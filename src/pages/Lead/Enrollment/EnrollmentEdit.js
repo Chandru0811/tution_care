@@ -8,18 +8,18 @@ import EditForm3 from "./EditEnrollment/EditForm3";
 import EditForm4 from "./EditEnrollment/EditForm4";
 import EditForm5 from "./EditEnrollment/EditForm5";
 import EditForm6 from "./EditEnrollment/EditForm6";
-import { useParams } from "react-router-dom";
+// import { useParams } from "react-router-dom";
 import Tooltip from "react-bootstrap/Tooltip";
-import { OverlayTrigger } from "react-bootstrap";
+ import { OverlayTrigger } from "react-bootstrap";
 
 const steps = [{ tooltip: "Student Information" }, { tooltip: "Child Ability" },{ tooltip: "Parent Information" },{ tooltip: "Address" },{ tooltip: "Account Information" },{ tooltip: "Authorised Person Address" }];
 
 
 export default function EnrollmentEdit() {
-  const { id } = useParams();
+  // const { id } = useParams();
 
   const [activeStep, setActiveStep] = useState(0);
-  const [formData, setFormData] = useState({ id });
+  const [formData, setFormData] = useState({ });
   const [loadIndicator, setLoadIndicator] = useState(false);
 
   const childRef = React.useRef();
@@ -78,7 +78,7 @@ export default function EnrollmentEdit() {
             <OverlayTrigger
               placement="top"
               overlay={
-                <Tooltip id={`tooltip-${index}`}>{step.tooltip}</Tooltip>
+                <Tooltip>{step.tooltip}</Tooltip>
               }
             >
               <StepLabel></StepLabel>

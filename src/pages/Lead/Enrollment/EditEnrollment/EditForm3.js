@@ -92,31 +92,31 @@ const EditForm3 = forwardRef(
       },
     });
 
-    useEffect(() => {
-      const getData = async () => {
-        const response = await api.get(`/getAllLeadInfoById/${formData.id}`);
+    // useEffect(() => {
+    //   const getData = async () => {
+    //     const response = await api.get(`/getAllLeadInfoById/${formData.id}`);
 
-        const fathersDateOfBirth =
-          response.data.fathersDateOfBirth &&
-          response.data.fathersDateOfBirth.substring(0, 10);
-        const mothersDateOfBirth =
-          response.data.mothersDateOfBirth &&
-          response.data.mothersDateOfBirth.substring(0, 10);
-        console.log(response.data);
-        formik.setValues({
-          ...response.data,
-          fathersDateOfBirth: fathersDateOfBirth,
-          mothersDateOfBirth: mothersDateOfBirth,
-          primaryContact: response.data.primaryContact === true || false,
-        });
-      };
-      getData();
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    //     const fathersDateOfBirth =
+    //       response.data.fathersDateOfBirth &&
+    //       response.data.fathersDateOfBirth.substring(0, 10);
+    //     const mothersDateOfBirth =
+    //       response.data.mothersDateOfBirth &&
+    //       response.data.mothersDateOfBirth.substring(0, 10);
+    //     console.log(response.data);
+    //     formik.setValues({
+    //       ...response.data,
+    //       fathersDateOfBirth: fathersDateOfBirth,
+    //       mothersDateOfBirth: mothersDateOfBirth,
+    //       primaryContact: response.data.primaryContact === true || false,
+    //     });
+    //   };
+    //   getData();
+    //   // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, []);
 
-    useImperativeHandle(ref, () => ({
-      editForm3: formik.handleSubmit,
-    }));
+    // useImperativeHandle(ref, () => ({
+    //   editForm3: formik.handleSubmit,
+    // }));
 
     return (
       <form onSubmit={formik.handleSubmit}>

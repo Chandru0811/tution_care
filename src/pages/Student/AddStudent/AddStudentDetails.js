@@ -212,7 +212,7 @@ const AddStudentDetails = forwardRef(
                       </label>
                       <br />
                       <input
-                        className="form-control  forform-control-smm-contorl-sm"
+                        className="form-control  form-control-sm"
                         name="dateOfBirth"
                         type="date"
                         onChange={formik.handleChange}

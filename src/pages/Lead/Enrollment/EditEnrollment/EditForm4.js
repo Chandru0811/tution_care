@@ -60,17 +60,17 @@ const EditForm4 = forwardRef(({ formData,setLoadIndicators, setFormData, handleN
     },
   });
 
-  useEffect(() => {
-    const getData = async () => {
-      const response = await api.get(`/getAllLeadInfoById/${formData.id}`);
-      formik.setValues(response.data);
-    };
-    getData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-  useImperativeHandle(ref, () => ({
-    editform4: formik.handleSubmit,
-  }));
+  // useEffect(() => {
+  //   const getData = async () => {
+  //     const response = await api.get(`/getAllLeadInfoById/${formData.id}`);
+  //     formik.setValues(response.data);
+  //   };
+  //   getData();
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
+  // useImperativeHandle(ref, () => ({
+  //   editform4: formik.handleSubmit,
+  // }));
 
   return (
     <form onSubmit={formik.handleSubmit}>

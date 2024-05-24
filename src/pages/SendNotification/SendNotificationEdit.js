@@ -80,14 +80,14 @@ function SendNotificationEdit({ id, onSuccess }) {
         <form onSubmit={formik.handleSubmit}>
           <Modal.Body>
             <div className="container">
-              <div className="row py-4">
+              <div className="row mb-3">
                 <div className="col-md-12 col-12 mb-2">
                   <label className="form-label">
                     Title<span className="text-danger">*</span>
                   </label>
                   <input
                     type="text"
-                    className={`form-control  ${
+                    className={`form-control form-control-sm  ${
                       formik.touched.messageTitle && formik.errors.messageTitle
                         ? "is-invalid"
                         : ""
@@ -108,7 +108,7 @@ function SendNotificationEdit({ id, onSuccess }) {
                   <textarea
                     type="text"
                     rows={5}
-                    className={`form-control  ${
+                    className={`form-control form-control-sm  ${
                       formik.touched.messageDescription &&
                       formik.errors.messageDescription
                         ? "is-invalid"

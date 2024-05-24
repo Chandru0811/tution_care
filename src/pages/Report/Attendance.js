@@ -125,7 +125,7 @@ const Attendance = () => {
   };
 
   return (
-<div className="minHeight container-fluid center ">
+<div className="container-fluid center ">
       <div className="card shadow border-0 mb-2 top-header ">
         <div className="d-flex justify-content-between px-4">
           <div className="pt-3">
@@ -133,14 +133,14 @@ const Attendance = () => {
           </div>
         </div>
         <hr />
-        <div className="table-response px-4">
+        <div className="table-response minHeight  px-4">
           <form onSubmit={formik.handleSubmit}>
             <div className="row my-4">
               <div className="col-md-4 col-12 mb-2">
                 <label className="form-label">Centre</label>
                 <select
                   {...formik.getFieldProps("centerId")}
-                  className={`form-select ${
+                  className={`form-select form-select-sm${
                     formik.touched.centerId && formik.errors.centerId
                       ? "is-invalid"
                       : ""
@@ -165,7 +165,7 @@ const Attendance = () => {
                 <label className="form-label">Course</label>
                 <select
                   {...formik.getFieldProps("courseId")}
-                  className={`form-select ${
+                  className={`form-select form-select-sm${
                     formik.touched.courseId && formik.errors.courseId
                       ? "is-invalid"
                       : ""
@@ -190,7 +190,7 @@ const Attendance = () => {
                 <input
                   {...formik.getFieldProps("attendanceDate")}
                   type="date"
-                  className={`form-control ${
+                  className={`form-control form-control-sm ${
                     formik.touched.attendanceDate &&
                     formik.errors.attendanceDate
                       ? "is-invalid"
@@ -210,7 +210,7 @@ const Attendance = () => {
                 <label className="form-label">Status</label>
                 <select
                   {...formik.getFieldProps("attendanceStatus")}
-                  className={`form-select ${
+                  className={`form-select form-select-sm${
                     formik.touched.attendanceStatus &&
                     formik.errors.attendanceStatus
                       ? "is-invalid"

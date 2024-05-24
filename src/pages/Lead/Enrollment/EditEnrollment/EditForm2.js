@@ -64,33 +64,33 @@ const EditForm2 = forwardRef(({ formData,setLoadIndicators, setFormData, handleN
     },
   });
 
-  useEffect(() => {
-    const getData = async () => {
-      const response = await api.get(`/getAllLeadInfoById/${formData.id}`);
-      const {
-        writeUpperAToZ,
-        writeLowerAToZ,
-        soundOfAToZ,
-        canReadSimpleSentence,
-        ...otherData
-      } = response.data;
-      const updatedValues = {
-        ...otherData,
-        writeUpperAToZ: writeUpperAToZ ? "Yes" : "No",
-        writeLowerAToZ: writeLowerAToZ ? "Yes" : "No",
-        soundOfAToZ: soundOfAToZ ? "Yes" : "No",
-        canReadSimpleSentence: canReadSimpleSentence ? "Yes" : "No",
-      };
+  // useEffect(() => {
+  //   const getData = async () => {
+  //     const response = await api.get(`/getAllLeadInfoById/${formData.id}`);
+  //     const {
+  //       writeUpperAToZ,
+  //       writeLowerAToZ,
+  //       soundOfAToZ,
+  //       canReadSimpleSentence,
+  //       ...otherData
+  //     } = response.data;
+  //     const updatedValues = {
+  //       ...otherData,
+  //       writeUpperAToZ: writeUpperAToZ ? "Yes" : "No",
+  //       writeLowerAToZ: writeLowerAToZ ? "Yes" : "No",
+  //       soundOfAToZ: soundOfAToZ ? "Yes" : "No",
+  //       canReadSimpleSentence: canReadSimpleSentence ? "Yes" : "No",
+  //     };
 
-      formik.setValues(updatedValues);
-    };
-    getData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  //     formik.setValues(updatedValues);
+  //   };
+  //   getData();
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
 
-  useImperativeHandle(ref, () => ({
-    editForm2: formik.handleSubmit,
-  }));
+  // useImperativeHandle(ref, () => ({
+  //   editForm2: formik.handleSubmit,
+  // }));
 
   return (
     <section>

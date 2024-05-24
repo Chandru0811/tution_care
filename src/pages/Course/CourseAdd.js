@@ -104,36 +104,36 @@ function CourseAdd({ onSuccess }) {
     <section className="courseAdd">
       <div className="container-fluid  center">
         <form onSubmit={formik.handleSubmit}>
-        <div className="card shadow border-0 mb-2 top-header">
-        <div className="container-fluid py-4">
-          <div className="row align-items-center">
-            <div className="col">
-              <div className="d-flex align-items-center gap-4">
-                <h2 className="h2 ls-tight headingColor">Add Course</h2>
-              </div>
-            </div>
-            <div className="col-auto">
-              <div className="hstack gap-2 justify-content-end">
-                <Link to="/course">
-                  <button type="submit" className="btn btn-sm btn-light">
-                    <span>Back</span>
-                  </button>
-                </Link>
-                &nbsp;&nbsp;
-          <button type="submit" className="btn btn-button btn-sm" disabled={loadIndicator}>
-                {loadIndicator && (
-                    <span
-                      className="spinner-border spinner-border-sm me-2"
-                      aria-hidden="true"
-                    ></span>
-                  )}
-                Save
-              </button>
+          <div className="card shadow border-0 mb-2 top-header">
+            <div className="container-fluid py-4">
+              <div className="row align-items-center">
+                <div className="col">
+                  <div className="d-flex align-items-center gap-4">
+                    <h2 className="h2 ls-tight headingColor">Add Course</h2>
+                  </div>
+                </div>
+                <div className="col-auto">
+                  <div className="hstack gap-2 justify-content-end">
+                    <Link to="/course">
+                      <button type="submit" className="btn btn-sm btn-light">
+                        <span>Back</span>
+                      </button>
+                    </Link>
+                    &nbsp;&nbsp;
+                    <button type="submit" className="btn btn-button btn-sm" disabled={loadIndicator}>
+                      {loadIndicator && (
+                        <span
+                          className="spinner-border spinner-border-sm me-2"
+                          aria-hidden="true"
+                        ></span>
+                      )}
+                      Save
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
           <div className="container card shadow border-0 mb-2 top-header p-5">
             <div className="row">
               <div className="col-md-6 col-12 mb-2">
@@ -143,11 +143,10 @@ function CourseAdd({ onSuccess }) {
                 <div className="input-group mb-3">
                   <select
                     {...formik.getFieldProps("centerId")}
-                    className={`form-select  form-select-sm${
-                      formik.touched.centerId && formik.errors.centerId
+                    className={`form-select  form-select-sm${formik.touched.centerId && formik.errors.centerId
                         ? "is-invalid"
                         : ""
-                    }`}
+                      }`}
                     aria-label="Default select example"
                   >
                     <option selected></option>
@@ -171,11 +170,10 @@ function CourseAdd({ onSuccess }) {
                 </lable>
                 <input
                   type="text"
-                  className={`form-control form-control-sm  ${
-                    formik.touched.courseName && formik.errors.courseName
+                  className={`form-control form-control-sm  ${formik.touched.courseName && formik.errors.courseName
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   {...formik.getFieldProps("courseName")}
                 />
                 {formik.touched.courseName && formik.errors.courseName && (
@@ -193,11 +191,10 @@ function CourseAdd({ onSuccess }) {
                 <div className="input-group mb-3">
                   <input
                     type="text"
-                    className={`form-control form-control-sm  ${
-                      formik.touched.courseCode && formik.errors.courseCode
+                    className={`form-control form-control-sm  ${formik.touched.courseCode && formik.errors.courseCode
                         ? "is-invalid"
                         : ""
-                    }`}
+                      }`}
                     {...formik.getFieldProps("courseCode")}
                   />
                   {formik.touched.courseCode && formik.errors.courseCode && (
@@ -212,11 +209,10 @@ function CourseAdd({ onSuccess }) {
                   Subject<span className="text-danger">*</span>
                 </lable>
                 <select
-                  className={`form-select  form-select-sm${
-                    formik.touched.subjectId && formik.errors.subjectId
+                  className={`form-select  form-select-sm${formik.touched.subjectId && formik.errors.subjectId
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   {...formik.getFieldProps("subjectId")}
                   aria-label="Default select example"
                 >
@@ -243,11 +239,10 @@ function CourseAdd({ onSuccess }) {
                 <div className="input-group mb-3">
                   <select
                     {...formik.getFieldProps("levelId")}
-                    className={`form-select  form-select-sm${
-                      formik.touched.levelId && formik.errors.levelId
+                    className={`form-select  form-select-sm${formik.touched.levelId && formik.errors.levelId
                         ? "is-invalid"
                         : ""
-                    }`}
+                      }`}
                     aria-label="Default select example"
                   >
                     <option selected></option>
@@ -269,11 +264,10 @@ function CourseAdd({ onSuccess }) {
                 <lable className="form-lable">Min Class Size</lable>
                 <input
                   type="text"
-                  className={`form-control form-control-sm  ${
-                    formik.touched.minClassSize && formik.errors.minClassSize
+                  className={`form-control form-control-sm  ${formik.touched.minClassSize && formik.errors.minClassSize
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   {...formik.getFieldProps("minClassSize")}
                   placeholder=""
                 />
@@ -289,11 +283,10 @@ function CourseAdd({ onSuccess }) {
                 <lable className="form-lable">Max Class Size</lable>
                 <input
                   type="text"
-                  className={`form-control form-control-sm  ${
-                    formik.touched.maxClassSize && formik.errors.maxClassSize
+                  className={`form-control form-control-sm  ${formik.touched.maxClassSize && formik.errors.maxClassSize
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   {...formik.getFieldProps("maxClassSize")}
                   placeholder=""
                 />
@@ -307,12 +300,11 @@ function CourseAdd({ onSuccess }) {
                 <lable className="">Replacement Lesson Student Buffer</lable>
                 <input
                   type="text"
-                  className={`form-control form-control-sm  ${
-                    formik.touched.replacementLessonStudentBuffer &&
-                    formik.errors.replacementLessonStudentBuffer
+                  className={`form-control form-control-sm  ${formik.touched.replacementLessonStudentBuffer &&
+                      formik.errors.replacementLessonStudentBuffer
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   {...formik.getFieldProps("replacementLessonStudentBuffer")}
                 />
                 {formik.touched.replacementLessonStudentBuffer &&
@@ -325,22 +317,25 @@ function CourseAdd({ onSuccess }) {
             </div>
             <div className="row mt-3">
               <div className="col-md-6 col-12 mb-2">
-                <lable className="form-lable">Color Code</lable>
+                <label className="form-label">Color Code</label>
                 <div className="input-group mb-3">
                   <div className="input-group-text inputGroup">
                     <input
                       type="color"
                       {...formik.getFieldProps("colorCode")}
-                      className="form-control form-control-sm form-control-color circle"
+                      className="form-control-color circle form-control-sm"
                     />
                   </div>
                   <input
                     type="text"
-                    className={`form-control form-control-sm iconInput`}
+                    className="form-control form-control-sm iconInput"
                     value={formik.values.colorCode}
+                    onChange={formik.handleChange}
+                    name="colorCode"
                   />
                 </div>
               </div>
+
               <div className="col-md-6 col-12 mb-2">
                 <lable className="">
                   Course Type<span className="text-danger">*</span>
@@ -421,11 +416,10 @@ function CourseAdd({ onSuccess }) {
                 <div className="input-group ">
                   <select
                     {...formik.getFieldProps("status")}
-                    className={`form-select  form-select-sm${
-                      formik.touched.status && formik.errors.status
+                    className={`form-select  form-select-sm${formik.touched.status && formik.errors.status
                         ? "is-invalid"
                         : ""
-                    }`}
+                      }`}
                     aria-label="Default select example"
                   >
                     <option selected></option>

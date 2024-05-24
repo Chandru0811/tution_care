@@ -109,7 +109,7 @@ function LevelAdd({ onSuccess }) {
                     </div>
                   )}
                 </div>
-                <div className="col-md-6 col-12 mb-2">
+                <div className="col-md-6 col-12 mb-3">
                   <label className="form-label">
                     Status<span className="text-danger">*</span>
                   </label>

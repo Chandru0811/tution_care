@@ -50,18 +50,18 @@ const Package = () => {
   }, []);
 
   return (
-    <div className="minHeight container-fluid  center">
+    <div className="container-fluid  center">
     <div className="card shadow border-0 mb-2 top-header">
       <div className="container-fluid px-0">
         <div className="my-3 d-flex justify-content-between mb-5 px-4">
           <h2>Package Balance Report</h2>
         </div>
         <hr />
-        <div className="table-responsive px-4">
+        <div className="table-responsive minHeight  px-4">
         <div className="row my-5">
           <div className="col-md-4 col-12">
             <select
-              className="form-select "
+              className="form-select form-select-sm"
               aria-label="Default select example"
             >
               <option selected>Arty Learning @ HG</option>
@@ -72,7 +72,7 @@ const Package = () => {
           </div>
           <div className="col-md-4 col-12">
             <select
-              className="form-select "
+              className="form-select form-select-sm"
               aria-label="Default select example"
             >
               <option selected>Select a student</option>
@@ -83,7 +83,7 @@ const Package = () => {
           </div>
           <div className="col-md-4 col-12">
             <select
-              className="form-select "
+              className="form-select form-select-sm"
               aria-label="Default select example"
             >
               <option selected>Select a course</option>

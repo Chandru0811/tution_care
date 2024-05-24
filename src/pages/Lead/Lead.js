@@ -179,14 +179,14 @@ const Lead = () => {
                   <td>
                     <div className="d-flex">
                       {storedScreens?.leadListingRead && (
-                        <Link to={`/lead/lead/view/${data.id}`}>
+                        <Link to={`/lead/lead/view`}>
                           <button className="btn btn-sm">
                             <FaEye />
                           </button>
                         </Link>
                       )}
                       {storedScreens?.leadListingUpdate && (
-                        <Link to={`/lead/lead/edit/${data.id}`}>
+                        <Link to={`/lead/lead/edit`}>
                           <button className="btn btn-sm">
                             <FaEdit />
                           </button>

@@ -67,7 +67,7 @@ function AddMore() {
                       <label className="form-label">Lesson No</label>
                       <select
                         {...formik.getFieldProps("lessonNo")}
-                        className={`form-select`}
+                        className={`form-select form-select-sm`}
                         aria-label="Default select example"
                       >
                         <option selected></option>

@@ -86,7 +86,7 @@ const [loadIndicator, setLoadIndicator] = useState(false);
   }, []);
 
   return (
-    <div className="minHeight container-fluid center">
+    <div className="container-fluid center">
         <form onSubmit={formik.handleSubmit}>
           <div className="card shadow border-0 mb-2 top-header">
             <div className="my-3 d-flex justify-content-between">
@@ -116,7 +116,7 @@ const [loadIndicator, setLoadIndicator] = useState(false);
               </div>
             </div>
           </div>
-          <div className="container card shadow border-0 mb-2 top-header p-5">
+          <div className="minHeight container card shadow border-0 mb-2 top-header p-5">
             <div className="row py-4">
               <div class="col-md-6 col-12 mb-4">
                 <lable class="">

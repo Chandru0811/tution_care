@@ -110,7 +110,7 @@ function HolidayAdd() {
           <div className="container p-5">
             <div className="row">
               <div className="col-lg-6 col-md-6 col-12">
-                <div className="text-start mt-2 mb-3">
+                <div className="text-start">
                   <label className="form-label">
                     Center Name<span className="text-danger">*</span>
                   </label>
@@ -136,7 +136,7 @@ function HolidayAdd() {
                 </div>
               </div>
               <div className="col-lg-6 col-md-6 col-12">
-                <div className="text-start mt-2 mb-3">
+                <div className="text-start">
                   <lable className="form-lable">
                     Holiday Name<span className="text-danger">*</span>
                   </lable>
