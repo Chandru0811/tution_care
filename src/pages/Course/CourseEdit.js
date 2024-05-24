@@ -145,7 +145,7 @@ const [loadIndicator, setLoadIndicator] = useState(false);
           </div>
         </div>
       </div>
-          <div className="container card shadow border-0 mb-2 top-header p-5">
+      <div className="container card shadow border-0 mb-2 top-header p-5">
             <div className="row">
               <div className="col-md-6 col-12 mb-2">
                 <lable className="form-lable">
@@ -154,7 +154,7 @@ const [loadIndicator, setLoadIndicator] = useState(false);
                 <div className="input-group mb-3">
                   <select
                     {...formik.getFieldProps("centerId")}
-                    className={`form-select  ${
+                    className={`form-select  form-select-sm${
                       formik.touched.centerId && formik.errors.centerId
                         ? "is-invalid"
                         : ""
@@ -182,7 +182,7 @@ const [loadIndicator, setLoadIndicator] = useState(false);
                 </lable>
                 <input
                   type="text"
-                  className={`form-control  ${
+                  className={`form-control form-control-sm  ${
                     formik.touched.courseName && formik.errors.courseName
                       ? "is-invalid"
                       : ""
@@ -204,7 +204,7 @@ const [loadIndicator, setLoadIndicator] = useState(false);
                 <div className="input-group mb-3">
                   <input
                     type="text"
-                    className={`form-control  ${
+                    className={`form-control form-control-sm  ${
                       formik.touched.courseCode && formik.errors.courseCode
                         ? "is-invalid"
                         : ""
@@ -223,7 +223,7 @@ const [loadIndicator, setLoadIndicator] = useState(false);
                   Subject<span className="text-danger">*</span>
                 </lable>
                 <select
-                  className={`form-select  ${
+                  className={`form-select  form-select-sm${
                     formik.touched.subjectId && formik.errors.subjectId
                       ? "is-invalid"
                       : ""
@@ -254,7 +254,7 @@ const [loadIndicator, setLoadIndicator] = useState(false);
                 <div className="input-group mb-3">
                   <select
                     {...formik.getFieldProps("levelId")}
-                    className={`form-select  ${
+                    className={`form-select  form-select-sm${
                       formik.touched.levelId && formik.errors.levelId
                         ? "is-invalid"
                         : ""
@@ -280,7 +280,7 @@ const [loadIndicator, setLoadIndicator] = useState(false);
                 <lable className="form-lable">Min Class Size</lable>
                 <input
                   type="text"
-                  className={`form-control  ${
+                  className={`form-control form-control-sm  ${
                     formik.touched.minClassSize && formik.errors.minClassSize
                       ? "is-invalid"
                       : ""
@@ -300,7 +300,7 @@ const [loadIndicator, setLoadIndicator] = useState(false);
                 <lable className="form-lable">Max Class Size</lable>
                 <input
                   type="text"
-                  className={`form-control  ${
+                  className={`form-control form-control-sm  ${
                     formik.touched.maxClassSize && formik.errors.maxClassSize
                       ? "is-invalid"
                       : ""
@@ -318,7 +318,7 @@ const [loadIndicator, setLoadIndicator] = useState(false);
                 <lable className="">Replacement Lesson Student Buffer</lable>
                 <input
                   type="text"
-                  className={`form-control  ${
+                  className={`form-control form-control-sm  ${
                     formik.touched.replacementLessonStudentBuffer &&
                     formik.errors.replacementLessonStudentBuffer
                       ? "is-invalid"
@@ -342,12 +342,12 @@ const [loadIndicator, setLoadIndicator] = useState(false);
                     <input
                       type="color"
                       {...formik.getFieldProps("colorCode")}
-                      className="form-control-color circle"
+                      className="form-control form-control-sm form-control-color circle"
                     />
                   </div>
                   <input
                     type="text"
-                    className={`form-control iconInput `}
+                    className={`form-control form-control-sm iconInput`}
                     value={formik.values.colorCode}
                   />
                 </div>
@@ -395,7 +395,7 @@ const [loadIndicator, setLoadIndicator] = useState(false);
                 <div className="input-group mb-3">
                   <select
                     {...formik.getFieldProps("durationInHrs")}
-                    className="form-select iconInput "
+                    className="form-select form-select-sm iconInput "
                     aria-label="Default select example"
                   >
                     <option selected></option>
@@ -412,7 +412,7 @@ const [loadIndicator, setLoadIndicator] = useState(false);
                 <div className="input-group mb-3">
                   <select
                     {...formik.getFieldProps("durationInMins")}
-                    className="form-select iconInput "
+                    className="form-select form-select-sm iconInput "
                     aria-label="Default select example"
                   >
                     <option selected></option>
@@ -432,7 +432,7 @@ const [loadIndicator, setLoadIndicator] = useState(false);
                 <div className="input-group ">
                   <select
                     {...formik.getFieldProps("status")}
-                    className={`form-select  ${
+                    className={`form-select  form-select-sm${
                       formik.touched.status && formik.errors.status
                         ? "is-invalid"
                         : ""
@@ -488,7 +488,7 @@ const [loadIndicator, setLoadIndicator] = useState(false);
                 <lable className="">Description</lable>
                 <textarea
                   type="text"
-                  className={`form-control pb-5`}
+                  className={`form-control form-control-sm pb-5`}
                   {...formik.getFieldProps("description")}
                   placeholder=""
                 ></textarea>

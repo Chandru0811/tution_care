@@ -342,9 +342,9 @@ function Sidebar({ onLogout }) {
             style={{ listStyle: "none", paddingLeft: 0 }}
           >
               <NavLink to="/" onClick={() => handleMenuClick(null)}>
-              <li className="py-2 px-4 nav-link link-home">
-                <i className="bx bx-grid-alt me-3" style={{ color: "#303030" }}></i>
-                <span className="links_name">Home</span>
+              <li className="py-2 px-4 nav-link">
+                <i className="bx bx-grid-alt me-3"></i>
+                <span className="links_name links_names" style={{ color: "rgb(48 48 48 / 79%)" }}>Home</span>
                 </li>
               </NavLink>
          
@@ -410,8 +410,8 @@ function Sidebar({ onLogout }) {
                 onClick={() => handleMenuClick(null)}
               >
                    <li className="py-2 px-4 nav-link">
-                <i className="bx bx-send me-3" style={{ color: "#303030" }}></i>
-                <span className="links_name"  style={{ color: "#303030" }}>Send Notification</span>
+                <i className="bx bx-send me-3"></i>
+                <span className="links_name links_names" style={{ color: "rgb(48 48 48 / 79%)" }}>Send Notification</span>
                 </li>
               </NavLink>
            
@@ -423,15 +423,14 @@ function Sidebar({ onLogout }) {
             style={{ border: "1px solid #87878761" }}
           />
          </div>
-         <button id="exit" className="nav-link" to="#">
+         <button id="exit" className="nav-link ps-2" to="#">
             <i className="bi bi-person-square me-2"></i> Account
           </button>
           <button
             id="exit"
+            className="nav-link ps-1"
             to="#"
-            className="nav-link"
-            onClick={handleLogOutClick}
-          >
+            onClick={handleLogOutClick}>
             <i className="bi bi-box-arrow-left me-2"></i> Logout
           </button>
         </div>

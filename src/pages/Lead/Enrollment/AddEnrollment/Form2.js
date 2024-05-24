@@ -83,7 +83,7 @@ const Form2 = forwardRef(({ formData,setLoadIndicators, setFormData, handleNext 
               </label>
               <div className="input-group">
                 <select
-                  className="form-select"
+                  className="form-select form-select-sm"
                   name="pencilGrip"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -109,7 +109,7 @@ const Form2 = forwardRef(({ formData,setLoadIndicators, setFormData, handleNext 
                 </label>
                 <div className="input-group ">
                   <select
-                    className="form-select"
+                    className="form-select form-select-sm"
                     name="writing"
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
@@ -136,7 +136,7 @@ const Form2 = forwardRef(({ formData,setLoadIndicators, setFormData, handleNext 
                 </label>
                 <div className="input-group ">
                   <select
-                    className="form-select"
+                    className="form-select form-select-sm"
                     name="recognizeAToZ"
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}

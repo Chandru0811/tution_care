@@ -153,7 +153,7 @@ const ContactEdit = forwardRef(
                 </label>
                 <input
                   type="email"
-                  className="form-control"
+                  className="form-control form-control-sm"
                   name="email"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -171,7 +171,7 @@ const ContactEdit = forwardRef(
                 </label>
                 <input
                   type="text"
-                  className="form-control"
+                  className="form-control form-control-sm"
                   name="contactNumber"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -190,7 +190,7 @@ const ContactEdit = forwardRef(
                 </label>
                 <textarea
                   type="text"
-                  className="form-control"
+                  className="form-control form-control-sm"
                   name="address"
                   rows="3"
                   onChange={formik.handleChange}
@@ -209,7 +209,7 @@ const ContactEdit = forwardRef(
                 </label>
                 <input
                   type="text"
-                  className="form-control"
+                  className="form-control form-control-sm"
                   name="postalCode"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}

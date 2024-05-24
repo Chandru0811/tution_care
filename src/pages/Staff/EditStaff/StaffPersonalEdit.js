@@ -94,13 +94,13 @@ const StaffPersonalEdit = forwardRef(
       <form onSubmit={formik.handleSubmit}>
         <div className="pb-4">
           <p class="headColor">Personal Information</p>
-          <div class="container-fluid row d-flex my-4">
-            <div class="form-group col-sm">
+          <div class="container row d-flex my-4">
+            <div class="form-group  col-sm ">
               <label>Staff Name</label>
               <span className="text-danger">*</span>
               <input
                 type="text"
-                class="form-control "
+                class="form-control form-control-sm"
                 name="teacherName"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -117,7 +117,7 @@ const StaffPersonalEdit = forwardRef(
               <span className="text-danger">*</span>
               <input
                 type="date"
-                class="form-control "
+                class="form-control form-control-sm"
                 name="dateOfBirth"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -130,13 +130,14 @@ const StaffPersonalEdit = forwardRef(
               )}
             </div>
           </div>
+
           <div class="container row d-flex my-4 justify-align-content-around">
             <div class="form-group  col-sm ">
               <label>ID Type</label>
               <span className="text-danger">*</span>
               <input
                 type="text"
-                class="form-control "
+                class="form-control form-control-sm"
                 name="idType"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -153,7 +154,7 @@ const StaffPersonalEdit = forwardRef(
               <span className="text-danger">*</span>
               <input
                 type="text"
-                class="form-control "
+                class="form-control form-control-sm"
                 name="idNo"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -172,7 +173,7 @@ const StaffPersonalEdit = forwardRef(
               <span className="text-danger">*</span>
               <input
                 type="text"
-                class="form-control"
+                class="form-control form-control-sm"
                 name="citizenship"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -184,18 +185,25 @@ const StaffPersonalEdit = forwardRef(
                 </div>
               )}
             </div>
-            {/* <div class="form-group  col-sm ">
-              <label>Photo</label>
+            <div class="form-group  col-sm ">
+              <label>Photo</label><span className="text-danger">*</span>
               <input
                 type="file"
-                class="form-control "
-                name="photo"
+                name="file"
+                className="form-control form-control-sm"
                 onChange={(event) => {
-                  formik.setFieldValue("photo", event.currentTarget.files[0]);
+                  formik.setFieldValue("file", event.target.files[0]);
                 }}
                 onBlur={formik.handleBlur}
               />
-            </div> */}
+              {formik.touched.file && !formik.values.file && (
+                <div className="error text-danger">
+                  <small>Photo is required</small>
+                </div>
+              )}
+            </div>
+          </div>
+          <div class="container row d-flex my-4 justify-align-content-around">
             <div class="form-group  col-sm ">
               <label className="mb-3">Gender</label>
               <div className="d-flex align-items-center justify-content-start">
@@ -223,7 +231,7 @@ const StaffPersonalEdit = forwardRef(
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                 />
-                <label className="form-check-label" htmlFor="male">
+                <label className="form-check-label" htmlFor="yes">
                   Male
                 </label>
               </div>
@@ -238,7 +246,7 @@ const StaffPersonalEdit = forwardRef(
                 Short Introduction
               </label>
               <textarea
-                class="form-control "
+                class="form-control form-control-sm"
                 id="exampleFormControlTextarea1"
                 rows="4"
                 name="shortIntroduction"

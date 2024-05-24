@@ -38,7 +38,7 @@ const RequiredEdit=forwardRef(({ formData,setLoadIndicators, setFormData, handle
             Resume / CV 
           </label>
           <input type="file" 
-          class="form-control    mt-3" accept=".pdf" 
+          class="form-control form-control-sm    mt-3" accept=".pdf" 
           name="resume"
              onChange={(event) => {
               formik.setFieldValue("resume", event.currentTarget.files[0]);
@@ -53,7 +53,7 @@ const RequiredEdit=forwardRef(({ formData,setLoadIndicators, setFormData, handle
             Education Certificate 
           </label>
           <input type="file" 
-          class="form-control mt-3" accept=".pdf" 
+          class="form-control form-control-sm mt-3" accept=".pdf" 
           name="educationCertificate"
              onChange={(event) => {
               formik.setFieldValue("educationCertificate", event.currentTarget.files[0]);

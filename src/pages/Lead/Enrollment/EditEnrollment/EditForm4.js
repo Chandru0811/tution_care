@@ -89,7 +89,7 @@ const EditForm4 = forwardRef(({ formData,setLoadIndicators, setFormData, handleN
                 <textarea
                   type="text"
                   name="address"
-                  className="form-control"
+                  className="form-control form-control-sm"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   value={formik.values.address}
@@ -109,7 +109,7 @@ const EditForm4 = forwardRef(({ formData,setLoadIndicators, setFormData, handleN
               </label>
               <input
                 type="text"
-                className="form-control "
+                className="form-control form-control-sm "
                 name="postalCode"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -130,7 +130,7 @@ const EditForm4 = forwardRef(({ formData,setLoadIndicators, setFormData, handleN
               </label>
               <input
                 type="text"
-                className="form-control "
+                className="form-control form-control-sm "
                 name="nameOfEmergency"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -152,7 +152,7 @@ const EditForm4 = forwardRef(({ formData,setLoadIndicators, setFormData, handleN
               </label>
               <input
                 type="text"
-                className="form-control "
+                className="form-control form-control-sm "
                 name="emergencyNric"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -173,7 +173,7 @@ const EditForm4 = forwardRef(({ formData,setLoadIndicators, setFormData, handleN
               </label>
               <input
                 type="text"
-                className="form-control "
+                className="form-control form-control-sm "
                 name="emergencyContact"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -281,7 +281,7 @@ const EditForm4 = forwardRef(({ formData,setLoadIndicators, setFormData, handleN
               <form className="">
                 <textarea
                   type="text"
-                  className="form-control"
+                  className="form-control form-control-sm"
                   name="nameOfAuthorised"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -299,7 +299,7 @@ const EditForm4 = forwardRef(({ formData,setLoadIndicators, setFormData, handleN
               <form className="">
                 <textarea
                   type="text"
-                  className="form-control "
+                  className="form-control form-control-sm "
                   name="relationToChils"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -317,7 +317,7 @@ const EditForm4 = forwardRef(({ formData,setLoadIndicators, setFormData, handleN
               <form className="">
                 <textarea
                   type="text"
-                  className="form-control "
+                  className="form-control form-control-sm "
                   name="noAuthorisedNric"
                   value={formik.values.noAuthorisedNric}
                   onChange={formik.handleChange}
@@ -336,7 +336,7 @@ const EditForm4 = forwardRef(({ formData,setLoadIndicators, setFormData, handleN
               Than Parents-For Pickups)
               <textarea
                 type="text"
-                className="form-control "
+                className="form-control form-control-sm "
                 name="contactOfAuthorised"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}

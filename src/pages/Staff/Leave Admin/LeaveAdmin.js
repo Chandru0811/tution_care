@@ -85,7 +85,7 @@ const LeaveAdmin = () => {
             </div>
           ) : (
             <div className="table-response px-4">
-              <table ref={tableRef} className="display">
+              <table ref={tableRef} className="display minHeight ">
                 <thead>
                   <tr>
                     <th scope="col" style={{ whiteSpace: "nowrap" }}>

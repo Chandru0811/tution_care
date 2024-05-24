@@ -83,17 +83,15 @@ function Edit({ id, onSuccess }) {
           <Modal.Title className="headColor">Update Level</Modal.Title>
         </Modal.Header>
         <form onSubmit={formik.handleSubmit}>
-          <Modal.Body>
-            <div className="container">
-              <div className="row py-4">
-                <div className="col-md-6 col-12 mb-2">
+        <Modal.Body>
+          <div className="row">
+            <div className="col-md-6 col-12 mb-2">
                   <label className="form-label">
                     Level<span className="text-danger">*</span>
                   </label>
                   <input
                     type="text"
-                    placeholder=""
-                    className={`form-control  ${
+                    className={`form-control form-control-sm  ${
                       formik.touched.level && formik.errors.level
                         ? "is-invalid"
                         : ""
@@ -112,8 +110,7 @@ function Edit({ id, onSuccess }) {
                   </label>
                   <input
                     type="text"
-                    placeholder=""
-                    className={`form-control  ${
+                    className={`form-control form-control-sm  ${
                       formik.touched.levelCode && formik.errors.levelCode
                         ? "is-invalid"
                         : ""
@@ -132,29 +129,16 @@ function Edit({ id, onSuccess }) {
                   </label>
                   <select
                     {...formik.getFieldProps("status")}
-                    class={`form-select  ${
+                    class={`form-select form-select-sm  ${
                       formik.touched.status && formik.errors.status
                         ? "is-invalid"
                         : ""
                     }`}
                     aria-label="Default select example"
                   >
-                    <option
-                      // defaultValue={data.status === "Active"}
-                    > 
-                    </option>
-                    <option
-                      value="Active"
-                      // defaultValue={data.status === "Active"}
-                    >
-                      Active
-                    </option>
-                    <option
-                      value="Inactive"
-                      // defaultValue={data.status === "Inactive"}
-                    >
-                      Inactive
-                    </option>
+                    <option selected></option>
+                    <option value="Active">Active</option>
+                    <option value="Inactive">Inactive</option>
                   </select>
                   {formik.touched.status && formik.errors.status && (
                     <div className="invalid-feedback">
@@ -163,14 +147,13 @@ function Edit({ id, onSuccess }) {
                   )}
                 </div>
               </div>
-            </div>
-            <Modal.Footer>
-              <Button variant="secondary btn-sm" onClick={handleClose}>
+
+            <Modal.Footer className="mt-3">
+              <Button type="button" variant="secondary btn-sm" onClick={handleClose}>
                 Cancel
               </Button>
-              <button
+              <Button
                 type="submit"
-                onSubmit={formik.handleSubmit}
                 className="btn btn-button btn-sm"
                 disabled={loadIndicator}
               >
@@ -181,7 +164,10 @@ function Edit({ id, onSuccess }) {
                   ></span>
                 )}
                 Update
-              </button>
+              </Button>
+              {/* <Button variant="danger" type="submit">
+                Submit
+              </Button> */}
             </Modal.Footer>
           </Modal.Body>
         </form>

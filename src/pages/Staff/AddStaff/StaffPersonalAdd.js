@@ -106,7 +106,7 @@ const StaffPersonalAdd = forwardRef(
               <span className="text-danger">*</span>
               <input
                 type="text"
-                class="form-control "
+                class="form-control form-control-sm"
                 name="teacherName"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -123,7 +123,7 @@ const StaffPersonalAdd = forwardRef(
               <span className="text-danger">*</span>
               <input
                 type="date"
-                class="form-control"
+                class="form-control form-control-sm"
                 name="dateOfBirth"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -143,7 +143,7 @@ const StaffPersonalAdd = forwardRef(
               <span className="text-danger">*</span>
               <input
                 type="text"
-                class="form-control "
+                class="form-control form-control-sm"
                 name="idType"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -160,7 +160,7 @@ const StaffPersonalAdd = forwardRef(
               <span className="text-danger">*</span>
               <input
                 type="text"
-                class="form-control "
+                class="form-control form-control-sm"
                 name="idNo"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -179,7 +179,7 @@ const StaffPersonalAdd = forwardRef(
               <span className="text-danger">*</span>
               <input
                 type="text"
-                class="form-control "
+                class="form-control form-control-sm"
                 name="citizenship"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -196,7 +196,7 @@ const StaffPersonalAdd = forwardRef(
               <input
                 type="file"
                 name="file"
-                className="form-control"
+                className="form-control form-control-sm"
                 onChange={(event) => {
                   formik.setFieldValue("file", event.target.files[0]);
                 }}
@@ -252,7 +252,7 @@ const StaffPersonalAdd = forwardRef(
                 Short Introduction
               </label>
               <textarea
-                class="form-control"
+                class="form-control form-control-sm"
                 id="exampleFormControlTextarea1"
                 rows="4"
                 name="shortIntroduction"

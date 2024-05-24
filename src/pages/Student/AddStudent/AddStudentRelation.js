@@ -84,7 +84,7 @@ const Addrelation = forwardRef(({ formData,setLoadIndicators, setFormData, handl
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values.studentRelationCenter}
-                        className="form-select "
+                        className="form-select form-select-sm"
                       >
                         <option selected></option>
                          {centerData &&
@@ -102,7 +102,7 @@ const Addrelation = forwardRef(({ formData,setLoadIndicators, setFormData, handl
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values.studentRelation}
-                        className="form-select "
+                        className="form-select form-select-sm"
                         name="studentRelation"
                       >
                         <option value=""></option>
@@ -125,7 +125,7 @@ const Addrelation = forwardRef(({ formData,setLoadIndicators, setFormData, handl
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values.studentRelationStudentName}
-                        className="form-control "
+                        className="form-control form-control-sm"
                       />
                       {formik.touched.studentRelationStudentName &&
                         formik.errors.studentRelationStudentName && (

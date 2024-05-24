@@ -67,85 +67,87 @@ const LoginAdd = forwardRef(({ formData,setLoadIndicators, setFormData, handleNe
       <div className="container" style={{ minHeight: "60vh" }}>
         <p className="headColor my-4">Login Information</p>
         <div class="row">
-            <div class="col-md-6 col-12 mb-2">
-              <div className="mb-3">
-                <label>
-                  Password<span class="text-danger">*</span>
-                </label>
-                <div className={`input-group mb-3`}>
-                  <input
-                    type={showPassword ? "text" : "password"}
-                    placeholder="Enter password"
-                    className={`form-control ${
-                      formik.touched.password && formik.errors.password
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    style={{
-                      borderRadius: "3px",
-                      borderRight: "none",
-                      borderTopRightRadius: "0px",
-                      borderBottomRightRadius: "0px",
-                    }}
-                    name="password"
-                    {...formik.getFieldProps("password")}
-                  />
-                  <span
-                    className={`input-group-text iconInputBackground`}
-                    id="basic-addon1"
-                    onClick={togglePasswordVisibility}
-                    style={{ cursor: "pointer", borderRadius: "3px" }}
-                  >
-                    {showPassword ? <IoEyeOffOutline /> : <IoEyeOutline />}
-                  </span>
-                  {formik.touched.password && formik.errors.password && (
-                    <div className="invalid-feedback">
-                      {formik.errors.password}
-                    </div>
-                  )}
-                </div>
+          <div class="col-md-6 col-12 mb-2">
+            <div className="mb-3">
+              <label>
+                Password<span class="text-danger">*</span>
+              </label>
+              <div className={`input-group mb-3`}>
+                <input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Enter password"
+                  className={`form-control form-control-sm ${
+                    formik.touched.password && formik.errors.password
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  style={{
+                    borderRadius: "3px",
+                    borderRight: "none",
+                    borderTopRightRadius: "0px",
+                    borderBottomRightRadius: "0px",
+                  }}
+                  name="password"
+                  {...formik.getFieldProps("password")}
+                />
+                <span
+                  className={`input-group-text iconInputBackground`}
+                  id="basic-addon1"
+                  onClick={togglePasswordVisibility}
+                  style={{ cursor: "pointer", borderRadius: "3px" }}
+                >
+                  {showPassword ? <IoEyeOffOutline /> : <IoEyeOutline />}
+                </span>
+                {formik.touched.password && formik.errors.password && (
+                  <div className="invalid-feedback">
+                    {formik.errors.password}
+                  </div>
+                )}
               </div>
             </div>
-             <div class="col-md-6 col-12 mb-2">
-              <div className="mb-3">
-                <label>
-                  Confirm Password<span class="text-danger">*</span>
-                </label>
-                <div className={`input-group mb-3`}>
-                  <input
-                    type={showConfirmPassword ? "text" : "password"}
-                    placeholder="Enter confirm password"
-                    className={`form-control ${
-                      formik.touched.confirmPassword && formik.errors.confirmPassword
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    style={{
-                      borderRadius: "3px",
-                      borderRight: "none",
-                      borderTopRightRadius: "0px",
-                      borderBottomRightRadius: "0px",
-                    }}
-                    name="confirmPassword"
-                    {...formik.getFieldProps("confirmPassword")}
-                  />
-                  <span
-                    className={`input-group-text iconInputBackground`}
-                    id="basic-addon1"
-                    onClick={toggleConfirmPasswordVisibility}
-                    style={{ cursor: "pointer", borderRadius: "3px" }}
-                  >
-                    {showConfirmPassword ? <IoEyeOffOutline /> : <IoEyeOutline />}
-                  </span>
-                  {formik.touched.confirmPassword && formik.errors.confirmPassword && (
+          </div>
+          <div class="col-md-6 col-12 mb-2">
+            <div className="mb-3">
+              <label>
+                Confirm Password<span class="text-danger">*</span>
+              </label>
+              <div className={`input-group mb-3`}>
+                <input
+                  type={showConfirmPassword ? "text" : "password"}
+                  placeholder="Enter confirm password"
+                  className={`form-control form-control-sm ${
+                    formik.touched.confirmPassword &&
+                    formik.errors.confirmPassword
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  style={{
+                    borderRadius: "3px",
+                    borderRight: "none",
+                    borderTopRightRadius: "0px",
+                    borderBottomRightRadius: "0px",
+                  }}
+                  name="confirmPassword"
+                  {...formik.getFieldProps("confirmPassword")}
+                />
+                <span
+                  className={`input-group-text iconInputBackground`}
+                  id="basic-addon1"
+                  onClick={toggleConfirmPasswordVisibility}
+                  style={{ cursor: "pointer", borderRadius: "3px" }}
+                >
+                  {showConfirmPassword ? <IoEyeOffOutline /> : <IoEyeOutline />}
+                </span>
+                {formik.touched.confirmPassword &&
+                  formik.errors.confirmPassword && (
                     <div className="invalid-feedback">
                       {formik.errors.confirmPassword}
                     </div>
                   )}
-                </div>
               </div>
             </div>
           </div>
+        </div>
       </div>
     </form>
   );

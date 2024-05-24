@@ -150,7 +150,7 @@ const LeaveEdit = forwardRef(
                 </label>
                 <input
                   type="date"
-                  class="form-control    mt-3 "
+                  class="form-control form-control-sm    mt-3 "
                   name="year"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -168,7 +168,7 @@ const LeaveEdit = forwardRef(
                 </label>
                 <input
                   type="text"
-                  class="form-control    mt-3"
+                  class="form-control form-control-sm    mt-3"
                   name="annualLeave"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -186,7 +186,7 @@ const LeaveEdit = forwardRef(
                 </label>
                 <input
                   type="text"
-                  class="form-control    mt-3 "
+                  class="form-control form-control-sm    mt-3 "
                   name="medicalLeave"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -204,7 +204,7 @@ const LeaveEdit = forwardRef(
                 </label>
                 <input
                   type="text"
-                  class="form-control    mt-3"
+                  class="form-control form-control-sm    mt-3"
                   name="otherLeave"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -222,7 +222,7 @@ const LeaveEdit = forwardRef(
                 </label>
                 <input
                   type="text"
-                  class="form-control    mt-3"
+                  class="form-control form-control-sm    mt-3"
                   name="carryForwardLeave"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}

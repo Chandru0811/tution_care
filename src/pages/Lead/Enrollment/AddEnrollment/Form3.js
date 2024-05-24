@@ -95,7 +95,6 @@ const Form3 = forwardRef(
         <div className="container py-4">
           <h5 className="headColor mb-5">Parent Information</h5>
           <div className="row">
-            {" "}
             <div className="col-12 mb-3">
               <div className="row">
                 <div className="col-6">
@@ -108,16 +107,16 @@ const Form3 = forwardRef(
                     name="primaryContact"
                     className="form-check-input mx-2"
                     value="mother"
-                    checked={formik.values.primaryContact === "mother"}
-                    onChange={formik.handleChange}
+                    checked={formik.values.primaryContactMother}
+                    onChange={(e) => {
+                      formik.setValues({
+                        ...formik.values,
+                        primaryContactMother: e.target.value === "mother",
+                        primaryContactFather: e.target.value !== "mother",
+                      });
+                    }}
                     onBlur={formik.handleBlur}
                   />
-                  {formik.touched.primaryContact &&
-                    formik.errors.primaryContact && (
-                      <div className="error text-danger ">
-                        <small>{formik.errors.primaryContact}</small>
-                      </div>
-                    )}
                 </div>
               </div>
             </div>
@@ -128,7 +127,7 @@ const Form3 = forwardRef(
                 </label>
                 <input
                   type="text"
-                  className="form-control"
+                  className="form-control form-control-sm"
                   name="mothersFullName"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -149,7 +148,7 @@ const Form3 = forwardRef(
                 </label>
                 <input
                   type="text"
-                  className="form-control"
+                  className="form-control form-control-sm"
                   name="mothersOccupation"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -170,7 +169,7 @@ const Form3 = forwardRef(
                 </label>
                 <input
                   type="date"
-                  className="form-control"
+                  className="form-control form-control-sm"
                   name="mothersDateOfBirth"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -191,7 +190,7 @@ const Form3 = forwardRef(
                 </label>
                 <input
                   type="text"
-                  className="form-control"
+                  className="form-control form-control-sm"
                   name="mothersMobileNumber"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -212,7 +211,7 @@ const Form3 = forwardRef(
                 </label>
                 <input
                   type="email"
-                  className="form-control"
+                  className="form-control form-control-sm"
                   name="mothersEmailAddress"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -231,7 +230,7 @@ const Form3 = forwardRef(
                 Mother's Monthly Income<span className="text-danger">*</span>
               </label>
               <select
-                className="form-select"
+                className="form-select form-select-sm"
                 name="monthlyIncomeOfMother"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -272,16 +271,16 @@ const Form3 = forwardRef(
                     name="primaryContact"
                     className="form-check-input mx-2"
                     value="father"
-                    checked={formik.values.primaryContact === "father"}
-                    onChange={formik.handleChange}
+                    checked={formik.values.primaryContactFather}
+                    onChange={(e) => {
+                      formik.setValues({
+                        ...formik.values,
+                        primaryContactFather: e.target.value === "father",
+                        primaryContactMother: e.target.value !== "father",
+                      });
+                    }}
                     onBlur={formik.handleBlur}
                   />
-                  {formik.touched.primaryContact &&
-                    formik.errors.primaryContact && (
-                      <div className="error text-danger ">
-                        <small>{formik.errors.primaryContact}</small>
-                      </div>
-                    )}
                 </div>
               </div>
             </div>
@@ -292,7 +291,7 @@ const Form3 = forwardRef(
                 </label>
                 <input
                   type="text"
-                  className="form-control"
+                  className="form-control form-control-sm"
                   name="fathersFullName"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -313,7 +312,7 @@ const Form3 = forwardRef(
                 </label>
                 <input
                   type="text"
-                  className="form-control"
+                  className="form-control form-control-sm"
                   name="fathersOccupation"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -334,7 +333,7 @@ const Form3 = forwardRef(
                 </label>
                 <input
                   type="date"
-                  className="form-control"
+                  className="form-control form-control-sm"
                   name="fathersDateOfBirth"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -355,7 +354,7 @@ const Form3 = forwardRef(
                 </label>
                 <input
                   type="text"
-                  className="form-control"
+                  className="form-control form-control-sm"
                   name="fathersMobileNumber"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -376,7 +375,7 @@ const Form3 = forwardRef(
                 </label>
                 <input
                   type="email"
-                  className="form-control"
+                  className="form-control form-control-sm"
                   name="fathersEmailAddress"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -395,7 +394,7 @@ const Form3 = forwardRef(
                 Father's Monthly Income<span className="text-danger">*</span>
               </label>
               <select
-                className="form-select"
+                className="form-select form-select-sm"
                 name="monthlyIncomeOfFather"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}

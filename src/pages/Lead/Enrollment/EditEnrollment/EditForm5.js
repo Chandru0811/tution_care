@@ -102,7 +102,7 @@ const EditForm5 = forwardRef(({ formData,setLoadIndicators, setFormData, handleN
                 Center<span className="text-danger">*</span>
               </lable>
               <select
-                className="form-select"
+                className="form-select form-select-sm"
                 name="centerId"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -404,7 +404,7 @@ const EditForm5 = forwardRef(({ formData,setLoadIndicators, setFormData, handleN
               <label>Marketing Source</label>
               <div className="input-group ">
                 <select
-                  className="form-select"
+                  className="form-select form-select-sm"
                   name="marketingSource"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -430,7 +430,7 @@ const EditForm5 = forwardRef(({ formData,setLoadIndicators, setFormData, handleN
               <label>Referred By</label>
               <div className="input-group ">
                 <input
-                  className="form-control"
+                  className="form-control form-control-sm"
                   name="referBy"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -448,7 +448,7 @@ const EditForm5 = forwardRef(({ formData,setLoadIndicators, setFormData, handleN
               <label>Name of Referal</label>
               <div className="input-group ">
                 <input
-                  className="form-control"
+                  className="form-control form-control-sm"
                   name="nameOfReferral"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -470,7 +470,7 @@ const EditForm5 = forwardRef(({ formData,setLoadIndicators, setFormData, handleN
                 <input
                   type="date"
                   name="enquiryDate"
-                  className="form-control"
+                  className="form-control form-control-sm"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   value={formik.values.enquiryDate}
@@ -487,7 +487,7 @@ const EditForm5 = forwardRef(({ formData,setLoadIndicators, setFormData, handleN
               <label>Refer Student Center</label>
               <div className="input-group ">
                 <select
-                  className="form-select"
+                  className="form-select form-select-sm"
                   name="referedStudentCenterNameId"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -518,7 +518,7 @@ const EditForm5 = forwardRef(({ formData,setLoadIndicators, setFormData, handleN
               <div className="">
                 <textarea
                   type="text"
-                  className="form-control"
+                  className="form-control form-control-sm"
                   name="remark"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}

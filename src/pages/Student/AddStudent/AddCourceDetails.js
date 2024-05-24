@@ -106,7 +106,7 @@ const AddcourseDetail = forwardRef(
                           onChange={formik.handleChange}
                           onBlur={formik.handleBlur}
                           value={formik.values.courseId}
-                          className="form-select"
+                          className="form-select form-select-sm"
                         >
                           <option selected></option>
                           {courseData &&
@@ -123,7 +123,7 @@ const AddcourseDetail = forwardRef(
                         </label>
                         <br />
                         <input
-                          className="form-control  form-contorl-sm"
+                          className="form-control form-contorl-sm"
                           name="startDate"
                           type="date"
                           onChange={formik.handleChange}
@@ -137,7 +137,7 @@ const AddcourseDetail = forwardRef(
                         </label>
                         <br />
                         <input
-                          className="form-control "
+                          className="form-control form-control-sm"
                           type="time"
                           name="startTime"
                           onChange={formik.handleChange}
@@ -152,7 +152,7 @@ const AddcourseDetail = forwardRef(
                         <br />
                         <input
                           type="file"
-                          className="form-control"
+                          className="form-control"form-control-sm
                           name="file"
                           onChange={(event) => {
                             formik.setFieldValue(
@@ -175,7 +175,7 @@ const AddcourseDetail = forwardRef(
                           onBlur={formik.handleBlur}
                           value={formik.values.courseDay}
                           name="courseDay"
-                          className="form-control "
+                          className="form-control form-control-sm"
                           type="date"
                         />
                       </div>
@@ -199,7 +199,7 @@ const AddcourseDetail = forwardRef(
                         </label>
                         <br />
                         <input
-                          className="form-control "
+                          className="form-control form-control-sm"
                           type="time"
                           name="endTime"
                           onChange={formik.handleChange}
@@ -213,7 +213,7 @@ const AddcourseDetail = forwardRef(
                         </label>
                         <br />
                         <input
-                          className="form-control  form-contorl-sm"
+                          className="form-control form-control-sm form-contorl-sm"
                           name="signatureDate"
                           type="date"
                           onChange={formik.handleChange}

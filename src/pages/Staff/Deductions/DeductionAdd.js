@@ -120,7 +120,7 @@ function DeductionAdd() {
   // }, []);
 
   return (
-    <div className="minHeight container-fluid center">
+    <div className="container-fluid center">
       <form onSubmit={formik.handleSubmit}>
         <div className="card shadow border-0 mb-2 top-header">
           <div className="container-fluid py-4">
@@ -152,7 +152,7 @@ function DeductionAdd() {
             </div>
           </div>
         </div>
-        <div className="card shadow border-0 mb-2 top-header">
+        <div className="minHeight card shadow border-0 mb-2 top-header">
           <div className="container p-5">
             <div className="row">
               <div className="row mt-3">
@@ -161,7 +161,7 @@ function DeductionAdd() {
                   <span className="text-danger">*</span>
                   <select
                     {...formik.getFieldProps("centerId")}
-                    className={`form-select ${formik.touched.centerId && formik.errors.centerId
+                    className={`form-select form-select-sm ${formik.touched.centerId && formik.errors.centerId
                         ? "is-invalid"
                         : ""
                       }`}
@@ -186,7 +186,7 @@ function DeductionAdd() {
                   <label className="form-label">Employee Name</label>
                   <select
                     {...formik.getFieldProps("userId")}
-                    class={`form-select  ${formik.touched.userId && formik.errors.userId
+                    class={`form-select form-select-sm  ${formik.touched.userId && formik.errors.userId
                         ? "is-invalid"
                         : ""
                       }`}
@@ -208,7 +208,7 @@ function DeductionAdd() {
                   <span className="text-danger">*</span>
                   <select
                     {...formik.getFieldProps("deductionName")}
-                    className={`form-select ${formik.touched.deductionName && formik.errors.deductionName
+                    className={`form-select form-select-sm ${formik.touched.deductionName && formik.errors.deductionName
                         ? "is-invalid"
                         : ""
                       }`}
@@ -233,7 +233,7 @@ function DeductionAdd() {
                   </label>
                   <input
                     type="month"
-                    className={`form-control ${formik.touched.deductionMonth &&
+                    className={`form-control form-control-sm ${formik.touched.deductionMonth &&
                         formik.errors.deductionMonth
                         ? "is-invalid"
                         : ""
@@ -253,7 +253,7 @@ function DeductionAdd() {
                   </label>
                   <input
                     type="text"
-                    className={`form-control ${formik.touched.deductionAmount &&
+                    className={`form-control form-control-sm ${formik.touched.deductionAmount &&
                         formik.errors.deductionAmount
                         ? "is-invalid"
                         : ""
@@ -274,7 +274,7 @@ function DeductionAdd() {
                   </label>
                   <input
                     type="text"
-                    className={`form-control ${
+                    className={`form-control form-control-sm ${
                       formik.touched.totalDeductionAmount &&
                       formik.errors.totalDeductionAmount
                         ? "is-invalid"

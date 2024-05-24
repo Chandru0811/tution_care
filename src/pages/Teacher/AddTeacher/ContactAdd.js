@@ -59,87 +59,88 @@ const ContactAdd = forwardRef(({ formData,setLoadIndicators, setFormData, handle
 
   return (
     <form onsubmit={formik.handleSubmit}>
-      <section>
-        <div className="container">
-          <p className="headColor my-4">Contact Information</p>
-          <div class="row">
-            <div class="col-md-6 col-12 mb-2 mt-3">
-              <label>
-                Email ID<span class="text-danger">*</span>
-              </label>
-              <input
-                type="email"
-                className="form-control"
-                name="email"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.email}
-              />
-              {formik.touched.email && formik.errors.email && (
-                <div className="error text-danger ">
-                  <small>{formik.errors.email}</small>
-                </div>
-              )}
-            </div>
-            <div class="col-md-6 col-12 mb-2 mt-3">
-              <label>
-                Contact Number<span class="text-danger">*</span>
-              </label>
-              <input
-                type="text"
-                className="form-control"
-                name="contactNumber"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.contactNumber}
-              />
-              {formik.touched.contactNumber && formik.errors.contactNumber && (
+    <section>
+      <div className="container">
+        <p className="headColor my-4">Contact Information</p>
+        <div class="row">
+          <div class="col-md-6 col-12 mb-2 mt-3">
+            <label>
+              Email Id<span class="text-danger">*</span>
+            </label>
+            <input
+              type="email"
+              className="form-control form-control-sm"
+              name="email"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.email}
+            />
+            {formik.touched.email && formik.errors.email && (
+              <div className="error text-danger ">
+                <small>{formik.errors.email}</small>
+              </div>
+            )}
+          </div>
+          <div class="col-md-6 col-12 mb-2 mt-3">
+            <label>
+              Contact Number<span class="text-danger">*</span>
+            </label>
+            <input
+              type="text"
+              className="form-control form-control-sm"
+              name="contactNumber"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.contactNumber}
+            />
+            {formik.touched.contactNumber &&
+              formik.errors.contactNumber && (
                 <div className="error text-danger ">
                   <small>{formik.errors.contactNumber}</small>
                 </div>
               )}
-            </div>
-            <div class="col-md-6 col-12 mb-2 mt-3">
-              <label>
-                Address<span class="text-danger">*</span>
-              </label>
-              <textarea
-                type="text"
-                className="form-control"
-                name="address"
-                rows="3"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.address}
-              />
-              {formik.touched.address && formik.errors.address && (
-                <div className="error text-danger ">
-                  <small>{formik.errors.address}</small>
-                </div>
-              )}
-            </div>
-            <div class="col-md-6 col-12 mb-2 mt-3">
-              <label>
-                Postal Code<span class="text-danger">*</span>
-              </label>
-              <input
-                type="text"
-                className="form-control"
-                name="postalCode"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.postalCode}
-              />
-              {formik.touched.postalCode && formik.errors.postalCode && (
-                <div className="error text-danger ">
-                  <small>{formik.errors.postalCode}</small>
-                </div>
-              )}
-            </div>
+          </div>
+          <div class="col-md-6 col-12 mb-2 mt-3">
+            <label>
+              Address<span class="text-danger">*</span>
+            </label>
+            <textarea
+              type="text"
+              className="form-control form-control-sm"
+              name="address"
+              rows="3"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.address}
+            />
+            {formik.touched.address && formik.errors.address && (
+              <div className="error text-danger ">
+                <small>{formik.errors.address}</small>
+              </div>
+            )}
+          </div>
+          <div class="col-md-6 col-12 mb-2 mt-3">
+            <label>
+              Postal Code<span class="text-danger">*</span>
+            </label>
+            <input
+              type="text"
+              className="form-control form-control-sm"
+              name="postalCode"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.postalCode}
+            />
+            {formik.touched.postalCode && formik.errors.postalCode && (
+              <div className="error text-danger ">
+                <small>{formik.errors.postalCode}</small>
+              </div>
+            )}
           </div>
         </div>
-      </section>
-    </form>
+      </div>
+    </section>
+  </form>
   );
 });
 

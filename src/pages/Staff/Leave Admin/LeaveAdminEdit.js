@@ -224,7 +224,7 @@ function LeaveAdminEdit() {
                 </label>
                 <select
                   {...formik.getFieldProps("centerId")}
-                  className={`form-select ${formik.touched.centerId && formik.errors.centerId
+                  className={`form-select form-select-sm ${formik.touched.centerId && formik.errors.centerId
                       ? "is-invalid"
                       : ""
                     }`}
@@ -250,7 +250,7 @@ function LeaveAdminEdit() {
                 <select
                   {...formik.getFieldProps("userId")}
                   name="userId"
-                  className={`form-select  ${formik.touched.userId && formik.errors.userId
+                  className={`form-select form-select-sm  ${formik.touched.userId && formik.errors.userId
                       ? "is-invalid"
                       : ""
                     }`}
@@ -272,7 +272,7 @@ function LeaveAdminEdit() {
                   Leave Type<span className="text-danger">*</span>
                 </label>
                 <select
-                  className={`form-select  ${formik.touched.leaveType && formik.errors.leaveType
+                  className={`form-select form-select-sm  ${formik.touched.leaveType && formik.errors.leaveType
                       ? "is-invalid"
                       : ""
                     }`}
@@ -294,7 +294,7 @@ function LeaveAdminEdit() {
                   Leave Status<span className="text-danger">*</span>
                 </label>
                 <select
-                  className={`form-select  ${formik.touched.leaveStatus && formik.errors.leaveStatus
+                  className={`form-select form-select-sm  ${formik.touched.leaveStatus && formik.errors.leaveStatus
                       ? "is-invalid"
                       : ""
                     }`}
@@ -316,7 +316,7 @@ function LeaveAdminEdit() {
                 </label>
                 <input
                   type="text"
-                  className={`form-control  ${formik.touched.noOfDays && formik.errors.noOfDays
+                  className={`form-control form-control-sm  ${formik.touched.noOfDays && formik.errors.noOfDays
                       ? "is-invalid"
                       : ""
                     }`}
@@ -334,7 +334,7 @@ function LeaveAdminEdit() {
                 </label>
                 <input
                   type="date"
-                  className={`form-control  ${formik.touched.fromDate && formik.errors.fromDate
+                  className={`form-control form-control-sm  ${formik.touched.fromDate && formik.errors.fromDate
                       ? "is-invalid"
                       : ""
                     }`}
@@ -351,7 +351,7 @@ function LeaveAdminEdit() {
                 </label>
                 <input
                   type="date"
-                  className={`form-control  ${formik.touched.toDate && formik.errors.toDate
+                  className={`form-control form-control-sm  ${formik.touched.toDate && formik.errors.toDate
                       ? "is-invalid"
                       : ""
                     }`}
@@ -368,7 +368,7 @@ function LeaveAdminEdit() {
                 </label>
                 <input
                   type="text"
-                  className={`form-control  ${formik.touched.dayType && formik.errors.dayType
+                  className={`form-control form-control-sm  ${formik.touched.dayType && formik.errors.dayType
                       ? "is-invalid"
                       : ""
                     }`}
@@ -382,7 +382,7 @@ function LeaveAdminEdit() {
                 <label className="form-label">Attachment</label>
                 <input
                   type="file"
-                  className="form-control"
+                  className="form-control form-control-sm"
                   onChange={(event) =>
                     formik.setFieldValue("attachment", event.target.files[0])
                   }
@@ -394,7 +394,7 @@ function LeaveAdminEdit() {
                 </label>
                 <textarea
                   rows={5}
-                  className={`form-control  ${formik.touched.leaveReason && formik.errors.leaveReason
+                  className={`form-control form-control-sm  ${formik.touched.leaveReason && formik.errors.leaveReason
                       ? "is-invalid"
                       : ""
                     }`}

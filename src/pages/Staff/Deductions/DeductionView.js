@@ -33,7 +33,7 @@ function DeductionView() {
   // }, [id]); //   Add <i class="bx bx-plus"></i>id as a dependency
 
   return (
-    <div className="minHeight container-fluid center">
+    <div className="container-fluid center">
         <div className="card shadow border-0 mb-2 top-header">
         <div className="container-fluid py-4">
           <div className="row align-items-center">
@@ -54,7 +54,7 @@ function DeductionView() {
           </div>
         </div>
       </div>
-      <div className="card shadow border-0 mb-2 top-header">
+      <div className="minHeight card shadow border-0 mb-2 top-header">
         <div className="container p-5">
         <div className="row mt-5 pb-3">
             <div className="col-md-6 col-12">

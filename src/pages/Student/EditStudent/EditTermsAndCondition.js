@@ -146,7 +146,7 @@ const EditTermsAndCondition = forwardRef(
                         <br />
                         <input
                           type="file"
-                          className="form-control"
+                          className="form-control form-control-sm"
                           name="file"
                           onChange={(event) => {
                             formik.setFieldValue("file", event.target.files[0]);
@@ -201,7 +201,7 @@ const EditTermsAndCondition = forwardRef(
                         </label>
                         <br />
                         <input
-                          className="form-control  form-contorl-sm"
+                          className="form-control form-control-sm  form-contorl-sm"
                           name="termsAndConditionSignatureDate"
                           type="date"
                           onChange={formik.handleChange}

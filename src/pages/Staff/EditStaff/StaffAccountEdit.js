@@ -223,7 +223,7 @@ const StaffAccountEdit = forwardRef(
               </label>
               <input
                 type="date"
-                className="form-control"
+                className="form-control form-control-sm"
                 name="startDate"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -244,7 +244,7 @@ const StaffAccountEdit = forwardRef(
                   <input
                     type="color"
                     {...formik.getFieldProps("colorCode")}
-                    className="form-control-color  circle"
+                    className="form-control-color  circle form-control-sm"
                   />
                 </div>
                 <input
@@ -266,7 +266,7 @@ const StaffAccountEdit = forwardRef(
               </label>
               <input
                 type="text"
-                className="form-control"
+                className="form-control form-control-sm"
                 name="teacherId"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -284,7 +284,7 @@ const StaffAccountEdit = forwardRef(
               </label>
               <select
                 type="text"
-                className="form-select"
+                className="form-select form-select-sm"
                 name="teacherType"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -307,7 +307,7 @@ const StaffAccountEdit = forwardRef(
               </label>
               <input
                 type="text"
-                className="form-control"
+                className="form-control form-control-sm"
                 name="shgType"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -325,7 +325,7 @@ const StaffAccountEdit = forwardRef(
               </label>
               <input
                 type="text"
-                className="form-control"
+                className="form-control form-control-sm"
                 name="shgAmount"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -343,7 +343,7 @@ const StaffAccountEdit = forwardRef(
                 Status<span class="text-danger">*</span>
               </lable>
               <select
-                class="form-select"
+                class="form-select  form-select-sm"
                 name="status"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -365,7 +365,7 @@ const StaffAccountEdit = forwardRef(
               </label>
               <input
                 type="date"
-                className="form-control"
+                className="form-control form-control-sm"
                 name="endDate"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -582,7 +582,7 @@ const StaffAccountEdit = forwardRef(
               <div className="input-group mb-3">
                 <select
                   {...formik.getFieldProps("centerId")}
-                  className={`form-select  ${
+                  className={`form-select  form-select-sm  ${
                     formik.touched.centerId && formik.errors.centerId
                       ? "is-invalid"
                       : ""

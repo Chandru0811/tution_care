@@ -99,7 +99,6 @@
   display: none;
 }
 
-
 /* Style to show inner square when checkbox is checked */
 .M-S:checked + .custom-checkbox .inner-square {
   display: block;
@@ -242,8 +241,6 @@
 div.dt-container .dt-search input{
   outline: none !important;
 }
-
-
 
 /* Buttons in Page */
 

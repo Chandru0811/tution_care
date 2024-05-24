@@ -5,6 +5,7 @@ import $ from "jquery";
 import SendNotificationAdd from "./SendNotificationAdd";
 import SendNotificationEdit from "./SendNotificationEdit";
 import api from "../../config/URL";
+import Delete from "../../components/common/DeleteModel";
 
 const SendNotification = () => {
   const tableRef = useRef(null);
@@ -152,6 +153,12 @@ const SendNotification = () => {
                           onSuccess={refreshData}
                         />
                       )}
+                       {storedScreens?.levelDelete && (
+                    <Delete
+                      onSuccess={refreshData}
+                      path={`/deleteCourseLevel/${data.id}`}
+                    />
+                  )}
                     </td>
                   </tr>
                 ))}

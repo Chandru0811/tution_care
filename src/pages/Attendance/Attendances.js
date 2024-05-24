@@ -147,19 +147,19 @@ function Attendances() {
   };
 
   return (
-      <div className="minHeight container-fluid  center">
+      <div className="container-fluid  center">
         <div className="card shadow border-0 mb-2 top-header">
           <div className="container-fluid px-0">
             <div className="my-3 d-flex justify-content-between mb-5 px-4">
               <h2>Attendance</h2>
             </div>
             <hr />
-        <div className="container p-5">
+        <div className="minHeight container p-5">
         <div className="row">
           <div className="col-md-6 col-12 mb-2">
             <label className="form-lable">Centre</label>
             <select
-              className="form-select "
+              className="form-select form-select-sm "
               aria-label="Default select example"
               onChange={(e) => setSelectedCenter(e.target.value)}
             >
@@ -174,7 +174,7 @@ function Attendances() {
           {/* <div className="col-md-6 col-12 mb-2">
             <label className="form-lable">Course</label>
             <select
-              className="form-select "
+              className="form-select form-select-sm "
               aria-label="Default select example"
               onChange={(e) => setSelectedCourse(e.target.value)}
             >
@@ -190,7 +190,7 @@ function Attendances() {
           <div className="col-md-6 col-12">
             <label className="form-lable">Batch</label>
             <select
-              className="form-select "
+              className="form-select form-select-sm "
               aria-label="Default select example"
               onChange={(e) => setSelectedBatch(e.target.value)}
             >
@@ -206,7 +206,7 @@ function Attendances() {
             <label className="form-lable">Attendance Date</label>
             <input
               type="date"
-              className="form-control"
+              className="form-control form-control-sm"
               onChange={(e) => setSelectedDate(e.target.value)}
               value={selectedDate}
             />

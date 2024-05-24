@@ -75,7 +75,7 @@ const AddTermsAndCondition = forwardRef(
                         <br />
                         <input
                           type="file"
-                          className="form-control"
+                          className="form-control form-control-sm"
                           name="file"
                           onChange={(event) => {
                             formik.setFieldValue(

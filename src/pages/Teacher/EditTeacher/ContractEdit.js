@@ -210,7 +210,7 @@ const ContractEdit = forwardRef(({ formData,setLoadIndicators, setFormData }, re
               <label>Employer</label>
               <input
                 type="text"
-                className="form-control"
+                className="form-control form-control-sm"
                 name="employer"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -221,7 +221,7 @@ const ContractEdit = forwardRef(({ formData,setLoadIndicators, setFormData }, re
               <label>UEN</label>
               <input
                 type="text"
-                className="form-control"
+                className="form-control form-control-sm"
                 name="uen"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -238,7 +238,7 @@ const ContractEdit = forwardRef(({ formData,setLoadIndicators, setFormData }, re
             <label>Address of Employment</label>
             <input
               type="text"
-              className="form-control"
+              className="form-control form-control-sm"
               name="addressOfEmployment"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
@@ -251,7 +251,7 @@ const ContractEdit = forwardRef(({ formData,setLoadIndicators, setFormData }, re
               <label>Employee</label>
               <input
                 type="text"
-                className="form-control"
+                className="form-control form-control-sm"
                 name="employee"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -262,7 +262,7 @@ const ContractEdit = forwardRef(({ formData,setLoadIndicators, setFormData }, re
               <label>NRIC</label>
               <input
                 type="text"
-                className="form-control"
+                className="form-control form-control-sm"
                 name="nric"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -278,7 +278,7 @@ const ContractEdit = forwardRef(({ formData,setLoadIndicators, setFormData }, re
               <label>Address</label>
               <input
                 type="text"
-                className="form-control"
+                className="form-control form-control-sm"
                 name="userContractAddress"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -289,7 +289,7 @@ const ContractEdit = forwardRef(({ formData,setLoadIndicators, setFormData }, re
               <label>Job Title</label>
               <input
                 type="text"
-                className="form-control"
+                className="form-control form-control-sm"
                 name="jobTitle"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -300,7 +300,7 @@ const ContractEdit = forwardRef(({ formData,setLoadIndicators, setFormData }, re
               <label>Main Duties</label>
               <input
                 type="text"
-                className="form-control"
+                className="form-control form-control-sm"
                 name="mainDuties"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -311,7 +311,7 @@ const ContractEdit = forwardRef(({ formData,setLoadIndicators, setFormData }, re
               <label>Start Date of Employment</label>
               <input
                 type="date"
-                className="form-control"
+                className="form-control form-control-sm"
                 name="startDateOfEmployment"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -322,7 +322,7 @@ const ContractEdit = forwardRef(({ formData,setLoadIndicators, setFormData }, re
               <label>Training</label>
               <input
                 type="text"
-                className="form-control"
+                className="form-control form-control-sm"
                 name="training"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -333,7 +333,7 @@ const ContractEdit = forwardRef(({ formData,setLoadIndicators, setFormData }, re
               <label>Allowance</label>
               <input
                 type="text"
-                className="form-control"
+                className="form-control form-control-sm"
                 name="allowance"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -349,7 +349,7 @@ const ContractEdit = forwardRef(({ formData,setLoadIndicators, setFormData }, re
               <label>Start Date</label>
               <input
                 type="date"
-                className="form-control"
+                className="form-control form-control-sm"
                 name="userContractStartDate"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -360,7 +360,7 @@ const ContractEdit = forwardRef(({ formData,setLoadIndicators, setFormData }, re
               <label>Contract Period</label>
               <input
                 type="text"
-                className="form-control"
+                className="form-control form-control-sm"
                 name="contactPeriod"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -371,7 +371,7 @@ const ContractEdit = forwardRef(({ formData,setLoadIndicators, setFormData }, re
               <label>Porbation</label>
               <input
                 type="text"
-                className="form-control"
+                className="form-control form-control-sm"
                 name="probation"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -384,7 +384,7 @@ const ContractEdit = forwardRef(({ formData,setLoadIndicators, setFormData }, re
               </label>
               <input
                 type="date"
-                className="form-control"
+                className="form-control form-control-sm"
                 name="workingDays"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -401,7 +401,7 @@ const ContractEdit = forwardRef(({ formData,setLoadIndicators, setFormData }, re
                 Working Days<span className="text-danger">*</span>
               </label>
               <select
-                className={`form-select  ${
+                className={`form-select form-select-sm ${
                   formik.touched.workingDays && formik.errors.workingDays
                     ? "is-invalid"
                     : ""
@@ -430,7 +430,7 @@ const ContractEdit = forwardRef(({ formData,setLoadIndicators, setFormData }, re
               <label>Salary</label>
               <input
                 type="text"
-                className="form-control"
+                className="form-control form-control-sm"
                 name="userContractSalary"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -447,7 +447,7 @@ const ContractEdit = forwardRef(({ formData,setLoadIndicators, setFormData }, re
               <label>Salary Start Date</label>
               <input
                 type="date"
-                className="form-control"
+                className="form-control form-control-sm"
                 name="salaryStartDate"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -458,7 +458,7 @@ const ContractEdit = forwardRef(({ formData,setLoadIndicators, setFormData }, re
               <label>End Date</label>
               <input
                 type="date"
-                className="form-control"
+                className="form-control form-control-sm"
                 name="userContractEndDate"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -471,7 +471,7 @@ const ContractEdit = forwardRef(({ formData,setLoadIndicators, setFormData }, re
                 <label>Pay Now</label>
                 <input
                   type="text"
-                  className="form-control"
+                  className="form-control form-control-sm"
                   name="payNow"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -482,7 +482,7 @@ const ContractEdit = forwardRef(({ formData,setLoadIndicators, setFormData }, re
                 <label>Internet Banking</label>
                 <input
                   type="text"
-                  className="form-control"
+                  className="form-control form-control-sm"
                   name="internetBanking"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -493,7 +493,7 @@ const ContractEdit = forwardRef(({ formData,setLoadIndicators, setFormData }, re
                 <label>Contract Date</label>
                 <input
                   type="date"
-                  className="form-control"
+                  className="form-control form-control-sm"
                   name="contractDate"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -504,7 +504,7 @@ const ContractEdit = forwardRef(({ formData,setLoadIndicators, setFormData }, re
                 <label>Termination Notice</label>
                 <input
                   type="text"
-                  className="form-control"
+                  className="form-control form-control-sm"
                   name="terminationNotice"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}

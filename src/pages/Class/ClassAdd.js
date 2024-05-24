@@ -120,13 +120,13 @@ function ClassAdd() {
                 <select
                   {...formik.getFieldProps("centerId")}
                   name="centerId"
-                  className={`form-select   ${
+                  className={`form-select form-select-sm  ${
                     formik.touched.centerId && formik.errors.centerId
                       ? "is-invalid"
                       : ""
                   }`}
                   aria-label="Default select example"
-                  class="form-select "
+                  class="form-select form-select-sm"
                 >
                   <option selected></option>
                   {centerData &&
@@ -149,13 +149,13 @@ function ClassAdd() {
                 <select
                   {...formik.getFieldProps("courseId")}
                   name="courseId"
-                  className={`form-select   ${
+                  className={`form-select form-select-sm  ${
                     formik.touched.courseId && formik.errors.courseId
                       ? "is-invalid"
                       : ""
                   }`}
                   aria-label="Default select example"
-                  class="form-select "
+                  class="form-select form-select-sm"
                 >
                   <option selected></option>
                   {courseData &&
@@ -177,9 +177,9 @@ function ClassAdd() {
                 </label>
                 <input
                   name="className"
-                  class="form-control "
+                  class="form-control form-control-sm"
                   type="text"
-                  className={`form-control  ${
+                  className={`form-control form-control-sm ${
                     formik.touched.className && formik.errors.className
                       ? "is-invalid"
                       : ""
@@ -237,7 +237,7 @@ function ClassAdd() {
                 </label>
                 <select
                   {...formik.getFieldProps("durationInHrs")}
-                  className={`form-select  ${
+                  className={`form-select form-select-sm ${
                     formik.touched.durationInHrs && formik.errors.durationInHrs
                       ? "is-invalid"
                       : ""
@@ -262,9 +262,9 @@ function ClassAdd() {
                 <label>Remark</label>
                 <textarea
                   name="remark"
-                  class="form-control "
+                  class="form-control form-control-sm"
                   type="text"
-                  className={`form-control  ${
+                  className={`form-control form-control-sm ${
                     formik.touched.remark && formik.errors.remark
                       ? "is-invalid"
                       : ""

@@ -118,7 +118,7 @@ const AddEmergencyContact = forwardRef(
                               </label>
                               <br />
                               <input
-                                className="form-control "
+                                className="form-control form-control-sm"
                                 type="text"
                                 name="emergencyContactName"
                                 onChange={formik.handleChange}
@@ -136,7 +136,7 @@ const AddEmergencyContact = forwardRef(
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
                                 value={formik.values.emergencyRelation}
-                                className="form-select "
+                                className="form-select form-select-sm"
                                 aria-label="example"
                               >
                                 <option value=""></option>
@@ -153,7 +153,7 @@ const AddEmergencyContact = forwardRef(
                               </label>
                               <br />
                               <input
-                                className="form-control "
+                                className="form-control form-control-sm"
                                 type="text"
                                 name="emergencyContactNo"
                                 onChange={formik.handleChange}
@@ -195,7 +195,7 @@ const AddEmergencyContact = forwardRef(
                             </label>
                             <br />
                             <input
-                              className="form-control "
+                              className="form-control form-control-sm"
                               type="text"
                               name={`emergencyContactInformation[${index}].name`}
                               onChange={formik.handleChange}
@@ -215,7 +215,7 @@ const AddEmergencyContact = forwardRef(
                               name={`emergencyContactInformation[${index}].authorizedRelation`}
                               onChange={formik.handleChange}
                               onBlur={formik.handleBlur}
-                              className="form-select "
+                              className="form-select form-select-sm"
                               aria-label=" example"
                               value={
                                 formik.values.emergencyContactInformation[index]
@@ -235,7 +235,7 @@ const AddEmergencyContact = forwardRef(
                             </label>
                             <br />
                             <input
-                              className="form-control "
+                              className="form-control form-control-sm"
                               type="text"
                               onChange={formik.handleChange}
                               onBlur={formik.handleBlur}
@@ -254,7 +254,7 @@ const AddEmergencyContact = forwardRef(
                             </label>
                             <br />
                             <input
-                              className="form-control "
+                              className="form-control form-control-sm"
                               type="text"
                               onChange={formik.handleChange}
                               onBlur={formik.handleBlur}
@@ -271,7 +271,7 @@ const AddEmergencyContact = forwardRef(
                             </label>
                             <br />
                             <input
-                              className="form-control "
+                              className="form-control form-control-sm"
                               type="text"
                               onChange={formik.handleChange}
                               onBlur={formik.handleBlur}
@@ -288,7 +288,7 @@ const AddEmergencyContact = forwardRef(
                             </label>
                             <br />
                             <input
-                              className="form-control"
+                              className="form-control form-control-sm"
                               type="file"
                               name="files"
                                // name={`emergencyContactInformation[${index}].files`}

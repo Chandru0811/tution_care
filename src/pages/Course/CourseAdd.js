@@ -143,7 +143,7 @@ function CourseAdd({ onSuccess }) {
                 <div className="input-group mb-3">
                   <select
                     {...formik.getFieldProps("centerId")}
-                    className={`form-select  ${
+                    className={`form-select  form-select-sm${
                       formik.touched.centerId && formik.errors.centerId
                         ? "is-invalid"
                         : ""
@@ -171,7 +171,7 @@ function CourseAdd({ onSuccess }) {
                 </lable>
                 <input
                   type="text"
-                  className={`form-control  ${
+                  className={`form-control form-control-sm  ${
                     formik.touched.courseName && formik.errors.courseName
                       ? "is-invalid"
                       : ""
@@ -193,7 +193,7 @@ function CourseAdd({ onSuccess }) {
                 <div className="input-group mb-3">
                   <input
                     type="text"
-                    className={`form-control  ${
+                    className={`form-control form-control-sm  ${
                       formik.touched.courseCode && formik.errors.courseCode
                         ? "is-invalid"
                         : ""
@@ -212,7 +212,7 @@ function CourseAdd({ onSuccess }) {
                   Subject<span className="text-danger">*</span>
                 </lable>
                 <select
-                  className={`form-select  ${
+                  className={`form-select  form-select-sm${
                     formik.touched.subjectId && formik.errors.subjectId
                       ? "is-invalid"
                       : ""
@@ -243,7 +243,7 @@ function CourseAdd({ onSuccess }) {
                 <div className="input-group mb-3">
                   <select
                     {...formik.getFieldProps("levelId")}
-                    className={`form-select  ${
+                    className={`form-select  form-select-sm${
                       formik.touched.levelId && formik.errors.levelId
                         ? "is-invalid"
                         : ""
@@ -269,7 +269,7 @@ function CourseAdd({ onSuccess }) {
                 <lable className="form-lable">Min Class Size</lable>
                 <input
                   type="text"
-                  className={`form-control  ${
+                  className={`form-control form-control-sm  ${
                     formik.touched.minClassSize && formik.errors.minClassSize
                       ? "is-invalid"
                       : ""
@@ -289,7 +289,7 @@ function CourseAdd({ onSuccess }) {
                 <lable className="form-lable">Max Class Size</lable>
                 <input
                   type="text"
-                  className={`form-control  ${
+                  className={`form-control form-control-sm  ${
                     formik.touched.maxClassSize && formik.errors.maxClassSize
                       ? "is-invalid"
                       : ""
@@ -307,7 +307,7 @@ function CourseAdd({ onSuccess }) {
                 <lable className="">Replacement Lesson Student Buffer</lable>
                 <input
                   type="text"
-                  className={`form-control  ${
+                  className={`form-control form-control-sm  ${
                     formik.touched.replacementLessonStudentBuffer &&
                     formik.errors.replacementLessonStudentBuffer
                       ? "is-invalid"
@@ -331,12 +331,12 @@ function CourseAdd({ onSuccess }) {
                     <input
                       type="color"
                       {...formik.getFieldProps("colorCode")}
-                      className="form-control-color circle"
+                      className="form-control form-control-sm form-control-color circle"
                     />
                   </div>
                   <input
                     type="text"
-                    className={`form-control iconInput `}
+                    className={`form-control form-control-sm iconInput`}
                     value={formik.values.colorCode}
                   />
                 </div>
@@ -384,7 +384,7 @@ function CourseAdd({ onSuccess }) {
                 <div className="input-group mb-3">
                   <select
                     {...formik.getFieldProps("durationInHrs")}
-                    className="form-select iconInput "
+                    className="form-select form-select-sm iconInput "
                     aria-label="Default select example"
                   >
                     <option selected></option>
@@ -401,7 +401,7 @@ function CourseAdd({ onSuccess }) {
                 <div className="input-group mb-3">
                   <select
                     {...formik.getFieldProps("durationInMins")}
-                    className="form-select iconInput "
+                    className="form-select form-select-sm iconInput "
                     aria-label="Default select example"
                   >
                     <option selected></option>
@@ -421,7 +421,7 @@ function CourseAdd({ onSuccess }) {
                 <div className="input-group ">
                   <select
                     {...formik.getFieldProps("status")}
-                    className={`form-select  ${
+                    className={`form-select  form-select-sm${
                       formik.touched.status && formik.errors.status
                         ? "is-invalid"
                         : ""
@@ -477,7 +477,7 @@ function CourseAdd({ onSuccess }) {
                 <lable className="">Description</lable>
                 <textarea
                   type="text"
-                  className={`form-control pb-5`}
+                  className={`form-control form-control-sm pb-5`}
                   {...formik.getFieldProps("description")}
                   placeholder=""
                 ></textarea>

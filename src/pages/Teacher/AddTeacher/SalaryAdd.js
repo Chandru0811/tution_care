@@ -60,7 +60,7 @@ const SalaryAdd = forwardRef(({ formData,setLoadIndicators, setFormData, handleN
               <label>Salary</label>
               <input
                 type="text"
-                className="form-control"
+                className="form-control form-control-sm"
                 name="salary"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -76,7 +76,7 @@ const SalaryAdd = forwardRef(({ formData,setLoadIndicators, setFormData, handleN
               <label>Effective Date</label>
               <input
                 type="date"
-                className="form-control"
+                className="form-control form-control-sm"
                 name="effectiveDate"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -87,7 +87,7 @@ const SalaryAdd = forwardRef(({ formData,setLoadIndicators, setFormData, handleN
               <label>Salary Type</label>
               <select
                 type="text"
-                className="form-select"
+                className="form-select form-select-sm"
                 name="salaryType"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}

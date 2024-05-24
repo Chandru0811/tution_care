@@ -165,7 +165,7 @@ const AddStudentDetails = forwardRef(
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values.centerId}
-                        className="form-select"
+                        className="form-select form-select-sm"
                       >
                         <option selected></option>
                         {centerData &&
@@ -191,7 +191,7 @@ const AddStudentDetails = forwardRef(
                       </label>
                       <br />
                       <input
-                        className="form-control "
+                        className="form-control form-control-sm"
                         type="text"
                         name="studentChineseName"
                         onChange={formik.handleChange}
@@ -212,7 +212,7 @@ const AddStudentDetails = forwardRef(
                       </label>
                       <br />
                       <input
-                        className="form-control  form-contorl-sm"
+                        className="form-control  forform-control-smm-contorl-sm"
                         name="dateOfBirth"
                         type="date"
                         onChange={formik.handleChange}
@@ -314,7 +314,7 @@ const AddStudentDetails = forwardRef(
                       </label>
                       <br />
                       <input
-                        className="form-control "
+                        className="form-control form-control-sm"
                         type="text"
                         name="preAssessmentResult"
                         onChange={formik.handleChange}
@@ -339,7 +339,7 @@ const AddStudentDetails = forwardRef(
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values.nationality}
-                        className="form-select "
+                        className="form-select form-select-sm "
                         aria-label=". example"
                       >
                         <option value=""></option>
@@ -362,7 +362,7 @@ const AddStudentDetails = forwardRef(
                       <br />
                       <input
                         name="referByParent"
-                        className="form-control"
+                        className="form-control form-control-sm"
                         type="text"
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
@@ -388,7 +388,7 @@ const AddStudentDetails = forwardRef(
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values.studentName}
-                        className="form-control "
+                        className="form-control form-control-sm"
                         type="text"
                       />
                       {formik.touched.studentName &&
@@ -398,7 +398,7 @@ const AddStudentDetails = forwardRef(
                           </div>
                         )}
                     </div>
-                    <div className="text-start mt-4">
+                    {/* <div className="text-start mt-4">
                       <label htmlFor="" className=" fw-medium">
                         <small>Profile Image</small>
                         <span className="text-danger">*</span>
@@ -406,19 +406,17 @@ const AddStudentDetails = forwardRef(
                       <br />
                       <input
                         type="file"
-                        name="file"
-                        className="form-control"
+                        name="profileImage"
+                        className="form-controform-control-sml"
                         onChange={(event) => {
-                          formik.setFieldValue("file", event.target.files[0]);
+                          formik.setFieldValue(
+                            "profileImage",
+                            event.target.files[0]
+                          );
                         }}
                         onBlur={formik.handleBlur}
                       />
-                      {formik.touched.file && formik.errors.file && (
-                        <div className="error text-danger ">
-                          <small>{formik.errors.file}</small>
-                        </div>
-                      )}
-                    </div>
+                    </div> */}
                     <div className="text-start mt-4">
                       <label htmlFor="" className=" fw-medium">
                         <small>Age</small>
@@ -426,7 +424,7 @@ const AddStudentDetails = forwardRef(
                       </label>
                       <br />
                       <input
-                        className="form-control "
+                        className="form-control form-control-sm"
                         type="text"
                         name="age"
                         onChange={formik.handleChange}
@@ -446,7 +444,7 @@ const AddStudentDetails = forwardRef(
                       </label>
                       <br />
                       <input
-                        className="form-control "
+                        className="form-control form-control-sm"
                         type="text"
                         name="medicalCondition"
                         onChange={formik.handleChange}
@@ -471,7 +469,7 @@ const AddStudentDetails = forwardRef(
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values.schoolName}
-                        className="form-control "
+                        className="form-control form-control-sm"
                         type="text"
                       />
                       {formik.touched.schoolName &&
@@ -492,7 +490,7 @@ const AddStudentDetails = forwardRef(
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values.race}
-                        className="form-select "
+                        className="form-select form-select-sm "
                         aria-label=". example"
                       >
                         <option selected></option>
@@ -514,7 +512,7 @@ const AddStudentDetails = forwardRef(
                       </label>
                       <br />
                       <input
-                        className="form-control "
+                        className="form-controform-control-sml"
                         type="text"
                         name="primaryLanguageSpokenEnglish"
                         onChange={formik.handleChange}
@@ -530,45 +528,18 @@ const AddStudentDetails = forwardRef(
                           </div>
                         )}
                     </div>
-                    {/* <div className="text-start mt-4">
+                    <div className="text-start mt-4">
                       <label htmlFor="" className="mb-1 fw-medium">
                         <small>Refer By Student</small>
                         <span className="text-danger">*</span>
                       </label>
                       <br />
-                      <select
-                        name="referByStudent"
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        value={formik.values.referByStudent}
-                        className="form-select "
-                        aria-label=". example"
-                      >
-                        <option value=""></option>
-                        <option value="Jacky">Jacky</option>
-                        <option value="Lee">Lee</option>
-                        <option value="Chan">Chan</option>
-                      </select>
-                      {formik.touched.referByStudent &&
-                        formik.errors.referByStudent && (
-                          <div className="error text-danger ">
-                            <small>{formik.errors.referByStudent}</small>
-                          </div>
-                        )}
-                    </div> */}
-                    <div className="text-start mt-4">
-                      <label htmlFor="" className=" fw-medium">
-                        <small>Refer By Student</small>
-                        <span className="text-danger">*</span>
-                      </label>
-                      <br />
                       <input
-                        className="form-control "
-                        type="text"
                         name="referByStudent"
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values.referByStudent}
+                        className="form-controform-control-sml"
                       />
                       {formik.touched.referByStudent &&
                         formik.errors.referByStudent && (
@@ -586,7 +557,7 @@ const AddStudentDetails = forwardRef(
                   <br />
                   <textarea
                     name="remark"
-                    className="form-control "
+                    className="form-control form-control-sm"
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.remark}

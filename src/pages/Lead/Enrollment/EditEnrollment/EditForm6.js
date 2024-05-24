@@ -84,7 +84,7 @@ const EditForm6 = forwardRef(({ formData,setLoadIndicators,setFormData, handleNe
                 <textarea
                   id="addressOfAuthorisedPerson"
                   name="addressOfAuthorisedPerson"
-                  className="form-control"
+                  className="form-control form-control-sm"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   value={formik.values.addressOfAuthorisedPerson}

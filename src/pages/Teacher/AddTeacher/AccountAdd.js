@@ -94,14 +94,14 @@ const AccountAdd = forwardRef(({ formData,setLoadIndicators, setFormData, handle
     <form onSubmit={formik.handleSubmit}>
       <div className="container courseAdd">
         <p className="headColor my-4">Account Information</p>
-        <div className="row">
-          <div className="col-md-6 col-12 mb-2 mt-3">
+        <div class="row">
+          <div class="col-md-6 col-12 mb-2 mt-3">
             <label>
-              Start Date<span className="text-danger">*</span>
+              Start Date<span class="text-danger">*</span>
             </label>
             <input
               type="date"
-              className="form-control"
+              className="form-control form-control-sm"
               name="startDate"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
@@ -113,31 +113,38 @@ const AccountAdd = forwardRef(({ formData,setLoadIndicators, setFormData, handle
               </div>
             )}
           </div>
-          <div className="col-md-6 col-12 mb-2 mt-3">
-            <label>Color Code</label>
+          <div class="col-md-6 col-12 mb-2 mt-3">
+            <label>
+              Color Code<span class="text-danger">*</span>
+            </label>
             <div class="input-group mb-3 courseAdd">
               <div class="input-group-text inputGroup">
                 <input
                   type="color"
-                  className="form-control-color circle"
                   {...formik.getFieldProps("colorCode")}
+                  className="form-control-color  circle form-control-sm"
                 />
               </div>
               <input
                 type="text"
-                className={`form-control iconInput `}
+                className={`form-control form-control-sm iconInput `}
                 value={formik.values.colorCode}
                 placeholder=""
               />
             </div>
+            {formik.errors.colorCode ? (
+              <div className="error text-danger ">
+                <small>{formik.errors.colorCode}</small>
+              </div>
+            ) : null}
           </div>
-          <div className="col-md-6 col-12 mb-2 mt-3">
+          <div class="col-md-6 col-12 mb-2 mt-3">
             <label>
-              Teacher Id<span className="text-danger">*</span>
+              Teacher ID<span class="text-danger">*</span>
             </label>
             <input
               type="text"
-              className="form-control"
+              className="form-control form-control-sm"
               name="teacherId"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
@@ -149,13 +156,13 @@ const AccountAdd = forwardRef(({ formData,setLoadIndicators, setFormData, handle
               </div>
             )}
           </div>
-          <div className="col-md-6 col-12 mb-2 mt-3">
+          <div class="col-md-6 col-12 mb-2 mt-3">
             <label>
-              Teacher Type<span className="text-danger">*</span>
+              Teacher Type<span class="text-danger">*</span>
             </label>
             <select
               type="text"
-              className="form-select"
+              className="form-select form-select-sm"
               name="teacherType"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
@@ -167,37 +174,36 @@ const AccountAdd = forwardRef(({ formData,setLoadIndicators, setFormData, handle
               <option value="Intern">Intern</option>
             </select>
             {formik.touched.teacherType && formik.errors.teacherType && (
-              <div className="text-danger ">
+              <div className="error text-danger ">
                 <small>{formik.errors.teacherType}</small>
               </div>
             )}
           </div>
-          <div className="col-md-6 col-12 mb-2 mt-3">
+          <div class="col-md-6 col-12 mb-2 mt-3">
             <label>
-              SHG(s) Type<span className="text-danger">*</span>
+              SHG(s) Type<span class="text-danger">*</span>
             </label>
             <input
               type="text"
-              className="form-control"
+              className="form-control form-control-sm"
               name="shgType"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.shgType}
             />
             {formik.touched.shgType && formik.errors.shgType && (
-              <div className="text-danger">
+              <div className="error text-danger ">
                 <small>{formik.errors.shgType}</small>
               </div>
             )}
           </div>
-
-          <div className="col-md-6 col-12 mb-2 mt-3">
+          <div class="col-md-6 col-12 mb-2 mt-3">
             <label>
-              SHG Amount<span className="text-danger">*</span>
+              SHG Amount<span class="text-danger">*</span>
             </label>
             <input
               type="text"
-              className="form-control"
+              className="form-control form-control-sm"
               name="shgAmount"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
@@ -210,12 +216,12 @@ const AccountAdd = forwardRef(({ formData,setLoadIndicators, setFormData, handle
             )}
           </div>
 
-          <div className="col-md-6 col-12 mb-2 mt-3">
-            <lable>
-              Status<span className="text-danger">*</span>
+          <div class="col-md-6 col-12 mb-2 mt-3">
+            <lable class="">
+              Status<span class="text-danger">*</span>
             </lable>
             <select
-              className="form-select "
+              class="form-select form-select-sm "
               name="status"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
@@ -231,14 +237,13 @@ const AccountAdd = forwardRef(({ formData,setLoadIndicators, setFormData, handle
               </div>
             )}
           </div>
-
-          <div className="col-md-6 col-12 mb-2 mt-3">
+          <div class="col-md-6 col-12 mb-2 mt-3">
             <label>
-              End Date<span className="text-danger">*</span>
+              End Date<span class="text-danger">*</span>
             </label>
             <input
               type="date"
-              className="form-control"
+              className="form-control form-control-sm"
               name="endDate"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
@@ -255,41 +260,45 @@ const AccountAdd = forwardRef(({ formData,setLoadIndicators, setFormData, handle
                 <input
                   type="radio"
                   className="form-check-input"
+                  id="Yes"
                   name="approvelContentRequired"
                   value="Yes"
                   checked={formik.values.approvelContentRequired === "Yes"}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                 />
-                <label className="form-check-label me-4">Yes</label>
+                <label className="form-check-label" htmlFor="Yes">
+                  Yes
+                </label>
               </div>
               <div className="form-check">
                 <input
                   type="radio"
                   className="form-check-input"
+                  id="No"
                   name="approvelContentRequired"
                   value="No"
                   checked={formik.values.approvelContentRequired === "No"}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                 />
-                <label className="form-check-label">No</label>
+                <label className="form-check-label" htmlFor="No">
+                  No
+                </label>
               </div>
             </div>
-            {formik.touched.approvelContentRequired &&
-            formik.errors.approvelContentRequired ? (
+            {formik.touched.approvelContentRequired && formik.errors.approvelContentRequired ? (
               <div className="error text-danger ">
                 <small>{formik.errors.approvelContentRequired}</small>
               </div>
             ) : null}
           </div>
-
-          <div className="col-md-6 col-12 mb-2 mt-3">
+          <div class="col-md-6 col-12 mb-2 mt-3">
             <label>
-              Working Days<span className="text-danger">*</span>
+              Working Days<span class="text-danger">*</span>
             </label>
-            <div className="mt-2 d-flex mt-3">
-              <div className="checkbox-container">
+            <div class="mt-2 d-flex justify-content-between mt-3">
+              <div class="checkbox-container">
                 <input
                   type="checkbox"
                   className="form-check-input"
@@ -303,14 +312,14 @@ const AccountAdd = forwardRef(({ formData,setLoadIndicators, setFormData, handle
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                 />
-                <label for="myCheckbox1" className="custom-checkbox">
-                  <div className="inner-square"></div>
+                <label for="myCheckbox1" class="custom-checkbox">
+                  <div class="inner-square"></div>
                 </label>
                 <label for="myCheckbox1" className="mx-1">
                   Mon
                 </label>
               </div>
-              <div className="checkbox-container">
+              <div class="checkbox-container">
                 <input
                   type="checkbox"
                   className="form-check-input"
@@ -324,14 +333,14 @@ const AccountAdd = forwardRef(({ formData,setLoadIndicators, setFormData, handle
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                 />
-                <label for="myCheckbox2" className="custom-checkbox">
-                  <div className="inner-square"></div>
+                <label for="myCheckbox2" class="custom-checkbox">
+                  <div class="inner-square"></div>
                 </label>
                 <label for="myCheckbox2" className="mx-1">
                   Tue
                 </label>
               </div>
-              <div className="checkbox-container">
+              <div class="checkbox-container">
                 <input
                   type="checkbox"
                   className="form-check-input"
@@ -345,14 +354,14 @@ const AccountAdd = forwardRef(({ formData,setLoadIndicators, setFormData, handle
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                 />
-                <label for="myCheckbox3" className="custom-checkbox">
-                  <div className="inner-square"></div>
+                <label for="myCheckbox3" class="custom-checkbox">
+                  <div class="inner-square"></div>
                 </label>
                 <label for="myCheckbox3" className="mx-1">
                   Wed
                 </label>
               </div>
-              <div className="checkbox-container">
+              <div class="checkbox-container">
                 <input
                   type="checkbox"
                   className="form-check-input"
@@ -366,14 +375,14 @@ const AccountAdd = forwardRef(({ formData,setLoadIndicators, setFormData, handle
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                 />
-                <label for="myCheckbox4" className="custom-checkbox">
-                  <div className="inner-square"></div>
+                <label for="myCheckbox4" class="custom-checkbox">
+                  <div class="inner-square"></div>
                 </label>
                 <label for="myCheckbox4" className="mx-1">
                   Thu
                 </label>
               </div>
-              <div className="checkbox-container">
+              <div class="checkbox-container">
                 <input
                   type="checkbox"
                   className="form-check-input"
@@ -387,14 +396,14 @@ const AccountAdd = forwardRef(({ formData,setLoadIndicators, setFormData, handle
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                 />
-                <label for="myCheckbox5" className="custom-checkbox">
-                  <div className="inner-square"></div>
+                <label for="myCheckbox5" class="custom-checkbox">
+                  <div class="inner-square"></div>
                 </label>
                 <label for="myCheckbox5" className="mx-1">
                   Fri
                 </label>
               </div>
-              <div className="checkbox-container">
+              <div class="checkbox-container">
                 <input
                   type="checkbox"
                   className="form-check-input"
@@ -408,14 +417,14 @@ const AccountAdd = forwardRef(({ formData,setLoadIndicators, setFormData, handle
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                 />
-                <label for="myCheckbox6" className="custom-checkbox">
-                  <div className="inner-square"></div>
+                <label for="myCheckbox6" class="custom-checkbox">
+                  <div class="inner-square"></div>
                 </label>
                 <label for="myCheckbox6" className="mx-1">
                   Sat
                 </label>
               </div>
-              <div className="checkbox-container">
+              <div class="checkbox-container">
                 <input
                   type="checkbox"
                   className="form-check-input"
@@ -429,8 +438,8 @@ const AccountAdd = forwardRef(({ formData,setLoadIndicators, setFormData, handle
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                 />
-                <label for="myCheckbox7" className="custom-checkbox">
-                  <div className="inner-square"></div>
+                <label for="myCheckbox7" class="custom-checkbox">
+                  <div class="inner-square"></div>
                 </label>
                 <label for="myCheckbox7" className="mx-1">
                   Sun
@@ -450,7 +459,7 @@ const AccountAdd = forwardRef(({ formData,setLoadIndicators, setFormData, handle
             <div className="input-group mb-3">
               <select
                 {...formik.getFieldProps("centerId")}
-                className={`form-select  ${
+                className={`form-select form-select-sm  ${
                   formik.touched.centerId && formik.errors.centerId
                     ? "is-invalid"
                     : ""
