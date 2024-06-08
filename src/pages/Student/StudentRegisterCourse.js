@@ -5,7 +5,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 import api from "../../config/URL";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import fetchAllCoursesWithIds from "../List/CourseList";
 
 function StudentRegisterCourse() {
@@ -69,7 +69,7 @@ function StudentRegisterCourse() {
           );
           if (response.status === 200) {
             toast.success(response.data.message);
-            navigate("/student");
+            navigate("/studentlisting");
           } else {
             toast.error(response.data.message);
           }
@@ -90,7 +90,7 @@ function StudentRegisterCourse() {
           );
           if (response.status === 201) {
             toast.success(response.data.message);
-            navigate("/student");
+            navigate("/studentlisting");
           } else {
             toast.error(response.data.message);
           }
@@ -143,7 +143,7 @@ function StudentRegisterCourse() {
       <div className="container">
         <form onSubmit={formik.handleSubmit}>
           <div className="my-3 d-flex justify-content-end align-items-end  mb-5">
-            <Link to={`/student/view/${id}`}>
+            <Link to={`/studentlisting/view/${id}`}>
               <button type="button" className="btn btn-sm btn-border   ">
                 Back
               </button>

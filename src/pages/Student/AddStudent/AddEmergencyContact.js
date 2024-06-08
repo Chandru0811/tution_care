@@ -1,7 +1,7 @@
 import React, { forwardRef, useImperativeHandle, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import api from "../../../config/URL";
 import { data } from "jquery";
 
@@ -326,7 +326,7 @@ const AddEmergencyContact = forwardRef(
                 }}
                 className="btn btn-border btn-sm"
               >
-                <i className="bx bx-plus"></i>   Add <i class="bx bx-plus"></i>More
+                <i className="bx bx-plus"></i>More
               </button>{" "}
               &nbsp;&nbsp;
               {rows.length > 1 && (

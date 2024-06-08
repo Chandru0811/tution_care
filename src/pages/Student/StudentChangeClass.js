@@ -37,17 +37,17 @@ function StudentChangeClass() {
     <div className="container">
       <form onSubmit={formik.handleSubmit}>
         <div className="my-3 d-flex justify-content-end align-items-end  mb-5">
-          <Link to="/student/view">
+          <Link to="/studentlisting">
             <button type="button" className="btn btn-sm btn-border">
               Back
             </button>
           </Link>
           &nbsp;&nbsp;
-          {/* {/ <Link to="/student"> /} */}
+          <Link to="/studentlisting"> 
           <button type="submit" className="btn btn-button btn-sm ">
             Save
           </button>
-          {/* {/ </Link> /} */}
+           </Link> 
         </div>
         <div className="container">
           <div className="row py-4">

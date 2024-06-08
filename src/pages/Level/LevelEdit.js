@@ -6,7 +6,7 @@ import Modal from "react-bootstrap/Modal";
 import { FaEdit } from "react-icons/fa";
 import * as Yup from "yup";
 import api from "../../config/URL";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 
 function Edit({ id, onSuccess }) {
   const [show, setShow] = useState(false);

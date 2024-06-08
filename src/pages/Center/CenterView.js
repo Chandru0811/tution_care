@@ -1,24 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import api from "../../config/URL";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 
 function CenterView() {
   const { id } = useParams();
   const [data, setData] = useState([]);
   console.log(data);
 
-  // useEffect(() => {
-  //   const getData = async () => {
-  //     try {
-  //       const response = await api.get(`/getAllCenterById/${id}`);
-  //       setData(response.data);
-  //     } catch (error) {
-  //       toast.error("Error Fetching Data", error);
-  //     }
-  //   };
-  //   getData();
-  // }, [id]);
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const response = await api.get(`/getAllTuitionById/${id}`);
+        setData(response.data);
+      } catch (error) {
+        toast.error("Error Fetching Data", error.message);
+      }
+    };
+    getData();
+  }, [id]);
   return (
     <div className="container-fluid center">
         <div className="card shadow border-0 mb-2 top-header">
@@ -52,7 +52,7 @@ function CenterView() {
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">
-                    : {data.centerName || "--"}
+                    : {data.tuitionCareName || "--"}
                   </p>
                 </div>
               </div>
@@ -74,7 +74,7 @@ function CenterView() {
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">
-                    : {data.centerManager || "--"}
+                    : {data.tuitionManager || "--"}
                   </p>
                 </div>
               </div>
@@ -251,8 +251,8 @@ function CenterView() {
                   </tr>
                 </thead>
                 <tbody>
-                  {data.centerRegistrations &&
-                    data.centerRegistrations.map((registration, index) => (
+                  {data.tuitionCareRegistration &&
+                    data.tuitionCareRegistration.map((registration, index) => (
                       <tr key={index}>
                         <td>{index + 1}</td>
                         <td>
@@ -287,8 +287,8 @@ function CenterView() {
                   </tr>
                 </thead>
                 <tbody>
-                  {data.centerBreaks &&
-                    data.centerBreaks.map((centerBreak, index) => (
+                  {data.tuitionCareBreak &&
+                    data.tuitionCareBreak.map((centerBreak, index) => (
                       <tr key={index}>
                         <td>{index + 1}</td>
                         <td>{centerBreak.breakName}</td>
@@ -346,8 +346,8 @@ function CenterView() {
                   </tr>
                 </thead>
                 <tbody>
-                  {data.centerClassRooms &&
-                    data.centerClassRooms.map((centerClassRoom, index) => (
+                  {data.tuitionCareClassRoom &&
+                    data.tuitionCareClassRoom.map((centerClassRoom, index) => (
                       <tr key={index}>
                         <td>{index + 1}</td>
                         <td>{centerClassRoom.classRoomName}</td>
@@ -378,8 +378,8 @@ function CenterView() {
                   </tr>
                 </thead>
                 <tbody>
-                  {data.centerPackages &&
-                    data.centerPackages.map((centerPackage, index) => (
+                  {data.tuitionCarePackage &&
+                    data.tuitionCarePackage.map((centerPackage, index) => (
                       <tr key={index}>
                         <td>{index + 1}</td>
                         <td>{centerPackage.packageName || "--"}</td>

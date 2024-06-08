@@ -1,7 +1,7 @@
 import React, { forwardRef, useImperativeHandle } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import api from "../../../config/URL";
 
 const validationSchema = Yup.object().shape({
@@ -31,26 +31,26 @@ const StaffPersonalAdd = forwardRef(
         gender: formData.gender || "",
       },
       validationSchema: validationSchema,
-      // onSubmit: async (values) => {
-      //   // values.dateOfBirth = "2024-02-22T09:46:22.412Z";
-      //   try {
-      //     const response = await api.post(`/createUser`, values, {
-      //       headers: {
-      //         "Content-Type": "application/json",
-      //       },
-      //     });
-      //     if (response.status === 201) {
-      //       const user_id = response.data.user_id;
-      //       toast.success(response.data.message);
-      //       setFormData((prv) => ({ ...prv, ...values, user_id }));
-      //       handleNext();
-      //     } else {
-      //       toast.error(response.data.message);
-      //     }
-      //   } catch (error) {
-      //     toast.error(error);
-      //   }
-      // },
+      onSubmit: async (values) => {
+        // values.dateOfBirth = "2024-02-22T09:46:22.412Z";
+        try {
+          const response = await api.post(`/createUser`, values, {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+          if (response.status === 201) {
+            const user_id = response.data.user_id;
+            toast.success(response.data.message);
+            setFormData((prv) => ({ ...prv, ...values, user_id }));
+            handleNext();
+          } else {
+            toast.error(response.data.message);
+          }
+        } catch (error) {
+          toast.error(error);
+        }
+      },
       onSubmit: async (values) => {
         setLoadIndicators(true);
         try {

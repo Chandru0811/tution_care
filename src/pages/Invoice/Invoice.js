@@ -9,7 +9,7 @@ import api from "../../config/URL";
 import fetchAllCoursesWithIds from "../List/CourseList";
 import fetchAllCentersWithIds from "../List/CenterList";
 import fetchAllStudentsWithIds from "../List/StudentList";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 // import { SCREENS } from "../../config/ScreenFilter";
 
 const Invoice = () => {
@@ -29,7 +29,7 @@ const Invoice = () => {
       const centerData = await fetchAllCentersWithIds();
       const courseData = await fetchAllCoursesWithIds();
       const studentData = await fetchAllStudentsWithIds();
-      const packageData = await api.get("getAllCentersPackageWithIds");
+      const packageData = await api.get("getAllTuitionPackageWithIds");
       setPackageData(packageData.data);
       setCenterData(centerData);
       setCourseData(courseData);
@@ -45,7 +45,7 @@ const Invoice = () => {
         const response = await api.get("/getAllGenerateInvoices");
         setDatas(response.data);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching data:", error.message);
       } finally {
         setLoading(false);
       }
@@ -68,9 +68,7 @@ const Invoice = () => {
       // DataTable already initialized, no need to initialize again
       return;
     }
-    $(tableRef.current).DataTable({
-      responsive: true,
-    });
+    $(tableRef.current).DataTable();
   };
 
   const destroyDataTable = () => {
@@ -138,7 +136,7 @@ const Invoice = () => {
                       <td>
                         {courseData &&
                           courseData.map((course) =>
-                            parseInt(data.courseId) === course.id
+                            parseInt(data.courseId ) === course.id
                               ? course.courseNames || "--"
                               : ""
                           )}
@@ -146,7 +144,7 @@ const Invoice = () => {
                       <td>
                         {centerData &&
                           centerData.map((center) =>
-                            parseInt(data.centerId) === center.id
+                            parseInt(data.tuitionId ) === center.id
                               ? center.centerNames || "--"
                               : ""
                           )}
@@ -169,26 +167,26 @@ const Invoice = () => {
                       </td>
                       <td>
                         <div className="d-flex">
-                          {storedScreens?.invoiceRead && (
+                          {/* {storedScreens?.invoiceRead && ( */}
                             <Link to={`/invoice/view/${data.id}`}>
                               <button className="btn btn-sm">
                                 <FaEye />
                               </button>
                             </Link>
-                          )}
-                          {storedScreens?.invoiceUpdate && (
+                          {/* )} */}
+                          {/* {storedScreens?.invoiceUpdate && ( */}
                             <Link to={`/invoice/edit/${data.id}`}>
                               <button className="btn btn-sm">
                                 <FaEdit />
                               </button>
                             </Link>
-                          )}
-                          {storedScreens?.invoiceDelete && (
+                          {/* )} */}
+                          {/* {storedScreens?.invoiceDelete && ( */}
                             <Delete
                               onSuccess={refreshData}
                               path={`/deleteGenerateInvoice/${data.id}`}
                             />
-                          )}
+                          {/* )} */}
                         </div>
                       </td>
                     </tr>

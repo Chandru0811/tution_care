@@ -5,7 +5,7 @@ import * as Yup from "yup";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import fetchAllCentersWithIds from "../List/CenterList";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
 import fetchAllClassesWithIdsC from "../List/ClassListByCourse";
 import api from "../../config/URL";
@@ -53,9 +53,9 @@ function ScheduleTeacherAdd({ onSuccess }) {
     }
   };
 
-  const fetchTeacher = async (centerId) => {
+  const fetchTeacher = async (tuitionId) => {
     try {
-      const teacher = await fetchAllTeacherListByCenter(centerId);
+      const teacher = await fetchAllTeacherListByCenter(tuitionId);
       setTeacherData(teacher);
     } catch (error) {
       toast.error(error);
@@ -135,8 +135,8 @@ function ScheduleTeacherAdd({ onSuccess }) {
       });
 
       let requestBody = {
-        centerId: values.centerId,
-        centerName: selectedCenterName,
+        tuitionId: values.centerId,
+        tuitionCareName: selectedCenterName,
         className: selectedClassName,
         classId: values.classId,
         course: selectedCourseName,
@@ -177,10 +177,10 @@ function ScheduleTeacherAdd({ onSuccess }) {
     setCourseData(null);
     setClassData(null);
     setTeacherData(null);
-    const centerId = event.target.value;
-    formik.setFieldValue("centerId", centerId);
-    fetchCourses(centerId);
-    fetchTeacher(centerId); // Fetch courses for the selected center
+    const tuitionId = event.target.value;
+    formik.setFieldValue("centerId", tuitionId);
+    fetchCourses(tuitionId);
+    fetchTeacher(tuitionId); // Fetch courses for the selected center
   };
 
   const handleCourseChange = (event) => {
@@ -190,27 +190,27 @@ function ScheduleTeacherAdd({ onSuccess }) {
     fetchClasses(courseId); // Fetch class for the selected center
   };
 
-  // const handleClassChange = (event) => {
-  //   const teacherId = event.target.value;
-  //   formik.setFieldValue("class", teacherId);
-  //   fetchTeacher(teacherId); // Fetch teacher for the selected center
-  // };
+  const handleClassChange = (event) => {
+    const teacherId = event.target.value;
+    formik.setFieldValue("class", teacherId);
+    fetchTeacher(teacherId); // Fetch teacher for the selected center
+  };
 
-  // const convertTo12Hour = (time24h) => {
-  //   let [hours, minutes] = time24h.split(":");
-  //   let modifier = "AM";
+  const convertTo12Hour = (time24h) => {
+    let [hours, minutes] = time24h.split(":");
+    let modifier = "AM";
 
-  //   if (parseInt(hours) >= 12) {
-  //     modifier = "PM";
-  //     hours = (parseInt(hours) - 12).toString();
-  //   }
+    if (parseInt(hours) >= 12) {
+      modifier = "PM";
+      hours = (parseInt(hours) - 12).toString();
+    }
 
-  //   if (hours === "0") {
-  //     hours = "12";
-  //   }
+    if (hours === "0") {
+      hours = "12";
+    }
 
-  //   return `${hours}:${minutes} ${modifier}`;
-  // };
+    return `${hours}:${minutes} ${modifier}`;
+  };
 
   return (
     <>

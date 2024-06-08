@@ -6,13 +6,13 @@ import React, {
 } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { toast } from "react-toastify";
-// import fetchAllCentersWithIds from "../../../List/CenterList";
+import toast from "react-hot-toast";
+import fetchAllCentersWithIds from "../../../List/CenterList";
 import api from "../../../../config/URL";
 import { logDOM } from "@testing-library/react";
 
 const validationSchema = Yup.object().shape({
-  centerId: Yup.string().required("*Centre is required"),
+  tuitionId: Yup.string().required("*Centre is required"),
   // preferredDay: Yup.array().of(Yup.string().required("*Select Days")),
   preferredDay: Yup.array()
     .min(1, "*Select at least one preferred day")
@@ -25,7 +25,7 @@ const Form5 = forwardRef(({ formData,setLoadIndicators, setFormData, handleNext 
 
   const formik = useFormik({
     initialValues: {
-      centerId: formData.centerId || "",
+      tuitionId: formData.tuitionId || "",
       preferredDay: formData.preferredDay || "",
       enquiryDate: formData.enquiryDate || "",
       marketingSource: formData.marketingSource || "",
@@ -65,12 +65,12 @@ const Form5 = forwardRef(({ formData,setLoadIndicators, setFormData, handleNext 
   });
 
   const fetchData = async () => {
-    // try {
-    //   const centerData = await fetchAllCentersWithIds();
-    //   setCenterData(centerData);
-    // } catch (error) {
-    //   toast.error(error);
-    // }
+    try {
+      const centerData = await fetchAllCentersWithIds();
+      setCenterData(centerData);
+    } catch (error) {
+      toast.error(error);
+    }
   };
 
   useEffect(() => {
@@ -96,22 +96,22 @@ const Form5 = forwardRef(({ formData,setLoadIndicators, setFormData, handleNext 
             </lable>
             <select
               className="form-select form-select-sm"
-              name="centerId"
+              name="tuitionId"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              value={formik.values.centerId}
+              value={formik.values.tuitionId}
             >
               <option selected></option>
               {centerData &&
-                centerData.map((centerId) => (
-                  <option key={centerId.id} value={centerId.id}>
-                    {centerId.centerNames}
+                centerData.map((tuitionId) => (
+                  <option key={tuitionId.id} value={tuitionId.id}>
+                    {tuitionId.centerNames}
                   </option>
                 ))}
             </select>
-            {formik.touched.centerId && formik.errors.centerId && (
+            {formik.touched.tuitionId && formik.errors.tuitionId && (
               <div className="error text-danger">
-                <small>{formik.errors.centerId}</small>
+                <small>{formik.errors.tuitionId}</small>
               </div>
             )}
           </div>

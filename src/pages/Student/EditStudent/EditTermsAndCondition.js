@@ -8,7 +8,7 @@ import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import api from "../../../config/URL";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 // import BlockImg from "../.././../assets/images/Block_Img1.jpg";
 
 const validationSchema = Yup.object().shape({
@@ -50,7 +50,7 @@ const EditTermsAndCondition = forwardRef(
             );
             if (response.status === 200) {
               toast.success(response.data.message);
-              navigate("/student");
+              navigate("/studentlisting");
             } else {
               toast.error(response.data.message);
             }

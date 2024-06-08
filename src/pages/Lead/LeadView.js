@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import api from "../../config/URL";
-// import fetchAllCentersWithIds from "../List/CenterList";
-// import fetchAllSubjectsWithIds from "../List/SubjectList";
-import { toast } from "react-toastify";
+import fetchAllCentersWithIds from "../List/CenterList";
+import fetchAllSubjectsWithIds from "../List/SubjectList";
+import toast from "react-hot-toast";
 import { ImCross } from "react-icons/im";
 import { TiTick } from "react-icons/ti";
 import Modal from "react-bootstrap/Modal";
@@ -36,80 +36,80 @@ function Leadview() {
   const [subjectData, setSubjectData] = useState(null);
 
   const fetchData = async () => {
-    // try {
-    //   const centerData = await fetchAllCentersWithIds();
-    //   const subjectData = await fetchAllSubjectsWithIds();
-    //   setCenterData(centerData);
-    //   setSubjectData(subjectData);
-    // } catch (error) {
-    //   toast.error(error);
-    // }
+    try {
+      const centerData = await fetchAllCentersWithIds();
+      const subjectData = await fetchAllSubjectsWithIds();
+      setCenterData(centerData);
+      setSubjectData(subjectData);
+    } catch (error) {
+      toast.error(error);
+    }
   };
 
   const handleSavePaymentStatus = async () => {
-    // try {
-    //   const response = await api.put(`/updateLeadInfo/${id}`, {
-    //     paymentStatus,
-    //   });
-    //   if (response.status === 200) {
-    //     toast.success(response.data.message);
-    //     handleClose(); // Close the modal after successful update
-    //     try {
-    //       if (paymentStatus === "PAID") {
-    //         const migrateResponse = await api.post(`/leadToStudentMigrate`, {
-    //           leadId: id,
-    //           status: "paid",
-    //         });
-    //         if (migrateResponse.status === 201) {
-    //           toast.success(migrateResponse.data.message);
-    //         } else {
-    //           toast.error(migrateResponse.data.message);
-    //         }
-    //       }
-    //     } catch (error) {
-    //       console.log("Error Payment Response", error?.response?.status);
-    //       if (error?.response?.status === 409) {
-    //         toast.warning(error?.response?.data.message);
-    //       } else if (error?.response?.status === 404) {
-    //         toast.warning(error?.response?.data.message);
-    //       } else {
-    //         toast.error(error?.response?.data.message);
-    //       }
-    //     }
-    //   } else {
-    //     toast.error(response.data.message);
-    //   }
-    // } catch (error) {
-    //   toast.error("Error updating payment status");
-    // }
+    try {
+      const response = await api.put(`/updateLeadInfo/${id}`, {
+        paymentStatus,
+      });
+      if (response.status === 200) {
+        toast.success(response.data.message);
+        handleClose(); // Close the modal after successful update
+        try {
+          if (paymentStatus === "PAID") {
+            const migrateResponse = await api.post(`/leadToStudentMigrate`, {
+              leadId: id,
+              status: "paid",
+            });
+            if (migrateResponse.status === 201) {
+              toast.success(migrateResponse.data.message);
+            } else {
+              toast.error(migrateResponse.data.message);
+            }
+          }
+        } catch (error) {
+          console.log("Error Payment Response", error?.response?.status);
+          if (error?.response?.status === 409) {
+            toast.warning(error?.response?.data.message);
+          } else if (error?.response?.status === 404) {
+            toast.warning(error?.response?.data.message);
+          } else {
+            toast.error(error?.response?.data.message);
+          }
+        }
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      toast.error("Error updating payment status");
+    }
   };
 
-  // useEffect(() => {
-  //   const getData = async () => {
-  //     try {
-  //       const response = await api.get(`/getAllLeadInfoWithReferrerById/${id}`);
-  //       setData(response.data);
-  //       setPaymentStatus(response.data.paymentStatus);
-  //     } catch (error) {
-  //       toast.error("Error Fetch Data ", error);
-  //     }
-  //     // console.log("Lead  :",response);
-  //   };
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const response = await api.get(`/getAllLeadInfoWithReferrerById/${id}`);
+        setData(response.data);
+        setPaymentStatus(response.data.paymentStatus);
+      } catch (error) {
+        toast.error("Error Fetch Data ", error);
+      }
+      // console.log("Lead  :",response);
+    };
 
-  //   const getAssesmentData = async () => {
-  //     try {
-  //       const response = await api.get(`/getLeadAssessmentDataByLeadId/${id}`);
-  //       setDoassesmentData(response.data);
-  //     } catch (error) {
-  //       toast.error("Error Fetch Data ", error);
-  //     }
-  //   };
+    const getAssesmentData = async () => {
+      try {
+        const response = await api.get(`/getLeadAssessmentDataByLeadId/${id}`);
+        setDoassesmentData(response.data);
+      } catch (error) {
+        toast.error("Error Fetch Data ", error);
+      }
+    };
 
-  //   getData();
-  //   getAssesmentData();
+    getData();
+    getAssesmentData();
 
-  //   fetchData();
-  // }, [id]);
+    fetchData();
+  }, [id]);
 
   return (
     <>

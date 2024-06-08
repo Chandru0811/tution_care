@@ -5,7 +5,7 @@ import * as yup from "yup";
 import { useFormik } from "formik";
 import { FaEdit } from "react-icons/fa";
 import api from "../../../config/URL";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 
 function EditClass({ id, onSuccess }) {
   const [show, setShow] = useState(false);
@@ -33,7 +33,7 @@ function EditClass({ id, onSuccess }) {
       setLoadIndicator(true);
       try {
         const response = await api.put(
-          `/updateCenterClassRooms/${id}`,
+          `/updateTuitionClassRooms/${id}`,
           values,
           {
             headers: {
@@ -58,7 +58,7 @@ function EditClass({ id, onSuccess }) {
   useEffect(() => {
     const getData = async () => {
       try{
-      const response = await api.get(`/getCenterClassRoomsById/${id}`);
+      const response = await api.get(`/getTuitionClassRoomsById/${id}`);
       formik.setValues(response.data);
       }catch (error) {
         toast.error("Error Fetching Data");

@@ -1,7 +1,7 @@
 import React, { forwardRef, useEffect, useImperativeHandle } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import api from "../../../config/URL";
 
 const validationSchema = Yup.object().shape({
@@ -15,6 +15,7 @@ const validationSchema = Yup.object().shape({
 });
 const StaffPersonalEdit = forwardRef(
   ({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
+    console.log("formData",formData)
     const formik = useFormik({
       initialValues: {
         teacherName: formData.teacherName || "",
@@ -26,6 +27,7 @@ const StaffPersonalEdit = forwardRef(
         shortIntroduction: formData.shortIntroduction || "",
         gender: formData.gender || "",
       },
+     
       validationSchema: validationSchema,
       onSubmit: async (data) => {
         setLoadIndicators(true);

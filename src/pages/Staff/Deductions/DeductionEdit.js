@@ -3,12 +3,12 @@ import { Link, useParams, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import api from "../../../config/URL";
-import { toast } from "react-toastify";
-// import fetchAllCentersWithIds from "../../List/CenterList";
-// import fetchAllEmployeeListByCenter from "../../List/EmployeeList";
+import toast from "react-hot-toast";
+import fetchAllCentersWithIds from "../../List/CenterList";
+import fetchAllEmployeeListByCenter from "../../List/EmployeeList";
 
 const validationSchema = Yup.object({
-  centerId: Yup.string().required("*Center Name is required"),
+  tuitionId: Yup.string().required("*Center Name is required"),
   userId: Yup.string().required("*Employee Name is required"),
   deductionName: Yup.string().required("*Select the Deduction Name"),
   deductionMonth: Yup.string().required("*Select the Deduction Month"),
@@ -25,7 +25,7 @@ function DeductionEdit() {
 
   const formik = useFormik({
     initialValues: {
-      centerId: "",
+      tuitionId: "",
       userId: "",
       deductionMonth: "",
       deductionAmount: "",
@@ -56,46 +56,46 @@ function DeductionEdit() {
 
   const handleCenterChange = async (event) => {
     setUserNameData(null);
-    const centerId = event.target.value;
-    formik.setFieldValue("centerId", centerId);
+    const tuitionId = event.target.value;
+    formik.setFieldValue("tuitionId", tuitionId);
     try {
-      await fetchUserName(centerId);
+      await fetchUserName(tuitionId);
     } catch (error) {
       toast.error(error.message);
     }
   };
 
   const fetchData = async () => {
-    // try {
-    //   const centers = await fetchAllCentersWithIds();
-    //   setCenterData(centers);
-    // } catch (error) {
-    //   toast.error(error.message);
-    // }
+    try {
+      const centers = await fetchAllCentersWithIds();
+      setCenterData(centers);
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
 
-  const fetchUserName = async (centerId) => {
-    // try {
-    //   const userNames = await fetchAllEmployeeListByCenter(centerId);
-    //   setUserNameData(userNames);
-    // } catch (error) {
-    //   toast.error(error.message);
-    // }
+  const fetchUserName = async (tuitionId) => {
+    try {
+      const userNames = await fetchAllEmployeeListByCenter(tuitionId);
+      setUserNameData(userNames);
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
 
-  // useEffect(() => {
-  //   const getData = async () => {
-  //     try {
-  //       const response = await api.get(`/getAllUserDeductionById/${id}`);
-  //       formik.setValues(response.data);
-  //       fetchUserName(response.data.centerId);
-  //     } catch (error) {
-  //       console.error("Error fetching data:", error);
-  //     }
-  //   };
-  //   getData();
-  //   fetchData();
-  // }, []);
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const response = await api.get(`/getAllUserDeductionById/${id}`);
+        formik.setValues(response.data);
+        fetchUserName(response.data.tuitionId);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    getData();
+    fetchData();
+  }, []);
 
   return (
     <div className="container-fluid center">
@@ -138,8 +138,8 @@ function DeductionEdit() {
                 <label className="form-label">Centre Name</label>
                 <span className="text-danger">*</span>
                 <select
-                  {...formik.getFieldProps("centerId")}
-                  className={`form-select form-select-sm ${formik.touched.centerId && formik.errors.centerId
+                  {...formik.getFieldProps("tuitionId")}
+                  className={`form-select form-select-sm ${formik.touched.tuitionId && formik.errors.tuitionId
                       ? "is-invalid"
                       : ""
                     }`}
@@ -154,9 +154,9 @@ function DeductionEdit() {
                       </option>
                     ))}
                 </select>
-                {formik.touched.centerId && formik.errors.centerId && (
+                {formik.touched.tuitionId && formik.errors.tuitionId && (
                   <div className="invalid-feedback">
-                    {formik.errors.centerId}
+                    {formik.errors.tuitionId}
                   </div>
                 )}
               </div>

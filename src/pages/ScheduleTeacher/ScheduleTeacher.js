@@ -5,9 +5,9 @@ import $ from "jquery";
 import Modal from "react-bootstrap/Modal";
 import { FaTrash } from "react-icons/fa";
 import api from "../../config/URL";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import ScheduleTeacherAdd from "../ScheduleTeacher/ScheduleTeacherAdd";
-// import ScheduleTeacherEdit from "../ScheduleTeacher/ScheduleTeacherEdit";
+import ScheduleTeacherEdit from "../ScheduleTeacher/ScheduleTeacherEdit";
 import ScheduleTeacherView from "../ScheduleTeacher/ScheduleTeacherView";
 import { Link } from "react-router-dom";
 import { BsTable } from "react-icons/bs";
@@ -31,16 +31,16 @@ const ScheduleTeacher = () => {
 
   const handelDelete = async (rowData) => {
     try {
-      const { centerId, userId, courseId, classId, days } = rowData;
+      const { tuitionId, userId, courseId, classId, days } = rowData;
       const formData = new FormData();
-      formData.append("centerId", centerId);
+      formData.append("tuitionId", tuitionId);
       formData.append("userId", userId);
       formData.append("courseId", courseId);
       formData.append("classId", classId);
       formData.append("dayOfWeek", days);
 
       // const requestBody = {
-      //   centerId: 8,
+      //   tuitionId: 8,
       //   userId,
       //   courseId: 11,
       //   classId: 20,
@@ -118,7 +118,7 @@ const ScheduleTeacher = () => {
         <div className="container-fluid px-0">
         <div className="d-flex justify-content-between mb-5 my-3 px-4">
               <h2>Schedule Teacher</h2>
-         <ScheduleTeacherAdd/>
+         <ScheduleTeacherAdd  onSuccess={refreshData}/>
           </div>
           <hr />
       {loading ? (
@@ -152,39 +152,39 @@ const ScheduleTeacher = () => {
                 {datas.map((data, index) => (
                   <tr key={index}>
                     <th scope="row">{index + 1}</th>
-                    <td>{data.centerName}</td>
+                    <td>{data.tuitionCareName}</td>
                     <td>{data.teacher}</td>
                     <td>{data.course}</td>
                     <td>{data.className}</td>
                     <td>{data.days}</td>
                     <td>
                       <div className="d-flex justify-content-center align-item-center">
-                        {storedScreens?.scheduleTeacherRead && (
+                        {/* {storedScreens?.scheduleTeacherRead && ( */}
                           <ScheduleTeacherView id={data.id} />
-                        )}
-                        {/* {storedScreens?.scheduleTeacherUpdate && (
+                        {/* )} */}
+                        {/* {storedScreens?.scheduleTeacherUpdate && ( */}
                         <ScheduleTeacherEdit
                           id={data.id}
                           onSuccess={refreshData}
                         />
-                      )} */}
-                        {storedScreens?.scheduleTeacherDelete && (
+                      {/* )} */}
+                        {/* {storedScreens?.scheduleTeacherDelete && ( */}
                           <button
                             className="btn btn-sm"
                             onClick={() => handleShow(data)}
                           >
                             <FaTrash />
                           </button>
-                        )}
-                        {storedScreens?.timeScheduleIndex && (
+                        {/* )} */}
+                        {/* {storedScreens?.timeScheduleIndex && ( */}
                           <Link
-                            to={`/scheduleteacher/scheduletime/${data.userId}?centerId=${data.centerId}`}
+                            to={`/scheduleteacher/scheduletime/${data.userId}?tuitionId=${data.tuitionId}`}
                           >
                             <button className="btn">
                               <BsTable className="text-dark" />
                             </button>
                           </Link>
-                        )}
+                        {/* )} */}
                       </div>
                     </td>
                   </tr>

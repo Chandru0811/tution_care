@@ -4,7 +4,7 @@ import Modal from "react-bootstrap/Modal";
 import { FaEdit } from "react-icons/fa";
 import * as yup from "yup";
 import { useFormik } from "formik";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import api from "../../config/URL";
 
 function SubjectEdit({ id, onSuccess }) {

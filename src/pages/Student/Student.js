@@ -4,11 +4,9 @@ import "datatables.net-responsive-dt";
 import $ from "jquery";
 import { Link } from "react-router-dom";
 import { FaEye, FaEdit } from "react-icons/fa";
-// import Delete from "../../components/common/Delete";
 import api from "../../config/URL";
 import { SCREENS } from "../../config/ScreenFilter";
-import StudentAdd from "./StudentAdd";
-import StudentEdit from "./StudentEdit";
+import DeleteModel from "../../components/common/DeleteModel";
 
 const Student = () => {
   const tableRef = useRef(null);
@@ -19,19 +17,19 @@ const Student = () => {
   const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
   console.log("Screens : ", SCREENS);
 
-  // useEffect(() => {
-  //   const getCenterData = async () => {
-  //     try {
-  //       const response = await api.get("/getAllStudentDetails");
-  //       setDatas(response.data);
-  //     } catch (error) {
-  //       console.error("Error fetching data:", error);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-  //   getCenterData();
-  // }, []);
+  useEffect(() => {
+    const getCenterData = async () => {
+      try {
+        const response = await api.get("/getAllStudentDetails");
+        setDatas(response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    getCenterData();
+  }, []);
 
   useEffect(() => {
     if (!loading) {
@@ -75,38 +73,45 @@ const Student = () => {
   return (
     <div>
       {loading ? (
-          <div className="loader-container">
-            <div className="loading">
-              <span></span>
-              <span></span>
-              <span></span>
-              <span></span>
-              <span></span>
-            </div>
+        <div className="loader-container">
+          <div class="loading">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
           </div>
-        ) : (
-          <div className="minHeight container-fluid  center">
-          <div className="card shadow border-0 mb-2 top-header">
-          <div className="container-fluid">
-            <div className="my-3 d-flex justify-content-between mb-5">
-              {/* {storedScreens?.staffCreate && ( */}
-                <Link to="/studentlisting/add">
-                  <button type="button" className="btn btn-button btn-sm">
-                        Add <i class="bx bx-plus"></i>
-                  </button>
-                </Link>
-              {/* )} */}
-            </div>
-            <hr/>
+        </div>
+      ) : (
+        <div className="minHeight center">
+        <div className="container-fluid my-4 center">
+        <div className="card shadow border-0 mb-2 top-header">
+        <div className="container-fluid px-0">
+          <div className="my-3 d-flex justify-content-between px-4">
+            <h2>Student Listing</h2>
+           {/* {storedScreens?.studentListingCreate && (  */}
+              <Link to="/studentlisting/add">
+                <button type="button" className="btn btn-button btn-sm">
+                  Add <i class="bx bx-plus"></i>
+                </button>
+              </Link>
+             {/* )}  */}
+          </div>
+          <hr/>
+          <div className="px-4">
           <table ref={tableRef} className="display">
             <thead>
               <tr>
                 <th scope="col" style={{ whiteSpace: "nowrap" }}>
                   S No
                 </th>
-                <th scope="col">Level</th>
-                <th scope="col">Code</th>
-                <th scope="col">Status</th>
+                <th scope="col">Student ID</th>
+                <th scope="col">Student Name</th>
+                <th scope="col">Age</th>
+                <th scope="col">Gender</th>
+                <th scope="col">Nationality</th>
+                {/* <th scope="col">Join Class Date</th>
+                <th scope="col">Status</th> */}
                 <th scope="col">Action</th>
               </tr>
             </thead>
@@ -114,55 +119,50 @@ const Student = () => {
               {datas.map((data, index) => (
                 <tr key={index}>
                   <th scope="row">{index + 1}</th>
-                  <td>{data.level}</td>
-                  <td>{data.levelCode}</td>
+                  <td>{data.studentUniqueId}</td>
+                  <td>{data.studentName}</td>
+                  <td>{data.age}</td>
+                  <td>{data.gender}</td>
+                  <td>{data.nationality}</td>
+                  {/* <td>{data.joinClassDate}</td>
+                  <td>{data.status}</td> */}
                   <td>
-                    {data.status === "Active" ? (
-                      <span className="badge badges-Green">Active</span>
-                    ) : (
-                      <span className="badge badges-Red">Inactive</span>
-                    )}
-                  </td>
-                  <td>
-                    {storedScreens?.levelRead && (
-                      <Link to={`/studentlisting/view`}>
-                        <button className="btn btn-sm">
-                          <FaEye />
-                        </button>
-                      </Link>
-                    )}
-                    {/* {storedScreens?.levelUpdate && (
-                      <StudentEdit id={data.id} 
-                      // onSuccess={refreshData} 
-                      />
-                    )} */}
-                    {/* {storedScreens?.levelDelete && (
-                  <Delete
-                    onSuccess={refreshData}
-                    path={`/deleteCourseLevel/${data.id}`}
-                  />
-                )} */}
-                 {storedScreens?.levelUpdate && (
-                      <Link
-                        to={`/studentlisting/edit`}
-                        style={{ display: "inline-block" }}
-                      >
-                        <button className="btn btn-sm">
-                          <FaEdit />
-                        </button>
-                      </Link>
-                    )}
+                    <div className="d-flex">
+                      {/* {storedScreens?.studentListingRead && ( */}
+                        <Link to={`/studentlisting/view/${data.id}`}>
+                          <button className="btn btn-sm">
+                            <FaEye />
+                          </button>
+                        </Link>
+                      {/* )} */}
+                      {/* {storedScreens?.studentListingUpdate && ( */}
+                        <Link to={`/studentlisting/edit/${data.id}`}>
+                          <button className="btn btn-sm">
+                            <FaEdit />
+                          </button>
+                        </Link>
+                      {/* )} */}
+                      {/* {storedScreens?.studentListingDelete && ( */}
+                        <DeleteModel
+                          onSuccess={refreshData}
+                          path={`/deleteStudentDetail/${data.id}`}
+                        />
+                      {/* )} */}
+                    </div>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
-          </div>
-          </div>
         </div>
-        )}
-      </div>
+        </div>
+        </div>
+        </div>
+        </div>
+      )}
+    </div>
   );
 };
 
 export default Student;
+

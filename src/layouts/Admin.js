@@ -51,11 +51,11 @@ import ScheduleTime from "../pages/ScheduleTeacher/ScheduleTime";
 import AttendancesCourse from "../pages/Attendance/AttendancesCourse";
 import AttendancesAdd from "../pages/Attendance/AttendancesAdd";
 import AttendancesEdit from "../pages/Attendance/AttendancesEdit";
-import Document from "../pages/Document/Document";
-import DocumentAdd from "../pages/Document/DocumentAdd";
-import DocumentEdit from "../pages/Document/DocumentEdit";
-import DocumentView from "../pages/Document/DocumentView";
-import DocumentFile from "../pages/Document/DocumentFiles";
+// import Document from "../pages/Document/Document";
+// import DocumentAdd from "../pages/Document/DocumentAdd";
+// import DocumentEdit from "../pages/Document/DocumentEdit";
+// import DocumentView from "../pages/Document/DocumentView";
+// import DocumentFile from "../pages/Document/DocumentFiles";
 import Holiday from "../pages/Staff/Holiday/Holiday";
 import HolidayAdd from "../pages/Staff/Holiday/HolidayAdd";
 import HolidayEdit from "../pages/Staff/Holiday/HolidayEdit";
@@ -104,10 +104,20 @@ import Payment from "../pages/Payment/Payment";
 import SendNotification from "../pages/SendNotification/SendNotification";
 import SendNotificationAdd from "../pages/SendNotification/SendNotificationAdd";
 import SendNotificationEdit from "../pages/SendNotification/SendNotificationEdit";
+import {  Toaster } from "react-hot-toast";
+import Student from "../pages/Student/Student";
+import Curriculum from "../pages/Curriculum/Curriculum";
+import StaffingAttendance from "../pages/StaffingAttendance/StaffingAttendance";
+import StaffingAttendanceAdd from "../pages/StaffingAttendance/StaffingAttendanceAdd";
+import StaffingAttendanceEdit from "../pages/StaffingAttendance/StaffingAttendanceEdit";
+import StaffingAttendanceView from "../pages/StaffingAttendance/StaffingAttendanceView";
+// import CurriculumAdd from "../pages/Curriculum/CurriculumAdd";
+// import CurriculumEdit from "../pages/Curriculum/CurriculumEdit";
 
 function Admin({ handleLogout }) {
   return (
     <BrowserRouter>
+    <Toaster />
       <div className="d-flex flex-column flex-lg-row h-lg-full bg-surface-secondary">
         <Sidebar onLogout={handleLogout} />
         <div className="h-screen flex-grow-1 overflow-y-lg-auto">
@@ -117,55 +127,57 @@ function Admin({ handleLogout }) {
 
               <Route path="/center" element={<Center />} />
               <Route path="/center/add" element={<CenterAdd />} />
-              <Route path="/center/view" element={<CenterView />} />
-              <Route path="/center/edit" element={<CenterEdit />} />
+              <Route path="/center/view/:id" element={<CenterView />} />
+              <Route path="/center/edit/:id" element={<CenterEdit />} />
 
               <Route path="/course" element={<Course />} />
               <Route path="/course/add" element={<CourseAdd />} />
-              <Route path="/course/edit" element={<CourseEdit />} />
-              <Route path="/course/view" element={<CourseView />} />
-              {/* <Route path="/course/curriculum/:id" element={<Curriculum />} />
-              <Route path="/curriculum" element={<Curriculum />} /> */}
+              <Route path="/course/edit/:id" element={<CourseEdit />} />
+              <Route path="/course/view/:id" element={<CourseView />} />
+              <Route path="/course/curriculum/:id" element={<Curriculum />} />
+              <Route path="/curriculum" element={<Curriculum />} />
+              {/* <Route path="/curriculum" element={<CurriculumAdd />} />
+              <Route path="/curriculum" element={<CurriculumEdit />} /> */}
 
               <Route path="/level" element={<Level />} />
               <Route path="/level/add" element={<LevelAdd />} />
-              <Route path="/level/edit" element={<LevelEdit />} />
-              <Route path="/level/view" element={<LevelView />} />
+              <Route path="/level/edit/:id" element={<LevelEdit />} />
+              <Route path="/level/view/:id" element={<LevelView />} />
 
               <Route path="/subject" element={<Subject />} />
               <Route path="/subject/add" element={<SubjectAdd />} />
-              <Route path="/subject/edit" element={<SubjectEdit />} />
-              <Route path="/subject/view" element={<SubjectView />} />
+              <Route path="/subject/edit/:id" element={<SubjectEdit />} />
+              <Route path="/subject/view/:id" element={<SubjectView />} />
 
               <Route path="/class" element={<Class />} />
               <Route path="/class/add" element={<ClassAdd />} />
-              <Route path="/class/edit" element={<ClassEdit />} />
-              <Route path="/class/view" element={<ClassView />} />
+              <Route path="/class/edit/:id" element={<ClassEdit />} />
+              <Route path="/class/view/:id" element={<ClassView />} />
 
               <Route path="/lead/lead" element={<Lead />} />
               <Route path="/lead/add" element={<LeadAdd />} />
-              <Route path="/lead/edit" element={<EnrollmentEdit />} />
-              <Route path="/lead/view" element={<LeadView />} />
+              <Route path="/lead/lead/edit/:id" element={<EnrollmentEdit />} />
+              <Route path="/lead/lead/view/:id" element={<LeadView />} />
 
               {/* Enrollment */}
               <Route path="/lead/enrollment" element={<EnrollmentAdd />} />
 
 
               {/* {/ Document  /} */}
-              <Route path="/document" element={<Document />} />
+              {/* <Route path="/document" element={<Document />} />
               <Route path="/document/add" element={<DocumentAdd />} />
               <Route path="/document/edit" element={<DocumentEdit />} />
               <Route path="/document/view/:id" element={<DocumentView />} />
-              <Route path="/documentfile" element={<DocumentFile />} />
+              <Route path="/documentfile" element={<DocumentFile />} /> */}
 
               {/* {/ Student /} */}
-              {/* {/ <Route path="/student" element={<Student />} /> /} */}
+               <Route path="/studentlisting" element={<Student />} />
               <Route path="/studentlisting/add" element={<StudentAdd />} />
               <Route
-                path="/studentlisting/edit"
+                path="/studentlisting/edit/:id"
                 element={<StudentEdit />}
               />
-              <Route path="/studentlisting/view" element={<StudentView />} />
+              <Route path="/studentlisting/view/:id" element={<StudentView />} />
               <Route
                 path="/student/view/transferOut/:id"
                 element={<StudentTransferOut />}
@@ -187,7 +199,7 @@ function Admin({ handleLogout }) {
                 path="/student/register/course/:id"
                 element={<StudentRegisterCourse />}
               />
-              <Route path="/studentlisting" element={<StudentListing />} />
+              {/* <Route path="/studentlisting" element={<StudentListing />} /> */}
 
               {/* {/ Attendances /} */}
               <Route path="/attendance/list" element={<AttendancesCourse />} />
@@ -210,40 +222,44 @@ function Admin({ handleLogout }) {
                 element={<ScheduleTeacherView />}
               />
               <Route
-                path="/scheduleteacher/scheduletime"
+                path="/scheduleteacher/scheduletime/:id"
                 element={<ScheduleTime />}
               />
 
               <Route path="/holiday" element={<Holiday />} />
               <Route path="/holiday/add" element={<HolidayAdd />} />
-              <Route path="/holiday/edit" element={<HolidayEdit />} />
-              <Route path="/holiday/list" element={<HolidayView />} />
+              <Route path="/holiday/edit/:id" element={<HolidayEdit />} />
+              <Route path="/holiday/list/:id" element={<HolidayView />} />
 
               <Route path="/deduction" element={<Deduction />} />
               <Route path="/deduction/add" element={<DeductionAdd />} />
-              <Route path="/deduction/edit" element={<DeductionEdit />} />
-              <Route path="/deduction/list" element={<DeductionView />} />
+              <Route path="/deduction/edit/:id" element={<DeductionEdit />} />
+              <Route path="/deduction/list/:id" element={<DeductionView />} />
 
               <Route path="/leaveadmin" element={<LeaveAdmin />} />
-              <Route path="/leaveadmin/edit" element={<LeaveAdminEdit />} />
-              <Route path="/leaveadmin/view" element={<LeaveAdminView />} />
+              <Route path="/leaveadmin/edit/:id" element={<LeaveAdminEdit />} />
+              <Route path="/leaveadmin/view/:id" element={<LeaveAdminView />} />
 
               <Route path="/leave" element={<Leave />} />
               <Route path="/leave/add" element={<LeaveAdd />} />
-              <Route path="/leave/view" element={<LeaveView />} />
+              <Route path="/leave/view/:id" element={<LeaveView />} />
 
               <Route path="/staff" element={<Staff />} />
               <Route path="/staff/add" element={<StaffAdd />} />
-              <Route path="/staff/edit" element={<StaffEdit />} />
-              <Route path="/staff/view" element={<StaffView />} />
+              <Route path="/staff/edit/:staff_id" element={<StaffEdit />} />
+              <Route path="/staff/view/:id" element={<StaffView />} />
               <Route path="/staff/leave" element={<StaffLeave />} />
               <Route path="/staff/leave/view" element={<StaffLeaveView />} />
               <Route path="/staff/payslip" element={<StaffPayslip />} />
+              <Route path="/staffing/attendance" element={<StaffingAttendance />} />
+              <Route path="/staffing/attendance/add" element={<StaffingAttendanceAdd />} />
+              <Route path="/staffing/attendance/edit/:id" element={<StaffingAttendanceEdit />} />
+              <Route path="/staffing/attendance/view/:id" element={<StaffingAttendanceView />} />
 
               <Route path="/teacher" element={<Teacher />} />
               <Route path="/teacher/add" element={<TeacherAdd />} />
-              <Route path="/teacher/edit" element={<TeacherEdit />} />
-              <Route path="/teacher/view" element={<TeacherView />} />
+              <Route path="/teacher/edit/:staff_id" element={<TeacherEdit />} />
+              <Route path="/teacher/view/:id" element={<TeacherView />} />
               <Route path="/teacher/leave" element={<TeacherLeave />} />
               <Route
                 path="/teacher/leave/view"
@@ -258,8 +274,8 @@ function Admin({ handleLogout }) {
               {/* / Invoice / */} 
               <Route path="/invoice" element={<Invoice />} />
               <Route path="/invoice/add" element={<InvoiceAdd />} />
-              <Route path="/invoice/edit" element={<InvoiceEdit />} />
-              <Route path="/invoice/view" element={<InvoiceView />} />
+              <Route path="/invoice/edit/:id" element={<InvoiceEdit />} />
+              <Route path="/invoice/view/:id" element={<InvoiceView />} />
 
               {/* /* <Route
                 path="/invoice/invoicepayment"

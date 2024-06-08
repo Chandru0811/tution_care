@@ -7,10 +7,10 @@ import React, {
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import api from "../../../config/URL";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import fetchAllCoursesWithIds from "../../List/CourseList";
 import { useParams } from "react-router-dom";
-// import BlockImg from "../.././../assets/images/Block_Img1.jpg";
+// import BlockImg from "../.././../assets/Block_Img1.jpg";
 
 const validationSchema = Yup.object().shape({
   signatureDate: Yup.string().required("*Signature Date is required")
@@ -46,7 +46,7 @@ const EditCourseDetail = forwardRef(
             formDatas.append("courseDay", data.courseDay);
             formDatas.append("startDate", data.startDate);
             formDatas.append("endDate", data.endDate);
-            formDatas.append("file", data.file);
+            // formDatas.append("file", data.file);
             formDatas.append("startTime", data.startTime);
             formDatas.append("endTime", data.endTime);
             formDatas.append("signatureDate", data.signatureDate);
@@ -76,7 +76,7 @@ const EditCourseDetail = forwardRef(
             formDatas.append("courseName", data.courseId);
             formDatas.append("startDate", data.startDate);
             formDatas.append("startTime", data.startTime);
-            formDatas.append("file", data.file);
+            // formDatas.append("file", data.file);
             formDatas.append("courseDay", data.courseDay);
             formDatas.append("endDate", data.endDate);
             formDatas.append("endTime", data.endTime);
@@ -151,7 +151,7 @@ const EditCourseDetail = forwardRef(
             courseId: "",
             startDate: "",
             startTime: "",
-            parentSignature: null || "",
+            // parentSignature: null || "",
             courseDay: "",
             endDate: "",
             endTime: "",
@@ -191,7 +191,7 @@ const EditCourseDetail = forwardRef(
                           onChange={formik.handleChange}
                           onBlur={formik.handleBlur}
                           value={formik.values.courseId}
-                          className="form-select form-select-sm"
+                          className="form-select"
                         >
                           <option selected></option>
                           {courseData &&
@@ -208,7 +208,7 @@ const EditCourseDetail = forwardRef(
                         </label>
                         <br />
                         <input
-                          className="form-control form-control-sm"
+                          className="form-control  form-contorl-sm"
                           name="startDate"
                           type="date"
                           onChange={formik.handleChange}
@@ -222,7 +222,7 @@ const EditCourseDetail = forwardRef(
                         </label>
                         <br />
                         <input
-                          className="form-control form-control-sm"
+                          className="form-control"
                           type="time"
                           name="startTime"
                           onChange={formik.handleChange}
@@ -230,14 +230,14 @@ const EditCourseDetail = forwardRef(
                           value={formik.values.startTime}
                         />
                       </div>
-                      <div className="text-start mt-2">
+                      {/* <div className="text-start mt-2">
                         <label htmlFor="" className="mb-1 fw-medium">
                           <small>Parent Signature</small>
                         </label>
                         <br />
                         <input
                           type="file"
-                          className="form-control form-control-sm"
+                          className="form-control"
                           name="file"
                           onChange={(event) => {
                             formik.setFieldValue("file", event.target.files[0]);
@@ -248,7 +248,7 @@ const EditCourseDetail = forwardRef(
                           data.studentCourseDetailModels.length > 0 &&
                           data.studentCourseDetailModels.map((parent) => (
                             <div className="container-fluid col-12 p-2">
-                              {/* <p className="my-2 d-flex">
+                              <p className="my-2 d-flex">
                                 {parent.parentSignature ? (
                                   <img
                                     src={parent.parentSignature}
@@ -267,7 +267,7 @@ const EditCourseDetail = forwardRef(
                                     alt="Parent Signature Img"
                                   />
                                 )}
-                              </p> */}
+                              </p>
                             </div>
                           ))}
                         {(!data.studentCourseDetailModels ||
@@ -283,7 +283,7 @@ const EditCourseDetail = forwardRef(
                               </div>
                             </div>
                           )}
-                      </div>
+                      </div> */}
                     </div>
                     <div className="col-lg-6 col-md-6 col-12 px-5">
                       <div className="text-start">
@@ -296,7 +296,7 @@ const EditCourseDetail = forwardRef(
                           onBlur={formik.handleBlur}
                           value={formik.values.courseDay}
                           name="courseDay"
-                          className="form-control form-control-sm "
+                          className="form-control "
                           type="date"
                         />
                       </div>
@@ -306,7 +306,7 @@ const EditCourseDetail = forwardRef(
                         </label>
                         <br />
                         <input
-                          className="form-control form-control-sm  form-contorl-sm"
+                          className="form-control  form-contorl-sm"
                           name="endDate"
                           type="date"
                           onChange={formik.handleChange}
@@ -320,7 +320,7 @@ const EditCourseDetail = forwardRef(
                         </label>
                         <br />
                         <input
-                          className="form-control form-control-sm "
+                          className="form-control "
                           type="time"
                           name="endTime"
                           onChange={formik.handleChange}
@@ -334,7 +334,7 @@ const EditCourseDetail = forwardRef(
                         </label>
                         <br />
                         <input
-                          className="form-control form-control-sm  form-contorl-sm"
+                          className="form-control  form-contorl-sm"
                           name="signatureDate"
                           type="date"
                           onChange={formik.handleChange}

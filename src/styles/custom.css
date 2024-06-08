@@ -6,15 +6,15 @@
 }
 
 .nav-link.active {
-  background-color: #ACE1AF;
+  background-color: #1f4ce0;
 }
 .nav-link:hover {
-  background-color: #E0FBE2;
+  background-color: #365ddd;
   color: #ffffff;
   cursor: pointer;
 }
 #exit:hover {
-  background-color: #ACE1AF;
+  background-color: #1f4ce0;
   color: #ffffff !important;
   cursor: pointer;
 }
@@ -22,7 +22,7 @@
   margin-left: -150px;
   }
 .navbar-vertical.navbar-light .navbar-nav > .nav-item > .nav-link:hover{
-  background-color: #57ACC6;
+  background-color: #365ddd;
   color: #ffffff;
   cursor: pointer;
 }
@@ -34,7 +34,7 @@
 }
 .link-notification active{
   color: rgba(0, 0, 0, 0.616) !important;
-  background: #ACE1AF;
+  background: #1f4ce0;
 }
 
 .nav-link {
@@ -46,11 +46,11 @@
 }
 
 .css-1u4zpwo-MuiSvgIcon-root-MuiStepIcon-root.Mui-active {
-  color: #ACE1AF !important;
+  color: #1f4ce0 !important;
 }
 
 .css-1u4zpwo-MuiSvgIcon-root-MuiStepIcon-root {
-  color: #ACE1AF !important;
+  color: #1f4ce0 !important;
 }
 
 .linkPadding {
@@ -156,11 +156,11 @@
 /* All save , update some buttons custom css */
 
 .btn-button {
-  color: #000 !important;
+  color: #ffff !important;
   padding: 0.5rem 0.9rem;
   font-weight: 600;
-  background-color: #BFF6C3 !important;
-  border-color: #BFF6C3 !important;
+  background-color: #6080eb !important;
+  border-color: #ffffff !important;
 }
 
 .btn-button i {
@@ -168,15 +168,15 @@
 }
 /* .btn-button:hover {
   color: #fff;
-  background-color: #ACE1AF;
-  border-color: #ACE1AF;
+  background-color: #1f4ce0;
+  border-color: #1f4ce0;
 } */
 .btn-check:focus + .btn-button,
 .btn-button:focus {
   color: #fff;
-  background-color: #ACE1AF;
-  border-color: #ACE1AF;
-  box-shadow: 0 0 0 0.25rem #ACE1AF;
+  background-color: #1f4ce0;
+  border-color: #1f4ce0;
+  box-shadow: 0 0 0 0.25rem #1f4ce0;
 }
 .btn-check:checked + .btn-button,
 .btn-check:active + .btn-button,
@@ -184,21 +184,21 @@
 .btn-button.active,
 .show > .btn-button.dropdown-toggle {
   color: #fff;
-  background-color: #ACE1AF;
-  border-color: #ACE1AF;
+  background-color: #1f4ce0;
+  border-color: #1f4ce0;
 }
 .btn-check:checked + .btn-button:focus,
 .btn-check:active + .btn-button:focus,
 .btn-button:active:focus,
 .btn-button.active:focus,
 .show > .btn-button.dropdown-toggle:focus {
-  box-shadow: 0 0 0 0.25rem #ACE1AF;
+  box-shadow: 0 0 0 0.25rem #1f4ce0;
 }
 .btn-button:disabled,
 .btn-button.disabled {
   color: #fff;
-  background-color: #ACE1AF;
-  border-color: #BFF6C3;
+  background-color: #1f4ce0;
+  border-color: #1f4ce0;
 }
 
 .btn-button-check:checked + .btn-button,
@@ -206,8 +206,8 @@
 .btn-button.show,
 .btn-button:first-child:active,
 :not(.btn-button-check) + .btn-button:active {
-  background-color: #ACE1AF;
-  border-color: #BFF6C3;
+  background-color: #1f4ce0;
+  border-color: #1f4ce0;
   color: #fff;
 }
 
@@ -313,4 +313,37 @@ div.dt-container select.dt-input{
   padding: .5em 0;
   border: none !important;
   outline: none !important;
+}
+.radio-buttons {
+  display: flex;
+}
+
+.radio-button {
+  margin-right: 20px;
+}
+
+.radio-button input[type="radio"] {
+  display: none;
+}
+.radio-button input[type="radio"] + .radio-button-text {
+  display: inline-block;
+  width: 100px;
+  height: 30px;
+  line-height: 28px;
+  text-align: center;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.radio-button
+  input[type="radio"]:checked[value="present"]
+  + .radio-button-text {
+  background-color: green;
+  color: white;
+}
+
+.radio-button input[type="radio"]:checked[value="absent"] + .radio-button-text {
+  background-color: red;
+  color: white;
 }

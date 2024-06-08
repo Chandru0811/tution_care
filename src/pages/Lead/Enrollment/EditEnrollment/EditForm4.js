@@ -2,7 +2,7 @@ import React, { forwardRef, useEffect, useImperativeHandle } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import api from "../../../../config/URL";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 
 const validationSchema = Yup.object().shape({
   address: Yup.string().required("*Address is required"),
@@ -60,17 +60,17 @@ const EditForm4 = forwardRef(({ formData,setLoadIndicators, setFormData, handleN
     },
   });
 
-  // useEffect(() => {
-  //   const getData = async () => {
-  //     const response = await api.get(`/getAllLeadInfoById/${formData.id}`);
-  //     formik.setValues(response.data);
-  //   };
-  //   getData();
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
-  // useImperativeHandle(ref, () => ({
-  //   editform4: formik.handleSubmit,
-  // }));
+  useEffect(() => {
+    const getData = async () => {
+      const response = await api.get(`/getAllLeadInfoById/${formData.id}`);
+      formik.setValues(response.data);
+    };
+    getData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  useImperativeHandle(ref, () => ({
+    editform4: formik.handleSubmit,
+  }));
 
   return (
     <form onSubmit={formik.handleSubmit}>

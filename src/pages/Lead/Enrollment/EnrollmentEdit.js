@@ -8,7 +8,7 @@ import EditForm3 from "./EditEnrollment/EditForm3";
 import EditForm4 from "./EditEnrollment/EditForm4";
 import EditForm5 from "./EditEnrollment/EditForm5";
 import EditForm6 from "./EditEnrollment/EditForm6";
-// import { useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import Tooltip from "react-bootstrap/Tooltip";
  import { OverlayTrigger } from "react-bootstrap";
 
@@ -16,10 +16,10 @@ const steps = [{ tooltip: "Student Information" }, { tooltip: "Child Ability" },
 
 
 export default function EnrollmentEdit() {
-  // const { id } = useParams();
+  const { id } = useParams();
 
   const [activeStep, setActiveStep] = useState(0);
-  const [formData, setFormData] = useState({ });
+  const [formData, setFormData] = useState({id});
   const [loadIndicator, setLoadIndicator] = useState(false);
 
   const childRef = React.useRef();

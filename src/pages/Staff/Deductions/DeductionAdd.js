@@ -3,14 +3,14 @@ import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import api from "../../../config/URL";
-import { toast } from "react-toastify";
-// import fetchAllCentersWithIds from "../../List/CenterList";
-// import fetchAllEmployeeListByCenter from "../../List/EmployeeList";
-// import { format } from "date-fns";
+import toast from "react-hot-toast";
+import fetchAllCentersWithIds from "../../List/CenterList";
+import fetchAllEmployeeListByCenter from "../../List/EmployeeList";
+import { format } from "date-fns";
 
 const validationSchema = Yup.object({
-  centerId: Yup.number().required("*Center Name is required"),
-  userId: Yup.number().required("*Employee Name is required"),
+  tuitionId: Yup.number().required("*Center Name is required"),
+  userNames: Yup.number().required("*Employee Name is required"),
   deductionName: Yup.string().required("*Select the Deduction Name"),
   deductionMonth: Yup.string().required("*Select the Deduction Month"),
   deductionAmount: Yup.string().required("*Deduction Amount is required"),
@@ -21,11 +21,12 @@ function DeductionAdd() {
   const [userNamesData, setUserNameData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const navigate = useNavigate();
+  
 
   const formik = useFormik({
     initialValues: {
-      centerId: "",
-      userId: "",
+      tuitionId: "",
+      userNames: "",
       deductionName: "",
       deductionMonth: "",
       deductionAmount: "",
@@ -39,21 +40,21 @@ function DeductionAdd() {
       let selectedEmployeeName = "";
 
       centerData.forEach((center) => {
-        if (parseInt(values.centerId) === center.id) {
+        if (parseInt(values.tuitionId) === center.id) {
           selectedCenterName = center.centerNames || "--";
         }
       });
 
       userNamesData.forEach((employee) => {
-        if (parseInt(values.userId) === employee.id) {
+        if (parseInt(values.userNames) === employee.id) {
           selectedEmployeeName = employee.userNames || "--";
         }
       });
 
       let payload = {
-        centerId: values.centerId,
-        centerName: selectedCenterName,
-        userId: values.userId,
+        tuitionId: values.tuitionId,
+        tuitionCareName: selectedCenterName,
+        userId: values.userNames,
         employeeName: selectedEmployeeName,
         deductionName: values.deductionName,
         deductionMonth: values.deductionMonth,
@@ -83,41 +84,44 @@ function DeductionAdd() {
 
   const handleCenterChange = async (event) => {
     setUserNameData(null);
-    const centerId = event.target.value;
-    formik.setFieldValue("centerId", centerId);
+    const tuitionId = event.target.value;
+    console.log("tuitionId", tuitionId)
+    formik.setFieldValue("tuitionId", tuitionId);
     try {
-      await fetchUserName(centerId);
+      await fetchUserName(tuitionId);
     } catch (error) {
       toast.error(error);
     }
   };
 
   const fetchData = async () => {
-    // try {
-    //   const centers = await fetchAllCentersWithIds();
-    //   setCenterData(centers);
-    // } catch (error) {
-    //   toast.error(error);
-    // }
+    try {
+      const centers = await fetchAllCentersWithIds();
+      setCenterData(centers);
+    } catch (error) {
+      toast.error(error);
+    }
   };
 
   useEffect(() => {
     fetchData();
   }, []);
 
-  const fetchUserName = async (centerId) => {
-    // try {
-    //   const userNames = await fetchAllEmployeeListByCenter(centerId);
-    //   setUserNameData(userNames);
-    // } catch (error) {
-    //   toast.error(error);
-    // }
+  const fetchUserName = async (tuitionId) => {
+    try {
+      console.log("tuitionId",tuitionId)
+      const userNames = await fetchAllEmployeeListByCenter(tuitionId);
+      setUserNameData(userNames);
+      console.log("userNamesData",userNamesData)
+    } catch (error) {
+      toast.error(error);
+    }
   };
 
-  // useEffect(() => {
-  //   const currentMonth = format(new Date(), "yyyy-MM");
-  //   formik.setFieldValue("deductionMonth", currentMonth);
-  // }, []);
+  useEffect(() => {
+    const currentMonth = format(new Date(), "yyyy-MM");
+    formik.setFieldValue("deductionMonth", currentMonth);
+  }, []);
 
   return (
     <div className="container-fluid center">
@@ -160,8 +164,8 @@ function DeductionAdd() {
                   <label className="form-label">Centre Name</label>
                   <span className="text-danger">*</span>
                   <select
-                    {...formik.getFieldProps("centerId")}
-                    className={`form-select form-select-sm ${formik.touched.centerId && formik.errors.centerId
+                    {...formik.getFieldProps("tuitionId")}
+                    className={`form-select form-select-sm ${formik.touched.tuitionId && formik.errors.tuitionId
                         ? "is-invalid"
                         : ""
                       }`}
@@ -176,17 +180,17 @@ function DeductionAdd() {
                         </option>
                       ))}
                   </select>
-                  {formik.touched.centerId && formik.errors.centerId && (
+                  {formik.touched.tuitionId && formik.errors.tuitionId && (
                     <div className="invalid-feedback">
-                      {formik.errors.centerId}
+                      {formik.errors.tuitionId}
                     </div>
                   )}
                 </div>
                 <div className="col-md-6 col-12 mb-3">
                   <label className="form-label">Employee Name</label>
                   <select
-                    {...formik.getFieldProps("userId")}
-                    class={`form-select form-select-sm  ${formik.touched.userId && formik.errors.userId
+                    {...formik.getFieldProps("userNames")}
+                    class={`form-select form-select-sm  ${formik.touched.userNames && formik.errors.userNames
                         ? "is-invalid"
                         : ""
                       }`}
@@ -199,8 +203,8 @@ function DeductionAdd() {
                         </option>
                       ))}
                   </select>
-                  {formik.touched.userId && formik.errors.userId && (
-                    <div className="invalid-feedback">{formik.errors.userId}</div>
+                  {formik.touched.userNames && formik.errors.userNames && (
+                    <div className="invalid-feedback">{formik.errors.userNames}</div>
                   )}
                 </div>
                 <div className="col-md-6 col-12 mb-3">

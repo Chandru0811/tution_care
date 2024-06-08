@@ -140,26 +140,26 @@ const Teacher = () => {
                   </td>
                   <td>
                     <div className="d-flex">
-                    {storedScreens?.teacherRead && (
+                    {/* {storedScreens?.teacherRead && ( */}
                       <Link to={`/teacher/view/${data.id}`}>
                         <button className="btn btn-sm">
                           <FaEye />
                         </button>
                       </Link>
-                    )}
-                    {storedScreens?.teacherUpdate && (
+                    {/* )} */}
+                    {/* {storedScreens?.teacherUpdate && ( */}
                       <Link to={`/teacher/edit/${data.id}`}>
                         <button className="btn btn-sm">
                           <FaEdit />
                         </button>
                       </Link>
-                    )}
-                    {storedScreens?.teacherDelete && (
+                    {/* )} */}
+                    {/* {storedScreens?.teacherDelete && ( */}
                       <Delete
                         onSuccess={refreshData}
                         path={`/deleteUser/${data.id}`}
                       />
-                    )}
+                    {/* )} */}
 
                     </div>
                   </td>

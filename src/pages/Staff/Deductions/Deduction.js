@@ -4,28 +4,28 @@ import "datatables.net-responsive-dt";
 import $ from "jquery";
 import { Link } from "react-router-dom";
 import { FaEye, FaEdit } from "react-icons/fa";
-// import Delete from "../../../components/common/Delete";
 import api from "../../../config/URL";
+import DeleteModel from "../../../components/common/DeleteModel";
 
 const Deduction = () => {
   const tableRef = useRef(null);
   const [datas, setDatas] = useState([]);
   console.log(datas);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
 
-  // useEffect(() => {
-  //   const getData = async () => {
-  //     try {
-  //       const response = await api.get("/getAllUserDeduction");
-  //       setDatas(response.data);
-  //       setLoading(false);
-  //     } catch (error) {
-  //       console.error("Error fetching data ", error);
-  //     }
-  //   };
-  //   getData();
-  // }, []);
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const response = await api.get("/getAllUserDeduction");
+        setDatas(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching data ", error);
+      }
+    };
+    getData();
+  }, []);
 
   useEffect(() => {
     if (!loading) {
@@ -55,13 +55,13 @@ const Deduction = () => {
   const refreshData = async () => {
     destroyDataTable();
     setLoading(true);
-    // try {
-    //   const response = await api.get("/getAllUserDeduction");
-    //   setDatas(response.data);
-    //   initializeDataTable();
-    // } catch (error) {
-    //   console.error("Error refreshing data:", error);
-    // }
+    try {
+      const response = await api.get("/getAllUserDeduction");
+      setDatas(response.data);
+      initializeDataTable();
+    } catch (error) {
+      console.error("Error refreshing data:", error);
+    }
     setLoading(false);
   };
 
@@ -107,32 +107,32 @@ const Deduction = () => {
             {datas.map((data, index) => (
               <tr key={index}>
                 <th scope="row">{index + 1}</th>
-                <td>{data.centerName}</td>
+                <td>{data.tuitionCareName}</td>
                 <td>{data.employeeName}</td>
                 <td>{data.deductionName}</td>
                 <td>{data.deductionAmount}</td>
                 <td>
-                  {storedScreens?.deductionRead && (
+                  {/* {storedScreens?.deductionRead && ( */}
                     <Link to={`/deduction/list/${data.id}`}>
                       <button className="btn btn-sm">
                         <FaEye />
                       </button>
                     </Link>
-                  )}
-                  {storedScreens?.deductionUpdate && (
+                  {/* )} */}
+                  {/* {storedScreens?.deductionUpdate && ( */}
                     <Link to={`/deduction/edit/${data.id}`}>
                       <button className="btn btn-sm">
                         <FaEdit />
                       </button>
                     </Link>
-                  )}
+                  {/* )} */}
 
-                  {/* {storedScreens?.deductionDelete && (
-                    <Delete
+                  {/* {storedScreens?.deductionDelete && ( */}
+                    <DeleteModel
                       onSuccess={refreshData}
                       path={`/deleteUserDeduction/${data.id}`}
                     />
-                  )} */}
+                  {/* )} */}
                 </td>
               </tr>
             ))}

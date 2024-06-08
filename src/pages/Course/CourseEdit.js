@@ -3,11 +3,11 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import "../../styles/custom.css";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import api from "../../config/URL";
-// import fetchAllCentersWithIds from "../List/CenterList";
-// import fetchAllLevelsWithIds from "../List/LevelList";
-// import fetchAllSubjectsWithIds from "../List/SubjectList";
+import fetchAllCentersWithIds from "../List/CenterList";
+import fetchAllLevelsWithIds from "../List/LevelList";
+import fetchAllSubjectsWithIds from "../List/SubjectList";
 
 function CourseEdit() {
   const { id } = useParams();
@@ -19,9 +19,9 @@ function CourseEdit() {
 const [loadIndicator, setLoadIndicator] = useState(false);
   const fetchData = async () => {
     try {
-      // const centerData = await fetchAllCentersWithIds();
-      // const levelData = await fetchAllLevelsWithIds();
-      // const subjectData = await fetchAllSubjectsWithIds();
+      const centerData = await fetchAllCentersWithIds();
+      const levelData = await fetchAllLevelsWithIds();
+      const subjectData = await fetchAllSubjectsWithIds();
       setCenterData(centerData);
       setLevelData(levelData);
       setSubjectData(subjectData);
@@ -35,7 +35,7 @@ const [loadIndicator, setLoadIndicator] = useState(false);
   }, []);
 
   const validationSchema = Yup.object({
-    centerId: Yup.string().required("*Select the Centre Name"),
+    tuitionId: Yup.string().required("*Select the Centre Name"),
     courseName: Yup.string().required("*Course Name is required"),
     courseCode: Yup.string().required("*Course Code is required"),
     subjectId: Yup.string().required("*Select the Subject"),
@@ -52,7 +52,7 @@ const [loadIndicator, setLoadIndicator] = useState(false);
 
   const formik = useFormik({
     initialValues: {
-      centerId: "",
+      tuitionId: "",
       courseName: "",
       courseCode: "",
       subjectId: "",
@@ -73,43 +73,43 @@ const [loadIndicator, setLoadIndicator] = useState(false);
       setLoadIndicator(true);
       console.log(values);
       values.classReplacementAllowed = values.classReplacementAllowed === true;
-      // try {
-      //   const response = await api.put(`/updateCourses/${id}`, values, {
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //     },
-      //   });
-      //   if (response.status === 200) {
-      //     toast.success(response.data.message);
-      //     navigate("/course");
-      //   } else {
-      //     toast.error(response.data.message);
-      //   }
-      // } catch (error) {
-      //   toast.error(error);
-      // }finally {
-      //   setLoadIndicator(false);
-      // }
+      try {
+        const response = await api.put(`/updateCourses/${id}`, values, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        if (response.status === 200) {
+          toast.success(response.data.message);
+          navigate("/course");
+        } else {
+          toast.error(response.data.message);
+        }
+      } catch (error) {
+        toast.error(error);
+      }finally {
+        setLoadIndicator(false);
+      }
     },
   });
 
-  // useEffect(() => {
-  //   const getData = async () => {
-  //     try {
-  //       const response = await api.get(`/getAllCoursesById/${id}`);
-  //       formik.setValues({
-  //         ...response.data,
-  //         classReplacementAllowed:
-  //           response.data.classReplacementAllowed || false,
-  //       });
-  //     } catch (error) {
-  //       toast.error("Error fetching data:", error);
-  //     }
-  //   };
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const response = await api.get(`/getAllCoursesById/${id}`);
+        formik.setValues({
+          ...response.data,
+          classReplacementAllowed:
+            response.data.classReplacementAllowed || false,
+        });
+      } catch (error) {
+        toast.error("Error fetching data:", error);
+      }
+    };
 
-  //   getData();
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
+    getData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <section className="courseAdd">
@@ -153,9 +153,9 @@ const [loadIndicator, setLoadIndicator] = useState(false);
                 </lable>
                 <div className="input-group mb-3">
                   <select
-                    {...formik.getFieldProps("centerId")}
+                    {...formik.getFieldProps("tuitionId")}
                     className={`form-select  form-select-sm${
-                      formik.touched.centerId && formik.errors.centerId
+                      formik.touched.tuitionId && formik.errors.tuitionId
                         ? "is-invalid"
                         : ""
                     }`}
@@ -163,15 +163,15 @@ const [loadIndicator, setLoadIndicator] = useState(false);
                   >
                     <option selected></option>
                     {centerData &&
-                      centerData.map((centerId) => (
-                        <option key={centerId.id} value={centerId.id}>
-                          {centerId.centerNames}
+                      centerData.map((tuitionId) => (
+                        <option key={tuitionId.id} value={tuitionId.id}>
+                          {tuitionId.centerNames}
                         </option>
                       ))}
                   </select>
-                  {formik.touched.centerId && formik.errors.centerId && (
+                  {formik.touched.tuitionId && formik.errors.tuitionId && (
                     <div className="invalid-feedback">
-                      {formik.errors.centerId}
+                      {formik.errors.tuitionId}
                     </div>
                   )}
                 </div>
@@ -232,12 +232,12 @@ const [loadIndicator, setLoadIndicator] = useState(false);
                   aria-label="Default select example"
                 >
                   <option selected></option>
-                  {/* {subjectData &&
+                  {subjectData &&
                     subjectData.map((subjectId) => (
                       <option key={subjectId.id} value={subjectId.id}>
                         {subjectId.subjects}
                       </option>
-                    ))} */}
+                    ))}
                 </select>
                 {formik.touched.subjectId && formik.errors.subjectId && (
                   <div className="invalid-feedback">
@@ -262,12 +262,12 @@ const [loadIndicator, setLoadIndicator] = useState(false);
                     aria-label="Default select example"
                   >
                     <option selected></option>
-                    {/* {levelData &&
+                    {levelData &&
                       levelData.map((levelId) => (
                         <option key={levelId.id} value={levelId.id}>
                           {levelId.levels}
                         </option>
-                      ))} */}
+                      ))}
                   </select>
                   {formik.touched.levelId && formik.errors.levelId && (
                     <div className="invalid-feedback">

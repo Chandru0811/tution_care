@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { FaCloudDownloadAlt } from "react-icons/fa";
 import api from "../../../config/URL";
-import { toast } from "react-toastify";
-// import fetchAllCentersWithIds from "../../List/CenterList";
-// import fetchAllTeachersWithIds from "../../List/TeacherList";
+import toast from "react-hot-toast";
+import fetchAllCentersWithIds from "../../List/CenterList";
+import fetchAllTeachersWithIds from "../../List/TeacherList";
 
 function LeaveView() {
 
@@ -15,14 +15,14 @@ function LeaveView() {
   const [teacherData, setTeacherData] = useState(null);
 
   const fetchData = async () => {
-    // try {
-    //   const centerData = await fetchAllCentersWithIds();
-    //   const teacherData = await fetchAllTeachersWithIds();
-    //   setCenterData(centerData);
-    //   setTeacherData(teacherData);
-    // } catch (error) {
-    //   toast.error(error);
-    // }
+    try {
+      const centerData = await fetchAllCentersWithIds();
+      const teacherData = await fetchAllTeachersWithIds();
+      setCenterData(centerData);
+      setTeacherData(teacherData);
+    } catch (error) {
+      toast.error(error);
+    }
   };
 
   useEffect(() => {
@@ -71,7 +71,7 @@ function LeaveView() {
                 <p className="text-muted text-sm">
                   : {centerData &&
                     centerData.map((centerId) =>
-                      parseInt(data.centerId) === centerId.id
+                      parseInt(data.tuitionId) === centerId.id
                         ? centerId.centerNames || "--"
                         : ""
                     )}</p>
@@ -90,7 +90,7 @@ function LeaveView() {
                         parseInt(data.teacher) === teacher.id
                           ? teacher.teacherNames || "--"
                           : ""
-                      )}*/}
+                      )} */}
                   : {data.employeeName || "--"}</p>
               </div>
             </div>

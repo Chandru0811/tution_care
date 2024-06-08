@@ -20,10 +20,10 @@ function Sidebar({ onLogout }) {
       courseIndex: true,
       classIndex: true,
       leadListingIndex: true,
-      enrollmentIndex: true,
+      // enrollmentIndex: true,
       staffIndex: true,
       teacherIndex: true,
-      staffAttendanceIndex: false,
+      staffAttendanceIndex: true,
       leaveAdminIndex: true,
       leaveIndex: true,
       holidayIndex: true,
@@ -37,7 +37,7 @@ function Sidebar({ onLogout }) {
       documentListingIndex: true,
       documentFileIndex: true,
       invoiceIndex: true,
-      paymentIndex: true,
+      // paymentIndex: true,
       documentReportIndex: true,
       attendanceReportIndex: true,
       studentReportIndex: false,
@@ -91,11 +91,11 @@ function Sidebar({ onLogout }) {
             path: "lead/lead",
             access: storedScreens.leadListingIndex,
           },
-          {
-            title: "Enrollment",
-            path: "/lead/enrollment",
-            access: storedScreens.enrollmentIndex,
-          },
+          // {
+          //   title: "Enrollment",
+          //   path: "/lead/enrollment",
+          //   access: storedScreens.enrollmentIndex,
+          // },
         ],
       },
       {
@@ -211,11 +211,11 @@ function Sidebar({ onLogout }) {
             path: "/invoice",
             access: storedScreens.invoiceIndex,
           },
-          {
-            title: "Payment",
-            path: "/payment",
-            access: storedScreens.paymentIndex,
-          },
+          // {
+          //   title: "Payment",
+          //   path: "/payment",
+          //   access: storedScreens.paymentIndex,
+          // },
         ],
       },
 
@@ -304,7 +304,7 @@ function Sidebar({ onLogout }) {
   return (
     <nav
       className="navbar show navbar-vertical h-lg-screen navbar-expand-lg p-0 navbar-light border-bottom border-bottom-lg-0 border-end-lg"
-      style={{ backgroundColor: "#BFF6C3" }}
+      style={{ backgroundColor: "#4066D5" }}
       id="navbarVertical"
     >
       <div className="container-fluid sidebar">
@@ -320,7 +320,7 @@ function Sidebar({ onLogout }) {
           <span className="navbar-toggler-icon"></span>
         </button>
         <NavLink
-          style={{ background: "#BFF6C3" }}
+          style={{ background: "#4066D5" }}
           className="navbar-brand logo_ats py-lg-2 px-lg-6 m-0 d-flex align-items-center justify-content-center"
           to="/"
         >
@@ -344,7 +344,7 @@ function Sidebar({ onLogout }) {
               <NavLink to="/" onClick={() => handleMenuClick(null)}>
               <li className="py-2 px-4 nav-link">
                 <i className="bx bx-grid-alt me-3"></i>
-                <span className="links_name links_names" style={{ color: "rgb(48 48 48 / 79%)" }}>Home</span>
+                <span className="links_name links_names" style={{ color: "#fff" }}>Home</span>
                 </li>
               </NavLink>
          
@@ -411,7 +411,7 @@ function Sidebar({ onLogout }) {
               >
                    <li className="py-2 px-4 nav-link">
                 <i className="bx bx-send me-3"></i>
-                <span className="links_name links_names" style={{ color: "rgb(48 48 48 / 79%)" }}>Send Notification</span>
+                <span className="links_name links_names" style={{ color: "#fff" }}>Send Notification</span>
                 </li>
               </NavLink>
            
@@ -423,15 +423,16 @@ function Sidebar({ onLogout }) {
             style={{ border: "1px solid #87878761" }}
           />
          </div>
-         <button id="exit" className="nav-link ps-2" to="#">
-            <i className="bi bi-person-square me-2"></i> Account
+         <button id="exit" className="nav-link ps-2" to="#"  style={{ color: "#fff" }}>
+            <i className="bi bi-person-square me-2" ></i> Account
           </button>
           <button
             id="exit"
             className="nav-link ps-1"
+            style={{ color: "#fff" }}
             to="#"
             onClick={handleLogOutClick}>
-            <i className="bi bi-box-arrow-left me-2"></i> Logout
+            <i className="bi bi-box-arrow-left me-2"  ></i> Logout
           </button>
         </div>
       </div>

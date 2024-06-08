@@ -5,7 +5,7 @@ import * as Yup from "yup";
 import { useFormik } from "formik";
 import { useState } from "react";
 import api from "../../config/URL";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import fetchAllCentersWithIds from "../List/CenterList";
 import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
 import fetchAllPackageListByCenter from "../List/PackageListByCenter";
@@ -73,7 +73,7 @@ export default function InvoiceAdd() {
         // Prepare the payload to send to the API
         const payload = {
           generateInvoice: {
-            centerId: values.center,
+            tuitionId : values.center,
             parent: values.parent,
             studentId: values.student,
             courseId: values.course,
@@ -90,7 +90,7 @@ export default function InvoiceAdd() {
             remarks: values.remarks,
             receiptAmount: parseFloat(values.receiptAmount), // Ensure numerical values are parsed correctly
           },
-          invoiceItemsList: values.invoiceItems.map((item) => ({
+          invoiceItemsModelList: values.invoiceItems.map((item) => ({
             item: item.item,
             itemAmount: parseFloat(item.itemAmount), // Ensure numerical values are parsed correctly
             taxType: item.taxType,
@@ -131,27 +131,27 @@ export default function InvoiceAdd() {
     }
   };
 
-  const fetchCourses = async (centerId) => {
+  const fetchCourses = async (tuitionId) => {
     try {
-      const courseData = await fetchAllCoursesWithIdsC(centerId);
+      const courseData = await fetchAllCoursesWithIdsC(tuitionId);
       setCourseData(courseData);
     } catch (error) {
       toast.error(error);
     }
   };
 
-  const fetchPackage = async (centerId) => {
+  const fetchPackage = async (tuitionId) => {
     try {
-      const packageData = await fetchAllPackageListByCenter(centerId);
+      const packageData = await fetchAllPackageListByCenter(tuitionId);
       setPackageData(packageData);
     } catch (error) {
       toast.error(error);
     }
   };
 
-  const fetchStudent = async (centerId) => {
+  const fetchStudent = async (tuitionId) => {
     try {
-      const student = await fetchAllStudentListByCenter(centerId);
+      const student = await fetchAllStudentListByCenter(tuitionId);
       setStudentData(student);
     } catch (error) {
       toast.error(error);

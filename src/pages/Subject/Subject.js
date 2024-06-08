@@ -4,33 +4,34 @@ import "datatables.net-responsive-dt";
 import $ from "jquery";
 import { Link } from "react-router-dom";
 import { FaEye } from "react-icons/fa";
-// import Delete from "../../components/common/Delete";
 import SubjectAdd from "./SubjectAdd";
 import SubjectEdit from "./SubjectEdit";
 import api from "../../config/URL";
 import { SCREENS } from "../../config/ScreenFilter";
+import toast from "react-hot-toast";
+import Delete from "../../components/common/DeleteModel";
 
 const Subject = () => {
   const tableRef = useRef(null);
 
   const [datas, setDatas] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
   console.log("Screens : ", SCREENS);
 
-  // useEffect(() => {
-  //   const getData = async () => {
-  //     try {
-  //       const response = await api.get("/getAllCourseSubjects");
-  //       setDatas(response.data);
-  //       setLoading(false);
-  //     } catch (error) {
-  //       toast.error("Error Fetching Data ", error);
-  //     }
-  //   };
-  //   getData();
-  // }, []);
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const response = await api.get("/getAllCourseSubjects");
+        setDatas(response.data);
+        setLoading(false);
+      } catch (error) {
+        toast.error("Error Fetching Data ", error);
+      }
+    };
+    getData();
+  }, []);
 
   useEffect(() => {
     if (!loading) {
@@ -90,7 +91,7 @@ const Subject = () => {
               <div className="my-3 d-flex justify-content-between mb-5 px-4">
                 {/* {storedScreens?.subjectCreate && ( */}
                 <h2>Subject</h2>
-                <SubjectAdd />
+                <SubjectAdd onSuccess={refreshData} />
                 {/* )} */}
               </div>
               <hr />
@@ -124,27 +125,24 @@ const Subject = () => {
                         </td>
                         <td>
                           <div className="d-flex">
-                            {storedScreens?.subjectRead && (
-                              <Link to={`/subject/view/${data.id}`}>
-                                <button className="btn btn-sm">
-                                  <FaEye />
-                                </button>
-                              </Link>
-                            )}
+                            {/* {storedScreens?.subjectRead && ( */}
+                            <Link to={`/subject/view/${data.id}`}>
+                              <button className="btn btn-sm">
+                                <FaEye />
+                              </button>
+                            </Link>
+                            {/* )} */}
 
-                            {storedScreens?.subjectUpdate && (
-                              <SubjectEdit
-                                id={data.id}
-                                onSuccess={refreshData}
-                              />
-                            )}
+                            {/* {storedScreens?.subjectUpdate && ( */}
+                            <SubjectEdit id={data.id} onSuccess={refreshData} />
+                            {/* )} */}
 
-                            {/* {storedScreens?.subjectDelete && (
-                      <Delete
-                        onSuccess={refreshData}
-                        path={`/deleteCourseSubject/${data.id}`}
-                      />
-                    )} */}
+                            {/* {storedScreens?.subjectDelete && ( */}
+                            <Delete
+                              onSuccess={refreshData}
+                              path={`/deleteCourseSubject/${data.id}`}
+                            />
+                            {/* )} */}
                           </div>
                         </td>
                       </tr>

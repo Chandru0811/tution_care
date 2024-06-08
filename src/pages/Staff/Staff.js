@@ -6,30 +6,30 @@ import { Link } from "react-router-dom";
 import { FaEye, FaEdit } from "react-icons/fa";
 import Delete from "../../components/common/DeleteModel";
 import api from "../../config/URL";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 // import { SCREENS } from "../../config/ScreenFilter";
 
 const Staff = () => {
   const tableRef = useRef(null);
 
   const [datas, setDatas] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
   // console.log("Screens : ", SCREENS);
 
-  // useEffect(() => {
-  //   const getData = async () => {
-  //     try {
-  //       const response = await api.get("/getAllUsersByRole/staff");
-  //       setDatas(response.data);
-  //       setLoading(false);
-  //     } catch (error) {
-  //       toast.error("Error Fetch Data", error);
-  //     }
-  //   };
-  //   getData();
-  // }, []);
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const response = await api.get("/getAllUsersByRole/staff");
+        setDatas(response.data);
+        setLoading(false);
+      } catch (error) {
+        toast.error("Error Fetch Data", error);
+      }
+    };
+    getData();
+  }, []);
 
   useEffect(() => {
     if (!loading) {
@@ -45,9 +45,7 @@ const Staff = () => {
       // DataTable already initialized, no need to initialize again
       return;
     }
-    $(tableRef.current).DataTable({
-      responsive: true,
-    });
+    $(tableRef.current).DataTable();
   };
 
   const destroyDataTable = () => {
@@ -140,26 +138,26 @@ const Staff = () => {
                   </td>
                   <td>
                     <div className="d-flex">
-                      {storedScreens?.staffRead && (
+                      {/* {storedScreens?.staffRead && ( */}
                         <Link to={`/staff/view/${data.id}`}>
                           <button className="btn btn-sm">
                             <FaEye />
                           </button>
                         </Link>
-                      )}
-                      {storedScreens?.staffUpdate && (
+                      {/* )} */}
+                      {/* {storedScreens?.staffUpdate && ( */}
                         <Link to={`/staff/edit/${data.id}`}>
                           <button className="btn btn-sm">
                             <FaEdit />
                           </button>
                         </Link>
-                      )}
-                      {/* {storedScreens?.staffDelete && (
+                      {/* )} */}
+                      {/* {storedScreens?.staffDelete && ( */}
                         <Delete
                           onSuccess={refreshData}
                           path={`/deleteUser/${data.id}`}
                         />
-                      )} */}
+                      {/* )} */}
                     </div>
                   </td>
                 </tr>

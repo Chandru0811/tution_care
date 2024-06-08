@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import api from "../../config/URL";
-// import fetchAllCentersWithIds from "../List/CenterList";
-import { toast } from "react-toastify";
-// import fetchAllCoursesWithIds from "../List/CourseList";
+import fetchAllCentersWithIds from "../List/CenterList";
+import toast from "react-hot-toast";
+import fetchAllCoursesWithIds from "../List/CourseList";
 
 function ClassView() {
   const { id } = useParams();
@@ -13,14 +13,14 @@ function ClassView() {
   const [courseData, setCourseData] = useState(null);
 
   const fetchData = async () => {
-    // try {
-    //   const centerData = await fetchAllCentersWithIds();
-    //   const courseData = await fetchAllCoursesWithIds();
-    //   setCenterData(centerData);
-    //   setCourseData(courseData);
-    // } catch (error) {
-    //   toast.error(error);
-    // }
+    try {
+      const centerData = await fetchAllCentersWithIds();
+      const courseData = await fetchAllCoursesWithIds();
+      setCenterData(centerData);
+      setCourseData(courseData);
+    } catch (error) {
+      toast.error(error);
+    }
   };
 
   useEffect(() => {
@@ -69,9 +69,9 @@ function ClassView() {
                 <p className="text-muted text-sm">
                   :{" "}
                   {centerData &&
-                    centerData.map((centerId) =>
-                      parseInt(data.centerId) === centerId.id
-                        ? centerId.centerNames || "--"
+                    centerData.map((tuitionId) =>
+                      parseInt(data.tuitionId) === tuitionId.id
+                        ? tuitionId.centerNames || "--"
                         : ""
                     )}
                 </p>

@@ -2,13 +2,13 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-// import fetchAllCentersWithIds from "../../List/CenterList";
-import { toast } from "react-toastify";
+import fetchAllCentersWithIds from "../../List/CenterList";
+import toast from "react-hot-toast";
 import api from "../../../config/URL";
-// import fetchAllEmployeeListByCenter from "../../List/EmployeeList";
+import fetchAllEmployeeListByCenter from "../../List/EmployeeList";
 
 const validationSchema = Yup.object({
-  centerId: Yup.string().required("*Select a Centre Name"),
+  tuitionId: Yup.string().required("*Select a Centre Name"),
   userId: Yup.string().required("*Employee Name is required"),
   leaveType: Yup.string().required("*Select a Leave Type"),
   fromDate: Yup.string().required("*From Date is required"),
@@ -28,7 +28,7 @@ function LeaveAdminEdit() {
   const { id } = useParams();
   const formik = useFormik({
     initialValues: {
-      centerId: "",
+      tuitionId: "",
       centerName: "",
       userId: "",
       leaveType: "",
@@ -53,7 +53,7 @@ function LeaveAdminEdit() {
       // console.log("user Data", values.userId)
 
       centerData.forEach((center) => {
-        if (parseInt(values.centerId) === center.id) {
+        if (parseInt(values.tuitionId) === center.id) {
           selectedCenterName = center.centerNames || "--";
         }
       });
@@ -65,7 +65,7 @@ function LeaveAdminEdit() {
       });
 
       const payload = {
-        centerId: values.centerId,
+        tuitionId: values.tuitionId,
         centerName: selectedCenterName,
         userId: values.userId,
         employeeName: selectedTeacherName,
@@ -108,21 +108,21 @@ function LeaveAdminEdit() {
   });
 
   const fetchData = async () => {
-    // try {
-    //   const centers = await fetchAllCentersWithIds();
-    //   setCenterData(centers);
-    // } catch (error) {
-    //   toast.error(error);
-    // }
+    try {
+      const centers = await fetchAllCentersWithIds();
+      setCenterData(centers);
+    } catch (error) {
+      toast.error(error);
+    }
   };
 
-  const fetchTeacher = async (centerId) => {
-    // try {
-    //   const teacher = await fetchAllEmployeeListByCenter(centerId);
-    //   setTeacherData(teacher);
-    // } catch (error) {
-    //   toast.error(error);
-    // }
+  const fetchTeacher = async (tuitionId) => {
+    try {
+      const teacher = await fetchAllEmployeeListByCenter(tuitionId);
+      setTeacherData(teacher);
+    } catch (error) {
+      toast.error(error);
+    }
   };
 
   const calculateDays = (fromDate, toDate) => {
@@ -156,31 +156,31 @@ function LeaveAdminEdit() {
 
   const handleCenterChange = (event) => {
     setTeacherData(null);
-    const centerId = event.target.value;
-    formik.setFieldValue("centerId", centerId);
-    fetchTeacher(centerId);
+    const tuitionId = event.target.value;
+    formik.setFieldValue("tuitionId", tuitionId);
+    fetchTeacher(tuitionId);
   };
 
-  // useEffect(() => {
-  //   const getData = async () => {
-  //     try {
-  //       const response = await api.get(`/getUserLeaveRequestById/${id}`);
-  //       console.log(response.data);
-  //       formik.setValues(response.data);
-  //       fetchData();
-  //       fetchTeacher(response.data.centerId);
-  //       const { daysDifference } = calculateDays(
-  //         response.data.fromDate,
-  //         response.data.toDate
-  //       );
-  //       setDaysDifference(daysDifference);
-  //     } catch (error) {
-  //       console.error("Error fetching data:", error);
-  //     }
-  //   };
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const response = await api.get(`/getUserLeaveRequestById/${id}`);
+        console.log(response.data);
+        formik.setValues(response.data);
+        fetchData();
+        fetchTeacher(response.data.tuitionId);
+        const { daysDifference } = calculateDays(
+          response.data.fromDate,
+          response.data.toDate
+        );
+        setDaysDifference(daysDifference);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
 
-  //   getData();
-  // }, [id]);
+    getData();
+  }, [id]);
 
   return (
     <div className="container-fluid center">
@@ -223,8 +223,8 @@ function LeaveAdminEdit() {
                   Centre Name<span className="text-danger">*</span>
                 </label>
                 <select
-                  {...formik.getFieldProps("centerId")}
-                  className={`form-select form-select-sm ${formik.touched.centerId && formik.errors.centerId
+                  {...formik.getFieldProps("tuitionId")}
+                  className={`form-select form-select-sm ${formik.touched.tuitionId && formik.errors.tuitionId
                       ? "is-invalid"
                       : ""
                     }`}
@@ -239,8 +239,8 @@ function LeaveAdminEdit() {
                       </option>
                     ))}
                 </select>
-                {formik.touched.centerId && formik.errors.centerId && (
-                  <div className="invalid-feedback">{formik.errors.centerId}</div>
+                {formik.touched.tuitionId && formik.errors.tuitionId && (
+                  <div className="invalid-feedback">{formik.errors.tuitionId}</div>
                 )}
               </div>
               <div className="col-md-6 col-12 mb-3">

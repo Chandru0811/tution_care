@@ -4,45 +4,46 @@ import "datatables.net-responsive-dt";
 import $ from "jquery";
 import { Link } from "react-router-dom";
 import { FaEye } from "react-icons/fa";
-// import fetchAllCentersWithIds from "../../List/CenterList";
-import { toast } from "react-toastify";
+import fetchAllCentersWithIds from "../../List/CenterList";
+import toast from "react-hot-toast";
 import api from "../../../config/URL";
 
 const Leave = () => {
   const tableRef = useRef(null);
   const [datas, setDatas] = useState([]);
-  const userId = sessionStorage.getItem("userId");
+  // const userId = sessionStorage.getItem("userId");
+  const userId = 1;
   // console.log("Data:", datas.employeeData);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [centerData, setCenterData] = useState(null);
-  // console.log("centerData", centerData);
+  console.log("centerData", datas);
   const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
 
   const fetchData = async () => {
-    // try {
-    //   const centerData = await fetchAllCentersWithIds();
-    //   setCenterData(centerData);
-    // } catch (error) {
-    //   toast.error(error);
-    // }
+    try {
+      const centerData = await fetchAllCentersWithIds();
+      setCenterData(centerData);
+    } catch (error) {
+      toast.error(error);
+    }
   };
 
-  // useEffect(() => {
-  //   const getData = async () => {
-  //     try {
-  //       const response = await api.get(
-  //         `/getUserLeaveRequestByUserId/${userId}`
-  //       );
-  //       setDatas(response.data);
-  //       // console.log("responsedata", response.data);
-  //       setLoading(false);
-  //     } catch (error) {
-  //       toast.error("Error Fetching Data : ", error);
-  //     }
-  //   };
-  //   getData();
-  //   fetchData();
-  // }, []);
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const response = await api.get(
+          `/getUserLeaveRequestByUserId/${userId}`
+        );
+        setDatas(response.data);
+        // console.log("responsedata", response.data);
+        setLoading(false);
+      } catch (error) {
+        toast.error("Error Fetching Data : ", error);
+      }
+    };
+    getData();
+    fetchData();
+  }, []);
 
   useEffect(() => {
     if (!loading) {
@@ -58,9 +59,7 @@ const Leave = () => {
       // DataTable already initialized, no need to initialize again
       return;
     }
-    $(tableRef.current).DataTable({
-      responsive: true,
-    });
+    $(tableRef.current).DataTable();
   };
 
   const destroyDataTable = () => {
@@ -75,7 +74,7 @@ const Leave = () => {
       <div className="card shadow border-0 mb-2 top-header">
         <div className="container-fluid px-0">
           <div className="my-5 px-4 d-flex justify-content-between">
-             {/* {storedScreens?.leaveCreate && (  */}
+            {/* {storedScreens?.leaveCreate && (  */}
             <h2>Leave Request</h2>
             <Link to="/leave/add">
               <button type="button" className="btn btn-button btn-sm">
@@ -117,66 +116,66 @@ const Leave = () => {
                     </div>
                     <div className="col-6">
                       <p className="text-muted text-sm">
-                        : {datas.leaveLimit || "--"}
+                        : {datas.leaveLimit !== undefined ? datas.leaveLimit : "--"}
                       </p>
                     </div>
                   </div>
                 </div>
               </div>
               <div className="table-responsive px-4">
-              <table ref={tableRef} className="display minHeight ">
-                <thead>
-                  <tr>
-                    <th scope="col" style={{ whiteSpace: "nowrap" }}>
-                      S No
-                    </th>
-                    <th scope="col">Centre Name</th>
-                    <th scope="col">Employee Name</th>
-                    <th scope="col">Leave Type</th>
-                    <th scope="col">Leave Status</th>
-                    <th className="text-center">Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {datas?.employeeData?.map((data, index) => (
-                    <tr key={index}>
-                      <th scope="row">{index + 1}</th>
-                      <td>
-                        {centerData &&
-                          centerData.map((centerId) =>
-                            parseInt(data.centerId) === centerId.id
-                              ? centerId.centerNames || "--"
-                              : ""
-                          )}
-                      </td>
-                      <td>{data.employeeName}</td>
-                      <td>{data.leaveType}</td>
-                      <td>
-                        {data.leaveStatus === "APPROVED" ? (
-                          <span className="badge badges-Green">Approved</span>
-                        ) : data.leaveStatus === "REJECTED" ? (
-                          <span className="badge badges-Red">Rejected</span>
-                        ) : (
-                          <span className="badge badges-Yellow">Pending</span>
-                        )}
-                      </td>
-                      <td>
-                        <div className="d-flex justify-content-center align-items-center ">
-                          <Link
-                            to={`/leave/view/${data.id}`}
-                            style={{ display: "inline-block" }}
-                          >
-                            <button className="btn btn-sm">
-                              <FaEye />
-                            </button>
-                          </Link>
-                        </div>
-                      </td>
+                <table ref={tableRef} className="display minHeight ">
+                  <thead>
+                    <tr>
+                      <th scope="col" style={{ whiteSpace: "nowrap" }}>
+                        S No
+                      </th>
+                      <th scope="col">Centre Name</th>
+                      <th scope="col">Employee Name</th>
+                      <th scope="col">Leave Type</th>
+                      <th scope="col">Leave Status</th>
+                      <th className="text-center">Action</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                  </thead>
+                  <tbody>
+                    {datas?.employeeData?.map((data, index) => (
+                      <tr key={index}>
+                        <th scope="row">{index + 1}</th>
+                        <td>
+                          {centerData &&
+                            centerData.map((centerId) =>
+                              parseInt(data.tuitionId) === centerId.id
+                                ? centerId.centerNames || "--"
+                                : ""
+                            )}
+                        </td>
+                        <td>{data.employeeName || datas.employeeName}</td>
+                        <td>{data.leaveType}</td>
+                        <td>
+                          {datas.leaveStatus === "APPROVED" ? (
+                            <span className="badge badges-Green">Approved</span>
+                          ) : datas.leaveStatus === "REJECTED" ? (
+                            <span className="badge badges-Red">Rejected</span>
+                          ) : (
+                            <span className="badge badges-Yellow">Pending</span>
+                          )}
+                        </td>
+                        <td>
+                          <div className="d-flex justify-content-center align-items-center ">
+                            <Link
+                              to={`/leave/view/${data.id}`}
+                              style={{ display: "inline-block" }}
+                            >
+                              <button className="btn btn-sm">
+                                <FaEye />
+                              </button>
+                            </Link>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           )}
         </div>

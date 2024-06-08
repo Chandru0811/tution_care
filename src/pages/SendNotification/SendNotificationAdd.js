@@ -5,7 +5,7 @@ import * as Yup from "yup";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import api from "../../config/URL";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 // import { useNavigate } from "react-router-dom";
 
 function SendNotificationAdd({ onSuccess }) {
@@ -38,7 +38,7 @@ function SendNotificationAdd({ onSuccess }) {
       setLoadIndicator(true);
       console.log("pushNotification:", values);
       try {
-        const response = await api.post(`/sendSmsPushNotifications`, values, {
+        const response = await api.post(`/sendTuitionCarePushNotifications`, values, {
           headers: {
             "Content-Type": "application/json",
             //Authorization: `Bearer ${token}`,
@@ -46,8 +46,9 @@ function SendNotificationAdd({ onSuccess }) {
         });
         if (response.status === 201) {
       
-          onSuccess();
+          
           handleClose();
+          onSuccess();
           toast.success(response.data.message);
         
         } else {

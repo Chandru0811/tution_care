@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import api from "../../config/URL";
 import fetchAllCentersWithIds from "../List/CenterList";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import fetchAllCoursesWithIds from "../List/CourseList";
 import StudentSummary from "./StudentSummary";
 // import BlockImg from "../../assets/images/Block_Img1.jpg";
@@ -109,7 +109,7 @@ function StudentView () {
                 </button>
               </Link>
             )}
-            {storedScreens?.deductDepositCreate && (
+            {/* {storedScreens?.deductDepositCreate && (
               <Link to={"/student/view/deposit"}>
                 <button
                   className="btn btn-border btn-sm ms-2 stdViewBtn"
@@ -118,7 +118,7 @@ function StudentView () {
                   Deduct Deposit
                 </button>
               </Link>
-            )}
+            )} */}
             <StudentSummary className="ms-2" data={data} />
             <Link to={"/studentlisting"}>
               <button
@@ -167,7 +167,7 @@ function StudentView () {
                             <b className="mx-2">:</b>
                             {centerData &&
                               centerData.map((center) =>
-                                parseInt(data.centerId) === center.id
+                                parseInt(data.tuitionId) === center.id
                                   ? center.centerNames || "--"
                                   : ""
                               )}
@@ -1027,7 +1027,7 @@ function StudentView () {
                             <td>
                               {centerData &&
                                 centerData.map((center) =>
-                                  parseInt(data.center) === center.id
+                                  parseInt(data.tuitionId) === center.id
                                     ? center.centerNames || "--"
                                     : ""
                                 )}

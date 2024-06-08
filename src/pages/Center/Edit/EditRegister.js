@@ -5,7 +5,7 @@ import * as yup from "yup";
 import { useFormik } from "formik";
 import { FaEdit } from "react-icons/fa";
 import api from "../../../config/URL";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 
 function EditRegisteration({ id, onSuccess }) {
   const [show, setShow] = useState(false);
@@ -32,7 +32,7 @@ function EditRegisteration({ id, onSuccess }) {
       setLoadIndicator(true);
       try {
         const response = await api.put(
-          `/updateCenterRegistrations/${id}`,
+          `/updateTuitionRegistrations/${id}`,
           values,
           {
             headers: {
@@ -57,7 +57,7 @@ function EditRegisteration({ id, onSuccess }) {
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await api.get(`/getAllCenterRegistrationsById/${id}`);
+        const response = await api.get(`/getAllTuitionRegistrationsById/${id}`);
         const formattedData = {
           ...response.data,
           registrationDate: response.data.registrationDate

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import api from "../../config/URL";
 import fetchAllCoursesWithIds from "../List/CourseList";
 import fetchAllCentersWithIds from "../List/CenterList";
@@ -63,7 +63,7 @@ function StudentTransferOut() {
         });
         if (response.status === 200) {
           toast.success(response.data.message);
-          navigate(`/student/view/${id}`);
+          navigate(`/studentlisting/view/${id}`);
         } else {
           toast.error(response.data.message);
         }
@@ -99,7 +99,7 @@ function StudentTransferOut() {
     <div className="card shadow border-0 mb-2 top-header">
       <div className="container-fluid">
         <div className="my-3 d-flex justify-content-end align-items-end  mb-5">
-          <Link to={`/studentlisting/view`}>
+          <Link to={`/studentlisting/view/${id}`}>
             <button type="button " className="btn btn-sm btn-border   ">
               Back
             </button>

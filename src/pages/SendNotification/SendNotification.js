@@ -12,42 +12,11 @@ const SendNotification = () => {
   const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
   const [loading, setLoading] = useState(true);
   const [datas, setDatas] = useState([]);
-  // const datas = [
-  //   {
-  //     id: 1,
-  //     eventName: "Nagaran Test-msg",
-  //     message: "Testting Purpose Notification",
-  //     createdAt: "04-19-2024",
-  //   },
-  //   {
-  //     id: 2,
-  //     eventName: "Manoj Test-msg",
-  //     message: "Testting Purpose Notification",
-  //     createdAt: "05-19-2024",
-  //   },
-  //   {
-  //     id: 3,
-  //     eventName: "Chandru Test-msg",
-  //     message: "Testting Purpose Notification",
-  //     createdAt: "06-19-2024",
-  //   },
-  //   {
-  //     id: 4,
-  //     eventName: "Ragul Test-msg",
-  //     message: "Testting Purpose Notification",
-  //     createdAt: "07-19-2024",
-  //   },
-  //   {
-  //     id: 5,
-  //     eventName: "Antony Test-msg",
-  //     message: "Testting Purpose Notification",
-  //     createdAt: "08-19-2024",
-  //   },
-  // ];
+
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await api.get("/getAllSmsPushNotifications");
+        const response = await api.get("/getAllTuitionCarePushNotifications");
         setDatas(response.data);
         console.log("message", response.data);
       } catch (error) {
@@ -59,15 +28,13 @@ const SendNotification = () => {
     getData();
   }, []);
 
-  // useEffect(() => {
-  //   const table = $(tableRef.current).DataTable({
-  //     responsive: true,
-  //   });
+  useEffect(() => {
+    const table = $(tableRef.current).DataTable();
 
-  //   return () => {
-  //     table.destroy();
-  //   };
-  // }, []);
+    return () => {
+      table.destroy();
+    };
+  }, []);
 
   useEffect(() => {
     if (!loading) {
@@ -99,7 +66,7 @@ const SendNotification = () => {
     destroyDataTable();
     setLoading(true);
     try {
-      const response = await api.get("/getAllSmsPushNotifications");
+      const response = await api.get("/getAllTuitionCarePushNotifications");
       setDatas(response.data);
       initializeDataTable(); // Reinitialize DataTable after successful data update
     } catch (error) {
@@ -114,7 +81,7 @@ const SendNotification = () => {
         <div className="container-fluid px-0">
         <div className="d-flex justify-content-between mb-5 my-3 px-4">
               <h2>Send Notification</h2>
-              <SendNotificationAdd />
+              <SendNotificationAdd  onSuccess={refreshData} />
           </div>
           <hr />
       {loading ? (
@@ -147,18 +114,18 @@ const SendNotification = () => {
                     <td>{data.messageDescription}</td>
                     <td>{data.datePosted}</td>
                     <td>
-                      {storedScreens?.sendNotificationUpdate && (
+                      {/* {storedScreens?.sendNotificationUpdate && ( */}
                         <SendNotificationEdit
                           id={data.id}
                           onSuccess={refreshData}
                         />
-                      )}
-                       {storedScreens?.levelDelete && (
+                      {/* )} */}
+                       {/* {storedScreens?.levelDelete && ( */}
                     <Delete
                       onSuccess={refreshData}
-                      path={`/deleteCourseLevel/${data.id}`}
+                      path={`/deleteTuitionCarePushNotifications/${data.id}`}
                     />
-                  )}
+                  {/* )} */}
                     </td>
                   </tr>
                 ))}

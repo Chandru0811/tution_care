@@ -5,7 +5,7 @@ import * as yup from "yup";
 import { useFormik } from "formik";
 import { FaEdit } from "react-icons/fa";
 import api from "../../../config/URL";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 
 function EditPackage({ id, onSuccess }) {
   const [show, setShow] = useState(false);
@@ -27,7 +27,7 @@ function EditPackage({ id, onSuccess }) {
     onSubmit: async (values) => {
       setLoadIndicator(true);
       try {
-        const response = await api.put(`/updateCenterPackages/${id}`, values, {
+        const response = await api.put(`/updateTuitionPackages/${id}`, values, {
           headers: {
             "Content-Type": "application/json",
           },
@@ -49,7 +49,7 @@ function EditPackage({ id, onSuccess }) {
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await api.get(`/getAllCenterPackagesById/${id}`);
+        const response = await api.get(`/getAllTuitionPackagesById/${id}`);
         formik.setValues(response.data);
       } catch (error) {
         toast.error("Error Fetching Data");

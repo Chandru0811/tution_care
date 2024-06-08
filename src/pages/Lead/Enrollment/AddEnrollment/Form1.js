@@ -7,12 +7,12 @@ import React, {
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import api from "../../../../config/URL";
-import { toast } from "react-toastify";
-// import fetchAllSubjectsWithIds from "../../../List/SubjectList";
+import toast from "react-hot-toast";
+import fetchAllSubjectsWithIds from "../../../List/SubjectList";
 
 const validationSchema = Yup.object().shape({
   studentName: Yup.string().required("*Name is required"),
-  subject: Yup.string().required("*Subject is required"), // Adding validation for subject field
+  subjectId: Yup.string().required("*Subject is required"), // Adding validation for subjectId field
   gender: Yup.string().required("*Gender is required"),
   dateOfBirth: Yup.date()
     .required("*Date of Birth is required")
@@ -27,12 +27,12 @@ const validationSchema = Yup.object().shape({
 });
 
 const Form1 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
-  const [subjectData, setSubjectData] = useState(null);
+  const [subjectIdData, setSubjectData] = useState(null);
 
   const formik = useFormik({
     initialValues: {
       studentName: formData.studentName || "",
-      subject: formData.subject,
+      subjectId: formData.subjectId,
       gender: formData.gender || "",
       dateOfBirth: formData.dateOfBirth || "",
       medicalCondition: formData.medicalCondition || "",
@@ -67,12 +67,12 @@ const Form1 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
   });
 
   const fetchData = async () => {
-    // try {
-    //   const subjectData = await fetchAllSubjectsWithIds();
-    //   setSubjectData(subjectData);
-    // } catch (error) {
-    //   toast.error(error);
-    // }
+    try {
+      const subjectIdData = await fetchAllSubjectsWithIds();
+      setSubjectData(subjectIdData);
+    } catch (error) {
+      toast.error(error);
+    }
   };
 
   useEffect(() => {
@@ -113,22 +113,22 @@ const Form1 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
             <span className="text-danger">*</span>
             <select
               className="form-select form-select-sm"
-              name="subject"
+              name="subjectId"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              value={formik.values.subject}
+              value={formik.values.subjectId}
             >
               <option selected></option>
-              {subjectData &&
-                subjectData.map((subject) => (
-                  <option key={subject.id} value={subject.id}>
-                    {subject.subjects}
+              {subjectIdData &&
+                subjectIdData.map((subjectId) => (
+                  <option key={subjectId.id} value={subjectId.id}>
+                    {subjectId.subjectIds}
                   </option>
                 ))}
             </select>
-            {formik.touched.subject && formik.errors.subject && (
+            {formik.touched.subjectId && formik.errors.subjectId && (
               <div className="text-danger">
-                <small>{formik.errors.subject}</small>
+                <small>{formik.errors.subjectId}</small>
               </div>
             )}
           </div>

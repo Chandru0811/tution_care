@@ -1,10 +1,10 @@
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import api from "../../config/URL";
 
 const fetchAllPackageListByCenter = async (id) => {
   try {
     const response = await api.get(
-      `getCenterPackageIdsAndNamesByCenterId/${id}`
+      `getTuitionPackageIdsAndNamesBytuitionId/${id}`
     );
     return response.data;
   } catch (error) {

@@ -6,7 +6,7 @@ import BlockTimeSlot from "./BlockTimeSlot";
 import UnBlockTimeSlot from "./UnBlockTimeSlot";
 import ApproveStudentTimeSlot from "./ApproveStudentTimeSlot";
 import RemoveStudentTimeSlot from "./RemoveStudentTimeSlot";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 
 export default function ScheduleTime() {
   const { id } = useParams();
@@ -14,7 +14,9 @@ export default function ScheduleTime() {
   const [loading, setLoading] = useState(true);
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
-  const centerId = searchParams.get("centerId");
+  const tuitionId = searchParams.get("tuitionId");
+  // // const tuitionId = searchParams.get(9);
+  // const tuitionId = 9;
 
   // const [selectedDay, setSelectedDay] = useState(null);
   // const [selectedClass, setSelectedClass] = useState(null);
@@ -45,7 +47,7 @@ export default function ScheduleTime() {
       toast.error("Error Fetching Data ", error);
     }
   };
-
+console.log("object",teacherSchedules)
   const batchTimes = [
     "2:30 pm",
     "3:30 pm",
@@ -139,18 +141,19 @@ export default function ScheduleTime() {
                                       : null;
                                   let backgroundColor = "transparent";
                                   let content = null;
+                                  console.log("student",student)
 
                                   if (student && student.name) {
                                     content = (
                                       <>
                                         <span>{student.name}</span>
                                         <br />
-                                        {storedScreens?.timeScheduleDelete && (
+                                        {/* {storedScreens?.timeScheduleDelete && ( */}
                                           <RemoveStudentTimeSlot
                                             id={student.id}
                                             onSuccess={refreshData}
                                           />
-                                        )}
+                                        {/* )} */}
                                       </>
                                     );
                                     if (student.blocked) {
@@ -169,18 +172,18 @@ export default function ScheduleTime() {
                                         <div>
                                           <span>{student.name}</span>
                                           <br />
-                                          {storedScreens?.timeScheduleApproved && (
+                                          {/* {storedScreens?.timeScheduleApproved && ( */}
                                             <ApproveStudentTimeSlot
                                               id={student.id}
                                               onSuccess={refreshData}
                                             />
-                                          )}
-                                          {storedScreens?.timeScheduleDelete && (
+                                          {/* )} */}
+                                          {/* {storedScreens?.timeScheduleDelete && ( */}
                                             <RemoveStudentTimeSlot
                                               id={student.id}
                                               onSuccess={refreshData}
                                             />
-                                          )}
+                                          {/* )} */}
                                         </div>
                                       );
                                     }
@@ -188,47 +191,47 @@ export default function ScheduleTime() {
                                     backgroundColor = "lightgrey";
                                     content = (
                                       <>
-                                        {storedScreens?.timeScheduleUnBlock && (
+                                        {/* {storedScreens?.timeScheduleUnBlock && ( */}
                                           <UnBlockTimeSlot
                                             id={student.id}
                                             onSuccess={refreshData}
                                           />
-                                        )}
+                                        {/* )} */}
                                       </>
                                     );
                                   } else {
                                     content =
                                       student && student.id ? (
                                         <>
-                                          {storedScreens?.timeScheduleAdd && (
+                                          {/* {storedScreens?.timeScheduleAdd && ( */}
                                             <DayTableAdd
                                               id={student.id}
                                               onSuccess={refreshData}
-                                              centerId={centerId}
+                                              tuitionId={tuitionId}
                                               day={data.day}
                                             />
-                                          )}
-                                          {storedScreens?.timeScheduleBlock && (
+                                          {/* )} */}
+                                          {/* {storedScreens?.timeScheduleBlock && ( */}
                                             <BlockTimeSlot
                                               id={student.id}
                                               onSuccess={refreshData}
                                             />
-                                          )}
+                                          {/* )} */}
                                         </>
                                       ) : (
                                         <>
-                                          {storedScreens?.timeScheduleAdd && (
+                                          {/* {storedScreens?.timeScheduleAdd && ( */}
                                             <DayTableAdd
                                               onSuccess={refreshData}
-                                              centerId={centerId}
+                                              tuitionId={tuitionId}
                                               day={data.day}
                                             />
-                                          )}
-                                          {storedScreens?.timeScheduleBlock && (
+                                          {/* )} */}
+                                          {/* {storedScreens?.timeScheduleBlock && ( */}
                                             <BlockTimeSlot
                                               onSuccess={refreshData}
                                             />
-                                          )}
+                                          {/* )} */}
                                         </>
                                       );
                                   }

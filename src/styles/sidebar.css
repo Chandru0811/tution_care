@@ -9,11 +9,11 @@
 }
 
 .logutBtn :hover{
-  background-color: #ACE1AF !important;
+  background-color: #1db2b8 !important;
 }
 .logutBtn :active{
   width: 60px;
-  background-color: #E0FBE2;
+  background-color: #227679;
 }
 
 .sidebar {
@@ -21,13 +21,14 @@
   overflow: auto;
   height: 100%;
   width: 280px;
-  background: #BFF6C3;
+  background:#4066D5;
+  color: white !important;
   transition: all 0.5s ease;
 }
 
 .sidebar.active {
   width: 60px;
-  background-color: #E0FBE2;
+  background-color: #9ca19c;
 }
 
 .sidebar .logo-details {
@@ -82,18 +83,19 @@
 }
 
 .sidebar .nav-links li a:hover {
-  background: #E0FBE2;
+  background: #365ddd;
 }
 
 .sidebar .nav-links li a.active{
-  background: #ACE1AF;
+  background: #1f4ce0;
 }
 .sidebar .nav-links li i {
   /* min-width: 60px; */
   font-weight: 600;
   text-align: center;
   font-size: 16px;
-  color: #484848;
+  /* color: #484848; */
+  color: #fff;
 }
 
 .sidebar .nav-links li a .links_name {
@@ -101,6 +103,7 @@
   font-size: 15px;
   font-weight: 500;
   white-space: nowrap;
+  color: #fff;
 }
 
 .sidebar .nav-links .log_out {

@@ -3,14 +3,14 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import api from "../../config/URL";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 
 const validationSchema = Yup.object().shape({
-  centerName: Yup.string().required("*Centre Name is required"),
+  tuitionCareName: Yup.string().required("*Centre Name is required"),
   code: Yup.number()
     .typeError("*Enter a valid number")
     .required("*Code is required"),
-  centerManager: Yup.string().required("*Select the Center Manager"),
+  tuitionManager: Yup.string().required("*Select the Center Manager"),
   zipCode: Yup.number()
     .typeError("*Zip Code must be number")
     .required("*Zip Code is required")
@@ -52,9 +52,9 @@ function CenterAdd() {
 
   const formik = useFormik({
     initialValues: {
-      centerName: "",
+      tuitionCareName: "",
       code: "",
-      centerManager: "",
+      tuitionManager: "",
       address: "",
       zipCode: "",
       mobile: "",
@@ -75,7 +75,7 @@ function CenterAdd() {
       // Convert gst value to boolean
       values.gst = values.gst === "true";
       try {
-        const response = await api.post("/createCenter", values, {
+        const response = await api.post("/createTuition", values, {
           headers: {
             "Content-Type": "application/json",
           },
@@ -87,7 +87,7 @@ function CenterAdd() {
           toast.error(response.data.message);
         }
       } catch (error) {
-        toast.error(error);
+        toast.error(error.message);
       } finally {
         setLoadIndicator(false);
       }
@@ -137,19 +137,19 @@ function CenterAdd() {
                 </label>
                 <input
                   type="text"
-                  name="centerName"
+                  name="tuitionCareName"
                   className={`form-control form-control-sm  ${
-                    formik.touched.centerName && formik.errors.centerName
+                    formik.touched.tuitionCareName && formik.errors.tuitionCareName
                       ? "is-invalid"
                       : ""
                   }`}
                   aria-label="Username"
                   aria-describedby="basic-addon1"
-                  {...formik.getFieldProps("centerName")}
+                  {...formik.getFieldProps("tuitionCareName")}
                 />
-                {formik.touched.centerName && formik.errors.centerName && (
+                {formik.touched.tuitionCareName && formik.errors.tuitionCareName && (
                   <div className="invalid-feedback">
-                    {formik.errors.centerName}
+                    {formik.errors.tuitionCareName}
                   </div>
                 )}
               </div>
@@ -180,9 +180,9 @@ function CenterAdd() {
                   Centre Manager<span className="text-danger">*</span>
                 </label>
                 <select
-                  {...formik.getFieldProps("centerManager")}
+                  {...formik.getFieldProps("tuitionManager")}
                   className={`form-select form-select-sm   ${
-                    formik.touched.centerManager && formik.errors.centerManager
+                    formik.touched.tuitionManager && formik.errors.tuitionManager
                       ? "is-invalid"
                       : ""
                   }`}
@@ -193,10 +193,10 @@ function CenterAdd() {
                   <option value="Jeanette Aw">Jeanette Aw</option>
                   <option value="Baey Yam Keng">Baey Yam Keng</option>
                 </select>
-                {formik.touched.centerManager &&
-                  formik.errors.centerManager && (
+                {formik.touched.tuitionManager &&
+                  formik.errors.tuitionManager && (
                     <div className="invalid-feedback">
-                      {formik.errors.centerManager}
+                      {formik.errors.tuitionManager}
                     </div>
                   )}
               </div>

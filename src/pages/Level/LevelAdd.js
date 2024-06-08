@@ -5,16 +5,15 @@ import * as Yup from "yup";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import api from "../../config/URL";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
+
 
 function LevelAdd({ onSuccess }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
 
-  const handleClose = () => {
-    setShow(false);
-    formik.resetForm();
-  };
+  const handleClose = () => {setShow(false)
+  formik.resetForm();}
 
   const handleShow = () => setShow(true);
 
@@ -41,9 +40,9 @@ function LevelAdd({ onSuccess }) {
           },
         });
         if (response.status === 201) {
-          onSuccess();
           handleClose();
           toast.success(response.data.message);
+          onSuccess();
         } else {
           toast.error(response.data.message);
         }

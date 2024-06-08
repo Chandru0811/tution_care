@@ -9,9 +9,9 @@ import AddRegister from "./Add/AddRegister";
 import AddBreak from "./Add/AddBreak";
 import AddClass from "./Add/AddClass";
 import AddPackage from "./Add/AddPackage";
-// import Delete from "../../components/common/Delete";
 import api from "../../config/URL";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
+import DeleteModel from "../../components/common/DeleteModel";
 
 const Center = () => {
   const tableRef = useRef(null);
@@ -19,16 +19,16 @@ const Center = () => {
   // console.log("Screens : ", SCREENS);
 
   const [datas, setDatas] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const getCenterData = async () => {
       try {
-        const response = await api.get("/getAllCenter");
+        const response = await api.get("/getAllTuition");
         setDatas(response.data);
         setLoading(false);
       } catch (error) {
-        toast.error("Error Fetching Data : ", error);
+        toast.error("Error Fetching Data : ", error.message);
       }
     };
     getCenterData();
@@ -48,9 +48,7 @@ const Center = () => {
       // DataTable already initialized, no need to initialize again
       return;
     }
-    $(tableRef.current).DataTable({
-      responsive: true,
-    });
+    $(tableRef.current).DataTable();
   };
 
   const destroyDataTable = () => {
@@ -64,11 +62,11 @@ const Center = () => {
     destroyDataTable();
     setLoading(true);
     try {
-      const response = await api.get("/getAllCenter");
+      const response = await api.get("/getAllTuition");
       setDatas(response.data);
       initializeDataTable(); // Reinitialize DataTable after successful data update
     } catch (error) {
-      console.error("Error refreshing data:", error);
+      console.error("Error refreshing data:", error.message);
     }
     setLoading(false);
   };
@@ -118,14 +116,14 @@ const Center = () => {
             {datas.map((data, index) => (
               <tr key={index}>
                 <th scope="row">{index + 1}</th>
-                <td>{data.centerName}</td>
-                <td>{data.centerManager}</td>
+                <td>{data.tuitionCareName}</td>
+                <td>{data.tuitionManager}</td>
                 <td>{data.code}</td>
                 <td>{data.uenNumber}</td>
                 <td>{data.mobile}</td>
                 <td>
                   <div className="d-flex justify-content-center align-items-center ">
-                    {storedScreens?.centerListingCreate && (
+                    {/* {storedScreens?.centerListingCreate && ( */}
                       <div class="dropdown" style={{ display: "inline-block" }}>
                         <button
                           class="btn dropdown-toggle"
@@ -150,8 +148,8 @@ const Center = () => {
                           </li>
                         </ul>
                       </div>
-                    )}
-                    {storedScreens?.centerListingRead && (
+                    {/* )} */}
+                    {/* {storedScreens?.centerListingRead && ( */}
                       <Link
                         to={`/center/view/${data.id}`}
                         style={{ display: "inline-block" }}
@@ -160,8 +158,8 @@ const Center = () => {
                           <FaEye />
                         </button>
                       </Link>
-                    )}
-                    {storedScreens?.centerListingUpdate && (
+                    {/* )} */}
+                    {/* {storedScreens?.centerListingUpdate && ( */}
                       <Link
                         to={`/center/edit/${data.id}`}
                         style={{ display: "inline-block" }}
@@ -170,14 +168,14 @@ const Center = () => {
                           <FaEdit />
                         </button>
                       </Link>
-                    )}
-                    {/* {storedScreens?.centerListingDelete && (
-                      <Delete
-                        onSuccess={refreshData}
-                        path={`/deleteCenter/${data.id}`}
+                    {/* )} */}
+                    {/* {storedScreens?.centerListingDelete && ( */}
+                      <DeleteModel
+                         onSuccess={refreshData}
+                        path={`/deleteTuition/${data.id}`}
                         style={{ display: "inline-block" }}
                       />
-                    )} */}
+                    {/* )} */}
                   </div>
                 </td>
               </tr>

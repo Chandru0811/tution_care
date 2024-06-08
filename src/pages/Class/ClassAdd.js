@@ -3,9 +3,9 @@ import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import api from "../../config/URL";
-import { toast } from "react-toastify";
-// import fetchAllCentersWithIds from "../List/CenterList";
-// import fetchAllCoursesWithIds from "../List/CourseList";
+import toast from "react-hot-toast";
+import fetchAllCentersWithIds from "../List/CenterList";
+import fetchAllCoursesWithIds from "../List/CourseList";
 
 function ClassAdd() {
   const navigate = useNavigate();
@@ -14,14 +14,14 @@ function ClassAdd() {
   const [loadIndicator, setLoadIndicator] = useState(false);
 
   const fetchData = async () => {
-    // try {
-    //   const centerData = await fetchAllCentersWithIds();
-    //   const courseData = await fetchAllCoursesWithIds();
-    //   setCenterData(centerData);
-    //   setCourseData(courseData);
-    // } catch (error) {
-    //   toast.error(error);
-    // }
+    try {
+      const centerData = await fetchAllCentersWithIds();
+      const courseData = await fetchAllCoursesWithIds();
+      setCenterData(centerData);
+      setCourseData(courseData);
+    } catch (error) {
+      toast.error(error);
+    }
   };
 
   useEffect(() => {
@@ -29,7 +29,7 @@ function ClassAdd() {
   }, []);
 
   const validationSchema = Yup.object({
-    centerId: Yup.string().required("*Centre Name is required"),
+    tuitionId: Yup.string().required("*Centre Name is required"),
     courseId: Yup.string().required("*Course Name is required"),
     className: Yup.string().required("*Class Name is required"),
     classType: Yup.string().required("*Class Type is required"),
@@ -37,7 +37,7 @@ function ClassAdd() {
   });
   const formik = useFormik({
     initialValues: {
-      centerId: "",
+      tuitionId: "",
       courseId: "",
       className: "",
       classType: "",
@@ -47,7 +47,7 @@ function ClassAdd() {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       setLoadIndicator(true);
-      const selectedValue = formik.values.centerId; // Assuming formik is in scope
+      const selectedValue = formik.values.tuitionId; // Assuming formik is in scope
       let selectedOptionName = "";
 
       centerData.forEach((center) => {
@@ -118,10 +118,10 @@ function ClassAdd() {
                   Centre<span class="text-danger">*</span>
                 </lable>
                 <select
-                  {...formik.getFieldProps("centerId")}
-                  name="centerId"
+                  {...formik.getFieldProps("tuitionId")}
+                  name="tuitionId"
                   className={`form-select form-select-sm  ${
-                    formik.touched.centerId && formik.errors.centerId
+                    formik.touched.tuitionId && formik.errors.tuitionId
                       ? "is-invalid"
                       : ""
                   }`}
@@ -130,15 +130,15 @@ function ClassAdd() {
                 >
                   <option selected></option>
                   {centerData &&
-                    centerData.map((centerId) => (
-                      <option key={centerId.id} value={centerId.id}>
-                        {centerId.centerNames}
+                    centerData.map((tuitionId) => (
+                      <option key={tuitionId.id} value={tuitionId.id}>
+                        {tuitionId.centerNames}
                       </option>
                     ))}
                 </select>
-                {formik.touched.centerId && formik.errors.centerId && (
+                {formik.touched.tuitionId && formik.errors.tuitionId && (
                   <div className="invalid-feedback">
-                    {formik.errors.centerId}
+                    {formik.errors.tuitionId}
                   </div>
                 )}
               </div>

@@ -4,32 +4,32 @@ import "datatables.net-responsive-dt";
 import $ from "jquery";
 import { Link } from "react-router-dom";
 import { FaEye, FaEdit } from "react-icons/fa";
-//import Delete from "../../components/common/Delete";
 import api from "../../config/URL";
 import { FaFileInvoice } from "react-icons/fa";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { SCREENS } from "../../config/ScreenFilter";
+import DeleteModel from "../../components/common/DeleteModel";
 
 const Course = () => {
   console.log("Screens : ", SCREENS);
   // const { id } = useParams();
   const tableRef = useRef(null);
   const [datas, setDatas] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
 
-  // useEffect(() => {
-  //   const getData = async () => {
-  //     try {
-  //       const response = await api.get("/getAllCourses");
-  //       setDatas(response.data);
-  //       setLoading(false);
-  //     } catch (error) {
-  //       console.error("Error fetching data ", error);
-  //     }
-  //   };
-  //   getData();
-  // }, []);
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const response = await api.get("/getAllCourses");
+        setDatas(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching data ", error);
+      }
+    };
+    getData();
+  }, []);
 
   useEffect(() => {
     if (!loading) {
@@ -45,9 +45,7 @@ const Course = () => {
       // DataTable already initialized, no need to initialize again
       return;
     }
-    $(tableRef.current).DataTable({
-      responsive: true,
-    });
+    $(tableRef.current).DataTable();
   };
 
   const destroyDataTable = () => {
@@ -114,7 +112,7 @@ const Course = () => {
                     {datas.map((data, index) => (
                       <tr key={index}>
                         <th scope="row">{index + 1}</th>
-                        {/* <td>{data.centerName}</td> */}
+                        {/* <td>{data.tuitionCareName}</td> */}
                         <td>{data.courseName}</td>
                         <td>{data.courseCode}</td>
                         <td>{data.courseType}</td>
@@ -126,28 +124,28 @@ const Course = () => {
                           )}
                         </td>
                         <td>
-                          {storedScreens?.courseRead && (
+                          {/* {storedScreens?.courseRead && ( */}
                             <Link to={`/course/view/${data.id}`}>
                               <button className="btn btn-sm">
                                 <FaEye />
                               </button>
                             </Link>
-                          )}
-                          {storedScreens?.courseUpdate && (
+                          {/* )} */}
+                          {/* {storedScreens?.courseUpdate && ( */}
                             <Link to={`/course/edit/${data.id}`}>
                               <button className="btn btn-sm">
                                 <FaEdit />
                               </button>
                             </Link>
-                          )}
-                          {/* {storedScreens?.courseDelete && (
-                    <Delete
+                          {/* )} */}
+                          {/* {storedScreens?.courseDelete && ( */}
+                    <DeleteModel
                       onSuccess={refreshData}
                       path={`/deleteCourse/${data.id}`}
                     />
-                  )} */}
+                  {/* )} */}
 
-                          {storedScreens?.curriculumIndex && (
+                          {/* {storedScreens?.curriculumIndex && ( */}
                             <OverlayTrigger
                               placement="top"
                               overlay={
@@ -160,7 +158,7 @@ const Course = () => {
                                 </button>
                               </Link>
                             </OverlayTrigger>
-                          )}
+                          {/* )} */}
                         </td>
                       </tr>
                     ))}

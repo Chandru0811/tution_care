@@ -8,7 +8,7 @@ import api from "../../../config/URL";
 import EditParentDetailModel from "./EditParentDetailModel";
 import AddParentDetailModel from "./AddParentDetailModel";
 import { GoDotFill } from "react-icons/go";
-// import BlockImg from "../../../assets/images/Block_Img1.jpg";
+import BlockImg from "../../../assets/Block_Img1.jpg";
 import { FaEdit } from "react-icons/fa";
 
 const EditParentGuardian = forwardRef(
@@ -44,7 +44,7 @@ const EditParentGuardian = forwardRef(
               <div className="col-md-12 col-12 mt-4">
                 <h5 className="headColor mb-3">Parents / Guardian Details</h5>
                 <table className="table table-border-solid">
-                  <thead className=" table-light" style={{background:"#BFF6C3"}}>
+                  <thead className=" table-light bg-warning">
                     <tr>
                       <th scope="col" className="fw-medium">
                         S.No
@@ -73,7 +73,7 @@ const EditParentGuardian = forwardRef(
                         <tr key={index}>
                           <td>{index + 1}</td>
                           <td>
-                            {/* <p className="my-2 d-flex">
+                            <p className="my-2 d-flex">
                               {parent.profileImage ? (
                                 <img
                                   src={parent.profileImage}
@@ -97,7 +97,7 @@ const EditParentGuardian = forwardRef(
                               {parent.primaryContact === true && (
                                 <GoDotFill className="text-primary" />
                               )}
-                            </p> */}
+                            </p>
                           </td>
                           <td>
                             {parent.parentDateOfBirth?.substring(0, 10) || "-"}

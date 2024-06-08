@@ -24,7 +24,7 @@ const steps = [
   { tooltip: "Terms and Conditions" },
 ];
 
-export default function StudentEdit() {
+export default function StudentAdd() {
   const { id } = useParams();
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [activeStep, setActiveStep] = useState(0);
@@ -113,7 +113,7 @@ export default function StudentEdit() {
         ))}
       </Stepper>
 
-      <div className="container-fluid card shadow border-0 mb-7 py-3 mb-5">
+      <div className="container-fluid card shadow border-0 mb-4">
         <React.Fragment>
           {activeStep === 0 && (
             <EditStudentDetails

@@ -4,10 +4,10 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { FaEdit } from "react-icons/fa";
 import fetchAllCentersWithIds from "../List/CenterList";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
 import fetchAllClassesWithIdsC from "../List/ClassListByCourse";
 import fetchAllTeachersWithIds from "../List/TeacherList";
@@ -20,7 +20,7 @@ function ScheduleTeacherEdit({ id, onSuccess }) {
   const [classData, setClassData] = useState(null);
   const [teacherData, setTeacherData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const handleClose = () => {
     setShow(false);
@@ -53,9 +53,9 @@ function ScheduleTeacherEdit({ id, onSuccess }) {
     }
   };
 
-  const fetchCourses = async (centerId) => {
+  const fetchCourses = async (tuitionId) => {
     try {
-      const courses = await fetchAllCoursesWithIdsC(centerId);
+      const courses = await fetchAllCoursesWithIdsC(tuitionId);
       setCourseData(courses);
     } catch (error) {
       toast.error(error);
@@ -85,7 +85,7 @@ function ScheduleTeacherEdit({ id, onSuccess }) {
   }, []);
 
   const validationSchema = Yup.object({
-    centerId: Yup.string().required("*Centre is required"),
+    tuitionId: Yup.string().required("*Centre is required"),
     courseId: Yup.string().required("*Course  is required"),
     classId: Yup.string().required("*Class is required"),
     days: Yup.string().required("*Days is required"),
@@ -95,7 +95,7 @@ function ScheduleTeacherEdit({ id, onSuccess }) {
 
   const formik = useFormik({
     initialValues: {
-      centerId: "",
+      tuitionId: "",
       courseId: "",
       classId: "",
       centerName: "",
@@ -116,8 +116,8 @@ function ScheduleTeacherEdit({ id, onSuccess }) {
       let selectedTeacherName = "";
 
       centerData.forEach((center) => {
-        if (parseInt(values.centerId) === center.id) {
-          selectedCenterName = center.centerNames || "--";
+        if (parseInt(values.tuitionId) === center.id) {
+          selectedCenterName = center.tuitionCareName || "--";
         }
       });
 
@@ -142,7 +142,7 @@ function ScheduleTeacherEdit({ id, onSuccess }) {
       });
 
       let requestBody = {
-        centerId: values.centerId,
+        tuitionId: values.tuitionId,
         centerName: selectedCenterName,
         className: selectedClassName,
         classId: values.classId,
@@ -181,9 +181,9 @@ function ScheduleTeacherEdit({ id, onSuccess }) {
   });
 
   const handleCenterChange = (event) => {
-    const centerId = event.target.value;
-    formik.setFieldValue("centerId", centerId);
-    fetchCourses(centerId); // Fetch courses for the selected center
+    const tuitionId = event.target.value;
+    formik.setFieldValue("tuitionId", tuitionId);
+    fetchCourses(tuitionId); // Fetch courses for the selected center
   };
 
   const handleCourseChange = (event) => {
@@ -229,9 +229,9 @@ function ScheduleTeacherEdit({ id, onSuccess }) {
                   Centre<span className="text-danger">*</span>
                   </label>
                   <select
-                    {...formik.getFieldProps("centerId")}
+                    {...formik.getFieldProps("tuitionId")}
                     className={`form-select form-select-sm ${
-                      formik.touched.centerId && formik.errors.centerId
+                      formik.touched.tuitionId && formik.errors.tuitionId
                         ? "is-invalid"
                         : ""
                     }`}
@@ -246,9 +246,9 @@ function ScheduleTeacherEdit({ id, onSuccess }) {
                         </option>
                       ))}
                   </select>
-                  {formik.touched.centerId && formik.errors.centerId && (
+                  {formik.touched.tuitionId && formik.errors.tuitionId && (
                     <div className="invalid-feedback">
-                      {formik.errors.centerId}
+                      {formik.errors.tuitionId}
                     </div>
                   )}
                 </div>

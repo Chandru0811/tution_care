@@ -2,7 +2,7 @@ import React, { forwardRef, useImperativeHandle, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import api from "../../../config/URL";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 
 const validationSchema = Yup.object().shape({
   parentInformation: Yup.array().of(
@@ -456,7 +456,7 @@ const AddParentGuardian = forwardRef(
               onClick={() => setRows((prevRows) => prevRows + 1)}
               className="btn btn-border btn-sm"
             >
-              <i className="bx bx-plus"></i>   Add <i class="bx bx-plus"></i>More
+              <i className="bx bx-plus"></i>More
             </button>{" "}
             &nbsp;&nbsp;
             {rows > 1 && (

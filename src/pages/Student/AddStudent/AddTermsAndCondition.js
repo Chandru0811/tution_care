@@ -3,7 +3,7 @@ import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import api from "../../../config/URL";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 
 const validationSchema = Yup.object().shape({
   termsAndConditionSignatureDate: Yup.string().required("*Signature Date is required"),
@@ -42,7 +42,7 @@ const AddTermsAndCondition = forwardRef(
           if (response.status === 201) {
             toast.success(response.data.message);
             setFormData((prv) => ({ ...prv, ...data }));
-            navigate("/student");
+            navigate("/studentlisting");
           } else {
             toast.error(response.data.message);
           }

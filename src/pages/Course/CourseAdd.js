@@ -3,39 +3,39 @@ import { Link, useNavigate } from "react-router-dom";
 import "../../styles/custom.css";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import api from "../../config/URL";
-// import fetchAllCentersWithIds from "../List/CenterList";
-// import fetchAllLevelsWithIds from "../List/LevelList";
-// import fetchAllSubjectsWithIds from "../List/SubjectList";
+import fetchAllCentersWithIds from "../List/CenterList";
+import fetchAllLevelsWithIds from "../List/LevelList";
+import fetchAllSubjectsWithIds from "../List/SubjectList";
 
 function CourseAdd({ onSuccess }) {
   const navigate = useNavigate();
   const [centerData, setCenterData] = useState(null);
   console.log("Center Data", centerData);
-  // const [levelData, setLevelData] = useState(null);
-  // const [subjectData, setSubjectData] = useState(null);
+  const [levelData, setLevelData] = useState(null);
+  const [subjectData, setSubjectData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
 
   const fetchData = async () => {
-    // try {
-    //   const centerData = await fetchAllCentersWithIds();
-    //   const levelData = await fetchAllLevelsWithIds();
-    //   const subjectData = await fetchAllSubjectsWithIds();
-    //   setCenterData(centerData);
-    //   setLevelData(levelData);
-    //   setSubjectData(subjectData);
-    // } catch (error) {
-    //   toast.error(error);
-    // }
+    try {
+      const centerData = await fetchAllCentersWithIds();
+      const levelData = await fetchAllLevelsWithIds();
+      const subjectData = await fetchAllSubjectsWithIds();
+      setCenterData(centerData);
+      setLevelData(levelData);
+      setSubjectData(subjectData);
+    } catch (error) {
+      toast.error(error);
+    }
   };
 
-  // useEffect(() => {
-  //   fetchData();
-  // }, []);
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const validationSchema = Yup.object({
-    centerId: Yup.string().required("*Select the Centre Name"),
+    tuitionId: Yup.string().required("*Select the Centre Name"),
     courseName: Yup.string().required("*Course Name is required"),
     courseCode: Yup.string().required("*Course Code is required"),
     subjectId: Yup.string().required("*Select the Subject"),
@@ -52,7 +52,7 @@ function CourseAdd({ onSuccess }) {
 
   const formik = useFormik({
     initialValues: {
-      centerId: "",
+      tuitionId: "",
       courseName: "",
       courseCode: "",
       subjectId: "",
@@ -88,7 +88,7 @@ function CourseAdd({ onSuccess }) {
         if (response.status === 201) {
           toast.success(response.data.message);
           navigate("/course");
-          onSuccess();
+          // onSuccess();
         } else {
           toast.error(response.data.message);
         }
@@ -142,8 +142,8 @@ function CourseAdd({ onSuccess }) {
                 </lable>
                 <div className="input-group mb-3">
                   <select
-                    {...formik.getFieldProps("centerId")}
-                    className={`form-select  form-select-sm${formik.touched.centerId && formik.errors.centerId
+                    {...formik.getFieldProps("tuitionId")}
+                    className={`form-select  form-select-sm${formik.touched.tuitionId && formik.errors.tuitionId
                         ? "is-invalid"
                         : ""
                       }`}
@@ -151,15 +151,15 @@ function CourseAdd({ onSuccess }) {
                   >
                     <option selected></option>
                     {centerData &&
-                      centerData.map((centerId) => (
-                        <option key={centerId.id} value={centerId.id}>
-                          {centerId.centerNames}
+                      centerData.map((tuitionId) => (
+                        <option key={tuitionId.id} value={tuitionId.id}>
+                          {tuitionId.centerNames}
                         </option>
                       ))}
                   </select>
-                  {formik.touched.centerId && formik.errors.centerId && (
+                  {formik.touched.tuitionId && formik.errors.tuitionId && (
                     <div className="invalid-feedback">
-                      {formik.errors.centerId}
+                      {formik.errors.tuitionId}
                     </div>
                   )}
                 </div>
@@ -217,12 +217,12 @@ function CourseAdd({ onSuccess }) {
                   aria-label="Default select example"
                 >
                   <option selected></option>
-                  {/* {subjectData &&
+                  {subjectData &&
                     subjectData.map((subjectId) => (
                       <option key={subjectId.id} value={subjectId.id}>
                         {subjectId.subjects}
                       </option>
-                    ))} */}
+                    ))}
                 </select>
                 {formik.touched.subjectId && formik.errors.subjectId && (
                   <div className="invalid-feedback">
@@ -246,12 +246,12 @@ function CourseAdd({ onSuccess }) {
                     aria-label="Default select example"
                   >
                     <option selected></option>
-                    {/* {levelData &&
+                    {levelData &&
                       levelData.map((levelId) => (
                         <option key={levelId.id} value={levelId.id}>
                           {levelId.levels}
                         </option>
-                      ))} */}
+                      ))}
                   </select>
                   {formik.touched.levelId && formik.errors.levelId && (
                     <div className="invalid-feedback">

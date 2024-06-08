@@ -6,7 +6,7 @@ import api from "../../config/URL";
 import fetchAllCoursesWithIds from "../List/CourseList";
 import fetchAllStudentsWithIds from "../List/StudentList";
 import { BsFillSendFill } from "react-icons/bs";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import SendAndPublish from "../../components/SendAndPublish";
@@ -39,7 +39,7 @@ function InvoiceView() {
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await api.get(`/getGenerateInvoiceById/${id}`);
+        const response = await api.get(`/getInvoiceDetailsByInvoiceId/${id}`);
         setData(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);

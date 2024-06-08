@@ -1,7 +1,7 @@
 import React, { forwardRef, useImperativeHandle } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import api from "../../../config/URL";
 
 const validationSchema = Yup.object().shape({
@@ -11,11 +11,11 @@ const validationSchema = Yup.object().shape({
     .max(new Date(), "*Date of Birth cannot be in the future"),
   idType: Yup.string().required("*Id Type is required!"),
   idNo: Yup.string().required("*Id No is required!"),
-  citizenship: Yup.string().required("*Citizenship is required!"),
+  citizenship: Yup.string().required("*citizenship is required!"),
 
   shortIntroduction: Yup.string().required("*Short Introduction is required!"),
-  gender: Yup.string().required("*Gender is required!"),
-  file: Yup.string().required("*Photo is required!"),
+  gender: Yup.string().required("*gender is required!"),
+  // file: Yup.string().required("*file is required!"),
 });
 const PersonalAdd = forwardRef(({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
   const formik = useFormik({
@@ -31,25 +31,25 @@ const PersonalAdd = forwardRef(({ formData,setLoadIndicators, setFormData, handl
       gender: formData.gender,
     },
     validationSchema: validationSchema,
-    // onSubmit: async (values) => {
-    //   try {
-    //     const response = await api.post(`/createUser`, values, {
-    //       headers: {
-    //         "Content-Type": "application/json",
-    //       },
-    //     });
-    //     if (response.status === 201) {
-    //       const user_id = response.data.user_id;
-    //       toast.success(response.data.message);
-    //       setFormData((prv) => ({ ...prv, ...values, user_id }));
-    //       handleNext();
-    //     } else {
-    //       toast.error(response.data.message);
-    //     }
-    //   } catch (error) {
-    //     toast.error(error);
-    //   }
-    // },
+    onSubmit: async (values) => {
+      try {
+        const response = await api.post(`/createUser`, values, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        if (response.status === 201) {
+          const user_id = response.data.user_id;
+          toast.success(response.data.message);
+          setFormData((prv) => ({ ...prv, ...values, user_id }));
+          handleNext();
+        } else {
+          toast.error(response.data.message);
+        }
+      } catch (error) {
+        toast.error(error);
+      }
+    },
 
     onSubmit: async (values) => {
       setLoadIndicators(true);
@@ -177,7 +177,7 @@ const PersonalAdd = forwardRef(({ formData,setLoadIndicators, setFormData, handl
       </div>
       <div class="container row d-flex my-4 justify-align-content-around">
         <div class="form-group  col-sm ">
-          <label>Citizenship</label>
+          <label>citizenship</label>
           <span className="text-danger">*</span>
           <input
             type="text"
@@ -193,20 +193,22 @@ const PersonalAdd = forwardRef(({ formData,setLoadIndicators, setFormData, handl
             </div>
           )}
         </div>
-        {/* <div class="form-group  col-sm ">
-          <label>Photo</label>
+        <div class="form-group  col-sm ">
+          <label>File</label>
           <input
             type="file"
             class="form-control form-control-sm"
-            name="photo"
+            name="file"
             onChange={(event) => {
-              formik.setFieldValue("photo", event.currentTarget.files[0]);
+              formik.setFieldValue("file", event.currentTarget.files[0]);
             }}
             onBlur={formik.handleBlur}
           />
-        </div> */}
+        </div>
+        </div>
+        <div class="container row d-flex justify-content-start align-items-center">
         <div class="form-group  col-sm ">
-          <label className="mb-3">Gender</label>
+          <label className="mb-3">gender</label>
           <div className="d-flex align-items-center justify-content-start">
             <div className="me-4">
               <input
@@ -238,7 +240,7 @@ const PersonalAdd = forwardRef(({ formData,setLoadIndicators, setFormData, handl
           </div>
         </div>
       </div>
-      <div class="container row d-flex justify-content-start align-items-center">
+     
         <div class="form-group  col-sm ">
           <label
             for="exampleFormControlTextarea1 "
@@ -257,7 +259,7 @@ const PersonalAdd = forwardRef(({ formData,setLoadIndicators, setFormData, handl
           ></textarea>
         </div>
       </div>
-    </div>
+    {/* </div> */}
   </form>
   );
 });

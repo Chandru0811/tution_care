@@ -3,7 +3,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 import api from "../../../../config/URL";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 
 const EditForm6 = forwardRef(({ formData,setLoadIndicators,setFormData, handleNext }, ref) => {
   const navigate = useNavigate();
@@ -49,18 +49,18 @@ const EditForm6 = forwardRef(({ formData,setLoadIndicators,setFormData, handleNe
     },
   });
 
-  // useEffect(() => {
-  //   const getData = async () => {
-  //     const response = await api.get(`/getAllLeadInfoById/${formData.id}`);
-  //     formik.setValues(response.data);
-  //   };
-  //   getData();
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
+  useEffect(() => {
+    const getData = async () => {
+      const response = await api.get(`/getAllLeadInfoById/${formData.id}`);
+      formik.setValues(response.data);
+    };
+    getData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  // useImperativeHandle(ref, () => ({
-  //   editform6: formik.handleSubmit,
-  // }));
+  useImperativeHandle(ref, () => ({
+    editform6: formik.handleSubmit,
+  }));
 
   return (
     <div className="Container py-4">

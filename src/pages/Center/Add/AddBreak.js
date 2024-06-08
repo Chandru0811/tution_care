@@ -3,7 +3,7 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import * as yup from "yup";
 import { useFormik } from "formik";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import api from "../../../config/URL";
 
 function AddBreak({ id, onSuccess }) {
@@ -30,7 +30,7 @@ function AddBreak({ id, onSuccess }) {
       console.log("Form values:", values);
       try {
         const response = await api.post(
-          `/createCenterBreaks/${id}`,
+          `/createTuitionBreaks/${id}`,
           values,
           {
             headers: {

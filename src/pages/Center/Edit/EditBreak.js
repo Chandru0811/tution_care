@@ -4,7 +4,7 @@ import Modal from "react-bootstrap/Modal";
 import * as yup from "yup";
 import { useFormik } from "formik";
 import { FaEdit } from "react-icons/fa";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import api from "../../../config/URL";
 
 function EditBreak({ id, onSuccess }) {
@@ -29,7 +29,7 @@ function EditBreak({ id, onSuccess }) {
     onSubmit: async (values) => {
       setLoadIndicator(true);
       try {
-        const response = await api.put(`/updateCenterBreaks/${id}`, values, {
+        const response = await api.put(`/updateTuitionBreaks/${id}`, values, {
           headers: {
             "Content-Type": "application/json",
           },
@@ -51,7 +51,7 @@ function EditBreak({ id, onSuccess }) {
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await api.get(`/getAllCenterBreaksById/${id}`);
+        const response = await api.get(`/getAllTuitionBreaksById/${id}`);
         const formattedData = {
           ...response.data,
           fromDate: response.data.fromDate

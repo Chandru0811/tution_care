@@ -2,14 +2,14 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-// import fetchAllCentersWithIds from "../../List/CenterList";
+import fetchAllCentersWithIds from "../../List/CenterList";
 import api from "../../../config/URL";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 
 
 function HolidayAdd() {
   const validationSchema = Yup.object({
-    centerId: Yup.string().required("*Center Name is required"),
+    tuitionId: Yup.string().required("*Center Name is required"),
     holidayName: Yup.string().required("*Holiday Name is required"),
     startDate: Yup.string().required("*Select the start date"),
     endDate: Yup.string().required("*Select the end date"),
@@ -20,7 +20,7 @@ function HolidayAdd() {
   const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
-      centerId: "",
+      tuitionId: "",
       holidayName: "",
       startDate: "",
       endDate: "",
@@ -32,7 +32,7 @@ function HolidayAdd() {
       console.log(values);
       try {
         const payload = {
-          centerId: values.centerId,
+          tuitionId: values.tuitionId,
           holidayName: values.holidayName,
           startDate: values.startDate,
           endDate: values.endDate,
@@ -61,12 +61,12 @@ function HolidayAdd() {
   });
 
   const fetchData = async () => {
-    // try {
-    //   const centerData = await fetchAllCentersWithIds();
-    //   setCenterData(centerData);
-    // } catch (error) {
-    //   toast.error(error);
-    // }
+    try {
+      const centerData = await fetchAllCentersWithIds();
+      setCenterData(centerData);
+    } catch (error) {
+      toast.error(error);
+    }
   };
 
   useEffect(() => {
@@ -115,9 +115,9 @@ function HolidayAdd() {
                     Center Name<span className="text-danger">*</span>
                   </label>
                   <select
-                    {...formik.getFieldProps("centerId")}
-                    name="centerId"
-                    className={`form-select form-select-sm ${formik.touched.centerId && formik.errors.centerId
+                    {...formik.getFieldProps("tuitionId")}
+                    name="tuitionId"
+                    className={`form-select form-select-sm ${formik.touched.tuitionId && formik.errors.tuitionId
                         ? "is-invalid"
                         : ""
                       }`}
@@ -130,8 +130,8 @@ function HolidayAdd() {
                         </option>
                       ))}
                   </select>
-                  {formik.touched.centerId && formik.errors.centerId && (
-                    <div className="invalid-feedback">{formik.errors.centerId}</div>
+                  {formik.touched.tuitionId && formik.errors.tuitionId && (
+                    <div className="invalid-feedback">{formik.errors.tuitionId}</div>
                   )}
                 </div>
               </div>

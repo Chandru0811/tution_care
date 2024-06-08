@@ -2,7 +2,7 @@ import React, { forwardRef, useImperativeHandle, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import api from "../../../../config/URL";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 
 const validationSchema = Yup.object().shape({
   fathersFullName: Yup.string().required("*Father Full Name is required"),
@@ -20,9 +20,9 @@ const validationSchema = Yup.object().shape({
 
   mothersFullName: Yup.string().required("*Mother Name is required"),
   mothersOccupation: Yup.string().required("*Mother Occupation is required"),
-  mothersDateOfBirth: Yup.date()
-    .required("*Date of Birth is required")
-    .max(new Date(), "*Date of Birth cannot be in the future"),
+  // mothersDateOfBirth: Yup.date()
+  //   .required("*Date of Birth is required")
+  //   .max(new Date(), "*Date of Birth cannot be in the future"),
   mothersMobileNumber: Yup.string()
     .matches(/^(?:\+?65)?\s?\d{8,15}$/, "Invalid Phone Number")
     .required("*Mobile Number is required"),
@@ -30,9 +30,9 @@ const validationSchema = Yup.object().shape({
     .email("*Invalid Email")
     .required("*Email is required"),
   monthlyIncomeOfMother: Yup.string().required("*Mother Income is required"),
-  primaryContact: Yup.string()
-    .oneOf(["father", "mother"])
-    .required("*Primary Contact is required"),
+  // primaryContact: Yup.string()
+  //   .oneOf(["father", "mother"])
+  //   .required("*Primary Contact is required"),
 });
 
 const Form3 = forwardRef(

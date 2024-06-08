@@ -7,7 +7,7 @@ import React, {
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import api from "../../../config/URL";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import fetchAllCoursesWithIds from "../../List/CourseList";
 
 const validationSchema = Yup.object().shape({
@@ -37,7 +37,7 @@ const AddcourseDetail = forwardRef(
 
           // Append each form field to FormData object
           formDatas.append("courseId", data.courseId);
-          formDatas.append("courseName", data.courseId);
+          formDatas.append("courseName", "tutition");
           formDatas.append("startDate", data.startDate);
           formDatas.append("startTime", data.startTime);
           formDatas.append("file", data.file);

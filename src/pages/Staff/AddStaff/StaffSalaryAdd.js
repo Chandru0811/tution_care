@@ -1,8 +1,8 @@
 import React, { forwardRef, useImperativeHandle }  from 'react';
 import { useFormik } from "formik";
-import { toast } from 'react-toastify';
 import api from '../../../config/URL';
 import * as Yup from "yup";
+import toast from 'react-hot-toast';
 
 const validationSchema = Yup.object().shape({
   salary: Yup.number()

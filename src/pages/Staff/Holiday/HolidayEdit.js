@@ -2,13 +2,13 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-// import fetchAllCentersWithIds from "../../List/CenterList";
+import fetchAllCentersWithIds from "../../List/CenterList";
 import api from "../../../config/URL";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 
 function HolidayEdit() {
   const validationSchema = Yup.object({
-    centerId: Yup.string().required("*Center Name is required"),
+    tuitionId: Yup.string().required("*Center Name is required"),
     holidayName: Yup.string().required("*Holiday Name is required"),
     startDate: Yup.string().required("*Select the start date"),
     endDate: Yup.string().required("*Select the end date"),
@@ -22,7 +22,7 @@ function HolidayEdit() {
   const { id } = useParams();
   const formik = useFormik({
     initialValues: {
-      centerId: "",
+      tuitionId: "",
       holidayName: "",
       startDate: "",
       endDate: "",
@@ -34,7 +34,7 @@ function HolidayEdit() {
       console.log(values);
       try {
         const payload = {
-          centerId: values.centerId,
+          tuitionId: values.tuitionId,
           holidayName: values.holidayName,
           startDate: values.startDate,
           endDate: values.endDate,
@@ -63,32 +63,32 @@ function HolidayEdit() {
   });
 
   const fetchData = async () => {
-    // try {
-    //   const centerData = await fetchAllCentersWithIds();
-    //   setCenterData(centerData);
-    // } catch (error) {
-    //   toast.error(error);
-    // }
+    try {
+      const centerData = await fetchAllCentersWithIds();
+      setCenterData(centerData);
+    } catch (error) {
+      toast.error(error);
+    }
   };
 
-  // useEffect(() => {
-  //   const getData = async () => {
-  //     try {
-  //       const response = await api.get(`/getAllUserHolidayById/${id}`);
-  //       const formattedResponseData = {
-  //         ...response.data,
-  //         startDate: response.data.startDate.substring(0, 10),
-  //         endDate: response.data.endDate.substring(0, 10),
-  //       };
-  //       formik.setValues(formattedResponseData);
-  //     } catch (error) {
-  //       console.error("Error fetching data:", error);
-  //     }
-  //   };
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const response = await api.get(`/getAllUserHolidayById/${id}`);
+        const formattedResponseData = {
+          ...response.data,
+          startDate: response.data.startDate.substring(0, 10),
+          endDate: response.data.endDate.substring(0, 10),
+        };
+        formik.setValues(formattedResponseData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
 
-  //   getData();
-  //   fetchData();
-  // }, []);
+    getData();
+    fetchData();
+  }, []);
 
   return (
     <div className="container-fluid center">
@@ -132,9 +132,9 @@ function HolidayEdit() {
                     Center Name<span className="text-danger">*</span>
                   </label>
                   <select
-                    {...formik.getFieldProps("centerId")}
-                    name="centerId"
-                    className={`form-select form-select-sm ${formik.touched.centerId && formik.errors.centerId
+                    {...formik.getFieldProps("tuitionId")}
+                    name="tuitionId"
+                    className={`form-select form-select-sm ${formik.touched.tuitionId && formik.errors.tuitionId
                         ? "is-invalid"
                         : ""
                       }`}
@@ -147,8 +147,8 @@ function HolidayEdit() {
                         </option>
                       ))}
                   </select>
-                  {formik.touched.centerId && formik.errors.centerId && (
-                    <div className="invalid-feedback">{formik.errors.centerId}</div>
+                  {formik.touched.tuitionId && formik.errors.tuitionId && (
+                    <div className="invalid-feedback">{formik.errors.tuitionId}</div>
                   )}
                 </div>
               </div>

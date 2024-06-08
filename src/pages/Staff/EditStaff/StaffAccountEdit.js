@@ -6,9 +6,9 @@ import React, {
 } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import api from "../../../config/URL";
-// import fetchAllCentersWithIds from "../../List/CenterList";
+import fetchAllCentersWithIds from "../../List/CenterList";
 
 const validationSchema = Yup.object().shape({
   startDate: Yup.string().required("*Start Date is required!"),
@@ -27,7 +27,7 @@ const validationSchema = Yup.object().shape({
   workingDays: Yup.array()
     .of(Yup.string().required("*Working Days is required!"))
     .min(1, "*Working Days is required!"),
-  centerId: Yup.string().required("*Centres is required!"),
+  tuitionId: Yup.string().required("*Centres is required!"),
 });
 
 const StaffAccountEdit = forwardRef(
@@ -35,12 +35,12 @@ const StaffAccountEdit = forwardRef(
     const [centerData, setCenterData] = useState(null);
 
     const fetchData = async () => {
-      // try {
-      //   const centerData = await fetchAllCentersWithIds();
-      //   setCenterData(centerData);
-      // } catch (error) {
-      //   toast.error(error);
-      // }
+      try {
+        const centerData = await fetchAllCentersWithIds();
+        setCenterData(centerData);
+      } catch (error) {
+        toast.error(error);
+      }
     };
 
     const formik = useFormik({
@@ -55,7 +55,7 @@ const StaffAccountEdit = forwardRef(
         endDate: "",
         approvelContentRequired: "",
         workingDays: [],
-        centerId: "",
+        tuitionId: "",
       },
       validationSchema: validationSchema,
       // onSubmit: async (values) => {
@@ -143,22 +143,22 @@ const StaffAccountEdit = forwardRef(
       },
     });
 
-    // useEffect(() => {
-    //   const getData = async () => {
-    //     const response = await api.get(`/getAllUsersById/${formData.user_id}`);
-    //     const data = response.data.userAccountInfo[0];
-    //     formik.setValues({
-    //       ...data,
-    //       startDate: data.startDate.substring(0, 10),
-    //       endDate: data.endDate.substring(0, 10),
-    //       accountId: data.id,
-    //       approvelContentRequired:
-    //         data.approvelContentRequired === true ? "Yes" : "No",
-    //     });
-    //   };
-    //   getData();
-    //   // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, []);
+    useEffect(() => {
+      const getData = async () => {
+        const response = await api.get(`/getAllUsersById/${formData.user_id}`);
+        const data = response.data.userAccountInfo[0];
+        formik.setValues({
+          ...data,
+          startDate: data.startDate.substring(0, 10),
+          endDate: data.endDate.substring(0, 10),
+          accountId: data.id,
+          approvelContentRequired:
+            data.approvelContentRequired === true ? "Yes" : "No",
+        });
+      };
+      getData();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     useEffect(() => {
       const getData = async () => {
@@ -193,7 +193,7 @@ const StaffAccountEdit = forwardRef(
               endDate: "",
               approvelContentRequired: "",
               workingDays: [],
-              centerId: "",
+              tuitionId: "",
             });
             // console.log("Account ID:", formik.values.accountId);
           }
@@ -581,9 +581,9 @@ const StaffAccountEdit = forwardRef(
               </lable>
               <div className="input-group mb-3">
                 <select
-                  {...formik.getFieldProps("centerId")}
+                  {...formik.getFieldProps("tuitionId")}
                   className={`form-select  form-select-sm  ${
-                    formik.touched.centerId && formik.errors.centerId
+                    formik.touched.tuitionId && formik.errors.tuitionId
                       ? "is-invalid"
                       : ""
                   }`}
@@ -591,15 +591,15 @@ const StaffAccountEdit = forwardRef(
                 >
                   <option selected></option>
                   {centerData &&
-                    centerData.map((centerId) => (
-                      <option key={centerId.id} value={centerId.id}>
-                        {centerId.centerNames}
+                    centerData.map((tuitionId) => (
+                      <option key={tuitionId.id} value={tuitionId.id}>
+                        {tuitionId.centerNames}
                       </option>
                     ))}
                 </select>
-                {formik.touched.centerId && formik.errors.centerId && (
+                {formik.touched.tuitionId && formik.errors.tuitionId && (
                   <div className="invalid-feedback">
-                    {formik.errors.centerId}
+                    {formik.errors.tuitionId}
                   </div>
                 )}
               </div>

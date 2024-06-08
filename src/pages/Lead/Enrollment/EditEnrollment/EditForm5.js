@@ -6,12 +6,12 @@ import React, {
 } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { toast } from "react-toastify";
-// import fetchAllCentersWithIds from "../../../List/CenterList";
+import toast from "react-hot-toast";
+import fetchAllCentersWithIds from "../../../List/CenterList";
 import api from "../../../../config/URL";
 
 const validationSchema = Yup.object().shape({
-  centerId: Yup.string().required("*Center is required!"),
+  tuitionId: Yup.string().required("*Center is required!"),
   // preferredDay: Yup.array().of(Yup.string().required("*Select Days")),
   preferredDay: Yup.array()
     .min(1, "*Select at least one preferred day!")
@@ -24,7 +24,7 @@ const EditForm5 = forwardRef(({ formData,setLoadIndicators, setFormData, handleN
 
   const formik = useFormik({
     initialValues: {
-      centerId: formData.centerId,
+      tuitionId: formData.tuitionId,
       preferredDay: formData.preferredDay || "",
       enquiryDate: formData.enquiryDate || "",
       marketingSource: formData.marketingSource || "",
@@ -59,34 +59,34 @@ const EditForm5 = forwardRef(({ formData,setLoadIndicators, setFormData, handleN
   });
 
   const fetchData = async () => {
-    // try {
-    //   const centerData = await fetchAllCentersWithIds();
-    //   setCenterData(centerData);
-    // } catch (error) {
-    //   toast.error(error);
-    // }
+    try {
+      const centerData = await fetchAllCentersWithIds();
+      setCenterData(centerData);
+    } catch (error) {
+      toast.error(error);
+    }
   };
 
-  // const getData = async () => {
-  //   const response = await api.get(`/getAllLeadInfoById/${formData.id}`);
-  //   const enquiryDate =
-  //     response.data.enquiryDate && response.data.enquiryDate.substring(0, 10);
+  const getData = async () => {
+    const response = await api.get(`/getAllLeadInfoById/${formData.id}`);
+    const enquiryDate =
+      response.data.enquiryDate && response.data.enquiryDate.substring(0, 10);
 
-  //   formik.setValues({
-  //     ...response.data,
-  //     enquiryDate: enquiryDate,
-  //   });
-  // };
+    formik.setValues({
+      ...response.data,
+      enquiryDate: enquiryDate,
+    });
+  };
 
-  // useEffect(() => {
-  //   getData();
-  //   fetchData();
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
+  useEffect(() => {
+    getData();
+    fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  // useImperativeHandle(ref, () => ({
-  //   editform5: formik.handleSubmit,
-  // }));
+  useImperativeHandle(ref, () => ({
+    editform5: formik.handleSubmit,
+  }));
 
   return (
     <section>
@@ -103,22 +103,22 @@ const EditForm5 = forwardRef(({ formData,setLoadIndicators, setFormData, handleN
               </lable>
               <select
                 className="form-select form-select-sm"
-                name="centerId"
+                name="tuitionId"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                value={formik.values.centerId}
+                value={formik.values.tuitionId}
               >
                 <option selected></option>
                 {centerData &&
-                  centerData.map((centerId) => (
-                    <option key={centerId.id} value={centerId.id}>
-                      {centerId.centerNames}
+                  centerData.map((tuitionId) => (
+                    <option key={tuitionId.id} value={tuitionId.id}>
+                      {tuitionId.centerNames}
                     </option>
                   ))}
               </select>
-              {formik.touched.centerId && formik.errors.centerId && (
+              {formik.touched.tuitionId && formik.errors.tuitionId && (
                 <div className="error text-danger">
-                  <small>{formik.errors.centerId}</small>
+                  <small>{formik.errors.tuitionId}</small>
                 </div>
               )}
             </div>

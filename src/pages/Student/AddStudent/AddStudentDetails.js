@@ -7,11 +7,11 @@ import React, {
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import api from "../../../config/URL";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import fetchAllCentersWithIds from "../../List/CenterList";
 
 const validationSchema = Yup.object().shape({
-  centerId: Yup.string().required("*Centre is required!"),
+  tuitionId: Yup.string().required("*Centre is required!"),
   studentName: Yup.string().required("*Student Name is required!"),
   dateOfBirth: Yup.date()
     .required("*Date of Birth is required!")
@@ -61,7 +61,7 @@ const AddStudentDetails = forwardRef(
 
     const formik = useFormik({
       initialValues: {
-        centerId: formData.centerId || "",
+        tuitionId: formData.tuitionId || "",
         studentName: formData.studentName || "",
         studentChineseName: formData.studentChineseName || "",
         file: null || "",
@@ -105,8 +105,8 @@ const AddStudentDetails = forwardRef(
           formData.append("remark", values.remark);
           formData.append("allowMagazine", values.allowMagazine);
           formData.append("allowSocialMedia", values.allowSocialMedia);
-          formData.append("centerId", values.centerId);
-          formData.append("center", values.centerId);
+          formData.append("tuitionId", values.tuitionId);
+          formData.append("center", values.tuitionId);
           formData.append(
             "primaryLanguageSpokenEnglish",
             values.primaryLanguageSpokenEnglish
@@ -161,23 +161,23 @@ const AddStudentDetails = forwardRef(
                       </label>
                       <br />
                       <select
-                        name="centerId"
+                        name="tuitionId"
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
-                        value={formik.values.centerId}
+                        value={formik.values.tuitionId}
                         className="form-select form-select-sm"
                       >
                         <option selected></option>
                         {centerData &&
-                          centerData.map((centerId) => (
-                            <option key={centerId.id} value={centerId.id}>
-                              {centerId.centerNames}
+                          centerData.map((tuitionId) => (
+                            <option key={tuitionId.id} value={tuitionId.id}>
+                              {tuitionId.centerNames}
                             </option>
                           ))}
                       </select>
-                      {formik.touched.centerId && formik.errors.centerId && (
+                      {formik.touched.tuitionId && formik.errors.tuitionId && (
                         <div className="text-danger">
-                          <small>{formik.errors.centerId}</small>
+                          <small>{formik.errors.tuitionId}</small>
                         </div>
                       )}
                     </div>
@@ -398,7 +398,7 @@ const AddStudentDetails = forwardRef(
                           </div>
                         )}
                     </div>
-                    {/* <div className="text-start mt-4">
+                    <div className="text-start mt-4">
                       <label htmlFor="" className=" fw-medium">
                         <small>Profile Image</small>
                         <span className="text-danger">*</span>
@@ -406,17 +406,19 @@ const AddStudentDetails = forwardRef(
                       <br />
                       <input
                         type="file"
-                        name="profileImage"
-                        className="form-controform-control-sml"
+                        name="file"
+                        className="form-control"
                         onChange={(event) => {
-                          formik.setFieldValue(
-                            "profileImage",
-                            event.target.files[0]
-                          );
+                          formik.setFieldValue("file", event.target.files[0]);
                         }}
                         onBlur={formik.handleBlur}
                       />
-                    </div> */}
+                      {formik.touched.file && formik.errors.file && (
+                        <div className="error text-danger ">
+                          <small>{formik.errors.file}</small>
+                        </div>
+                      )}
+                    </div>
                     <div className="text-start mt-4">
                       <label htmlFor="" className=" fw-medium">
                         <small>Age</small>
@@ -512,7 +514,7 @@ const AddStudentDetails = forwardRef(
                       </label>
                       <br />
                       <input
-                        className="form-controform-control-sml"
+                        className="form-control form-control-sm"
                         type="text"
                         name="primaryLanguageSpokenEnglish"
                         onChange={formik.handleChange}
@@ -539,7 +541,7 @@ const AddStudentDetails = forwardRef(
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values.referByStudent}
-                        className="form-controform-control-sml"
+                        className="form-control form-control-sml"
                       />
                       {formik.touched.referByStudent &&
                         formik.errors.referByStudent && (

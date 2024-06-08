@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-// import fetchAllTeacherListByCenter from "../../List/TeacherListByCenter";
-// import fetchAllCentersWithIds from "../../List/CenterList";
-import { toast } from "react-toastify";
+import fetchAllTeacherListByCenter from "../../List/TeacherListByCenter";
+import fetchAllCentersWithIds from "../../List/CenterList";
+import toast from "react-hot-toast";
 import api from "../../../config/URL";
 
 const validationSchema = Yup.object({
@@ -18,8 +18,12 @@ const validationSchema = Yup.object({
 function LeaveAdd() {
   const [centerData, setCenterData] = useState(null);
   const [datas, setDatas] = useState([]);
-  const userId = sessionStorage.getItem("userId");
-  const centerId = sessionStorage.getItem("centerId");
+  // const userId = sessionStorage.getItem("userId");
+  const userId = 1;
+  const tuitionId = 1;
+  // const tuitionId = sessionStorage.getItem("centerId");
+  console.log(tuitionId)
+  console.log(datas)
   const navigate = useNavigate();
   const [selectedDate, setSelectedDate] = useState(
     new Date().toISOString().split("T")[0]
@@ -37,12 +41,12 @@ function LeaveAdd() {
   };
 
   const fetchData = async () => {
-    // try {
-    //   const centers = await fetchAllCentersWithIds();
-    //   setCenterData(centers);
-    // } catch (error) {
-    //   toast.error(error);
-    // }
+    try {
+      const centers = await fetchAllCentersWithIds();
+      setCenterData(centers);
+    } catch (error) {
+      toast.error(error);
+    }
   };
 
   useEffect(() => {
@@ -51,7 +55,7 @@ function LeaveAdd() {
 
   const formik = useFormik({
     initialValues: {
-      centerId: "",
+      tuitionId: "",
       centerName: "",
       employeeName: "",
       userId: "",
@@ -73,15 +77,15 @@ function LeaveAdd() {
 
       if (centerData) {
         centerData.forEach((center) => {
-          if (parseInt(centerId) === center.id) {
+          if (parseInt(tuitionId) === center.id) {
             selectedCenterName = center.centerNames || "--";
           }
         });
       }
       const payload = {
         userId: userId,
-        centerId: centerId,
-        centerName: selectedCenterName,
+        tuitionId: tuitionId,
+        tuitionCareName: selectedCenterName,
         employeeName: datas.employeeName,
         leaveType: values.leaveType,
         noOfDays: daysDifference,
@@ -96,37 +100,37 @@ function LeaveAdd() {
 
       console.log("Request Date is", payload);
 
-      // try {
-      //   const response = await api.post("/createUserLeaveRequest", payload, {
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //     },
-      //   });
-      //   if (response.status === 201) {
-      //     toast.success(response.data.message);
-      //     navigate("/leave");
-      //   } else {
-      //     toast.error(response.data.message);
-      //   }
-      // } catch (error) {
-      //   toast.error(error);
-      // }
+      try {
+        const response = await api.post("/createUserLeaveRequest", payload, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        if (response.status === 201) {
+          toast.success(response.data.message);
+          navigate("/leave");
+        } else {
+          toast.error(response.data.message);
+        }
+      } catch (error) {
+        toast.error(error);
+      }
     },
   });
 
-  // useEffect(() => {
-  //   const getData = async () => {
-  //     try {
-  //       const response = await api.get(
-  //         `/getUserLeaveRequestByUserId/${userId}`
-  //       );
-  //       setDatas(response.data);
-  //     } catch (error) {
-  //       toast.error("Error Fetching Data : ", error);
-  //     }
-  //   };
-  //   getData();
-  // }, []);
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const response = await api.get(
+          `/getUserLeaveRequestByUserId/${userId}`
+        );
+        setDatas(response.data);
+      } catch (error) {
+        toast.error("Error Fetching Data : ", error);
+      }
+    };
+    getData();
+  }, []);
 
   return (
     <div className="minHeight container-fluid center">
