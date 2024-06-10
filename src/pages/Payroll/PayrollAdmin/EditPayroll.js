@@ -9,7 +9,7 @@ import api from "../../../config/URL";
 import fetchAllEmployeeListByCenter from "../../List/EmployeeList";
 
 const validationSchema = Yup.object({
-  centerId: Yup.string().required("*Centre name is required"),
+  tuitionId: Yup.string().required("*Centre name is required"),
   userId: Yup.string().required("*Employee name is required"),
   grossPay: Yup.number()
     .required("*Basic pay is required")
@@ -38,7 +38,7 @@ function EditPayroll() {
 
   const formik = useFormik({
     initialValues: {
-      centerId: "",
+      tuitionId: "",
       userId: "",
       grossPay: "",
       payrollMonth: "",
@@ -54,7 +54,7 @@ function EditPayroll() {
       let selectedEmployeeName = "";
 
       centerData.forEach((center) => {
-        if (parseInt(values.centerId) === center.id) {
+        if (parseInt(values.tuitionId) === center.id) {
           selectedCenterName = center.centerNames || "--";
         }
       });
@@ -67,7 +67,7 @@ function EditPayroll() {
 
       let payload = {
         centerName: selectedCenterName,
-        centerId: values.centerId,
+        tuitionId: values.tuitionId,
         userId: values.userId,
         employeeName: selectedEmployeeName,
         grossPay: values.grossPay,
@@ -86,13 +86,13 @@ function EditPayroll() {
         });
         if (response.status === 200) {
           toast.success(response.data.message);
-          navigate("/payrolladmin");
+          navigate("/adminpayroll");
         } else {
           toast.error(response.data.message);
         }
       } catch (error) {
-        toast.error(error);
-      }finally {
+        toast.error(error.message);
+      } finally {
         setLoadIndicator(false);
       }
     },
@@ -100,15 +100,15 @@ function EditPayroll() {
 
   const handleCenterChange = async (event) => {
     setUserNameData(null);
-    const centerId = event.target.value;
-    formik.setFieldValue("centerId", centerId);
+    const tuitionId = event.target.value;
+    formik.setFieldValue("tuitionId", tuitionId);
     formik.setFieldValue("deductionAmount", "");
     formik.setFieldValue("grossPay", "");
     formik.setFieldValue("bonus", "");
     try {
-      await fetchUserName(centerId);
+      await fetchUserName(tuitionId);
     } catch (error) {
-      toast.error(error);
+      toast.error(error.message);
     }
   };
 
@@ -117,7 +117,7 @@ function EditPayroll() {
       const centers = await fetchAllCentersWithIds();
       setCenterData(centers);
     } catch (error) {
-      toast.error(error);
+      toast.error(error.message);
     }
   };
 
@@ -125,12 +125,12 @@ function EditPayroll() {
     fetchData();
   }, []);
 
-  const fetchUserName = async (centerId) => {
+  const fetchUserName = async (tuitionId) => {
     try {
-      const userNames = await fetchAllEmployeeListByCenter(centerId);
+      const userNames = await fetchAllEmployeeListByCenter(tuitionId);
       setUserNameData(userNames);
     } catch (error) {
-      toast.error(error);
+      toast.error(error.message);
     }
   };
 
@@ -154,7 +154,7 @@ function EditPayroll() {
       formik.setFieldValue("deductionAmount", response.data.deductionAmount);
       formik.setFieldValue("grossPay", response.data.grossPay);
     } catch (error) {
-      toast.error(error);
+      toast.error(error.message);
     }
   };
 
@@ -200,9 +200,9 @@ function EditPayroll() {
         const response = await api.get(`/getAllUserPayrollById/${id}`);
         // console.log("Formated Data is ", response.data);
         formik.setValues(response.data);
-        fetchUserName(response.data.centerId);
+        fetchUserName(response.data.tuitionId);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching data:", error.message);
       }
     };
 
@@ -214,213 +214,233 @@ function EditPayroll() {
     <div className="container-fluid">
       <form onSubmit={formik.handleSubmit}>
         <div className="container py-3">
-          <div className="row">
-            <div className="col-12 text-end">
-              <Link to="/payrolladmin">
-                <button type="button" className="btn btn-sm btn-border">
-                  Back
-                </button>
-              </Link>
-              &nbsp;&nbsp;
-              <button type="submit" className="btn btn-button btn-sm" disabled={loadIndicator}>
-                {loadIndicator && (
+          <div className="card shadow border-0 mb-2 top-header">
+            <div className="my-3 d-flex justify-content-between">
+              <div className="ms-3">
+                <h2>Add Payroll</h2>
+              </div>
+              <div>
+                <Link to="/adminpayroll">
+                  <button type="button " className="btn btn-sm btn-border">
+                    Back
+                  </button>
+                </Link>
+                &nbsp;&nbsp;
+                <button
+                  type="submit"
+                  className="btn btn-button btn-sm me-3"
+                  disabled={loadIndicator}
+                >
+                  {loadIndicator && (
                     <span
                       className="spinner-border spinner-border-sm me-2"
                       aria-hidden="true"
                     ></span>
                   )}
-                Update
-              </button>
+                  Update
+                </button>
+              </div>
             </div>
           </div>
 
-          <div className="row mt-3">
-            <div className="col-md-6 col-12 mb-3 ">
-              <lable className="">Centre Name</lable>
-              <span className="text-danger">*</span>
-              <select
-                {...formik.getFieldProps("centerId")}
-                className={`form-select ${
-                  formik.touched.centerId && formik.errors.centerId
-                    ? "is-invalid"
-                    : ""
-                }`}
-                aria-label="Default select example"
-                onChange={handleCenterChange}
-              >
-                <option selected disabled></option>
-                {centerData &&
-                  centerData.map((center) => (
-                    <option key={center.id} value={center.id}>
-                      {center.centerNames}
-                    </option>
-                  ))}
-              </select>
-              {formik.touched.centerId && formik.errors.centerId && (
-                <div className="invalid-feedback">{formik.errors.centerId}</div>
-              )}
-            </div>
-            <div className="col-md-6 col-12 mb-3 ">
-              <lable className="">Employee Name</lable>
-              <select
-                {...formik.getFieldProps("userId")}
-                class={`form-select  ${
-                  formik.touched.userId && formik.errors.userId
-                    ? "is-invalid"
-                    : ""
-                }`}
-                onChange={handleUserChange}
-              >
-                <option></option>
-                {userNamesData &&
-                  userNamesData.map((userName) => (
-                    <option key={userName.id} value={userName.id}>
-                      {userName.userNames}
-                    </option>
-                  ))}
-              </select>
-              {formik.touched.userId && formik.errors.userId && (
-                <div className="invalid-feedback">{formik.errors.userId}</div>
-              )}
-            </div>
-
-            <div className="  col-md-6 col-12">
-              <div className="text-start mt-2 mb-3">
-                <lable className="form-lable">
-                  Basic Pay<span className="text-danger">*</span>
-                </lable>
-                <input
-                  type="text"
-                  className={`form-control  ${
-                    formik.touched.grossPay && formik.errors.grossPay
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  aria-label="Username"
-                  aria-describedby="basic-addon1"
-                  {...formik.getFieldProps("grossPay")}
-                  readOnly
-                />
-                {formik.touched.grossPay && formik.errors.grossPay && (
-                  <div className="invalid-feedback">
-                    {formik.errors.grossPay}
-                  </div>
-                )}
-              </div>
-            </div>
-            <div className="col-md-6 col-12">
-              <div className="text-start mt-2 mb-3">
-                <label className="form-label">
-                  Payroll Month<span className="text-danger">*</span>
-                </label>
-                <input
-                  type="month"
-                  className={`form-control ${
-                    formik.touched.payrollMonth && formik.errors.payrollMonth
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  {...formik.getFieldProps("payrollMonth")}
-                />
-                {formik.touched.payrollMonth && formik.errors.payrollMonth && (
-                  <div className="invalid-feedback">
-                    {formik.errors.payrollMonth}
-                  </div>
-                )}
-              </div>
-            </div>
-            <div className="  col-md-6 col-12">
-              <div className="text-start mt-2 mb-3">
-                <lable className="form-lable">
-                  Bonus<span className="text-danger">*</span>
-                </lable>
-                <input
-                  type="text"
-                  className={`form-control  ${
-                    formik.touched.bonus && formik.errors.bonus
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  aria-label="Username"
-                  aria-describedby="basic-addon1"
-                  {...formik.getFieldProps("bonus")}
-                />
-                {formik.touched.bonus && formik.errors.bonus && (
-                  <div className="invalid-feedback">{formik.errors.bonus}</div>
-                )}
-              </div>
-            </div>
-            <div className="  col-md-6 col-12">
-              <div className="text-start mt-2 mb-3">
-                <lable className="form-lable">
-                  Deduction<span className="text-danger">*</span>
-                </lable>
-                <input
-                  type="text"
-                  className={`form-control  ${
-                    formik.touched.deductionAmount &&
-                    formik.errors.deductionAmount
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  aria-label="Username"
-                  aria-describedby="basic-addon1"
-                  {...formik.getFieldProps("deductionAmount")}
-                  readOnly
-                />
-                {formik.touched.deductionAmount &&
-                  formik.errors.deductionAmount && (
-                    <div className="invalid-feedback">
-                      {formik.errors.deductionAmount}
-                    </div>
-                  )}
-              </div>
-            </div>
-            <div className="  col-md-6 col-12">
-              <div className="text-start mt-2 mb-3">
-                <lable className="form-lable">
-                  Net Pay<span className="text-danger">*</span>
-                </lable>
-                <input
-                  type="text"
-                  className={`form-control  ${
-                    formik.touched.netPay && formik.errors.netPay
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  aria-label="Username"
-                  aria-describedby="basic-addon1"
-                  {...formik.getFieldProps("netPay")}
-                  readOnly
-                />
-                {formik.touched.netPay && formik.errors.netPay && (
-                  <div className="invalid-feedback">{formik.errors.netPay}</div>
-                )}
-              </div>
-            </div>
-            <div className="  col-md-6 col-12">
-              <div className="text-start mt-2 mb-3">
-                <lable className="form-lable">
-                  Status<span className="text-danger">*</span>
-                </lable>
+          <div className="minHeight container card shadow border-0 mb-2 top-header p-5">
+            <div className="row py-4">
+              <div className="col-md-6 col-12 mb-3 ">
+                <lable className="">Centre Name</lable>
+                <span className="text-danger">*</span>
                 <select
-                  {...formik.getFieldProps("status")}
-                  className={`form-select    ${
-                    formik.touched.status && formik.errors.status
+                  {...formik.getFieldProps("tuitionId")}
+                  className={`form-select ${
+                    formik.touched.tuitionId && formik.errors.tuitionId
                       ? "is-invalid"
                       : ""
                   }`}
                   aria-label="Default select example"
+                  onChange={handleCenterChange}
                 >
                   <option selected></option>
-                  <option value="APPROVED">Approved</option>
-                  <option value="REJECTED">Rejected</option>
-                  <option value="PENDING">Pending</option>
+                  {centerData &&
+                    centerData.map((center) => (
+                      <option key={center.tuitionId} value={center.id}>
+                        {center.centerNames}
+                      </option>
+                    ))}
                 </select>
-
-                {formik.touched.status && formik.errors.status && (
-                  <div className="invalid-feedback">{formik.errors.status}</div>
+                {formik.touched.tuitionId && formik.errors.tuitionId && (
+                  <div className="invalid-feedback">
+                    {formik.errors.tuitionId}
+                  </div>
                 )}
+              </div>
+              <div className="col-md-6 col-12 mb-3 ">
+                <lable className="">Employee Name</lable>
+                <select
+                  {...formik.getFieldProps("userId")}
+                  class={`form-select  ${
+                    formik.touched.userId && formik.errors.userId
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  onChange={handleUserChange}
+                >
+                  <option></option>
+                  {userNamesData &&
+                    userNamesData.map((userName) => (
+                      <option key={userName.id} value={userName.id}>
+                        {userName.userNames}
+                      </option>
+                    ))}
+                </select>
+                {formik.touched.userId && formik.errors.userId && (
+                  <div className="invalid-feedback">{formik.errors.userId}</div>
+                )}
+              </div>
+
+              <div className="  col-md-6 col-12">
+                <div className="text-start mt-2 mb-3">
+                  <lable className="form-lable">
+                    Basic Pay<span className="text-danger">*</span>
+                  </lable>
+                  <input
+                    type="text"
+                    className={`form-control  ${
+                      formik.touched.grossPay && formik.errors.grossPay
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                    aria-label="Username"
+                    aria-describedby="basic-addon1"
+                    {...formik.getFieldProps("grossPay")}
+                    readOnly
+                  />
+                  {formik.touched.grossPay && formik.errors.grossPay && (
+                    <div className="invalid-feedback">
+                      {formik.errors.grossPay}
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className="col-md-6 col-12">
+                <div className="text-start mt-2 mb-3">
+                  <label className="form-label">
+                    Payroll Month<span className="text-danger">*</span>
+                  </label>
+                  <input
+                    type="month"
+                    className={`form-control ${
+                      formik.touched.payrollMonth && formik.errors.payrollMonth
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                    {...formik.getFieldProps("payrollMonth")}
+                  />
+                  {formik.touched.payrollMonth &&
+                    formik.errors.payrollMonth && (
+                      <div className="invalid-feedback">
+                        {formik.errors.payrollMonth}
+                      </div>
+                    )}
+                </div>
+              </div>
+              <div className="  col-md-6 col-12">
+                <div className="text-start mt-2 mb-3">
+                  <lable className="form-lable">
+                    Bonus<span className="text-danger">*</span>
+                  </lable>
+                  <input
+                    type="text"
+                    className={`form-control  ${
+                      formik.touched.bonus && formik.errors.bonus
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                    aria-label="Username"
+                    aria-describedby="basic-addon1"
+                    {...formik.getFieldProps("bonus")}
+                  />
+                  {formik.touched.bonus && formik.errors.bonus && (
+                    <div className="invalid-feedback">
+                      {formik.errors.bonus}
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className="  col-md-6 col-12">
+                <div className="text-start mt-2 mb-3">
+                  <lable className="form-lable">
+                    Deduction<span className="text-danger">*</span>
+                  </lable>
+                  <input
+                    type="text"
+                    className={`form-control  ${
+                      formik.touched.deductionAmount &&
+                      formik.errors.deductionAmount
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                    aria-label="Username"
+                    aria-describedby="basic-addon1"
+                    {...formik.getFieldProps("deductionAmount")}
+                    readOnly
+                  />
+                  {formik.touched.deductionAmount &&
+                    formik.errors.deductionAmount && (
+                      <div className="invalid-feedback">
+                        {formik.errors.deductionAmount}
+                      </div>
+                    )}
+                </div>
+              </div>
+              <div className="  col-md-6 col-12">
+                <div className="text-start mt-2 mb-3">
+                  <lable className="form-lable">
+                    Net Pay<span className="text-danger">*</span>
+                  </lable>
+                  <input
+                    type="text"
+                    className={`form-control  ${
+                      formik.touched.netPay && formik.errors.netPay
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                    aria-label="Username"
+                    aria-describedby="basic-addon1"
+                    {...formik.getFieldProps("netPay")}
+                    readOnly
+                  />
+                  {formik.touched.netPay && formik.errors.netPay && (
+                    <div className="invalid-feedback">
+                      {formik.errors.netPay}
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className="  col-md-6 col-12">
+                <div className="text-start mt-2 mb-3">
+                  <lable className="form-lable">
+                    Status<span className="text-danger">*</span>
+                  </lable>
+                  <select
+                    {...formik.getFieldProps("status")}
+                    className={`form-select    ${
+                      formik.touched.status && formik.errors.status
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                    aria-label="Default select example"
+                  >
+                    <option selected></option>
+                    <option value="APPROVED">Approved</option>
+                    <option value="REJECTED">Rejected</option>
+                    <option value="PENDING">Pending</option>
+                  </select>
+
+                  {formik.touched.status && formik.errors.status && (
+                    <div className="invalid-feedback">
+                      {formik.errors.status}
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           </div>

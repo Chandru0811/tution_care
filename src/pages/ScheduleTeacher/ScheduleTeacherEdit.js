@@ -30,14 +30,13 @@ function ScheduleTeacherEdit({ id, onSuccess }) {
   };
 
   const handleShow = async () => {
-    try{
+    try {
       const response = await api.get(`/getAllScheduleTeacherById/${id}`);
       formik.setValues(response.data);
       setShow(true);
-    }catch (error) {
-      console.error("Error fetching data:", error);
-    }
-    finally{
+    } catch (error) {
+      console.error("Error fetching data:", error.message);
+    } finally {
       setShow(true);
     }
   };
@@ -49,7 +48,7 @@ function ScheduleTeacherEdit({ id, onSuccess }) {
       setCenterData(centers);
       setTeacherData(teacher);
     } catch (error) {
-      toast.error(error);
+      toast.error(error.message);
     }
   };
 
@@ -58,7 +57,7 @@ function ScheduleTeacherEdit({ id, onSuccess }) {
       const courses = await fetchAllCoursesWithIdsC(tuitionId);
       setCourseData(courses);
     } catch (error) {
-      toast.error(error);
+      toast.error(error.message);
     }
   };
 
@@ -67,7 +66,7 @@ function ScheduleTeacherEdit({ id, onSuccess }) {
       const classes = await fetchAllClassesWithIdsC(courseId);
       setClassData(classes);
     } catch (error) {
-      toast.error(error);
+      toast.error(error.message);
     }
   };
 
@@ -173,8 +172,8 @@ function ScheduleTeacherEdit({ id, onSuccess }) {
           toast.error(response.data.message);
         }
       } catch (error) {
-        toast.error(error);
-      }finally {
+        toast.error(error.message);
+      } finally {
         setLoadIndicator(false);
       }
     },
@@ -191,7 +190,6 @@ function ScheduleTeacherEdit({ id, onSuccess }) {
     formik.setFieldValue("courseId", courseId);
     fetchClasses(courseId); // Fetch class for the selected center
   };
-
 
   // const convertTo12Hour = (time24h) => {
   //   let [hours, minutes] = time24h.split(":");
@@ -218,7 +216,9 @@ function ScheduleTeacherEdit({ id, onSuccess }) {
       </div>
       <Modal show={show} size="lg" onHide={handleClose} centered>
         <Modal.Header closeButton>
-          <Modal.Title className="headColor">Update Schedule Teacher</Modal.Title>
+          <Modal.Title className="headColor">
+            Update Schedule Teacher
+          </Modal.Title>
         </Modal.Header>
         <form onSubmit={formik.handleSubmit}>
           <Modal.Body>
@@ -226,7 +226,7 @@ function ScheduleTeacherEdit({ id, onSuccess }) {
               <div className="row">
                 <div className="col-md-6 col-12 mb-2">
                   <label className="form-label">
-                  Centre<span className="text-danger">*</span>
+                    Centre<span className="text-danger">*</span>
                   </label>
                   <select
                     {...formik.getFieldProps("tuitionId")}
@@ -265,10 +265,12 @@ function ScheduleTeacherEdit({ id, onSuccess }) {
                     }`}
                     onChange={handleCourseChange}
                   >
-                     <option value={formik.values.courseId}>{formik.values.course}</option>
+                    <option value={formik.values.courseId}>
+                      {formik.values.course}
+                    </option>
                     {courseData &&
                       courseData.map((course) => (
-                        <option  key={course.id} value={course.id}>
+                        <option key={course.id} value={course.id}>
                           {course.courseNames}
                         </option>
                       ))}
@@ -384,7 +386,11 @@ function ScheduleTeacherEdit({ id, onSuccess }) {
               </div>
             </div>
             <Modal.Footer className="mt-3">
-              <Button type="button" variant="secondary btn-sm" onClick={handleClose}>
+              <Button
+                type="button"
+                variant="secondary btn-sm"
+                onClick={handleClose}
+              >
                 Cancel
               </Button>
               <Button

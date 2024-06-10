@@ -21,7 +21,7 @@ function LeaveView() {
       setCenterData(centerData);
       setTeacherData(teacherData);
     } catch (error) {
-      toast.error(error);
+      toast.error(error.message);
     }
   };
 
@@ -31,7 +31,7 @@ function LeaveView() {
         const response = await api.get(`/getUserLeaveRequestById/${id}`);
         setData(response.data);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching data:", error.message);
       }
     };
     getData();

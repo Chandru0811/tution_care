@@ -93,7 +93,7 @@ const StaffLeaveEdit = forwardRef(
             }
           }
         } catch (error) {
-          toast.error(error);
+          toast.error(error.message);
         }finally{
           setLoadIndicators(false);
         }

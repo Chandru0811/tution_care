@@ -47,7 +47,7 @@ const PersonalAdd = forwardRef(({ formData,setLoadIndicators, setFormData, handl
           toast.error(response.data.message);
         }
       } catch (error) {
-        toast.error(error);
+        toast.error(error.message);
       }
     },
 
@@ -87,7 +87,7 @@ const PersonalAdd = forwardRef(({ formData,setLoadIndicators, setFormData, handl
           toast.error(response.data.message);
         }
       } catch (error) {
-        toast.error(error);
+        toast.error(error.message);
       }finally {
         setLoadIndicators(false);
       }

@@ -105,7 +105,7 @@ const ContractEdit = forwardRef(({ formData,setLoadIndicators, setFormData }, re
           }
         }
       } catch (error) {
-        toast.error(error);
+        toast.error(error.message);
       }finally{
           setLoadIndicators(false)
         }
@@ -187,7 +187,7 @@ const ContractEdit = forwardRef(({ formData,setLoadIndicators, setFormData }, re
           // console.log("Contract ID:", formik.values.contractId);
         }
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching data:", error.message);
       }
     };
     // console.log(formik.values);

@@ -51,7 +51,7 @@ const Edi = forwardRef(
         const centerData = await fetchAllCentersWithIds();
         setCenterData(centerData);
       } catch (error) {
-        toast.error(error);
+        toast.error(error.message);
       }
     };
     const calculateAge = (dob) => {
@@ -126,7 +126,7 @@ const Edi = forwardRef(
             toast.error(response.data.message);
           }
         } catch (error) {
-          toast.error(error);
+          toast.error(error.message);
         }finally {
           setLoadIndicators(false);
         }

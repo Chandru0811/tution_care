@@ -127,7 +127,7 @@ export default function InvoiceAdd() {
       const centerData = await fetchAllCentersWithIds();
       setCenterData(centerData);
     } catch (error) {
-      toast.error(error);
+      toast.error(error.message);
     }
   };
 
@@ -136,7 +136,7 @@ export default function InvoiceAdd() {
       const courseData = await fetchAllCoursesWithIdsC(tuitionId);
       setCourseData(courseData);
     } catch (error) {
-      toast.error(error);
+      toast.error(error.message);
     }
   };
 
@@ -145,7 +145,7 @@ export default function InvoiceAdd() {
       const packageData = await fetchAllPackageListByCenter(tuitionId);
       setPackageData(packageData);
     } catch (error) {
-      toast.error(error);
+      toast.error(error.message);
     }
   };
 
@@ -154,7 +154,7 @@ export default function InvoiceAdd() {
       const student = await fetchAllStudentListByCenter(tuitionId);
       setStudentData(student);
     } catch (error) {
-      toast.error(error);
+      toast.error(error.message);
     }
   };
 

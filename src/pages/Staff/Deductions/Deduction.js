@@ -67,81 +67,81 @@ const Deduction = () => {
 
   return (
     <div className="container-fluid  center">
-      <div className="card shadow border-0 mb-2 top-header">
-    <div className="container-fluid px-0">
-      <div className="my-3 d-flex justify-content-between mb-5 px-4">
-        {/* {storedScreens?.deductionCreate && ( */}
-        <h2>Deduction</h2>
-          <Link to="/deduction/add">
-            <button type="button" className="btn btn-button btn-sm">
-                  Add <i class="bx bx-plus"></i>
-            </button>
-          </Link>
-        {/* )} */}
-      </div>
-      <hr/>
-      {loading ? (
-        <div className="loader-container">
-          <div class="loading">
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
+      <div className="card shadow border-0 mb-2 top-header minHeight">
+        <div className="container-fluid px-0">
+          <div className="my-3 d-flex justify-content-between mb-5 px-4">
+            {/* {storedScreens?.deductionCreate && ( */}
+            <h2>Deduction</h2>
+            <Link to="/deduction/add">
+              <button type="button" className="btn btn-button btn-sm">
+                Add <i class="bx bx-plus"></i>
+              </button>
+            </Link>
+            {/* )} */}
           </div>
-        </div>
-      ) : (
-        <div className="table-responsive px-4">
-        <table ref={tableRef} className="display minHeight">
-          <thead>
-            <tr>
-              <th scope="col">S No</th>
-              <th scope="col">Centre Name</th>
-              <th scope="col">Employee Name</th>
-              <th scope="col">Deduction Name</th>
-              <th scope="col">Deduction Amount</th>
-              <th scope="col">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {datas.map((data, index) => (
-              <tr key={index}>
-                <th scope="row">{index + 1}</th>
-                <td>{data.tuitionCareName}</td>
-                <td>{data.employeeName}</td>
-                <td>{data.deductionName}</td>
-                <td>{data.deductionAmount}</td>
-                <td>
-                  {/* {storedScreens?.deductionRead && ( */}
-                    <Link to={`/deduction/list/${data.id}`}>
-                      <button className="btn btn-sm">
-                        <FaEye />
-                      </button>
-                    </Link>
-                  {/* )} */}
-                  {/* {storedScreens?.deductionUpdate && ( */}
-                    <Link to={`/deduction/edit/${data.id}`}>
-                      <button className="btn btn-sm">
-                        <FaEdit />
-                      </button>
-                    </Link>
-                  {/* )} */}
+          <hr />
+          {loading ? (
+            <div className="loader-container">
+              <div class="loading">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+            </div>
+          ) : (
+            <div className="table-responsive px-4">
+              <table ref={tableRef} className="display ">
+                <thead>
+                  <tr>
+                    <th scope="col">S No</th>
+                    <th scope="col">Centre Name</th>
+                    <th scope="col">Employee Name</th>
+                    <th scope="col">Deduction Name</th>
+                    <th scope="col">Deduction Amount</th>
+                    <th scope="col">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {datas.map((data, index) => (
+                    <tr key={index}>
+                      <th scope="row">{index + 1}</th>
+                      <td>{data.tuitionCareName}</td>
+                      <td>{data.employeeName}</td>
+                      <td>{data.deductionName}</td>
+                      <td>{data.deductionAmount}</td>
+                      <td>
+                        {/* {storedScreens?.deductionRead && ( */}
+                        <Link to={`/deduction/list/${data.id}`}>
+                          <button className="btn btn-sm">
+                            <FaEye />
+                          </button>
+                        </Link>
+                        {/* )} */}
+                        {/* {storedScreens?.deductionUpdate && ( */}
+                        <Link to={`/deduction/edit/${data.id}`}>
+                          <button className="btn btn-sm">
+                            <FaEdit />
+                          </button>
+                        </Link>
+                        {/* )} */}
 
-                  {/* {storedScreens?.deductionDelete && ( */}
-                    <DeleteModel
-                      onSuccess={refreshData}
-                      path={`/deleteUserDeduction/${data.id}`}
-                    />
-                  {/* )} */}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                        {/* {storedScreens?.deductionDelete && ( */}
+                        <DeleteModel
+                          onSuccess={refreshData}
+                          path={`/deleteUserDeduction/${data.id}`}
+                        />
+                        {/* )} */}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
-      )}
-    </div>
-    </div>
+      </div>
     </div>
   );
 };

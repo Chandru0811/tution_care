@@ -106,7 +106,7 @@ const StaffContractEdit = forwardRef(({ formData,setLoadIndicators, setFormData 
           }
         }
       } catch (error) {
-        toast.error(error);
+        toast.error(error.message);
       }finally{
         setLoadIndicators(false);
       }

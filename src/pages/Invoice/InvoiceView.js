@@ -42,7 +42,7 @@ function InvoiceView() {
         const response = await api.get(`/getInvoiceDetailsByInvoiceId/${id}`);
         setData(response.data);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching data:", error.message);
         toast.error("Error fetching data");
       } finally {
         setLoading(false);

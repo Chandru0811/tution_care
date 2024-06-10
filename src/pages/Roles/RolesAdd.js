@@ -231,7 +231,7 @@ function RolesAdd() {
           toast.error(response.data.message);
         }
       } catch (error) {
-        toast.error(error);
+        toast.error(error.message);
       }
     },
   });
@@ -253,33 +253,33 @@ function RolesAdd() {
       formik.setValues(response.data);
       // console.log(response.data, "getroleData");
     } catch (error) {
-      console.error("Error fetching role data:", error);
+      console.error("Error fetching role data:", error.message);
     }
   };
 
   return (
     <div className="container-fluid center">
-    <form onSubmit={formik.handleSubmit}>
-     <div className="card shadow border-0 mb-2 top-header">
-      <div className="container-fluid py-4">
-        <div className="row align-items-center">
-          <div className="col">
-            <div className="d-flex align-items-center gap-4">
-              <h2 className="h2 ls-tight headingColor">Role & Matrix</h2>
-            </div>
-          </div>
-          <div className="col-auto">
-            <div className="hstack gap-2 justify-content-end">
-        <button type="submit" className="btn btn-button btn-sm">
-              Save
-            </button>
+      <form onSubmit={formik.handleSubmit}>
+        <div className="card shadow border-0 mb-2 top-header">
+          <div className="container-fluid py-4">
+            <div className="row align-items-center">
+              <div className="col">
+                <div className="d-flex align-items-center gap-4">
+                  <h2 className="h2 ls-tight headingColor">Role & Matrix</h2>
+                </div>
+              </div>
+              <div className="col-auto">
+                <div className="hstack gap-2 justify-content-end">
+                  <button type="submit" className="btn btn-button btn-sm">
+                    Save
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
-    <div className="card shadow border-0 mb-2 top-header p-3">
-        <div className="container p-5">
+        <div className="card shadow border-0 mb-2 top-header p-3">
+          <div className="container p-5">
             <div class="col-md-6 col-12 mb-2">
               <lable className="form-lable">
                 User Role <span class="text-danger">*</span>
@@ -1192,14 +1192,10 @@ function RolesAdd() {
                           onChange={handleCheckboxChange(`payslipIndex`)}
                         />
                       </td>
-                      <td>
-                      </td>
-                      <td>
-                      </td>
-                      <td>
-                      </td>
-                      <td>
-                      </td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
                     </tr>
 
                     <tr>

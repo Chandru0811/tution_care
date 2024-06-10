@@ -31,7 +31,7 @@ const validationSchema = Yup.object().shape({
 });
 
 const StaffAccountEdit = forwardRef(
-  ({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
+  ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const [centerData, setCenterData] = useState(null);
 
     const fetchData = async () => {
@@ -39,7 +39,7 @@ const StaffAccountEdit = forwardRef(
         const centerData = await fetchAllCentersWithIds();
         setCenterData(centerData);
       } catch (error) {
-        toast.error(error);
+        toast.error(error.message);
       }
     };
 
@@ -103,6 +103,7 @@ const StaffAccountEdit = forwardRef(
                 },
               }
             );
+
             if (response.status === 200) {
               toast.success(response.data.message);
               setFormData((prv) => ({ ...prv, ...values }));
@@ -131,13 +132,11 @@ const StaffAccountEdit = forwardRef(
               toast.success(response.data.message);
               setFormData((prv) => ({ ...prv, ...values }));
               handleNext();
-            } else {
-              toast.error(response.data.message);
             }
           }
         } catch (error) {
-          toast.error(error);
-        }finally{
+          toast.error(error.message);
+        } finally {
           setLoadIndicators(false);
         }
       },
@@ -156,7 +155,9 @@ const StaffAccountEdit = forwardRef(
             data.approvelContentRequired === true ? "Yes" : "No",
         });
       };
-      getData();
+      if (formData.user_id) {
+        getData();
+      }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -198,7 +199,7 @@ const StaffAccountEdit = forwardRef(
             // console.log("Account ID:", formik.values.accountId);
           }
         } catch (error) {
-          toast.error("Error Fetching Data");
+          toast.error("Error Fetching Data", error.message);
         }
       };
 
@@ -206,7 +207,7 @@ const StaffAccountEdit = forwardRef(
       getData();
       fetchData();
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [formData.staff_id]);
 
     useImperativeHandle(ref, () => ({
       staffAccountEdit: formik.handleSubmit,
@@ -240,11 +241,11 @@ const StaffAccountEdit = forwardRef(
                 Color Code<span class="text-danger">*</span>
               </label>
               <div class="input-group mb-3 courseAdd">
-                <div class="input-group-text inputGroup">
+                <div class="input-group-text">
                   <input
                     type="color"
                     {...formik.getFieldProps("colorCode")}
-                    className="form-control-color  circle form-control-sm"
+                    className="circle"
                   />
                 </div>
                 <input

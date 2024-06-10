@@ -67,7 +67,7 @@ function HolidayEdit() {
       const centerData = await fetchAllCentersWithIds();
       setCenterData(centerData);
     } catch (error) {
-      toast.error(error);
+      toast.error(error.message);
     }
   };
 
@@ -82,7 +82,7 @@ function HolidayEdit() {
         };
         formik.setValues(formattedResponseData);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching data:", error.message);
       }
     };
 

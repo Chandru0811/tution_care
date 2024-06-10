@@ -84,7 +84,7 @@ const LoginEdit = forwardRef(({ formData,setLoadIndicators, setFormData, handleN
           }
         }
       } catch (error) {
-        toast.error(error);
+        toast.error(error.message);
       }finally{
         setLoadIndicators(false)
       }
@@ -124,7 +124,7 @@ const LoginEdit = forwardRef(({ formData,setLoadIndicators, setFormData, handleN
           // console.log("Login ID:", formik.values.loginId);
         }
       }catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching data:", error.message);
       }
       
     };

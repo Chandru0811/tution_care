@@ -24,7 +24,7 @@ const Leave = () => {
       const centerData = await fetchAllCentersWithIds();
       setCenterData(centerData);
     } catch (error) {
-      toast.error(error);
+      toast.error(error.message);
     }
   };
 
@@ -38,7 +38,7 @@ const Leave = () => {
         // console.log("responsedata", response.data);
         setLoading(false);
       } catch (error) {
-        toast.error("Error Fetching Data : ", error);
+        toast.error("Error Fetching Data : ", error.message);
       }
     };
     getData();
@@ -71,7 +71,7 @@ const Leave = () => {
 
   return (
     <div className="container-fluid  center">
-      <div className="card shadow border-0 mb-2 top-header">
+      <div className="card shadow border-0 mb-2 top-header minHeight">
         <div className="container-fluid px-0">
           <div className="my-5 px-4 d-flex justify-content-between">
             {/* {storedScreens?.leaveCreate && (  */}
@@ -123,7 +123,7 @@ const Leave = () => {
                 </div>
               </div>
               <div className="table-responsive px-4">
-                <table ref={tableRef} className="display minHeight ">
+                <table ref={tableRef} className="display">
                   <thead>
                     <tr>
                       <th scope="col" style={{ whiteSpace: "nowrap" }}>

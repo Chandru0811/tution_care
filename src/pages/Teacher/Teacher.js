@@ -23,7 +23,7 @@ const Teacher = () => {
         const response = await api.get("/getAllUsersByRole/teacher");
         setDatas(response.data);
       }catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching data:", error.message);
       } finally {
         setLoading(false);
       }
@@ -65,7 +65,7 @@ const Teacher = () => {
       setDatas(response.data);
       initializeDataTable(); // Reinitialize DataTable after successful data update
     } catch (error) {
-      console.error("Error refreshing data:", error);
+      console.error("Error refreshing data:", error.message);
     }
     setLoading(false);
   };
@@ -84,7 +84,7 @@ const Teacher = () => {
         </div>
      ) : (
       <div className="container-fluid  center">
-      <div className="card shadow border-0 mb-2 top-header">
+      <div className="card shadow border-0 mb-2 top-header minHeight">
       <div className="container-fluid px-0">
         <div className="my-3 d-flex justify-content-between mb-5 px-4">
           {/* {storedScreens?.staffCreate && ( */}
@@ -98,7 +98,7 @@ const Teacher = () => {
         </div>
         <hr/>
         <div className="table-responsive px-4">
-          <table ref={tableRef} className="display minHeight ">
+          <table ref={tableRef} className="display  ">
             <thead>
               <tr>
                 <th scope="col" style={{ whiteSpace: "nowrap" }}>

@@ -6,7 +6,7 @@ const fetchAllCoursesWithIds = async () => {
     const response = await api.get("getAllCoursesWithIds");
     return response.data;
   } catch (error) {
-    toast.error("Error fetching center data:", error);
+    toast.error("Error fetching center data:", error.message);
     throw error;
   }
 };

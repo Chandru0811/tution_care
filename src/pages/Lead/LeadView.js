@@ -19,15 +19,15 @@ function Leadview() {
 
   // Payment Status & Summary Modal
 
-  const [showPaymentStatusModal, setShowPaymentStatusModal] = useState(false);
+  // const [showPaymentStatusModal, setShowPaymentStatusModal] = useState(false);
   const [showSummaryModal, setShowSummaryModal] = useState(false);
 
   const handleClose = () => {
-    setShowPaymentStatusModal(false);
+    // setShowPaymentStatusModal(false);
     setShowSummaryModal(false);
   };
 
-  const handlePaymentStatusShow = () => setShowPaymentStatusModal(true);
+  // const handlePaymentStatusShow = () => setShowPaymentStatusModal(true);
   const handleSummaryShow = () => setShowSummaryModal(true);
 
   // console.log(data);
@@ -42,263 +42,106 @@ function Leadview() {
       setCenterData(centerData);
       setSubjectData(subjectData);
     } catch (error) {
-      toast.error(error);
+      toast.error(error.message);
     }
   };
 
-  const handleSavePaymentStatus = async () => {
-    try {
-      const response = await api.put(`/updateLeadInfo/${id}`, {
-        paymentStatus,
-      });
-      if (response.status === 200) {
-        toast.success(response.data.message);
-        handleClose(); // Close the modal after successful update
-        try {
-          if (paymentStatus === "PAID") {
-            const migrateResponse = await api.post(`/leadToStudentMigrate`, {
-              leadId: id,
-              status: "paid",
-            });
-            if (migrateResponse.status === 201) {
-              toast.success(migrateResponse.data.message);
-            } else {
-              toast.error(migrateResponse.data.message);
-            }
-          }
-        } catch (error) {
-          console.log("Error Payment Response", error?.response?.status);
-          if (error?.response?.status === 409) {
-            toast.warning(error?.response?.data.message);
-          } else if (error?.response?.status === 404) {
-            toast.warning(error?.response?.data.message);
-          } else {
-            toast.error(error?.response?.data.message);
-          }
-        }
-      } else {
-        toast.error(response.data.message);
-      }
-    } catch (error) {
-      toast.error("Error updating payment status");
-    }
-  };
+  // const handleSavePaymentStatus = async () => {
+  //   try {
+  //     const response = await api.put(`/updateLeadInfo/${id}`, {
+  //       paymentStatus,
+  //     });
+  //     if (response.status === 200) {
+  //       toast.success(response.data.message);
+  //       handleClose(); // Close the modal after successful update
+  //       try {
+  //         if (paymentStatus === "PAID") {
+  //           const migrateResponse = await api.post(`/leadToStudentMigrate`, {
+  //             leadId: id,
+  //             status: "paid",
+  //           });
+  //           if (migrateResponse.status === 201) {
+  //             toast.success(migrateResponse.data.message);
+  //           } else {
+  //             toast.error(migrateResponse.data.message);
+  //           }
+  //         }
+  //       } catch (error) {
+  //         console.log("Error Payment Response", error?.response?.status);
+  //         if (error?.response?.status === 409) {
+  //           toast.warning(error?.response?.data.message);
+  //         } else if (error?.response?.status === 404) {
+  //           toast.warning(error?.response?.data.message);
+  //         } else {
+  //           toast.error(error?.response?.data.message);
+  //         }
+  //       }
+  //     } else {
+  //       toast.error(response.data.message);
+  //     }
+  //   } catch (error) {
+  //     toast.error("Error updating payment status");
+  //   }
+  // };
 
   useEffect(() => {
     const getData = async () => {
       try {
         const response = await api.get(`/getAllLeadInfoWithReferrerById/${id}`);
         setData(response.data);
-        setPaymentStatus(response.data.paymentStatus);
+        // setPaymentStatus(response.data.paymentStatus);
       } catch (error) {
         toast.error("Error Fetch Data ", error);
       }
       // console.log("Lead  :",response);
     };
 
-    const getAssesmentData = async () => {
-      try {
-        const response = await api.get(`/getLeadAssessmentDataByLeadId/${id}`);
-        setDoassesmentData(response.data);
-      } catch (error) {
-        toast.error("Error Fetch Data ", error);
-      }
-    };
+    // const getAssesmentData = async () => {
+    //   try {
+    //     const response = await api.get(`/getLeadAssessmentDataByLeadId/${id}`);
+    //     setDoassesmentData(response.data);
+    //   } catch (error) {
+    //     toast.error("Error Fetch Data ", error);
+    //   }
+    // };
 
     getData();
-    getAssesmentData();
+    // getAssesmentData();
 
     fetchData();
   }, [id]);
 
   return (
     <>
-      <Modal
-        show={showPaymentStatusModal}
-        onHide={handleClose}
-        animation={false}
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>Payment Status</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <div>
-            <div className="text-start mt-4">
-              <select
-                name="paymentStatus"
-                onChange={(e) => setPaymentStatus(e.target.value)}
-                // onBlur={formik.handleBlur}
-                // value={formik.values.paymentStatus}
-                value={paymentStatus}
-                className="form-select"
-                aria-label="example"
-              >
-                <option value="PENDING" selected>
-                  Pending
-                </option>
-                <option value="PAID">Paid</option>
-                <option value="REJECTED">Rejected</option>
-              </select>
-            </div>
-          </div>
-        </Modal.Body>
-        <Modal.Footer>
-          <button
-            className="btn btn-border btn-sm"
-            type="button"
-            onClick={handleClose}
-          >
-            Close
-          </button>
-          <button
-            className="btn btn-button btn-sm"
-            type="submit"
-            onClick={handleSavePaymentStatus}
-          >
-            Save
-          </button>
-        </Modal.Footer>
-      </Modal>
-      <Modal show={showSummaryModal} onHide={handleClose} animation={false}>
-        <Modal.Header closeButton>
-          <Modal.Title>Summary</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <div>
-            <ul>
-              <div className="row">
-                <div className="d-flex align-items-center mb-3">
-                  <box-icon
-                    name="check-circle"
-                    type="solid"
-                    color="#0bda5d"
-                  ></box-icon>
-                  &nbsp; &nbsp;
-                  <li className="list-unstyled d-flex text-start">
-                    Student Information
-                  </li>
+      <div className="container-fluid center">
+        <div className="card shadow border-0 mb-2 top-header">
+          <div className="container-fluid py-4">
+            <div className="row align-items-center">
+              <div className="col">
+                <div className="d-flex align-items-center gap-4">
+                  <h2 className="h2 ls-tight headingColor">Lead View</h2>
                 </div>
               </div>
-              <div className="d-flex align-items-center mb-3">
-                <box-icon
-                  name="x-circle"
-                  type="solid"
-                  color="#d42615"
-                ></box-icon>
-                &nbsp; &nbsp;
-                <li className="list-unstyled d-flex align-items-center">
-                  Child Ability
-                </li>
-              </div>
-              <div className="d-flex align-items-center mb-3">
-                <box-icon
-                  name="x-circle"
-                  type="solid"
-                  color="#d42615"
-                ></box-icon>
-                &nbsp; &nbsp;
-                <li className="list-unstyled d-flex align-items-center">
-                  Parent Information &nbsp; &nbsp;
-                </li>
-              </div>
-              <div className="d-flex align-items-center mb-3">
-                <box-icon
-                  name="check-circle"
-                  type="solid"
-                  color="#0bda5d"
-                ></box-icon>
-                &nbsp; &nbsp;
-                <li className="list-unstyled d-flex align-items-center">
-                  Address
-                </li>
-              </div>
-              <div className="d-flex align-items-center mb-3">
-                <box-icon
-                  name="x-circle"
-                  type="solid"
-                  color="#d42615"
-                ></box-icon>
-                &nbsp; &nbsp;
-                <li className="list-unstyled d-flex align-items-center">
-                  Account Information
-                </li>
-              </div>
-              <div className="d-flex align-items-center mb-3">
-                <box-icon
-                  name="check-circle"
-                  type="solid"
-                  color="#0bda5d"
-                ></box-icon>
-                &nbsp; &nbsp;
-                <li className="list-unstyled d-flex align-items-center">
-                  Authorised Person Address
-                </li>
-              </div>
-            </ul>
-          </div>
-        </Modal.Body>
-        {/* <Modal.Footer> */}
-        {/* <button
-            className="btn btn-border btn-sm"
-            type="button"
-            onClick={handleClose}
-          >
-            Close
-          </button>
-          <button
-            className="btn btn-button btn-sm"
-            type="submit"
-            onClick={handleClose}
-          >
-            Save
-          </button> */}
-        {/* </Modal.Footer> */}
-      </Modal>
-      <div className="minHeight container-fluid  center">
-      <div className="card shadow border-0 mb-2 top-header">
-      <div className="mb-5">
-        <div className="container-fluid ">
-          <div className=" products">
-            <div class="container-fluid py-4">
-              <div class="row d-flex  justify-content-end">
-                <div class="col-auto ">
-                  <div class="hstack gap-2 ">
-                    <Link to="/lead/lead">
-                      <button type="button" class="btn btn-border btn-sm">
-                        <span>Back</span>
-                      </button>
-                    </Link>
-                    {/* <button
-                      type="button"
-                      onClick={handleSummaryShow}
-                      class="btn btn-border btn-sm"
-                    >
-                      <span>Summary</span>
-                    </button> */}
-
-                    <button
-                      type="button"
-                      onClick={handlePaymentStatusShow}
-                      class="btn btn-border btn-sm"
-                    >
-                      <span>Payment Status</span>
+              <div className="col-auto">
+                <div className="hstack gap-2 justify-content-end">
+                  <Link to="/lead/lead">
+                    <button type="submit" className="btn btn-sm btn-light">
+                      <span>Back</span>
                     </button>
-                    <Link to={`/lead/lead/assessment/${id}`}>
-                      <button type="button" class="btn btn-border btn-sm">
-                        <span>Do Assessment</span>
-                      </button>
-                    </Link>
-                  </div>
+                  </Link>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div className="container-fluid">
-          <div class="accordion" id="accordionExample">
-            {/* Lead Information */}
-            <div class="accordion-item">
-              <h2 class="accordion-header">
+        <div className="card shadow border-0 mb-2 top-header">
+          <div className="container p-5">
+            <div className="row mt-5 pb-3">
+              <div className="container-fluid">
+                {/* <div class="accordion" id="accordionExample"> */}
+                {/* Lead Information */}
+                {/* <div class="accordion-item"> */}
+                {/* <h2 class="accordion-header">
                 <button
                   class="accordion-button"
                   type="button"
@@ -309,13 +152,13 @@ function Leadview() {
                 >
                   <b>Lead Information</b>
                 </button>
-              </h2>
-              <div
-                id="collapseOne"
-                class="accordion-collapse collapse show"
-                data-bs-parent="#accordionExample"
-              >
-                <div class="accordion-body">
+              </h2> */}
+                <div
+                  id="collapseOne"
+                  class="accordion-collapse collapse show"
+                  data-bs-parent="#accordionExample"
+                >
+                  {/* <div class="accordion-body"> */}
                   <div className="container-fluid">
                     <div className="row  m-3">
                       <h5 className="headColor mt-2 mb-4">
@@ -1049,12 +892,12 @@ function Leadview() {
                       </div>
                     </div>
                   </div>
+                  {/* </div> */}
                 </div>
-              </div>
-            </div>
+                {/* </div> */}
 
-            {/* Assessment Information */}
-            <div class="accordion-item">
+                {/* Assessment Information */}
+                {/* <div class="accordion-item">
               <h2 class="accordion-header">
                 <button
                   class="accordion-button collapsed"
@@ -1073,7 +916,7 @@ function Leadview() {
                 data-bs-parent="#accordionExample"
               >
                 <div class="accordion-body">
-                  {/* Child Particulars */}
+                 
                   <div className="container-fluid">
                     <div className="row  m-3">
                       <h5 className="headColor mt-2 mb-4">Child Particulars</h5>
@@ -1368,7 +1211,7 @@ function Leadview() {
                       </div>
                     </div>
                   </div>
-                  {/* Child Pencil Grip */}
+                 
                   <div className="container-fluid">
                     <div className="row  m-3">
                       <h5 className="headColor mt-5 mb-4">Child Pencil Grip</h5>
@@ -1405,7 +1248,7 @@ function Leadview() {
                           </div>
                         </div>
                       </div>
-                      {/* <div className="col-md-6 col-12">
+                      <div className="col-md-6 col-12">
                         <div className="row mb-2">
                           <div className="col-6 d-flex  align-items-center">
                             <p className="text-sm fw-medium ">Plamer Grasp</p>
@@ -1471,10 +1314,10 @@ function Leadview() {
                             </p>
                           </div>
                         </div>
-                      </div> */}
+                      </div>
                     </div>
                   </div>
-                  {/* Arty Beliver & Arty Dreamers */}
+                
                   <div className="container-fluid">
                     <div className="row  m-3">
                       <h5 className="headColor mt-5 mb-4">
@@ -1577,7 +1420,7 @@ function Leadview() {
                     </div>
                   </div>
 
-                  {/* Alphabet */}
+                 
                   {doassesmentData.leadDoAssessmentAlphabet &&
                   doassesmentData.leadDoAssessmentAlphabet.length > 0 ? (
                     <div className="container-fluid">
@@ -4318,7 +4161,7 @@ function Leadview() {
                     </div>
                   )}
 
-                  {/* Arty Pursuers */}
+
                   {doassesmentData.leadDoAssessmentArtyPursuers &&
                   doassesmentData.leadDoAssessmentArtyPursuers.length > 0 ? (
                     <div className="container-fluid">
@@ -5765,12 +5608,64 @@ function Leadview() {
                   )}
                 </div>
               </div>
+            </div> */}
+                {/* </div> */}
+              </div>
             </div>
           </div>
         </div>
+        <div className="card shadow border-0 mb-2 top-header">
+          <div className="container">
+            <div className="row"></div>
+          </div>
+        </div>
       </div>
-      </div>
-      </div>
+      {/* <Modal
+        show={showPaymentStatusModal}
+        onHide={handleClose}
+        animation={false}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Payment Status</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div>
+            <div className="text-start mt-4">
+              <select
+                name="paymentStatus"
+                onChange={(e) => setPaymentStatus(e.target.value)}
+                // onBlur={formik.handleBlur}
+                // value={formik.values.paymentStatus}
+                value={paymentStatus}
+                className="form-select"
+                aria-label="example"
+              >
+                <option value="PENDING" selected>
+                  Pending
+                </option>
+                <option value="PAID">Paid</option>
+                <option value="REJECTED">Rejected</option>
+              </select>
+            </div>
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <button
+            className="btn btn-border btn-sm"
+            type="button"
+            onClick={handleClose}
+          >
+            Close
+          </button>
+          <button
+            className="btn btn-button btn-sm"
+            type="submit"
+            onClick={handleSavePaymentStatus}
+          >
+            Save
+          </button>
+        </Modal.Footer>
+      </Modal> */}
     </>
   );
 }

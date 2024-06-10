@@ -17,7 +17,7 @@ function TeacherView() {
         const response = await api.get(`/getAllUsersById/${id}`);
         setData(response.data);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching data:", error.message);
       }
     };
     getData();

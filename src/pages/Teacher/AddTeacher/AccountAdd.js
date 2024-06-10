@@ -33,7 +33,7 @@ const AccountAdd = forwardRef(({ formData,setLoadIndicators, setFormData, handle
       const centerData = await fetchAllCentersWithIds();
       setCenterData(centerData);
     } catch (error) {
-      toast.error(error);
+      toast.error(error.message);
     }
   };
 
@@ -79,7 +79,7 @@ const AccountAdd = forwardRef(({ formData,setLoadIndicators, setFormData, handle
           toast.error(response.data.message);
         }
       } catch (error) {
-        toast.error(error);
+        toast.error(error.message);
       }finally {
         setLoadIndicators(false);
       }
@@ -122,7 +122,7 @@ const AccountAdd = forwardRef(({ formData,setLoadIndicators, setFormData, handle
                 <input
                   type="color"
                   {...formik.getFieldProps("colorCode")}
-                  className="form-control-color  circle form-control-sm"
+                  className="circle"
                 />
               </div>
               <input

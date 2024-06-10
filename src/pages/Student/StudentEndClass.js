@@ -52,7 +52,7 @@ const StudentEndClass = () => {
           toast.error(response.data.message);
         }
       } catch (error) {
-        toast.error(error);
+        toast.error(error.message);
       }
     },
   });
@@ -62,7 +62,7 @@ const StudentEndClass = () => {
       const course = await fetchAllCoursesWithIds();
       setCourseData(course);
     } catch (error) {
-      toast.error(error);
+      toast.error(error.message);
     }
   };
 
@@ -71,7 +71,7 @@ const StudentEndClass = () => {
       const classes = await fetchAllClassesWithIds(courseId);
       setClassData(classes);
     } catch (error) {
-      toast.error(error);
+      toast.error(error.message);
     }
   };
 

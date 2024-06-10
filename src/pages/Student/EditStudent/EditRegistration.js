@@ -150,7 +150,7 @@ const AddEmergencyContact = forwardRef(
                 }
             }
         } catch (error) {
-            toast.error(error);
+            toast.error(error.message);
         }finally {
           setLoadIndicators(false);
         }
@@ -187,7 +187,7 @@ const AddEmergencyContact = forwardRef(
             });
           }
         } catch (error) {
-          console.error("Error fetching data:", error);
+          console.error("Error fetching data:", error.message);
         }
         // console.log("Emergency Contact ID:", response.data.emergencyContactId);
       };

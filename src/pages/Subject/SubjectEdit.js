@@ -42,12 +42,12 @@ function SubjectEdit({ id, onSuccess }) {
           toast.success(response.data.message);
           onSuccess();
           handleClose();
-          navigate("/level");
+         
         } else {
           toast.error(response.data.message);
         }
       } catch (error) {
-        toast.error(error);
+        toast.error(error.message);
       }finally {
         setLoadIndicator(false);
       }

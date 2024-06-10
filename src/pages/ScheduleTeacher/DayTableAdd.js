@@ -18,7 +18,7 @@ function DayTableAdd({ onSuccess, id, tuitionId, day }) {
       const studentData = await fetchAllStudentListByCenter(tuitionId);
       setStudentData(studentData);
     } catch (error) {
-      toast.error(error);
+      toast.error(error.message);
     }
   };
 

@@ -12,20 +12,20 @@ function HolidayView() {
   const fetchData = async () => {
     try {
       const centerData = await fetchAllCentersWithIds();
-   
+
       setCenterData(centerData);
     } catch (error) {
-      toast.error(error);
+      toast.error(error.message);
     }
   };
-  console.log("object",data)
+  console.log("object", data);
   useEffect(() => {
     const getData = async () => {
       try {
         const response = await api.get(`/getAllUserHolidayById/${id}`);
         setData(response.data);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching data:", error.message);
       }
     };
     getData();
@@ -34,7 +34,7 @@ function HolidayView() {
 
   return (
     <div className="container-fluid center">
-        <div className="card shadow border-0 mb-2 top-header">
+      <div className="card shadow border-0 mb-2 top-header">
         <div className="container-fluid py-4">
           <div className="row align-items-center">
             <div className="col">
@@ -54,9 +54,12 @@ function HolidayView() {
           </div>
         </div>
       </div>
-      <div className="minHeight card shadow border-0 mb-2 top-header">
+      <div
+        className="container card shadow border-0 mb-2 top-header"
+        style={{ height: "70vh" }}
+      >
         <div className="container p-5">
-        <div className="row mt-5 pb-3">
+          <div className="row mt-5 pb-3">
             <div className="col-md-6 col-12">
               <div className="row mb-2">
                 <div className="col-6 ">
@@ -64,7 +67,8 @@ function HolidayView() {
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">
-                    : {centerData &&
+                    :{" "}
+                    {centerData &&
                       centerData.map((tuitionId) =>
                         parseInt(data.tuitionId) === tuitionId.id
                           ? tuitionId.centerNames || "--"
@@ -81,7 +85,9 @@ function HolidayView() {
                   <p className="fw-medium">Holiday Name</p>
                 </div>
                 <div className="col-6">
-                  <p className="text-muted text-sm">: {data && data.holidayName || "--"}</p>
+                  <p className="text-muted text-sm">
+                    : {(data && data.holidayName) || "--"}
+                  </p>
                 </div>
               </div>
             </div>
@@ -92,7 +98,9 @@ function HolidayView() {
                   <p className="fw-medium">Start Date</p>
                 </div>
                 <div className="col-6">
-                  <p className="text-muted text-sm">: {data.startDate || "--"}</p>
+                  <p className="text-muted text-sm">
+                    : {data.startDate || "--"}
+                  </p>
                 </div>
               </div>
             </div>
@@ -112,14 +120,16 @@ function HolidayView() {
                   <p className="fw-medium">Description</p>
                 </div>
                 <div className="col-6">
-                  <p className="text-muted text-sm">: {data.holidayDescription || "--"}</p>
+                  <p className="text-muted text-sm">
+                    : {data.holidayDescription || "--"}
+                  </p>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-      </div>
+    </div>
   );
 }
 

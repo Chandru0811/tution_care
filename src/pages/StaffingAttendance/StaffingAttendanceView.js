@@ -5,11 +5,9 @@ import fetchAllCentersWithIds from "../List/CenterList";
 import fetchAllTeachersWithIds from "../List/TeacherList";
 import toast from "react-hot-toast";
 
-
 function StaffingAttendanceView() {
-
   const [data, setData] = useState([]);
-  console.log('Attendance Datas:',data);
+  console.log("Attendance Datas:", data);
   const { id } = useParams();
   const [centerData, setCenterData] = useState(null);
   const [teacherData, setTeacherData] = useState(null);
@@ -21,7 +19,7 @@ function StaffingAttendanceView() {
       setCenterData(centerData);
       setTeacherData(teacherData);
     } catch (error) {
-      toast.error(error);
+      toast.error(error.message);
     }
   };
 
@@ -31,7 +29,7 @@ function StaffingAttendanceView() {
         const response = await api.get(`/getUserAttendanceById/${id}`);
         setData(response.data);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching data:", error.message);
       }
     };
     getData();
@@ -40,15 +38,33 @@ function StaffingAttendanceView() {
 
   return (
     <div className="container ">
-      <div className="row  mt-3">
-        <div className="col-12 text-end">
-          <Link to="/staffing/attendance">
-            <button className="btn btn-sm btn-border">Back</button>
-          </Link>
+      <div className="card shadow border-0 mb-2 top-header">
+        <div className="container-fluid py-4">
+          <div className="row align-items-center">
+            <div className="col">
+              <div className="d-flex align-items-center gap-4">
+                <h2 className="h2 ls-tight headingColor">
+                  Staffing Attendance
+                </h2>
+              </div>
+            </div>
+            <div className="col-auto">
+              <div className="hstack gap-2 justify-content-end">
+                <Link to="/staffing/attendance">
+                  <button type="submit" className="btn btn-sm btn-light">
+                    <span>Back</span>
+                  </button>
+                </Link>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <div>
-        <div className="container">
+        <div
+          className="container card shadow border-0 mb-2 top-header"
+          style={{ height: "70vh" }}
+        >
           <div className="row mt-5 pb-3">
             <div className="col-md-6 col-12">
               <div className="row    mb-2">
@@ -57,12 +73,14 @@ function StaffingAttendanceView() {
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">
-                    : {centerData &&
+                    :{" "}
+                    {centerData &&
                       centerData.map((centerId) =>
                         parseInt(data.tuitionId) === centerId.id
                           ? centerId.centerNames || "--"
                           : ""
-                      )}</p>
+                      )}
+                  </p>
                 </div>
               </div>
             </div>
@@ -72,7 +90,9 @@ function StaffingAttendanceView() {
                   <p className="fw-medium">Employee Name </p>
                 </div>
                 <div className="col-6">
-                  <p className="text-muted text-sm">: {data.employeeName || "--"}</p>
+                  <p className="text-muted text-sm">
+                    : {data.employeeName || "--"}
+                  </p>
                 </div>
               </div>
             </div>
@@ -92,7 +112,9 @@ function StaffingAttendanceView() {
                   <p className="fw-medium">Attendance Status </p>
                 </div>
                 <div className="col-6">
-                  <p className="text-muted text-sm">: {data.attendanceStatus || "--"}</p>
+                  <p className="text-muted text-sm">
+                    : {data.attendanceStatus || "--"}
+                  </p>
                 </div>
               </div>
             </div>
@@ -112,7 +134,9 @@ function StaffingAttendanceView() {
                   <p className="fw-medium">Check Out</p>
                 </div>
                 <div className="col-6">
-                  <p className="text-muted text-sm">: {data.checkOut || "--"}</p>
+                  <p className="text-muted text-sm">
+                    : {data.checkOut || "--"}
+                  </p>
                 </div>
               </div>
             </div>
@@ -136,13 +160,15 @@ function StaffingAttendanceView() {
                 </div>
               </div>
             </div> */}
-             <div className="col-md-6 col-12">
+            <div className="col-md-6 col-12">
               <div className="row    mb-2">
                 <div className="col-6 ">
                   <p className="fw-medium">Mode Of Working</p>
                 </div>
                 <div className="col-6">
-                  <p className="text-muted text-sm">: {data.modeOfWorking || "--"}</p>
+                  <p className="text-muted text-sm">
+                    : {data.modeOfWorking || "--"}
+                  </p>
                 </div>
               </div>
             </div>
@@ -152,7 +178,9 @@ function StaffingAttendanceView() {
                   <p className="fw-medium">OT Start Time</p>
                 </div>
                 <div className="col-6">
-                  <p className="text-muted text-sm">: {data.otStartTime || "--"}</p>
+                  <p className="text-muted text-sm">
+                    : {data.otStartTime || "--"}
+                  </p>
                 </div>
               </div>
             </div>
@@ -162,7 +190,9 @@ function StaffingAttendanceView() {
                   <p className="fw-medium">OT End Time</p>
                 </div>
                 <div className="col-6">
-                  <p className="text-muted text-sm">: {data.otEndTime || "--"}</p>
+                  <p className="text-muted text-sm">
+                    : {data.otEndTime || "--"}
+                  </p>
                 </div>
               </div>
             </div>
@@ -172,7 +202,9 @@ function StaffingAttendanceView() {
                   <p className="fw-medium">Attendance Remark</p>
                 </div>
                 <div className="col-6">
-                  <p className="text-muted text-sm">: {data.attendanceRemark || "--"}</p>
+                  <p className="text-muted text-sm">
+                    : {data.attendanceRemark || "--"}
+                  </p>
                 </div>
               </div>
             </div>

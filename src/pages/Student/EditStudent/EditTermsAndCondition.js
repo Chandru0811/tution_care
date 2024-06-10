@@ -76,7 +76,7 @@ const EditTermsAndCondition = forwardRef(
             }
           }
         } catch (error) {
-          toast.error(error);
+          toast.error(error.message);
         }finally {
           setLoadIndicators(false);
         }
@@ -117,7 +117,7 @@ const EditTermsAndCondition = forwardRef(
             });
           }
         } catch (error) {
-          console.error("Error fetching data:", error);
+          console.error("Error fetching data:", error.message);
         }
       };
       // console.log(formik.values);

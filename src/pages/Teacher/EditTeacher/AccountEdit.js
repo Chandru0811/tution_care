@@ -133,7 +133,7 @@ const AccountEdit = forwardRef(({ formData,setLoadIndicators, setFormData, handl
           }
         }
       } catch (error) {
-        toast.error(error);
+        toast.error(error.message);
       }finally {
         setLoadIndicators(false);
       }
@@ -198,7 +198,7 @@ const AccountEdit = forwardRef(({ formData,setLoadIndicators, setFormData, handl
           // console.log("Account ID:", formik.values.accountId);
         }
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching data:", error.message);
       }
     };
     // console.log(formik.values);
@@ -243,7 +243,7 @@ const AccountEdit = forwardRef(({ formData,setLoadIndicators, setFormData, handl
                 <input
                   type="color"
                   {...formik.getFieldProps("colorCode")}
-                  className="form-control-color  circle form-control-sm"
+                  className="circle"
                 />
               </div>
               <input

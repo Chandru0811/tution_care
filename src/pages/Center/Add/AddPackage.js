@@ -40,7 +40,7 @@ function AddPackage({ id, onSuccess }) {
           toast.error(response.data.message);
         }
       } catch (error) {
-        toast.error(error);
+        toast.error(error.message);
       }finally {
         setLoadIndicator(false);
       }
@@ -54,7 +54,7 @@ function AddPackage({ id, onSuccess }) {
         className="btn btn-normal"
         onClick={handleShow}
       >
-          Add <i class="bx bx-plus"></i>Package
+          Add Package
       </button>
 
       <Modal

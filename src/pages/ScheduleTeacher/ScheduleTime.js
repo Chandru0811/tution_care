@@ -29,7 +29,7 @@ export default function ScheduleTime() {
         const response = await api.get(`getTeacherSchedulesByTeacherId/${id}`);
         setTeacherSchedules(response.data);
       } catch (error) {
-        console.error("Error fetching teacher schedules:", error);
+        console.error("Error fetching teacher schedules:", error.message);
       } finally {
         setLoading(false);
       }
@@ -44,10 +44,10 @@ export default function ScheduleTime() {
       const response = await api.get(`getTeacherSchedulesByTeacherId/${id}`);
       setTeacherSchedules(response.data);
     } catch (error) {
-      toast.error("Error Fetching Data ", error);
+      toast.error("Error Fetching Data ", error.message);
     }
   };
-console.log("object",teacherSchedules)
+  console.log("object", teacherSchedules);
   const batchTimes = [
     "2:30 pm",
     "3:30 pm",
@@ -141,7 +141,7 @@ console.log("object",teacherSchedules)
                                       : null;
                                   let backgroundColor = "transparent";
                                   let content = null;
-                                  console.log("student",student)
+                                  console.log("student", student);
 
                                   if (student && student.name) {
                                     content = (
@@ -149,10 +149,10 @@ console.log("object",teacherSchedules)
                                         <span>{student.name}</span>
                                         <br />
                                         {/* {storedScreens?.timeScheduleDelete && ( */}
-                                          <RemoveStudentTimeSlot
-                                            id={student.id}
-                                            onSuccess={refreshData}
-                                          />
+                                        <RemoveStudentTimeSlot
+                                          id={student.id}
+                                          onSuccess={refreshData}
+                                        />
                                         {/* )} */}
                                       </>
                                     );
@@ -173,16 +173,16 @@ console.log("object",teacherSchedules)
                                           <span>{student.name}</span>
                                           <br />
                                           {/* {storedScreens?.timeScheduleApproved && ( */}
-                                            <ApproveStudentTimeSlot
-                                              id={student.id}
-                                              onSuccess={refreshData}
-                                            />
+                                          <ApproveStudentTimeSlot
+                                            id={student.id}
+                                            onSuccess={refreshData}
+                                          />
                                           {/* )} */}
                                           {/* {storedScreens?.timeScheduleDelete && ( */}
-                                            <RemoveStudentTimeSlot
-                                              id={student.id}
-                                              onSuccess={refreshData}
-                                            />
+                                          <RemoveStudentTimeSlot
+                                            id={student.id}
+                                            onSuccess={refreshData}
+                                          />
                                           {/* )} */}
                                         </div>
                                       );
@@ -192,10 +192,10 @@ console.log("object",teacherSchedules)
                                     content = (
                                       <>
                                         {/* {storedScreens?.timeScheduleUnBlock && ( */}
-                                          <UnBlockTimeSlot
-                                            id={student.id}
-                                            onSuccess={refreshData}
-                                          />
+                                        <UnBlockTimeSlot
+                                          id={student.id}
+                                          onSuccess={refreshData}
+                                        />
                                         {/* )} */}
                                       </>
                                     );
@@ -204,33 +204,33 @@ console.log("object",teacherSchedules)
                                       student && student.id ? (
                                         <>
                                           {/* {storedScreens?.timeScheduleAdd && ( */}
-                                            <DayTableAdd
-                                              id={student.id}
-                                              onSuccess={refreshData}
-                                              tuitionId={tuitionId}
-                                              day={data.day}
-                                            />
+                                          <DayTableAdd
+                                            id={student.id}
+                                            onSuccess={refreshData}
+                                            tuitionId={tuitionId}
+                                            day={data.day}
+                                          />
                                           {/* )} */}
                                           {/* {storedScreens?.timeScheduleBlock && ( */}
-                                            <BlockTimeSlot
-                                              id={student.id}
-                                              onSuccess={refreshData}
-                                            />
+                                          <BlockTimeSlot
+                                            id={student.id}
+                                            onSuccess={refreshData}
+                                          />
                                           {/* )} */}
                                         </>
                                       ) : (
                                         <>
                                           {/* {storedScreens?.timeScheduleAdd && ( */}
-                                            <DayTableAdd
-                                              onSuccess={refreshData}
-                                              tuitionId={tuitionId}
-                                              day={data.day}
-                                            />
+                                          <DayTableAdd
+                                            onSuccess={refreshData}
+                                            tuitionId={tuitionId}
+                                            day={data.day}
+                                          />
                                           {/* )} */}
                                           {/* {storedScreens?.timeScheduleBlock && ( */}
-                                            <BlockTimeSlot
-                                              onSuccess={refreshData}
-                                            />
+                                          <BlockTimeSlot
+                                            onSuccess={refreshData}
+                                          />
                                           {/* )} */}
                                         </>
                                       );

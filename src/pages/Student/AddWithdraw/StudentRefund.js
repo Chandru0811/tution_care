@@ -68,7 +68,7 @@ const StudentRefund = forwardRef(
         setFormData((prv) => ({ ...prv, ...data }));
         // console.log("form parent",formData );
         console.log("data", data);
-        navigate("/student/view");
+        navigate("/studentlistening/view");
       },
     });
     const handleNextStep = () => {

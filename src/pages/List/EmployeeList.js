@@ -9,7 +9,7 @@ const fetchAllEmployeeListByCenter = async (id) => {
 
     return response.data;
   } catch (error) {
-    toast.error("Error fetching Employee data:", error);
+    toast.error("Error fetching Employee data:", error.message);
     throw error;
   }
  

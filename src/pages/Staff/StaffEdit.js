@@ -149,11 +149,11 @@ function StaffEdit() {
 
             {activeStep === 1 && (
               <StaffAccountEdit
-                formData={formData}
-                ref={childRef}
-                setFormData={setFormData}
-                handleNext={handleNext}
-                setLoadIndicators={setLoadIndicator}
+              formData={formData}
+              ref={childRef}
+              setFormData={setFormData}
+              handleNext={handleNext}
+              setLoadIndicators={setLoadIndicator}
               />
             )}
 

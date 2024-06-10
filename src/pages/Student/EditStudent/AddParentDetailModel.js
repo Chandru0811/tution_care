@@ -160,7 +160,7 @@ const AddParentDetailModel = forwardRef(({ formData }) => {
       const response = await api.get(`/getAllStudentDetails/${formData.id}`);
       setData(response.data);
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error("Error fetching data:", error.message);
     }
   };
 

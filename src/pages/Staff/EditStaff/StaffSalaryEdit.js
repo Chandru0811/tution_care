@@ -46,9 +46,9 @@ const StaffSalaryEdit = forwardRef(
         setLoadIndicators(true);
         console.log("Api Data:", values);
         try {
-          if (values.salaryId !== null) {
+          if (formData.staff_id !== null) {
             const response = await api.put(
-              `/updateUserSalaryCreation/${values.salaryId}`,
+              `/updateUserSalaryCreation/${formData.staff_id}`,
               values,
               {
                 headers: {
@@ -82,7 +82,7 @@ const StaffSalaryEdit = forwardRef(
             }
           }
         } catch (error) {
-          toast.error(error);
+          toast.error(error.message);
         }finally{
           setLoadIndicators(false);
         }

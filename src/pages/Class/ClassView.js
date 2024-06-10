@@ -29,7 +29,7 @@ function ClassView() {
         const response = await api.get(`/getAllCourseClassListingsById/${id}`);
         setData(response.data);
       } catch (error) {
-        toast.error("Error Fetching Data ", error);
+        toast.error("Error Fetching Data ", error.message);
       }
     };
     getData();
@@ -58,7 +58,7 @@ function ClassView() {
           </div>
         </div>
       </div>
-      <div className="minHeight container card shadow border-0 mb-2 top-header">
+      <div className="container card shadow border-0 mb-2 top-header"style={{height:"70vh"}}>
         <div className="row mt-5 pb-3">
           <div className="col-md-6 col-12">
             <div className="row mt-3  mb-2">

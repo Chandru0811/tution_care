@@ -52,7 +52,7 @@ const AddStudentDetails = forwardRef(
         const centerData = await fetchAllCentersWithIds();
         setCenterData(centerData);
       } catch (error) {
-        toast.error(error);
+        toast.error(error.message);
       }
     };
 
@@ -113,7 +113,7 @@ const AddStudentDetails = forwardRef(
             toast.error(response.data.message);
           }
         } catch (error) {
-          toast.error(error);
+          toast.error(error.message);
         }finally {
           setLoadIndicators(false);
         }
@@ -135,7 +135,7 @@ const AddStudentDetails = forwardRef(
           };
           formik.setValues(updatedValues);
         } catch (error) {
-          console.error("Error fetching data:", error);
+          console.error("Error fetching data:", error.message);
         }
       };
       getData();

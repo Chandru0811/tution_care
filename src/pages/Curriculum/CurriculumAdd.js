@@ -50,7 +50,7 @@ function CurriculumAdd({ onSuccess, course_id }) {
           toast.error(response.data.message);
         }
       } catch (error) {
-        toast.error(error);
+        toast.error(error.message);
       } finally {
         setLoadIndicator(false);
       }

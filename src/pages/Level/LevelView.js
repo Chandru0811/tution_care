@@ -12,7 +12,7 @@ export default function LevelView() {
         const response = await api.get(`/getAllCourseLevels/${id}`);
         setData(response.data);
       } catch (error) {
-        console.error("Error fetching data ", error);
+        console.error("Error fetching data ", error.message);
       }
     };
     getData();
@@ -20,7 +20,7 @@ export default function LevelView() {
 
   return (
     <div className="container-fluid center">
-     <div className="card shadow border-0 mb-2 top-header">
+      <div className="card shadow border-0 mb-2 top-header">
         <div className="container-fluid py-4">
           <div className="row align-items-center">
             <div className="col">
@@ -40,41 +40,41 @@ export default function LevelView() {
           </div>
         </div>
       </div>
-      <div className="minHeight card shadow border-0 mb-2 top-header">
+      <div className="card shadow border-0 mb-2" style={{height:"70vh"}}>
         <div className="container p-5">
-        <div className="row mt-5 pb-3">
-          <div className="col-md-6 col-12">
-            <div className="row   mb-2">
-              <div className="col-6 ">
-                <p className="fw-medium">Level</p>
-              </div>
-              <div className="col-6">
-                <p className="text-muted text-sm">: {data.level}</p>
-              </div>
-            </div>
-          </div>
-          <div className="col-md-6 col-12">
-            <div className="row  mb-2 ">
-              <div className="col-6  ">
-                <p className="fw-medium">Code</p>
-              </div>
-              <div className="col-6">
-                <p className="text-muted text-sm">: {data.levelCode}</p>
+          <div className="row mt-5 ">
+            <div className="col-md-6 col-12">
+              <div className="row   mb-2">
+                <div className="col-6 ">
+                  <p className="fw-medium">Level</p>
+                </div>
+                <div className="col-6">
+                  <p className="text-muted text-sm">: {data.level}</p>
+                </div>
               </div>
             </div>
-          </div>
-          <div className="col-md-6 col-12">
-            <div className="row  mb-2">
-              <div className="col-6  ">
-                <p className="fw-medium">Status</p>
+            <div className="col-md-6 col-12">
+              <div className="row  mb-2 ">
+                <div className="col-6  ">
+                  <p className="fw-medium">Code</p>
+                </div>
+                <div className="col-6">
+                  <p className="text-muted text-sm">: {data.levelCode}</p>
+                </div>
               </div>
-              <div className="col-6">
-                <p className="text-muted text-sm">: {data.status}</p>
+            </div>
+            <div className="col-md-6 col-12">
+              <div className="row  mb-2">
+                <div className="col-6  ">
+                  <p className="fw-medium">Status</p>
+                </div>
+                <div className="col-6">
+                  <p className="text-muted text-sm">: {data.status}</p>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
       </div>
     </div>
   );

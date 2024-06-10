@@ -79,7 +79,7 @@ const AddEmergencyContact = forwardRef(
             toast.error(response.data.message);
           }
         } catch (error) {
-          toast.error(error);
+          toast.error(error.message);
         }finally {
           setLoadIndicators(false);
         }

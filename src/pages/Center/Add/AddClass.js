@@ -49,7 +49,7 @@ function AddClass({ id, onSuccess }) {
           toast.error(response.data.message);
         }
       } catch (error) {
-        toast.error(error);
+        toast.error(error.message);
       }finally {
         setLoadIndicator(false);
       }
@@ -63,7 +63,7 @@ function AddClass({ id, onSuccess }) {
         className="btn btn-normal"
         onClick={handleShow}
       >
-          Add <i class="bx bx-plus"></i>Classroom
+          Add Classroom
       </button>
 
       <Modal

@@ -24,7 +24,7 @@ const Holiday = () => {
       console.log("object",centerData)
       setCenterData(centerData);
     } catch (error) {
-      toast.error(error);
+      toast.error(error.message);
     }
   };
 
@@ -35,7 +35,7 @@ const Holiday = () => {
         setDatas(response.data);
         setLoading(false);
       } catch (error) {
-        toast.error("Error Fetching Data : ", error);
+        toast.error("Error Fetching Data : ", error.message);
       }
     };
     getData();
@@ -76,14 +76,14 @@ const Holiday = () => {
       setDatas(response.data);
       initializeDataTable(); // Reinitialize DataTable after successful data update
     } catch (error) {
-      console.error("Error refreshing data:", error);
+      console.error("Error refreshing data:", error.message);
     }
     setLoading(false);
   };
 
   return (
     <div className="container-fluid  center">
-    <div className="card shadow border-0 mb-2 top-header">
+    <div className="card shadow border-0 mb-2 top-header minHeight">
     <div className="container-fluid px-0">
       <div className="my-5 d-flex justify-content-between px-4">
       <h2>Holiday</h2>
@@ -108,7 +108,7 @@ const Holiday = () => {
         </div>
       ) : (
         <div className="table-responsive px-4">
-        <table ref={tableRef} className="display minHeight ">
+        <table ref={tableRef} className="display">
           <thead>
             <tr>
               <th scope="col" style={{ whiteSpace: "nowrap" }}>

@@ -17,7 +17,7 @@ const EditStudentRelation = forwardRef(({ formData,setLoadIndicators, setFormDat
       const centerData = await fetchAllCentersWithIds();
       setCenterData(centerData);
     } catch (error) {
-      toast.error(error);
+      toast.error(error.message);
     }
   };
   
@@ -49,7 +49,7 @@ const EditStudentRelation = forwardRef(({ formData,setLoadIndicators, setFormDat
           });
         }
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching data:", error.message);
       }
     };
     // console.log(formik.values);
@@ -101,7 +101,7 @@ const EditStudentRelation = forwardRef(({ formData,setLoadIndicators, setFormDat
             }
         }
     } catch (error) {
-        toast.error(error);
+        toast.error(error.message);
     }finally {
       setLoadIndicators(false);
     }

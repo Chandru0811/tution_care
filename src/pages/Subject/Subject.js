@@ -27,7 +27,7 @@ const Subject = () => {
         setDatas(response.data);
         setLoading(false);
       } catch (error) {
-        toast.error("Error Fetching Data ", error);
+        toast.error("Error Fetching Data ", error.message);
       }
     };
     getData();
@@ -67,7 +67,7 @@ const Subject = () => {
       setDatas(response.data);
       initializeDataTable(); // Reinitialize DataTable after successful data update
     } catch (error) {
-      console.error("Error refreshing data:", error);
+      console.error("Error refreshing data:", error.message);
     }
     setLoading(false);
   };
@@ -86,7 +86,7 @@ const Subject = () => {
         </div>
       ) : (
         <div className="container-fluid  center">
-          <div className="card shadow border-0 mb-2 top-header">
+          <div className="card shadow border-0 mb-2 top-header minHeight">
             <div className="container-fluid px-0">
               <div className="my-3 d-flex justify-content-between mb-5 px-4">
                 {/* {storedScreens?.subjectCreate && ( */}
@@ -95,8 +95,8 @@ const Subject = () => {
                 {/* )} */}
               </div>
               <hr />
-              <div className="table-responsive px-4">
-                <table ref={tableRef} className="display minHeight">
+              <div className="table-responsiv px-4">
+                <table ref={tableRef} className="display ">
                   <thead>
                     <tr>
                       <th scope="col" style={{ whiteSpace: "nowrap" }}>

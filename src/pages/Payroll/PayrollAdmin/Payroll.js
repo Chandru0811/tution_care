@@ -21,7 +21,7 @@ const Payroll = () => {
       const centerData = await fetchAllCentersWithIds();
       setCenterData(centerData);
     } catch (error) {
-      toast.error(error);
+      toast.error(error.message);
     }
   };
 
@@ -32,7 +32,7 @@ const Payroll = () => {
         setDatas(response.data);
         setLoading(false);
       } catch (error) {
-        console.error("Error fetching data ", error);
+        console.error("Error fetching data ", error.message);
       }
     };
     getData();
@@ -73,22 +73,13 @@ const Payroll = () => {
       setDatas(response.data);
       // initializeDataTable(); // Reinitialize DataTable after successful data update
     } catch (error) {
-      console.error("Error refreshing data:", error);
+      console.error("Error refreshing data:", error.message);
     }
     setLoading(false);
   };
 
   return (
-    <div className="container">
-      <div className="col-12 text-end my-3">
-        {storedScreens?.payrollCreate && (
-          <Link to={`/payrolladmin/add`}>
-            <button type="button" className="btn btn-button btn-sm">
-                  Add <i class="bx bx-plus"></i>
-            </button>
-          </Link>
-        )}
-      </div>
+    <div>
       {loading ? (
         <div className="loader-container">
           <div class="loading">
@@ -100,6 +91,21 @@ const Payroll = () => {
           </div>
         </div>
       ) : (
+        <div className="container-fluid  center">
+          <div className="card shadow border-0 mb-2 top-header minHeight">
+            <div className="container-fluid px-0">
+              <div className="my-3 d-flex justify-content-between mb-5 px-4">
+                {/* {storedScreens?.subjectCreate && ( */}
+                <h2>Class</h2>
+                <Link to="/adminpayroll/add">
+                  <button type="button" className="btn btn-button btn-sm">
+                    Add <i class="bx bx-plus"></i>
+                  </button>
+                </Link>
+                {/* )} */}
+              </div>
+              <hr />
+              <div className="table-responsive px-4">
         <table ref={tableRef} className="display">
           <thead>
             <tr>
@@ -121,7 +127,7 @@ const Payroll = () => {
                 <td>
                   {centerData &&
                     centerData.map((center) =>
-                      parseInt(data.centerId) === center.id
+                      parseInt(data.tuitionId) === center.id
                         ? center.centerNames || "--"
                         : ""
                     )}
@@ -141,32 +147,36 @@ const Payroll = () => {
                   )}
                 </td>
                 <td>
-                  {storedScreens?.payrollRead && (
-                    <Link to={`/payrolladmin/view/${data.id}`}>
+                  {/* {storedScreens?.payrollRead && ( */}
+                    <Link to={`/adminpayroll/view/${data.id}`}>
                       <button className="btn btn-sm">
                         <FaEye />
                       </button>
                     </Link>
-                  )}
-                  {storedScreens?.payrollUpdate && (
-                    <Link to={`/payrolladmin/edit/${data.id}`}>
+                  {/* )} */}
+                  {/* {storedScreens?.payrollUpdate && ( */}
+                    <Link to={`/adminpayroll/edit/${data.id}`}>
                       <button className="btn btn-sm">
                         <FaEdit />
                       </button>
                     </Link>
-                  )}
-                  {storedScreens?.payrollDelete && (
+                  {/* )} */}
+                  {/* {storedScreens?.payrollDelete && ( */}
                     <Delete
                       onSuccess={refreshData}
                       path={`/deleteUserPayroll/${data.id}`}
                       style={{ display: "inline-block" }}
                     />
-                  )}
+                  {/* )} */}
                 </td>
               </tr>
             ))}
           </tbody>
-        </table>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

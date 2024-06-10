@@ -6,7 +6,7 @@ const fetchAllStudentListByCenter = async (id) => {
     const response = await api.get(`getIdsAndStudentNamesByTuitionId/${id}`);
     return response.data;
   } catch (error) {
-    toast.error("Error fetching Course data:", error);
+    toast.error("Error fetching Course data:", error.message);
     throw error;
   }
 };

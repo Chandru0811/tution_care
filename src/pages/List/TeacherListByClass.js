@@ -6,7 +6,7 @@ const fetchAllTeachersWithIdsC = async (id) => {
     const response = await api.get(`getTeacherIdsAndTeacherNamesByClassId/${id}`);
     return response.data;
   } catch (error) {
-    toast.error("Error fetching center data:", error);
+    toast.error("Error fetching center data:", error.message);
     throw error;
   }
 };

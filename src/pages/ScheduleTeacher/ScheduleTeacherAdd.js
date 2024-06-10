@@ -40,7 +40,7 @@ function ScheduleTeacherAdd({ onSuccess }) {
       const centers = await fetchAllCentersWithIds();
       setCenterData(centers);
     } catch (error) {
-      toast.error(error);
+      toast.error(error.message);
     }
   };
 
@@ -49,7 +49,7 @@ function ScheduleTeacherAdd({ onSuccess }) {
       const courses = await fetchAllCoursesWithIdsC(centerId);
       setCourseData(courses);
     } catch (error) {
-      toast.error(error);
+      toast.error(error.message);
     }
   };
 
@@ -58,7 +58,7 @@ function ScheduleTeacherAdd({ onSuccess }) {
       const teacher = await fetchAllTeacherListByCenter(tuitionId);
       setTeacherData(teacher);
     } catch (error) {
-      toast.error(error);
+      toast.error(error.message);
     }
   };
 
@@ -67,7 +67,7 @@ function ScheduleTeacherAdd({ onSuccess }) {
       const classes = await fetchAllClassesWithIdsC(courseId);
       setClassData(classes);
     } catch (error) {
-      toast.error(error);
+      toast.error(error.message);
     }
   };
 
@@ -166,8 +166,8 @@ function ScheduleTeacherAdd({ onSuccess }) {
           toast.error(response.data.message);
         }
       } catch (error) {
-        toast.error(error);
-      }finally {
+        toast.error(error.message);
+      } finally {
         setLoadIndicator(false);
       }
     },
@@ -214,13 +214,13 @@ function ScheduleTeacherAdd({ onSuccess }) {
 
   return (
     <>
-        <button
-          type="button"
-          className="btn btn-button btn-sm"
-          onClick={handleShow}
-        >
-          Add <i class="bx bx-plus"></i>
-        </button>
+      <button
+        type="button"
+        className="btn btn-button btn-sm"
+        onClick={handleShow}
+      >
+        Add <i class="bx bx-plus"></i>
+      </button>
       <Modal show={show} size="lg" onHide={handleClose} centered>
         <Modal.Header closeButton>
           <Modal.Title className="headColor">Add Schedule Teacher</Modal.Title>
@@ -386,7 +386,11 @@ function ScheduleTeacherAdd({ onSuccess }) {
               </div>
             </div>
             <Modal.Footer className="mt-3">
-              <Button type="button" variant="secondary btn-sm" onClick={handleClose}>
+              <Button
+                type="button"
+                variant="secondary btn-sm"
+                onClick={handleClose}
+              >
                 Cancel
               </Button>
               <Button

@@ -8,7 +8,7 @@ const fetchAllClassesWithIdsC = async (id) => {
     const response = await api.get(`getClassIdsAndNamesByCourseId/${id}`);
     return response.data;
   } catch (error) {
-    toast.error("Error fetching Class data:", error);
+    toast.error("Error fetching Class data:", error.message);
     throw error;
   }
 };

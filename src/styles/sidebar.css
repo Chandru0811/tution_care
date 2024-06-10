@@ -101,7 +101,7 @@
 .sidebar .nav-links li a .links_name {
   color: #303030;
   font-size: 15px;
-  font-weight: 500;
+  font-weight: 500px;
   white-space: nowrap;
   color: #fff;
 }
@@ -497,7 +497,7 @@ table.dataTable thead > tr {
 }
 
 .headColor {
-  color: #7de682;
+  color: #365ddd;
   font-weight: 400 !important;
   font-size: 19px;
   margin-bottom: 0px;
@@ -508,13 +508,13 @@ table.dataTable thead > tr {
   color: #f3c8a2 !important;
 }
 
-.css-1u4zpwo-MuiSvgIcon-root-MuiStepIcon-root.Mui-active {
+/* .css-1u4zpwo-MuiSvgIcon-root-MuiStepIcon-root.Mui-active {
   color: #ACE1AF !important;
 }
 
 .css-1u4zpwo-MuiSvgIcon-root-MuiStepIcon-root.Mui-completed {
   color: #ACE1AF !important;
-}
+} */
 
 /* thead tr th {
   font-size: 14px !important;
@@ -628,7 +628,7 @@ a:hover {
 }
 
 .on-off-toggle__input:checked + .on-off-toggle__slider {
-  background-color: #64e455;
+  background-color: #0c61e0;
 
   &:before {
     transform: translateX(20px);

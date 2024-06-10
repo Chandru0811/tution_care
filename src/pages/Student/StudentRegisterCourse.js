@@ -29,7 +29,7 @@ function StudentRegisterCourse() {
       const centers = await fetchAllCoursesWithIds();
       setCourseData(centers);
     } catch (error) {
-      toast.error(error);
+      toast.error(error.message);
     }
   };
 
@@ -96,7 +96,7 @@ function StudentRegisterCourse() {
           }
         }
       } catch (error) {
-        toast.error(error);
+        toast.error(error.message);
       }
     },
   });

@@ -86,7 +86,7 @@ const EditParentDetailModel = forwardRef(({ id, getData }) => {
           toast.error(response.data.message);
         }
       } catch (error) {
-        toast.error(error);
+        toast.error(error.message);
       } finally {
         setLoadIndicator(false);
       }
@@ -104,7 +104,7 @@ const EditParentDetailModel = forwardRef(({ id, getData }) => {
       setData(response.data);
       console.log("Student ParentsDetails Data:", getFormData);
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error("Error fetching data:", error.message);
     }
   };
 

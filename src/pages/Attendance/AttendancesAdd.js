@@ -37,7 +37,7 @@ function AttendancesAdd() {
         alert("Attendance Created Successfully");
         navigate("/attendance");
       } catch (error) {
-        console.error("Error submitting form", error);
+        console.error("Error submitting form", error.message);
         alert("Failed to Create Attendance");
       }finally {
         setLoadIndicator(false);

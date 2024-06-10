@@ -58,7 +58,7 @@ const ScheduleTeacher = () => {
         toast.error(response.data.message);
       }
     } catch (error) {
-      toast.error("Error deleting data:", error);
+      toast.error("Error deleting data:", error.message);
     }
   };
 
@@ -68,7 +68,7 @@ const ScheduleTeacher = () => {
         const response = await api.get("/getAllScheduleTeacher");
         setDatas(response.data);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching data:", error.message);
       } finally {
         setLoading(false);
       }
@@ -107,113 +107,113 @@ const ScheduleTeacher = () => {
       setDatas(response.data);
       initializeDataTable();
     } catch (error) {
-      console.error("Error refreshing data:", error);
+      console.error("Error refreshing data:", error.message);
     }
     setLoading(false);
   };
 
   return (
     <div className="container-fluid  center">
-      <div className="card shadow border-0 mb-2 top-header">
+      <div className="card shadow border-0 mb-2 top-header minHeight">
         <div className="container-fluid px-0">
-        <div className="d-flex justify-content-between mb-5 my-3 px-4">
-              <h2>Schedule Teacher</h2>
-         <ScheduleTeacherAdd  onSuccess={refreshData}/>
+          <div className="d-flex justify-content-between mb-5 my-3 px-4">
+            <h2>Schedule Teacher</h2>
+            <ScheduleTeacherAdd onSuccess={refreshData} />
           </div>
           <hr />
-      {loading ? (
-        <div className="loader-container">
-          <div class="loading">
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-          </div>
-        </div>
-      ) : (
-        <>
-          <div className="table-responsive px-4">
-            <table ref={tableRef} className="display minHeight">
-              {/* Table Header */}
-              <thead>
-                <tr>
-                  <th scope="col">S No</th>
-                  <th scope="col">Centre</th>
-                  <th scope="col">Teacher</th>
-                  <th scope="col">Course</th>
-                  <th scope="col">Class</th>
-                  <th scope="col">Day</th>
-                  <th scope="col">Action</th>
-                </tr>
-              </thead>
-              {/* Table Body */}
-              <tbody>
-                {datas.map((data, index) => (
-                  <tr key={index}>
-                    <th scope="row">{index + 1}</th>
-                    <td>{data.tuitionCareName}</td>
-                    <td>{data.teacher}</td>
-                    <td>{data.course}</td>
-                    <td>{data.className}</td>
-                    <td>{data.days}</td>
-                    <td>
-                      <div className="d-flex justify-content-center align-item-center">
-                        {/* {storedScreens?.scheduleTeacherRead && ( */}
-                          <ScheduleTeacherView id={data.id} />
-                        {/* )} */}
-                        {/* {storedScreens?.scheduleTeacherUpdate && ( */}
-                        <ScheduleTeacherEdit
-                          id={data.id}
-                          onSuccess={refreshData}
-                        />
-                      {/* )} */}
-                        {/* {storedScreens?.scheduleTeacherDelete && ( */}
-                          <button
-                            className="btn btn-sm"
-                            onClick={() => handleShow(data)}
-                          >
-                            <FaTrash />
-                          </button>
-                        {/* )} */}
-                        {/* {storedScreens?.timeScheduleIndex && ( */}
-                          <Link
-                            to={`/scheduleteacher/scheduletime/${data.userId}?tuitionId=${data.tuitionId}`}
-                          >
-                            <button className="btn">
-                              <BsTable className="text-dark" />
+          {loading ? (
+            <div className="loader-container">
+              <div class="loading">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+            </div>
+          ) : (
+            <>
+              <div className="table-responsive px-4">
+                <table ref={tableRef} className="display ">
+                  {/* Table Header */}
+                  <thead>
+                    <tr>
+                      <th scope="col">S No</th>
+                      <th scope="col">Centre</th>
+                      <th scope="col">Teacher</th>
+                      <th scope="col">Course</th>
+                      <th scope="col">Class</th>
+                      <th scope="col">Day</th>
+                      <th scope="col">Action</th>
+                    </tr>
+                  </thead>
+                  {/* Table Body */}
+                  <tbody>
+                    {datas.map((data, index) => (
+                      <tr key={index}>
+                        <th scope="row">{index + 1}</th>
+                        <td>{data.tuitionCareName}</td>
+                        <td>{data.teacher}</td>
+                        <td>{data.course}</td>
+                        <td>{data.className}</td>
+                        <td>{data.days}</td>
+                        <td>
+                          <div className="d-flex justify-content-center align-item-center">
+                            {/* {storedScreens?.scheduleTeacherRead && ( */}
+                            <ScheduleTeacherView id={data.id} />
+                            {/* )} */}
+                            {/* {storedScreens?.scheduleTeacherUpdate && ( */}
+                            <ScheduleTeacherEdit
+                              id={data.id}
+                              onSuccess={refreshData}
+                            />
+                            {/* )} */}
+                            {/* {storedScreens?.scheduleTeacherDelete && ( */}
+                            <button
+                              className="btn btn-sm"
+                              onClick={() => handleShow(data)}
+                            >
+                              <FaTrash />
                             </button>
-                          </Link>
-                        {/* )} */}
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          {/* Delete Confirmation Modal */}
-          <Modal show={show} onHide={handleClose}>
-            <Modal.Header closeButton>
-              <Modal.Title>Delete</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>Are you sure you want to delete?</Modal.Body>
-            <Modal.Footer>
-              <Button variant="secondary btn-sm" onClick={handleClose}>
-                Close
-              </Button>
-              <Button
-                variant="danger"
-                onClick={() => handelDelete(selectedRowData)}
-              >
-                Delete
-              </Button>
-            </Modal.Footer>
-          </Modal>
-        </>
-      )}
-    </div>
-    </div>
+                            {/* )} */}
+                            {/* {storedScreens?.timeScheduleIndex && ( */}
+                            <Link
+                              to={`/scheduleteacher/scheduletime/${data.userId}?tuitionId=${data.tuitionId}`}
+                            >
+                              <button className="btn">
+                                <BsTable className="text-dark" />
+                              </button>
+                            </Link>
+                            {/* )} */}
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              {/* Delete Confirmation Modal */}
+              <Modal show={show} onHide={handleClose}>
+                <Modal.Header closeButton>
+                  <Modal.Title>Delete</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>Are you sure you want to delete?</Modal.Body>
+                <Modal.Footer>
+                  <Button variant="secondary btn-sm" onClick={handleClose}>
+                    Close
+                  </Button>
+                  <Button
+                    variant="danger"
+                    onClick={() => handelDelete(selectedRowData)}
+                  >
+                    Delete
+                  </Button>
+                </Modal.Footer>
+              </Modal>
+            </>
+          )}
+        </div>
+      </div>
     </div>
   );
 };

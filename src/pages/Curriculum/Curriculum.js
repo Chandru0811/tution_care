@@ -88,14 +88,14 @@ const Curriculum = () => {
       setDatas(response.data);
       initializeDataTable(); // Reinitialize DataTable after successful data update
     } catch (error) {
-      console.error("Error refreshing data:", error);
+      console.error("Error refreshing data:", error.message);
     }
     setLoading(false);
   };
 
   return (
     <div className="container-fluid  center">
-      <div className="card shadow border-0 mb-2 top-header">
+      <div className="card shadow border-0 mb-2 top-header minHight">
     <div className="container my-4">
       {loading ? (
         <div className="loader-container">

@@ -32,9 +32,9 @@ function Payslip() {
     } catch (error) {
       if (error?.response?.status === 404) {
         setData({});
-        console.log("Error Fetching Data ", error);
+        console.log("Error Fetching Data ", error.message);
       } else {
-        console.log("Error Fetching Data ", error);
+        console.log("Error Fetching Data ", error.message);
       }
     } finally {
       setLoading(false);

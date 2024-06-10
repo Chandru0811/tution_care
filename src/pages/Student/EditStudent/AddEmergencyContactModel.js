@@ -123,7 +123,7 @@ const AddEmergencyContactModel = forwardRef(
         // formik.setValues(response.data || "");
         // console.log("getAllStudentEmergencyContactsById",EmergencyData);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching data:", error.message);
       }
     };
 

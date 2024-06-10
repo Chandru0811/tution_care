@@ -46,7 +46,7 @@ function AddBreak({ id, onSuccess }) {
           toast.error(response.data.message);
         }
       } catch (error) {
-        toast.error(error);
+        toast.error(error.message);
       }finally {
         setLoadIndicator(false);
       }
@@ -59,7 +59,7 @@ function AddBreak({ id, onSuccess }) {
         className="btn btn-normal"
         onClick={handleShow}
       >
-          Add <i class="bx bx-plus"></i>Centre Break
+          Add Centre Break
       </button>
 
       <Modal

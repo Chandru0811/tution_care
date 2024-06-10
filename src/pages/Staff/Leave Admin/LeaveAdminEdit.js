@@ -100,7 +100,7 @@ function LeaveAdminEdit() {
           toast.error(response.data.message);
         }
       } catch (error) {
-        toast.error(error);
+        toast.error(error.message);
       } finally {
         setLoadIndicator(false);
       }
@@ -112,7 +112,7 @@ function LeaveAdminEdit() {
       const centers = await fetchAllCentersWithIds();
       setCenterData(centers);
     } catch (error) {
-      toast.error(error);
+      toast.error(error.message);
     }
   };
 
@@ -121,7 +121,7 @@ function LeaveAdminEdit() {
       const teacher = await fetchAllEmployeeListByCenter(tuitionId);
       setTeacherData(teacher);
     } catch (error) {
-      toast.error(error);
+      toast.error(error.message);
     }
   };
 
@@ -175,7 +175,7 @@ function LeaveAdminEdit() {
         );
         setDaysDifference(daysDifference);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching data:", error.message);
       }
     };
 
@@ -201,7 +201,11 @@ function LeaveAdminEdit() {
                     </button>
                   </Link>
                   &nbsp;&nbsp;
-                  <button type="submit" className="btn btn-button btn-sm" disabled={loadIndicator}>
+                  <button
+                    type="submit"
+                    className="btn btn-button btn-sm"
+                    disabled={loadIndicator}
+                  >
                     {loadIndicator && (
                       <span
                         className="spinner-border spinner-border-sm me-2"
@@ -224,10 +228,11 @@ function LeaveAdminEdit() {
                 </label>
                 <select
                   {...formik.getFieldProps("tuitionId")}
-                  className={`form-select form-select-sm ${formik.touched.tuitionId && formik.errors.tuitionId
+                  className={`form-select form-select-sm ${
+                    formik.touched.tuitionId && formik.errors.tuitionId
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   aria-label="Default select example"
                   onChange={handleCenterChange}
                 >
@@ -240,7 +245,9 @@ function LeaveAdminEdit() {
                     ))}
                 </select>
                 {formik.touched.tuitionId && formik.errors.tuitionId && (
-                  <div className="invalid-feedback">{formik.errors.tuitionId}</div>
+                  <div className="invalid-feedback">
+                    {formik.errors.tuitionId}
+                  </div>
                 )}
               </div>
               <div className="col-md-6 col-12 mb-3">
@@ -250,10 +257,11 @@ function LeaveAdminEdit() {
                 <select
                   {...formik.getFieldProps("userId")}
                   name="userId"
-                  className={`form-select form-select-sm  ${formik.touched.userId && formik.errors.userId
+                  className={`form-select form-select-sm  ${
+                    formik.touched.userId && formik.errors.userId
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                 >
                   <option value="" disabled selected hidden></option>
                   {teacherData &&
@@ -272,10 +280,11 @@ function LeaveAdminEdit() {
                   Leave Type<span className="text-danger">*</span>
                 </label>
                 <select
-                  className={`form-select form-select-sm  ${formik.touched.leaveType && formik.errors.leaveType
+                  className={`form-select form-select-sm  ${
+                    formik.touched.leaveType && formik.errors.leaveType
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   {...formik.getFieldProps("leaveType")}
                 >
                   <option value="" disabled selected hidden></option>
@@ -294,10 +303,11 @@ function LeaveAdminEdit() {
                   Leave Status<span className="text-danger">*</span>
                 </label>
                 <select
-                  className={`form-select form-select-sm  ${formik.touched.leaveStatus && formik.errors.leaveStatus
+                  className={`form-select form-select-sm  ${
+                    formik.touched.leaveStatus && formik.errors.leaveStatus
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   {...formik.getFieldProps("leaveStatus")}
                 >
                   <option value="PENDING">Pending</option>
@@ -316,16 +326,19 @@ function LeaveAdminEdit() {
                 </label>
                 <input
                   type="text"
-                  className={`form-control form-control-sm  ${formik.touched.noOfDays && formik.errors.noOfDays
+                  className={`form-control form-control-sm  ${
+                    formik.touched.noOfDays && formik.errors.noOfDays
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   {...formik.getFieldProps("noOfDays")}
                   value={daysDifference || formik.values.noOfDays}
                   readOnly
                 />
                 {formik.touched.noOfDays && formik.errors.noOfDays && (
-                  <div className="invalid-feedback">{formik.errors.noOfDays}</div>
+                  <div className="invalid-feedback">
+                    {formik.errors.noOfDays}
+                  </div>
                 )}
               </div>
               <div className="col-md-6 col-12 mb-3">
@@ -334,15 +347,18 @@ function LeaveAdminEdit() {
                 </label>
                 <input
                   type="date"
-                  className={`form-control form-control-sm  ${formik.touched.fromDate && formik.errors.fromDate
+                  className={`form-control form-control-sm  ${
+                    formik.touched.fromDate && formik.errors.fromDate
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   {...formik.getFieldProps("fromDate")}
                   onChange={handleFromDateChange}
                 />
                 {formik.touched.fromDate && formik.errors.fromDate && (
-                  <div className="invalid-feedback">{formik.errors.fromDate}</div>
+                  <div className="invalid-feedback">
+                    {formik.errors.fromDate}
+                  </div>
                 )}
               </div>
               <div className="col-md-6 col-12 mb-3">
@@ -351,10 +367,11 @@ function LeaveAdminEdit() {
                 </label>
                 <input
                   type="date"
-                  className={`form-control form-control-sm  ${formik.touched.toDate && formik.errors.toDate
+                  className={`form-control form-control-sm  ${
+                    formik.touched.toDate && formik.errors.toDate
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   {...formik.getFieldProps("toDate")}
                   onChange={handleToDateChange}
                 />
@@ -368,14 +385,17 @@ function LeaveAdminEdit() {
                 </label>
                 <input
                   type="text"
-                  className={`form-control form-control-sm  ${formik.touched.dayType && formik.errors.dayType
+                  className={`form-control form-control-sm  ${
+                    formik.touched.dayType && formik.errors.dayType
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   {...formik.getFieldProps("dayType")}
                 />
                 {formik.touched.dayType && formik.errors.dayType && (
-                  <div className="invalid-feedback">{formik.errors.dayType}</div>
+                  <div className="invalid-feedback">
+                    {formik.errors.dayType}
+                  </div>
                 )}
               </div>
               <div className="col-md-6 col-12 mb-3">
@@ -394,10 +414,11 @@ function LeaveAdminEdit() {
                 </label>
                 <textarea
                   rows={5}
-                  className={`form-control form-control-sm  ${formik.touched.leaveReason && formik.errors.leaveReason
+                  className={`form-control form-control-sm  ${
+                    formik.touched.leaveReason && formik.errors.leaveReason
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   {...formik.getFieldProps("leaveReason")}
                 ></textarea>
                 {formik.touched.leaveReason && formik.errors.leaveReason && (

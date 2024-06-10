@@ -73,7 +73,7 @@ const Center = () => {
 
   return (
     <div className="container-fluid  center">
-      <div className="card shadow border-0 mb-2 top-header">
+      <div className="card shadow border-0 mb-2 top-header minHeight">
         <div className="container-fluid px-0">
         <div className="d-flex justify-content-between mb-5 my-3 px-4">
               <h2>Centre Listing</h2>
@@ -96,7 +96,7 @@ const Center = () => {
         </div>
       ) : (
         <div className="table-responsive px-4">
-        <table ref={tableRef} className="display minHeight">
+        <table ref={tableRef} className="display">
           <thead>
             <tr>
               <th scope="col" style={{ whiteSpace: "nowrap" }}>

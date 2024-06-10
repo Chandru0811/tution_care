@@ -8,13 +8,13 @@ function DeductionView() {
   const [data, setData] = useState({});
   const { id } = useParams();
   const [centerData, setCenterData] = useState(null);
-  console.log("data",centerData)
+  console.log("data", centerData);
   const fetchData = async () => {
     try {
       const centerData = await fetchAllCentersWithIds();
       setCenterData(centerData);
     } catch (error) {
-      toast.error(error);
+      toast.error(error.message);
     }
   };
 
@@ -23,7 +23,6 @@ function DeductionView() {
       try {
         const response = await api.get(`/getAllUserDeductionById/${id}`);
         setData(response.data);
-       
       } catch (error) {
         console.error("Error fetching data:", error);
         toast.error("Error fetching data");
@@ -35,7 +34,7 @@ function DeductionView() {
 
   return (
     <div className="container-fluid center">
-        <div className="card shadow border-0 mb-2 top-header">
+      <div className="card shadow border-0 mb-2 top-header">
         <div className="container-fluid py-4">
           <div className="row align-items-center">
             <div className="col">
@@ -55,9 +54,12 @@ function DeductionView() {
           </div>
         </div>
       </div>
-      <div className="minHeight card shadow border-0 mb-2 top-header">
+      <div
+        className="container card shadow border-0 mb-2 top-header"
+        style={{ height: "70vh" }}
+      >
         <div className="container p-5">
-        <div className="row mt-5 pb-3">
+          <div className="row mt-5 pb-3">
             <div className="col-md-6 col-12">
               <div className="row mb-2">
                 <div className="col-6 ">
@@ -65,7 +67,8 @@ function DeductionView() {
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">
-                    : {centerData &&
+                    :{" "}
+                    {centerData &&
                       centerData.map((centerId) =>
                         parseInt(data.tuitionId) === centerId.id
                           ? centerId.centerNames || "--"
@@ -139,7 +142,7 @@ function DeductionView() {
           </div>
         </div>
       </div>
-      </div>
+    </div>
   );
 }
 

@@ -23,7 +23,7 @@ const Student = () => {
         const response = await api.get("/getAllStudentDetails");
         setDatas(response.data);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching data:", error.message);
       } finally {
         setLoading(false);
       }
@@ -65,7 +65,7 @@ const Student = () => {
       setDatas(response.data);
       initializeDataTable(); // Reinitialize DataTable after successful data update
     } catch (error) {
-      console.error("Error refreshing data:", error);
+      console.error("Error refreshing data:", error.message);
     }
     setLoading(false);
   };
@@ -85,7 +85,7 @@ const Student = () => {
       ) : (
         <div className="minHeight center">
         <div className="container-fluid my-4 center">
-        <div className="card shadow border-0 mb-2 top-header">
+        <div className="card shadow border-0 mb-2 top-header minHeight">
         <div className="container-fluid px-0">
           <div className="my-3 d-flex justify-content-between px-4">
             <h2>Student Listing</h2>

@@ -94,7 +94,7 @@ const LeaveEdit = forwardRef(
             }
           }
         } catch (error) {
-          toast.error(error);
+          toast.error(error.message);
         }finally{
           setLoadIndicators(false)
         }
@@ -126,7 +126,7 @@ const LeaveEdit = forwardRef(
             // console.log("Leave ID:", formik.values.leaveId);
           }
         }catch (error) {
-          console.error("Error fetching data:", error);
+          console.error("Error fetching data:", error.message);
         }
       };
       // console.log(formik.values);

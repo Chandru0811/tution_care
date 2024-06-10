@@ -125,7 +125,7 @@ export default function InvoiceEdit() {
           toast.error(response.data.message);
         }
       } catch (error) {
-        toast.error(error);
+        toast.error(error.message);
       }finally {
         setLoadIndicator(false);
       }
@@ -153,11 +153,11 @@ export default function InvoiceEdit() {
           const packages = await fetchAllPackageListByCenter(tuitionId);
           setPackageData(packages);
         } catch (error) {
-          toast.error(error);
+          toast.error(error.message);
         }
       }
     } catch (error) {
-      toast.error(error);
+      toast.error(error.message);
     }
   };
 
@@ -167,7 +167,7 @@ export default function InvoiceEdit() {
       const courses = await fetchAllCoursesWithIdsC(tuitionId);
       setCourseData(courses);
     } catch (error) {
-      toast.error(error);
+      toast.error(error.message);
     }
   };
 
@@ -178,7 +178,7 @@ export default function InvoiceEdit() {
       setPackageData(courses);
       console.log("courses",courses)
     } catch (error) {
-      toast.error(error);
+      toast.error(error.message);
     }
   };
 
@@ -189,7 +189,7 @@ export default function InvoiceEdit() {
       setStudentData(studentId);
       console.log("studentId",studentId)
     } catch (error) {
-      toast.error(error);
+      toast.error(error.message);
     }
   };
 
@@ -224,7 +224,7 @@ export default function InvoiceEdit() {
         fetchData(response.data.tuitionId);
         // console.log("Response:", response);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching data:", error.message);
       }
     };
 

@@ -21,7 +21,6 @@ function DeductionAdd() {
   const [userNamesData, setUserNameData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const navigate = useNavigate();
-  
 
   const formik = useFormik({
     initialValues: {
@@ -30,7 +29,6 @@ function DeductionAdd() {
       deductionName: "",
       deductionMonth: "",
       deductionAmount: "",
-
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
@@ -74,23 +72,22 @@ function DeductionAdd() {
           toast.error(response.data.message);
         }
       } catch (error) {
-        toast.error(error);
+        toast.error(error.message);
       } finally {
         setLoadIndicator(false);
       }
-
     },
   });
 
   const handleCenterChange = async (event) => {
     setUserNameData(null);
     const tuitionId = event.target.value;
-    console.log("tuitionId", tuitionId)
+    console.log("tuitionId", tuitionId);
     formik.setFieldValue("tuitionId", tuitionId);
     try {
       await fetchUserName(tuitionId);
     } catch (error) {
-      toast.error(error);
+      toast.error(error.message);
     }
   };
 
@@ -99,7 +96,7 @@ function DeductionAdd() {
       const centers = await fetchAllCentersWithIds();
       setCenterData(centers);
     } catch (error) {
-      toast.error(error);
+      toast.error(error.message);
     }
   };
 
@@ -109,12 +106,12 @@ function DeductionAdd() {
 
   const fetchUserName = async (tuitionId) => {
     try {
-      console.log("tuitionId",tuitionId)
+      console.log("tuitionId", tuitionId);
       const userNames = await fetchAllEmployeeListByCenter(tuitionId);
       setUserNameData(userNames);
-      console.log("userNamesData",userNamesData)
+      console.log("userNamesData", userNamesData);
     } catch (error) {
-      toast.error(error);
+      toast.error(error.message);
     }
   };
 
@@ -142,7 +139,11 @@ function DeductionAdd() {
                     </button>
                   </Link>
                   &nbsp;&nbsp;
-                  <button type="submit" className="btn btn-button btn-sm" disabled={loadIndicator}>
+                  <button
+                    type="submit"
+                    className="btn btn-button btn-sm"
+                    disabled={loadIndicator}
+                  >
                     {loadIndicator && (
                       <span
                         className="spinner-border spinner-border-sm me-2"
@@ -165,10 +166,11 @@ function DeductionAdd() {
                   <span className="text-danger">*</span>
                   <select
                     {...formik.getFieldProps("tuitionId")}
-                    className={`form-select form-select-sm ${formik.touched.tuitionId && formik.errors.tuitionId
+                    className={`form-select form-select-sm ${
+                      formik.touched.tuitionId && formik.errors.tuitionId
                         ? "is-invalid"
                         : ""
-                      }`}
+                    }`}
                     aria-label="Default select example"
                     onChange={handleCenterChange}
                   >
@@ -190,10 +192,11 @@ function DeductionAdd() {
                   <label className="form-label">Employee Name</label>
                   <select
                     {...formik.getFieldProps("userNames")}
-                    class={`form-select form-select-sm  ${formik.touched.userNames && formik.errors.userNames
+                    class={`form-select form-select-sm  ${
+                      formik.touched.userNames && formik.errors.userNames
                         ? "is-invalid"
                         : ""
-                      }`}
+                    }`}
                   >
                     <option selected disabled></option>
                     {userNamesData &&
@@ -204,7 +207,9 @@ function DeductionAdd() {
                       ))}
                   </select>
                   {formik.touched.userNames && formik.errors.userNames && (
-                    <div className="invalid-feedback">{formik.errors.userNames}</div>
+                    <div className="invalid-feedback">
+                      {formik.errors.userNames}
+                    </div>
                   )}
                 </div>
                 <div className="col-md-6 col-12 mb-3">
@@ -212,24 +217,25 @@ function DeductionAdd() {
                   <span className="text-danger">*</span>
                   <select
                     {...formik.getFieldProps("deductionName")}
-                    className={`form-select form-select-sm ${formik.touched.deductionName && formik.errors.deductionName
+                    className={`form-select form-select-sm ${
+                      formik.touched.deductionName &&
+                      formik.errors.deductionName
                         ? "is-invalid"
                         : ""
-                      }`}
+                    }`}
                     aria-label="Default select example"
-
                   >
                     <option></option>
                     <option>CPF</option>
                     <option>LOP</option>
                     <option>LOAN INTEREST</option>
-
                   </select>
-                  {formik.touched.deductionName && formik.errors.deductionName && (
-                    <div className="invalid-feedback">
-                      {formik.errors.deductionName}
-                    </div>
-                  )}
+                  {formik.touched.deductionName &&
+                    formik.errors.deductionName && (
+                      <div className="invalid-feedback">
+                        {formik.errors.deductionName}
+                      </div>
+                    )}
                 </div>
                 <div className="col-md-6 col-12 mb-3">
                   <label className="form-label">
@@ -237,11 +243,12 @@ function DeductionAdd() {
                   </label>
                   <input
                     type="month"
-                    className={`form-control form-control-sm ${formik.touched.deductionMonth &&
-                        formik.errors.deductionMonth
+                    className={`form-control form-control-sm ${
+                      formik.touched.deductionMonth &&
+                      formik.errors.deductionMonth
                         ? "is-invalid"
                         : ""
-                      }`}
+                    }`}
                     {...formik.getFieldProps("deductionMonth")}
                   />
                   {formik.touched.deductionMonth &&
@@ -257,11 +264,12 @@ function DeductionAdd() {
                   </label>
                   <input
                     type="text"
-                    className={`form-control form-control-sm ${formik.touched.deductionAmount &&
-                        formik.errors.deductionAmount
+                    className={`form-control form-control-sm ${
+                      formik.touched.deductionAmount &&
+                      formik.errors.deductionAmount
                         ? "is-invalid"
                         : ""
-                      }`}
+                    }`}
                     {...formik.getFieldProps("deductionAmount")}
                   />
                   {formik.touched.deductionAmount &&
@@ -296,7 +304,6 @@ function DeductionAdd() {
               </div> */}
               </div>
             </div>
-
           </div>
         </div>
       </form>

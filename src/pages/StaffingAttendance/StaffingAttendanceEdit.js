@@ -92,7 +92,7 @@ function StaffingAttendanceEdit() {
           toast.error(response.data.message);
         }
       } catch (error) {
-        toast.error(error);
+        toast.error(error.message);
       }finally {
         setLoadIndicator(false);
       }
@@ -105,7 +105,7 @@ function StaffingAttendanceEdit() {
     try {
       await fetchUserName(tuitionId);
     } catch (error) {
-      toast.error(error);
+      toast.error(error.message);
     }
   };
 
@@ -114,7 +114,7 @@ function StaffingAttendanceEdit() {
       const centers = await fetchAllCentersWithIds();
       setCenterData(centers);
     } catch (error) {
-      toast.error(error);
+      toast.error(error.message);
     }
   };
 
@@ -123,7 +123,7 @@ function StaffingAttendanceEdit() {
       const userNames = await fetchAllEmployeeListByCenter(tuitionId);
       setUserNameData(userNames);
     } catch (error) {
-      toast.error(error);
+      toast.error(error.message);
     }
   };
 
@@ -138,7 +138,7 @@ function StaffingAttendanceEdit() {
         formik.setValues(formattedResponseData);
         fetchUserName(response.data.tuitionId);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching data:", error.message);
       }
     };
 

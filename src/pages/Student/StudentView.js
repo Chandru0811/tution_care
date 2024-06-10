@@ -42,7 +42,7 @@ function StudentView () {
         setData(response.data);
         console.log("StudentDetails", response.data);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching data:", error.message);
       }
     };
     getData();

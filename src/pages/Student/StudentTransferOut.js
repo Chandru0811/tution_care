@@ -29,7 +29,7 @@ function StudentTransferOut() {
       setCourseData(course);
       setCenterData(center);
     } catch (error) {
-      toast.error(error);
+      toast.error(error.message);
     }
   };
 

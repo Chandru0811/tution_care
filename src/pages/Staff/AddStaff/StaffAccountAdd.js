@@ -30,7 +30,7 @@ const validationSchema = Yup.object().shape({
 });
 
 const StaffAccountAdd = forwardRef(
-  ({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
+  ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const [centerData, setCenterData] = useState(null);
 
     const fetchData = async () => {
@@ -38,7 +38,7 @@ const StaffAccountAdd = forwardRef(
         const centerData = await fetchAllCentersWithIds();
         setCenterData(centerData);
       } catch (error) {
-        toast.error(error);
+        toast.error(error.message);
       }
     };
 
@@ -88,8 +88,8 @@ const StaffAccountAdd = forwardRef(
             toast.error(response.data.message);
           }
         } catch (error) {
-          toast.error(error);
-        }finally {
+          toast.error(error.message);
+        } finally {
           setLoadIndicators(false);
         }
       },
@@ -131,7 +131,7 @@ const StaffAccountAdd = forwardRef(
                   <input
                     type="color"
                     {...formik.getFieldProps("colorCode")}
-                    className="form-control-color  circle form-control-sm"
+                    className="circle"
                   />
                 </div>
                 <input

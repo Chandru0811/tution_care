@@ -80,7 +80,7 @@ const PersonalEdit = forwardRef(
             dateOfBirth: dateOfBirth,
           });
         } catch (error) {
-          console.error("Error fetching data:", error);
+          console.error("Error fetching data:", error.message);
         }
       };
       getData();

@@ -13,7 +13,7 @@ function SubjectView() {
         const response = await api.get(`/getAllCourseSubjectsById/${id}`);
         setData(response.data);
       } catch (error) {
-        console.error("Error fetching data ", error);
+        console.error("Error fetching data ", error.message);
       }
     };
     getData();
@@ -42,7 +42,7 @@ function SubjectView() {
        </div>
      </div>
      
-     <div className="card shadow border-0 mb-2 top-header">
+     <div className="card shadow border-0 mb-2 top-header" style={{height:"70vh"}}>
         <div className="container p-5">
         <div className="row mt-5 pb-3">
           <div className="col-md-6 col-12">

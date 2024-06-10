@@ -49,7 +49,7 @@ function SendNotificationEdit({ id, onSuccess }) {
           toast.error(response.data.message);
         }
       } catch (error) {
-        toast.error(error);
+        toast.error(error.message);
       }finally {
         setLoadIndicator(false);
       }
@@ -60,7 +60,7 @@ function SendNotificationEdit({ id, onSuccess }) {
       const response = await api.get(`/getAllTuitionCarePushNotificationsById/${id}`);
       formik.setValues(response.data);
     } catch (error) {
-      console.error("Error fetching data ", error);
+      console.error("Error fetching data ", error.message);
     }
   };
   useEffect(() => {

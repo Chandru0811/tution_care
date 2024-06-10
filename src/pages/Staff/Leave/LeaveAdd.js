@@ -45,7 +45,7 @@ function LeaveAdd() {
       const centers = await fetchAllCentersWithIds();
       setCenterData(centers);
     } catch (error) {
-      toast.error(error);
+      toast.error(error.message);
     }
   };
 
@@ -113,7 +113,7 @@ function LeaveAdd() {
           toast.error(response.data.message);
         }
       } catch (error) {
-        toast.error(error);
+        toast.error(error.message);
       }
     },
   });
@@ -126,7 +126,7 @@ function LeaveAdd() {
         );
         setDatas(response.data);
       } catch (error) {
-        toast.error("Error Fetching Data : ", error);
+        toast.error("Error Fetching Data : ", error.message);
       }
     };
     getData();

@@ -51,7 +51,7 @@ const LeaveAdd = forwardRef(({ formData,setLoadIndicators, setFormData, handleNe
           toast.error(response.data.message);
         }
       } catch (error) {
-        toast.error(error);
+        toast.error(error.message);
       }finally {
         setLoadIndicators(false);
       }

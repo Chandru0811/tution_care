@@ -35,7 +35,7 @@ const Invoice = () => {
       setCourseData(courseData);
       setStudentData(studentData);
     } catch (error) {
-      toast.error(error);
+      toast.error(error.message);
     }
   };
 
@@ -86,14 +86,14 @@ const Invoice = () => {
       setDatas(response.data);
       initializeDataTable();
     } catch (error) {
-      console.error("Error refreshing data:", error);
+      console.error("Error refreshing data:", error.message);
     }
     setLoading(false);
   };
 
   return (
     <div className="container-fluid  center">
-      <div className="card shadow border-0 mb-2 top-header">
+      <div className="card shadow border-0 mb-2 top-header minHeight">
         <div className="container-fluid px-0">
           <div className="d-flex justify-content-between mb-5 my-3 px-4">
             <h2>Invoice</h2>
@@ -116,7 +116,7 @@ const Invoice = () => {
             </div>
           ) : (
             <div className="table-responsive px-4">
-              <table ref={tableRef} className="display minHeight">
+              <table ref={tableRef} className="display">
                 <thead>
                   <tr>
                     <th scope="col" style={{ whiteSpace: "nowrap" }}>

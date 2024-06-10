@@ -38,7 +38,7 @@ function Attendances() {
       setCourseData(courseData);
       setSelectedCenter(centerData[0].id);
     } catch (error) {
-      toast.error(error);
+      toast.error(error.message);
     }
   };
 
@@ -61,7 +61,7 @@ function Attendances() {
       );
       setAttendanceData(response.data);
     } catch (error) {
-      toast.error("Error fetching data:", error);
+      toast.error("Error fetching data:", error.message);
     }
   };
 
@@ -142,7 +142,7 @@ function Attendances() {
         toast.error(response.data.message);
       }
     } catch (error) {
-      toast.error("Error marking attendance:", error);
+      toast.error("Error marking attendance:", error.message);
     }
   };
 

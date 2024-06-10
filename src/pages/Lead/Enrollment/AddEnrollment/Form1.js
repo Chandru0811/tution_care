@@ -27,7 +27,7 @@ const validationSchema = Yup.object().shape({
 });
 
 const Form1 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
-  const [subjectIdData, setSubjectData] = useState(null);
+  const [subjecdData, setSubjectData] = useState(null);
 
   const formik = useFormik({
     initialValues: {
@@ -61,15 +61,16 @@ const Form1 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
           toast.error(response.data.message);
         }
       } catch (error) {
-        toast.error(error);
+        toast.error(error.message);
       }
     },
   });
 
   const fetchData = async () => {
     try {
-      const subjectIdData = await fetchAllSubjectsWithIds();
-      setSubjectData(subjectIdData);
+      const subjectData = await fetchAllSubjectsWithIds();
+      setSubjectData(subjectData);
+      console.log("subjectData", subjectData);
     } catch (error) {
       toast.error(error);
     }
@@ -119,10 +120,10 @@ const Form1 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
               value={formik.values.subjectId}
             >
               <option selected></option>
-              {subjectIdData &&
-                subjectIdData.map((subjectId) => (
-                  <option key={subjectId.id} value={subjectId.id}>
-                    {subjectId.subjectIds}
+              {subjecdData &&
+                subjecdData.map((subjectId) => (
+                  <option key={subjectId.subjectId} value={subjectId.id}>
+                    {subjectId.subjects}
                   </option>
                 ))}
             </select>

@@ -86,7 +86,7 @@ const [loadIndicator, setLoadIndicator] = useState(false);
           toast.error(response.data.message);
         }
       } catch (error) {
-        toast.error(error);
+        toast.error(error.message);
       }finally {
         setLoadIndicator(false);
       }
@@ -103,7 +103,7 @@ const [loadIndicator, setLoadIndicator] = useState(false);
             response.data.classReplacementAllowed || false,
         });
       } catch (error) {
-        toast.error("Error fetching data:", error);
+        toast.error("Error fetching data:", error.message);
       }
     };
 

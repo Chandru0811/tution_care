@@ -85,7 +85,7 @@ const ContactEdit = forwardRef(
             }
           }
         } catch (error) {
-          toast.error(error);
+          toast.error(error.message);
         }finally{
           setLoadIndicators(false)
         }
@@ -129,7 +129,7 @@ const ContactEdit = forwardRef(
           }
           
         }catch (error) {
-          console.error("Error fetching data:", error);
+          console.error("Error fetching data:", error.message);
         }
       };
       // console.log(formik.values);

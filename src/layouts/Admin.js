@@ -83,7 +83,7 @@ import TeacherEdit from "../pages/Teacher/TeacherEdit";
 import TeacherView from "../pages/Teacher/TeacherView";
 import TeacherLeave from "../pages/Teacher/TeacherLeave";
 import TeacherLeaveView from "../pages/Teacher/TeacherLeaveView";
-import Payroll from "../pages/Payroll/PayrollAdmin/Payroll";
+
 // import TeacherPayslip from "../pages/Staff/Teacher/TeacherPayslip";
 import Payslip from "../pages/EmployeePayslip/Payslip";
 import ViewPayslip from "../pages/EmployeePayslip/ViewPayslip";
@@ -100,24 +100,28 @@ import Enrollment from "../pages/Report/Enrolment";
 import Fee from "../pages/Report/Fee";
 import Sales from "../pages/Report/Sales";
 import Package from "../pages/Report/Package";
-import Payment from "../pages/Payment/Payment";
+// import Payment from "../pages/Payment/Payment";
 import SendNotification from "../pages/SendNotification/SendNotification";
 import SendNotificationAdd from "../pages/SendNotification/SendNotificationAdd";
 import SendNotificationEdit from "../pages/SendNotification/SendNotificationEdit";
-import {  Toaster } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 import Student from "../pages/Student/Student";
 import Curriculum from "../pages/Curriculum/Curriculum";
 import StaffingAttendance from "../pages/StaffingAttendance/StaffingAttendance";
 import StaffingAttendanceAdd from "../pages/StaffingAttendance/StaffingAttendanceAdd";
 import StaffingAttendanceEdit from "../pages/StaffingAttendance/StaffingAttendanceEdit";
 import StaffingAttendanceView from "../pages/StaffingAttendance/StaffingAttendanceView";
+import Payroll from "../pages/Payroll/PayrollAdmin/Payroll";
+import AddPayroll from "../pages/Payroll/PayrollAdmin/AddPayroll";
+import EditPayroll from "../pages/Payroll/PayrollAdmin/EditPayroll";
+import Viewpayroll from "../pages/Payroll/PayrollAdmin/ViewPayroll";
 // import CurriculumAdd from "../pages/Curriculum/CurriculumAdd";
 // import CurriculumEdit from "../pages/Curriculum/CurriculumEdit";
 
 function Admin({ handleLogout }) {
   return (
     <BrowserRouter>
-    <Toaster />
+      <Toaster />
       <div className="d-flex flex-column flex-lg-row h-lg-full bg-surface-secondary">
         <Sidebar onLogout={handleLogout} />
         <div className="h-screen flex-grow-1 overflow-y-lg-auto">
@@ -162,7 +166,6 @@ function Admin({ handleLogout }) {
               {/* Enrollment */}
               <Route path="/lead/enrollment" element={<EnrollmentAdd />} />
 
-
               {/* {/ Document  /} */}
               {/* <Route path="/document" element={<Document />} />
               <Route path="/document/add" element={<DocumentAdd />} />
@@ -171,13 +174,16 @@ function Admin({ handleLogout }) {
               <Route path="/documentfile" element={<DocumentFile />} /> */}
 
               {/* {/ Student /} */}
-               <Route path="/studentlisting" element={<Student />} />
+              <Route path="/studentlisting" element={<Student />} />
               <Route path="/studentlisting/add" element={<StudentAdd />} />
               <Route
                 path="/studentlisting/edit/:id"
                 element={<StudentEdit />}
               />
-              <Route path="/studentlisting/view/:id" element={<StudentView />} />
+              <Route
+                path="/studentlisting/view/:id"
+                element={<StudentView />}
+              />
               <Route
                 path="/student/view/transferOut/:id"
                 element={<StudentTransferOut />}
@@ -251,10 +257,22 @@ function Admin({ handleLogout }) {
               <Route path="/staff/leave" element={<StaffLeave />} />
               <Route path="/staff/leave/view" element={<StaffLeaveView />} />
               <Route path="/staff/payslip" element={<StaffPayslip />} />
-              <Route path="/staffing/attendance" element={<StaffingAttendance />} />
-              <Route path="/staffing/attendance/add" element={<StaffingAttendanceAdd />} />
-              <Route path="/staffing/attendance/edit/:id" element={<StaffingAttendanceEdit />} />
-              <Route path="/staffing/attendance/view/:id" element={<StaffingAttendanceView />} />
+              <Route
+                path="/staffing/attendance"
+                element={<StaffingAttendance />}
+              />
+              <Route
+                path="/staffing/attendance/add"
+                element={<StaffingAttendanceAdd />}
+              />
+              <Route
+                path="/staffing/attendance/edit/:id"
+                element={<StaffingAttendanceEdit />}
+              />
+              <Route
+                path="/staffing/attendance/view/:id"
+                element={<StaffingAttendanceView />}
+              />
 
               <Route path="/teacher" element={<Teacher />} />
               <Route path="/teacher/add" element={<TeacherAdd />} />
@@ -271,7 +289,7 @@ function Admin({ handleLogout }) {
               <Route path="/employeepayslip/view" element={<ViewPayslip />} />
 
               {/* {/ <Route path="/role/add" element={<RolesAdd />} /> /} */}
-              {/* / Invoice / */} 
+              {/* / Invoice / */}
               <Route path="/invoice" element={<Invoice />} />
               <Route path="/invoice/add" element={<InvoiceAdd />} />
               <Route path="/invoice/edit/:id" element={<InvoiceEdit />} />
@@ -283,12 +301,15 @@ function Admin({ handleLogout }) {
               />
               /* <Route path="/payment" element={<Payment />} /> */}
 
-               {/* Payment  */}
-               <Route path="/payment" element={<Payment />} />
+              {/* Payment  */}
+              {/* <Route path="/payment" element={<Payment />} /> */}
 
               <Route path="/role/add" element={<Roll />} />
 
-              <Route path="/adminpayroll" element={<Payroll />} />
+              <Route path="/adminpayroll" element={<Payroll/>} />
+              <Route path="/adminpayroll/add" element={<AddPayroll/>} />
+              <Route path="/adminpayroll/edit/:id" element={<EditPayroll/>} />
+              <Route path="/adminpayroll/view/:id" element={<Viewpayroll/>} />
 
               <Route path="/report/assessment" element={<AssessmentReport />} />
               <Route path="/report/attendance" element={<Attendance />} />
@@ -298,11 +319,16 @@ function Admin({ handleLogout }) {
               <Route path="/report/package" element={<Package />} />
               <Route path="/report/sales" element={<Sales />} />
 
-              
               {/* Send Notification */}
               <Route path="/sendNotification" element={<SendNotification />} />
-              <Route path="/sendNotification/add" element={<SendNotificationAdd />} />
-              <Route path="/sendNotification/edit" element={<SendNotificationEdit />} />
+              <Route
+                path="/sendNotification/add"
+                element={<SendNotificationAdd />}
+              />
+              <Route
+                path="/sendNotification/edit"
+                element={<SendNotificationEdit />}
+              />
             </Routes>
             <Footer />
           </main>

@@ -20,7 +20,7 @@ const SendNotification = () => {
         setDatas(response.data);
         console.log("message", response.data);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching data:", error.message);
       } finally {
         setLoading(false);
       }
@@ -77,64 +77,64 @@ const SendNotification = () => {
 
   return (
     <div className="container-fluid  center">
-      <div className="card shadow border-0 mb-2 top-header">
+      <div className="card shadow border-0 mb-2 top-header minHeight">
         <div className="container-fluid px-0">
-        <div className="d-flex justify-content-between mb-5 my-3 px-4">
-              <h2>Send Notification</h2>
-              <SendNotificationAdd  onSuccess={refreshData} />
+          <div className="d-flex justify-content-between mb-5 my-3 px-4">
+            <h2>Send Notification</h2>
+            <SendNotificationAdd onSuccess={refreshData} />
           </div>
           <hr />
-      {loading ? (
-        <div className="loader-container">
-          <div class="loading">
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-          </div>
-        </div>
-      ) : (
-        <div className="table-responsive px-4">
-        <table ref={tableRef} className="display minHeight">
-              <thead>
-                <tr>
-                  <th scope="col">S No</th>
-                  <th scope="col">Event Name</th>
-                  <th scope="col">Message</th>
-                  <th scope="col">Created At</th>
-                  <th scope="col">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {datas.map((data, index) => (
-                  <tr key={index}>
-                    <th scope="row">{index + 1}</th>
-                    <td>{data.messageTitle}</td>
-                    <td>{data.messageDescription}</td>
-                    <td>{data.datePosted}</td>
-                    <td>
-                      {/* {storedScreens?.sendNotificationUpdate && ( */}
+          {loading ? (
+            <div className="loader-container">
+              <div class="loading">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+            </div>
+          ) : (
+            <div className="table-responsive px-4">
+              <table ref={tableRef} className="display ">
+                <thead>
+                  <tr>
+                    <th scope="col">S No</th>
+                    <th scope="col">Event Name</th>
+                    <th scope="col">Message</th>
+                    <th scope="col">Created At</th>
+                    <th scope="col">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {datas.map((data, index) => (
+                    <tr key={index}>
+                      <th scope="row">{index + 1}</th>
+                      <td>{data.messageTitle}</td>
+                      <td>{data.messageDescription}</td>
+                      <td>{data.datePosted}</td>
+                      <td>
+                        {/* {storedScreens?.sendNotificationUpdate && ( */}
                         <SendNotificationEdit
                           id={data.id}
                           onSuccess={refreshData}
                         />
-                      {/* )} */}
-                       {/* {storedScreens?.levelDelete && ( */}
-                    <Delete
-                      onSuccess={refreshData}
-                      path={`/deleteTuitionCarePushNotifications/${data.id}`}
-                    />
-                  {/* )} */}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-      )}
-    </div>
-    </div>
+                        {/* )} */}
+                        {/* {storedScreens?.levelDelete && ( */}
+                        <Delete
+                          onSuccess={refreshData}
+                          path={`/deleteTuitionCarePushNotifications/${data.id}`}
+                        />
+                        {/* )} */}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 };

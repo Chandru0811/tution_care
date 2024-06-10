@@ -12,7 +12,7 @@ import fetchAllSubjectsWithIds from "../../../List/SubjectList";
 
 const validationSchema = Yup.object().shape({
   studentName: Yup.string().required("*Name is required"),
-  subject: Yup.string().required("*Subject is required"), // Adding validation for subject field
+  subjectId: Yup.string().required("*Subject is required"), // Adding validation for subject field
   gender: Yup.string().required("*Gender is required"),
   dateOfBirth: Yup.date()
     .required("Date of Birth is required")
@@ -32,7 +32,7 @@ const EditForm1 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
   const formik = useFormik({
     initialValues: {
       studentName: "",
-      subject: "",
+      subjectId: "",
       gender: "",
       dateOfBirth: "",
       medicalCondition: "",
@@ -59,7 +59,7 @@ const EditForm1 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
           toast.error(response.data.message);
         }
       } catch (error) {
-        toast.error(error);
+        toast.error(error.message);
       }
     },
   });
@@ -69,7 +69,7 @@ const EditForm1 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
       const subjectData = await fetchAllSubjectsWithIds();
       setSubjectData(subjectData);
     } catch (error) {
-      toast.error(error);
+      toast.error(error.message);
     }
   };
 
@@ -125,22 +125,22 @@ const EditForm1 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
             <span className="text-danger">*</span>
             <select
               className="form-select form-select-sm"
-              name="subject"
+              name="subjectId"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              value={formik.values.subject}
+              value={formik.values.subjectId}
             >
               <option selected></option>
               {subjectData &&
-                subjectData.map((subject) => (
-                  <option key={subject.id} value={subject.id}>
-                    {subject.subjects}
+                subjectData.map((subjectId) => (
+                  <option key={subjectId.id} value={subjectId.id}>
+                    {subjectId.subjects}
                   </option>
                 ))}
             </select>
-            {formik.touched.subject && formik.errors.subject && (
+            {formik.touched.subjectId && formik.errors.subjectId && (
               <div className="text-danger">
-                <small>{formik.errors.subject}</small>
+                <small>{formik.errors.subjectId}</small>
               </div>
             )}
           </div>

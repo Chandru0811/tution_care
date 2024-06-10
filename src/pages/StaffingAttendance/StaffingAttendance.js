@@ -22,7 +22,7 @@ const StaffingAttendance = () => {
       const centerData = await fetchAllCentersWithIds();
       setCenterData(centerData);
     } catch (error) {
-      toast.error(error);
+      toast.error(error.message);
     }
   };
 
@@ -33,7 +33,7 @@ const StaffingAttendance = () => {
         setDatas(response.data);
         setLoading(false);
       } catch (error) {
-        toast.error("Error Fetching Data : ", error);
+        toast.error("Error Fetching Data : ", error.message);
       }
     };
     getData();
@@ -74,7 +74,7 @@ const StaffingAttendance = () => {
       setDatas(response.data);
       initializeDataTable(); // Reinitialize DataTable after successful data update
     } catch (error) {
-      console.error("Error refreshing data:", error);
+      console.error("Error refreshing data:", error.message);
     }
     setLoading(false);
   };
@@ -82,7 +82,7 @@ const StaffingAttendance = () => {
   return (
     <div className="minHeight center">
     <div className="container-fluid my-4 center">
-    <div className="card shadow border-0 mb-2 top-header">
+    <div className="card shadow border-0 mb-2 top-header minHeight">
     <div className="container my-4">
       <div className="my-3 d-flex align-items-end justify-content-end">
         {/* {storedScreens?.staffAttendanceCreate && ( */}

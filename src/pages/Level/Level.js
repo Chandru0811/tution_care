@@ -21,7 +21,7 @@ const Level = () => {
         const response = await api.get("/getAllCourseLevels");
         setDatas(response.data);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching data:", error.message);
       } finally {
         setLoading(false);
       }
@@ -61,7 +61,7 @@ const Level = () => {
       setDatas(response.data);
       initializeDataTable(); // Reinitialize DataTable after successful data update
     } catch (error) {
-      console.error("Error refreshing data:", error);
+      console.error("Error refreshing data:", error.message);
     }
     setLoading(false);
   };
@@ -80,18 +80,18 @@ const Level = () => {
         </div>
       ) : (
         <div className="container-fluid  center">
-          <div className="card shadow border-0 mb-2 top-header">
+          <div className="card shadow border-0 mb-2 top-header minHeight">
             <div className="container-fluid px-0">
               <div className="my-3 d-flex justify-content-between mb-5 px-4">
                 {/* {storedScreens?.levelCreate && ( */}
                 <h2>Level</h2>
-                <LevelAdd  onSuccess={refreshData}/>
+                <LevelAdd onSuccess={refreshData} />
 
                 {/* )} */}
               </div>
               <hr />
               <div className="table-responsive px-4">
-                <table ref={tableRef} className="display minHeight">
+                <table ref={tableRef} className="display ">
                   <thead>
                     <tr>
                       <th scope="col">S No</th>

@@ -99,7 +99,7 @@ const EditCourseDetail = forwardRef(
             }
           }
         } catch (error) {
-          toast.error(error);
+          toast.error(error.message);
         }finally {
           setLoadIndicators(false);
         }
@@ -111,7 +111,7 @@ const EditCourseDetail = forwardRef(
         const courseData = await fetchAllCoursesWithIds();
         setCourseData(courseData);
       } catch (error) {
-        toast.error(error);
+        toast.error(error.message);
       }
     };
 
@@ -158,7 +158,7 @@ const EditCourseDetail = forwardRef(
           });
         }
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching data:", error.message);
       }
     };
 

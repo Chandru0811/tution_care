@@ -21,7 +21,7 @@ const LeaveAdmin = () => {
       const centerData = await fetchAllCentersWithIds();
       setCenterData(centerData);
     } catch (error) {
-      toast.error(error);
+      toast.error(error.message);
     }
   };
 
@@ -32,7 +32,7 @@ const LeaveAdmin = () => {
         setDatas(response.data);
         setLoading(false);
       } catch (error) {
-        toast.error("Error Fetching Data : ", error);
+        toast.error("Error Fetching Data : ", error.message);
       }
     };
     getData();
@@ -67,7 +67,7 @@ const LeaveAdmin = () => {
 
   return (
     <div className="minHeight container-fluid  center">
-      <div className="card shadow border-0 mb-2 top-header">
+      <div className="card shadow border-0 mb-2 top-header minHeight">
         <div className="container-fluid px-0">
           <div className="my-5 px-4 d-flex justify-content-between">
             <h2>Leave</h2>
@@ -85,7 +85,7 @@ const LeaveAdmin = () => {
             </div>
           ) : (
             <div className="table-response px-4">
-              <table ref={tableRef} className="display minHeight ">
+              <table ref={tableRef} className="display  ">
                 <thead>
                   <tr>
                     <th scope="col" style={{ whiteSpace: "nowrap" }}>

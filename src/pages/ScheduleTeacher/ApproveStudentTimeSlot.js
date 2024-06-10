@@ -28,7 +28,7 @@ function ApproveStudentTimeSlot({ onSuccess, id }) {
         toast.error(response.data.message);
       }
     } catch (error) {
-      toast.error(error);
+      toast.error(error.message);
     }
   };
   return (
