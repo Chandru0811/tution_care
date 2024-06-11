@@ -162,12 +162,12 @@ const ScheduleTeacher = () => {
                             {/* {storedScreens?.scheduleTeacherRead && ( */}
                             <ScheduleTeacherView id={data.id} />
                             {/* )} */}
-                            {/* {storedScreens?.scheduleTeacherUpdate && ( */}
+                            {/* {storedScreens?.scheduleTeacherUpdate && (
                             <ScheduleTeacherEdit
                               id={data.id}
                               onSuccess={refreshData}
                             />
-                            {/* )} */}
+                            )} */}
                             {/* {storedScreens?.scheduleTeacherDelete && ( */}
                             <button
                               className="btn btn-sm"
