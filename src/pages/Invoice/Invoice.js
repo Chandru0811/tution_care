@@ -97,11 +97,13 @@ const Invoice = () => {
         <div className="container-fluid px-0">
           <div className="d-flex justify-content-between mb-5 my-3 px-4">
             <h2>Invoice</h2>
+            {storedScreens?.invoiceCreate && ( 
             <Link to="/invoice/add">
               <button type="button" className="btn btn-button btn-sm">
                     Add <i class="bx bx-plus"></i>
               </button>
             </Link>
+            )}
           </div>
           <hr />
           {loading ? (
@@ -167,26 +169,26 @@ const Invoice = () => {
                       </td>
                       <td>
                         <div className="d-flex">
-                          {/* {storedScreens?.invoiceRead && ( */}
+                         {storedScreens?.invoiceRead && (
                             <Link to={`/invoice/view/${data.id}`}>
                               <button className="btn btn-sm">
                                 <FaEye />
                               </button>
                             </Link>
-                          {/* )} */}
-                          {/* {storedScreens?.invoiceUpdate && ( */}
+                          )} 
+                        {storedScreens?.invoiceUpdate && ( 
                             <Link to={`/invoice/edit/${data.id}`}>
                               <button className="btn btn-sm">
                                 <FaEdit />
                               </button>
                             </Link>
-                          {/* )} */}
-                          {/* {storedScreens?.invoiceDelete && ( */}
+                        )} 
+                          {storedScreens?.invoiceDelete && ( 
                             <Delete
                               onSuccess={refreshData}
                               path={`/deleteGenerateInvoice/${data.id}`}
                             />
-                          {/* )} */}
+                          )} 
                         </div>
                       </td>
                     </tr>

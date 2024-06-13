@@ -85,14 +85,15 @@ const Staff = () => {
         <div className="card shadow border-0 mb-2 top-header minHeight">
         <div className="container-fluid px-0">
           <div className="my-3 d-flex justify-content-between mb-5 px-4">
-            {/* {storedScreens?.staffCreate && ( */}
-            <h2>Staff</h2>
+          <h2>Staff</h2>
+           {storedScreens?.staffCreate && ( 
+          
               <Link to="/staff/add">
                 <button type="button" className="btn btn-button btn-sm">
                       Add <i class="bx bx-plus"></i>
                 </button>
               </Link>
-            {/* )} */}
+         )}
           </div>
           <hr/>
           <div className="table-responsive px-4">
@@ -118,7 +119,7 @@ const Staff = () => {
                     {data.userAccountInfo.length > 0 &&
                       data.userAccountInfo[0].teacherId}
                   </td>
-                  {/* <td>{data.teacherId}</td> */}
+                  {/* <td>{data.teacherId}</td> */} 
                   <td>{data.teacherName}</td>
                   <td>
                     {data.userAccountInfo.length > 0 &&
@@ -138,26 +139,26 @@ const Staff = () => {
                   </td>
                   <td>
                     <div className="d-flex">
-                      {/* {storedScreens?.staffRead && ( */}
+                      {storedScreens?.staffRead && ( 
                         <Link to={`/staff/view/${data.id}`}>
                           <button className="btn btn-sm">
                             <FaEye />
                           </button>
                         </Link>
-                      {/* )} */}
-                      {/* {storedScreens?.staffUpdate && ( */}
+                       )} 
+                      {storedScreens?.staffUpdate && (  
                         <Link to={`/staff/edit/${data.id}`}>
                           <button className="btn btn-sm">
                             <FaEdit />
                           </button>
                         </Link>
-                      {/* )} */}
-                      {/* {storedScreens?.staffDelete && ( */}
+                       )} 
+                       {storedScreens?.staffDelete && (  
                         <Delete
                           onSuccess={refreshData}
                           path={`/deleteUser/${data.id}`}
                         />
-                      {/* )} */}
+                     )} 
                     </div>
                   </td>
                 </tr>

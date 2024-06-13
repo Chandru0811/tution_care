@@ -89,13 +89,13 @@ const Student = () => {
         <div className="container-fluid px-0">
           <div className="my-3 d-flex justify-content-between px-4">
             <h2>Student Listing</h2>
-           {/* {storedScreens?.studentListingCreate && (  */}
+           {storedScreens?.studentListingCreate && (  
               <Link to="/studentlisting/add">
                 <button type="button" className="btn btn-button btn-sm">
                   Add <i class="bx bx-plus"></i>
                 </button>
               </Link>
-             {/* )}  */}
+             )}  
           </div>
           <hr/>
           <div className="px-4">
@@ -128,26 +128,26 @@ const Student = () => {
                   <td>{data.status}</td> */}
                   <td>
                     <div className="d-flex">
-                      {/* {storedScreens?.studentListingRead && ( */}
+                      {storedScreens?.studentListingRead && ( 
                         <Link to={`/studentlisting/view/${data.id}`}>
                           <button className="btn btn-sm">
                             <FaEye />
                           </button>
                         </Link>
-                      {/* )} */}
-                      {/* {storedScreens?.studentListingUpdate && ( */}
+                      )} 
+                       {storedScreens?.studentListingUpdate && ( 
                         <Link to={`/studentlisting/edit/${data.id}`}>
                           <button className="btn btn-sm">
                             <FaEdit />
                           </button>
                         </Link>
-                      {/* )} */}
-                      {/* {storedScreens?.studentListingDelete && ( */}
+                      )} 
+                     {storedScreens?.studentListingDelete && ( 
                         <DeleteModel
                           onSuccess={refreshData}
                           path={`/deleteStudentDetail/${data.id}`}
                         />
-                      {/* )} */}
+                     )} 
                     </div>
                   </td>
                 </tr>

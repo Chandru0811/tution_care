@@ -77,11 +77,13 @@ const Center = () => {
         <div className="container-fluid px-0">
         <div className="d-flex justify-content-between mb-5 my-3 px-4">
               <h2>Centre Listing</h2>
+              {storedScreens?.tutionCareListingCreate && ( 
               <Link to="/center/add">
               <button type="button" className="btn btn-button btn-sm">
                       Add <i class="bx bx-plus"></i>
                 </button>
               </Link>
+              )}
           </div>
           <hr />
       {loading ? (
@@ -123,7 +125,7 @@ const Center = () => {
                 <td>{data.mobile}</td>
                 <td>
                   <div className="d-flex justify-content-center align-items-center ">
-                    {/* {storedScreens?.centerListingCreate && ( */}
+                    {storedScreens?.tutionCareListingCreate && (
                       <div class="dropdown" style={{ display: "inline-block" }}>
                         <button
                           class="btn dropdown-toggle"
@@ -148,8 +150,8 @@ const Center = () => {
                           </li>
                         </ul>
                       </div>
-                    {/* )} */}
-                    {/* {storedScreens?.centerListingRead && ( */}
+                    )} 
+                    {storedScreens?.tutionCareListingRead && ( 
                       <Link
                         to={`/center/view/${data.id}`}
                         style={{ display: "inline-block" }}
@@ -158,8 +160,8 @@ const Center = () => {
                           <FaEye />
                         </button>
                       </Link>
-                    {/* )} */}
-                    {/* {storedScreens?.centerListingUpdate && ( */}
+                   )} 
+                  {storedScreens?.tutionCareListingUpdate && ( 
                       <Link
                         to={`/center/edit/${data.id}`}
                         style={{ display: "inline-block" }}
@@ -168,14 +170,14 @@ const Center = () => {
                           <FaEdit />
                         </button>
                       </Link>
-                    {/* )} */}
-                    {/* {storedScreens?.centerListingDelete && ( */}
+                   )} 
+                    {storedScreens?.tutionCareListingDelete && ( 
                       <DeleteModel
                          onSuccess={refreshData}
                         path={`/deleteTuition/${data.id}`}
                         style={{ display: "inline-block" }}
                       />
-                    {/* )} */}
+                    )} 
                   </div>
                 </td>
               </tr>

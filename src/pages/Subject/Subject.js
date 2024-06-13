@@ -89,10 +89,11 @@ const Subject = () => {
           <div className="card shadow border-0 mb-2 top-header minHeight">
             <div className="container-fluid px-0">
               <div className="my-3 d-flex justify-content-between mb-5 px-4">
-                {/* {storedScreens?.subjectCreate && ( */}
-                <h2>Subject</h2>
+              <h2>Subject</h2>
+                 {storedScreens?.subjectCreate && ( 
+                
                 <SubjectAdd onSuccess={refreshData} />
-                {/* )} */}
+                 )}
               </div>
               <hr />
               <div className="table-responsiv px-4">
@@ -125,24 +126,24 @@ const Subject = () => {
                         </td>
                         <td>
                           <div className="d-flex">
-                            {/* {storedScreens?.subjectRead && ( */}
+                            {storedScreens?.subjectRead && ( 
                             <Link to={`/subject/view/${data.id}`}>
                               <button className="btn btn-sm">
                                 <FaEye />
                               </button>
                             </Link>
-                            {/* )} */}
+                           )} 
 
-                            {/* {storedScreens?.subjectUpdate && ( */}
+                            {storedScreens?.subjectUpdate && ( 
                             <SubjectEdit id={data.id} onSuccess={refreshData} />
-                            {/* )} */}
+                          )} 
 
-                            {/* {storedScreens?.subjectDelete && ( */}
+                            {storedScreens?.subjectDelete && ( 
                             <Delete
                               onSuccess={refreshData}
                               path={`/deleteCourseSubject/${data.id}`}
                             />
-                            {/* )} */}
+                          )}
                           </div>
                         </td>
                       </tr>

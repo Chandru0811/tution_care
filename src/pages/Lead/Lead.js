@@ -93,11 +93,13 @@ const Lead = () => {
         <div className="container-fluid px-0">
           <div className="d-flex justify-content-between mb-5 my-3 px-4">
             <h2>Lead Listing</h2>
+            {storedScreens?.leadListingCreate && (
             <Link to="/lead/add">
               <button type="button" className="btn btn-button btn-sm">
                 Add <i class="bx bx-plus"></i>
               </button>
             </Link>
+            )}
           </div>
           <hr />
           {loading ? (
@@ -179,26 +181,26 @@ const Lead = () => {
 
                       <td>
                         <div className="d-flex">
-                          {/* {storedScreens?.leadListingRead && ( */}
+                          {storedScreens?.leadListingRead && (
                           <Link to={`/lead/lead/view/${data.id}`}>
                             <button className="btn btn-sm">
                               <FaEye />
                             </button>
                           </Link>
-                          {/* )} */}
-                          {/* {storedScreens?.leadListingUpdate && ( */}
+                           )} 
+                          {storedScreens?.leadListingUpdate && ( 
                           <Link to={`/lead/lead/edit/${data.id}`}>
                             <button className="btn btn-sm">
                               <FaEdit />
                             </button>
                           </Link>
-                          {/* )} */}
-                          {/* {storedScreens?.leadListingDelete && ( */}
+                          )} 
+                          {storedScreens?.leadListingDelete && ( 
                           <DeleteModel
                             onSuccess={refreshData}
                             path={`/deleteLeadInfo/${data.id}`}
                           />
-                          {/* )} */}
+                          )} 
                         </div>
                       </td>
                       {/* <td className="text-center">

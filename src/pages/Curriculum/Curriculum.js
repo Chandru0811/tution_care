@@ -109,9 +109,9 @@ const Curriculum = () => {
         </div>
       ) : (
         <>
-          {/* {storedScreens?.curriculumCreate && ( */}
+         {storedScreens?.curriculumCreate && (
             <CurriculumAdd onSuccess={refreshData} course_id={id} />
-          {/* )} */}
+           )} 
           <table ref={tableRef} className="display">
             <thead>
               <tr>
@@ -149,15 +149,15 @@ const Curriculum = () => {
                     </td>
                   </td>
                   <td>
-                    {/* {storedScreens?.curriculumUpdate && ( */}
+                     {storedScreens?.curriculumUpdate && ( 
                       <CurriculumEdit id={data.id} onSuccess={refreshData} />
-                    {/* )} */}
-                    {/* {storedScreens?.curriculumDelete && ( */}
+                     )} 
+                {storedScreens?.curriculumDelete && ( 
                       <DeleteModel
                         onSuccess={refreshData}
                         path={`/deleteCourseCurriculumCode/${data.id}`}
                       />
-                    {/* )} */}
+                 )} 
                   </td>
                 </tr>
               ))}

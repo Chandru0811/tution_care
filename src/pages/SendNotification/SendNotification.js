@@ -81,7 +81,9 @@ const SendNotification = () => {
         <div className="container-fluid px-0">
           <div className="d-flex justify-content-between mb-5 my-3 px-4">
             <h2>Send Notification</h2>
+            {storedScreens?.sendNotificationCreate && ( 
             <SendNotificationAdd onSuccess={refreshData} />
+            )}
           </div>
           <hr />
           {loading ? (
@@ -114,18 +116,18 @@ const SendNotification = () => {
                       <td>{data.messageDescription}</td>
                       <td>{data.datePosted}</td>
                       <td>
-                        {/* {storedScreens?.sendNotificationUpdate && ( */}
+                        {storedScreens?.sendNotificationUpdate && ( 
                         <SendNotificationEdit
                           id={data.id}
                           onSuccess={refreshData}
                         />
-                        {/* )} */}
-                        {/* {storedScreens?.levelDelete && ( */}
+                         )} 
+                         {storedScreens?.sendNotificationDelete && ( 
                         <Delete
                           onSuccess={refreshData}
                           path={`/deleteTuitionCarePushNotifications/${data.id}`}
                         />
-                        {/* )} */}
+                         )} 
                       </td>
                     </tr>
                   ))}

@@ -38,7 +38,7 @@ function Login({ onLogin }) {
 
         if (response.status === 200) {
          const { role } = response.data;
-          if (role === "SMS_PARENT") {
+          if (role === "TUTIONCARE_PARENT") {
             toast.warning(
               "You don't have access to the website. Please log in using Artylearning mobile app."
             );
