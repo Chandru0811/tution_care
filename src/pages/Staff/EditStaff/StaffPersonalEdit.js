@@ -27,6 +27,7 @@ const validationSchema = Yup.object().shape({
 const StaffPersonalEdit = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const userName = localStorage.getItem("userName");
+    const centerId = localStorage.getItem("centerId");
 
     const [idTypeData, setIdTypeData] = useState(null);
     const [nationalityData, setNationalityData] = useState(null);
@@ -139,7 +140,7 @@ const StaffPersonalEdit = forwardRef(
       const getData = async () => {
         try {
           const response = await api.get(
-            `/getAllUserById/${formData.staff_id}`
+            `/getAllUserWithCenterId/${centerId}`
           );
           const dateOfBirth = response.data.dateOfBirth.substring(0, 10);
           formik.setValues({

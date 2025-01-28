@@ -29,6 +29,7 @@ const StaffAccountEdit = forwardRef(
     const [centerData, setCenterData] = useState([]);
     const [shgData, setShgData] = useState([]);
     const [selectedCenters, setSelectedCenters] = useState([]);
+    const centerId = localStorage.getItem("centerId");
     const centerOptions = centerData.map((center) => ({
       label: center.centerNames,
       value: center.id,
@@ -126,7 +127,7 @@ const StaffAccountEdit = forwardRef(
             };
 
             const response = await api.post(
-              `/createUserAccountInfos`,
+              `/createUserAccountInfoWithCenterId`,
               updatedData,
               {
                 headers: {
@@ -183,7 +184,7 @@ const StaffAccountEdit = forwardRef(
       const getData = async () => {
         try {
           const response = await api.get(
-            `/getAllUserById/${formData.staff_id}`
+            `/getAllUserAccountInfoWithCenterId/${centerId}`
           );
           if (
             response.data.userAccountInfo &&

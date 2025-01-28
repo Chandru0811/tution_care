@@ -27,6 +27,7 @@ const PersonalEdit = forwardRef(
     const [idTypeData, setIdTypeData] = useState(null);
     const [nationalityData, setNationalityData] = useState(null);
     const userName = localStorage.getItem("userName");
+    const centerId = localStorage.getItem("centerId");
 
     const formik = useFormik({
       initialValues: {
@@ -111,7 +112,7 @@ const PersonalEdit = forwardRef(
       const getData = async () => {
         try {
           const response = await api.get(
-            `/getAllUserById/${formData.staff_id}`
+            `/getAllUserWithCenterId/${centerId}`
           );
           const dateOfBirth = response.data.dateOfBirth.substring(0, 10);
           const role = response.data.role;

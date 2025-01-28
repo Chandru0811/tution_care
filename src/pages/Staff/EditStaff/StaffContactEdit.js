@@ -30,6 +30,7 @@ const StaffContactEdit = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     console.log("form", formData);
     const userName = localStorage.getItem("userName");
+    const centerId = localStorage.getItem("centerId");
     const [datas, setDatas] = useState();
 
     const formik = useFormik({
@@ -87,7 +88,7 @@ const StaffContactEdit = forwardRef(
             }
           } else {
             const response = await api.post(
-              `/createUserContactInfo/${formData.staff_id}`,
+              `/createUserContactInfoWithCenterId/${formData.staff_id}`,
               values,
               {
                 headers: {
@@ -135,7 +136,7 @@ const StaffContactEdit = forwardRef(
       const getData = async () => {
         try {
           const response = await api.get(
-            `/getAllUserById/${formData.staff_id}`
+            `/getAllUserContactInfoWithCenterId/${centerId}`
           );
           if (
             response.data.userContactInfo &&

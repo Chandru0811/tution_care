@@ -36,6 +36,7 @@ const AccountEdit = forwardRef(
       value: center.id,
     }));
     const userName = localStorage.getItem("userName");
+    const centerId = localStorage.getItem("centerId");
 
     const fetchData = async () => {
       try {
@@ -100,7 +101,7 @@ const AccountEdit = forwardRef(
               userId: formData.staff_id,
             };
             const response = await api.post(
-              `/createUserAccountInfos`,
+              `/createUserAccountInfoWithCenterId`,
               updatedData,
               {
                 headers: {
@@ -166,7 +167,7 @@ const AccountEdit = forwardRef(
       const getData = async () => {
         try {
           const response = await api.get(
-            `/getAllUserById/${formData.staff_id}`
+            `/getAllUserAccountInfoWithCenterId/${centerId}`
           );
           if (
             response.data.userAccountInfo &&

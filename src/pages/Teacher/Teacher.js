@@ -23,6 +23,7 @@ const Teacher = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const roles = localStorage.getItem("userName");
+  const centerId = localStorage.getItem("centerId");
 
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
 
@@ -150,7 +151,8 @@ const Teacher = () => {
       );
       const queryParams = new URLSearchParams(filteredFilters).toString();
       const response = await api.get(
-        `/getAllTeachersAndFreelancers?${queryParams}`
+        // `/getAllTeachersAndFreelancers?${queryParams}`
+        `/getAllUserWithCenterId/${centerId}`
       );
       setData(response.data);
     } catch (error) {

@@ -49,7 +49,7 @@ const StaffSalaryAdd = forwardRef(
         values.createdBy = userName;
         try {
           const response = await api.post(
-            `/createUserSalaryCreation/${formData.user_id}`,
+            `/createSalaryCreationWithCenterId/${formData.user_id}`,
             values,
             {
               headers: {
