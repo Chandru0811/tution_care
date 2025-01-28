@@ -53,20 +53,20 @@ function InvoiceView() {
 
   const qrCodeUrl = centerData
     ? centerData.reduce((src, center) => {
-        return parseInt(data.centerId) === center.id
-          ? center.qrCode || "--"
-          : src;
-      }, "")
+      return parseInt(data.centerId) === center.id
+        ? center.qrCode || "--"
+        : src;
+    }, "")
     : "";
   console.log("QR Code:", qrCodeUrl);
 
   const uenNumber = centerData
     ? centerData.find((center) => parseInt(data.centerId) === center.id)
-        ?.uenNumber || "--"
+      ?.uenNumber || "--"
     : "";
   const invoiceNotes = centerData
     ? centerData.find((center) => parseInt(data.centerId) === center.id)
-        ?.invoiceNotes || "--"
+      ?.invoiceNotes || "--"
     : "";
 
   const generatePDF = async (qrCodeUrl) => {
@@ -80,15 +80,13 @@ function InvoiceView() {
 
       doc.setFont("helvetica", "normal");
       doc.text(
-        `Tel No: ${
-          centerData?.find((center) => parseInt(data.centerId) === center.id)?.phone || "--"
+        `Tel No: ${centerData?.find((center) => parseInt(data.centerId) === center.id)?.phone || "--"
         }`,
         130,
         35
       );
       doc.text(
-        `Email: ${
-          centerData?.find((center) => parseInt(data.centerId) === center.id)?.email || "--"
+        `Email: ${centerData?.find((center) => parseInt(data.centerId) === center.id)?.email || "--"
         }`,
         130,
         45
@@ -102,8 +100,7 @@ function InvoiceView() {
       doc.text(`Student Id : ${data.studentUniqueId || " "}`, 14, 100);
       doc.text(`Course Name : ${data.courseName || " "}`, 120, 80);
       doc.text(
-        `Invoice Date : ${
-          data.invoiceDate ? data.invoiceDate.substring(0, 10) : "--"
+        `Invoice Date : ${data.invoiceDate ? data.invoiceDate.substring(0, 10) : "--"
         }`,
         120,
         90
@@ -234,8 +231,8 @@ function InvoiceView() {
   const handleGeneratePDF = async () => {
     const qrCodeUrl = centerData
       ? centerData.reduce((src, center) => {
-          return parseInt(data.centerId) === center.id ? center.qrCode : src;
-        })
+        return parseInt(data.centerId) === center.id ? center.qrCode : src;
+      })
       : "";
 
     generatePDF(qrCodeUrl);
@@ -387,17 +384,17 @@ function InvoiceView() {
                     )}
                 </h5>
                 <span>Tel No :  {centerData &&
-                    centerData.map((center) =>
-                      parseInt(data.centerId) === center.id
-                        ? center.phone || "--"
-                        : ""
-                    )}</span>
+                  centerData.map((center) =>
+                    parseInt(data.centerId) === center.id
+                      ? center.phone || "--"
+                      : ""
+                  )}</span>
                 <span>Email &nbsp;:  {centerData &&
-                    centerData.map((center) =>
-                      parseInt(data.centerId) === center.id
-                        ? center.email || "--"
-                        : ""
-                    )}</span>
+                  centerData.map((center) =>
+                    parseInt(data.centerId) === center.id
+                      ? center.email || "--"
+                      : ""
+                  )}</span>
               </div>
               <div className="card-header my-5">
                 <h5>Official Receipt</h5>
@@ -566,7 +563,7 @@ function InvoiceView() {
                 />
               )} */}
                 <p className="text-center">
-                  Arty Learning Pvt.Ltd <br />
+                  Tution Care Pvt.Ltd <br />
                   UEN : {uenNumber || " "}
                 </p>
               </div>

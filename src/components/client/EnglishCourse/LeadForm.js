@@ -942,7 +942,7 @@ function LeadForm() {
               />
               <label className="form-label">
                 By submitting this form, I confirm that I agree on releasing the
-                above details to Arty Learning./
+                above details to Tution Care./
                 本人同意将上述表格资料提供给学校。
               </label>
             </div>

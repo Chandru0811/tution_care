@@ -107,7 +107,7 @@ const CenterManager = () => {
             {datas.map((data, index) => (
               <tr key={index}>
                 <th scope="row">{index + 1}</th>
-                <td>{"artylearning"}</td>
+                <td>{"Tution Care"}</td>
                 <td>{"arty@gmail.com"}</td>
                 <td>{"956789098"}</td>
                 <td>{"Singapore"}</td>

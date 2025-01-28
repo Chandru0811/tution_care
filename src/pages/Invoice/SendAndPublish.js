@@ -135,9 +135,9 @@ function SendAndPublish({ data, qr, invoiceNotes, uenNumber }) {
                   <table>
                     <tr>
                        <td class="third">
-                        <b>Arty Learning @HG</b><br />
+                        <b>Tution Care @HG</b><br />
                         Tel No:87270752<br />
-                        Email:Artylearning@gmail.com
+                        Email:tutioncare@gmail.com
                       </td>
                     </tr>
                   </table>
@@ -158,14 +158,12 @@ function SendAndPublish({ data, qr, invoiceNotes, uenNumber }) {
             </div>
             <div style="display: flex;">
                 <label>Invoice Date</label>
-              <span>:&nbsp;&nbsp;${
-                data.dueDate ? data.invoiceDate.substring(0, 10) : "--"
-              }</span>
+              <span>:&nbsp;&nbsp;${data.dueDate ? data.invoiceDate.substring(0, 10) : "--"
+        }</span>
       
               <label>Due Date</label>
-              <span>:&nbsp;&nbsp;${
-                data.dueDate ? data.dueDate.substring(0, 10) : "--"
-              }</span>
+              <span>:&nbsp;&nbsp;${data.dueDate ? data.dueDate.substring(0, 10) : "--"
+        }</span>
             </div>
       
             <div style="display: flex">
@@ -192,8 +190,8 @@ function SendAndPublish({ data, qr, invoiceNotes, uenNumber }) {
                   <td style="white-space: nowrap">Total Amount</td>
                 </tr>
                 ${data.invoiceItemsDtoList
-                  .map(
-                    (product, index) => `
+          .map(
+            (product, index) => `
                               <tr>
                               <td>${index + 1 || "--"}</td>
                               <td>${product.item || "--"}</td>
@@ -204,8 +202,8 @@ function SendAndPublish({ data, qr, invoiceNotes, uenNumber }) {
                               <td>${product.totalAmount}</td>
                               </tr>
                               `
-                  )
-                  .join("")}
+          )
+          .join("")}
               </table>
             </div>
 
@@ -247,13 +245,11 @@ function SendAndPublish({ data, qr, invoiceNotes, uenNumber }) {
             >
               <div style="width: 50%">
              <p> <strong style="margin-right: 14px;">Remark</strong></p>
-             <p style="margin-top: 0px;margin-left: 10px;">${
-               data.remark || "--"
-             }</p><br />
+             <p style="margin-top: 0px;margin-left: 10px;">${data.remark || "--"
+        }</p><br />
                 <strong style="margin-right: 14px;margin-bottom: 50px; ">Notes : </strong>
-            <p style="margin-top: 0px;margin-left: 10px;">${
-              invoiceNotes || "--"
-            }</p><br />
+            <p style="margin-top: 0px;margin-left: 10px;">${invoiceNotes || "--"
+        }</p><br />
               </div>
               <div style="width: 50%; text-align: end">
               <div>
@@ -263,7 +259,7 @@ function SendAndPublish({ data, qr, invoiceNotes, uenNumber }) {
                     class="img-fluid"
                     width="50%"
                   />
-                  <div><strong style="margin-right: 14px;margin-bottom: 10px;">Arty Learning Pte.Ltd.</strong>
+                  <div><strong style="margin-right: 14px;margin-bottom: 10px;">Tution Care Pte.Ltd.</strong>
                   </strong><br /></div>
               <div><strong style="margin-right: 34px;margin-bottom: 10px;">UEN:${uenNumber}</strong>
                   </strong><br /></div>

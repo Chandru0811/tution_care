@@ -6,7 +6,7 @@ function CmsHomeWhyArtyLearning() {
   const [editingField, setEditingField] = useState(null);
   const [imageUrl, setImageUrl] = useState(Glass);
   const [content, setContent] = useState({
-    title: "Why Arty Learning",
+    title: "Why Tution Care",
     paragraphs:
       "We provide free academic assessment for every child, to understand their academic progress and match them to our enrichment classes that will benefit the child the most.\n\nOur assessment recognises that each child is unique, and with our individualised assessments we can help identify students' diverse learning styles, strengths, and needs.",
   });

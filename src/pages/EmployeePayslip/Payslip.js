@@ -133,13 +133,13 @@ function Payslip() {
                 >
                   <div className="payslip-container">
                     <div className="text-center">
-                      <h2>{data.centerName || "ARTY LEARNING"}</h2>
+                      <h2>{data.centerName || "Tution Care"}</h2>
                     </div>
                     <div className="row mt-5">
                       <div className="col-2 text-center p-0">
                         <img
                           src={Logo}
-                          alt="Arty Learning Logo"
+                          alt="Tution Care Logo"
                           className="img-fluid w-50"
                         />
                       </div>

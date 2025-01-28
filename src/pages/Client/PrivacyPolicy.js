@@ -11,8 +11,8 @@ function PrivacyPolicy() {
               Privacy Policy
             </h1>
             <p style={{ fontSize: "20px" }}>
-              At Arty Learning Pte Ltd its related corporations and franchises
-              ("Arty Learning"),we are committed to protecting your privacy and
+              At Tution Care Pte Ltd its related corporations and franchises
+              ("Tution Care"),we are committed to protecting your privacy and
               personal data. This Privacy Policy explians how we
               collect,use,disclose,and protect your personal data in accordance
               with the Singapore Personal Data Protection Act 2012 ("PDPA") and
@@ -23,8 +23,8 @@ function PrivacyPolicy() {
             </h1>
             <p style={{ fontSize: "20px" }}>
               This Policy applies to personal data
-              collected,stored,disclosed,and/or processed by Arty
-              Learning,including but not limited to:
+              collected,stored,disclosed,and/or processed by Tution
+              Care,including but not limited to:
               <br />
               <br />
               <ul style={{ listStyle: "none", marginLeft: "-35px" }}>
@@ -185,11 +185,11 @@ function PrivacyPolicy() {
               Contact Information
             </h1>
             <p style={{ fontSize: "20px" }}>
-              Arty Learning welcomes any queries pertaining to our Privacy
+              Tution Care welcomes any queries pertaining to our Privacy
               Policy, and we can be reached at:
             </p>
             <p style={{ fontSize: "20px" }}>
-              Arty Learning
+              Tution Care
               <ul style={{ listStyle: "none", marginLeft: "-35px" }}>
                 <li>806 Hougang Central,</li>
                 <li>#04-146</li>
@@ -197,7 +197,7 @@ function PrivacyPolicy() {
                 <li>
                   Email:
                   <Link style={{ color: "red", textDecoration: "underline" }}>
-                    artylearning@gmail.com
+                    tutioncare@gmail.com
                   </Link>
                 </li>
               </ul>

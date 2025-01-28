@@ -10,6 +10,11 @@ import ScrollToTop from "../pages/ScrollToTop";
 import NewDashboard from "../pages/NewDashboard";
 import { ToastContainer } from "react-bootstrap";
 import SuperAdminSidebar from "../components/common/SuperAdminSidebar";
+import SuperAdminCenter from "../pages/SuperAdminCenter/SuperAdminCenter";
+import SuperAdminCenterAdd from "../pages/SuperAdminCenter/SuperAdminCenterAdd";
+import SuperAdminCenterEdit from "../pages/SuperAdminCenter/SuperAdminCenterEdit";
+import SuperAdminCenterView from "../pages/SuperAdminCenter/SuperAdminCenterView";
+import ModuleAccess from "../pages/ModuleAccess/ModuleAccess";
 
 function SuperAdmin({ handleLogout }) {
   useEffect(() => {
@@ -36,6 +41,15 @@ function SuperAdmin({ handleLogout }) {
               {/* <Route path="/" element={<Dashboard />} /> */}
               <Route path="*" element={<NewDashboard />} />
               <Route path="/" element={<NewDashboard />} />
+
+              {/* SuperAdminCenter */}
+              <Route path="/companyregistration" element={<SuperAdminCenter />} />
+              <Route path="/companyregistration/add" element={<SuperAdminCenterAdd />} />
+              <Route path="/companyregistration/view/:id" element={<SuperAdminCenterEdit />} />
+              <Route path="/companyregistration/edit/:id" element={<SuperAdminCenterView />} />
+
+              {/* Setting */}
+              <Route path="/moduleaccess" element={<ModuleAccess />} />
             </Routes>
           </div>
           <Footer />

@@ -27,8 +27,8 @@ const StudentDeposit = () => {
               class="form-select form select-sm"
               aria-label="Default select example"
             >
-              <option selected>Arty Learning @ HG</option>
-              <option value="1">Arty Learning @ AMk</option>
+              <option selected>Tution Care @ HG</option>
+              <option value="1">Tution Care @ AMk</option>
             </select>
           </div>
           <div class="col-md-6 col-12 mb-2">

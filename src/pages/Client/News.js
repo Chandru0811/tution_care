@@ -26,7 +26,7 @@ function News() {
         <div className="content my-4">
           <p>
             Stay informed with our latest news and updates. Discover exciting
-            news and upcoming events from Arty Learning. Come<br></br>
+            news and upcoming events from Tution Care. Come<br></br>
             join us on our journey of continuous learning and growth.
           </p>
         </div>
