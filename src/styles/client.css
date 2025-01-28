@@ -474,10 +474,10 @@
     width: 100%;
   }
 }
-.form-check-input:checked {
+/* .form-check-input:checked {
   background-color: #eb862a;
   border-color: #eb862a;
-}
+} */
 .form input:hover {
   border-color: #eb862a;
 }
