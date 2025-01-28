@@ -22,7 +22,7 @@ import NewLogin from "../pages/auth/NewLogin.js";
 
 function Auth({ handleLogin }) {
   return (
-    <BrowserRouter basename="/tms">
+    <BrowserRouter basename="/tuitions">
       <ToastContainer position="top-center" />
       {/* <TopBar /> */}
       {/* <Header /> */}

@@ -1,6 +1,6 @@
 {
   "name": "tution_care",
-  "homepage": "/tms",
+  "homepage": "/tuitions",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

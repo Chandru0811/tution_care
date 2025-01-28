@@ -268,7 +268,7 @@ function Admin({ handleLogout }) {
 
   return (
     <div>
-      <BrowserRouter basename="/tms">
+      <BrowserRouter basename="/tuitions">
         <ToastContainer position="top-center" />
         <Sidebar />
         <section className="home-section">

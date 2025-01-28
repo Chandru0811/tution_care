@@ -30,7 +30,7 @@ function SuperAdmin({ handleLogout }) {
 
   return (
     <div>
-      <BrowserRouter basename="/tms">
+      <BrowserRouter basename="/tuitions">
         <ToastContainer position="top-center" />
         <SuperAdminSidebar />
         <section className="home-section">
