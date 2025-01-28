@@ -71,7 +71,7 @@ function StaffingAttendanceAdd() {
       otEndTime: "",
       attendanceRemark: "",
     },
-    validationSchema: validationSchema,
+    // validationSchema: validationSchema,
     onSubmit: async (values) => {
       setLoadIndicator(true);
       console.log("Attendance Emp:", values);
@@ -157,7 +157,7 @@ function StaffingAttendanceAdd() {
       }
 
       try {
-        const response = await api.post("/createUserAttendance", payload, {
+        const response = await api.post("/createUserAttendanceModelWithCenterId", payload, {
           headers: {
             "Content-Type": "application/json",
           },

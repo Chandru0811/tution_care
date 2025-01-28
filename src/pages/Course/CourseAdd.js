@@ -273,28 +273,6 @@ function CourseAdd({ onSuccess }) {
                   </div>
                 )}
               </div> */}
-              <div className="col-md-6 col-12 mb-2">
-                <lable className="form-label">Color Code</lable>
-                <div className="input-group mt-2 mb-3">
-                  <div className="input-group-text inputGroup">
-                    <input
-                      type="color"
-                      {...formik.getFieldProps("colorCode")}
-                      className="form-control-color circle"
-                      ref={colorInputRef}
-                    />
-                  </div>
-                  <input
-                    type="text"
-                    className={`form-control `}
-                    value={formik.values.colorCode}
-                    onClick={handleColorPickerClick}
-                    onChange={(e) =>
-                      formik.setFieldValue("colorCode", e.target.value)
-                    }
-                  />
-                </div>
-              </div>
             </div>
 
             <div className="row">
@@ -303,11 +281,10 @@ function CourseAdd({ onSuccess }) {
                   Subject<span className="text-danger">*</span>
                 </lable>
                 <select
-                  className={`form-select  ${
-                    formik.touched.subjectId && formik.errors.subjectId
+                  className={`form-select  ${formik.touched.subjectId && formik.errors.subjectId
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   {...formik.getFieldProps("subjectId")}
                   onChange={handleSubjectChange}
                   aria-label="Default select example"
@@ -333,11 +310,10 @@ function CourseAdd({ onSuccess }) {
                 <div className="input-group mb-3">
                   <select
                     {...formik.getFieldProps("levelId")}
-                    className={`form-select  ${
-                      formik.touched.levelId && formik.errors.levelId
+                    className={`form-select  ${formik.touched.levelId && formik.errors.levelId
                         ? "is-invalid"
                         : ""
-                    }`}
+                      }`}
                     aria-label="Default select example"
                   >
                     <option selected></option>
@@ -363,11 +339,10 @@ function CourseAdd({ onSuccess }) {
                 </lable>
                 <input
                   type="text"
-                  className={`form-control  ${
-                    formik.touched.courseName && formik.errors.courseName
+                  className={`form-control  ${formik.touched.courseName && formik.errors.courseName
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   {...formik.getFieldProps("courseName")}
                 />
                 {formik.touched.courseName && formik.errors.courseName && (
@@ -383,11 +358,10 @@ function CourseAdd({ onSuccess }) {
                 <div className="input-group mb-3">
                   <input
                     type="text"
-                    className={`form-control  ${
-                      formik.touched.courseCode && formik.errors.courseCode
+                    className={`form-control  ${formik.touched.courseCode && formik.errors.courseCode
                         ? "is-invalid"
                         : ""
-                    }`}
+                      }`}
                     {...formik.getFieldProps("courseCode")}
                   />
                   {formik.touched.courseCode && formik.errors.courseCode && (
@@ -406,11 +380,10 @@ function CourseAdd({ onSuccess }) {
                 </lable>
                 <input
                   type="text"
-                  className={`form-control  ${
-                    formik.touched.minClassSize && formik.errors.minClassSize
+                  className={`form-control  ${formik.touched.minClassSize && formik.errors.minClassSize
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   {...formik.getFieldProps("minClassSize")}
                   placeholder=""
                 />
@@ -426,11 +399,10 @@ function CourseAdd({ onSuccess }) {
                 </lable>
                 <input
                   type="text"
-                  className={`form-control  ${
-                    formik.touched.maxClassSize && formik.errors.maxClassSize
+                  className={`form-control  ${formik.touched.maxClassSize && formik.errors.maxClassSize
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   {...formik.getFieldProps("maxClassSize")}
                   placeholder=""
                 />
@@ -446,12 +418,11 @@ function CourseAdd({ onSuccess }) {
                 <lable className="">Replacement Lesson Student Buffer</lable>
                 <input
                   type="text"
-                  className={`form-control  ${
-                    formik.touched.replacementLessonStudentBuffer &&
-                    formik.errors.replacementLessonStudentBuffer
+                  className={`form-control  ${formik.touched.replacementLessonStudentBuffer &&
+                      formik.errors.replacementLessonStudentBuffer
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   {...formik.getFieldProps("replacementLessonStudentBuffer")}
                 />
                 {formik.touched.replacementLessonStudentBuffer &&
@@ -560,11 +531,10 @@ function CourseAdd({ onSuccess }) {
                 <div className="input-group ">
                   <select
                     {...formik.getFieldProps("status")}
-                    className={`form-select  ${
-                      formik.touched.status && formik.errors.status
+                    className={`form-select  ${formik.touched.status && formik.errors.status
                         ? "is-invalid"
                         : ""
-                    }`}
+                      }`}
                     aria-label="Default select example"
                   >
                     <option selected></option>
@@ -577,6 +547,28 @@ function CourseAdd({ onSuccess }) {
                     {formik.errors.status}
                   </div>
                 )}
+              </div>
+              <div className="col-md-6 col-12 mb-2">
+                <lable className="form-label">Color Code</lable>
+                <div className="input-group mt-2 mb-3">
+                  <div className="input-group-text inputGroup">
+                    <input
+                      type="color"
+                      {...formik.getFieldProps("colorCode")}
+                      className="form-control-color circle"
+                      ref={colorInputRef}
+                    />
+                  </div>
+                  <input
+                    type="text"
+                    className={`form-control `}
+                    value={formik.values.colorCode}
+                    onClick={handleColorPickerClick}
+                    onChange={(e) =>
+                      formik.setFieldValue("colorCode", e.target.value)
+                    }
+                  />
+                </div>
               </div>
               <div className="col-md-6 col-12 mb-2">
                 <lable>

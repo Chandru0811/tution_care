@@ -21,9 +21,9 @@ const ReferalFees = () => {
   const [loading, setLoading] = useState(true);
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
-  const [centerId, setCenterId] = useState("");
   const [isClearFilterClicked, setIsClearFilterClicked] = useState(false);
   const [centerData, setCenterData] = useState([]);
+  const centerId = localStorage.getItem("centerId");
 
   const centerLocalId = localStorage.getItem("selectedCenterId");
   const [filters, setFilters] = useState({
@@ -116,11 +116,11 @@ const ReferalFees = () => {
 
       const centerId =
         !isClearFilterClicked &&
-        (filters.centerId || (centerLocalId && centerLocalId !== "undefined"))
+          (filters.centerId || (centerLocalId && centerLocalId !== "undefined"))
           ? filters.centerId || centerLocalId
           : "";
 
-      const response = await api.get(`/getReferralFeeByCenterId?centerId=${centerId}`);
+      const response = await api.get(`getGenerateInvoiceByCenterId/${centerId}`);
       setData(response.data);
     } catch (error) {
       toast.error(`Error Fetching Data: ${error.message}`);
@@ -138,26 +138,26 @@ const ReferalFees = () => {
           ...prevFilters,
           centerId: centerLocalId,
         }));
-      setCenterData(centerData);
+        setCenterData(centerData);
       } else if (centerData !== null && centerData.length > 0) {
         setFilters((prevFilters) => ({
           ...prevFilters,
           centerId: centerData[0].id,
         }));
-      setCenterData(centerData);
+        setCenterData(centerData);
       }
     } catch (error) {
       toast.error(error);
     }
   };
-  
+
   useEffect(() => {
     const fetchData = async () => {
       await fetchCenterData(); // Fetch center data
     };
     fetchData();
   }, []);
-console.log("centerData",centerData);
+  console.log("centerData", centerData);
   useEffect(() => {
     fetchData();
   }, [filters]);
@@ -208,14 +208,14 @@ console.log("centerData",centerData);
   });
 
   const clearFilter = () => {
-  localStorage.removeItem("selectedCenterId"); // Clear center ID from local storage
-  setFilters({
-    centerId: "", // Reset filters
-    centerName: "",
-  });
-  setCenterId(""); // Clear local state for center ID
-  setIsClearFilterClicked(true); // Trigger fetch with no filters
-};
+    localStorage.removeItem("selectedCenterId"); // Clear center ID from local storage
+    setFilters({
+      centerId: "", // Reset filters
+      centerName: "",
+    });
+    // setCenterId(""); // Clear local state for center ID
+    setIsClearFilterClicked(true); // Trigger fetch with no filters
+  };
 
   const handleMenuClose = () => {
     setMenuAnchor(null);
@@ -264,13 +264,13 @@ console.log("centerData",centerData);
                     ...prevFilters,
                     centerId: value,
                   }));
-                  setCenterId(value);
+                  // setCenterId(value);
                 }}
                 name="centerId"
                 value={filters.centerId}
               >
                 <option value="">All Center</option>
-                { Array.isArray(centerData) && centerData?.map((center) => (
+                {Array.isArray(centerData) && centerData?.map((center) => (
                   <option key={center.id} value={center.id}>
                     {center.centerNames}
                   </option>
@@ -315,10 +315,10 @@ console.log("centerData",centerData);
                     updatedAt: false,
                   },
                 }}
-                // muiTableBodyRowProps={({ row }) => ({
-                //   onClick: () => navigate(`/center/view/${row.original.id}`),
-                //   style: { cursor: "pointer" },
-                // })}
+              // muiTableBodyRowProps={({ row }) => ({
+              //   onClick: () => navigate(`/center/view/${row.original.id}`),
+              //   style: { cursor: "pointer" },
+              // })}
               />
             </ThemeProvider>
 
