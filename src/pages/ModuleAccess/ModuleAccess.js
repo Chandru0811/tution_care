@@ -428,7 +428,7 @@ function ModuleAccess() {
             <div className="row align-items-center">
               <div className="col">
                 <div className="d-flex align-items-center gap-4">
-                  <h1 className="h4 ls-tight headingColor">Add Roles</h1>
+                  <h1 className="h4 ls-tight headingColor">Module Access</h1>
                 </div>
               </div>
               <div className="col-auto">
@@ -461,7 +461,7 @@ function ModuleAccess() {
           <div className="row d-flex align-items-start p-2">
             <div className="col-md-7 col-12">
               <lable className="form-lable">
-                User Role <span className="text-danger">*</span>
+                Company Names <span className="text-danger">*</span>
               </lable>
               <div className="input-group mb-3">
                 <select
@@ -469,13 +469,9 @@ function ModuleAccess() {
                   aria-label="Default select example"
                   //   onChange={handleRoleChange}
                 >
-                  <option value="1">Admin</option>
-                  <option value="2">Branch Admin</option>
-                  <option value="4">Staff</option>
-                  <option value="5">Staff Admin</option>
-                  <option value="6">Teacher</option>
-                  <option value="7">Centre Manager</option>
-                  <option value="8">Freelancer</option>
+                  <option value="1">A center</option>
+                  <option value="2">B center</option>
+                  <option value="4">C center</option>
                 </select>
               </div>
             </div>
