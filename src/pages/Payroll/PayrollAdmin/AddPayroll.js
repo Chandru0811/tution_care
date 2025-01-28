@@ -17,6 +17,8 @@ function AddPayroll() {
   const userName = localStorage.getItem("userName");
   const [bonus, setBonus] = useState(0);
   const [netPay, setNetPay] = useState(0);
+  const centerId = localStorage.getItem("centerId");
+
   console.log("NET PAY:", netPay);
 
   console.log("empRole", empRole);
@@ -95,7 +97,7 @@ function AddPayroll() {
 
   const formik = useFormik({
     initialValues: {
-      centerId: "",
+      centerId: centerId,
       userId: "",
       userRole: "",
       grossPay: "",
@@ -165,7 +167,7 @@ function AddPayroll() {
         const response = await api.post(
           empRole === "freelancer"
             ? "/createFreelancerPayroll"
-            : "/createUserPayroll",
+            : "/createUserPayrollWithCenterId",
           payload,
           {
             headers: {
@@ -194,7 +196,7 @@ function AddPayroll() {
 
   const handleCenterChange = async (event) => {
     setUserNameData(null);
-    const centerId = event.target.value;
+    // const centerId = event.target.value;
     formik.setFieldValue("centerId", centerId);
     formik.setFieldValue("deductionAmount", "");
     formik.setFieldValue("grossPay", "");
@@ -208,6 +210,7 @@ function AddPayroll() {
   useEffect(() => {
     const currentMonth = format(new Date(), "yyyy-MM");
     formik.setFieldValue("payrollMonth", currentMonth);
+    handleCenterChange();
   }, []);
 
   const fetchData = async () => {
@@ -441,7 +444,7 @@ function AddPayroll() {
           </div>
           <div className="container px-4">
             <div className="row">
-              <div className="col-md-6 col-12 mb-3 ">
+              {/* <div className="col-md-6 col-12 mb-3 ">
                 <lable className="">Centre Name</lable>
                 <span className="text-danger">*</span>
                 <select
@@ -467,7 +470,7 @@ function AddPayroll() {
                     {formik.errors.centerId}
                   </div>
                 )}
-              </div>
+              </div> */}
               <div className="col-md-6 col-12 mb-3 ">
                 <lable className="">Employee Name</lable>{" "}
                 <span className="text-danger">*</span>

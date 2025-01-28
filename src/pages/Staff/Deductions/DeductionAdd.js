@@ -24,11 +24,13 @@ function DeductionAdd() {
   const [userNamesData, setUserNameData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const userName = localStorage.getItem("userName");
+  const centerId = localStorage.getItem("centerId");
+
   const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: {
-      centerId: "",
+      centerId: centerId,
       userId: "",
       deductionName: "",
       deductionMonth: "",
@@ -66,11 +68,15 @@ function DeductionAdd() {
       };
 
       try {
-        const response = await api.post("/createUserDeduction", payload, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+        const response = await api.post(
+          "/createUserDeductionWithCenterId",
+          payload,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
         if (response.status === 201) {
           toast.success(response.data.message);
           navigate("/deduction");
@@ -87,7 +93,7 @@ function DeductionAdd() {
 
   const handleCenterChange = async (event) => {
     setUserNameData(null);
-    const centerId = event.target.value;
+    // const centerId = event.target.value;
     formik.setFieldValue("centerId", centerId);
     try {
       await fetchUserName(centerId);
@@ -107,6 +113,7 @@ function DeductionAdd() {
 
   useEffect(() => {
     fetchData();
+    handleCenterChange();
   }, []);
 
   const fetchUserName = async (centerId) => {
@@ -194,7 +201,7 @@ function DeductionAdd() {
           </div>
           <div className="container-fluid px-4">
             <div className="row">
-              <div className="col-md-6 col-12 mb-3">
+              {/* <div className="col-md-6 col-12 mb-3">
                 <label className="form-label">Centre Name</label>
                 <span className="text-danger">*</span>
                 <select
@@ -220,7 +227,7 @@ function DeductionAdd() {
                     {formik.errors.centerId}
                   </div>
                 )}
-              </div>
+              </div> */}
               <div className="col-md-6 col-12 mb-3">
                 <label className="form-label">Employee Name</label>{" "}
                 <span className="text-danger">*</span>
