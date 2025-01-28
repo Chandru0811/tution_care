@@ -91,7 +91,7 @@ function LeaveAdd() {
         formDatas.append("createdBy", userName);
 
         const response = await api.post(
-          `/createUserLeaveRequestWithAttachment`,
+          `/createUserLeaveRequestWithCenterId`,
           formDatas,
           {
             headers: {

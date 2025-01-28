@@ -21,6 +21,7 @@ const StaffSalaryEdit = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const [salaryTypeData, setSalaryTypeData] = useState(null);
     const userName = localStorage.getItem("userName");
+    const centerId = localStorage.getItem("centerId");
     const [id, setId] = useState();
 
     const fetchData = async () => {
@@ -67,7 +68,7 @@ const StaffSalaryEdit = forwardRef(
             }
           } else {
             const response = await api.post(
-              `/createUserSalaryCreation/${formData.staff_id}`,
+              `/createSalaryCreationWithCenterId/${formData.staff_id}`,
               values,
               {
                 headers: {
@@ -95,7 +96,7 @@ const StaffSalaryEdit = forwardRef(
       const getData = async () => {
         try {
           const response = await api.get(
-            `/getAllUserById/${formData.staff_id}`
+            `/getAllUserSalaryCreationWithCenterId/${centerId}`
           );
           if (
             response.data.userSalaryCreationModels &&

@@ -20,6 +20,7 @@ const Deduction = () => {
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
+  const centerId = localStorage.getItem("centerId");
 
   const columns = useMemo(
     () => [
@@ -92,7 +93,9 @@ const Deduction = () => {
 
   const getData = async () => {
     try {
-      const response = await api.get("/getAllUserDeduction");
+      const response = await api.get(
+        `/getAllUserDeductionWithCenterId/${centerId}`
+      );
       setDatas(response.data);
       setLoading(false);
     } catch (error) {
@@ -246,7 +249,8 @@ const Deduction = () => {
               onClose={handleMenuClose}
             >
               <MenuItem
-                onClick={() => navigate(`/deduction/edit/${selectedId}`)} className="text-start mb-0 menuitem-style"
+                onClick={() => navigate(`/deduction/edit/${selectedId}`)}
+                className="text-start mb-0 menuitem-style"
               >
                 Edit
               </MenuItem>

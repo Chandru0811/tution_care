@@ -93,7 +93,7 @@ const StaffContractAdd = forwardRef(
         values.createdBy = userName;
         try {
           const response = await api.post(
-            `/createUserContractCreation/${formData.user_id}`,
+            `/createUserContractCreationWithCenterId/${formData.user_id}`,
             values,
             {
               headers: {

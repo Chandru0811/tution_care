@@ -28,11 +28,12 @@ function HolidayAdd() {
   const [centerData, setCenterData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const userName = localStorage.getItem("userName");
+  const centerId = localStorage.getItem("centerId");
 
   const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
-      centerId: "",
+      centerId: centerId,
       holidayName: "",
       startDate: "",
       endDate: "",
@@ -157,7 +158,7 @@ function HolidayAdd() {
           </div>
           <div className="container-fluid px-4">
             <div className="row">
-              <div className="col-lg-6 col-md-6 col-12">
+              {/* <div className="col-lg-6 col-md-6 col-12">
                 <div className="text-start mt-2 mb-3">
                   <label className="form-label m-0">
                     Centre Name<span className="text-danger">*</span>
@@ -185,7 +186,7 @@ function HolidayAdd() {
                     </div>
                   )}
                 </div>
-              </div>
+              </div> */}
               <div className="col-lg-6 col-md-6 col-12">
                 <div className="text-start mt-2 mb-3">
                   <lable className="form-lable">

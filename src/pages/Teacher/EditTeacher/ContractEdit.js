@@ -13,6 +13,7 @@ import * as Yup from "yup";
 const ContractEdit = forwardRef(
   ({ formData, setLoadIndicators, setFormData }, ref) => {
     const userName = localStorage.getItem("userName");
+    const centerId = localStorage.getItem("centerId");
     const [employerData, setEmployerData] = useState(null);
     const [datas, setDatas] = useState();
     const [submitted, setSubmitted] = useState(false);
@@ -210,7 +211,7 @@ const ContractEdit = forwardRef(
             ? api.put(`/updateUserContractCreation/${contactId.id}`, values, {
                 headers: { "Content-Type": "application/json" },
               })
-            : api.post(`/createUserContractCreation/${formData.staff_id}`, values, {
+            : api.post(`/createUserContractCreationWithCenterId/${formData.staff_id}`, values, {
                 headers: { "Content-Type": "application/json" },
               });
     
@@ -254,7 +255,7 @@ const ContractEdit = forwardRef(
       const fetchEmployerData = async () => {
         try {
           const response = await api.get(
-            `/getAllUserById/${formData.staff_id}`
+            `/getAllUserContractCreationWithCenterId/${centerId}`
           );
           setEmployerData(response.data.userAccountInfo[0].centers || []);
           setWorkingDays(response.data.userAccountInfo[0].workingDays);

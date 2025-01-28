@@ -18,16 +18,17 @@ import { ToastContainer } from "react-toastify";
 import BlogView from "../components/client/Blogs/BlogView.js";
 import Blogs from "../pages/Client/Blogs.js";
 import ParticulerCourse from "../pages/Client/ParticulerCourse.js";
+import NewLogin from "../pages/auth/NewLogin.js";
 
 function Auth({ handleLogin }) {
   return (
     <BrowserRouter basename="/tms">
       <ToastContainer position="top-center" />
-      <TopBar />
-      <Header />
+      {/* <TopBar /> */}
+      {/* <Header /> */}
       <Routes>
-        <Route path="/login" element={<Login onLogin={handleLogin} />} />
-        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<NewLogin onLogin={handleLogin} />} />
+        {/* <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/teachers" element={<Teacher />} />
@@ -35,14 +36,14 @@ function Auth({ handleLogin }) {
         <Route path="/news" element={<News />} />
         <Route path="/calender/:id" element={<Calender />} />
         <Route path="/courses/:id" element={<ParticulerCourse />} />
-        {/* <Route path="/course/chinesh" element={<ChineshCourse />} /> */}
+        <Route path="/course/chinesh" element={<ChineshCourse />} />
         <Route path="/privacypolicy" element={<PrivacyPolicy />} />
         <Route path="/terms&conditions" element={<TermsConditions />} />
         <Route path="/blog" element={<Blogs />} />
-        <Route path="/blog/view/:id" element={<BlogView />} />
-        <Route path="*" element={<Login onLogin={handleLogin} />} />
+        <Route path="/blog/view/:id" element={<BlogView />} /> */}
+        <Route path="*" element={<NewLogin onLogin={handleLogin} />} />
       </Routes>
-      <Footer />
+      {/* <Footer /> */}
     </BrowserRouter>
   );
 }

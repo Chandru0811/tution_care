@@ -28,6 +28,7 @@ const Invoice = () => {
   });
   const [centerData, setCenterData] = useState([]);
   const centerIDLocal = localStorage.getItem("selectedCenterId");
+  const centerId = localStorage.getItem("centerId");
   const [centerManagerData, setCenterManagerData] = useState([]);
   const [packageData, setPackageData] = useState(null);
   const [studentData, setStudentData] = useState(null);
@@ -245,7 +246,8 @@ const Invoice = () => {
       }
 
       const response = await api.get(
-        `/getInvoiceWithCustomInfo?${queryParams.toString()}`
+        // `/getInvoiceWithCustomInfo?${queryParams.toString()}`
+        `/getGenerateInvoiceByCenterId/${centerId}`
       );
       setData(response.data);
     } catch (error) {
@@ -319,9 +321,9 @@ const Invoice = () => {
     }
   }, [filters]);
 
-    useEffect(() => {
-      getInvoiceData();
-    }, [filters]);
+  useEffect(() => {
+    getInvoiceData();
+  }, [filters]);
 
   const handleMenuClose = () => {
     setMenuAnchor(null);
@@ -491,7 +493,10 @@ const Invoice = () => {
               open={Boolean(menuAnchor)}
               onClose={handleMenuClose}
             >
-              <MenuItem onClick={() => navigate(`/invoice/edit/${selectedId}`)} className="text-start mb-0 menuitem-style">
+              <MenuItem
+                onClick={() => navigate(`/invoice/edit/${selectedId}`)}
+                className="text-start mb-0 menuitem-style"
+              >
                 Edit
               </MenuItem>
               <MenuItem>

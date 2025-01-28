@@ -42,7 +42,7 @@ const StaffLeaveAdd = forwardRef(
         values.createdBy = userName;
         try {
           const response = await api.post(
-            `/createUserLeaveCreation/${formData.user_id}`,
+            `/createUserLeaveCreationWithCenterId/${formData.user_id}`,
             values,
             {
               headers: {

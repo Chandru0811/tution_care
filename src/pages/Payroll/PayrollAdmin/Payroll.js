@@ -28,6 +28,7 @@ const Payroll = () => {
   const [centerData, setCenterData] = useState(null);
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
+  const centerId = localStorage.getItem("centerId");
 
   const columns = useMemo(
     () => [
@@ -169,7 +170,9 @@ const Payroll = () => {
 
   const fetchData = async () => {
     try {
-      const response = await api.get("getAllUserPayroll");
+      const response = await api.get(
+        `getAllUserPayrollWithCenterId/${centerId}`
+      );
       setAllData(response.data);
       setDatas(response.data);
       setLoading(false);

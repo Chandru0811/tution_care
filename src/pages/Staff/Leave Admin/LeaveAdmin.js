@@ -21,6 +21,7 @@ const LeaveAdmin = () => {
   const [leaveTypeData, setLeaveTypeData] = useState([]);
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
+  const centerId = localStorage.getItem("centerId");
 
   const columns = useMemo(
     () => [
@@ -118,7 +119,7 @@ const LeaveAdmin = () => {
 
   const getData = async () => {
     try {
-      const response = await api.get("/getAllUserLeaveRequests");
+      const response = await api.get(`getAllUserLeaveRequestWithCenterId/${centerId}`);
       setData(response.data);
       setLoading(false);
     } catch (error) {
