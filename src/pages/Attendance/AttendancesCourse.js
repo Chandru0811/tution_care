@@ -24,8 +24,8 @@ function AttendancesCourse() {
             onChange={handleSelectBtnChange}
           >
             <option value="" selected></option>
-            <option value="Arty Learning @ HG">Arty Learning @ HG</option>
-            <option value="Arty Learning @ AMK">Arty Learning @ AMK</option>
+            <option value="Tution Care @ HG">Tution Care @ HG</option>
+            <option value="Tution Care @ AMK">Tution Care @ AMK</option>
           </select>
         </div>
       </div>
@@ -35,16 +35,16 @@ function AttendancesCourse() {
             <thead>
               <tr>
                 <th scope="col" className="fw-medium text-center">
-                  Arty Learning
+                  Tution Care
                 </th>
                 <th scope="col" className="fw-medium text-center">
-                Arty Believer
+                  Tution Care Believer
                 </th>
                 <th scope="col" className="fw-medium text-center">
-                  Arty Pursue
+                  Tution Care Pursue
                 </th>
                 <th scope="col" className="fw-medium text-center">
-                  Arty 1On1
+                  Tution Care 1On1
                 </th>
               </tr>
             </thead>
@@ -121,120 +121,120 @@ function AttendancesCourse() {
               </div>
             </div>
 
-              <div className="col-md-6 col-12">
-                <div class="dropdown">
-                  <button
-                    class="btn btn-btn dropdown-toggle mx-2 mb-3"
-                    type="button"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
-                    style={{ borderRadius: "15px", width: "100%" }}
-                  >
-                    Science
-                  </button>
-                  <ul
-                    class="dropdown-menu px-2 text-center"
-                    style={{ width: "100%" }}
-                  >
-                    <Link to="/attendance" className="notLink">
-                      <li style={{ cursor: "pointer" }}>
-                        03:00 PM To 04:30 PM
-                      </li>
-                    </Link>
-                    <Link to="/attendance" className="notLink">
-                      <li style={{ cursor: "pointer" }}>
-                        04:00 PM To 05:00 PM
-                      </li>
-                    </Link>
-                    <Link to="/attendance" className="notLink">
-                      <li style={{ cursor: "pointer" }}>
-                        06:00 PM To 07:00 PM
-                      </li>
-                    </Link>
-                    <Link to="/attendance" className="notLink">
-                      <li style={{ cursor: "pointer" }}>
-                        07:30 PM To 08:30 PM
-                      </li>
-                    </Link>
-                  </ul>
-                </div>
+            <div className="col-md-6 col-12">
+              <div class="dropdown">
+                <button
+                  class="btn btn-btn dropdown-toggle mx-2 mb-3"
+                  type="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                  style={{ borderRadius: "15px", width: "100%" }}
+                >
+                  Science
+                </button>
+                <ul
+                  class="dropdown-menu px-2 text-center"
+                  style={{ width: "100%" }}
+                >
+                  <Link to="/attendance" className="notLink">
+                    <li style={{ cursor: "pointer" }}>
+                      03:00 PM To 04:30 PM
+                    </li>
+                  </Link>
+                  <Link to="/attendance" className="notLink">
+                    <li style={{ cursor: "pointer" }}>
+                      04:00 PM To 05:00 PM
+                    </li>
+                  </Link>
+                  <Link to="/attendance" className="notLink">
+                    <li style={{ cursor: "pointer" }}>
+                      06:00 PM To 07:00 PM
+                    </li>
+                  </Link>
+                  <Link to="/attendance" className="notLink">
+                    <li style={{ cursor: "pointer" }}>
+                      07:30 PM To 08:30 PM
+                    </li>
+                  </Link>
+                </ul>
               </div>
-              <div className="col-md-6 col-12">
-                <div class="dropdown">
-                  <button
-                    class="btn btn-btn dropdown-toggle mx-2 mb-3"
-                    type="button"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
-                    style={{ borderRadius: "15px", width: "100%" }}
-                  >
-                    English
-                  </button>
-                  <ul
-                    class="dropdown-menu px-2 text-center"
-                    style={{ width: "100%" }}
-                  >
-                    <Link to="/attendance" className="notLink">
-                      <li style={{ cursor: "pointer" }}>
-                        03:00 PM To 04:30 PM
-                      </li>
-                    </Link>
-                    <Link to="/attendance" className="notLink">
-                      <li style={{ cursor: "pointer" }}>
-                        04:00 PM To 05:00 PM
-                      </li>
-                    </Link>
-                    <Link to="/attendance" className="notLink">
-                      <li style={{ cursor: "pointer" }}>
-                        06:00 PM To 07:00 PM
-                      </li>
-                    </Link>
-                    <Link to="/attendance" className="notLink">
-                      <li style={{ cursor: "pointer" }}>
-                        07:30 PM To 08:30 PM
-                      </li>
-                    </Link>
-                  </ul>
-                </div>
+            </div>
+            <div className="col-md-6 col-12">
+              <div class="dropdown">
+                <button
+                  class="btn btn-btn dropdown-toggle mx-2 mb-3"
+                  type="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                  style={{ borderRadius: "15px", width: "100%" }}
+                >
+                  English
+                </button>
+                <ul
+                  class="dropdown-menu px-2 text-center"
+                  style={{ width: "100%" }}
+                >
+                  <Link to="/attendance" className="notLink">
+                    <li style={{ cursor: "pointer" }}>
+                      03:00 PM To 04:30 PM
+                    </li>
+                  </Link>
+                  <Link to="/attendance" className="notLink">
+                    <li style={{ cursor: "pointer" }}>
+                      04:00 PM To 05:00 PM
+                    </li>
+                  </Link>
+                  <Link to="/attendance" className="notLink">
+                    <li style={{ cursor: "pointer" }}>
+                      06:00 PM To 07:00 PM
+                    </li>
+                  </Link>
+                  <Link to="/attendance" className="notLink">
+                    <li style={{ cursor: "pointer" }}>
+                      07:30 PM To 08:30 PM
+                    </li>
+                  </Link>
+                </ul>
               </div>
-              <div className="col-md-6 col-12">
-                <div class="dropdown">
-                  <button
-                    class="btn btn-btn dropdown-toggle mx-2 mb-3"
-                    type="button"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
-                    style={{ borderRadius: "15px", width: "100%" }}
-                  >
-                    Chinese
-                  </button>
-                  <ul
-                    class="dropdown-menu px-2 text-center"
-                    style={{ width: "100%" }}
-                  >
-                    <Link to="/attendance" className="notLink">
-                      <li style={{ cursor: "pointer" }}>
-                        03:00 PM To 04:30 PM
-                      </li>
-                    </Link>
-                    <Link to="/attendance" className="notLink">
-                      <li style={{ cursor: "pointer" }}>
-                        04:00 PM To 05:00 PM
-                      </li>
-                    </Link>
-                    <Link to="/attendance" className="notLink">
-                      <li style={{ cursor: "pointer" }}>
-                        06:00 PM To 07:00 PM
-                      </li>
-                    </Link>
-                    <Link to="/attendance" className="notLink">
-                      <li style={{ cursor: "pointer" }}>
-                        07:30 PM To 08:30 PM
-                      </li>
-                    </Link>
-                  </ul>
-                </div>
+            </div>
+            <div className="col-md-6 col-12">
+              <div class="dropdown">
+                <button
+                  class="btn btn-btn dropdown-toggle mx-2 mb-3"
+                  type="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                  style={{ borderRadius: "15px", width: "100%" }}
+                >
+                  Chinese
+                </button>
+                <ul
+                  class="dropdown-menu px-2 text-center"
+                  style={{ width: "100%" }}
+                >
+                  <Link to="/attendance" className="notLink">
+                    <li style={{ cursor: "pointer" }}>
+                      03:00 PM To 04:30 PM
+                    </li>
+                  </Link>
+                  <Link to="/attendance" className="notLink">
+                    <li style={{ cursor: "pointer" }}>
+                      04:00 PM To 05:00 PM
+                    </li>
+                  </Link>
+                  <Link to="/attendance" className="notLink">
+                    <li style={{ cursor: "pointer" }}>
+                      06:00 PM To 07:00 PM
+                    </li>
+                  </Link>
+                  <Link to="/attendance" className="notLink">
+                    <li style={{ cursor: "pointer" }}>
+                      07:30 PM To 08:30 PM
+                    </li>
+                  </Link>
+                </ul>
               </div>
+            </div>
 
           </div>
         </div>

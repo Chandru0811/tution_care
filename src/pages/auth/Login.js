@@ -23,57 +23,57 @@ function Login({ onLogin }) {
       .email("*Invalid email address")
       .required("*Email is required"),
     password: Yup
-    .string()
-    .matches(/^\S*$/, "*Password must not contain spaces.")
-    .required("*Enter the valid Password"),
-});
+      .string()
+      .matches(/^\S*$/, "*Password must not contain spaces.")
+      .required("*Enter the valid Password"),
+  });
 
 
-const formik = useFormik({
-  initialValues: {
-    email: "",
-    password: "",
-  },
-  validationSchema: validationSchema,
-  onSubmit: async (values, { resetForm }) => {
-    try {
-      const response = await api.post(`smsLogin`, values, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      if (response.status === 200) {
-        const { role } = response.data;
-        if (role === "SMS_PARENT") {
-          toast.warning(
-            "You don't have access to the website. Please log in using Artylearning mobile app."
-          );
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    validationSchema: validationSchema,
+    onSubmit: async (values, { resetForm }) => {
+      try {
+        const response = await api.post(`smsLogin`, values, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        if (response.status === 200) {
+          const { role } = response.data;
+          if (role === "SMS_PARENT") {
+            toast.warning(
+              "You don't have access to the website. Please log in using Tution Care mobile app."
+            );
+          } else {
+            // Proceed with login for other roles
+            toast.success(response.data.message);
+            localStorage.setItem("centerId", response.data.centerId);
+            localStorage.setItem("roleId", response.data.roleId);
+            localStorage.setItem("role", response.data.role);
+            localStorage.setItem("token", response.data.accessToken);
+            localStorage.setItem("userId", response.data.userId);
+            localStorage.setItem("email", values.email);
+            onLogin(response.data.roleId);
+            navigate("/dashboard");
+          }
         } else {
-          // Proceed with login for other roles
-          toast.success(response.data.message);
-          localStorage.setItem("centerId", response.data.centerId);
-          localStorage.setItem("roleId", response.data.roleId);
-          localStorage.setItem("role", response.data.role);
-          localStorage.setItem("token", response.data.accessToken);
-          localStorage.setItem("userId", response.data.userId);
-          localStorage.setItem("email", values.email);
-          onLogin(response.data.roleId);
-          navigate("/dashboard");
+          toast.error(response.data.message);
         }
-      } else {
-        toast.error(response.data.message);
+      } catch (error) {
+        if (error?.response?.status === 409) {
+          toast.warning("Wrong username or password!");
+        } else {
+          toast.error(error?.response?.data?.message);
+        }
       }
-    } catch (error) {
-      if (error?.response?.status === 409) {
-        toast.warning("Wrong username or password!");
-      } else {
-        toast.error(error?.response?.data?.message);
-      }
-    }
 
-    resetForm();
-  },
-});
+      resetForm();
+    },
+  });
 
   const [showPassword, setShowPassword] = React.useState(false);
 
@@ -120,11 +120,10 @@ const formik = useFormik({
                       </label>
                       <input
                         type="email"
-                        className={`form-control ${
-                          formik.touched.email && formik.errors.email
+                        className={`form-control ${formik.touched.email && formik.errors.email
                             ? "is-invalid"
                             : ""
-                        }`}
+                          }`}
                         style={{
                           borderRadius: "8px",
                           borderColor:
@@ -147,11 +146,10 @@ const formik = useFormik({
                         <input
                           type={showPassword ? "text" : "password"}
                           placeholder="Enter password"
-                          className={`form-control ${
-                            formik.touched.password && formik.errors.password
+                          className={`form-control ${formik.touched.password && formik.errors.password
                               ? "is-invalid"
                               : ""
-                          }`}
+                            }`}
                           style={{
                             borderRadius: "8px",
                             borderColor:

@@ -22,6 +22,7 @@ import { GiExitDoor } from "react-icons/gi";
 import { MdOutlineAssignment } from "react-icons/md";
 
 const iconMapping = {
+  "Organization": <PiBuildings />,
   "Centre Management": <PiBuildings />,
   "Course Management": <PiBookOpenText />,
   "Lead Management": <GiExitDoor />,
@@ -65,14 +66,26 @@ function SuperAdminSidebar() {
     // Define your menu items based on screen access values
     const updatedMenuItems = [
       {
-        title: "organization",
+        title: "Organization",
         icon: "PiBuildings",
         isOpen: false,
         subMenus: [
           {
             title: "Company Listing",
-            path: "/center",
+            path: "/companyregistration",
             access: storedScreens.centerListingIndex,
+          },
+        ],
+      },
+      {
+        title: "Settings",
+        icon: "PiBuildings",
+        isOpen: false,
+        subMenus: [
+          {
+            title: "Module Access",
+            path: "/moduleaccess",
+            access: true,
           },
         ],
       },

@@ -70,7 +70,7 @@ const Datatable2 = () => {
       <div className="row my-5">
         <div className="col-md-4 col-12">
           <select className="form-select " aria-label="Default select example">
-            <option selected>Arty Learning @ HG</option>
+            <option selected>Tution Care @ HG</option>
             <option value="1">One</option>
             <option value="2">Two</option>
             <option value="3">Three</option>

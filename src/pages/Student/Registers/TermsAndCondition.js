@@ -79,7 +79,7 @@ function TermsAndCondition() {
               <div>
                 <input type="checkbox" name="Terms And Conditions" /> &nbsp; By
                 submitting this form, I confrim that I have read and agree to
-                Arty Learning s
+                Tution Care s
                 <span style={{ color: "#ff7500" }}>Terms & Conditions.</span>
               </div>
               <div className="d-flex justify-content-end mt-5  m-3">

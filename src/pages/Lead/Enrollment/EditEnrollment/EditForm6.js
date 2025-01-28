@@ -134,7 +134,7 @@ const EditForm6 = forwardRef(
                   onChange={formik.handleChange}
                 />
                 <label className="form-check-label" htmlFor="agreeConditionOne">
-                  I hereby provide my consent to Arty Learning Pte Ltd for the
+                  I hereby provide my consent to Tution Care Pte Ltd for the
                   display my child’s name, limited to first names and
                   potentially last initials (in cases where there are multiple
                   children with the same first name), in the facility’s
@@ -170,11 +170,11 @@ const EditForm6 = forwardRef(
                     className="form-check-label"
                     htmlFor="agreeConditionTwo"
                   >
-                    I hereby provide my consent to Arty Learning Pte Ltd for the
+                    I hereby provide my consent to Tution Care Pte Ltd for the
                     display my child’s name, limited to first names and
                     potentially last initials (in cases where there are multiple
                     children with the same first name), in photos and videos on
-                    arty learning social media pages to Arty Learning Pte Ltd,
+                    Tution Care social media pages to Tution Care Pte Ltd,
                     which will be shown to the public.
                   </label>
                 </div>

@@ -22,7 +22,7 @@ function EnrichmentClass() {
       <div className="row">
         <div className=" col-lg-6 col-md-12 col-sm-12 mt-5 ">
           <h1 className=" fw-bold d-flex">
-            {data.learningTitle || "Arty Learning"}
+            {data.learningTitle || "Tution Care"}
           </h1>
           <h5 className="text-secondary fw-bold d-flex pt-3 pb-3 ">
             {data.learningSubtitle || "Enrichment Classes in Singapore"}
@@ -44,8 +44,8 @@ function EnrichmentClass() {
                   explore their unique talents.
                 </p>
                 <p className="text-secondary fs-5 mt-2 lh-base">
-                  Discover Enrichment Classes Singapore for kids with Arty
-                  Learning and embark on a transformative educational journey
+                  Discover Enrichment Classes Singapore for kids with
+                  Tution Care and embark on a transformative educational journey
                   where boundless potential meets inventive teaching methods.
                 </p>
               </>
@@ -60,7 +60,7 @@ function EnrichmentClass() {
           <img
             className="rounded paper-draw ShadowLayer"
             src={data.learningImage || PaperDraw}
-            alt="arty learning"
+            alt="Tution Care"
           />
         </div>
       </div>

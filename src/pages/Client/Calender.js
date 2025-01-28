@@ -30,7 +30,7 @@ function Calender() {
         <div className="row py-5">
           <div className="offset-md-1 col-md-10 col-12">
             <p className="heading">
-              {data.heading || "2024 Arty Learning Calendar"}
+              {data.heading || "2024 Tution Care Calendar"}
             </p>
             <div className="row my-3">
               <div className="col-md-4 col-12">
@@ -81,7 +81,7 @@ function Calender() {
             <div className="comment pt-5 mt-3">
               {/* <h4 className="mb-3">Leave a Reply</h4> */}
               <p className="mb-3">
-                {data.para || "Stay informed with our latest news and updates. Discover exciting news and upcoming events from Arty Learning. Come"}
+                {data.para || "Stay informed with our latest news and updates. Discover exciting news and upcoming events from Tution Care. Come"}
               </p>
             </div>
           </div>

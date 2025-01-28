@@ -40,7 +40,7 @@ function Footer() {
               datas.slice(0, 2).map((data, index) => (
                 <>
                   <h4 style={{ fontWeight: "400" }}>
-                    <b>{data.centerName || "Arty Learning @ Hougang"}</b>
+                    <b>{data.centerName || "Tution Care"}</b>
                   </h4>
 
                   {data.address || (
@@ -59,7 +59,7 @@ function Footer() {
               datas.slice(2, 4).map((data, index) => (
                 <>
                   <h4 style={{ fontWeight: "400" }}>
-                    <b>{data.centerName || "Arty Learning @ Hougang"}</b>
+                    <b>{data.centerName || "Tution Care"}</b>
                   </h4>
 
                   {data.address || (

@@ -12,7 +12,7 @@ function ContactLists() {
   const [checkbox, setCheckboxs] = useState([
     {
       id: 1,
-      name: "Arty Learning",
+      name: "Tution Care",
       check: false,
     },
     {
@@ -27,7 +27,7 @@ function ContactLists() {
     },
     {
       id: 4,
-      name: "Arty Learning",
+      name: "Tution Care",
       check: false,
     },
     {
@@ -37,7 +37,7 @@ function ContactLists() {
     },
     {
       id: 6,
-      name: "Arty Learning",
+      name: "Tution Care",
       check: false,
     },
   ]);

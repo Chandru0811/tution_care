@@ -9,10 +9,10 @@ function CmsHomeEnrichmentClass() {
     "We Help Children Build a Strong Language Foundation With Our Creative Touch."
   );
   const [content, setContent] = useState({
-    header: "Arty Learning",
+    header: "Tution Care",
     subHeader: "Enrichment Classes in Singapore",
     paragraphs:
-      "We believe that every child has the potential to shine and achieve great things. As a dynamic and innovative language education centre, we are dedicated to providing a nurturing environment that fosters the creativity and development of young minds.\n\nDriven by a deep passion for education, we believe in the power of creativity and critical thinking. Children learn best when they are actively engaged, inspired and encouraged to explore their unique talents.\n\nDiscover Enrichment Classes Singapore for kids with Arty Learning and embark on a transformative educational journey where boundless potential meets inventive teaching methods.",
+      "We believe that every child has the potential to shine and achieve great things. As a dynamic and innovative language education centre, we are dedicated to providing a nurturing environment that fosters the creativity and development of young minds.\n\nDriven by a deep passion for education, we believe in the power of creativity and critical thinking. Children learn best when they are actively engaged, inspired and encouraged to explore their unique talents.\n\nDiscover Enrichment Classes Singapore for kids with Tution Care and embark on a transformative educational journey where boundless potential meets inventive teaching methods.",
   });
 
   const toggleEdit = (field) => {

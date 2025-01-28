@@ -428,7 +428,7 @@ const EditTermsAndCondition = forwardRef(
                     />
                     <small>
                       By submitting this form, I confrim that I have read and
-                      agree to Arty Learning's&nbsp;
+                      agree to Tution Care's&nbsp;
                       <span style={{ color: "#ff7500" }}>
                         Terms & Conditions.
                       </span>

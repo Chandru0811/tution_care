@@ -131,7 +131,7 @@ function CmsEnglishBanner({
             <div className="edit-container d-flex flex-column justify-content-center align-items-center">
               <img src={content?.img} alt="english" className="img-fluid"></img>
             </div>
-            <h1>Arty Learning</h1>
+            <h1>Tution Care</h1>
           </div>
         </div>
         <div className="col-md-4 col-12 p-5">

@@ -77,7 +77,7 @@ const Form4 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
               onBlur={formik.handleBlur}
             />
             <label className="form-check-label" for="flexCheckDefault">
-              I Hereby provide my consent to arty learning pte ltd for the
+              I Hereby provide my consent to Tution Care pte ltd for the
               display my child’s name, limited to first names and potentially
               last initials (in cases where there are multiple children with the
               same first name), in the facility’s scrapbook and bulletin board
@@ -102,11 +102,11 @@ const Form4 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
               onBlur={formik.handleBlur}
             />
             <label className="form-check-label" for="flexCheckDefault">
-              I Hereby provide my consent to arty learning pte ltd for the
+              I Hereby provide my consent to Tution Care pte ltd for the
               display my child’s name, limited to first names and potentially
               last initials (in cases where there are multiple children with the
-              same first name), in photos and videos on arty learning so media
-              pages to arty learning pte ltd, which will be shown to public.
+              same first name), in photos and videos on Tution Care so media
+              pages to Tution Care pte ltd, which will be shown to public.
             </label>
           </div>
         </div>

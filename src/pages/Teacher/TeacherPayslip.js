@@ -31,7 +31,7 @@ function TeacherPayslip() {
           <div className="container">
             <div className="row">
               <div className="col-12 text-start">
-                <h5>ARTY LEARNING</h5>
+                <h5>Tution Care</h5>
                 <p className="">
                   806 HOUGANG CENTRAL ,#04-146,SINGAPORE 530806
                 </p>
@@ -54,7 +54,7 @@ function TeacherPayslip() {
                   </div>
                   <div className="col-6">
                     <p className="text-muted text-sm">
-                      : ARTY LEARNING PTE.LTD
+                      : Tution Care PTE.LTD
                     </p>
                   </div>
                 </div>

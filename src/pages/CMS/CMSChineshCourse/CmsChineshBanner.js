@@ -114,14 +114,14 @@ function CmsChineseBanner({
             </>
           ) : (
             <>
-             {storedScreens?.chineseCourseUpdate && (
-              <button
-                className="btn btn-sm btn-outline-warning border ms-2 edit-button"
-                onClick={() => handleEdit("bgImg")}
-              >
-                <FaEdit />
-              </button>
-             )}
+              {storedScreens?.chineseCourseUpdate && (
+                <button
+                  className="btn btn-sm btn-outline-warning border ms-2 edit-button"
+                  onClick={() => handleEdit("bgImg")}
+                >
+                  <FaEdit />
+                </button>
+              )}
             </>
           )}
         </div>
@@ -133,7 +133,7 @@ function CmsChineseBanner({
             <div className="edit-container d-flex flex-column justify-content-center align-items-center">
               <img src={Alphabet} alt="english" className="img-fluid w-25"></img>
             </div>
-            <h1>Arty Learning</h1>
+            <h1>Tution Care</h1>
           </div>
         </div>
         <div className="col-md-4 col-12 p-5">
@@ -165,12 +165,12 @@ function CmsChineseBanner({
               <>
                 <h3 className="mb-3 headcolor">{heading}</h3>
                 {storedScreens?.chineseCourseUpdate && (
-                <button
-                  className="btn btn-sm btn-outline-warning border ms-2 edit-button"
-                  onClick={() => handleEdit("heading")}
-                >
-                  <FaEdit />
-                </button>)}
+                  <button
+                    className="btn btn-sm btn-outline-warning border ms-2 edit-button"
+                    onClick={() => handleEdit("heading")}
+                  >
+                    <FaEdit />
+                  </button>)}
               </>
             )}
           </div>
@@ -206,12 +206,12 @@ function CmsChineseBanner({
                 </div>
               ))}
               {storedScreens?.chineseCourseUpdate && (
-              <button
-                className="btn btn-sm btn-outline-warning border ms-2 edit-button"
-                onClick={toggleEdit}
-              >
-                <FaEdit />
-              </button>)}
+                <button
+                  className="btn btn-sm btn-outline-warning border ms-2 edit-button"
+                  onClick={toggleEdit}
+                >
+                  <FaEdit />
+                </button>)}
             </>
           )}
         </div>

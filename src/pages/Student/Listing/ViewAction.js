@@ -63,7 +63,7 @@ function ViewAction() {
                     </p>
                   </div>
                   <div className="col-6">
-                    <p className="text-muted text-sm">: Arty Learning @ HG</p>
+                    <p className="text-muted text-sm">: Tution Care @ HG</p>
                   </div>
                 </div>
               </div>

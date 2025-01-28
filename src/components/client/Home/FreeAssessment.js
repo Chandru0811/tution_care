@@ -13,13 +13,13 @@ function FreeAssessment() {
                   {" "}
                   <b
                     className="artyAnimatedText"
-                    // style={{ fontSize: "460%", marginLeft: "20px" }}
+                  // style={{ fontSize: "460%", marginLeft: "20px" }}
                   >
-                    ARTY
+                    TUTION
                   </b>
                   <br />{" "}
                   <b className="artyAnimatedText" id="LEARNING">
-                    LEARNING
+                    CARE
                   </b>{" "}
                 </span>
               </h1>

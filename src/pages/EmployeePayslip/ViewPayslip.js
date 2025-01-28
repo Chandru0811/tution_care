@@ -5,7 +5,7 @@ function ViewPayslip() {
   return (
     <div className="container">
       <div className="d-flex justify-content-center  align-item-center">
-        <h5 className="mt-5">Arty Learning</h5>
+        <h5 className="mt-5">Tution Care</h5>
         <p>Payslip For The Month Of March 2024</p>
       </div>
       <div className="row mt-5 pb-3">

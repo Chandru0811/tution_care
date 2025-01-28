@@ -49,7 +49,7 @@ function StudentListing() {
               <tr>
                 <td>1</td>
                 <td>S000482</td>
-                <td>Arty learning @HG</td>
+                <td>Tution Care @HG</td>
                 <td>Hasal Thing</td>
                 <td>3 Years 11 Months Ago</td>
                 <td>05-01-2024</td>
@@ -78,7 +78,7 @@ function StudentListing() {
               <tr>
                 <td>2</td>
                 <td>S000483</td>
-                <td>Arty learning @HG</td>
+                <td>Tution Care @HG</td>
                 <td>Hasal Thing</td>
                 <td>5 Years 11 Months Ago</td>
                 <td>05-01-2024</td>
@@ -101,7 +101,7 @@ function StudentListing() {
               <tr>
                 <td>3</td>
                 <td>S000453</td>
-                <td>Arty learning @HG</td>
+                <td>Tution Care @HG</td>
                 <td>Hasal Thing</td>
                 <td>5 Years </td>
                 <td>05-01-2024</td>
