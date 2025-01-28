@@ -11,8 +11,8 @@ import SuperAdmin from "./layouts/SuperAdmin";
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  // const role = localStorage.getItem("role");
-  const role = "TUITION_SUPER_ADMIN";  
+  const role = localStorage.getItem("role");
+  // const role = "TUITION_SUPER_ADMIN";  
 
   useEffect(() => {
     const isAdminFromStorage = localStorage.getItem("isAuthenticated");

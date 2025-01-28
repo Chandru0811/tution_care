@@ -71,7 +71,7 @@ function Header({ onLogout, centerChange }) {
           </Link>
           <div className="position-relative me-3">
             <span className="badge bg-primary rounded-pill">
-              {centerName || "Tution Care"}
+              {centerName || "Tuition Care"}
             </span>
           </div>
 
