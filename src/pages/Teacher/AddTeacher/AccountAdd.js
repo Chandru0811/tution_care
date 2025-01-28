@@ -97,7 +97,7 @@ const AccountAdd = forwardRef(
         values.signature = null;
         try {
           const response = await api.post(
-            `/createUserAccountInfos`,
+            `/createUserAccountInfoWithCenterId`,
             updatedData,
             {
               headers: {

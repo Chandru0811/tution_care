@@ -65,7 +65,7 @@ const StaffRequiredAdd = forwardRef(
           formDatas.append("createdBy", userName);
 
           const response = await api.post(
-            `/createUserRequireInformation`,
+            `/createUserRequireInformationWithCenterId`,
             formDatas,
             {
               headers: {

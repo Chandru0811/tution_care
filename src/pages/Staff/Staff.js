@@ -24,6 +24,7 @@ const Staff = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
+  const centerId = localStorage.getItem("centerId");
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
 
@@ -150,7 +151,8 @@ const Staff = () => {
       );
       const queryParams = new URLSearchParams(filteredFilters).toString();
       const response = await api.get(
-        `/getAllUserListExceptTeacher?${queryParams}`
+        // `/getAllUserWithCenterId?${queryParams}`
+        `/getAllUserWithCenterId/${centerId}`
       );
       setData(response.data);
     } catch (error) {

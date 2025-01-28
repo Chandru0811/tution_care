@@ -137,7 +137,7 @@ function Attendances() {
         ...(selectedBatch && { batchTime: selectedBatch }),
       };
       const response = await api.post(
-        "getAllTeacherWithStudentAttendance",
+        "getAllUserAttendanceWithCenterId",
         requestBody
       );
       setAttendanceData(response.data);

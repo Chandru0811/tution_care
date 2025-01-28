@@ -58,6 +58,7 @@ const StaffContractEdit = forwardRef(
   ({ formData, setLoadIndicators, setFormData }, ref) => {
     const navigate = useNavigate();
     const userName = localStorage.getItem("userName");
+    const centerId = localStorage.getItem("centerId");
     const [centerData, setCenterData] = useState(null);
     const [employerData, setEmployerData] = useState(null);
     const [datas, setDatas] = useState();
@@ -118,7 +119,7 @@ const StaffContractEdit = forwardRef(
             }
           } else {
             const response = await api.post(
-              `/createUserContractCreation/${formData.staff_id}`,
+              `/createUserContractCreationWithCenterId/${formData.staff_id}`,
               values,
               {
                 headers: {
@@ -219,7 +220,7 @@ const StaffContractEdit = forwardRef(
       const getData = async () => {
         try {
           const response = await api.get(
-            `/getAllUserById/${formData.staff_id}`
+            `/getAllUserContractCreationWithCenterId/${centerId}`
           );
           const employerData = response.data.userAccountInfo[0].centers;
           setEmployerData(employerData);

@@ -6,10 +6,13 @@ import Auth from "./layouts/Auth";
 import api from "./config/URL";
 import { updateScreens } from "./config/ScreenFilter";
 import { toast } from "react-toastify";
+import SuperAdmin from "./layouts/SuperAdmin";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const role = localStorage.getItem("role");
+  // const role = "TUITION_SUPER_ADMIN";  
 
   useEffect(() => {
     const isAdminFromStorage = localStorage.getItem("isAuthenticated");
@@ -86,8 +89,14 @@ function App() {
             <span></span>
           </div>
         </div>
-      ) : isAuthenticated ? (
-        <Admin handleLogout={handleLogout} />
+       ) : isAuthenticated ? (
+        role === "TUITION_SUPER_ADMIN" ? (
+          <SuperAdmin handleLogout={handleLogout} />
+        ) : role !== "TUITION_SUPER_ADMIN" ? (
+          <Admin handleLogout={handleLogout} />
+        ) : (
+          <Auth handleLogin={handleLogin} />
+        )
       ) : (
         <Auth handleLogin={handleLogin} />
       )}

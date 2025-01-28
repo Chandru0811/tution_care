@@ -100,7 +100,7 @@ const StaffAccountAdd = forwardRef(
         };
         try {
           const response = await api.post(
-            `/createUserAccountInfos`,
+            `/createUserAccountInfoWithCenterId`,
             updatedData,
             {
               headers: {

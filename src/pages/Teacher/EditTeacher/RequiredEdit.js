@@ -13,6 +13,7 @@ import { MdOutlineDownloadForOffline } from "react-icons/md";
 const RequiredEdit = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const userName = localStorage.getItem("userName");
+    const centerId = localStorage.getItem("centerId");
     const [datas, setDatas] = useState();
     console.log("required", formData);
     const formik = useFormik({
@@ -62,7 +63,7 @@ const RequiredEdit = forwardRef(
             );
 
             const response = await api.post(
-              `/createUserRequireInformation`,
+              `/createUserRequireInformationWithCenterId`,
               formDatas,
               {
                 headers: {
@@ -97,7 +98,7 @@ const RequiredEdit = forwardRef(
       const getData = async () => {
         try {
           const response = await api.get(
-            `/getAllUserById/${formData.staff_id}`
+            `/getAllUserRequireInformationWithCenterId/${centerId}`
           );
           if (
             response.data.userRequireInformationModels &&
