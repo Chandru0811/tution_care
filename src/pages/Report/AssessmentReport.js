@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from "react";
 import "datatables.net-dt";
 import "datatables.net-responsive-dt";
 import $ from "jquery";
+import { Link } from "react-router-dom";
 
 const AssessmentReport = () => {
   const tableRef = useRef(null);
@@ -92,65 +93,73 @@ const AssessmentReport = () => {
   }, []);
 
   return (
-    <div className="container-fluid  center">
-    <div className="card shadow border-0 mb-2 top-header">
-      <div className="container-fluid px-0">
-        <div className="my-3 d-flex justify-content-between mb-5 px-4">
-          <h2>Assessment Report</h2>
-        </div>
-        <hr />
-        <div className="table-responsive minHeight  px-4">
-        <table ref={tableRef} className="display">
-          <thead>
-            <tr>
-              <th scope="col">S No</th>
-              <th scope="col">Centre</th>
-              <th scope="col">Student</th>
-              <th scope="col">Assessment</th>
-              <th scope="col">Date</th>
-              <th scope="col">Start Time</th>
-              <th scope="col">Duration</th>
-              <th scope="col">Course Name</th>
-              <th scope="col">Result</th>
-              <th scope="col">Status</th>
+    <div className="container my-4">
+      <ol
+        className="breadcrumb my-3"
+        style={{ listStyle: "none", padding: 0, margin: 0 }}
+      >
+        <li>
+          <Link to="/" className="custom-breadcrumb">
+            Home
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          Report Management
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li className="breadcrumb-item active" aria-current="page">
+          Asssessment Report
+        </li>
+      </ol>
+      <table ref={tableRef} className="display">
+        <thead>
+          <tr>
+            <th scope="col">S No</th>
+            <th scope="col">Centre</th>
+            <th scope="col">Student</th>
+            <th scope="col">Assessment</th>
+            <th scope="col">Date</th>
+            <th scope="col">Start Time</th>
+            <th scope="col">Duration</th>
+            <th scope="col">Course Name</th>
+            <th scope="col">Result</th>
+            <th scope="col">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {datas.map((data, index) => (
+            <tr key={index}>
+              <th scope="row">{index + 1}</th>
+              <td>{data.center}</td>
+              <td>{data.student_name}</td>
+              <td>{data.assessment}</td>
+              <td>{data.assessment_date}</td>
+              <td>{data.start_time}</td>
+              <td>{data.Duration}</td>
+              <td>{data.course_name}</td>
+              <td>{data.result}</td>
+              <td>
+                {data.status === "enrolled" ? (
+                  <span className="badge badges-Green">Enrolled</span>
+                ) : data.status === "assessment_arranged" ? (
+                  <span className="badge badges-Yellow">
+                    Assessment Arranged
+                  </span>
+                ) : data.status === "cancelled" ? (
+                  <span className="badge badges-Red">Cancelled</span>
+                ) : data.status === "drop" ? (
+                  <span className="badge badges-Brown">Drop</span>
+                ) : (
+                  <span className="badge badges-LightGreen">
+                    Assessment Done
+                  </span>
+                )}
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            {datas.map((data, index) => (
-              <tr key={index}>
-                <th scope="row">{index + 1}</th>
-                <td>{data.center}</td>
-                <td>{data.student_name}</td>
-                <td>{data.assessment}</td>
-                <td>{data.assessment_date}</td>
-                <td>{data.start_time}</td>
-                <td>{data.Duration}</td>
-                <td>{data.course_name}</td>
-                <td>{data.result}</td>
-                <td>
-                  {data.status === "enrolled" ? (
-                    <span className="badge badges-Green">Enrolled</span>
-                  ) : data.status === "assessment_arranged" ? (
-                    <span className="badge badges-Yellow">
-                      Assessment Arranged
-                    </span>
-                  ) : data.status === "cancelled" ? (
-                    <span className="badge badges-Red">Cancelled</span>
-                  ) : data.status === "drop" ? (
-                    <span className="badge badges-Brown">Drop</span>
-                  ) : (
-                    <span className="badge badges-LightGreen">
-                      Assessment Done
-                    </span>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
-    </div>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };

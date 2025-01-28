@@ -11,12 +11,16 @@ const validationSchema = Yup.object().shape({
   lesson: Yup.string().required("*Select the Lesson"),
   nextclass: Yup.string().required("*Select the Type"),
   pace: Yup.string().required("*Select the Type"),
+  remark: Yup.string()
+      .max(200, "*The maximum length is 200 characters").required("*Only 200 Letters"),
 });
 
 
 
 function AttendancesEdit() {
   const [loadIndicator, setLoadIndicator] = useState(false);
+  const userName  = localStorage.getItem('userName');
+
 
   const navigate = useNavigate();
   const formik = useFormik({
@@ -28,6 +32,8 @@ function AttendancesEdit() {
       nextclass: "",
       pace: "",
       remark: "",
+      updatedBy:userName,
+
     },
     validationSchema: validationSchema,
     onSubmit: async (data) => {
@@ -70,7 +76,11 @@ function AttendancesEdit() {
   }, []);
   return (
     <div className="container">
-      <form onSubmit={formik.handleSubmit}>
+       <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
+          if (e.key === 'Enter' && !formik.isSubmitting) {
+            e.preventDefault();  // Prevent default form submission
+          }
+        }}>
         <div className="my-3 d-flex justify-content-end align-items-end  mb-2">
           <Link to="/attendance">
             <button type="button " className="btn btn-sm btn-border   ">
@@ -328,6 +338,8 @@ function AttendancesEdit() {
                 class="form-control"
                 {...formik.getFieldProps("remark")}
                 rows="3"
+                maxLength={200}
+
               ></textarea>
             </div>
           </div>

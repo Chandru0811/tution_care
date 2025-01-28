@@ -2,7 +2,7 @@ import React, { forwardRef, useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import api from "../../../config/URL";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { FaEdit } from "react-icons/fa";
@@ -18,9 +18,10 @@ const validationSchema = Yup.object().shape({
 });
 
 const AddEmergencyContact = forwardRef(
-  ({ id, emergencyId,setLoadIndicators, formValue, getData }) => {
+  ({ id, emergencyId, setLoadIndicators, formValue, getData }) => {
     const [show, setShow] = useState(false);
     const [data, setData] = useState([]);
+    const userName = localStorage.getItem("userName");
 
     const handleClose = () => setShow(false);
     const handleShow = () => {
@@ -56,10 +57,14 @@ const AddEmergencyContact = forwardRef(
             formDatas.append("name", data.name);
             formDatas.append("contactNo", data.contactNo);
             formDatas.append("authorizedRelation", data.authorizedRelation);
-            formDatas.append("postalCode",data.postalCode);
-            formDatas.append("emergencyContactAddress",data.emergencyContactAddress);
+            formDatas.append("postalCode", data.postalCode);
+            formDatas.append(
+              "emergencyContactAddress",
+              data.emergencyContactAddress
+            );
             formDatas.append("files", data.files);
             formDatas.append("deleteEmergencyAuthorizedContactIds ", 1);
+            formDatas.append("updatedBy", userName);
           });
           const response = await api.put(
             `/updateEmergencyContactWithEmergencyAuthorizedContact/${emergencyId}`,
@@ -79,8 +84,8 @@ const AddEmergencyContact = forwardRef(
             toast.error(response.data.message);
           }
         } catch (error) {
-          toast.error(error.message);
-        }finally {
+          toast.error(error);
+        } finally {
           setLoadIndicators(false);
         }
       },
@@ -100,10 +105,10 @@ const AddEmergencyContact = forwardRef(
             setData(emergency);
           }
         });
-        
+
         // console.log("getAllStudentEmergencyContactsById",EmergencyData);
       } catch (error) {
-        console.error("Error fetching data:", error.message);
+        console.error("Error fetching data:", error);
       }
     };
 
@@ -124,7 +129,14 @@ const AddEmergencyContact = forwardRef(
             centered
             onHide={handleClose}
           >
-            <form onSubmit={formik.handleSubmit}>
+            <form
+              onSubmit={formik.handleSubmit}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !formik.isSubmitting) {
+                  e.preventDefault(); // Prevent default form submission
+                }
+              }}
+            >
               <Modal.Header closeButton>
                 <Modal.Title>
                   <p className="headColor">
@@ -215,18 +227,21 @@ const AddEmergencyContact = forwardRef(
                       accept=".jpg, .jpeg, .png"
                     />
                     <div className="my-2 text-center">
-                    <img
-                      src={data.personProfile}
-                      className="img-fluid rounded"
-                      style={{ width: "60%" }}
-                      alt="Parent Signature Img"
-                    ></img>
-                  </div>
+                      <img
+                        src={data.personProfile}
+                        className="img-fluid rounded"
+                        style={{ width: "60%" }}
+                        alt="Parent Signature Img"
+                      ></img>
+                    </div>
                   </div>
                 </div>
               </Modal.Body>
               <Modal.Footer className="mt-3">
-                <Button variant="secondary btn-sm" onClick={handleClose}>
+                <Button
+                  className="btn btn-sm btn-border bg-light text-dark"
+                  onClick={handleClose}
+                >
                   Cancel
                 </Button>
                 <Button

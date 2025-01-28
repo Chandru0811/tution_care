@@ -1,183 +1,363 @@
-import React, { useEffect, useRef, useState } from "react";
-import "datatables.net-dt";
-import "datatables.net-responsive-dt";
-import $ from "jquery";
-import { Link } from "react-router-dom";
-import { FaEye, FaEdit } from "react-icons/fa";
-import Delete from "../../components/common/DeleteModel";
+import React, { useEffect, useMemo, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import api from "../../config/URL";
-import fetchAllCentersWithIds from "../List/CenterList";
-import toast from "react-hot-toast";
+import { MaterialReactTable } from "material-react-table";
+import {
+  ThemeProvider,
+  createTheme,
+  Menu,
+  MenuItem,
+  IconButton,
+} from "@mui/material";
+import { MoreVert as MoreVertIcon } from "@mui/icons-material";
+import { toast } from "react-toastify";
+import GlobalDelete from "../../components/common/GlobalDelete";
+import fetchAllCentersWithIds from "../../pages/List/CenterList";
 
 const StaffingAttendance = () => {
-  const tableRef = useRef(null);
-  const [datas, setDatas] = useState([]);
-  console.log("Leave Data:", datas);
+  const navigate = useNavigate();
+  const [data, setData] = useState([]);
+  console.log("Leave Data:", data);
   const [loading, setLoading] = useState(true);
   const [centerData, setCenterData] = useState(null);
-  const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
+  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
+  const [menuAnchor, setMenuAnchor] = useState(null);
+  const [selectedId, setSelectedId] = useState(null);
 
   const fetchData = async () => {
     try {
       const centerData = await fetchAllCentersWithIds();
       setCenterData(centerData);
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error);
     }
   };
 
+  const columns = useMemo(
+    () => [
+      {
+        accessorFn: (row, index) => index + 1,
+        header: "S.NO",
+        enableSorting: true,
+        enableHiding: false,
+        size: 20,
+        cell: ({ cell }) => (
+          <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
+        ),
+      },
+      {
+        accessorKey: "id",
+        header: "",
+        enableHiding: false,
+        enableSorting: false,
+        size: 20,
+        Cell: ({ cell }) => (
+          <IconButton
+            onClick={(e) => {
+              e.stopPropagation();
+              setMenuAnchor(e.currentTarget);
+              setSelectedId(cell.getValue());
+            }}
+          >
+            <MoreVertIcon />
+          </IconButton>
+        ),
+      },
+      {
+        accessorKey: "attendanceStatus",
+        enableHiding: false,
+        header: "Status",
+        size: 30,
+        Cell: ({ row }) =>
+          row.original.attendanceStatus === "Present" ||
+          row.original.attendanceStatus === "PRESENT" ? (
+            <span className="badge badges-Green fw-light">Present</span>
+          ) : row.original.attendanceStatus === "Absent" ||
+            row.original.attendanceStatus === "ABSENT" ? (
+            <span className="badge badges-orange fw-light">Absent</span>
+          ) : null,
+      },
+      { accessorKey: "centerName", enableHiding: false, header: "Centre Name" },
+      {
+        accessorKey: "employeeName",
+        enableHiding: false,
+        header: "Employee Name",
+      },
+      {
+        accessorKey: "checkIn",
+        size: 30,
+        enableHiding: false,
+        header: "Check In",
+        Cell: ({ cell }) => {
+          const timeValue = cell.getValue();
+          if (timeValue) {
+            const [hours, minutes] = timeValue.split(":");
+            const date = new Date();
+            date.setHours(hours, minutes);
+            const options = {
+              hour: "numeric",
+              minute: "numeric",
+              hour12: true,
+            };
+            return date.toLocaleTimeString(undefined, options);
+          }
+          return null;
+        },
+      },
+      {
+        accessorKey: "checkOut",
+        size: 30,
+        enableHiding: false,
+        header: "Check Out",
+        Cell: ({ cell }) => {
+          const timeValue = cell.getValue();
+          if (timeValue) {
+            const [hours, minutes] = timeValue.split(":");
+            const date = new Date();
+            date.setHours(hours, minutes);
+            const options = {
+              hour: "numeric",
+              minute: "numeric",
+              hour12: true,
+            };
+            return date.toLocaleTimeString(undefined, options);
+          }
+          return null;
+        },
+      },
+      { accessorKey: "date", enableHiding: false, header: "Date" },
+      { accessorKey: "createdBy", enableHiding: false, header: "Created By" },
+      {
+        accessorKey: "updatedBy",
+        header: "Updated By",
+        enableHiding: false,
+        Cell: ({ cell }) => cell.getValue() || "",
+      },
+      { accessorKey: "attendanceRemark", header: "Attendance Remark" },
+      {
+        accessorKey: "modeOfWorking",
+        header: "Mode Of Working",
+        Cell: ({ row }) =>
+          row.original.modeOfWorking === "WORK_FROM_HOME" ||
+          row.original.modeOfWorking === "work_from_home" ? (
+            <span>WORK FROM HOME</span>
+          ) : row.original.modeOfWorking === "WORK_FROM_OFFICE" ||
+            row.original.modeOfWorking === "work_from_office" ? (
+            <span>WORK FROM OFFICE</span>
+          ) : null,
+      },
+      { accessorKey: "userId", header: "User Id" },
+      {
+        accessorKey: "userRole",
+        header: "User Role",
+        Cell: ({ row }) =>
+          row.original.userRole === "SMS_TEACHER" ||
+          row.original.userRole === "sms_teacher" ? (
+            <span>SMS TEACHER</span>
+          ) : row.original.userRole === "CENTER_MANAGER" ||
+            row.original.userRole === "center_manager" ? (
+            <span>CENTER MANAGER</span>
+          ) : null,
+      },
+      { accessorKey: "otEndTime", header: "Ot End Time" },
+      { accessorKey: "otStartTime", header: "Ot Start Time" },
+      {
+        accessorKey: "createdAt",
+        header: "Created At",
+        Cell: ({ cell }) => cell.getValue()?.substring(0, 10),
+      },
+      {
+        accessorKey: "updatedAt",
+        header: "Updated At",
+        Cell: ({ cell }) => cell.getValue()?.substring(0, 10) || "",
+      },
+    ],
+    []
+  );
+
+  const getData = async () => {
+    try {
+      const response = await api.get("/getAllUserAttendances");
+      setData(response.data);
+      setLoading(false);
+    } catch (error) {
+      toast.error("Error Fetching Data : ", error);
+    }
+  };
   useEffect(() => {
-    const getData = async () => {
-      try {
-        const response = await api.get("/getAllUserAttendances");
-        setDatas(response.data);
-        setLoading(false);
-      } catch (error) {
-        toast.error("Error Fetching Data : ", error.message);
-      }
-    };
     getData();
     fetchData();
   }, []);
 
-  useEffect(() => {
-    if (!loading) {
-      initializeDataTable();
-    }
-    return () => {
-      destroyDataTable();
-    };
-  }, [loading]);
-
-  const initializeDataTable = () => {
-    if ($.fn.DataTable.isDataTable(tableRef.current)) {
-      // DataTable already initialized, no need to initialize again
-      return;
-    }
-    $(tableRef.current).DataTable({
-      responsive: true,
-    });
-  };
-
-  const destroyDataTable = () => {
-    const table = $(tableRef.current).DataTable();
-    if (table && $.fn.DataTable.isDataTable(tableRef.current)) {
-      table.destroy();
-    }
-  };
-
-  const refreshData = async () => {
-    destroyDataTable();
-    setLoading(true);
-    try {
-      const response = await api.get("/getAllUserAttendances");
-      setDatas(response.data);
-      initializeDataTable(); // Reinitialize DataTable after successful data update
-    } catch (error) {
-      console.error("Error refreshing data:", error.message);
-    }
-    setLoading(false);
-  };
+  const theme = createTheme({
+    components: {
+      MuiTableCell: {
+        styleOverrides: {
+          head: {
+            color: "#535454 !important",
+            backgroundColor: "#e6edf7 !important",
+            fontWeight: "400 !important",
+            fontSize: "13px !important",
+            textAlign: "center !important",
+          },
+        },
+      },
+      MuiSwitch: {
+        styleOverrides: {
+          root: {
+            "&.Mui-disabled .MuiSwitch-track": {
+              backgroundColor: "#f5e1d0",
+              opacity: 1,
+            },
+            "&.Mui-disabled .MuiSwitch-thumb": {
+              color: "#eb862a",
+            },
+          },
+          track: {
+            backgroundColor: "#e0e0e0",
+          },
+          thumb: {
+            color: "#eb862a",
+          },
+          switchBase: {
+            "&.Mui-checked": {
+              color: "#eb862a",
+            },
+            "&.Mui-checked + .MuiSwitch-track": {
+              backgroundColor: "#eb862a",
+            },
+          },
+        },
+      },
+    },
+  });
+  const handleMenuClose = () => setMenuAnchor(null);
 
   return (
-    <div className="minHeight center">
     <div className="container-fluid my-4 center">
-    <div className="card shadow border-0 mb-2 top-header minHeight">
-    <div className="container my-4">
-      <div className="my-3 d-flex align-items-end justify-content-end">
-        {storedScreens?.staffAttendanceCreate && ( 
-          <Link to="/staffing/attendance/add">
-            <button type="button" className="btn btn-button btn-sm">
-              Add <i className="bx bx-plus"></i>
-            </button>
+      <ol
+        className="breadcrumb my-3"
+        style={{ listStyle: "none", padding: 0, margin: 0 }}
+      >
+        <li>
+          <Link to="/" className="custom-breadcrumb">
+            Home
           </Link>
-        )}
-      </div>
-
-      {loading ? (
-        <div className="loader-container">
-          <div class="loading">
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          &nbsp;Staffing
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li className="breadcrumb-item active" aria-current="page">
+          &nbsp;Attendance
+        </li>
+      </ol>
+      <div className="card">
+        <div
+          className="mb-3 d-flex justify-content-between align-items-center p-1"
+          style={{ background: "#f5f7f9" }}
+        >
+          <div class="d-flex align-items-center">
+            <div class="d-flex">
+              <div class="dot active"></div>
+            </div>
+            <span class="me-2 text-muted">
+              This database shows the list of{" "}
+              <span className="bold" style={{ color: "#287f71" }}>
+                Attendance
+              </span>
+            </span>
           </div>
         </div>
-      ) : (
-        <table ref={tableRef} className="display">
-          <thead>
-            <tr>
-              <th scope="col" style={{ whiteSpace: "nowrap" }}>
-                S No
-              </th>
-              <th scope="col">Centre Name</th>
-              <th scope="col">Employee Name</th>
-              <th scope="col">Date</th>
-              <th scope="col">Status</th>
-              <th className="text-center">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {datas.map((data, index) => (
-              <tr key={index}>
-                <td>{index + 1}</td>
-                <td>
-                  {centerData &&
-                    centerData.map((center) =>
-                      parseInt(data.tuitionId) === center.id
-                        ? center.centerNames || "--"
-                        : ""
-                    )}
-                </td>
-                <td>{data.employeeName}</td>
-                <td>{data.date}</td>
-                <td>
-                  {data.attendanceStatus === "Present" ? (
-                    <span className="badge badges-Green">Present</span>
-                  ) : (
-                    <span className="badge badges-Red">Absent</span>
-                  )}
-                </td>
-                <td>
-                  <div className="d-flex justify-content-center align-items-center ">
-                    {storedScreens?.staffAttendanceRead && ( 
-                      <Link
-                        to={`/staffing/attendance/view/${data.id}`}
-                        style={{ display: "inline-block" }}
-                      >
-                        <button className="btn btn-sm">
-                          <FaEye />
-                        </button>
-                      </Link>
-                   )} 
-                     {storedScreens?.staffAttendanceUpdate && ( 
-                      <Link
-                        to={`/staffing/attendance/edit/${data.id}`}
-                        style={{ display: "inline-block" }}
-                      >
-                        <button className="btn btn-sm">
-                          <FaEdit />
-                        </button>
-                      </Link>
-                    )} 
-                   {storedScreens?.staffAttendanceDelete && ( 
-                      <Delete
-                        onSuccess={refreshData}
-                        path={`/deleteUserAttendance/${data.id}`}
-                        style={{ display: "inline-block" }}
-                      />
-                   )} 
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
-    </div>
-    </div>
-    </div>
+        <div className="mb-3 d-flex justify-content-end">
+          {storedScreens?.staffAttendanceCreate && (
+            <Link to="/staffing/attendance/add">
+              <button
+                type="button"
+                className="btn btn-button btn-sm me-2"
+                style={{ fontWeight: "600px !important" }}
+              >
+                &nbsp; Add &nbsp;&nbsp; <i className="bx bx-plus"></i>
+              </button>
+            </Link>
+          )}
+        </div>
+        {loading ? (
+          <div className="loader-container">
+            <div className="loading">
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </div>
+        ) : (
+          <div>
+            <ThemeProvider theme={theme}>
+              <MaterialReactTable
+                columns={columns}
+                data={data}
+                enableColumnActions={false}
+                enableColumnFilters={false}
+                enableDensityToggle={false}
+                enableFullScreenToggle={false}
+                initialState={{
+                  columnVisibility: {
+                    gst: false,
+                    address: false,
+                    bankAccountName: false,
+                    bankAccountNumber: false,
+                    bankBranch: false,
+                    bankName: false,
+                    attendanceRemark: false,
+                    modeOfWorking: false,
+                    userId: false,
+                    userRole: false,
+                    otEndTime: false,
+                    otStartTime: false,
+                    createdAt: false,
+                    updatedAt: false,
+                    invoiceNotes: false,
+                    openingDate: false,
+                    taxRegistrationNumber: false,
+                    zipCode: false,
+                  },
+                }}
+                muiTableBodyRowProps={({ row }) => ({
+                  onClick: () =>
+                    navigate(`/staffing/attendance/view/${row.original.id}`),
+                  style: { cursor: "pointer" },
+                })}
+              />
+            </ThemeProvider>
+
+            <Menu
+              id="action-menu"
+              anchorEl={menuAnchor}
+              open={Boolean(menuAnchor)}
+              onClose={handleMenuClose}
+            >
+              <MenuItem
+                onClick={() =>
+                  navigate(`/staffing/attendance/edit/${selectedId}`)
+                }
+                className="text-start mb-0 menuitem-style"
+              >
+                Edit
+              </MenuItem>
+              <MenuItem>
+                <GlobalDelete
+                  path={`/deleteUserAttendance/${selectedId}`}
+                  onDeleteSuccess={getData}
+                  onOpen={handleMenuClose}
+                />
+              </MenuItem>
+            </Menu>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

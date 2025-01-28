@@ -5,7 +5,7 @@ import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 // import EditRegistration from "./EditStudent/EditRegistration";
 // import EditDetails from "./EditStudent/EditDetails";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Tooltip from "react-bootstrap/Tooltip";
 import { OverlayTrigger } from "react-bootstrap";
 import EditStudentDetails from "./EditStudent/EditStudentDetails";
@@ -19,7 +19,7 @@ const steps = [
   { tooltip: "Student Details" },
   { tooltip: "Parents/Guardian" },
   { tooltip: "Emergency Contact" },
-  { tooltip: "Course Details" },
+  // { tooltip: "Course Details" },
   { tooltip: "Student Relation" },
   { tooltip: "Terms and Conditions" },
 ];
@@ -61,17 +61,17 @@ export default function StudentAdd() {
           childRef.current.emergencyContact();
         }
         break;
+      // case "3":
+      //   if (childRef.current) {
+      //     childRef.current.coursedetail();
+      //   }
+      //   break;
       case "3":
-        if (childRef.current) {
-          childRef.current.coursedetail();
-        }
-        break;
-      case "4":
         if (childRef.current) {
           childRef.current.Studentrelation();
         }
         break;
-      case "5":
+      case "4":
         if (childRef.current) {
           childRef.current.termsAndCondition();
         }
@@ -97,6 +97,31 @@ export default function StudentAdd() {
           </Step>
         ))}
       </Stepper> */}
+
+      <ol
+        className="breadcrumb my-3 px-2"
+        style={{ listStyle: "none", padding: 0, margin: 0 }}
+      >
+        <li>
+          <Link to="/" className="custom-breadcrumb">
+            Home
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          Student Management
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          <Link to="/student" className="custom-breadcrumb">
+            Student Listing
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li className="breadcrumb-item active" aria-current="page">
+          Student Listing Edit
+        </li>
+      </ol>
 
       <Stepper className="my-5" activeStep={activeStep} alternativeLabel>
         {steps.map((step, index) => (
@@ -142,7 +167,7 @@ export default function StudentAdd() {
               setLoadIndicators={setLoadIndicator}
             />
           )}
-          {activeStep === 3 && (
+          {/* {activeStep === 3 && (
             <EditCourseDetail
               formData={formData}
               ref={childRef}
@@ -150,8 +175,8 @@ export default function StudentAdd() {
               handleNext={handleNext}
               setLoadIndicators={setLoadIndicator}
             />
-          )}
-          {activeStep === 4 && (
+          )} */}
+          {activeStep === 3 && (
             <EditStudentRelation
               formData={formData}
               ref={childRef}
@@ -160,7 +185,7 @@ export default function StudentAdd() {
               setLoadIndicators={setLoadIndicator}
             />
           )}
-          {activeStep === 5 && (
+          {activeStep === 4 && (
             <EditTermsAndCondition
               formData={formData}
               ref={childRef}
@@ -171,14 +196,16 @@ export default function StudentAdd() {
           )}
 
           <div className="container-fluid p-1 d-flex align-items-center justify-content-center">
-            <button
-              className="btn btn-border btn-sm mt-5 mb-3"
-              style={{ padding: "7px" }}
-              disabled={activeStep === 0}
-              onClick={handleBack}
-            >
-              Back
-            </button>
+            {activeStep > 0 && (
+              <button
+                className="btn btn-border btn-sm mt-5 mb-3"
+                style={{ padding: "7px" }}
+                disabled={activeStep === 0}
+                onClick={handleBack}
+              >
+                Back
+              </button>
+            )}
 
             <div style={{ flex: "1 1 auto" }}></div>
 

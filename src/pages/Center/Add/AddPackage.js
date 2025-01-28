@@ -3,19 +3,38 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import * as yup from "yup";
 import { useFormik } from "formik";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 import api from "../../../config/URL";
-
-function AddPackage({ id, onSuccess }) {
+import { GoPackage } from "react-icons/go";
+import {
+  Dialog,
+  DialogActions,
+  DialogTitle,
+  DialogContent,
+} from "@mui/material";
+function AddPackage({ id, onSuccess,handleMenuClose }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
+  const [isModified, setIsModified] = useState(false);
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const handleClose = () => {
+    handleMenuClose()
+    formik.resetForm();
+    setShow(false);
+  };
 
+  const handleShow = () => {
+    setShow(true);
+    setIsModified(false);
+  };
   const validationSchema = yup.object().shape({
     packageName: yup.string().required("*Package Name is required"),
-    noOfLesson: yup.string().required("*Number of Lesson is required"),
+    noOfLesson: yup
+      .number()
+      .integer("Must be an integer")
+      .typeError("Must be a number")
+      .positive("Must be positive")
+      .required("*Number of Lesson is required"),
   });
   const formik = useFormik({
     initialValues: {
@@ -27,7 +46,7 @@ function AddPackage({ id, onSuccess }) {
       setLoadIndicator(true);
       console.log("Form values:", values);
       try {
-        const response = await api.post(`/createTuitionPackages/${id}`, values, {
+        const response = await api.post(`/createCenterPackages/${id}`, values, {
           headers: {
             "Content-Type": "application/json",
           },
@@ -40,37 +59,55 @@ function AddPackage({ id, onSuccess }) {
           toast.error(response.data.message);
         }
       } catch (error) {
-        toast.error(error.message);
-      }finally {
+        if (error.response.status === 409) {
+          toast.warning(error?.response?.data?.message);
+        } else {
+          toast.error(error.response.data.message);
+        }
+      } finally {
         setLoadIndicator(false);
+      }
+    },
+    enableReinitialize: true,
+    validateOnChange: true,
+    validateOnBlur: true,
+    validate: (values) => {
+      if (Object.values(values).some((value) => value.trim() !== "")) {
+        setIsModified(true);
+      } else {
+        setIsModified(false);
       }
     },
   });
 
   return (
     <>
-      <button
+       <p
+        className="text-start mb-0 menuitem-style"
         style={{ whiteSpace: "nowrap", width: "100%" }}
-        className="btn btn-normal"
         onClick={handleShow}
       >
-          Add Package
-      </button>
+      Add Package
+      </p>
 
-      <Modal
-        show={show}
-        size="lg"
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-        onHide={handleClose}
+      <Dialog
+        open={show}
+        onClose={handleClose} 
+        maxWidth="md"
+        fullWidth
       >
-        <form onSubmit={formik.handleSubmit}>
-          <Modal.Header closeButton>
-            <Modal.Title>
+        <form
+          onSubmit={formik.handleSubmit}
+          // onKeyDown={(e) => {
+          //   if (e.key === "Enter" && !formik.isSubmitting) {
+          //     e.preventDefault(); // Prevent default form submission
+          //   }
+          // }}
+        >
+            <DialogTitle>
               <p className="headColor">Add Package</p>
-            </Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
+            </DialogTitle>
+          <DialogContent>
             <div className="row">
               <div class="col-md-6 col-12 mb-2">
                 <lable className="form-lable">
@@ -79,6 +116,7 @@ function AddPackage({ id, onSuccess }) {
                 <div class="input-group mb-3">
                   <input
                     type="text"
+                    onKeyDown={(e) => e.stopPropagation()}
                     className={`form-control   ${
                       formik.touched.packageName && formik.errors.packageName
                         ? "is-invalid"
@@ -93,45 +131,59 @@ function AddPackage({ id, onSuccess }) {
                   )}
                 </div>
               </div>
-              <div class="col-md-6 col-12 mb-2">
-                <lable class="">
-                  Number of Lesson<span class="text-danger">*</span>
-                </lable>
-                <input
-                  type="text"
-                  className={`form-control   ${
-                    formik.touched.noOfLesson && formik.errors.noOfLesson
+              <div className="col-md-6 col-12 mb-2">
+                <label>
+                  Number of Lesson<span className="text-danger">*</span>
+                </label>
+                <select
+                  className={`form-select ${
+                    formik.touched.quantity && formik.errors.quantity
                       ? "is-invalid"
                       : ""
                   }`}
                   {...formik.getFieldProps("noOfLesson")}
-                />
+                  style={{ width: "100%" }}
+                >
+                  <option value=""></option>
+                  {Array.from({ length: 100 }, (_, i) => i + 1).map(
+                    (number) => (
+                      <option key={number} value={number}>
+                        {number}
+                      </option>
+                    )
+                  )}
+                </select>
                 {formik.touched.noOfLesson && formik.errors.noOfLesson && (
-                  <div className="invalid-feedback">{formik.errors.noOfLesson}</div>
+                  <div className="invalid-feedback">
+                    {formik.errors.noOfLesson}
+                  </div>
                 )}
               </div>
             </div>
-          </Modal.Body>
-          <Modal.Footer className="mt-5">
-            <Button variant="secondary btn-sm" onClick={handleClose}>
+          </DialogContent>
+          <DialogActions className="mt-5">
+            <Button
+              className="btn btn-sm btn-border bg-light text-dark"
+              onClick={handleClose}
+            >
               Cancel
             </Button>
             <Button
-                type="submit"
-                className="btn btn-button btn-sm"
-                disabled={loadIndicator}
-              >
-                {loadIndicator && (
-                  <span
-                    className="spinner-border spinner-border-sm me-2"
-                    aria-hidden="true"
-                  ></span>
-                )}
-                Submit
-              </Button>
-          </Modal.Footer>
+              type="submit"
+              className="btn btn-button btn-sm"
+              disabled={loadIndicator}
+            >
+              {loadIndicator && (
+                <span
+                  className="spinner-border spinner-border-sm me-2"
+                  aria-hidden="true"
+                ></span>
+              )}
+              Submit
+            </Button>
+          </DialogActions>
         </form>
-      </Modal>
+      </Dialog>
     </>
   );
 }

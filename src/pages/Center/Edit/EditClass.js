@@ -3,22 +3,30 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import * as yup from "yup";
 import { useFormik } from "formik";
-import { FaEdit } from "react-icons/fa";
 import api from "../../../config/URL";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
+import { BiEditAlt } from "react-icons/bi";
 
 function EditClass({ id, onSuccess }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
+  const [isModified, setIsModified] = useState(false);
 
   const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-
+  const handleShow = () => {
+    setShow(true);
+    setIsModified(false);
+  };
   const validationSchema = yup.object().shape({
     classRoomName: yup.string().required("*Classroom name is required"),
     classRoomType: yup.string().required("*Classroom type is required"),
-    classRoomCode: yup.number().typeError("*Enter a valid number").required("*Classroom code is required"),
-    capacity: yup.string().required("*Capacity is required"),
+    classRoomCode: yup.string().required("*Classroom Code is required"),
+    capacity: yup
+      .number()
+      .integer("Must be an integer")
+      .typeError("Must be a number")
+      .positive("Must be positive")
+      .required("*Capacity is required"),
   });
   const formik = useFormik({
     initialValues: {
@@ -33,7 +41,7 @@ function EditClass({ id, onSuccess }) {
       setLoadIndicator(true);
       try {
         const response = await api.put(
-          `/updateTuitionClassRooms/${id}`,
+          `/updateCenterClassRooms/${id}`,
           values,
           {
             headers: {
@@ -49,18 +57,36 @@ function EditClass({ id, onSuccess }) {
           toast.error(response.data.message);
         }
       } catch (error) {
-        toast.error(error.message);
-      }finally {
+        if (error.response.status === 409) {
+          toast.warning(error?.response?.data?.message);
+        } else {
+          toast.error(error.response.data.message);
+        }
+      } finally {
         setLoadIndicator(false);
+      }
+    },
+    enableReinitialize: true,
+    validateOnChange: true,
+    validateOnBlur: true,
+    validate: (values) => {
+      if (
+        Object.values(values).some(
+          (value) => typeof value === "string" && value.trim() !== ""
+        )
+      ) {
+        setIsModified(true);
+      } else {
+        setIsModified(false);
       }
     },
   });
   useEffect(() => {
     const getData = async () => {
-      try{
-      const response = await api.get(`/getTuitionClassRoomsById/${id}`);
-      formik.setValues(response.data);
-      }catch (error) {
+      try {
+        const response = await api.get(`/getCenterClassRoomsById/${id}`);
+        formik.setValues(response.data);
+      } catch (error) {
         toast.error("Error Fetching Data");
       }
     };
@@ -71,8 +97,12 @@ function EditClass({ id, onSuccess }) {
 
   return (
     <>
-      <button className="btn" onClick={handleShow}>
-        <FaEdit />
+      <button type="button"
+        style={{
+          whiteSpace: "nowrap",
+        }}
+        className="btn btn-normal text-start" onClick={handleShow}>
+        <BiEditAlt />
       </button>
 
       <Modal
@@ -81,8 +111,17 @@ function EditClass({ id, onSuccess }) {
         aria-labelledby="contained-modal-title-vcenter"
         centered
         onHide={handleClose}
+        backdrop={isModified ? "static" : true}
+        keyboard={isModified ? false : true}
       >
-        <form onSubmit={formik.handleSubmit}>
+        <form
+          onSubmit={formik.handleSubmit}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !formik.isSubmitting) {
+              e.preventDefault(); // Prevent default form submission
+            }
+          }}
+        >
           <Modal.Header closeButton>
             <Modal.Title>
               <p className="headColor">Edit Classroom</p>
@@ -166,6 +205,7 @@ function EditClass({ id, onSuccess }) {
                 </lable>
                 <input
                   type="text"
+                  pattern="^\d+$"
                   className={`form-control   ${
                     formik.touched.capacity && formik.errors.capacity
                       ? "is-invalid"
@@ -192,23 +232,26 @@ function EditClass({ id, onSuccess }) {
             </div>
           </Modal.Body>
           <Modal.Footer className="mt-3">
-            <Button variant="secondary btn-sm" onClick={handleClose}>
+            <Button
+              className="btn btn-sm btn-border bg-light text-dark"
+              onClick={handleClose}
+            >
               Cancel
             </Button>
             <Button
-                type="submit"
-                onSubmit={formik.handleSubmit}
-                className="btn btn-button btn-sm"
-                disabled={loadIndicator}
-              >
-                {loadIndicator && (
-                  <span
-                    className="spinner-border spinner-border-sm me-2"
-                    aria-hidden="true"
-                  ></span>
-                )}
-                Update
-              </Button>
+              type="button"
+              onClick={formik.handleSubmit}
+              className="btn btn-button btn-sm"
+              disabled={loadIndicator}
+            >
+              {loadIndicator && (
+                <span
+                  className="spinner-border spinner-border-sm me-2"
+                  aria-hidden="true"
+                ></span>
+              )}
+              Update
+            </Button>
             {/* <Button
               type="submit"
               variant="danger"

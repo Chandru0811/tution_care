@@ -8,22 +8,31 @@ import api from "../../../config/URL";
 import EditParentDetailModel from "./EditParentDetailModel";
 import AddParentDetailModel from "./AddParentDetailModel";
 import { GoDotFill } from "react-icons/go";
-import BlockImg from "../../../assets/Block_Img1.jpg";
-import { FaEdit } from "react-icons/fa";
+import { CiEdit } from "react-icons/ci";
+import { MdDeleteOutline } from "react-icons/md";
 
 const EditParentGuardian = forwardRef(
-  ({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
+  ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const [data, setData] = useState({});
-    console.log("Api Datas:",data);
+    const [primaryContact, setPrimaryContact] = useState(false);
+    const userName = localStorage.getItem("userName");
+
+    // console.log("Api Datas:",data);
 
     const getData = async () => {
       setLoadIndicators(true);
       try {
-        const response = await api.get(`/getAllStudentDetails/${formData.id}`);
+        const response = await api.get(`/getAllStudentById/${formData.id}`);
         setData(response.data);
+        // console.log("Response data", response.data.studentParentsDetails.length)
+        if (response.data.studentParentsDetails.length === 0) {
+          setPrimaryContact(true);
+        } else {
+          setPrimaryContact(false);
+        }
       } catch (error) {
-        console.error("Error fetching data:", error.message);
-      }finally {
+        console.error("Error fetching data:", error);
+      } finally {
         setLoadIndicators(false);
       }
     };
@@ -32,14 +41,29 @@ const EditParentGuardian = forwardRef(
       getData();
     }, []);
 
+    const handleDeleteRow = async (id) => {
+      try {
+        const response = await api.delete(`/deleteStudentParentsDetails/${id}`);
+        if (response.status === 200 || response.status === 201) {
+          getData(); // Refresh the data after successful deletion
+        }
+      } catch (error) {
+        console.error("Error deleting the parent information:", error);
+      }
+    };
+
     useImperativeHandle(ref, () => ({
       editParentGuardian: handleNext,
     }));
 
+    useEffect(() => {
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    }, []);
+
     return (
       <div className="container-fluid">
         <div className="container-fluid">
-          <div className="container">
+          <div className="container-fluid">
             <div className="row">
               <div className="col-md-12 col-12 mt-4">
                 <h5 className="headColor mb-3">Parents / Guardian Details</h5>
@@ -69,6 +93,7 @@ const EditParentGuardian = forwardRef(
                   </thead>
                   <tbody>
                     {data.studentParentsDetails &&
+                    data.studentParentsDetails.length > 0 ? (
                       data.studentParentsDetails.map((parent, index) => (
                         <tr key={index}>
                           <td>{index + 1}</td>
@@ -77,20 +102,12 @@ const EditParentGuardian = forwardRef(
                               {parent.profileImage ? (
                                 <img
                                   src={parent.profileImage}
-                                  onError={(e) => {
-                                    e.target.src = BlockImg;
-                                  }}
                                   className="rounded-5 mx-1"
                                   style={{ width: "30px", height: "40px" }}
-                                  alt="Img"
+                                  alt=""
                                 />
                               ) : (
-                                <img
-                                  src={BlockImg}
-                                  className="rounded-5 mx-1"
-                                  style={{ width: "40px", height: "40px" }}
-                                  alt="Img"
-                                />
+                                <></>
                               )}
 
                               {parent.parentName}
@@ -105,30 +122,63 @@ const EditParentGuardian = forwardRef(
                           <td>{parent.relation || "-"}</td>
                           <td>{parent.email || "-"}</td>
                           <td>{parent.mobileNumber || "-"}</td>
-                          <td>
-                            {parent.primaryContact ? (
-                              <button
-                                className="btn border-white"
-                                type="button" disabled
-                              >
-                                <FaEdit className="text-secondary" />
-                              </button>
-                            ) : (
-                              <EditParentDetailModel
-                                id={parent.id}
-                                getData={getData}
-                              />
-                            )}
+                          <td className="center">
+                            <div className="d-flex">
+                              {parent.primaryContact ? (
+                                <button
+                                  className="btn border-white"
+                                  type="button"
+                                  disabled
+                                >
+                                  <CiEdit className="text-secondary" />
+                                </button>
+                              ) : (
+                                <EditParentDetailModel
+                                  id={parent.id}
+                                  getData={getData}
+                                />
+                              )}
+                              {parent.primaryContact ? (
+                                <button
+                                  className="btn"
+                                  type="button"
+                                  style={{ display: "none" }}
+                                >
+                                  <MdDeleteOutline />
+                                </button>
+                              ) : (
+                                <button
+                                  className="btn"
+                                  type="button"
+                                  onClick={() => handleDeleteRow(parent.id)}
+                                >
+                                  <MdDeleteOutline
+                                    id={parent.id}
+                                    getData={getData}
+                                  />
+                                </button>
+                              )}
+                            </div>
                           </td>
                         </tr>
-                      ))}
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan="7" className="text-center">
+                          No records found
+                        </td>
+                      </tr>
+                    )}
                   </tbody>
                 </table>
               </div>
             </div>
             <div className="row">
               <div className="col-md-2 col-12 text-strat">
-                <AddParentDetailModel />
+                <AddParentDetailModel
+                  primaryContact={primaryContact}
+                  onSuccess={getData}
+                />
               </div>
             </div>
           </div>

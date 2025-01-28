@@ -54,7 +54,7 @@ const ReplaceClass = () => {
 
   return (
     <div className="container my-5">
-      <table ref={tableRef} className="display table-response">
+      <table ref={tableRef} className="display">
         <thead>
           <tr>
             <th scope="col">S No</th>

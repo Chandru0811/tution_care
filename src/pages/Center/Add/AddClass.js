@@ -3,21 +3,41 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import * as yup from "yup";
 import { useFormik } from "formik";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 import api from "../../../config/URL";
+import { SiGoogleclassroom } from "react-icons/si";
+import {
+  Dialog,
+  DialogActions,
+  DialogTitle,
+  DialogContent,
+} from "@mui/material";
 
-function AddClass({ id, onSuccess }) {
+function AddClass({ id, onSuccess, handleMenuClose }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
+  const [isModified, setIsModified] = useState(false);
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const handleClose = () => {
+    handleMenuClose();
+    formik.resetForm();
+    setShow(false);
+  };
 
+  const handleShow = () => {
+    setShow(true);
+    setIsModified(false);
+  };
   const validationSchema = yup.object().shape({
     classRoomName: yup.string().required("*Classroom Name is required"),
     classRoomType: yup.string().required("*Classroom Type is required"),
-    classRoomCode: yup.number().typeError("*Enter a valid number").required("*Classroom Code is required"),
-    capacity: yup.string().required("*Capacity is required"),
+    classRoomCode: yup.string().required("*Classroom Code is required"),
+    capacity: yup
+      .number()
+      .integer("Must be an integer")
+      .typeError("Must be a number")
+      .positive("Must be positive")
+      .required("*Capacity is required"),
   });
   const formik = useFormik({
     initialValues: {
@@ -33,7 +53,7 @@ function AddClass({ id, onSuccess }) {
       console.log("Form values:", values);
       try {
         const response = await api.post(
-          `/createTuitionClassRooms/${id}`,
+          `/createCenterClassRooms/${id}`,
           values,
           {
             headers: {
@@ -49,37 +69,50 @@ function AddClass({ id, onSuccess }) {
           toast.error(response.data.message);
         }
       } catch (error) {
-        toast.error(error.message);
-      }finally {
+        if (error.response.status === 409) {
+          toast.warning(error?.response?.data?.message);
+        } else {
+          toast.error(error.response.data.message);
+        }
+      } finally {
         setLoadIndicator(false);
+      }
+    },
+    enableReinitialize: true,
+    validateOnChange: true,
+    validateOnBlur: true,
+    validate: (values) => {
+      if (Object.values(values).some((value) => value.trim() !== "")) {
+        setIsModified(true);
+      } else {
+        setIsModified(false);
       }
     },
   });
 
   return (
     <>
-      <button
+      <p
+        className="text-start mb-0 menuitem-style"
         style={{ whiteSpace: "nowrap", width: "100%" }}
-        className="btn btn-normal"
         onClick={handleShow}
       >
-          Add Classroom
-      </button>
+        Add Classroom
+      </p>
 
-      <Modal
-        show={show}
-        size="lg"
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-        onHide={handleClose}
-      >
-        <form onSubmit={formik.handleSubmit}>
-          <Modal.Header closeButton>
-            <Modal.Title>
-              <p className="headColor">Add Classroom</p>
-            </Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
+      <Dialog open={show} onClose={handleClose} maxWidth="md" fullWidth>
+        <form
+          onSubmit={formik.handleSubmit}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !formik.isSubmitting) {
+              e.preventDefault(); // Prevent default form submission
+            }
+          }}
+        >
+          <DialogTitle>
+            <p className="headColor">Add Classroom</p>
+          </DialogTitle>
+          <DialogContent>
             <div className="row">
               <div class="col-md-6 col-12 mb-2">
                 <lable className="form-lable">
@@ -88,6 +121,7 @@ function AddClass({ id, onSuccess }) {
                 <div class="input-group mb-3">
                   <input
                     type="text"
+                    onKeyDown={(e) => e.stopPropagation()}
                     className={`form-control   ${
                       formik.touched.classRoomName &&
                       formik.errors.classRoomName
@@ -110,6 +144,7 @@ function AddClass({ id, onSuccess }) {
                 </lable>
                 <input
                   type="text"
+                  onKeyDown={(e) => e.stopPropagation()}
                   className={`form-control   ${
                     formik.touched.classRoomCode && formik.errors.classRoomCode
                       ? "is-invalid"
@@ -156,7 +191,9 @@ function AddClass({ id, onSuccess }) {
                   Capacity<span class="text-danger">*</span>
                 </lable>
                 <input
+                  onKeyDown={(e) => e.stopPropagation()}
                   type="text"
+                  pattern="^\d+$"
                   className={`form-control   ${
                     formik.touched.capacity && formik.errors.capacity
                       ? "is-invalid"
@@ -173,7 +210,8 @@ function AddClass({ id, onSuccess }) {
               <div className="form-floating">
                 <lable>Description</lable>
                 <textarea
-                  class="form-control"
+                onKeyDown={(e) => e.stopPropagation()}
+                  className="form-control p-1"
                   {...formik.getFieldProps("description")}
                   placeholder=""
                   id="floatingTextarea2"
@@ -182,27 +220,30 @@ function AddClass({ id, onSuccess }) {
                 ></textarea>
               </div>
             </div>
-          </Modal.Body>
-          <Modal.Footer className="mt-3">
-            <Button variant="secondary btn-sm" onClick={handleClose}>
+          </DialogContent>
+          <DialogActions className="mt-3">
+            <Button
+              className="btn btn-sm btn-border bg-light text-dark"
+              onClick={handleClose}
+            >
               Cancel
             </Button>
             <Button
-                type="submit"
-                className="btn btn-button btn-sm"
-                disabled={loadIndicator}
-              >
-                {loadIndicator && (
-                  <span
-                    className="spinner-border spinner-border-sm me-2"
-                    aria-hidden="true"
-                  ></span>
-                )}
-                Submit
-              </Button>
-          </Modal.Footer>
+              type="submit"
+              className="btn btn-button btn-sm"
+              disabled={loadIndicator}
+            >
+              {loadIndicator && (
+                <span
+                  className="spinner-border spinner-border-sm me-2"
+                  aria-hidden="true"
+                ></span>
+              )}
+              Submit
+            </Button>
+          </DialogActions>
         </form>
-      </Modal>
+      </Dialog>
     </>
   );
 }

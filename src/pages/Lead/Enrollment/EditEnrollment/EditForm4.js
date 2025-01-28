@@ -2,12 +2,13 @@ import React, { forwardRef, useEffect, useImperativeHandle } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import api from "../../../../config/URL";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
+import { dark } from "@mui/material/styles/createPalette";
 
 const validationSchema = Yup.object().shape({
   address: Yup.string().required("*Address is required"),
   postalCode: Yup.string()
-    .matches(/^\d+$/, "Must be a Number")
+    .matches(/^\d+$/, "*Must be a Number")
     .required("*Code is required"),
   nameOfEmergency: Yup.string().required(
     "*Emergency Contact Person is required"
@@ -16,14 +17,21 @@ const validationSchema = Yup.object().shape({
   emergencyContact: Yup.string()
     .matches(
       /^(?:\+?65)?\s?(?:\d{4}\s?\d{4}|\d{3}\s?\d{3}\s?\d{4})$/,
-      "Invalid Phone Number"
+      "*Invalid Phone Number"
     )
     .required("*Emergency Person Contact Number is required"),
   relationToChild: Yup.string().required("*Relationship is required"),
+  contactOfAuthorised: Yup.string()
+    .matches(
+      /^(?:\+?65)?\s?(?:\d{4}\s?\d{4}|\d{3}\s?\d{3}\s?\d{4})$/,
+      "*Invalid Phone Number"
+    )
+    .notRequired("*Invalid Phone Number"),
 });
 
 const EditForm4 = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
+    const userName = localStorage.getItem("userName");
     const formik = useFormik({
       initialValues: {
         address: formData.address || "",
@@ -36,10 +44,12 @@ const EditForm4 = forwardRef(
         relationToChils: formData.relationToChils || "",
         noAuthorisedNric: formData.noAuthorisedNric || "",
         contactOfAuthorised: formData.contactOfAuthorised || "",
+        updatedBy: userName,
       },
       validationSchema: validationSchema,
       onSubmit: async (data) => {
         setLoadIndicators(true);
+        data.updatedBy = userName;
         try {
           const response = await api.put(
             `/updateLeadInfo/${formData.id}`,
@@ -58,18 +68,43 @@ const EditForm4 = forwardRef(
             toast.error(response.data.message);
           }
         } catch (error) {
-          toast.error(error.message);
+          toast.error(error);
         } finally {
           setLoadIndicators(false);
         }
       },
+      validateOnChange: false, // Enable validation on change
+      validateOnBlur: true, // Enable validation on blur
     });
+
+    // Function to scroll to the first error field
+    const scrollToError = (errors) => {
+      const errorField = Object.keys(errors)[0]; // Get the first error field
+      const errorElement = document.querySelector(`[name="${errorField}"]`); // Find the DOM element
+      if (errorElement) {
+        errorElement.scrollIntoView({ behavior: "smooth", block: "center" });
+        errorElement.focus(); // Set focus to the error element
+      }
+    };
+
+    // Watch for form submit and validation errors
+    useEffect(() => {
+      if (formik.submitCount > 0 && Object.keys(formik.errors).length > 0) {
+        scrollToError(formik.errors);
+      }
+    }, [formik.submitCount, formik.errors]);
 
     useEffect(() => {
       const getData = async () => {
         const response = await api.get(`/getAllLeadInfoById/${formData.id}`);
         formik.setValues(response.data);
+        formik.setValues({
+          ...response.data,
+          relationToChils: response.data.relation,
+        });
+        console.log("relationToChils", response.data.relation);
       };
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
       getData();
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -94,7 +129,7 @@ const EditForm4 = forwardRef(
                   <textarea
                     type="text"
                     name="address"
-                    className="form-control form-control-sm"
+                    className="form-control"
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.address}
@@ -110,11 +145,11 @@ const EditForm4 = forwardRef(
             <div className="col-md-6 col-12">
               <div className="mb-3">
                 <label for="exampleFormControlInput1" className="form-label">
-                  Postal Code <span className="text-danger">*</span>
+                  Postal Code<span className="text-danger">*</span>
                 </label>
                 <input
                   type="text"
-                  className="form-control form-control-sm "
+                  className="form-control "
                   name="postalCode"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -135,7 +170,7 @@ const EditForm4 = forwardRef(
                 </label>
                 <input
                   type="text"
-                  className="form-control form-control-sm "
+                  className="form-control "
                   name="nameOfEmergency"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -152,12 +187,12 @@ const EditForm4 = forwardRef(
             <div className="col-md-6 col-12">
               <div className="mb-3">
                 <label for="exampleFormControlInput1" className="form-label">
-                  Emergency Contact Person's NRIC/FIC No. (other Than
-                  Parents)Last $ Digits<span className="text-danger">*</span>
+                  Emergency Contact Person's NRIC/FIC No. (other Than Parents)
+                  <span className="text-danger">*</span>
                 </label>
                 <input
                   type="text"
-                  className="form-control form-control-sm "
+                  className="form-control "
                   name="emergencyNric"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -179,7 +214,7 @@ const EditForm4 = forwardRef(
                 </label>
                 <input
                   type="text"
-                  className="form-control form-control-sm "
+                  className="form-control "
                   name="emergencyContact"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -278,76 +313,119 @@ const EditForm4 = forwardRef(
                   )}
               </div>
             </div>
-            <div className="col-md-12 col-12">
+            <div className="col-md-6 col-12">
               <div className="mb-3">
                 <label for="exampleFormControlInput1" className="form-label">
                   Name Of Authorised Person To Take child From Class (Other Than
                   Parents-For Pickups)
                 </label>
-                <form className="">
+                <input
+                  type="text"
+                  className="form-control "
+                  name="nameOfAuthorised"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.nameOfAuthorised}
+                />
+                {/* <form className="">
                   <textarea
                     type="text"
-                    className="form-control form-control-sm"
+                    className="form-control"
                     name="nameOfAuthorised"
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.nameOfAuthorised}
                   />
-                </form>
+                </form> */}
               </div>
             </div>
-            <div className="col-md-12 col-12">
+            <div className="col-md-6 col-12">
               <div className="mb-3">
                 <label for="exampleFormControlInput1" className="form-label">
                   Relation To Child Of Authorised Person To Take Child From
                   Class (Other Than Parents-For Pickups)
                 </label>
-                <form className="">
+
+                <select
+                  name="relationToChils"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  className="form-select "
+                  aria-label=" example"
+                  value={formik.values.relationToChils}
+                >
+                  <option value=""></option>
+                  <option value="Mother">Mother</option>
+                  <option value="Father">Father</option>
+                  <option value="Sister">Sister</option>
+                  <option value="Brother">Brother</option>
+                </select>
+                {/* <form className="">
                   <textarea
                     type="text"
-                    className="form-control form-control-sm "
+                    className="form-control "
                     name="relationToChils"
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.relationToChils}
                   />
-                </form>
+                </form> */}
               </div>
             </div>
-            <div className="col-md-12 col-12">
+            <div className="col-md-6 col-12">
               <div className="mb-3">
                 <label for="exampleFormControlInput1" className="form-label">
                   NRIC/FIN No. Authorised Person To Take Child From Class (Other
                   Than Parents-For Pickups)
                 </label>
-                <form className="">
+                <input
+                  type="text"
+                  className="form-control "
+                  name="noAuthorisedNric"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.noAuthorisedNric}
+                />
+                {/* <form className="">
                   <textarea
                     type="text"
-                    className="form-control form-control-sm "
+                    className="form-control "
                     name="noAuthorisedNric"
                     value={formik.values.noAuthorisedNric}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   />
-                </form>
+                </form> */}
               </div>
             </div>
-            <div className="col-md-12 col-12">
+            <div className="col-md-6 col-12">
               <div className="mb-3">
-                <label
-                  for="exampleFormControlInput1"
-                  className="form-label"
-                ></label>
-                Contact Number Authorised Person To Take Child From Class (Other
-                Than Parents-For Pickups)
-                <textarea
+                <label for="exampleFormControlInput1" className="form-label">
+                  Contact Number Authorised Person To Take Child From Class
+                  (Other Than Parents-For Pickups)
+                </label>
+                <input
                   type="text"
-                  className="form-control form-control-sm "
+                  className="form-control"
                   name="contactOfAuthorised"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   value={formik.values.contactOfAuthorised}
                 />
+                {formik.touched.contactOfAuthorised &&
+                  formik.errors.contactOfAuthorised && (
+                    <div className="error text-danger ">
+                      <small>{formik.errors.contactOfAuthorised}</small>
+                    </div>
+                  )}
+                {/* <textarea
+                  type="text"
+                  className="form-control "
+                  name="contactOfAuthorised"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.contactOfAuthorised}
+                /> */}
               </div>
             </div>
           </div>

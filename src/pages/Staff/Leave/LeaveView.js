@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { FaCloudDownloadAlt } from "react-icons/fa";
 import api from "../../../config/URL";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 import fetchAllCentersWithIds from "../../List/CenterList";
 import fetchAllTeachersWithIds from "../../List/TeacherList";
+import pdfLogo from "../../../assets/images/Attactmentpdf.jpg";
+import { MdOutlineDownloadForOffline } from "react-icons/md";
 
 function LeaveView() {
-
   const [data, setData] = useState([]);
-  console.log('Leave Datas:', data);
+  console.log("Leave Datas:", data);
   const { id } = useParams();
   const [centerData, setCenterData] = useState(null);
   const [teacherData, setTeacherData] = useState(null);
@@ -21,7 +21,7 @@ function LeaveView() {
       setCenterData(centerData);
       setTeacherData(teacherData);
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error);
     }
   };
 
@@ -31,7 +31,7 @@ function LeaveView() {
         const response = await api.get(`/getUserLeaveRequestById/${id}`);
         setData(response.data);
       } catch (error) {
-        console.error("Error fetching data:", error.message);
+        console.error("Error fetching data:", error);
       }
     };
     getData();
@@ -39,204 +39,231 @@ function LeaveView() {
   }, []);
 
   return (
-    <div className="container-fluid  center">
-      <div className="card shadow border-0 mb-2 top-header">
-        <div className="container-fluid py-4">
-          <div className="row align-items-center">
-            <div className="col">
-              <div className="d-flex align-items-center gap-4">
-                <h2 className="h2 ls-tight headingColor">View Leave</h2>
+    <div className="container">
+      <ol
+        className="breadcrumb my-3"
+        style={{ listStyle: "none", padding: 0, margin: 0 }}
+      >
+        <li>
+          <Link to="/" className="custom-breadcrumb">
+            Home
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          &nbsp;Staffing
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          <Link to="/leave" className="custom-breadcrumb">
+            &nbsp;Leave Request{" "}
+            <span className="breadcrumb-separator"> &gt; </span>
+          </Link>
+        </li>
+        <li className="breadcrumb-item active" aria-current="page">
+          &nbsp;Leave Request View
+        </li>
+      </ol>
+      <div className="card">
+        <div
+          className="d-flex px-4 justify-content-between align-items-center p-1 mb-4"
+          style={{ background: "#f5f7f9" }}
+        >
+          <div class="d-flex align-items-center">
+            <div class="d-flex">
+              <div class="dot active"></div>
+            </div>
+            <span class="me-2 text-muted">View Leave</span>
+          </div>
+          <div className="my-2 pe-3 d-flex align-items-center">
+            <Link to="/leave">
+              <button type="button " className="btn btn-sm btn-border   ">
+                Back
+              </button>
+            </Link>
+          </div>
+        </div>
+        <div class="container-fluid minHeight mb-5">
+          <div className="row mt-5">
+            <div className="col-md-6 col-12">
+              <div className="row mb-3">
+                <div className="col-6 d-flex">
+                  <p className="text-sm fw-medium">Centre Name</p>
+                </div>
+                <div className="col-6">
+                  <p className="text-muted text-sm">: {data.centerName}</p>
+                </div>
               </div>
             </div>
-            <div className="col-auto">
-              <div className="hstack gap-2 justify-content-end">
-                <Link to="/leave">
-                  <button type="submit" className="btn btn-sm btn-light">
-                    <span>Back</span>
-                  </button>
-                </Link>
+            <div className="col-md-6 col-12">
+              <div className="row mb-3">
+                <div className="col-6 d-flex">
+                  <p className="text-sm fw-medium">Employee Name</p>
+                </div>
+                <div className="col-6">
+                  <p className="text-muted text-sm">
+                    : {data.employeeName || "--"}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="col-md-6 col-12">
+              <div className="row mb-3">
+                <div className="col-6 d-flex">
+                  <p className="text-sm fw-medium">Leave Type</p>
+                </div>
+                <div className="col-6">
+                  <p className="text-muted text-sm">
+                    : {data.leaveType || "--"}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="col-md-6 col-12">
+              <div className="row mb-3">
+                <div className="col-6 d-flex ">
+                  <p className="text-sm fw-medium">No.Of.Days</p>
+                </div>
+                <div className="col-6">
+                  <p className="text-muted text-sm">
+                    : {data.noOfDays || "0"} Days
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="col-md-6 col-12 ">
+              <div className="row mb-3">
+                <div className="col-6 d-flex">
+                  <p className="text-sm fw-medium">From Date</p>
+                </div>
+                <div className="col-6">
+                  <p className="text-muted text-sm">
+                    : {data.fromDate || "--"}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="col-md-6 col-12">
+              <div className="row mb-3">
+                <div className="col-6 d-flex">
+                  <p className="text-sm fw-medium">To Date</p>
+                </div>
+                <div className="col-6">
+                  <p className="text-muted text-sm">: {data.toDate || "--"}</p>
+                </div>
+              </div>
+            </div>
+            <div className="col-md-6 col-12">
+              <div className="row mb-3">
+                <div className="col-6 d-flex">
+                  <p className="text-sm fw-medium">Day Type</p>
+                </div>
+                <div className="col-6">
+                  <p className="text-muted text-sm">: {data.dayType || "--"}</p>
+                </div>
+              </div>
+            </div>
+            {/* <div className="col-md-6 col-12">
+          <div className="row mb-3">
+            <div className="col-6 d-flex">
+              <p className="text-sm fw-medium">Request Date</p>
+            </div>
+            <div className="col-6">
+              <p className="text-muted text-sm">: {data.requestDate || "--"}</p>
+            </div>
+          </div>
+        </div> */}
+
+            {/* <div className="col-md-6 col-12">
+          <div className="row mb-3">
+            <div className="col-6 d-flex ">
+              <p className="text-sm fw-medium">Approver Name</p>
+            </div>
+            <div className="col-6">
+              <p className="text-muted text-sm">: {data.approverName || "--"}</p>
+            </div>
+          </div>
+        </div> */}
+            <div className="col-md-6 col-12">
+              <div className="row mb-3">
+                <div className="col-6 d-flex ">
+                  <p className="text-sm fw-medium">Status</p>
+                </div>
+                <div className="col-6">
+                  <p className="text-muted text-sm">
+                    : {data.leaveStatus || "--"}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="col-md-6 col-12">
+              <div className="row mb-3">
+                <div className="col-6 d-flex ">
+                  <p className="text-sm fw-medium">Leave Reason</p>
+                </div>
+                <div className="col-6">
+                  <p className="text-muted text-sm">
+                    : {data.leaveReason || "--"}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <p className="headColor mt-5">Attachment</p>
+            <hr />
+            <div className="row mt-4">
+              <div className="container p-2">
+                {data?.attachment && (
+                  <div class="card border-0 shadow" style={{ width: "30%" }}>
+                    <div
+                      onClick={(e) => e.stopPropagation()}
+                      style={{ cursor: "not-allowed" }}
+                    >
+                      <img
+                        class="card-img-top img-fluid"
+                        style={{
+                          height: "10rem",
+                          pointerEvents: "none",
+                          cursor: "not-allowed",
+                        }}
+                        src={pdfLogo}
+                        alt="Resume preview"
+                      />
+                    </div>
+                    <div
+                      class="card-body d-flex justify-content-between align-items-center"
+                      style={{ flexWrap: "wrap" }}
+                    >
+                      <p
+                        class="card-title fw-semibold mb-0 text-wrap"
+                        style={{
+                          flex: 1,
+                          whiteSpace: "nowrap",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                        }}
+                        title={data?.attachment?.split("/").pop()}
+                      >
+                        {data?.attachment?.split("/").pop()}
+                      </p>
+                      <a
+                        href={data?.attachment}
+                        download
+                        class="btn text-dark ms-2"
+                        title="Download Resume"
+                        style={{ flexShrink: 0 }}
+                      >
+                        <MdOutlineDownloadForOffline size={25} />
+                      </a>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
         </div>
-      </div>
-      <div className="minHeight container card shadow border-0 mb-2 top-header">
-        <div className="row mt-5">
-          <div className="col-md-6 col-12">
-            <div className="row mb-3">
-              <div className="col-6 d-flex">
-                <p className="text-sm fw-medium">Centre Name</p>
-              </div>
-              <div className="col-6">
-                <p className="text-muted text-sm">
-                  : {centerData &&
-                    centerData.map((centerId) =>
-                      parseInt(data.tuitionId) === centerId.id
-                        ? centerId.centerNames || "--"
-                        : ""
-                    )}</p>
-              </div>
-            </div>
-          </div>
-          <div className="col-md-6 col-12">
-            <div className="row mb-3">
-              <div className="col-6 d-flex">
-                <p className="text-sm fw-medium">Employee Name</p>
-              </div>
-              <div className="col-6">
-                <p className="text-muted text-sm">
-                  {/* : {teacherData &&
-                      teacherData.map((teacher) =>
-                        parseInt(data.teacher) === teacher.id
-                          ? teacher.teacherNames || "--"
-                          : ""
-                      )} */}
-                  : {data.employeeName || "--"}</p>
-              </div>
-            </div>
-          </div>
-          <div className="col-md-6 col-12">
-            <div className="row mb-3">
-              <div className="col-6 d-flex">
-                <p className="text-sm fw-medium">Leave Type</p>
-              </div>
-              <div className="col-6">
-                <p className="text-muted text-sm">: {data.leaveType || "--"}</p>
-              </div>
-            </div>
-          </div>
-          <div className="col-md-6 col-12">
-            <div className="row mb-3">
-              <div className="col-6 d-flex ">
-                <p className="text-sm fw-medium">No.Of.Days</p>
-              </div>
-              <div className="col-6">
-                <p className="text-muted text-sm">: {data.noOfDays || "--"}</p>
-              </div>
-            </div>
-          </div>
-          <div className="col-md-6 col-12 ">
-            <div className="row mb-3">
-              <div className="col-6 d-flex">
-                <p className="text-sm fw-medium">From Date</p>
-              </div>
-              <div className="col-6">
-                <p className="text-muted text-sm">: {data.fromDate || "--"}</p>
-              </div>
-            </div>
-          </div>
-          <div className="col-md-6 col-12">
-            <div className="row mb-3">
-              <div className="col-6 d-flex">
-                <p className="text-sm fw-medium">To Date</p>
-              </div>
-              <div className="col-6">
-                <p className="text-muted text-sm">: {data.toDate || "--"}</p>
-              </div>
-            </div>
-          </div>
-          <div className="col-md-6 col-12">
-            <div className="row mb-3">
-              <div className="col-6 d-flex">
-                <p className="text-sm fw-medium">Day Type</p>
-              </div>
-              <div className="col-6">
-                <p className="text-muted text-sm">: {data.dayType || "--"}</p>
-              </div>
-            </div>
-          </div>
-          <div className="col-md-6 col-12">
-            <div className="row mb-3">
-              <div className="col-6 d-flex">
-                <p className="text-sm fw-medium">Request Date</p>
-              </div>
-              <div className="col-6">
-                <p className="text-muted text-sm">: {data.requestDate || "--"}</p>
-              </div>
-            </div>
-          </div>
-          <div className="col-md-6 col-12">
-            <div className="row mb-3">
-              <div className="col-6 d-flex ">
-                <p className="text-sm fw-medium">Approver Name</p>
-              </div>
-              <div className="col-6">
-                <p className="text-muted text-sm">: {data.approverName || "--"}</p>
-              </div>
-            </div>
-          </div>
-          <div className="col-md-6 col-12">
-            <div className="row mb-3">
-              <div className="col-6 d-flex ">
-                <p className="text-sm fw-medium">Status</p>
-              </div>
-              <div className="col-6">
-                <p className="text-muted text-sm">: {data.leaveStatus || "--"}</p>
-              </div>
-            </div>
-          </div>
-          <div className="col-md-6 col-12">
-            <div className="row mb-3">
-              <div className="col-6 d-flex ">
-                <p className="text-sm fw-medium">Leave Reason</p>
-              </div>
-              <div className="col-6">
-                <p className="text-muted text-sm">: {data.leaveReason || "--"}</p>
-              </div>
-            </div>
-          </div>
-        </div>
-        {/* <p class="headColor mt-5">Attachment</p>
-      <hr></hr>
-      <div className="row mt-4">
-        <div className="">
-          <div className="row mb-3 d-flex">
-            <div className="col-4 ">
-              <p className="text-sm fw-medium">File Type</p>
-            </div>
-            <div className="col-4">
-              <p className="text-sm fw-medium">File Name</p>
-            </div>
-            <div className="col-4">
-              <p className="text-sm fw-medium">Action</p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="row ">
-        <div className="">
-          <div className="row mb-3 d-flex">
-            <div className="col-4 ">
-              <p className="text-sm text-muted">Leave Attendance</p>
-            </div>
-            <div className="col-4">
-              <p className="text-sm text-muted">evelynchiasiting.pdf</p>
-            </div>
-            <div className="col-4">
-              <p className="text-sm text-muted">
-                <FaCloudDownloadAlt />
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="row ">
-        <div className="">
-          <div className="row mb-3 d-flex">
-            <div className="col-4 ">
-              <p className="text-sm text-muted">Medical Certificates</p>
-            </div>
-            <div className="col-4">
-              <p className="text-sm text-muted">evelynchiasiting.pdf</p>
-            </div>
-            <div className="col-4">
-              <p className="text-sm text-muted">
-                <FaCloudDownloadAlt />
-              </p>
-            </div>
-          </div>
-        </div>
-      </div> */}
       </div>
     </div>
   );

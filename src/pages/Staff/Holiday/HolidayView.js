@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import api from "../../../config/URL";
 import fetchAllCentersWithIds from "../../List/CenterList";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 
 function HolidayView() {
   const [data, setData] = useState([]);
@@ -12,20 +12,19 @@ function HolidayView() {
   const fetchData = async () => {
     try {
       const centerData = await fetchAllCentersWithIds();
-
       setCenterData(centerData);
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error);
     }
   };
-  console.log("object", data);
+
   useEffect(() => {
     const getData = async () => {
       try {
         const response = await api.get(`/getAllUserHolidayById/${id}`);
         setData(response.data);
       } catch (error) {
-        console.error("Error fetching data:", error.message);
+        console.error("Error fetching data:", error);
       }
     };
     getData();
@@ -33,103 +32,126 @@ function HolidayView() {
   }, []);
 
   return (
-    <div className="container-fluid center">
-      <div className="card shadow border-0 mb-2 top-header">
-        <div className="container-fluid py-4">
-          <div className="row align-items-center">
-            <div className="col">
-              <div className="d-flex align-items-center gap-4">
-                <h2 className="h2 ls-tight headingColor">View Holiday</h2>
+    <section>
+      <div className="container-fluid">
+        <ol
+          className="breadcrumb my-3"
+          style={{ listStyle: "none", padding: 0, margin: 0 }}
+        >
+          <li>
+            <Link to="/" className="custom-breadcrumb">
+              Home
+            </Link>
+            <span className="breadcrumb-separator"> &gt; </span>
+          </li>
+          <li>
+            &nbsp;Staffing
+            <span className="breadcrumb-separator"> &gt; </span>
+          </li>
+          <li>
+            <Link to="/holiday" className="custom-breadcrumb">
+              &nbsp;Holiday
+            </Link>
+            <span className="breadcrumb-separator"> &gt; </span>
+          </li>
+          <li className="breadcrumb-item active" aria-current="page">
+            &nbsp;Holiday View
+          </li>
+        </ol>
+        <div className="card">
+          <div
+            className="d-flex px-4 justify-content-between align-items-center p-1 mb-4"
+            style={{ background: "#f5f7f9" }}
+          >
+            <div class="d-flex align-items-center">
+              <div class="d-flex">
+                <div class="dot active"></div>
               </div>
+              <span class="me-2 text-muted">View Holiday</span>
             </div>
-            <div className="col-auto">
-              <div className="hstack gap-2 justify-content-end">
-                <Link to="/holiday">
-                  <button type="submit" className="btn btn-sm btn-light">
-                    <span>Back</span>
-                  </button>
-                </Link>
+            <div className="my-2 pe-3 d-flex align-items-center">
+              <Link to="/holiday">
+                <button type="button " className="btn btn-sm btn-border   ">
+                  Back
+                </button>
+              </Link>
+            </div>
+          </div>
+          <div className="container-fluid px-4 mt-3">
+            <div className="row pb-3">
+              <div className="col-md-6 col-12">
+                <div className="row mb-2">
+                  <div className="col-6 ">
+                    <p className="">Centre Name</p>
+                  </div>
+                  <div className="col-6">
+                    <p className="text-muted text-sm">
+                      :{" "}
+                      {centerData &&
+                        centerData.map((centerId) =>
+                          parseInt(data.centerId) === centerId.id
+                            ? centerId.centerNames || "--"
+                            : ""
+                        )}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="col-md-6 col-12">
+                <div className="row mb-2">
+                  <div className="col-6 ">
+                    <p className="">Holiday Name</p>
+                  </div>
+                  <div className="col-6">
+                    <p className="text-muted text-sm">
+                      : {(data && data.holidayName) || "--"}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="col-md-6 col-12">
+                <div className="row mb-2">
+                  <div className="col-6 ">
+                    <p className="">Start Date</p>
+                  </div>
+                  <div className="col-6">
+                    <p className="text-muted text-sm">
+                      : {data.startDate || "--"}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="col-md-6 col-12">
+                <div className="row mb-2">
+                  <div className="col-6  ">
+                    <p className="">End Date</p>
+                  </div>
+                  <div className="col-6">
+                    <p className="text-muted text-sm">
+                      : {data.endDate || "--"}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="col-md-6 col-12">
+                <div className="row mb-2">
+                  <div className="col-6">
+                    <p className="">Description</p>
+                  </div>
+                  <div className="col-6">
+                    <p className="text-muted text-sm text-break">
+                      : {data.holidayDescription || "--"}
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div
-        className="container card shadow border-0 mb-2 top-header"
-        style={{ height: "70vh" }}
-      >
-        <div className="container p-5">
-          <div className="row mt-5 pb-3">
-            <div className="col-md-6 col-12">
-              <div className="row mb-2">
-                <div className="col-6 ">
-                  <p className="fw-medium">Centre Name</p>
-                </div>
-                <div className="col-6">
-                  <p className="text-muted text-sm">
-                    :{" "}
-                    {centerData &&
-                      centerData.map((tuitionId) =>
-                        parseInt(data.tuitionId) === tuitionId.id
-                          ? tuitionId.centerNames || "--"
-                          : ""
-                      )}
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="col-md-6 col-12">
-              <div className="row mb-2">
-                <div className="col-6 ">
-                  <p className="fw-medium">Holiday Name</p>
-                </div>
-                <div className="col-6">
-                  <p className="text-muted text-sm">
-                    : {(data && data.holidayName) || "--"}
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="col-md-6 col-12">
-              <div className="row mb-2">
-                <div className="col-6 ">
-                  <p className="fw-medium">Start Date</p>
-                </div>
-                <div className="col-6">
-                  <p className="text-muted text-sm">
-                    : {data.startDate || "--"}
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="col-md-6 col-12">
-              <div className="row mb-2">
-                <div className="col-6  ">
-                  <p className="fw-medium">End Date</p>
-                </div>
-                <div className="col-6">
-                  <p className="text-muted text-sm">: {data.endDate || "--"}</p>
-                </div>
-              </div>
-            </div>
-            <div className="col-md-6 col-12">
-              <div className="row mb-2">
-                <div className="col-6">
-                  <p className="fw-medium">Description</p>
-                </div>
-                <div className="col-6">
-                  <p className="text-muted text-sm">
-                    : {data.holidayDescription || "--"}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    </section>
   );
 }
 

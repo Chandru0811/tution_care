@@ -2,26 +2,31 @@ import React, { forwardRef, useEffect, useImperativeHandle } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import api from "../../../config/URL";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 
 const validationSchema = Yup.object().shape({
-  year: Yup.string().required("*year is required!"),
+  year: Yup.number()
+    .min(1990, "*Year is required")
+    .max(2050, "*Year is required")
+    .required("*Year is required"),
 
   annualLeave: Yup.string()
     .matches(/^[0-9]+$/, "*Annual Leave Must be numbers")
-    .required("*Annual Leave is required!"),
+    .required("*Annual Leave is required"),
   medicalLeave: Yup.string()
     .matches(/^[0-9]+$/, "*Medical Leave Must be numbers")
-    .required("*Medical Leave is required!"),
+    .required("*Medical Leave is required"),
   otherLeave: Yup.string()
     .matches(/^[0-9]+$/, "*Other Leave Must be numbers")
-    .required("*Other Leave is required!"),
+    .required("*Other Leave is required"),
   carryForwardLeave: Yup.string()
     .matches(/^[0-9]+$/, "*Carry Forward Leave Must be numbers")
-    .required("*Carry Forward Leave is required!"),
+    .required("*Carry Forward Leave is required"),
 });
 const LeaveEdit = forwardRef(
-  ({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
+  ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
+    const userName = localStorage.getItem("userName");
+
     const formik = useFormik({
       initialValues: {
         year: "",
@@ -29,6 +34,7 @@ const LeaveEdit = forwardRef(
         medicalLeave: "",
         otherLeave: "",
         carryForwardLeave: "",
+        updatedBy: userName,
       },
       validationSchema: validationSchema,
       // onSubmit: async (data) => {
@@ -55,7 +61,8 @@ const LeaveEdit = forwardRef(
       // },
 
       onSubmit: async (values) => {
-        setLoadIndicators(true)
+        setLoadIndicators(true);
+        values.updatedBy = userName;
         // console.log("Api Data:", values);
         try {
           if (values.leaveId !== null) {
@@ -94,17 +101,38 @@ const LeaveEdit = forwardRef(
             }
           }
         } catch (error) {
-          toast.error(error.message);
-        }finally{
-          setLoadIndicators(false)
+          toast.error(error);
+        } finally {
+          setLoadIndicators(false);
         }
       },
+      validateOnChange: false, // Enable validation on change
+      validateOnBlur: true, // Enable validation on blur
     });
+
+    // Function to scroll to the first error field
+    const scrollToError = (errors) => {
+      const errorField = Object.keys(errors)[0]; // Get the first error field
+      const errorElement = document.querySelector(`[name="${errorField}"]`); // Find the DOM element
+      if (errorElement) {
+        errorElement.scrollIntoView({ behavior: "smooth", block: "center" });
+        errorElement.focus(); // Set focus to the error element
+      }
+    };
+
+    // Watch for form submit and validation errors
+    useEffect(() => {
+      if (formik.submitCount > 0 && Object.keys(formik.errors).length > 0) {
+        scrollToError(formik.errors);
+      }
+    }, [formik.submitCount, formik.errors]);
 
     useEffect(() => {
       const getData = async () => {
-        try{
-          const response = await api.get(`/getAllUsersById/${formData.staff_id}`);
+        try {
+          const response = await api.get(
+            `/getAllUserById/${formData.staff_id}`
+          );
           if (
             response.data.userLeaveCreationModels &&
             response.data.userLeaveCreationModels.length > 0
@@ -112,7 +140,10 @@ const LeaveEdit = forwardRef(
             formik.setValues({
               ...response.data.userLeaveCreationModels[0],
               leaveId: response.data.userLeaveCreationModels[0].id,
-              year: response.data.userLeaveCreationModels[0].year.substring(0,10)
+              year: response.data.userLeaveCreationModels[0].year.substring(
+                0,
+                10
+              ),
             });
           } else {
             formik.setValues({
@@ -125,23 +156,30 @@ const LeaveEdit = forwardRef(
             });
             // console.log("Leave ID:", formik.values.leaveId);
           }
-        }catch (error) {
-          console.error("Error fetching data:", error.message);
+        } catch (error) {
+          console.error("Error fetching data:", error);
         }
       };
       // console.log(formik.values);
       getData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-    
+
     useImperativeHandle(ref, () => ({
       leaveEdit: formik.handleSubmit,
     }));
 
     return (
-      <form onSubmit={formik.handleSubmit}>
+      <form
+        onSubmit={formik.handleSubmit}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && !formik.isSubmitting) {
+            e.preventDefault(); // Prevent default form submission
+          }
+        }}
+      >
         <section>
-          <div className="container" style={{ minHeight: "95vh" }}>
+          <div className="container-fluid" style={{ minHeight: "50vh" }}>
             <p className="headColor my-4">Leave Information</p>
             <div class="row">
               <div class="col-md-6 col-12 mb-2">
@@ -149,12 +187,15 @@ const LeaveEdit = forwardRef(
                   Year<span class="text-danger">*</span>
                 </label>
                 <input
-                  type="date"
-                  class="form-control form-control-sm    mt-3 "
+                  type="number"
+                  className="form-control mt-3"
                   name="year"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   value={formik.values.year}
+                  // max={new Date().getFullYear()}
+                  step="1"
+                  placeholder="YYYY"
                 />
                 {formik.touched.year && formik.errors.year && (
                   <div className="error text-danger ">
@@ -168,7 +209,7 @@ const LeaveEdit = forwardRef(
                 </label>
                 <input
                   type="text"
-                  class="form-control form-control-sm    mt-3"
+                  class="form-control    mt-3"
                   name="annualLeave"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -186,7 +227,7 @@ const LeaveEdit = forwardRef(
                 </label>
                 <input
                   type="text"
-                  class="form-control form-control-sm    mt-3 "
+                  class="form-control    mt-3 "
                   name="medicalLeave"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -204,7 +245,7 @@ const LeaveEdit = forwardRef(
                 </label>
                 <input
                   type="text"
-                  class="form-control form-control-sm    mt-3"
+                  class="form-control    mt-3"
                   name="otherLeave"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -222,7 +263,7 @@ const LeaveEdit = forwardRef(
                 </label>
                 <input
                   type="text"
-                  class="form-control form-control-sm    mt-3"
+                  class="form-control    mt-3"
                   name="carryForwardLeave"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}

@@ -1,42 +1,62 @@
-import React, { forwardRef, useImperativeHandle, useState } from "react";
+import React, {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useState,
+} from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import api from "../../../../config/URL";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 
 const validationSchema = Yup.object().shape({
+  primaryContact: Yup.string()
+    .oneOf(
+      ["father", "mother"],
+      "*Primary Contact must be either 'father' or 'mother'"
+    )
+    .required("*Primary Contact is required"),
+  mothersFullName: Yup.string().required("*Mother Name is required"),
+  mothersOccupation: Yup.string().required("*Mother Occupation is required"),
+  mothersDateOfBirth: Yup.date()
+    .required("*Date of Birth is required")
+    .max(new Date(), "*Date of Birth cannot be in the future"),
+  mothersMobileNumber: Yup.string()
+    .matches(
+      /^(?:\+?65)?\s?(?:\d{4}\s?\d{4}|\d{3}\s?\d{3}\s?\d{4})$/,
+      "*Invalid Phone Number"
+    )
+    .required("*Emergency Person Contact Number is required"),
+  // mothersEmailAddress: Yup.string()
+  //   .email("*Invalid Email")
+  //   .required("*Email is required"),
+  mothersEmailAddress: Yup.string()
+    .email("*Invalid Email")
+    .required("*Email is required"),
+  monthlyIncomeOfMother: Yup.string().required("*Mother Income is required"),
   fathersFullName: Yup.string().required("*Father Full Name is required"),
   fathersOccupation: Yup.string().required("*Father Occupation is required"),
   fathersDateOfBirth: Yup.date()
     .required("*Date of Birth is required")
     .max(new Date(), "*Date of Birth cannot be in the future"),
   fathersMobileNumber: Yup.string()
-    .matches(/^(?:\+?65)?\s?\d{8,15}$/, "Invalid Phone Number")
-    .required("*Mobile Number is required"),
+    .matches(
+      /^(?:\+?65)?\s?(?:\d{4}\s?\d{4}|\d{3}\s?\d{3}\s?\d{4})$/,
+      "*Invalid Phone Number"
+    )
+    .required("*Emergency Person Contact Number is required"),
+  // fathersEmailAddress: Yup.string()
+  //   .email("*Invalid Email")
+  //   .required("*Email is required"),
   fathersEmailAddress: Yup.string()
     .email("*Invalid Email")
     .required("*Email is required"),
   monthlyIncomeOfFather: Yup.string().required("*Father Income is required"),
-
-  mothersFullName: Yup.string().required("*Mother Name is required"),
-  mothersOccupation: Yup.string().required("*Mother Occupation is required"),
-  // mothersDateOfBirth: Yup.date()
-  //   .required("*Date of Birth is required")
-  //   .max(new Date(), "*Date of Birth cannot be in the future"),
-  mothersMobileNumber: Yup.string()
-    .matches(/^(?:\+?65)?\s?\d{8,15}$/, "Invalid Phone Number")
-    .required("*Mobile Number is required"),
-  mothersEmailAddress: Yup.string()
-    .email("*Invalid Email")
-    .required("*Email is required"),
-  monthlyIncomeOfMother: Yup.string().required("*Mother Income is required"),
-  // primaryContact: Yup.string()
-  //   .oneOf(["father", "mother"])
-  //   .required("*Primary Contact is required"),
 });
 
 const Form3 = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
+    const userName = localStorage.getItem("userName");
     const formik = useFormik({
       initialValues: {
         fathersFullName: formData.fathersFullName || "",
@@ -52,10 +72,12 @@ const Form3 = forwardRef(
         mothersEmailAddress: formData.mothersEmailAddress || "",
         monthlyIncomeOfMother: formData.monthlyIncomeOfMother || "",
         primaryContact: formData.primaryContact || false,
+        createdBy: userName,
       },
       validationSchema: validationSchema,
       onSubmit: async (data) => {
         setLoadIndicators(true);
+        data.createdBy = userName;
         const primarycontactFather = data.primaryContact === "father";
         const primarycontactMother = data.primaryContact === "mother";
         data.primaryContactFather = primarycontactFather ? true : false;
@@ -79,44 +101,79 @@ const Form3 = forwardRef(
             toast.error(response.data.message);
           }
         } catch (error) {
-          toast.error(error.message);
+          toast.error(error);
         } finally {
           setLoadIndicators(false);
         }
       },
+      validateOnChange: false, // Enable validation on change
+      validateOnBlur: true, // Enable validation on blur
     });
+
+    // Function to scroll to the first error field
+    const scrollToError = (errors) => {
+      const errorField = Object.keys(errors)[0]; // Get the first error field
+      const errorElement = document.querySelector(`[name="${errorField}"]`); // Find the DOM element
+      if (errorElement) {
+        errorElement.scrollIntoView({ behavior: "smooth", block: "center" });
+        errorElement.focus(); // Set focus to the error element
+      }
+    };
+
+    // Watch for form submit and validation errors
+    useEffect(() => {
+      if (formik.submitCount > 0 && Object.keys(formik.errors).length > 0) {
+        scrollToError(formik.errors);
+      }
+    }, [formik.submitCount, formik.errors]);
 
     useImperativeHandle(ref, () => ({
       form3: formik.handleSubmit,
     }));
+    useEffect(() => {
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    }, []);
 
     return (
-      <form onSubmit={formik.handleSubmit}>
+      <form
+        onSubmit={formik.handleSubmit}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && !formik.isSubmitting) {
+            e.preventDefault(); // Prevent default form submission
+          }
+        }}
+      >
         <div className="container py-4">
           <h5 className="headColor mb-5">Parent Information</h5>
           <div className="row">
+            {" "}
             <div className="col-12 mb-3">
               <div className="row">
                 <div className="col-6">
                   <h6>Mother's Info</h6>
                 </div>
                 <div className="col-6 text-end">
-                  <label className="form-label">Primary Contact</label>
+                  <label className="form-label">
+                    Primary Contact{" "}
+                    {formik.values.primaryContact === "mother" && (
+                      <span className="text-danger">*</span>
+                    )}
+                  </label>
                   <input
                     type="radio"
                     name="primaryContact"
                     className="form-check-input mx-2"
                     value="mother"
-                    checked={formik.values.primaryContactMother}
-                    onChange={(e) => {
-                      formik.setValues({
-                        ...formik.values,
-                        primaryContactMother: e.target.value === "mother",
-                        primaryContactFather: e.target.value !== "mother",
-                      });
-                    }}
+                    checked={formik.values.primaryContact === "mother"}
+                    onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   />
+                  {formik.touched.primaryContact &&
+                    formik.errors.primaryContact && (
+                      <div className="error text-danger ">
+                        <small>{formik.errors.primaryContact}</small>
+                      </div>
+                    )}
                 </div>
               </div>
             </div>
@@ -127,7 +184,7 @@ const Form3 = forwardRef(
                 </label>
                 <input
                   type="text"
-                  className="form-control form-control-sm"
+                  className="form-control"
                   name="mothersFullName"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -148,7 +205,7 @@ const Form3 = forwardRef(
                 </label>
                 <input
                   type="text"
-                  className="form-control form-control-sm"
+                  className="form-control"
                   name="mothersOccupation"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -169,7 +226,7 @@ const Form3 = forwardRef(
                 </label>
                 <input
                   type="date"
-                  className="form-control form-control-sm"
+                  className="form-control"
                   name="mothersDateOfBirth"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -190,7 +247,7 @@ const Form3 = forwardRef(
                 </label>
                 <input
                   type="text"
-                  className="form-control form-control-sm"
+                  className="form-control"
                   name="mothersMobileNumber"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -211,7 +268,7 @@ const Form3 = forwardRef(
                 </label>
                 <input
                   type="email"
-                  className="form-control form-control-sm"
+                  className="form-control"
                   name="mothersEmailAddress"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -230,7 +287,7 @@ const Form3 = forwardRef(
                 Mother's Monthly Income<span className="text-danger">*</span>
               </label>
               <select
-                className="form-select form-select-sm"
+                className="form-select"
                 name="monthlyIncomeOfMother"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -259,28 +316,33 @@ const Form3 = forwardRef(
                   </div>
                 )}
             </div>
-            <div className="col-12 mb-3">
+            <div className="col-12 mb-3 mt-4">
               <div className="row">
                 <div className="col-6">
                   <h6>Father's Info</h6>
                 </div>
                 <div className="col-6 text-end">
-                  <label className="form-label">Primary Contact</label>
+                  <label className="form-label">
+                    Primary Contact
+                    {formik.values.primaryContact === "father" && (
+                      <span className="text-danger">*</span>
+                    )}
+                  </label>
                   <input
                     type="radio"
                     name="primaryContact"
                     className="form-check-input mx-2"
                     value="father"
-                    checked={formik.values.primaryContactFather}
-                    onChange={(e) => {
-                      formik.setValues({
-                        ...formik.values,
-                        primaryContactFather: e.target.value === "father",
-                        primaryContactMother: e.target.value !== "father",
-                      });
-                    }}
+                    checked={formik.values.primaryContact === "father"}
+                    onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   />
+                  {formik.touched.primaryContact &&
+                    formik.errors.primaryContact && (
+                      <div className="error text-danger ">
+                        <small>{formik.errors.primaryContact}</small>
+                      </div>
+                    )}
                 </div>
               </div>
             </div>
@@ -291,7 +353,7 @@ const Form3 = forwardRef(
                 </label>
                 <input
                   type="text"
-                  className="form-control form-control-sm"
+                  className="form-control"
                   name="fathersFullName"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -312,7 +374,7 @@ const Form3 = forwardRef(
                 </label>
                 <input
                   type="text"
-                  className="form-control form-control-sm"
+                  className="form-control"
                   name="fathersOccupation"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -333,7 +395,7 @@ const Form3 = forwardRef(
                 </label>
                 <input
                   type="date"
-                  className="form-control form-control-sm"
+                  className="form-control"
                   name="fathersDateOfBirth"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -354,7 +416,7 @@ const Form3 = forwardRef(
                 </label>
                 <input
                   type="text"
-                  className="form-control form-control-sm"
+                  className="form-control"
                   name="fathersMobileNumber"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -375,7 +437,7 @@ const Form3 = forwardRef(
                 </label>
                 <input
                   type="email"
-                  className="form-control form-control-sm"
+                  className="form-control"
                   name="fathersEmailAddress"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -394,7 +456,7 @@ const Form3 = forwardRef(
                 Father's Monthly Income<span className="text-danger">*</span>
               </label>
               <select
-                className="form-select form-select-sm"
+                className="form-select"
                 name="monthlyIncomeOfFather"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}

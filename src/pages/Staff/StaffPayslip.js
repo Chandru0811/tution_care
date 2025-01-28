@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import image from "../../assets/Logo.png";
+import image from "../../assets/images/Logo.png";
 
 function StaffPayslip() {
   return (

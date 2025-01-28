@@ -1,61 +1,18 @@
-import {  useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Admin from "./layouts/Admin";
-import "./styles/admin.css";
 import "./styles/custom.css";
+import "./styles/sidebar.css";
 import Auth from "./layouts/Auth";
-// import { useNavigate } from "react-router-dom";
 import api from "./config/URL";
-import toast from "react-hot-toast";
-// import { useNavigate } from "react-router-dom";
-import { FiAlertTriangle } from "react-icons/fi";
+import { updateScreens } from "./config/ScreenFilter";
+import { toast } from "react-toastify";
 
 function App() {
-
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  // const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
 
-
-  const handleLogin = async (id) => {
-    setIsLoading(true);
-    setIsAuthenticated(true);
-    sessionStorage.setItem("isAuthenticated", true);
-    try {
-      if (id) {
-        const response = await api.get(`/getAllRoleInfoById/${id}`);
-        const rolePermissions = response.data;
-        sessionStorage.setItem("screens", JSON.stringify(rolePermissions));
-
-        // Delay the execution by 2 seconds
-        sessionStorage.setItem("isAuthenticated", true);
-        setIsAuthenticated(true);
-      } else {
-        setIsLoading(false);
-        toast.error("Invalid email or password");
-      }
-    } catch (error) {
-      console.error("Error during login:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-   const handleLogout = () => {
-    setIsAuthenticated(false);
-    sessionStorage.removeItem("isAuthenticated");
-    sessionStorage.removeItem("screens");
-    sessionStorage.removeItem("roleId");
-    sessionStorage.removeItem("token");
-    sessionStorage.removeItem("userId");
-    sessionStorage.removeItem("userName");
-    sessionStorage.removeItem("loginUserId");
-    sessionStorage.removeItem("tutionCareId");
-  };
-
   useEffect(() => {
-
-    const isAdminFromStorage = sessionStorage.getItem("isAuthenticated");
-
+    const isAdminFromStorage = localStorage.getItem("isAuthenticated");
     const isAdminBoolean = isAdminFromStorage === "true";
     if (isAuthenticated !== isAdminBoolean) {
       setIsAuthenticated(isAdminBoolean);
@@ -67,9 +24,7 @@ function App() {
       (error) => {
         console.log("Error is", error.response);
         if (error.response?.status === 401) {
-          toast("Session Experied!! Please Login", {
-            icon: <FiAlertTriangle className="text-warning" />,
-          });
+          toast.warning("Session Experied!! Please Login");
           handleLogout();
         }
         return Promise.reject(error);
@@ -82,26 +37,60 @@ function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const handleLogin = async (id) => {
+    setIsLoading(true);
+
+    try {
+      if (id) {
+        // alert(id)
+        const response = await api.get(`/getAllRoleInfoById/${id}`);
+        const rolePermissions = response.data;
+        updateScreens(rolePermissions);
+        setIsAuthenticated(true);
+        localStorage.setItem("isAuthenticated", true);
+        // localStorage.setItem("userName", userName);
+      } else {
+        setIsLoading(false);
+        toast.error("Invalid email or password");
+      }
+    } catch (error) {
+      console.error("Error during login:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    localStorage.removeItem("isAuthenticated");
+    localStorage.removeItem("screens");
+    localStorage.removeItem("roleId");
+    localStorage.removeItem("token");
+    localStorage.removeItem("userId");
+    localStorage.removeItem("userName");
+    localStorage.removeItem("loginUserId");
+    localStorage.removeItem("centerId");
+    localStorage.removeItem("selectedCenterId");
+    localStorage.removeItem("email");
+  };
 
   return (
     <div>
-       <div>
-        {isLoading ? (
-          <div className="loader-container">
-            <div class="loading">
-              <span></span>
-              <span></span>
-              <span></span>
-              <span></span>
-              <span></span>
-            </div>
+      {isLoading ? (
+        <div className="loader-container">
+          <div class="loading">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
           </div>
-        ) : isAuthenticated ? (
-          <Admin handleLogout={handleLogout} />
-        ) : (
-          <Auth handleLogin={handleLogin} />
-        )}
-      </div>
+        </div>
+      ) : isAuthenticated ? (
+        <Admin handleLogout={handleLogout} />
+      ) : (
+        <Auth handleLogin={handleLogin} />
+      )}
     </div>
   );
 }

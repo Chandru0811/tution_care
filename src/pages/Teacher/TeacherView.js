@@ -3,49 +3,134 @@ import { Link, useParams } from "react-router-dom";
 import { FaCloudDownloadAlt } from "react-icons/fa";
 import api from "../../config/URL";
 import TeacherSummary from "./TeacherSummary";
-import BlockImg from "../.././assets/Block_Img1.jpg";
+import fetchAllCentersWithIds from "../List/CenterList";
+import { toast } from "react-toastify";
+import fetchAllSalaryTypeWithIds from "../List/SalaryTypeList";
 
 function TeacherView() {
   const { id } = useParams();
   const [data, setData] = useState([]);
-  // console.log(data);
-  const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
+  console.log("Api data:", data);
+  const [centerData, setCenterData] = useState(null);
+  const [shgData, setShgData] = useState([]);
+  const [salaryTypeData, setSalaryTypeData] = useState(null);
+
+  // const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
+
+  const fetchSalaryTypeData = async () => {
+    try {
+      const salarytype = await fetchAllSalaryTypeWithIds();
+      setSalaryTypeData(salarytype);
+    } catch (error) {
+      toast.error(error.message || "Error fetching salary types");
+    }
+  };
 
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await api.get(`/getAllUsersById/${id}`);
+        const response = await api.get(`/getAllUserById/${id}`);
         setData(response.data);
       } catch (error) {
-        console.error("Error fetching data:", error.message);
+        console.error("Error fetching data:", error);
       }
     };
     getData();
+    fetchData();
+    fetchSalaryTypeData();
   }, [id]);
 
+  const fetchData = async () => {
+    try {
+      const centerData = await fetchAllCentersWithIds();
+      setCenterData(centerData);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
+
+  const getData = async () => {
+    try {
+      const response = await api.get("/getAllSHGSetting");
+      setShgData(response.data);
+      console.log("shgdata", shgData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
+
+  const getFileNameFromUrl = (url) => {
+    if (url) {
+      const parts = url.split("/");
+      return parts[parts.length - 1];
+    }
+    return "--";
+  };
+
+  // Safely accessing the first element of userRequireInformationModels array
+  const userRequireInfo = data?.userRequireInformationModels?.[0];
+  const resumeFileName = userRequireInfo
+    ? getFileNameFromUrl(userRequireInfo.resume)
+    : "--";
+  const educationalCertificates = userRequireInfo
+    ? getFileNameFromUrl(userRequireInfo.educationCertificate)
+    : "--";
+
+  // Construct the full URL to the resume and educational certificates file
+  const resumeFileNameUrl = userRequireInfo ? userRequireInfo.resume : "#";
+  const educationCertificateUrl = userRequireInfo
+    ? userRequireInfo.educationCertificate
+    : "#";
+
+  const findSalaryType = (id) => {
+    const name = salaryTypeData?.find((datas) => datas.id === id);
+    return name?.salaryType;
+  };
+
   return (
-    <div className="container-fluid center">
-    <div className="card shadow border-0 mb-2 top-header">
-    <div className="container-fluid py-4">
-      <div className="row align-items-center">
-        <div className="col">
-          <div className="d-flex align-items-center gap-4">
-            <h2 className="h2 ls-tight headingColor">View Teacher</h2>
+    <div class="container-fluid minHeight mb-5">
+      <ol
+        className="breadcrumb my-3"
+        style={{ listStyle: "none", padding: 0, margin: 0 }}
+      >
+        <li>
+          <Link to="/" className="custom-breadcrumb">
+            Home
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          Staffing
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          <Link to="/teacher" className="custom-breadcrumb">
+            Teacher
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li className="breadcrumb-item active" aria-current="page">
+          Teacher View
+        </li>
+      </ol>
+      
+      <div class="container-fluid py-4">
+        <div class="row align-items-center">
+          <div class="col">
+            <div class="d-flex align-items-center gap-4"></div>
           </div>
-        </div>
-        <div className="col-auto">
-          <div className="hstack gap-2 justify-content-end">
-            <Link to="/teacher">
-              <button type="submit" className="btn btn-sm btn-light">
-                <span>Back</span>
-              </button>
-            </Link>
-            <TeacherSummary data={data} />
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+          <div class="col-auto">
+            <div class="hstack gap-2 justify-content-end">
+              <Link to="/teacher">
+                <button type="submit" className="btn btn-border btn-sm">
+                  <span>Back</span>
+                </button>
+              </Link>
+              <TeacherSummary data={data} />
               {/* {storedScreens?.payrollIndex && (
                 <Link to="/teacher/payslip">
                   <button type="submit" class="btn btn-border">
@@ -60,30 +145,23 @@ function TeacherView() {
                   </button>
                 </Link>
               )} */}
-        <div className="card shadow border-0 mb-2 top-header">
-        <div className="container p-5">
+            </div>
+          </div>
+        </div>
+      </div>
       <p class="headColor mt-3">Personal Information</p>
       <div className="d-flex justify-content-center">
         <p className="my-2 d-flex">
           {data.photo ? (
             <img
               src={data.photo}
-              onError={(e) => {
-                e.target.src = BlockImg;
-              }}
               style={{ borderRadius: 70 }}
               width="100"
               height="100"
-              alt="Teacher"
+              alt=""
             />
           ) : (
-            <img
-              src={BlockImg}
-              alt="Teacher"
-              style={{ borderRadius: 70 }}
-              width="100"
-              height="100"
-            />
+            <></>
           )}
         </p>
       </div>
@@ -142,6 +220,16 @@ function TeacherView() {
         </div>
         <div className="col-md-6 col-12">
           <div className="row mb-3">
+            <div className="col-6 d-flex">
+              <p className="text-sm fw-medium">Nationality</p>
+            </div>
+            <div className="col-6">
+              <p className="text-muted text-sm">: {data.nationality || "--"}</p>
+            </div>
+          </div>
+        </div>
+        <div className="col-md-6 col-12">
+          <div className="row mb-3">
             <div className="col-6 d-flex ">
               <p className="text-sm fw-medium">Gender</p>
             </div>
@@ -153,11 +241,34 @@ function TeacherView() {
         <div className="col-md-6 col-12">
           <div className="row mb-3">
             <div className="col-6 d-flex">
+              <p className="text-sm fw-medium">Email</p>
+            </div>
+            <div className="col-6">
+              <p className="text-muted text-sm">: {data.email || "--"}</p>
+            </div>
+          </div>
+        </div>
+        <div className="col-md-6 col-12">
+          <div className="row mb-3">
+            <div className="col-6 d-flex">
+              <p className="text-sm fw-medium">Role</p>
+            </div>
+            <div className="col-6">
+              <p className="text-muted text-sm">: {data.role || "--"}</p>
+            </div>
+          </div>
+        </div>
+        <div className="col-md-6 col-12">
+          <div className="row mb-3">
+            <div className="col-6 ">
               <p className="text-sm fw-medium">Short Introduction</p>
             </div>
             <div className="col-6">
-              <p className="text-muted text-sm">
-                : {data.shortIntroduction || "--"}
+              <p className="text-muted text-sm text-break">
+                :{" "}
+                {data.shortIntroduction === "undefined"
+                  ? "--"
+                  : data.shortIntroduction || "--"}
               </p>
             </div>
           </div>
@@ -199,7 +310,7 @@ function TeacherView() {
             </div>
           </div>
         </div>
-        <div className="col-md-6 col-12">
+        {/* <div className="col-md-6 col-12">
           <div className="row mb-3">
             <div className="col-6 d-flex">
               <p className="text-sm fw-medium">Teacher ID</p>
@@ -215,7 +326,7 @@ function TeacherView() {
               </p>
             </div>
           </div>
-        </div>
+        </div> */}
         <div className="col-md-6 col-12 ">
           <div className="row mb-3">
             <div className="col-6 d-flex">
@@ -243,8 +354,12 @@ function TeacherView() {
                 :{" "}
                 {data.userAccountInfo &&
                 data.userAccountInfo.length > 0 &&
-                data.userAccountInfo[0].shgType
-                  ? data.userAccountInfo[0].shgType
+                data.userAccountInfo[0].shgTypeId
+                  ? (
+                      shgData.find(
+                        (item) => item.id === data.userAccountInfo[0].shgTypeId
+                      ) || {}
+                    ).shgType || "--"
                   : "--"}
               </p>
             </div>
@@ -338,26 +453,28 @@ function TeacherView() {
             </div>
           </div>
         </div>
-      </div>
-      <p class="headColor mt-5">Contact Information</p>
-      <div className="row mt-4">
         <div className="col-md-6 col-12">
           <div className="row mb-3">
             <div className="col-6 d-flex">
-              <p className="text-sm fw-medium">Email</p>
+              <p className="text-sm fw-medium">Centre Name</p>
             </div>
             <div className="col-6">
               <p className="text-muted text-sm">
                 :{" "}
-                {data.userContactInfo &&
-                data.userContactInfo.length > 0 &&
-                data.userContactInfo[0].email
-                  ? data.userContactInfo[0].email
+                {data.userAccountInfo &&
+                data.userAccountInfo.length > 0 &&
+                data.userAccountInfo[0].centers
+                  ? data.userAccountInfo[0].centers
+                      .map((item) => item.centerName)
+                      .join(", ")
                   : "--"}
               </p>
             </div>
           </div>
         </div>
+      </div>
+      <p class="headColor mt-5">Contact Information</p>
+      <div className="row mt-4">
         <div className="col-md-6 col-12">
           <div className="row mb-3">
             <div className="col-6 d-flex">
@@ -428,187 +545,210 @@ function TeacherView() {
             </div>
           </div>
         </div>
-        <div className="row ">
+        {/* Resume/CV Section */}
+        <div className="row">
           <div className="">
             <div className="row mb-3 d-flex">
               <div className="col-4 ">
                 <p className="text-sm text-muted">Resume/Cv</p>
               </div>
               <div className="col-4">
-                <p className="text-sm text-muted">{data.subject || "--"}</p>
-              </div>
-              <div className="col-4">
-                <p className="text-sm ">
-                  <FaCloudDownloadAlt />
+                <p className="text-sm text-muted text-break">
+                  {resumeFileName || "--"}
                 </p>
+              </div>
+              <div className="col-4 ">
+                {userRequireInfo && (
+                  <p className="text-sm ms-3">
+                    <a href={resumeFileNameUrl} download={resumeFileName}>
+                      <FaCloudDownloadAlt />
+                    </a>
+                  </p>
+                )}
               </div>
             </div>
           </div>
         </div>
-        <div className="row ">
+
+        {/* Educational Certificates Section */}
+        <div className="row">
           <div className="">
             <div className="row mb-3 d-flex">
               <div className="col-4 ">
                 <p className="text-sm text-muted">Educational Certificates</p>
               </div>
               <div className="col-4">
-                <p className="text-sm text-muted">{data.subject || "--"}</p>
-              </div>
-              <div className="col-4">
-                <p className="text-sm">
-                  <FaCloudDownloadAlt />
+                <p className="text-sm text-muted text-break">
+                  {educationalCertificates || "--"}
                 </p>
               </div>
+              <div className="col-4">
+                {userRequireInfo && (
+                  <p className="text-sm ms-3">
+                    <a
+                      href={educationCertificateUrl}
+                      download={educationalCertificates}
+                    >
+                      <FaCloudDownloadAlt />
+                    </a>
+                  </p>
+                )}
+              </div>
             </div>
           </div>
         </div>
       </div>
-
-      <p class="headColor mt-5">Salary Information</p>
-      <div className="row mt-4">
-        <div className="col-md-6 col-12">
-          <div className="row mb-3">
-            <div className="col-6 d-flex">
-              <p className="text-sm fw-medium">Salary</p>
+      {data.role !== "freelancer" && (
+        <>
+          <p class="headColor mt-5">Salary Information</p>
+          <div className="row mt-4">
+            <div className="col-md-6 col-12">
+              <div className="row mb-3">
+                <div className="col-6 d-flex">
+                  <p className="text-sm fw-medium">Salary</p>
+                </div>
+                <div className="col-6">
+                  <p className="text-muted text-sm">
+                    :{" "}
+                    {data.userSalaryCreationModels &&
+                    data.userSalaryCreationModels.length > 0 &&
+                    data.userSalaryCreationModels[0].salary
+                      ? data.userSalaryCreationModels[0].salary
+                      : "--"}
+                  </p>
+                </div>
+              </div>
             </div>
-            <div className="col-6">
-              <p className="text-muted text-sm">
-                :{" "}
-                {data.userSalaryCreationModels &&
-                data.userSalaryCreationModels.length > 0 &&
-                data.userSalaryCreationModels[0].salary
-                  ? data.userSalaryCreationModels[0].salary
-                  : "--"}
-              </p>
+            <div className="col-md-6 col-12">
+              <div className="row mb-3">
+                <div className="col-6 d-flex">
+                  <p className="text-sm fw-medium">Effective Date</p>
+                </div>
+                <div className="col-6">
+                  <p className="text-muted text-sm">
+                    :{" "}
+                    {data.userSalaryCreationModels &&
+                    data.userSalaryCreationModels.length > 0 &&
+                    data.userSalaryCreationModels[0].effectiveDate
+                      ? data.userSalaryCreationModels[0].effectiveDate.substring(
+                          0,
+                          10
+                        )
+                      : "--"}
+                  </p>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-        <div className="col-md-6 col-12">
-          <div className="row mb-3">
-            <div className="col-6 d-flex">
-              <p className="text-sm fw-medium">Effective Date</p>
-            </div>
-            <div className="col-6">
-              <p className="text-muted text-sm">
-                :{" "}
-                {data.userSalaryCreationModels &&
-                data.userSalaryCreationModels.length > 0 &&
-                data.userSalaryCreationModels[0].effectiveDate
-                  ? data.userSalaryCreationModels[0].effectiveDate.substring(
-                      0,
-                      10
-                    )
-                  : "--"}
-              </p>
-            </div>
-          </div>
-        </div>
-        <div className="col-md-6 col-12">
-          <div className="row mb-3">
-            <div className="col-6 d-flex">
-              <p className="text-sm fw-medium">Salary Type</p>
-            </div>
-            <div className="col-6">
-              <p className="text-muted text-sm">
-                :{" "}
-                {data.userSalaryCreationModels &&
-                data.userSalaryCreationModels.length > 0 &&
-                data.userSalaryCreationModels[0].salaryType
-                  ? data.userSalaryCreationModels[0].salaryType
-                  : "--"}
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <p class="headColor mt-5">Leave Information</p>
-      <div className="row mt-4">
-        <div className="col-md-6 col-12">
-          <div className="row mb-3">
-            <div className="col-6 d-flex">
-              <p className="text-sm fw-medium">Year</p>
-            </div>
-            <div className="col-6">
-              <p className="text-muted text-sm">
-                :{" "}
-                {data.userLeaveCreationModels &&
-                data.userLeaveCreationModels.length > 0 &&
-                data.userLeaveCreationModels[0].year
-                  ? data.userLeaveCreationModels[0].year.substring(0, 10)
-                  : "--"}
-              </p>
+            <div className="col-md-6 col-12">
+              <div className="row mb-3">
+                <div className="col-6 d-flex">
+                  <p className="text-sm fw-medium">Salary Type</p>
+                </div>
+                <div className="col-6">
+                  <p className="text-muted text-sm">
+                    :{" "}
+                    {data.userSalaryCreationModels &&
+                    data.userSalaryCreationModels.length > 0 &&
+                    data.userSalaryCreationModels[0].salaryTypeId
+                      ? findSalaryType(
+                          data.userSalaryCreationModels[0].salaryTypeId
+                        )
+                      : "--"}
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-        <div className="col-md-6 col-12">
-          <div className="row mb-3">
-            <div className="col-6">
-              <p className="text-sm fw-medium">Annual Leave</p>
+          <p class="headColor mt-5">Leave Information</p>
+          <div className="row mt-4">
+            <div className="col-md-6 col-12">
+              <div className="row mb-3">
+                <div className="col-6 d-flex">
+                  <p className="text-sm fw-medium">Year</p>
+                </div>
+                <div className="col-6">
+                  <p className="text-muted text-sm">
+                    :{" "}
+                    {data.userLeaveCreationModels &&
+                    data.userLeaveCreationModels.length > 0 &&
+                    data.userLeaveCreationModels[0].year
+                      ? data.userLeaveCreationModels[0].year.substring(0, 10)
+                      : "--"}
+                  </p>
+                </div>
+              </div>
             </div>
-            <div className="col-6">
-              <p className="text-muted text-sm">
-                :{" "}
-                {data.userLeaveCreationModels &&
-                data.userLeaveCreationModels.length > 0 &&
-                data.userLeaveCreationModels[0].annualLeave
-                  ? data.userLeaveCreationModels[0].annualLeave
-                  : "--"}
-              </p>
+            <div className="col-md-6 col-12">
+              <div className="row mb-3">
+                <div className="col-6">
+                  <p className="text-sm fw-medium">Annual Leave</p>
+                </div>
+                <div className="col-6">
+                  <p className="text-muted text-sm">
+                    :{" "}
+                    {data.userLeaveCreationModels &&
+                    data.userLeaveCreationModels.length > 0 &&
+                    data.userLeaveCreationModels[0].annualLeave
+                      ? data.userLeaveCreationModels[0].annualLeave
+                      : "--"}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="col-md-6 col-12">
+              <div className="row mb-3">
+                <div className="col-6 d-flex">
+                  <p className="text-sm fw-medium">Medical Leave</p>
+                </div>
+                <div className="col-6">
+                  <p className="text-muted text-sm">
+                    :{" "}
+                    {data.userLeaveCreationModels &&
+                    data.userLeaveCreationModels.length > 0 &&
+                    data.userLeaveCreationModels[0].medicalLeave
+                      ? data.userLeaveCreationModels[0].medicalLeave
+                      : "--"}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="col-md-6 col-12 ">
+              <div className="row mb-3">
+                <div className="col-6 d-flex">
+                  <p className="text-sm fw-medium">Other Leave</p>
+                </div>
+                <div className="col-6">
+                  <p className="text-muted text-sm">
+                    :{" "}
+                    {data.userLeaveCreationModels &&
+                    data.userLeaveCreationModels.length > 0 &&
+                    data.userLeaveCreationModels[0].otherLeave
+                      ? data.userLeaveCreationModels[0].otherLeave
+                      : "--"}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="col-md-6 col-12">
+              <div className="row mb-3">
+                <div className="col-6 d-flex">
+                  <p className="text-sm fw-medium">Carry Forward Leave</p>
+                </div>
+                <div className="col-6">
+                  <p className="text-muted text-sm">
+                    :{" "}
+                    {data.userLeaveCreationModels &&
+                    data.userLeaveCreationModels.length > 0 &&
+                    data.userLeaveCreationModels[0].carryForwardLeave
+                      ? data.userLeaveCreationModels[0].carryForwardLeave
+                      : "--"}
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-        <div className="col-md-6 col-12">
-          <div className="row mb-3">
-            <div className="col-6 d-flex">
-              <p className="text-sm fw-medium">Medical Leave</p>
-            </div>
-            <div className="col-6">
-              <p className="text-muted text-sm">
-                :{" "}
-                {data.userLeaveCreationModels &&
-                data.userLeaveCreationModels.length > 0 &&
-                data.userLeaveCreationModels[0].medicalLeave
-                  ? data.userLeaveCreationModels[0].medicalLeave
-                  : "--"}
-              </p>
-            </div>
-          </div>
-        </div>
-        <div className="col-md-6 col-12 ">
-          <div className="row mb-3">
-            <div className="col-6 d-flex">
-              <p className="text-sm fw-medium">Other Leave</p>
-            </div>
-            <div className="col-6">
-              <p className="text-muted text-sm">
-                :{" "}
-                {data.userLeaveCreationModels &&
-                data.userLeaveCreationModels.length > 0 &&
-                data.userLeaveCreationModels[0].otherLeave
-                  ? data.userLeaveCreationModels[0].otherLeave
-                  : "--"}
-              </p>
-            </div>
-          </div>
-        </div>
-        <div className="col-md-6 col-12">
-          <div className="row mb-3">
-            <div className="col-6 d-flex">
-              <p className="text-sm fw-medium">Carry Forward Leave</p>
-            </div>
-            <div className="col-6">
-              <p className="text-muted text-sm">
-                :{" "}
-                {data.userLeaveCreationModels &&
-                data.userLeaveCreationModels.length > 0 &&
-                data.userLeaveCreationModels[0].carryForwardLeave
-                  ? data.userLeaveCreationModels[0].carryForwardLeave
-                  : "--"}
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
+        </>
+      )}
 
       <p class="headColor mt-5">Contract Information</p>
       <div className="row mt-4">
@@ -623,12 +763,35 @@ function TeacherView() {
             <div className="col-6">
               <p className="text-muted text-sm">
                 :{" "}
+                {/* {centerData &&
+                  centerData.map((centerId) =>
+                    parseInt(data.userContractCreationModels[0].employer) ===
+                    centerId.id
+                      ? centerId.centerNames || "--"
+                      : ""
+                  )} */}
+                {centerData &&
+                  centerData.map((centerId) => {
+                    if (
+                      data &&
+                      data.userContractCreationModels &&
+                      data.userContractCreationModels.length > 0 &&
+                      parseInt(data.userContractCreationModels[0].employer) ===
+                        centerId.id
+                    ) {
+                      return centerId.centerNames || "--";
+                    }
+                    return null;
+                  })}
+              </p>
+              {/* <p className="text-muted text-sm">
+                :{" "}
                 {data.userContractCreationModels &&
                 data.userContractCreationModels.length > 0 &&
                 data.userContractCreationModels[0].employer
                   ? data.userContractCreationModels[0].employer
                   : "--"}
-              </p>
+              </p> */}
             </div>
           </div>
         </div>
@@ -874,7 +1037,7 @@ function TeacherView() {
                 {data.userContractCreationModels &&
                 data.userContractCreationModels.length > 0 &&
                 data.userContractCreationModels[0].workingDays
-                  ? data.userContractCreationModels[0].workingDays
+                  ? data.userContractCreationModels[0].workingDays.join(", ")
                   : "--"}
               </p>{" "}
             </div>
@@ -992,8 +1155,6 @@ function TeacherView() {
           </div>
         </div>
       </div>
-    </div>
-    </div>
     </div>
   );
 }

@@ -3,17 +3,15 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import "datatables.net-dt";
 import "datatables.net-responsive-dt";
-import $ from "jquery";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 import fetchAllCentersWithIds from "../List/CenterList";
 import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
 import api from "../../config/URL";
+import { Link } from "react-router-dom";
 
 const Attendance = () => {
   const tableRef = useRef(null);
   const [datas, setDatas] = useState([]);
-  const [loading, setLoading] = useState(true);
-
   const [centerData, setCenterData] = useState(null);
   const [courseData, setCourseData] = useState(null);
   const getCurrentDate = () => {
@@ -24,60 +22,30 @@ const Attendance = () => {
     ).slice(-2)}-${("0" + today.getDate()).slice(-2)}`;
     return formattedDate;
   };
-
   const [selectedDate, setSelectedDate] = useState(getCurrentDate());
+  const centerLocalId = localStorage.getItem("selectedCenterId");
 
   const validationSchema = Yup.object({});
-
-  useEffect(() => {
-    fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  // useEffect(() => {
-  //   if (!loading) {
-  //     initializeDataTable();
-  //   }
-  //   return () => {
-  //     destroyDataTable();
-  //   };
-  // }, [loading]);
-
-  const initializeDataTable = () => {
-    $(tableRef.current).DataTable({
-      responsive: true,
-    });
-  };
-
-  const destroyDataTable = () => {
-    const table = $(tableRef.current).DataTable();
-    if ($.fn.DataTable.isDataTable(tableRef.current)) {
-      table.destroy();
-    }
-  };
 
   const formik = useFormik({
     initialValues: {
       centerId: "",
       courseId: "",
+      attendanceDate: "",
       attendanceStatus: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       const payload = {
         centerId: values.centerId,
+        courseId: values.courseId,
         attendanceDate: selectedDate,
+        // attendanceStatus: values.attendanceStatus,
+        ...(values.attendanceStatus && {
+          attendanceStatus: values.attendanceStatus,
+        }), // Add only if attendanceStatus is selected
       };
-      if (values.courseId !== undefined && values.courseId !== null) {
-        payload.courseId = values.courseId;
-      }
-      if (
-        values.attendanceStatus !== undefined &&
-        values.attendanceStatus !== null
-      ) {
-        payload.attendanceStatus = values.attendanceStatus;
-      }
-
+      console.log("Payload:", payload);
       try {
         const response = await api.post(
           "getAttendanceByCenterIdAndDate",
@@ -86,11 +54,9 @@ const Attendance = () => {
         if (response.status === 200) {
           setDatas(response.data);
         } else {
-          // Handle unexpected response status
           toast.error("Unexpected response status: " + response.status);
         }
       } catch (error) {
-        // Handle API call error
         toast.error(error.message || "An error occurred while fetching data");
       }
     },
@@ -99,48 +65,102 @@ const Attendance = () => {
   const fetchData = async () => {
     try {
       const centers = await fetchAllCentersWithIds();
-      formik.setValues({ centerId: centers[0].id });
-      setCenterData(centers);
-      setLoading(false); // Set loading to false after fetching data
+      if (centers.length > 0) {
+        const defaultCenterId = centers[0].id;
+        if (centerLocalId !== null && centerLocalId !== "undefined") {
+          formik.setFieldValue("centerId", centerLocalId);
+          await fetchCourses(centerLocalId);
+        } else if (centerData !== null && centerData.length > 0) {
+          formik.setFieldValue("centerId", defaultCenterId);
+          await fetchCourses(defaultCenterId);
+        }
+        setCenterData(centers);
+      } else {
+        console.error("No centers found!");
+      }
     } catch (error) {
-      toast.error(error);
+      toast.error(error.message || "Error fetching centers.");
     }
   };
 
   const fetchCourses = async (centerId) => {
     try {
       const courses = await fetchAllCoursesWithIdsC(centerId);
-      setCourseData(courses);
+      if (courses.length > 0) {
+        const defaultCourseId = courses[0].id;
+        formik.setFieldValue("courseId", defaultCourseId);
+        setCourseData(courses);
+      } else {
+        toast.error("No courses found for the selected center.");
+      }
     } catch (error) {
-      toast.error(error);
+      toast.error(error.message || "Error fetching courses.");
     }
   };
 
   const handleCenterChange = (event) => {
     setCourseData(null);
-    formik.setFieldValue("courseId", null);
     const centerId = event.target.value;
     formik.setFieldValue("centerId", centerId);
     fetchCourses(centerId);
   };
 
+  const clearFilter = () => {
+    formik.resetForm();
+  };
+
+  useEffect(() => {
+    fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
-<div className="container-fluid center ">
-      <div className="card shadow border-0 mb-2 top-header ">
-        <div className="d-flex justify-content-between px-4">
-          <div className="pt-3">
-            <h2>Attendance Report</h2>
+    <div className="container-fluid my-3">
+      <ol
+        className="breadcrumb my-3"
+        style={{ listStyle: "none", padding: 0, margin: 0 }}
+      >
+        <li>
+          <Link to="/" className="custom-breadcrumb">
+            Home
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          Report Management
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li className="breadcrumb-item active" aria-current="page">
+          Attendance Report
+        </li>
+      </ol>
+      <form
+        onSubmit={formik.handleSubmit}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && !formik.isSubmitting) {
+            e.preventDefault();
+          }
+        }}
+      >
+        <div className="card">
+          <div
+            className="d-flex px-4 justify-content-between align-items-center p-1 mb-4"
+            style={{ background: "#f5f7f9" }}
+          >
+            <div class="d-flex align-items-center">
+              <div class="d-flex">
+                <div class="dot active"></div>
+              </div>
+              <span class="me-2 text-muted">Attendance Report</span>
+            </div>
           </div>
-        </div>
-        <hr />
-        <div className="table-response minHeight  px-4">
-          <form onSubmit={formik.handleSubmit}>
+          <div className="container-fluid">
             <div className="row my-4">
               <div className="col-md-4 col-12 mb-2">
                 <label className="form-label">Centre</label>
                 <select
                   {...formik.getFieldProps("centerId")}
-                  className={`form-select form-select-sm${
+                  className={`form-select ${
                     formik.touched.centerId && formik.errors.centerId
                       ? "is-invalid"
                       : ""
@@ -148,6 +168,7 @@ const Attendance = () => {
                   aria-label="Default select example"
                   onChange={handleCenterChange}
                 >
+                  <option></option>
                   {centerData &&
                     centerData.map((center) => (
                       <option key={center.id} value={center.id}>
@@ -165,7 +186,7 @@ const Attendance = () => {
                 <label className="form-label">Course</label>
                 <select
                   {...formik.getFieldProps("courseId")}
-                  className={`form-select form-select-sm${
+                  className={`form-select ${
                     formik.touched.courseId && formik.errors.courseId
                       ? "is-invalid"
                       : ""
@@ -190,7 +211,8 @@ const Attendance = () => {
                 <input
                   {...formik.getFieldProps("attendanceDate")}
                   type="date"
-                  className={`form-control form-control-sm ${
+                  onFocus={(e) => e.target.showPicker()}
+                  className={`form-control ${
                     formik.touched.attendanceDate &&
                     formik.errors.attendanceDate
                       ? "is-invalid"
@@ -210,7 +232,7 @@ const Attendance = () => {
                 <label className="form-label">Status</label>
                 <select
                   {...formik.getFieldProps("attendanceStatus")}
-                  className={`form-select form-select-sm${
+                  className={`form-select ${
                     formik.touched.attendanceStatus &&
                     formik.errors.attendanceStatus
                       ? "is-invalid"
@@ -230,60 +252,72 @@ const Attendance = () => {
               </div>
               <div className="col-md-4 col-12 d-flex align-items-end">
                 <button
+                  type="button"
+                  onClick={clearFilter}
+                  className="btn btn-border btn-sm mt-3"
+                >
+                  Clear
+                </button>
+                <button
                   type="submit"
-                  className="btn btn-light btn-border btn-sm mt-3"
+                  className="btn btn-button btn-sm mt-3 mx-3"
                 >
                   Search
                 </button>
               </div>
             </div>
-          </form>
-
-          <table ref={tableRef} className="table table-striped">
-            <thead>
-              <tr>
-                <th scope="col" style={{ whiteSpace: "nowrap" }}>
-                  S No
-                </th>
-                <th scope="col">Student ID</th>
-                <th scope="col">Student Name</th>
-                <th scope="col">Centre</th>
-                <th scope="col">Course</th>
-                <th scope="col">Class Code</th>
-                <th scope="col">Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {datas &&
-                datas.map((data, index) => (
-                  <tr key={index}>
-                    <th scope="row">{index + 1}</th>
-                    <td>{data.studentUniqueId}</td>
-                    <td>{data.studentName}</td>
-                    <td>{data.centerName}</td>
-                    <td>{data.courseName}</td>
-                    <td>{data.classCode}</td>
-                    <td>
-                      {data.attendanceStatus === "present" ? (
-                        <span className="badge badges-Green">Present</span>
-                      ) : data.attendanceStatus === "deposit" ? (
-                        <span className="badge badges-Brown">
-                          Deposit Deducted
-                        </span>
-                      ) : data.attendanceStatus === "class_replaced" ? (
-                        <span className="badge badges-Orange">
-                          Class Replaced
-                        </span>
-                      ) : (
-                        <span className="badge badges-Red">Absent</span>
-                      )}
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>
+          </div>
+          <div className="container-fluid">
+            <table ref={tableRef} className="table table-striped">
+              <thead>
+                <tr>
+                  <th scope="col" style={{ whiteSpace: "nowrap" }}>
+                    S No
+                  </th>
+                  <th scope="col">Student ID</th>
+                  <th scope="col">Student Name</th>
+                  <th scope="col">Centre</th>
+                  <th scope="col">Course</th>
+                  <th scope="col">Class Code</th>
+                  <th scope="col">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {datas &&
+                  datas.map((data, index) => (
+                    <tr key={index}>
+                      <th scope="row">{index + 1}</th>
+                      <td>{data.studentUniqueId}</td>
+                      <td>{data.studentName}</td>
+                      <td>{data.centerName}</td>
+                      <td>{data.courseName}</td>
+                      <td>{data.classCode}</td>
+                      <td>
+                        {data.attendanceStatus === "present" ? (
+                          <span className="badge badges-Green">Present</span>
+                        ) : data.attendanceStatus === "deposit" ? (
+                          <span className="badge badges-Brown">
+                            Deposit Deducted
+                          </span>
+                        ) : data.attendanceStatus === "class_replaced" ? (
+                          <span className="badge badges-Orange">
+                            Class Replaced
+                          </span>
+                        ) : data.attendanceStatus === "absent" ? (
+                          <span className="badge badges-Red">Absent</span>
+                        ) : (
+                          <span className="badge badges-Gray">
+                            Not Yet Attendance
+                          </span>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
+      </form>
     </div>
   );
 };

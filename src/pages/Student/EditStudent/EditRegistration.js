@@ -3,7 +3,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 import api from "../../../config/URL";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 
 const validationSchema = Yup.object().shape({
   emergencyContactNo: Yup.string()
@@ -11,7 +11,7 @@ const validationSchema = Yup.object().shape({
       /^(?:\+?65)?\s?(?:\d{4}\s?\d{4}|\d{3}\s?\d{3}\s?\d{4})$/,
       "Invalid Phone Number"
     )
-    .required("*Emergency Contact Number is Required!"),
+    .required("*Emergency Contact Number is Required"),
   contactNo: Yup.string()
     .matches(/^\d+$/, "Invalid Phone Number")
     .notRequired(""),
@@ -150,7 +150,7 @@ const AddEmergencyContact = forwardRef(
                 }
             }
         } catch (error) {
-            toast.error(error.message);
+            toast.error(error);
         }finally {
           setLoadIndicators(false);
         }
@@ -162,7 +162,7 @@ const AddEmergencyContact = forwardRef(
       const getData = async () => {
         try {
           const response = await api.get(
-            `/getAllStudentDetails/${formData.id}`
+            `/getAllStudentById/${formData.id}`
           );
           if (
             response.data.studentEmergencyContacts &&
@@ -187,7 +187,7 @@ const AddEmergencyContact = forwardRef(
             });
           }
         } catch (error) {
-          console.error("Error fetching data:", error.message);
+          console.error("Error fetching data:", error);
         }
         // console.log("Emergency Contact ID:", response.data.emergencyContactId);
       };
@@ -210,7 +210,11 @@ const AddEmergencyContact = forwardRef(
     }));
     return (
       <div className="container-fluid">
-        <form onSubmit={formik.handleSubmit}>
+         <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
+          if (e.key === 'Enter' && !formik.isSubmitting) {
+            e.preventDefault();  // Prevent default form submission
+          }
+        }}>
           <div className="border-0 mb-5">
             <div className="mb-5">
               <div className="border-0 my-2">

@@ -1,93 +1,295 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { FaCloudDownloadAlt } from "react-icons/fa";
-// import teacher from "../../assets/images/teacher.jpg";
 import api from "../../config/URL";
-import toast from "react-hot-toast";
-// import TeacherSummary from "../Teacher/TeacherSummary";
-import BlockImg from "../.././assets/Block_Img1.jpg";
+import { toast } from "react-toastify";
 import TeacherSummary from "../Teacher/TeacherSummary";
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
+import fetchAllCentersWithIds from "../List/CenterList";
+import fetchAllSalaryTypeWithIds from "../List/SalaryTypeList";
+import { MdOutlineFileDownload } from "react-icons/md";
 
 function StaffView() {
   const { id } = useParams();
   const [data, setData] = useState([]);
-  console.log("Api Staff data:",data);
-  const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
+  const [centerData, setCenterData] = useState(null);
+  const [shgData, setShgData] = useState([]);
+  const [salaryTypeData, setSalaryTypeData] = useState(null);
+
+  console.log("Api Staff data:", data);
+  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
+  const fetchSalaryTypeData = async () => {
+    try {
+      const salarytype = await fetchAllSalaryTypeWithIds();
+      setSalaryTypeData(salarytype);
+    } catch (error) {
+      toast.error(error.message || "Error fetching salary types");
+    }
+  };
 
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await api.get(`/getAllUsersById/${id}`);
+        const response = await api.get(`/getAllUserById/${id}`);
         setData(response.data);
       } catch (error) {
         toast.error("Error Fetching Data ", error);
       }
     };
     getData();
+    fetchData();
+    fetchSalaryTypeData();
   }, [id]);
 
-  return (
-    <div className="container-fluid center">
-        <div className="card shadow border-0 mb-2 top-header">
-        <div className="container-fluid py-4">
-          <div className="row align-items-center">
-            <div className="col">
-              <div className="d-flex align-items-center gap-4">
-                <h2 className="h2 ls-tight headingColor">View Staff</h2>
-              </div>
-            </div>
-            <div className="col-auto">
-              <div className="hstack gap-2 justify-content-end">
-                <Link to="/staff">
-                  <button type="submit" className="btn btn-sm btn-light">
-                    <span>Back</span>
-                  </button>
-                </Link>
-                <TeacherSummary data={data} />
-              </div>
-            </div>
-          </div>
-        </div>
+  const fetchData = async () => {
+    try {
+      const centerData = await fetchAllCentersWithIds();
+      setCenterData(centerData);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const response = await api.get("/getAllSHGSetting");
+        setShgData(response.data);
+        console.log("shgdata", shgData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    getData();
+  }, []);
+
+  const generatePDF = async () => {
+    const mailContent = `
+ <!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Student Information</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+      }
+      .container{
+        margin-top: 3rem !important;
+        width: 100%;
+        margin: auto;
+      }
+      .section {
+        margin-bottom: 20px;
+      }
+      .section-header {
+        font-size: 5vw;
+        margin-bottom: 10px;
+        color: #333;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        
+      }
+      .section-content{
+        width: 80%;
+        margin: auto;
+      }
+      .section-content p{
+        margin-top: 2rem;
+        font-size: 2vw;
+      }
+      .signature{
+        width: 80%;
+        margin-top: 4rem;
+        display: flex;
+        justify-content: end;
+        font-size: 2vw;
+      }
+      
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="section-header">EMPLOYMENT CONTRACT</div>
+      <hr />
+      <div class="section-content">
+        <p>This Employment Agreement is made as of this 20 day of August, 2024 by
+            and between Employee and Employer .The Parties agree and convert to be 
+            bound by the terms set forth in this Agreement as follows
+        </p>
+        <P><strong>1.Employment : </strong><br>
+            Employer shall employ Employee as a <b>${
+              data.userContractCreationModels[0]?.jobTitle
+            }</b> on a full time basis under 
+            this Agreement. In this capacity, Employee shall have the following duties 
+            and undertake the Responsibilities. 
+        </P>
+        <p><strong>2.Performance of Duties :</strong><br>
+            Employee shall perform assigned duties and Responsibilities in a professional
+            manner, in good faith , and to the best of Employee's skills, abilities, talents
+            and experience.
+        </p>
+        <p><strong>3.Term :</strong><br>
+          Fixed Term Employee's employment under this Agreement shall begin ${data.userContractCreationModels[0]?.userContractStartDate?.substring(
+            0,
+            10
+          )}
+          and will terminate on ${data.userContractCreationModels[0]?.userContractEndDate?.substring(
+            0,
+            10
+          )}
+      </p>
+        <p><strong>4.Compensation : </strong><br>
+          As compensation for the services provided by Employee under this Agreement,
+          Employer will pay Employee ${
+            data.userContractCreationModels[0]?.userContractSalary
+          } per month. The Amount will be paid to employee 
+        </p
+       
       </div>
-              {/* <TeacherSummary data={data} /> */}
+      <p class="signature">
+        <strong>Signature</strong>
+      </p>
+    </div>
+  </body>
+</html>
+`;
+    try {
+      const tempElem = document.createElement("div");
+      tempElem.innerHTML = mailContent;
+
+      document.body.appendChild(tempElem);
+
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      const canvas = await html2canvas(tempElem);
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF();
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+      pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+      pdf.save(data.teacherName);
+
+      document.body.removeChild(tempElem);
+    } catch (error) {
+      console.error("Error generating PDF:", error);
+      toast.error("Error generating PDF");
+    }
+  };
+
+  const getFileNameFromUrl = (url) => {
+    if (url) {
+      const parts = url.split("/");
+      return parts[parts.length - 1];
+    }
+    return "--";
+  };
+
+  // Safely accessing the first element of userRequireInformationModels array
+  const userRequireInfo = data?.userRequireInformationModels?.[0];
+  const resumeFileName = userRequireInfo
+    ? getFileNameFromUrl(userRequireInfo.resume)
+    : "--";
+  const educationalCertificates = userRequireInfo
+    ? getFileNameFromUrl(userRequireInfo.educationCertificate)
+    : "--";
+
+  // Construct the full URL to the resume and educational certificates file
+  const resumeFileNameUrl = userRequireInfo ? userRequireInfo.resume : "#";
+  const educationCertificateUrl = userRequireInfo
+    ? userRequireInfo.educationCertificate
+    : "#";
+
+  const findSalaryType = (id) => {
+    const name = salaryTypeData?.find((datas) => datas.id === id);
+    return name?.salaryType;
+  };
+
+  return (
+    <div class="container-fluid minHeight mb-5">
+      <ol
+        className="breadcrumb my-3"
+        style={{ listStyle: "none", padding: 0, margin: 0 }}
+      >
+        <li>
+          <Link to="/" className="custom-breadcrumb">
+            Home
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          &nbsp;Staffing
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          <Link to="/staff" className="custom-breadcrumb">
+            &nbsp;Staff
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li className="breadcrumb-item active" aria-current="page">
+          &nbsp;Staff View
+        </li>
+      </ol>
+      <div class="container-fluid py-4">
+        <div class="row align-items-center">
+          <div class="col">
+            <div class="d-flex align-items-center gap-4"></div>
+          </div>
+          <div class="col-auto">
+            <div class="hstack gap-2 justify-content-end">
+              {data.userAccountInfo?.length === 0 ||
+              data.userContactInfo?.length === 0 ||
+              data.userRequireInformationModels?.length === 0 ||
+              data.userSalaryCreationModels?.length === 0 ||
+              data.userLeaveCreationModels?.length === 0 ||
+              data.userContractCreationModels?.length === 0 ? (
+                <></>
+              ) : (
+                <button
+                  className="btn btn-border btn-sm ms-1"
+                  onClick={generatePDF}
+                >
+                  <MdOutlineFileDownload /> Contract
+                </button>
+              )}
+
+              <TeacherSummary data={data} />
               {/* {storedScreens?.payrollIndex && (
                 <Link to="/staff/payslip">
                   <button type="button" class="btn btn-border">
                     <span>Payroll</span>
                   </button>
                 </Link>
-              )}
-              {storedScreens?.leaveRequestIndex && (
-                <Link to="/staff/leave">
-                  <button type="button" class="btn btn-border">
-                    <span>Leave Request</span>
+              )} */}
+              <div className="my-2 pe-3 d-flex align-items-center">
+                <Link to="/staff">
+                  <button type="button" className="btn btn-border btn-sm">
+                    <span>Back</span>
                   </button>
                 </Link>
-              )} */}
-            <div className="card shadow border-0 mb-2 top-header">
-        <div className="container p-5">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       <p class="headColor mt-3">Personal Information</p>
       <div className="d-flex justify-content-center">
         <p className="my-2 d-flex">
           {data.photo ? (
             <img
               src={data.photo}
-              onError={(e) => {
-                e.target.src = BlockImg;
-              }}
               style={{ borderRadius: 70 }}
               width="100"
               height="100"
-              alt="Staff"
+              alt=""
             />
           ) : (
-            <img
-              src={BlockImg}
-              alt="Staff"
-              style={{ borderRadius: 70 }}
-              width="100"
-              height="100"
-            />
+            <></>
           )}
         </p>
       </div>
@@ -137,6 +339,16 @@ function StaffView() {
         <div className="col-md-6 col-12">
           <div className="row mb-3">
             <div className="col-6 d-flex">
+              <p className="text-sm fw-medium">Nationality</p>
+            </div>
+            <div className="col-6">
+              <p className="text-muted text-sm">: {data.nationality || "--"}</p>
+            </div>
+          </div>
+        </div>
+        <div className="col-md-6 col-12">
+          <div className="row mb-3">
+            <div className="col-6 d-flex">
               <p className="text-sm fw-medium">Citizenship</p>
             </div>
             <div className="col-6">
@@ -167,10 +379,22 @@ function StaffView() {
         <div className="col-md-6 col-12">
           <div className="row mb-3">
             <div className="col-6 d-flex">
+              <p className="text-sm fw-medium">Email</p>
+            </div>
+            <div className="col-6">
+              <p className="text-muted text-sm text-break">
+                : {data.email || "--"}
+              </p>
+            </div>
+          </div>
+        </div>
+        <div className="col-md-6 col-12">
+          <div className="row mb-3">
+            <div className="col-6 d-flex">
               <p className="text-sm fw-medium">Short Introduction</p>
             </div>
             <div className="col-6">
-              <p className="text-muted text-sm">
+              <p className="text-muted text-sm text-break">
                 : {data.shortIntroduction || "--"}
               </p>
             </div>
@@ -257,8 +481,12 @@ function StaffView() {
                 :{" "}
                 {data.userAccountInfo &&
                 data.userAccountInfo.length > 0 &&
-                data.userAccountInfo[0].shgType
-                  ? data.userAccountInfo[0].shgType
+                data.userAccountInfo[0].shgTypeId
+                  ? (
+                      shgData?.find(
+                        (item) => item.id == data.userAccountInfo[0].shgTypeId
+                      ) || {}
+                    ).shgType || "--"
                   : "--"}
               </p>
             </div>
@@ -352,26 +580,33 @@ function StaffView() {
             </div>
           </div>
         </div>
-      </div>
-      <p class="headColor mt-5">Contact Information</p>
-      <div className="row mt-4">
-        <div className="col-md-6 col-12">
+        <div className="col-md-12 col-12">
           <div className="row mb-3">
-            <div className="col-6 d-flex">
-              <p className="text-sm fw-medium">Email</p>
+            <div className="col-3 d-flex">
+              <p className="text-sm fw-medium">Centre Name</p>
             </div>
-            <div className="col-6">
+            <div className="col-9">
+              {/* <p className="text-muted text-sm">: {centerData && centerData.map((centerId) =>
+                      parseInt(data.centerId) === centerId.id
+                        ? centerId.centerNames || "--"
+                        : ""
+                    )}</p> */}
               <p className="text-muted text-sm">
                 :{" "}
-                {data.userContactInfo &&
-                data.userContactInfo.length > 0 &&
-                data.userContactInfo[0].email
-                  ? data.userContactInfo[0].email
+                {data.userAccountInfo &&
+                data.userAccountInfo.length > 0 &&
+                data.userAccountInfo[0].centers
+                  ? data.userAccountInfo[0].centers
+                      .map((item) => item.centerName)
+                      .join(", ")
                   : "--"}
               </p>
             </div>
           </div>
         </div>
+      </div>
+      <p class="headColor mt-5">Contact Information</p>
+      <div className="row mt-4">
         <div className="col-md-6 col-12">
           <div className="row mb-3">
             <div className="col-6 d-flex">
@@ -442,36 +677,54 @@ function StaffView() {
             </div>
           </div>
         </div>
-        <div className="row ">
+        {/* Resume/CV Section */}
+        <div className="row">
           <div className="">
             <div className="row mb-3 d-flex">
               <div className="col-4 ">
                 <p className="text-sm text-muted">Resume/Cv</p>
               </div>
               <div className="col-4">
-                <p className="text-sm text-muted">{data.subject || "--"}</p>
+                <p className="text-sm text-muted text-break">
+                  {resumeFileName || "--"}
+                </p>
               </div>
               <div className="col-4">
-                <p className="text-sm ">
-                  <FaCloudDownloadAlt />
-                </p>
+                {userRequireInfo && (
+                  <p className="text-sm ms-3">
+                    <a href={resumeFileNameUrl} download={resumeFileName}>
+                      <FaCloudDownloadAlt />
+                    </a>
+                  </p>
+                )}
               </div>
             </div>
           </div>
         </div>
-        <div className="row ">
+
+        {/* Educational Certificates Section */}
+        <div className="row">
           <div className="">
             <div className="row mb-3 d-flex">
               <div className="col-4 ">
                 <p className="text-sm text-muted">Educational Certificates</p>
               </div>
               <div className="col-4">
-                <p className="text-sm text-muted">{data.subject || "--"}</p>
+                <p className="text-sm text-muted text-break">
+                  {educationalCertificates || "--"}
+                </p>
               </div>
               <div className="col-4">
-                <p className="text-sm">
-                  <FaCloudDownloadAlt />
-                </p>
+                {userRequireInfo && (
+                  <p className="text-sm ms-3">
+                    <a
+                      href={educationCertificateUrl}
+                      download={educationalCertificates}
+                    >
+                      <FaCloudDownloadAlt />
+                    </a>
+                  </p>
+                )}
               </div>
             </div>
           </div>
@@ -527,8 +780,10 @@ function StaffView() {
                 :{" "}
                 {data.userSalaryCreationModels &&
                 data.userSalaryCreationModels.length > 0 &&
-                data.userSalaryCreationModels[0].salaryType
-                  ? data.userSalaryCreationModels[0].salaryType
+                data.userSalaryCreationModels[0].salaryTypeId
+                  ? findSalaryType(
+                      data.userSalaryCreationModels[0].salaryTypeId
+                    )
                   : "--"}
               </p>
             </div>
@@ -637,12 +892,23 @@ function StaffView() {
             <div className="col-6">
               <p className="text-muted text-sm">
                 :{" "}
+                {centerData &&
+                  data?.userContractCreationModels?.length > 0 &&
+                  centerData.map((centerId) =>
+                    parseInt(data.userContractCreationModels[0].employer) ===
+                    centerId.id
+                      ? centerId.centerNames || "--"
+                      : ""
+                  )}
+              </p>
+              {/* <p className="text-muted text-sm">
+                :{" "}
                 {data.userContractCreationModels &&
                 data.userContractCreationModels.length > 0 &&
                 data.userContractCreationModels[0].employer
                   ? data.userContractCreationModels[0].employer
                   : "--"}
-              </p>
+              </p> */}
             </div>
           </div>
         </div>
@@ -888,9 +1154,9 @@ function StaffView() {
                 {data.userContractCreationModels &&
                 data.userContractCreationModels.length > 0 &&
                 data.userContractCreationModels[0].workingDays
-                  ? data.userContractCreationModels[0].workingDays
+                  ? data.userContractCreationModels[0].workingDays.join(", ")
                   : "--"}
-              </p>{" "}
+              </p>
             </div>
           </div>
         </div>
@@ -1026,8 +1292,6 @@ function StaffView() {
           </div>
         </div>
       </div>
-    </div>
-    </div>
     </div>
   );
 }

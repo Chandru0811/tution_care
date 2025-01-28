@@ -4,7 +4,7 @@ import Modal from "react-bootstrap/Modal";
 import { TbTrashFilled } from "react-icons/tb";
 
 import api from "../../config/URL";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 
 function RemoveStudentTimeSlot({ onSuccess, id }) {
   const [show, setShow] = useState(false);
@@ -27,7 +27,7 @@ function RemoveStudentTimeSlot({ onSuccess, id }) {
         toast.error(response.data.message);
       }
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error);
     }
   };
   return (
@@ -46,7 +46,10 @@ function RemoveStudentTimeSlot({ onSuccess, id }) {
         </Modal.Header>
         <Modal.Body>Are you sure you want to Remove the Student?</Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary btn-sm" onClick={handleClose}>
+          <Button
+            className="btn btn-sm btn-border bg-light text-dark"
+            onClick={handleClose}
+          >
             Close
           </Button>
           <Button variant="danger" onClick={handelBlock}>

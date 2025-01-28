@@ -1,17 +1,25 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import api from "../../config/URL";
 
 function Footer() {
+
+  const [data, setData] = useState({});
+  
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const response = await api.get(`/getAllHeaderSavePublish`);
+        setData(response.data);
+      } catch (error) {
+        console.error("Error Fetching Data: " + error.message);
+      }
+    };
+    getData();
+  }, []);
+
   return (
-    <div className="container-fluid ">
-      <div className="container-fluid card shadow border-0 products py-4">
-        <div className="row align-items-center">
-          <div className="col">
-            <div className="d-flex align-items-center justify-content-center gap-4">
-              <p className="text-muted text-sm">copyright@TutionCare2024</p>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div className="d-flex align-items-center justify-content-center">
+      <div className="text-muted" style={{ fontSize: "12px" }}>{data.copyRight || "Copyright@ArtyLearning2024"}</div>
     </div>
   );
 }

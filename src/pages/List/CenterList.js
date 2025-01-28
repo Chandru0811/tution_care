@@ -1,14 +1,16 @@
 // apiService.js
 
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 import api from "../../config/URL";
 
 const fetchAllCentersWithIds = async () => {
   try {
-    const response = await api.get("getAllTuitionWithIds");
+    const response = await api.get("getAllCentersWithIds");
+    console.log("response:::::",response.data);
+    
     return response.data;
   } catch (error) {
-    toast.error("Error fetching center data:", error.message);
+    console.error("Error fetching center data:", error);
     throw error;
   }
 };

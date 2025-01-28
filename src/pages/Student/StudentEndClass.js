@@ -1,20 +1,25 @@
 import React, { useEffect, useState } from "react";
 import * as Yup from "yup";
 import { useFormik } from "formik";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import toast from "react-hot-toast";
+import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { toast } from "react-toastify";
 import api from "../../config/URL";
-import fetchAllCoursesWithIds from "../List/CourseList";
 import fetchAllClassesWithIds from "../List/ClassList";
+import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
+import fetchAllClassesWithIdsC from "../List/ClassListByCourse";
 
 const validationSchema = Yup.object().shape({
   currentCourse: Yup.string().required("*Select a Current Course"),
-  // currentClass: Yup.string().required("*Select a Current Class"),
+  currentClass: Yup.string().required("*Select a Current Class"),
   lastLessonDate: Yup.string().required("*Select a Last Lesson"),
   reason: Yup.string().required("*Select a Reason"),
   otherReason: Yup.string().required("*Other Reason is required"),
-  centerRemark: Yup.string().required("*Center Remark is required"),
-  parentRemark: Yup.string().required("*Parent Remark is required"),
+  centerRemark: Yup.string()
+    .required("*Leave Reason is required")
+    .max(200, "*The maximum length is 200 characters"),
+  parentRemark: Yup.string()
+    .required("*Leave Reason is required")
+    .max(200, "*The maximum length is 200 characters"),
 });
 
 const StudentEndClass = () => {
@@ -23,12 +28,13 @@ const StudentEndClass = () => {
   const { id } = useParams();
   const [courseData, setCourseData] = useState(null);
   const [classData, setClassData] = useState(null);
-
+  const [searchParams] = useSearchParams();
+  const centerId = searchParams.get("centerId");
   // console.log(id);
   const formik = useFormik({
     initialValues: {
       currentCourse: "",
-      // currentClass: "",
+      currentClass: "",
       lastLessonDate: "",
       reason: "",
       otherReason: "",
@@ -47,31 +53,31 @@ const StudentEndClass = () => {
         });
         if (response.status === 201) {
           toast.success(response.data.message);
-          navigate(`/studentlisting/view/${id}`);
+          navigate(`/student/view/${id}`);
         } else {
           toast.error(response.data.message);
         }
       } catch (error) {
-        toast.error(error.message);
+        toast.error(error);
       }
     },
   });
 
   const fetchData = async () => {
     try {
-      const course = await fetchAllCoursesWithIds();
+      const course = await fetchAllCoursesWithIdsC(centerId);
       setCourseData(course);
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error);
     }
   };
 
   const fetchClasses = async (courseId) => {
     try {
-      const classes = await fetchAllClassesWithIds(courseId);
+      const classes = await fetchAllClassesWithIdsC(courseId);
       setClassData(classes);
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error);
     }
   };
 
@@ -99,7 +105,7 @@ const StudentEndClass = () => {
           console.log("Value not present in the table");
         }
       } catch (error) {
-        toast.error("Error Fetching Form Data");
+        console.log("Error Fetching Form Data");
       }
     };
 
@@ -108,65 +114,70 @@ const StudentEndClass = () => {
   }, []);
 
   return (
-    <div className="container my-4">
-      <form onSubmit={formik.handleSubmit}>
-        <div className="card shadow border-0 mb-2 top-header">
-          <div className="container-fluid py-4">
-            <div className="row align-items-center">
-              <div className="col">
-                <div className="d-flex align-items-center gap-4">
-                  <h2 className="h2 ls-tight headingColor">End Class</h2>
-                </div>
+    <div className="container-fluid">
+      <ol
+        className="breadcrumb my-3 px-2"
+        style={{ listStyle: "none", padding: 0, margin: 0 }}
+      >
+        <li>
+          <Link to="/" className="custom-breadcrumb">
+            Home
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          &nbsp;Student Management
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          <Link to="/student" className="custom-breadcrumb">
+            &nbsp;Student Listing{" "}
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          <Link to={`/student/view/${id}`} className="custom-breadcrumb">
+            &nbsp;Student View
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li className="breadcrumb-item active" aria-current="page">
+          &nbsp;Student End Class
+        </li>
+      </ol>
+      <form
+        onSubmit={formik.handleSubmit}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && !formik.isSubmitting) {
+            e.preventDefault();
+          }
+        }}
+      >
+        <div className="card">
+          <div
+            className="d-flex justify-content-between align-items-center p-1 mb-4 px-4"
+            style={{ background: "#f5f7f9" }}
+          >
+            <div class="d-flex align-items-center">
+              <div class="d-flex">
+                <div class="dot active"></div>
               </div>
-              <div className="col-auto">
-                <div className="hstack gap-2 justify-content-end">
-                  <Link to={`/studentlisting/view/${id}`}>
-                    <button type="submit" className="btn btn-sm btn-light">
-                      <span>Back</span>
-                    </button>
-                  </Link>
-                  &nbsp;&nbsp;
-                  <button type="submit" className="btn btn-button btn-sm">
-                    <span
-                      // className="spinner-border spinner-border-sm me-2"
-                    
-                    ></span>
-                    Save
-                  </button>
-                </div>
-              </div>
+              <span class="me-2 text-muted">Student End Class</span>
+            </div>
+            <div className="my-2 pe-3 d-flex align-items-center">
+              <Link to={`/student/view/${id}`}>
+                <button type="button " className="btn btn-sm btn-border">
+                  Back
+                </button>
+              </Link>
+              &nbsp;&nbsp;
+              <button type="submit" className="btn btn-button btn-sm">
+                <span className="fw-medium">Update</span>
+              </button>
             </div>
           </div>
-        </div>
-
-        <div className="card shadow border-0 mb-2 top-header">
-          <div className="container p-5">
-            <div className="row py-4">
-              {/* <div className="col-md-6 col-12 mb-4">
-              <lable className="form-lable">
-                Current Course<span className="text-danger">*</span>
-              </lable>
-              <select
-                {...formik.getFieldProps("currentCourse")}
-                className={`form-select    ${
-                  formik.touched.currentCourse && formik.errors.currentCourse
-                    ? "is-invalid"
-                    : ""
-                }`}
-                aria-label="Default select example"
-              >
-                <option selected></option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
-              </select>
-              {formik.touched.currentCourse && formik.errors.currentCourse && (
-                <div className="invalid-feedback">
-                  {formik.errors.currentCourse}
-                </div>
-              )}
-            </div> */}
-
+          <div className="container-fluid px-4">
+            <div className="row">
               <div className="col-md-6 col-12 mb-4">
                 <label className="form-label m-0">
                   Current Course <span className="text-danger">*</span>
@@ -262,37 +273,32 @@ const StudentEndClass = () => {
                   aria-label="Default select example"
                 >
                   <option selected></option>
-                  <option value="1">One</option>
-                  <option value="2">Two</option>
-                  <option value="3">Three</option>
+                  <option value="Withdraw">Withdraw</option>
+                  <option value="Graduate ">Graduate</option>
                 </select>
                 {formik.touched.reason && formik.errors.reason && (
                   <div className="invalid-feedback">{formik.errors.reason}</div>
                 )}
               </div>
             </div>
-            <div className="col-md-6 col-12 mb-4">
+            <div className=" mb-4">
               <lable className="form-lable">
                 Other Reason<span className="text-danger">*</span>
               </lable>
-              <div className="input-group mb-3">
-                <input
-                  type="text"
-                  className={`form-control  ${
-                    formik.touched.otherReason && formik.errors.otherReason
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  aria-label="Username"
-                  aria-describedby="basic-addon1"
-                  {...formik.getFieldProps("otherReason")}
-                />
-                {formik.touched.otherReason && formik.errors.otherReason && (
-                  <div className="invalid-feedback">
-                    {formik.errors.otherReason}
-                  </div>
-                )}
-              </div>
+
+              <textarea
+                className={`form-control   ${
+                  formik.touched.otherReason && formik.errors.otherReason
+                    ? "is-invalid"
+                    : ""
+                }`}
+                {...formik.getFieldProps("otherReason")}
+              ></textarea>
+              {formik.touched.otherReason && formik.errors.otherReason && (
+                <div className="invalid-feedback">
+                  {formik.errors.otherReason}
+                </div>
+              )}
             </div>
             <div className=" mb-4">
               <lable className="form-lable">

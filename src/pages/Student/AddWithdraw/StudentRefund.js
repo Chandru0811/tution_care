@@ -10,7 +10,7 @@ const validationSchema = Yup.object().shape({
      /^\d+$/ ,
     "Must be a number"
   )
-  .required("Registration Fees is required!"),
+  .required("Registration Fees is required"),
   depositAmount: Yup.string()
   .matches(
      /^\d+$/ ,
@@ -68,7 +68,7 @@ const StudentRefund = forwardRef(
         setFormData((prv) => ({ ...prv, ...data }));
         // console.log("form parent",formData );
         console.log("data", data);
-        navigate("/studentlistening/view");
+        navigate("/student/view");
       },
     });
     const handleNextStep = () => {

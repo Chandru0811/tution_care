@@ -8,26 +8,41 @@ import PersonalEdit from "./EditTeacher/PersonalEdit";
 import AccountEdit from "./EditTeacher/AccountEdit";
 import ContactEdit from "./EditTeacher/ContactEdit";
 import RequiredEdit from "./EditTeacher/RequiredEdit";
-import LoginEdit from "./EditTeacher/LoginEdit";
 import SalaryEdit from "./EditTeacher/SalaryEdit";
 import LeaveEdit from "./EditTeacher/LeaveEdit";
 import ContractEdit from "./EditTeacher/ContractEdit";
-import { useParams } from "react-router-dom";
+import {
+  Link,
+  useLocation,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import Tooltip from "react-bootstrap/Tooltip";
 import { OverlayTrigger } from "react-bootstrap";
 
-const steps = [{ tooltip: "Personal Information" }, { tooltip: "Account Information" },{ tooltip: "Contact Information" },
-{ tooltip: "Login Information" },{ tooltip: "Required Information" },{ tooltip: "Salary Information" },{ tooltip: "Leave Information" },{ tooltip: "Contract Informationn" } ];
+const steps = [
+  { tooltip: "Personal Information" },
+  { tooltip: "Account Information" },
+  { tooltip: "Contact Information" },
+  { tooltip: "Required Information" },
+  { tooltip: "Salary Information" },
+  { tooltip: "Leave Information" },
+  { tooltip: "Contract Informationn" },
+];
 
 export default function TeacherEdit() {
   const { staff_id } = useParams();
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
   const [loadIndicator, setLoadIndicator] = useState(false);
-  
+  const location = useLocation();
+  const [searchParams] = useSearchParams();
+  // Extract the "role" search parameter
+  const roleFromURL = searchParams.get("role");
   const childRef = React.useRef();
   const [formData, setFormData] = useState({ staff_id });
-  
+  console.log("object", formData);
+
   const isStepSkipped = (step) => {
     return skipped.has(step);
   };
@@ -39,12 +54,34 @@ export default function TeacherEdit() {
       newSkipped.delete(activeStep);
     }
 
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    const role = formData.role?.toLowerCase();
+    let nextStep = activeStep + 1;
+
+    if (role === "freelancer") {
+      if (activeStep === 3) {
+        nextStep = 6;
+      } else if (activeStep === 4) {
+        nextStep = 6;
+      }
+    }
+
+    setActiveStep(nextStep);
     setSkipped(newSkipped);
   };
 
   const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+    const role = formData.role?.toLowerCase();
+    let previousStep = activeStep - 1;
+
+    if (role === "freelancer") {
+      if (activeStep === 7) {
+        previousStep = 4; // Go back to step 4 from step 7
+      } else if (activeStep === 6) {
+        previousStep = 3; // Skip step 5 and go back to step 3
+      }
+    }
+
+    setActiveStep(previousStep);
   };
 
   const handleReset = () => {
@@ -52,8 +89,8 @@ export default function TeacherEdit() {
   };
 
   const handleButtonClick = () => {
-    // console.log("1",childRef);
-    // Call the child function using the ref
+    const role = formData.role?.toLowerCase();
+
     switch (activeStep.toString()) {
       case "0":
         if (childRef.current) {
@@ -72,50 +109,92 @@ export default function TeacherEdit() {
         break;
       case "3":
         if (childRef.current) {
-          childRef.current.loginEdit();
-        }
-        break;
-      case "4":
-        if (childRef.current) {
           childRef.current.requireEdit();
         }
         break;
+      case "4":
+        if (role !== "freelancer") {
+          if (childRef.current) {
+            childRef.current.salaryEdit();
+          }
+        } else {
+          handleNext(); // Skip SalaryAdd step
+        }
+        break;
       case "5":
-        if (childRef.current) {
-          childRef.current.salaryEdit();
+        if (role !== "freelancer") {
+          if (childRef.current) {
+            childRef.current.leaveEdit();
+          }
+        } else {
+          handleNext(); // Skip LeaveAdd step
         }
         break;
       case "6":
         if (childRef.current) {
-          childRef.current.leaveEdit();
-        }
-        break;
-      case "7":
-        if (childRef.current) {
           childRef.current.contractEdit();
         }
         break;
-
       default:
         break;
     }
   };
+
   return (
+    <>
       <div className="container-fluid minHeight my-5">
-      <Stepper className="my-5" activeStep={activeStep} alternativeLabel>
-        {steps.map((step, index) => (
-          <Step key={index} onClick={() => setActiveStep(index)}>
-            <OverlayTrigger
-              placement="top"
-              overlay={
-                <Tooltip id={`tooltip-${index}`}>{step.tooltip}</Tooltip>
-              }
-            >
-              <StepLabel></StepLabel>
-            </OverlayTrigger>
-          </Step>
-        ))}
-      </Stepper>
+        <ol
+          className="breadcrumb my-3"
+          style={{ listStyle: "none", padding: 0, margin: 0 }}
+        >
+          <li>
+            <Link to="/" className="custom-breadcrumb">
+              Home
+            </Link>
+            <span className="breadcrumb-separator"> &gt; </span>
+          </li>
+          <li>
+            &nbsp;Staffing
+            <span className="breadcrumb-separator"> &gt; </span>
+          </li>
+          <li>
+            <Link to="/teacher" className="custom-breadcrumb">
+              &nbsp;Teacher
+            </Link>
+            <span className="breadcrumb-separator"> &gt; </span>
+          </li>
+          <li className="breadcrumb-item active" aria-current="page">
+            &nbsp;Teacher Edit
+          </li>
+        </ol>
+        <Stepper className="my-5" activeStep={activeStep} alternativeLabel>
+          {steps.map((step, index) => {
+            // Determine if the step should be disabled based on the role
+            const isStepDisabled =
+              roleFromURL === "freelancer" && (index === 4 || index === 5); // Disable step 4 (Salary Information) and step 5 (Leave Information) for freelancers
+
+            return (
+              <Step
+                key={index}
+                onClick={() => !isStepDisabled && setActiveStep(index)}
+              >
+                <OverlayTrigger
+                  placement="top"
+                  overlay={
+                    <Tooltip id={`tooltip-${index}`}>{step.tooltip}</Tooltip>
+                  }
+                >
+                  <StepLabel
+                    className={isStepDisabled ? "step-disabled" : ""}
+                  ></StepLabel>
+                </OverlayTrigger>
+              </Step>
+            );
+          })}
+        </Stepper>
+      </div>
+
+      <div class="container-fluid minHeight">
         <div class="container-fluid py-3 card shadow border-0 mb-5">
           {activeStep === steps.length ? (
             <React.Fragment>
@@ -169,15 +248,6 @@ export default function TeacherEdit() {
                 />
               )}
               {activeStep === 3 && (
-                <LoginEdit
-                  formData={formData}
-                  ref={childRef}
-                  setFormData={setFormData}
-                  handleNext={handleNext}
-                  setLoadIndicators={setLoadIndicator}
-                />
-              )}
-              {activeStep === 4 && (
                 <RequiredEdit
                   formData={formData}
                   ref={childRef}
@@ -186,25 +256,27 @@ export default function TeacherEdit() {
                   setLoadIndicators={setLoadIndicator}
                 />
               )}
-              {activeStep === 5 && (
-                <SalaryEdit
-                  formData={formData}
-                  ref={childRef}
-                  setFormData={setFormData}
-                  handleNext={handleNext}
-                  setLoadIndicators={setLoadIndicator}
-                />
-              )}
+              {activeStep === 4 &&
+                formData.role?.toLowerCase() !== "freelancer" && (
+                  <SalaryEdit
+                    formData={formData}
+                    ref={childRef}
+                    setFormData={setFormData}
+                    handleNext={handleNext}
+                    setLoadIndicators={setLoadIndicator}
+                  />
+                )}
+              {activeStep === 5 &&
+                formData.role?.toLowerCase() !== "freelancer" && (
+                  <LeaveEdit
+                    formData={formData}
+                    ref={childRef}
+                    setFormData={setFormData}
+                    handleNext={handleNext}
+                    setLoadIndicators={setLoadIndicator}
+                  />
+                )}
               {activeStep === 6 && (
-                <LeaveEdit
-                  formData={formData}
-                  ref={childRef}
-                  setFormData={setFormData}
-                  handleNext={handleNext}
-                  setLoadIndicators={setLoadIndicator}
-                />
-              )}
-              {activeStep === 7 && (
                 <ContractEdit
                   formData={formData}
                   ref={childRef}
@@ -215,52 +287,38 @@ export default function TeacherEdit() {
               )}
 
               <div className="container-fluid p-1 d-flex align-items-center justify-content-center">
-                <button
-                  className="btn btn-sm btn-border mt-4"
-                  style={{ padding: "7px" }}
-                  disabled={activeStep === 0}
-                  onClick={handleBack}
-                >
-                  Back
-                </button>
-
+                {activeStep > 0  && (
+                  <button
+                    className="btn btn-sm btn-border mt-4"
+                    style={{ padding: "7px" }}
+                    disabled={activeStep === 0}
+                    onClick={handleBack}
+                  >
+                    Back
+                  </button>
+                )}
                 <div style={{ flex: "1 1 auto" }}></div>
-                {/* {isStepOptional(activeStep) && (
                 <button
-                  className="btn btn-warning"
-                  style={{ padding: "7px", marginRight: "10px" }}
-                  onClick={handleSkip}
-                  sx={{ mr: 1 }}
-                >
-                  Skip
-                </button>
-              )} */}
-              <button
-              className="btn btn-button btn-sm mt-5 mb-3"
-              onClick={handleButtonClick}
-              style={{ padding: "7px" }}
-              disabled={loadIndicator}
-            >
-              {loadIndicator && (
-                <span
-                  className="spinner-border spinner-border-sm me-2"
-                  aria-hidden="true"
-                ></span>
-              )}
-              {activeStep === steps.length - 1 ? "Submit" : " Save And Next"}
-            </button>
-                {/* <button
-                  type="submit"
-                  className="btn btn-button btn-sm mt-4"
+                  className="btn btn-button btn-sm mt-5 mb-3"
                   onClick={handleButtonClick}
                   style={{ padding: "7px" }}
+                  disabled={loadIndicator}
                 >
-                  {activeStep === steps.length - 1 ? "Submit" : "Save And Next"}
-                </button> */}
+                  {loadIndicator && (
+                    <span
+                      className="spinner-border spinner-border-sm me-2"
+                      aria-hidden="true"
+                    ></span>
+                  )}
+                  {activeStep === steps.length - 1
+                    ? "Submit"
+                    : " Save And Next"}
+                </button>
               </div>
             </React.Fragment>
           )}
         </div>
       </div>
+    </>
   );
 }

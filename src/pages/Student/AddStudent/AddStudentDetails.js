@@ -7,61 +7,105 @@ import React, {
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import api from "../../../config/URL";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 import fetchAllCentersWithIds from "../../List/CenterList";
+import fetchAllRaceWithIds from "../../List/RaceList";
+import fetchAllNationalityeWithIds from "../../List/NationalityAndCountryList";
+import fetchAllStudentsWithIds from "../../List/StudentList";
 
 const validationSchema = Yup.object().shape({
-  tuitionId: Yup.string().required("*Centre is required!"),
-  studentName: Yup.string().required("*Student Name is required!"),
+  centerId: Yup.string().required("*Centre is required"),
+  studentName: Yup.string().required("*Student Name is required"),
   dateOfBirth: Yup.date()
-    .required("*Date of Birth is required!")
-    .max(new Date(), "*Date of Birth cannot be in the future!"),
-  age: Yup.string()
-    .matches(/^\d+$/, "*Age is required!")
-    .required("*Age is required!"),
-  gender: Yup.string().required("*Gender is required!"),
-  schoolType: Yup.string().required("*School Type is required!"),
-  schoolName: Yup.string().required("*School Name is required!"),
+    .required("*Date of Birth is required")
+    .max(
+      new Date(new Date().setFullYear(new Date().getFullYear() - 1)),
+      "*Date of Birth must be at least 1 year ago"
+    ),
+  age: Yup.string().required("*Age is required"),
+  gender: Yup.string().required("*Gender is required"),
+  schoolType: Yup.string().required("*School Type is required"),
+  schoolName: Yup.string().required("*School Name is required"),
   allowMagazine: Yup.string().required("*Select a filed!"),
-  allowSocialMedia: Yup.string().required("*Select a filed!"),
+  allowSocialMedia: Yup.string().required("*Select a filed"),
   studentChineseName: Yup.string().required(
-    "*Student Chinese Name is required!"
+    "*Student Chinese Name is required"
   ),
-  file: Yup.string().required("*Select a Profile Image!"),
-  preAssessmentResult: Yup.string().required(
-    "*Pre-Assessment Result is required!"
-  ),
+  file: Yup.mixed()
+    .required("*File is required")
+    .test(
+      "max-file-name-length",
+      "*File name must be at most 50 characters",
+      (value) => !value || (value.name && value.name.length <= 50)
+    ),
+  // preAssessmentResult: Yup.string().required(
+  //   "*Pre-Assessment Result is required!"
+  // ),
   medicalCondition: Yup.string().required(
-    "*Medical Condition Result is required!"
+    "*Medical Condition Result is required"
   ),
-  nationality: Yup.string().required("*Select a Nationality!"),
-  primaryLanguageSpokenEnglish: Yup.string().required(
-    "*Primary Language is required!"
-  ),
-  race: Yup.string().required("*Select a Race!"),
-  referByStudent: Yup.string().required("*Refer By Student is required!"),
-  referByParent: Yup.string().required("*Refer By Parent is required!"),
+  remark: Yup.string()
+    .max(200, "*The maximum length is 200 characters")
+    .notRequired(),
+  // nationality: Yup.string().required("*Select a Nationality!"),
+  primaryLanguage: Yup.string().required("*Primary Language is required"),
+  race: Yup.string().required("*Select a Race"),
 });
 
 const AddStudentDetails = forwardRef(
-  ({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
+  ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const [centerData, setCenterData] = useState(null);
+    const [studentData, setStudentData] = useState(null);
+    const [imagePreviewUrl, setImagePreviewUrl] = useState(null);
+    const [raceData, setRaceData] = useState(null);
+    const [nationalityData, setNationalityData] = useState(null);
+    const userName = localStorage.getItem("userName");
+
+    // console.log("FormData is ", formData);
+
+    const maxDate = new Date();
+    maxDate.setFullYear(maxDate.getFullYear() - 1);
+
     const fetchData = async () => {
       try {
         const centerData = await fetchAllCentersWithIds();
         setCenterData(centerData);
+
+        const studentData = await fetchAllStudentsWithIds();
+        setStudentData(studentData);
+
+        const raceData = await fetchAllRaceWithIds();
+        setRaceData(raceData);
+
+        const nationality = await fetchAllNationalityeWithIds();
+        setNationalityData(nationality);
       } catch (error) {
-        toast.error(error.message);
+        toast.error(error);
       }
     };
 
-    useEffect(() => {
-      fetchData();
-    }, []);
+    const calculateAge = (dob) => {
+      if (!dob) return "0 years, 0 months"; // Default value if dob is not provided
+
+      const birthDate = new Date(dob);
+      const today = new Date();
+
+      if (isNaN(birthDate.getTime())) return "0 years, 0 months"; // Handle invalid date
+
+      let years = today.getFullYear() - birthDate.getFullYear();
+      let months = today.getMonth() - birthDate.getMonth();
+
+      if (months < 0) {
+        years--;
+        months += 12;
+      }
+
+      return `${years} years, ${months} months`;
+    };
 
     const formik = useFormik({
       initialValues: {
-        tuitionId: formData.tuitionId || "",
+        centerId: formData.centerId || "",
         studentName: formData.studentName || "",
         studentChineseName: formData.studentChineseName || "",
         file: null || "",
@@ -71,53 +115,65 @@ const AddStudentDetails = forwardRef(
         gender: formData.gender || "",
         schoolType: formData.schoolType || "",
         schoolName: formData.schoolName || "",
-        preAssessmentResult: formData.preAssessmentResult || "",
+        preAssessmentResult: "No Assessment Performed" || "",
         race: formData.race || "",
         nationality: formData.nationality || "",
-        primaryLanguageSpokenEnglish:
-          formData.primaryLanguageSpokenEnglish || "",
+        primaryLanguage: formData.primaryLanguage || "",
         referByParent: formData.referByParent || "",
         referByStudent: formData.referByStudent || "",
         remark: formData.remark || "",
         allowMagazine: formData.allowMagazine || "",
         allowSocialMedia: formData.allowSocialMedia || "",
+        createdby: userName,
       },
       validationSchema: validationSchema,
       onSubmit: async (values) => {
         setLoadIndicators(true);
         try {
-          const formData = new FormData();
+          let selectedCenter = "";
 
-          //   Add <i class="bx bx-plus"></i>each data field manually to the FormData object
-          formData.append("studentName", values.studentName);
-          formData.append("studentChineseName", values.studentChineseName);
-          formData.append("dateOfBirth", values.dateOfBirth);
-          formData.append("age", values.age);
-          formData.append("gender", values.gender);
-          formData.append("medicalCondition", values.medicalCondition);
-          formData.append("schoolType", values.schoolType);
-          formData.append("schoolName", values.schoolName);
-          formData.append("preAssessmentResult", values.preAssessmentResult);
-          formData.append("race", values.race);
-          formData.append("nationality", values.nationality);
-          formData.append("referByParent", values.referByParent);
-          formData.append("referByStudent", values.referByStudent);
-          formData.append("remark", values.remark);
-          formData.append("allowMagazine", values.allowMagazine);
-          formData.append("allowSocialMedia", values.allowSocialMedia);
-          formData.append("tuitionId", values.tuitionId);
-          formData.append("center", values.tuitionId);
-          formData.append(
-            "primaryLanguageSpokenEnglish",
-            values.primaryLanguageSpokenEnglish
-          );
-          formData.append("primaryLanguageSpokenChinese", "Chinese");
-          formData.append("groupName", values.groupName);
-          formData.append("file", values.file);
+          centerData.forEach((center) => {
+            if (parseInt(values.centerId) === center.id) {
+              selectedCenter = center.centerNames || "--";
+            }
+          });
+
+          // console.log("Center ", selectedCenter);
+
+          const formDatas = new FormData();
+
+          // Add each data field manually to the FormData object
+          formDatas.append("studentName", values.studentName);
+          formDatas.append("leadId", formData.LeadId || "");
+          formDatas.append("studentChineseName", values.studentChineseName);
+          formDatas.append("dateOfBirth", values.dateOfBirth);
+          formDatas.append("age", values.age);
+          formDatas.append("gender", values.gender);
+          formDatas.append("medicalCondition", values.medicalCondition);
+          formDatas.append("schoolType", values.schoolType);
+          formDatas.append("schoolName", values.schoolName);
+          formDatas.append("preAssessmentResult", values.preAssessmentResult);
+          formDatas.append("race", values.race);
+          formDatas.append("nationality", values.nationality || "");
+          formDatas.append("referByParent", values.referByParent || "");
+          formDatas.append("referByStudent", values.referByStudent || "");
+          formDatas.append("remark", values.remark || "");
+          formDatas.append("allowMagazine", values.allowMagazine);
+          formDatas.append("allowSocialMedia", values.allowSocialMedia);
+          formDatas.append("centerId", values.centerId);
+          formDatas.append("center", selectedCenter);
+          formDatas.append("primaryLanguage", values.primaryLanguage);
+          formDatas.append("groupName", values.groupName);
+          formDatas.append("file", values.file);
+          formDatas.append("createdBy", userName);
+
+          // for (let [key, value] of formDatas.entries()) {
+          //   console.log(`${key}: ${value}`);
+          // }
 
           const response = await api.post(
             "/createStudentDetailsWithProfileImageLatest",
-            formData,
+            formDatas,
             {
               headers: {
                 "Content-Type": "multipart/form-data",
@@ -135,11 +191,87 @@ const AddStudentDetails = forwardRef(
           }
         } catch (error) {
           toast.error(error);
-        }finally {
+        } finally {
           setLoadIndicators(false);
         }
       },
+      validateOnChange: false, // Enable validation on change
+      validateOnBlur: true, // Enable validation on blur
     });
+
+    // Function to scroll to the first error field
+    const scrollToError = (errors) => {
+      const errorField = Object.keys(errors)[0]; // Get the first error field
+      const errorElement = document.querySelector(`[name="${errorField}"]`); // Find the DOM element
+      if (errorElement) {
+        errorElement.scrollIntoView({ behavior: "smooth", block: "center" });
+        errorElement.focus(); // Set focus to the error element
+      }
+    };
+
+    // Watch for form submit and validation errors
+    useEffect(() => {
+      if (formik.submitCount > 0 && Object.keys(formik.errors).length > 0) {
+        scrollToError(formik.errors);
+      }
+    }, [formik.submitCount, formik.errors]);
+
+    useEffect(() => {
+      const getLeadDate = async () => {
+        // console.log(formData.LeadId)
+        if (formData.LeadId) {
+          try {
+            const response = await api.get(
+              `/getAllLeadInfoById/${formData.LeadId}`
+            );
+
+            const leadData = response.data;
+            formik.setValues({
+              centerId: leadData.centerId || "",
+              studentName: leadData.studentName || "",
+              leadId: leadData.id || "",
+              studentChineseName: leadData.studentChineseName || "",
+              file: null || "",
+              age: leadData.dateOfBirth
+                ? calculateAge(leadData.dateOfBirth)
+                : "0 years, 0 months",
+              medicalCondition: leadData.medicalCondition || "",
+              dateOfBirth: leadData.dateOfBirth.substring(0, 10) || "",
+              gender: leadData.gender || "",
+              schoolType: leadData.schoolType || "",
+              schoolName: leadData.nameOfSchool || "",
+              preAssessmentResult:
+                leadData.gradeCategory || "No Assessment Performed",
+              race: leadData.ethnicGroup || "",
+              nationality: leadData.nationality || "",
+              primaryLanguage: leadData.primaryLanguage || "",
+              referByParent: leadData.referByParentName || "",
+              referByStudent: leadData.referByStudentName || "",
+              remark: leadData.remark || "",
+              allowMagazine: leadData.allowMagazine || "",
+              allowSocialMedia: leadData.allowSocialMedia || "",
+            });
+            // console.log("Lead Data:", response.data);
+          } catch (error) {
+            console.error("Error fetching lead data:", error);
+            toast.error("Error fetching lead data");
+          }
+        }
+      };
+      getLeadDate();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    useEffect(() => {
+      if (formik.values.dateOfBirth) {
+        formik.setFieldValue("age", calculateAge(formik.values.dateOfBirth));
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [formik.values.dateOfBirth]);
+
+    useEffect(() => {
+      fetchData();
+    }, []);
 
     useImperativeHandle(ref, () => ({
       StudentDetails: formik.handleSubmit,
@@ -147,7 +279,14 @@ const AddStudentDetails = forwardRef(
 
     return (
       <div className="container-fluid">
-        <form onSubmit={formik.handleSubmit}>
+        <form
+          onSubmit={formik.handleSubmit}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !formik.isSubmitting) {
+              e.preventDefault(); // Prevent default form submission
+            }
+          }}
+        >
           <div className=" border-0 mb-5">
             <div className="mb-3">
               <p class="headColor">Student Details</p>
@@ -161,23 +300,23 @@ const AddStudentDetails = forwardRef(
                       </label>
                       <br />
                       <select
-                        name="tuitionId"
+                        name="centerId"
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
-                        value={formik.values.tuitionId}
-                        className="form-select form-select-sm"
+                        value={formik.values.centerId}
+                        className="form-select"
                       >
                         <option selected></option>
                         {centerData &&
-                          centerData.map((tuitionId) => (
-                            <option key={tuitionId.id} value={tuitionId.id}>
-                              {tuitionId.centerNames}
+                          centerData.map((centerId) => (
+                            <option key={centerId.id} value={centerId.id}>
+                              {centerId.centerNames}
                             </option>
                           ))}
                       </select>
-                      {formik.touched.tuitionId && formik.errors.tuitionId && (
+                      {formik.touched.centerId && formik.errors.centerId && (
                         <div className="text-danger">
-                          <small>{formik.errors.tuitionId}</small>
+                          <small>{formik.errors.centerId}</small>
                         </div>
                       )}
                     </div>
@@ -191,7 +330,7 @@ const AddStudentDetails = forwardRef(
                       </label>
                       <br />
                       <input
-                        className="form-control form-control-sm"
+                        className="form-control "
                         type="text"
                         name="studentChineseName"
                         onChange={formik.handleChange}
@@ -212,12 +351,14 @@ const AddStudentDetails = forwardRef(
                       </label>
                       <br />
                       <input
-                        className="form-control  form-control-sm"
+                        className="form-control  form-contorl-sm"
                         name="dateOfBirth"
                         type="date"
+                        // onFocus={(e) => e.target.showPicker()}
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values.dateOfBirth}
+                        // max={maxDate.toISOString().split("T")[0]}
                       />
                       {formik.touched.dateOfBirth &&
                         formik.errors.dateOfBirth && (
@@ -271,8 +412,8 @@ const AddStudentDetails = forwardRef(
                           className="form-check-input mx-2"
                           type="radio"
                           name="schoolType"
-                          value="Childcare"
-                          checked={formik.values.schoolType === "Childcare"}
+                          value="CHILDCARE"
+                          checked={formik.values.schoolType === "CHILDCARE"}
                           onChange={formik.handleChange}
                           onBlur={formik.handleBlur}
                         />
@@ -282,8 +423,8 @@ const AddStudentDetails = forwardRef(
                           className="form-check-input mx-2"
                           type="radio"
                           name="schoolType"
-                          value="Kindergarten"
-                          checked={formik.values.schoolType === "Kindergarten"}
+                          value="KINDERGARTEN"
+                          checked={formik.values.schoolType === "KINDERGARTEN"}
                           onChange={formik.handleChange}
                           onBlur={formik.handleBlur}
                         />
@@ -293,12 +434,12 @@ const AddStudentDetails = forwardRef(
                           className="form-check-input mx-2"
                           type="radio"
                           name="schoolType"
-                          value="NA"
-                          checked={formik.values.schoolType === "NA"}
+                          value="OTHERS"
+                          checked={formik.values.schoolType === "OTHERS"}
                           onChange={formik.handleChange}
                           onBlur={formik.handleBlur}
                         />
-                        <span style={{ color: "gray" }}>NA</span>
+                        <span style={{ color: "gray" }}>Others</span>
                       </div>
                       {formik.touched.schoolType &&
                         formik.errors.schoolType && (
@@ -310,28 +451,22 @@ const AddStudentDetails = forwardRef(
                     <div className="text-start mt-4">
                       <label htmlFor="" className=" fw-medium">
                         <small>Pre-Assessment Result</small>
-                        <span className="text-danger">*</span>
                       </label>
                       <br />
                       <input
-                        className="form-control form-control-sm"
+                        className="form-control "
                         type="text"
                         name="preAssessmentResult"
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values.preAssessmentResult}
+                        readOnly
                       />
-                      {formik.touched.preAssessmentResult &&
-                        formik.errors.preAssessmentResult && (
-                          <div className="error text-danger ">
-                            <small>{formik.errors.preAssessmentResult}</small>
-                          </div>
-                        )}
                     </div>
                     <div className="text-start mt-4">
                       <label htmlFor="" className="mb-1 fw-medium">
                         <small>Nationality</small>
-                        <span className="text-danger">*</span>
+                        {/* <span className="text-danger">*</span> */}
                       </label>
                       <br />
                       <select
@@ -339,13 +474,18 @@ const AddStudentDetails = forwardRef(
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values.nationality}
-                        className="form-select form-select-sm "
-                        aria-label=". example"
+                        className="form-select"
                       >
-                        <option value=""></option>
-                        <option value="Indian">Indian</option>
-                        <option value="Singaporean">Singaporean</option>
-                        <option value="American">American</option>
+                        <option selected></option>
+                        {nationalityData &&
+                          nationalityData.map((nationalityId) => (
+                            <option
+                              key={nationalityId.id}
+                              value={nationalityId.nationality}
+                            >
+                              {nationalityId.nationality}
+                            </option>
+                          ))}
                       </select>
                       {formik.touched.nationality &&
                         formik.errors.nationality && (
@@ -356,17 +496,18 @@ const AddStudentDetails = forwardRef(
                     </div>
                     <div className="text-start mt-4">
                       <label htmlFor="" className=" fw-medium">
-                        <small>Refered By Parents</small>
-                        <span className="text-danger">*</span>
+                        <small>Refered By Parent</small>
+                        {/* <span className="text-danger">*</span> */}
                       </label>
                       <br />
                       <input
                         name="referByParent"
-                        className="form-control form-control-sm"
+                        className="form-control"
                         type="text"
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values.referByParent}
+                        readOnly
                       />
                       {formik.touched.referByParent &&
                         formik.errors.referByParent && (
@@ -388,7 +529,7 @@ const AddStudentDetails = forwardRef(
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values.studentName}
-                        className="form-control form-control-sm"
+                        className="form-control "
                         type="text"
                       />
                       {formik.touched.studentName &&
@@ -399,7 +540,7 @@ const AddStudentDetails = forwardRef(
                         )}
                     </div>
                     <div className="text-start mt-4">
-                      <label htmlFor="" className=" fw-medium">
+                      <label htmlFor="file" className="fw-medium">
                         <small>Profile Image</small>
                         <span className="text-danger">*</span>
                       </label>
@@ -409,13 +550,30 @@ const AddStudentDetails = forwardRef(
                         name="file"
                         className="form-control"
                         onChange={(event) => {
-                          formik.setFieldValue("file", event.target.files[0]);
+                          const file = event.target.files[0];
+                          formik.setFieldValue("file", file);
+                          if (file) {
+                            const previewUrl = URL.createObjectURL(file);
+                            setImagePreviewUrl(previewUrl);
+                          } else {
+                            setImagePreviewUrl(null);
+                          }
                         }}
                         onBlur={formik.handleBlur}
+                        accept=".jpg, .jpeg, .png"
                       />
                       {formik.touched.file && formik.errors.file && (
-                        <div className="error text-danger ">
+                        <div className="error text-danger">
                           <small>{formik.errors.file}</small>
+                        </div>
+                      )}
+                      {imagePreviewUrl && (
+                        <div className="mt-3">
+                          <img
+                            src={imagePreviewUrl}
+                            alt="Profile Preview"
+                            className="w-25"
+                          />
                         </div>
                       )}
                     </div>
@@ -426,12 +584,13 @@ const AddStudentDetails = forwardRef(
                       </label>
                       <br />
                       <input
-                        className="form-control form-control-sm"
+                        className="form-control "
                         type="text"
                         name="age"
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values.age}
+                        readOnly
                       />
                       {formik.touched.age && formik.errors.age && (
                         <div className="text-danger">
@@ -446,7 +605,7 @@ const AddStudentDetails = forwardRef(
                       </label>
                       <br />
                       <input
-                        className="form-control form-control-sm"
+                        className="form-control "
                         type="text"
                         name="medicalCondition"
                         onChange={formik.handleChange}
@@ -471,7 +630,7 @@ const AddStudentDetails = forwardRef(
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values.schoolName}
-                        className="form-control form-control-sm"
+                        className="form-control "
                         type="text"
                       />
                       {formik.touched.schoolName &&
@@ -492,14 +651,15 @@ const AddStudentDetails = forwardRef(
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values.race}
-                        className="form-select form-select-sm "
-                        aria-label=". example"
+                        className="form-select"
                       >
                         <option selected></option>
-                        <option value="Chinese">Chinese</option>
-                        <option value="Malay">Malay</option>
-                        <option value="Indian ">Indian </option>
-                        <option value="Eurasian ">Eurasian </option>
+                        {raceData &&
+                          raceData.map((raceId) => (
+                            <option key={raceId.id} value={raceId.race}>
+                              {raceId.race}
+                            </option>
+                          ))}
                       </select>
                       {formik.touched.race && formik.errors.race && (
                         <div className="error text-danger ">
@@ -513,36 +673,54 @@ const AddStudentDetails = forwardRef(
                         <span className="text-danger">*</span>
                       </label>
                       <br />
-                      <input
-                        className="form-control form-control-sm"
-                        type="text"
-                        name="primaryLanguageSpokenEnglish"
+                      <select
+                        name="primaryLanguage"
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
-                        value={formik.values.primaryLanguageSpokenEnglish}
-                      />
-                      {formik.touched.primaryLanguageSpokenEnglish &&
-                        formik.errors.primaryLanguageSpokenEnglish && (
+                        value={formik.values.primaryLanguage}
+                        className="form-select"
+                      >
+                        <option selected></option>
+                        <option value="CHINESE">Chinese</option>
+                        <option value="ENGLISH">English</option>
+                      </select>
+                      {formik.touched.primaryLanguage &&
+                        formik.errors.primaryLanguage && (
                           <div className="error text-danger ">
-                            <small>
-                              {formik.errors.primaryLanguageSpokenEnglish}
-                            </small>
+                            <small>{formik.errors.primaryLanguage}</small>
                           </div>
                         )}
                     </div>
                     <div className="text-start mt-4">
-                      <label htmlFor="" className="mb-1 fw-medium">
+                      <label htmlFor="" className=" fw-medium">
                         <small>Refer By Student</small>
-                        <span className="text-danger">*</span>
+                        {/* <span className="text-danger">*</span> */}
                       </label>
                       <br />
                       <input
+                        className="form-control "
+                        type="text"
                         name="referByStudent"
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values.referByStudent}
-                        className="form-control form-control-sml"
+                        readOnly
                       />
+                      {/* <select
+                        name="referByStudent"
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        value={formik.values.referByStudent}
+                        className="form-select"
+                      >
+                        <option selected></option>
+                        {studentData &&
+                          studentData.map((student) => (
+                            <option key={student.id} value={student.id}>
+                              {student.studentNames}
+                            </option>
+                          ))}
+                      </select> */}
                       {formik.touched.referByStudent &&
                         formik.errors.referByStudent && (
                           <div className="error text-danger ">
@@ -559,7 +737,7 @@ const AddStudentDetails = forwardRef(
                   <br />
                   <textarea
                     name="remark"
-                    className="form-control form-control-sm"
+                    className="form-control "
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.remark}
@@ -567,7 +745,13 @@ const AddStudentDetails = forwardRef(
                     style={{
                       height: "7rem",
                     }}
+                    maxLength={200}
                   />
+                  {formik.touched.remark && formik.errors.remark && (
+                    <div className="error text-danger">
+                      <small>{formik.errors.remark}</small>
+                    </div>
+                  )}
                 </div>
 
                 <div className="mb-5">

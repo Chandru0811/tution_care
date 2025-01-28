@@ -4,14 +4,15 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { FaEdit } from "react-icons/fa";
 import fetchAllCentersWithIds from "../List/CenterList";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
 import fetchAllClassesWithIdsC from "../List/ClassListByCourse";
 import fetchAllTeachersWithIds from "../List/TeacherList";
 import api from "../../config/URL";
+import fetchAllClassRoomWithCenterIds from "../List/ClassRoomList";
 
 function ScheduleTeacherEdit({ id, onSuccess }) {
   const [show, setShow] = useState(false);
@@ -19,14 +20,19 @@ function ScheduleTeacherEdit({ id, onSuccess }) {
   const [courseData, setCourseData] = useState(null);
   const [classData, setClassData] = useState(null);
   const [teacherData, setTeacherData] = useState(null);
+  const [classRoomData, setClassRoomData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
-  const navigate = useNavigate();
+  const userName = localStorage.getItem("userName");
+  const [isModified, setIsModified] = useState(false);
+
+  // const navigate = useNavigate();
 
   const handleClose = () => {
     setShow(false);
     formik.resetForm();
     setCourseData(null);
     setClassData(null);
+    setClassRoomData(null);
   };
 
   const handleShow = async () => {
@@ -34,8 +40,9 @@ function ScheduleTeacherEdit({ id, onSuccess }) {
       const response = await api.get(`/getAllScheduleTeacherById/${id}`);
       formik.setValues(response.data);
       setShow(true);
+      setIsModified(false);
     } catch (error) {
-      console.error("Error fetching data:", error.message);
+      console.error("Error fetching data:", error);
     } finally {
       setShow(true);
     }
@@ -48,16 +55,16 @@ function ScheduleTeacherEdit({ id, onSuccess }) {
       setCenterData(centers);
       setTeacherData(teacher);
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error);
     }
   };
 
-  const fetchCourses = async (tuitionId) => {
+  const fetchCourses = async (centerId) => {
     try {
-      const courses = await fetchAllCoursesWithIdsC(tuitionId);
+      const courses = await fetchAllCoursesWithIdsC(centerId);
       setCourseData(courses);
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error);
     }
   };
 
@@ -65,6 +72,14 @@ function ScheduleTeacherEdit({ id, onSuccess }) {
     try {
       const classes = await fetchAllClassesWithIdsC(courseId);
       setClassData(classes);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
+  const fetchClassRoom = async (centerId) => {
+    try {
+      const classRoom = await fetchAllClassRoomWithCenterIds(centerId);
+      setClassRoomData(classRoom);
     } catch (error) {
       toast.error(error.message);
     }
@@ -84,17 +99,20 @@ function ScheduleTeacherEdit({ id, onSuccess }) {
   }, []);
 
   const validationSchema = Yup.object({
-    tuitionId: Yup.string().required("*Centre is required"),
+    centerId: Yup.string().required("*Centre is required"),
     courseId: Yup.string().required("*Course  is required"),
     classId: Yup.string().required("*Class is required"),
     days: Yup.string().required("*Days is required"),
     userId: Yup.string().required("*Teacher is required"),
+    classRoom: Yup.string().required("*Class Room is required"),
+    startDate: Yup.string().required("*Start Date is required"),
+    endDate: Yup.string().required("*End Date is required"),
     // batch: Yup.string().required("From Time is required"),
   });
 
   const formik = useFormik({
     initialValues: {
-      tuitionId: "",
+      centerId: "",
       courseId: "",
       classId: "",
       centerName: "",
@@ -102,6 +120,9 @@ function ScheduleTeacherEdit({ id, onSuccess }) {
       course: "",
       days: "",
       userId: "",
+      startDate: "",
+      endDate: "",
+      classRoom: "",
       // batch: "",
     },
     validationSchema: validationSchema,
@@ -113,10 +134,11 @@ function ScheduleTeacherEdit({ id, onSuccess }) {
       let selectedClassName = "";
       let selectedCourseName = "";
       let selectedTeacherName = "";
+      let selectedClassRoomName = "";
 
       centerData.forEach((center) => {
-        if (parseInt(values.tuitionId) === center.id) {
-          selectedCenterName = center.tuitionCareName || "--";
+        if (parseInt(values.centerId) === center.id) {
+          selectedCenterName = center.centerNames || "--";
         }
       });
 
@@ -140,8 +162,14 @@ function ScheduleTeacherEdit({ id, onSuccess }) {
         }
       });
 
+      classRoomData.forEach((classRoom) => {
+        if (parseInt(values.classRoom) === classRoom.id) {
+          selectedClassRoomName = classRoom.classRoomName || "--";
+        }
+      });
+
       let requestBody = {
-        tuitionId: values.tuitionId,
+        centerId: values.centerId,
         centerName: selectedCenterName,
         className: selectedClassName,
         classId: values.classId,
@@ -151,6 +179,10 @@ function ScheduleTeacherEdit({ id, onSuccess }) {
         userId: values.userId,
         teacher: selectedTeacherName,
         days: values.days,
+        startDate: values.startDate,
+        endDate: values.endDate,
+        classRoom: selectedClassRoomName,
+        updatedBy: userName,
       };
 
       // console.log(requestBody);
@@ -172,17 +204,32 @@ function ScheduleTeacherEdit({ id, onSuccess }) {
           toast.error(response.data.message);
         }
       } catch (error) {
-        toast.error(error.message);
+        toast.error(error);
       } finally {
         setLoadIndicator(false);
+      }
+    },
+    enableReinitialize: true,
+    validateOnChange: true,
+    validateOnBlur: true,
+    validate: (values) => {
+      if (
+        Object.values(values).some(
+          (value) => typeof value === "string" && value.trim() !== ""
+        )
+      ) {
+        setIsModified(true);
+      } else {
+        setIsModified(false);
       }
     },
   });
 
   const handleCenterChange = (event) => {
-    const tuitionId = event.target.value;
-    formik.setFieldValue("tuitionId", tuitionId);
-    fetchCourses(tuitionId); // Fetch courses for the selected center
+    const centerId = event.target.value;
+    formik.setFieldValue("centerId", centerId);
+    fetchCourses(centerId); // Fetch courses for the selected center
+    fetchClassRoom(centerId); // Fetch courses for the selected center
   };
 
   const handleCourseChange = (event) => {
@@ -214,24 +261,36 @@ function ScheduleTeacherEdit({ id, onSuccess }) {
           <FaEdit />
         </button>
       </div>
-      <Modal show={show} size="lg" onHide={handleClose} centered>
+      <Modal
+        show={show}
+        size="lg"
+        onHide={handleClose}
+        centered
+        backdrop={isModified ? "static" : true}
+        keyboard={isModified ? false : true}
+      >
         <Modal.Header closeButton>
-          <Modal.Title className="headColor">
-            Update Schedule Teacher
-          </Modal.Title>
+          <Modal.Title className="headColor">Edit schedule Teacher</Modal.Title>
         </Modal.Header>
-        <form onSubmit={formik.handleSubmit}>
+        <form
+          onSubmit={formik.handleSubmit}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !formik.isSubmitting) {
+              e.preventDefault(); // Prevent default form submission
+            }
+          }}
+        >
           <Modal.Body>
             <div className="container">
-              <div className="row">
+              <div className="row py-4">
                 <div className="col-md-6 col-12 mb-2">
                   <label className="form-label">
                     Centre<span className="text-danger">*</span>
                   </label>
                   <select
-                    {...formik.getFieldProps("tuitionId")}
-                    className={`form-select form-select-sm ${
-                      formik.touched.tuitionId && formik.errors.tuitionId
+                    {...formik.getFieldProps("centerId")}
+                    className={`form-select ${
+                      formik.touched.centerId && formik.errors.centerId
                         ? "is-invalid"
                         : ""
                     }`}
@@ -246,9 +305,9 @@ function ScheduleTeacherEdit({ id, onSuccess }) {
                         </option>
                       ))}
                   </select>
-                  {formik.touched.tuitionId && formik.errors.tuitionId && (
+                  {formik.touched.centerId && formik.errors.centerId && (
                     <div className="invalid-feedback">
-                      {formik.errors.tuitionId}
+                      {formik.errors.centerId}
                     </div>
                   )}
                 </div>
@@ -258,7 +317,7 @@ function ScheduleTeacherEdit({ id, onSuccess }) {
                   </label>
                   <select
                     {...formik.getFieldProps("courseId")}
-                    class={`form-select form-select-sm  ${
+                    class={`form-select  ${
                       formik.touched.courseId && formik.errors.courseId
                         ? "is-invalid"
                         : ""
@@ -287,7 +346,7 @@ function ScheduleTeacherEdit({ id, onSuccess }) {
                   </label>
                   <select
                     {...formik.getFieldProps("classId")}
-                    class={`form-select form-select-sm  ${
+                    class={`form-select  ${
                       formik.touched.classId && formik.errors.classId
                         ? "is-invalid"
                         : ""
@@ -317,6 +376,7 @@ function ScheduleTeacherEdit({ id, onSuccess }) {
                   </label>
                   <input
                     type="time"
+     
                     className={`form-control ${
                       formik.touched.batch && formik.errors.batch
                         ? "is-invalid"
@@ -338,7 +398,7 @@ function ScheduleTeacherEdit({ id, onSuccess }) {
                   </label>
                   <select
                     {...formik.getFieldProps("days")}
-                    class={`form-select form-select-sm  ${
+                    class={`form-select  ${
                       formik.touched.days && formik.errors.days
                         ? "is-invalid"
                         : ""
@@ -363,7 +423,7 @@ function ScheduleTeacherEdit({ id, onSuccess }) {
                   </label>
                   <select
                     {...formik.getFieldProps("userId")}
-                    class={`form-select form-select-sm  ${
+                    class={`form-select  ${
                       formik.touched.userId && formik.errors.userId
                         ? "is-invalid"
                         : ""
@@ -383,12 +443,76 @@ function ScheduleTeacherEdit({ id, onSuccess }) {
                     </div>
                   )}
                 </div>
+                <div className="col-md-6 col-12 mb-2">
+                  <label className="form-label">
+                    Class Room<span className="text-danger">*</span>
+                  </label>
+                  <select
+                    {...formik.getFieldProps("classRoom")}
+                    class={`form-select  ${
+                      formik.touched.classRoom && formik.errors.classRoom
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                  >
+                    <option></option>
+                    {classRoomData &&
+                      classRoomData.map((classRoom) => (
+                        <option key={classRoom.id} value={classRoom.id}>
+                          {classRoom.classRoomName}
+                        </option>
+                      ))}
+                  </select>
+                  {formik.touched.classRoom && formik.errors.classRoom && (
+                    <div className="invalid-feedback">
+                      {formik.errors.classRoom}
+                    </div>
+                  )}
+                </div>
+                <div className="col-md-6 col-12 mb-2">
+                  <label className="form-label">
+                    Start Date<span className="text-danger">*</span>
+                  </label>
+                  <input
+                    type="date"
+                    {...formik.getFieldProps("startDate")}
+                    class={`form-control  ${
+                      formik.touched.startDate && formik.errors.startDate
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                  />
+                  {formik.touched.startDate && formik.errors.startDate && (
+                    <div className="invalid-feedback">
+                      {formik.errors.startDate}
+                    </div>
+                  )}
+                </div>
+                <div className="col-md-6 col-12 mb-2">
+                  <label className="form-label">
+                    End Date<span className="text-danger">*</span>
+                  </label>
+                  <input
+                    type="date"
+                    {...formik.getFieldProps("endDate")}
+                    class={`form-control  ${
+                      formik.touched.endDate && formik.errors.endDate
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                  />
+                  {formik.touched.endDate && formik.errors.endDate && (
+                    <div className="invalid-feedback">
+                      {formik.errors.endDate}
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
-            <Modal.Footer className="mt-3">
+            <Modal.Footer>
               <Button
                 type="button"
-                variant="secondary btn-sm"
+                className="btn btn-sm btn-border bg-light text-dark"
                 onClick={handleClose}
               >
                 Cancel

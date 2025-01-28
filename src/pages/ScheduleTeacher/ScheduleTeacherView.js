@@ -1,25 +1,23 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import { FaEye } from "react-icons/fa";
 import api from "../../config/URL";
 
-function ScheduleTeacherView({ id,}) {
+function ScheduleTeacherView({ id, onSuccess }) {
   const [show, setShow] = useState(false);
   const [data, setData] = useState([]);
 
   const handleClose = () => setShow(false);
 
   const handleShow = async () => {
-    try{
+    try {
       const response = await api.get(`/getAllScheduleTeacherById/${id}`);
       setData(response.data);
       setShow(true);
-    }
-    catch (error) {
-      console.error("Error fetching data:", error.message);
-    }
-    finally{
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
       setShow(true);
     }
   };
@@ -36,7 +34,7 @@ function ScheduleTeacherView({ id,}) {
     <>
       <div className="">
         <button className="btn btn-sm" onClick={handleShow}>
-          <FaEye />
+          <FaEye /> View
         </button>
       </div>
       <Modal show={show} size="lg" onHide={handleClose} centered>
@@ -52,7 +50,7 @@ function ScheduleTeacherView({ id,}) {
                     <p className="fw-bold">Centre</p>
                   </div>
                   <div className="col-7">
-                    <p>:&nbsp;{data.tuitionCareName}</p>
+                    <p>:&nbsp;{data.centerName}</p>
                   </div>
                 </div>
               </div>
@@ -66,8 +64,8 @@ function ScheduleTeacherView({ id,}) {
                   </div>
                 </div>
               </div>
-              </div>
-              <div className="row">
+            </div>
+            <div className="row">
               <div className="col-md-6 col-12 mb-2">
                 <div className="row">
                   <div className="col-5">
@@ -96,6 +94,50 @@ function ScheduleTeacherView({ id,}) {
                   </div>
                   <div className="col-7">
                     <p>:&nbsp;{data.teacher}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-md-6 col-12 mb-2">
+                <div className="row">
+                  <div className="col-5">
+                    <p className="fw-bold">Days</p>
+                  </div>
+                  <div className="col-7">
+                    <p>:&nbsp;{data.days}</p>
+                  </div>
+                </div>
+              </div>
+              <div className="col-md-6 col-12 mb-2">
+              <div className="row">
+                  <div className="col-5">
+                    <p className="fw-bold">Class Room</p>
+                  </div>
+                  <div className="col-7">
+                    <p>:&nbsp;{data.classRoom}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-md-6 col-12 mb-2">
+                <div className="row">
+                  <div className="col-5">
+                    <p className="fw-bold">Start Date</p>
+                  </div>
+                  <div className="col-7">
+                    <p>:&nbsp;{data.startDate}</p>
+                  </div>
+                </div>
+              </div>
+              <div className="col-md-6 col-12 mb-2">
+              <div className="row">
+                  <div className="col-5">
+                    <p className="fw-bold">End Date</p>
+                  </div>
+                  <div className="col-7">
+                    <p>:&nbsp;{data.endDate}</p>
                   </div>
                 </div>
               </div>

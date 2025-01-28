@@ -8,18 +8,18 @@ import EditForm3 from "./EditEnrollment/EditForm3";
 import EditForm4 from "./EditEnrollment/EditForm4";
 import EditForm5 from "./EditEnrollment/EditForm5";
 import EditForm6 from "./EditEnrollment/EditForm6";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Tooltip from "react-bootstrap/Tooltip";
- import { OverlayTrigger } from "react-bootstrap";
+import { OverlayTrigger } from "react-bootstrap";
 
-const steps = [{ tooltip: "Student Information" }, { tooltip: "Child Ability" },{ tooltip: "Parent Information" },{ tooltip: "Address" },{ tooltip: "Account Information" },{ tooltip: "Authorised Person Address" }];
+const steps = [{ tooltip: "Student Information" }, { tooltip: "Child Ability" },{ tooltip: "Parent Information" },{ tooltip: "Address" },{ tooltip: "Account Information" },{ tooltip: "Permission for Medias Posting" }];
 
 
 export default function EnrollmentEdit() {
   const { id } = useParams();
 
   const [activeStep, setActiveStep] = useState(0);
-  const [formData, setFormData] = useState({id});
+  const [formData, setFormData] = useState({ id });
   const [loadIndicator, setLoadIndicator] = useState(false);
 
   const childRef = React.useRef();
@@ -72,13 +72,37 @@ export default function EnrollmentEdit() {
 
   return (
     <div className="container-fluid minHeight">
-     <Stepper className="my-5" activeStep={activeStep} alternativeLabel>
+      <ol
+        className="breadcrumb my-3"
+        style={{ listStyle: "none", padding: 0, margin: 0 }}
+      >
+        <li>
+          <Link to="/" className="custom-breadcrumb">
+            Home
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          &nbsp;Lead Management
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          <Link to="/lead/lead" className="custom-breadcrumb">
+            &nbsp;Lead
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li className="breadcrumb-item active" aria-current="page">
+          &nbsp;Lead Edit
+        </li>
+      </ol>
+      <Stepper className="my-5" activeStep={activeStep} alternativeLabel>
         {steps.map((step, index) => (
           <Step key={index} onClick={() => setActiveStep(index)}>
             <OverlayTrigger
               placement="top"
               overlay={
-                <Tooltip>{step.tooltip}</Tooltip>
+                <Tooltip id={`tooltip-${index}`}>{step.tooltip}</Tooltip>
               }
             >
               <StepLabel></StepLabel>
@@ -143,14 +167,16 @@ export default function EnrollmentEdit() {
             />
           )}
           <div className="container-fluid p-1 d-flex align-items-center justify-content-center">
-            <button
-              className="btn btn-border btn-sm mt-5 mb-3"
-              style={{ padding: "7px" }}
-              disabled={activeStep === 0}
-              onClick={handleBack}
-            >
-              Back
-            </button>
+            {activeStep > 0 && (
+              <button
+                className="btn btn-border btn-sm mt-5 mb-3"
+                style={{ padding: "7px" }}
+                disabled={activeStep === 0}
+                onClick={handleBack}
+              >
+                Back
+              </button>
+            )}
 
             <div style={{ flex: "1 1 auto" }}></div>
             <button

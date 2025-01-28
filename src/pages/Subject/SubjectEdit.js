@@ -1,37 +1,51 @@
 import { useState, useEffect } from "react";
 import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
-import { FaEdit } from "react-icons/fa";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import { MdOutlineModeEdit } from "react-icons/md";
 import * as yup from "yup";
 import { useFormik } from "formik";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 import api from "../../config/URL";
 
-function SubjectEdit({ id, onSuccess }) {
+function SubjectEdit({ id, onSuccess, handleMenuClose }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
+  const userName = localStorage.getItem("userName");
+  const [isModified, setIsModified] = useState(false);
 
-  const navigate = useState();
+  const handleClose = () => {
+    setShow(false);
+    handleMenuClose();
+    formik.resetForm();
+  };
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const handleShow = () => {
+    getData();
+    setShow(true);
+    setIsModified(false);
+  };
 
   const validationSchema = yup.object().shape({
     subject: yup.string().required("*Subject is required"),
     code: yup.string().required("*Code is required"),
     status: yup.string().required("*Status is required"),
   });
+
   const formik = useFormik({
     initialValues: {
       subject: "",
       code: "",
       status: "",
+      updatedBy: userName,
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      // console.log(values);
       setLoadIndicator(true);
-
+      values.updatedBy= userName;
       try {
         const response = await api.put(`/updateCourseSubject/${id}`, values, {
           headers: {
@@ -42,65 +56,80 @@ function SubjectEdit({ id, onSuccess }) {
           toast.success(response.data.message);
           onSuccess();
           handleClose();
-         
         } else {
           toast.error(response.data.message);
         }
       } catch (error) {
-        toast.error(error.message);
-      }finally {
+        toast.error(error.message || "Error occurred");
+      } finally {
         setLoadIndicator(false);
+      }
+    },
+    enableReinitialize: true,
+    validateOnChange: true,
+    validateOnBlur: true,
+    validate: (values) => {
+      if (
+        Object.values(values).some(
+          (value) => typeof value === "string" && value.trim() !== ""
+        )
+      ) {
+        setIsModified(true);
+      } else {
+        setIsModified(false);
       }
     },
   });
 
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const response = await api.get(`/getAllCourseSubjectsById/${id}`);
-        formik.setValues(response.data);
-      } catch (error) {
-        console.error("Error fetching data ", error);
-      }
-    };
-
-    getData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const getData = async () => {
+    try {
+      const response = await api.get(`/getAllCourseSubjectsById/${id}`);
+      formik.setValues(response.data);
+    } catch (error) {
+      console.error("Error fetching data ", error);
+    }
+  };
 
   return (
     <>
-      <button className="btn btn-sm" onClick={handleShow}>
-        <FaEdit />
-      </button>
-
-      <Modal
-        show={show}
-        onHide={handleClose}
-        size="lg"
-        aria-labelledby="contained-model-title-vcenter"
-        centered
+      <p
+      className="text-start mb-0 menuitem-style"
+        onClick={handleShow}
+        style={{
+          whiteSpace: "nowrap",
+          width: "100%",
+        }}
       >
-        <form onSubmit={formik.handleSubmit}>
-          <Modal.Header closeButton>
-            <Modal.Title className="headColor">Update Subject</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-              <div className="row">
+        Edit
+      </p>
+
+      <Dialog open={show} onClose={handleClose} fullWidth maxWidth="md">
+        <form
+          onSubmit={formik.handleSubmit}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !formik.isSubmitting) {
+              e.preventDefault();
+            }
+          }}
+        >
+          <DialogTitle>Edit Subject</DialogTitle>
+          <DialogContent>
+            <div className="container">
+              <div className="row py-4">
                 <div className="col-md-6 col-12 mb-2">
                   <label className="form-label">
                     Subject<span className="text-danger">*</span>
                   </label>
                   <div className="input-group mb-3">
                     <input
+                      onKeyDown={(e) => e.stopPropagation()}
                       type="text"
-                      className={`form-control form-control-sm  ${
+                      className={`form-control   ${
                         formik.touched.subject && formik.errors.subject
                           ? "is-invalid"
                           : ""
                       }`}
                       aria-label="Subject"
-                      aria-describedby="basic-addon1"
                       {...formik.getFieldProps("subject")}
                     />
                     {formik.touched.subject && formik.errors.subject && (
@@ -117,13 +146,13 @@ function SubjectEdit({ id, onSuccess }) {
                   <div className="input-group mb-3">
                     <input
                       type="text"
-                      className={`form-control form-control-sm ${
+                      onKeyDown={(e) => e.stopPropagation()}
+                      className={`form-control   ${
                         formik.touched.code && formik.errors.code
                           ? "is-invalid"
                           : ""
                       }`}
-                      aria-label="code"
-                      aria-describedby="basic-addon1"
+                      aria-label="Code"
                       {...formik.getFieldProps("code")}
                     />
                     {formik.touched.code && formik.errors.code && (
@@ -133,21 +162,20 @@ function SubjectEdit({ id, onSuccess }) {
                     )}
                   </div>
                 </div>
-                <div class="col-md-6 col-12 mb-2">
-                  <lable class="">
-                    Status<span class="text-danger">*</span>
-                  </lable>
-                  <div class="input-group mb-3">
+                <div className="col-md-6 col-12 mb-2">
+                  <label className="form-label">
+                    Status<span className="text-danger">*</span>
+                  </label>
+                  <div className="input-group mb-3">
                     <select
                       {...formik.getFieldProps("status")}
-                      className={`form-select form-select-sm  ${
+                      className={`form-select  ${
                         formik.touched.status && formik.errors.status
                           ? "is-invalid"
                           : ""
                       }`}
-                      aria-label="Default select example"
                     >
-                      <option selected></option>
+                      <option></option>
                       <option value="Active">Active</option>
                       <option value="Inactive">Inactive</option>
                     </select>
@@ -159,28 +187,31 @@ function SubjectEdit({ id, onSuccess }) {
                   </div>
                 </div>
               </div>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary btn-sm" onClick={handleClose}>
+            </div>
+          </DialogContent>
+          <DialogActions>
+            <Button
+              className="btn btn-sm btn-border bg-light text-dark"
+              onClick={handleClose}
+            >
               Cancel
             </Button>
             <button
-                type="submit"
-                onSubmit={formik.handleSubmit}
-                className="btn btn-button btn-sm"
-                disabled={loadIndicator}
-              >
-                {loadIndicator && (
-                  <span
-                    className="spinner-border spinner-border-sm me-2"
-                    aria-hidden="true"
-                  ></span>
-                )}
-                Update
-              </button>
-          </Modal.Footer>
+              type="submit"
+              className="btn btn-button btn-sm"
+              disabled={loadIndicator}
+            >
+              {loadIndicator && (
+                <span
+                  className="spinner-border spinner-border-sm me-2"
+                  aria-hidden="true"
+                ></span>
+              )}
+              Update
+            </button>
+          </DialogActions>
         </form>
-      </Modal>
+      </Dialog>
     </>
   );
 }

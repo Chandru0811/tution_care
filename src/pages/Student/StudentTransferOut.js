@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 import api from "../../config/URL";
 import fetchAllCoursesWithIds from "../List/CourseList";
 import fetchAllCentersWithIds from "../List/CenterList";
@@ -13,13 +13,20 @@ function StudentTransferOut() {
   const navigate = useNavigate();
   const [courseData, setCourseData] = useState(null);
   const [centerData, setCenterData] = useState(null);
+  const [loadIndicator, setLoadIndicator] = useState(false);
+
   const validationSchema = Yup.object({
-    courseId: Yup.string().required("Current Course is required"),
-    // currentClass: Yup.string().required("Current Class is required"),
-    lastLessonDate: Yup.string().required("Last Lesson Date  is required"),
-    centerId: Yup.string().required("Transfer To is required"),
-    reason: Yup.string().required("Reason is required"),
-    centerRemark: Yup.string().required("Centre Remark is required"),
+    courseId: Yup.string().required("*Current Course is required"),
+    // currentClass: Yup.string().required("*Current Class is required"),
+    lastLessonDate: Yup.string().required("*Last Lesson Date  is required"),
+    centerId: Yup.string().required("*Transfer To is required"),
+    reason: Yup.string().required("*Reason is required"),
+    centerRemark: Yup.string()
+  .required("*Leave Reason is required")
+  .max(200, "*The maximum length is 200 characters"),
+  parentRemark: Yup.string()
+  .notRequired("*Leave Reason is required")
+  .max(200, "*The maximum length is 200 characters"),
   });
 
   const fetchData = async () => {
@@ -29,13 +36,12 @@ function StudentTransferOut() {
       setCourseData(course);
       setCenterData(center);
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error);
     }
   };
 
   useEffect(() => {
     fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const formik = useFormik({
@@ -54,6 +60,7 @@ function StudentTransferOut() {
     },
     validationSchema: validationSchema, // Assign the validation schema
     onSubmit: async (values) => {
+      setLoadIndicator(true);
       // console.log(values);
       try {
         const response = await api.put(`/updateStudentDetail/${id}`, values, {
@@ -63,7 +70,7 @@ function StudentTransferOut() {
         });
         if (response.status === 200) {
           toast.success(response.data.message);
-          navigate(`/studentlisting/view/${id}`);
+          navigate(`/student/view/${id}`);
         } else {
           toast.error(response.data.message);
         }
@@ -77,7 +84,8 @@ function StudentTransferOut() {
     const getData = async () => {
       try {
         const response = await api.get(`/getAllStudentDetails/${id}`);
-        if (response.data.studentCourseDetailModels.length > 0) {
+        console.log("Response is ", response.data);
+        if (response.data.centerId && response.data.centerId) {
           // setData(response.data);
           const formattedResponseData = {
             courseId: response.data.studentCourseDetailModels[0].courseId,
@@ -86,7 +94,9 @@ function StudentTransferOut() {
           formik.setValues(formattedResponseData);
         }
       } catch (error) {
-        toast.error("Error Fetching Form Data");
+        console.log("Error Fetching Form Data");
+      } finally {
+        setLoadIndicator(false);
       }
     };
 
@@ -94,25 +104,34 @@ function StudentTransferOut() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
-    <div className="minHeight container-fluid  center">
-    <form onSubmit={formik.handleSubmit}>
-    <div className="card shadow border-0 mb-2 top-header">
-      <div className="container-fluid">
+    <div className="container">
+       <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
+          if (e.key === 'Enter' && !formik.isSubmitting) {
+            e.preventDefault();  // Prevent default form submission
+          }
+        }}>
         <div className="my-3 d-flex justify-content-end align-items-end  mb-5">
-          <Link to={`/studentlisting/view/${id}`}>
+          <Link to={`/student/view/${id}`}>
             <button type="button " className="btn btn-sm btn-border   ">
               Back
             </button>
           </Link>
           &nbsp;&nbsp;
-          <button type="submit" className="btn btn-button btn-sm ">
+          <button
+            type="submit"
+            className="btn btn-button btn-sm"
+            disabled={loadIndicator}
+          >
+            {loadIndicator && (
+              <span
+                className="spinner-border spinner-border-sm me-2"
+                aria-hidden="true"
+              ></span>
+            )}
             Save
           </button>
         </div>
-        </div>
-        </div>
-        <div className="card shadow border-0 mb-2 top-header">
-        <div className="container p-5">
+        <div className="container">
           <div className="row py-4">
             <div class="col-md-6 col-12 mb-2">
               <lable class="">
@@ -173,6 +192,7 @@ function StudentTransferOut() {
               </lable>
               <input
                 type="date"
+                onFocus={(e) => e.target.showPicker()}
                 {...formik.getFieldProps("lastLessonDate")}
                 name="lastLessonDate"
                 className={`form-control   ${
@@ -222,9 +242,10 @@ function StudentTransferOut() {
                 name="preferTiming"
                 {...formik.getFieldProps("preferTiming")}
                 type="time"
+     
               />
             </div>
-            <div class="col-md-6 col-12 mb-2 ">
+            {/* <div class="col-md-6 col-12 mb-2 ">
               <label>Prefer Days </label>
               <input
                 class="form-control "
@@ -232,11 +253,41 @@ function StudentTransferOut() {
                 {...formik.getFieldProps("preferDays")}
                 type="text"
               />
+            </div> */}
+            <div class="col-md-6 col-12 mb-2">
+              <lable class="">Prefer Days</lable>
+              <select
+                {...formik.getFieldProps("preferDays")}
+                name="preferDays"
+                className={`form-select ${
+                  formik.touched.preferDays && formik.errors.preferDays
+                    ? "is-invalid"
+                    : ""
+                }`}
+                aria-label="Default select example"
+                class="form-select "
+              >
+                <option selected></option>
+                <option value="Monday">Monday</option>
+                <option value="Tuesday">Tuesday</option>
+                <option value="Wednesday">Wednesday</option>
+                <option value="Thursday">Thursday</option>
+                <option value="Friday">Friday</option>
+                <option value="Saturday">Saturday</option>
+                <option value="Sunday">Sunday</option>
+              </select>
+              {formik.touched.preferDays && formik.errors.preferDays && (
+                <div className="invalid-feedback">
+                  {formik.errors.preferDays}
+                </div>
+              )}
             </div>
+
             <div class="col-md-6 col-12 mb-2">
               <label>Prefer Start date</label>
               <input
                 type="date"
+                onFocus={(e) => e.target.showPicker()}
                 name="preferStartDate"
                 class="form-control "
                 {...formik.getFieldProps("preferStartDate")}
@@ -310,10 +361,9 @@ function StudentTransferOut() {
                 rows="4"
               ></textarea>
             </div>
-            </div>
           </div>
         </div>
-        </form>
+      </form>
     </div>
   );
 }

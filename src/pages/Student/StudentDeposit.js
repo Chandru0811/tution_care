@@ -5,13 +5,13 @@ const StudentDeposit = () => {
   return (
     <div className="container my-4">
       <div className="mb-5 mt-3 d-flex justify-content-end">
-        <Link to={`/studentlisting`}>
+        <Link to={`/student`}>
           <button type="button" className="btn btn-sm btn-border">
             Back
           </button>
         </Link>
         &nbsp;&nbsp;
-        <Link to={"/studentlisting"}>
+        <Link to={`/student`}>
           <button type="button" className="btn btn-button btn-sm">
             Save
           </button>
@@ -38,7 +38,7 @@ const StudentDeposit = () => {
             <div class="input-group mb-3">
               <input
                 type="text"
-                className={`form-control iconInput `}
+                className={`form-control iconInput`}
                 value={"S000377"}
               />
             </div>
@@ -62,6 +62,7 @@ const StudentDeposit = () => {
             <div class="input-group mb-3">
               <input
                 type="date"
+                onFocus={(e) => e.target.showPicker()}
                 className={`form-control iconInput `}
                 value={"2024-01-06"}
               />

@@ -148,7 +148,7 @@ function StudentSummary({ data }) {
                       Terms & Condition
                     </li>
                   </div>
-                  {/*   Add <i class="bx bx-plus"></i>more items as needed */}
+                  {/* Add more items as needed */}
                 </div>
               </ul>
             </div>

@@ -3,27 +3,37 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 import api from "../../../../config/URL";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
+
+const validationSchema = Yup.object().shape({
+  agreeConditionOne: Yup.boolean()
+    .oneOf([true], "*Declare is required")
+    .required(),
+  agreeConditionTwo: Yup.boolean()
+    .oneOf([true], "*Declare is required")
+    .required(),
+  agreeConditionThree: Yup.boolean()
+    .oneOf([true], "*Declare is required")
+    .required(),
+});
 
 const Form6 = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const navigate = useNavigate();
-
-    const validationSchema = Yup.object().shape({
-      addressOfAuthorisedPerson: Yup.string().required("*Address is required"),
-      declare: Yup.string().required("*Declare is required"),
-    });
+    const userName = localStorage.getItem("userName");
 
     const formik = useFormik({
       initialValues: {
-        addressOfAuthorisedPerson: formData.addressOfAuthorisedPerson || "",
-        consentScrapbook: false,
-        consentPhotos: false,
-        declare: "",
+        // addressOfAuthorisedPerson: formData.addressOfAuthorisedPerson || "",
+        agreeConditionOne: false,
+        agreeConditionTwo: false,
+        agreeConditionThree: false,
+        createdBy: userName,
       },
-      validationSchema: validationSchema,
+      // validationSchema: validationSchema,
       onSubmit: async (values) => {
         setLoadIndicators(true);
+        values.createdBy = userName;
         try {
           const response = await api.put(
             `/updateLeadInfo/${formData.lead_id}`,
@@ -43,7 +53,7 @@ const Form6 = forwardRef(
             toast.error(response.data.message);
           }
         } catch (error) {
-          toast.error(error.message);
+          toast.error(error);
         } finally {
           setLoadIndicators(false);
         }
@@ -57,11 +67,18 @@ const Form6 = forwardRef(
     return (
       <div className="Container py-4">
         <div className="py-3">
-          <p className="headColor">Authorised Person Address</p>
+          <p className="headColor">Permission for Medias Posting</p>
         </div>
-        <form onSubmit={formik.handleSubmit}>
+        <form
+          onSubmit={formik.handleSubmit}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !formik.isSubmitting) {
+              e.preventDefault(); // Prevent default form submission
+            }
+          }}
+        >
           <div className="row">
-            <div className="col-md-12 col-12 mb-3">
+            {/* <div className="col-md-12 col-12 mb-3">
               <div className="mb-3">
                 <div>
                   <label
@@ -77,7 +94,7 @@ const Form6 = forwardRef(
                   <textarea
                     id="addressOfAuthorisedPerson"
                     name="addressOfAuthorisedPerson"
-                    className="form-control form-control-sm"
+                    className="form-control"
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.addressOfAuthorisedPerson}
@@ -90,18 +107,19 @@ const Form6 = forwardRef(
                     )}
                 </div>
               </div>
-            </div>
-            <div className="col-mb-12 col-12 mb-3">
-              <div className="form-check">
+            </div> */}
+            {/* <div className="d-flex"> */}
+            <div className="col-md-12 col-12 mb-2">
+              <div className="form-check d-flex">
                 <input
                   className="form-check-input mx-2"
-                  id="consentScrapbook"
-                  name="consentScrapbook"
+                  id="agreeConditionOne"
+                  name="agreeConditionOne"
                   type="checkbox"
-                  checked={formik.values.consentScrapbook}
+                  checked={formik.values.agreeConditionOne}
                   onChange={formik.handleChange}
                 />
-                <label className="form-check-label" htmlFor="consentScrapbook">
+                <label className="form-check-label" htmlFor="agreeConditionOne">
                   I hereby provide my consent to Arty Learning Pte Ltd for the
                   display my child’s name, limited to first names and
                   potentially last initials (in cases where there are multiple
@@ -111,48 +129,80 @@ const Form6 = forwardRef(
                   information will be displayed on the company’s website.
                 </label>
               </div>
-            </div>
-            <div className="col-mb-12 col-12 mb-3">
-              <div className="form-check">
-                <input
-                  className="form-check-input mx-2"
-                  id="consentPhotos"
-                  name="consentPhotos"
-                  type="checkbox"
-                  checked={formik.values.consentPhotos}
-                  onChange={formik.handleChange}
-                />
-                <label className="form-check-label" htmlFor="consentPhotos">
-                  I hereby provide my consent to Arty Learning Pte Ltd for the
-                  display my child’s name, limited to first names and
-                  potentially last initials (in cases where there are multiple
-                  children with the same first name), in photos and videos on
-                  arty learning social media pages to Arty Learning Pte Ltd,
-                  which will be shown to the public.
-                </label>
-              </div>
-            </div>
-            <div className="col-mb-12 col-12 mb-3">
-              <div className="form-check">
-                <input
-                  className="form-check-input mx-2"
-                  id="declare"
-                  name="declare"
-                  type="checkbox"
-                  checked={formik.values.declare}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.declare}
-                />
-                <label className="form-check-label" htmlFor="declare">
-                  I agree that the information provided is true to my abilities.
-                </label>
-                {formik.touched.declare && formik.errors.declare && (
-                  <div className="error text-danger ">
-                    <small>{formik.errors.declare}</small>
+              {formik.touched.agreeConditionOne &&
+                formik.errors.agreeConditionOne && (
+                  <div className="error text-danger ms-5">
+                    <small>{formik.errors.agreeConditionOne}</small>
                   </div>
                 )}
+              {/* </div> */}
+              {/* <div className="col-md-11 col-10 mb-3"> */}
+              {/* <div className="form-check"></div> */}
+              {/* </div> */}
+            </div>
+
+            <div className="row">
+              <div className="col-md-12 col-12 mb-2">
+                <div className="form-check d-flex">
+                  <input
+                    className="form-check-input  mx-2"
+                    id="agreeConditionTwo"
+                    name="agreeConditionTwo"
+                    type="checkbox"
+                    checked={formik.values.agreeConditionTwo}
+                    onChange={formik.handleChange}
+                  />
+                  <label
+                    className="form-check-label"
+                    htmlFor="agreeConditionTwo"
+                  >
+                    I hereby provide my consent to Arty Learning Pte Ltd for the
+                    display my child’s name, limited to first names and
+                    potentially last initials (in cases where there are multiple
+                    children with the same first name), in photos and videos on
+                    arty learning social media pages to Arty Learning Pte Ltd,
+                    which will be shown to the public.
+                  </label>
+                </div>
+                {formik.touched.agreeConditionTwo &&
+                  formik.errors.agreeConditionTwo && (
+                    <div className="error text-danger ms-5">
+                      <small>{formik.errors.agreeConditionTwo}</small>
+                    </div>
+                  )}
               </div>
+              {/* <div className="col-md-11 col-10 mb-3">
+    <div className="form-check">
+      
+    </div>
+  </div> */}
+            </div>
+
+            <div className="col-mb-12 col-12 mb-3">
+              <div className="form-check d-flex">
+                <input
+                  className="form-check-input mx-2"
+                  id="agreeConditionThree"
+                  name="agreeConditionThree"
+                  type="checkbox"
+                  checked={formik.values.agreeConditionThree}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.agreeConditionThree}
+                />
+                <label
+                  className="form-check-label"
+                  htmlFor="agreeConditionThree"
+                >
+                  I agree that the information provided is true to my abilities.
+                </label>
+              </div>
+              {formik.touched.agreeConditionThree &&
+                formik.errors.agreeConditionThree && (
+                  <div className="error text-danger ms-5">
+                    <small>{formik.errors.agreeConditionThree}</small>
+                  </div>
+                )}
             </div>
           </div>
         </form>

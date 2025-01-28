@@ -34,7 +34,11 @@ function InvoicePayment() {
   });
   return (
     <div className="container-fluid my-5 minHeight">
-      <form onSubmit={formik.handleSubmit}>
+       <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
+          if (e.key === 'Enter' && !formik.isSubmitting) {
+            e.preventDefault();  // Prevent default form submission
+          }
+        }}>
         <div className="card shadow border-0 minHeight">
           <div className="container">
             <div className="row py-4">
@@ -137,6 +141,7 @@ function InvoicePayment() {
                 <input
                   name="paymentdate"
                   type="date"
+
                   className={`form-select  ${
                     formik.touched.paymentdate && formik.errors.paymentdate
                       ? "is-invalid"

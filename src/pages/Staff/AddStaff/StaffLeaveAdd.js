@@ -1,11 +1,14 @@
-import React, { forwardRef, useImperativeHandle } from "react";
+import React, { forwardRef, useEffect, useImperativeHandle } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 import api from "../../../config/URL";
 
 const validationSchema = Yup.object().shape({
-  year: Yup.string().required("*year is required!"),
+  year: Yup.number()
+    .min(1990, "*Year is required")
+    .max(2050, "*Year is required")
+    .required("*Year is required"),
 
   annualLeave: Yup.string()
     .matches(/^[0-9]+(?:\.[0-9]+)?$/, "*Annual Leave Must be numbers")
@@ -15,13 +18,15 @@ const validationSchema = Yup.object().shape({
     .required("*Medical Leave is required!"),
   otherLeave: Yup.string()
     .matches(/^[0-9]+$/, "*Other Leave Must be numbers")
-    .required("*Other Leave is required!"),
+    .required("*Other Leave is required"),
   carryForwardLeave: Yup.string()
     .matches(/^[0-9]+(?:\.[0-9]+)?$/, "*Carry Forward Leave Must be numbers")
-    .required("*Carry Forward Leave is required!"),
+    .required("*Carry Forward Leave is required"),
 });
 const StaffLeaveAdd = forwardRef(
-  ({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
+  ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
+    const userName = localStorage.getItem("userName");
+
     const formik = useFormik({
       initialValues: {
         year: formData.year,
@@ -29,10 +34,12 @@ const StaffLeaveAdd = forwardRef(
         medicalLeave: formData.medicalLeave,
         otherLeave: formData.otherLeave,
         carryForwardLeave: formData.carryForwardLeave,
+        createdBy: userName,
       },
       validationSchema: validationSchema,
       onSubmit: async (values) => {
         setLoadIndicators(true);
+        values.createdBy = userName;
         try {
           const response = await api.post(
             `/createUserLeaveCreation/${formData.user_id}`,
@@ -51,30 +58,57 @@ const StaffLeaveAdd = forwardRef(
             toast.error(response.data.message);
           }
         } catch (error) {
-          toast.error(error.message);
-        }finally {
+          toast.error(error);
+        } finally {
           setLoadIndicators(false);
         }
       },
+      validateOnChange: false, // Enable validation on change
+      validateOnBlur: true, // Enable validation on blur
     });
+
+    // Function to scroll to the first error field
+    const scrollToError = (errors) => {
+      const errorField = Object.keys(errors)[0]; // Get the first error field
+      const errorElement = document.querySelector(`[name="${errorField}"]`); // Find the DOM element
+      if (errorElement) {
+        errorElement.scrollIntoView({ behavior: "smooth", block: "center" });
+        errorElement.focus(); // Set focus to the error element
+      }
+    };
+
+    // Watch for form submit and validation errors
+    useEffect(() => {
+      if (formik.submitCount > 0 && Object.keys(formik.errors).length > 0) {
+        scrollToError(formik.errors);
+      }
+    }, [formik.submitCount, formik.errors]);
 
     useImperativeHandle(ref, () => ({
       staffLeaveAdd: formik.handleSubmit,
     }));
 
     return (
-      <form onSubmit={formik.handleSubmit}>
+      <form
+        onSubmit={formik.handleSubmit}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && !formik.isSubmitting) {
+            e.preventDefault(); // Prevent default form submission
+          }
+        }}
+      >
         <section>
-          <div className="container" style={{ minHeight: "95vh" }}>
+          <div className="container-fluid" style={{ minHeight: "60vh" }}>
             <p className="headColor my-4">Leave Information</p>
             <div class="row">
-              <div class="col-md-6 col-12 mb-2">
+              {/* <div class="col-md-6 col-12 mb-2">
                 <label>
                   Year<span class="text-danger">*</span>
                 </label>
                 <input
-                  type="date"
-                  class="form-control form-control-sm mt-3"
+                  type="month"
+                  // onFocus={(e)=> e.target.showPicker()}
+                  class="form-control mt-3"
                   name="year"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -85,14 +119,36 @@ const StaffLeaveAdd = forwardRef(
                     <small>{formik.errors.year}</small>
                   </div>
                 )}
+              </div> */}
+              <div className="col-md-6 col-12 mb-2">
+                <label>
+                  Year<span className="text-danger">*</span>
+                </label>
+                <input
+                  type="number"
+                  className="form-control mt-3"
+                  name="year"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.year}
+                  // max={new Date().getFullYear()}
+                  step="1"
+                  placeholder="YYYY"
+                />
+                {formik.touched.year && formik.errors.year && (
+                  <div className="error text-danger">
+                    <small>{formik.errors.year}</small>
+                  </div>
+                )}
               </div>
+
               <div class="col-md-6 col-12 mb-2">
                 <label>
                   Annual Leave<span class="text-danger">*</span>
                 </label>
                 <input
                   type="text"
-                  class="form-control form-control-sm mt-3"
+                  class="form-control    mt-3"
                   name="annualLeave"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -110,7 +166,7 @@ const StaffLeaveAdd = forwardRef(
                 </label>
                 <input
                   type="text"
-                  class="form-control form-control-sm mt-3 "
+                  class="form-control    mt-3 "
                   name="medicalLeave"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -128,7 +184,7 @@ const StaffLeaveAdd = forwardRef(
                 </label>
                 <input
                   type="text"
-                  class="form-control form-control-sm mt-3"
+                  class="form-control    mt-3"
                   name="otherLeave"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -146,7 +202,7 @@ const StaffLeaveAdd = forwardRef(
                 </label>
                 <input
                   type="text"
-                  class="form-control form-control-sm    mt-3"
+                  class="form-control    mt-3"
                   name="carryForwardLeave"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}

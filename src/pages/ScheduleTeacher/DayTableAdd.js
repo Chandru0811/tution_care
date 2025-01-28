@@ -5,33 +5,14 @@ import * as Yup from "yup";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { FaPlusCircle } from "react-icons/fa";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 import api from "../../config/URL";
-import fetchAllStudentListByCenter from "../List/StudentListByCenter";
+// import fetchAllStudentListByCenter from "../List/StudentListByCenter";
+import fetchAllStudentListByCenterAndCourse from "../List/StudentListByCenterAndCourse";
 
-function DayTableAdd({ onSuccess, id, tuitionId, day }) {
+function DayTableAdd({ onSuccess, id, centerId, courseId, day }) {
   const [show, setShow] = useState(false);
-  const [studentData, setStudentData] = useState(false);
-
-  const fetchData = async () => {
-    try {
-      const studentData = await fetchAllStudentListByCenter(tuitionId);
-      setStudentData(studentData);
-    } catch (error) {
-      toast.error(error.message);
-    }
-  };
-
-  useEffect(() => {
-    fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const handleClose = () => {
-    setShow(false);
-    formik.resetForm();
-  };
-  const handleShow = () => setShow(true);
+  const [studentData, setStudentData] = useState([false]);
 
   const validationSchema = Yup.object({
     studentId: Yup.string().required("*Student is required"),
@@ -71,6 +52,30 @@ function DayTableAdd({ onSuccess, id, tuitionId, day }) {
     },
   });
 
+  const fetchData = async () => {
+    try {
+      const studentData = await fetchAllStudentListByCenterAndCourse(
+        centerId,
+        courseId
+      );
+      setStudentData(studentData);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const handleClose = () => {
+    setShow(false);
+    formik.resetForm();
+  };
+
+  const handleShow = () => setShow(true);
+
   return (
     <>
       <button type="button" class="btn text-success fs-4" onClick={handleShow}>
@@ -80,7 +85,14 @@ function DayTableAdd({ onSuccess, id, tuitionId, day }) {
         <Modal.Header closeButton>
           <Modal.Title className="headColor">Assign Student</Modal.Title>
         </Modal.Header>
-        <form onSubmit={formik.handleSubmit}>
+        <form
+          onSubmit={formik.handleSubmit}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !formik.isSubmitting) {
+              e.preventDefault(); // Prevent default form submission
+            }
+          }}
+        >
           <Modal.Body>
             <div className="container">
               <div className="row py-4">
@@ -116,7 +128,11 @@ function DayTableAdd({ onSuccess, id, tuitionId, day }) {
               </div>
             </div>
             <Modal.Footer>
-              <Button type="button" variant="secondary btn-sm" onClick={handleClose}>
+              <Button
+                type="button"
+                className="btn btn-sm btn-border bg-light text-dark"
+                onClick={handleClose}
+              >
                 Cancel
               </Button>
               <Button variant="danger" type="submit">

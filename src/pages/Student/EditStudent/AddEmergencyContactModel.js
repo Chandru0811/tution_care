@@ -2,7 +2,7 @@ import React, { forwardRef, useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import api from "../../../config/URL";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 
@@ -13,6 +13,13 @@ const validationSchema = Yup.object().shape({
   postalCode: Yup.string()
     .matches(/^\d+$/, "Invalid Phone Number")
     .notRequired(""),
+  files: Yup.mixed()
+    .notRequired()
+    .test(
+      "max-file-name-length",
+      "*File name must be at most 50 characters",
+      (value) => !value || (value.name && value.name.length <= 50)
+    ),
 });
 
 const AddEmergencyContactModel = forwardRef(
@@ -20,6 +27,7 @@ const AddEmergencyContactModel = forwardRef(
     const [show, setShow] = useState(false);
     const [data, setData] = useState([]);
     const [loadIndicator, setLoadIndicator] = useState(false);
+    const userName = localStorage.getItem("userName");
 
     const handleClose = () => setShow(false);
     const handleShow = () => {
@@ -63,6 +71,7 @@ const AddEmergencyContactModel = forwardRef(
             );
             formDatas.append("files", data.files);
             formDatas.append("deleteEmergencyAuthorizedContactIds ", 1);
+            formDatas.append("createdBy ", userName);
           });
           const response = await api.put(
             `/updateEmergencyContactWithEmergencyAuthorizedContact/${emergencyId}`,
@@ -123,12 +132,15 @@ const AddEmergencyContactModel = forwardRef(
         // formik.setValues(response.data || "");
         // console.log("getAllStudentEmergencyContactsById",EmergencyData);
       } catch (error) {
-        console.error("Error fetching data:", error.message);
+        console.error("Error fetching data:", error);
       }
     };
 
     useEffect(() => {
       fetchEmergencyData();
+    }, []);
+    useEffect(() => {
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
     }, []);
 
     return (
@@ -148,7 +160,14 @@ const AddEmergencyContactModel = forwardRef(
             centered
             onHide={handleClose}
           >
-            <form onSubmit={formik.handleSubmit}>
+            <form
+              onSubmit={formik.handleSubmit}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !formik.isSubmitting) {
+                  e.preventDefault(); // Prevent default form submission
+                }
+              }}
+            >
               <Modal.Header closeButton>
                 <Modal.Title>
                   <p className="headColor">
@@ -162,7 +181,7 @@ const AddEmergencyContactModel = forwardRef(
                     <lable className="form-lable">Name</lable>
                     <div className="input-group mb-3">
                       <input
-                        className="form-control form-control-sm "
+                        className="form-control "
                         type="text"
                         name="name"
                         onChange={formik.handleChange}
@@ -174,7 +193,7 @@ const AddEmergencyContactModel = forwardRef(
                   <div className="col-md-6 col-12 mb-2">
                     <lable className="">Contact No</lable>
                     <input
-                      className="form-control form-control-sm "
+                      className="form-control "
                       type="text"
                       name="contactNo"
                       onChange={formik.handleChange}
@@ -202,7 +221,7 @@ const AddEmergencyContactModel = forwardRef(
                   <div className="col-md-6 col-12 mb-2">
                     <lable className="">Postal Code</lable>
                     <input
-                      className="form-control form-control-sm "
+                      className="form-control "
                       type="text"
                       name="postalCode"
                       onChange={formik.handleChange}
@@ -215,7 +234,7 @@ const AddEmergencyContactModel = forwardRef(
                       Address<span className="text-danger">*</span>
                     </lable>
                     <textarea
-                      className="form-control form-control-sm "
+                      className="form-control "
                       type="text"
                       name="emergencyContactAddress"
                       onChange={formik.handleChange}
@@ -229,7 +248,7 @@ const AddEmergencyContactModel = forwardRef(
                     </label>
                     <br />
                     <input
-                      className="form-control form-control-sm"
+                      className="form-control"
                       type="file"
                       name="files"
                       onChange={(event) => {
@@ -238,11 +257,19 @@ const AddEmergencyContactModel = forwardRef(
                       onBlur={formik.handleBlur}
                       accept=".jpg, .jpeg, .png"
                     />
+                     {formik.touched.files && formik.errors.files && (
+                    <div className="error text-danger">
+                      <small>{formik.errors.files}</small>
+                    </div>
+                  )}
                   </div>
                 </div>
               </Modal.Body>
               <Modal.Footer className="mt-3">
-                <Button variant="secondary btn-sm" onClick={handleClose}>
+                <Button
+                  className="btn btn-sm btn-border bg-light text-dark"
+                  onClick={handleClose}
+                >
                   Cancel
                 </Button>
                 <Button

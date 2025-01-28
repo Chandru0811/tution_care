@@ -1,8 +1,8 @@
-import React, { forwardRef, useImperativeHandle } from "react";
+import React, { forwardRef, useEffect, useImperativeHandle } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import api from "../../../../config/URL";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 
 const validationSchema = Yup.object().shape({
   pencilGrip: Yup.string().required("*Select Pencil Grip"),
@@ -16,6 +16,8 @@ const validationSchema = Yup.object().shape({
 
 const Form2 = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
+    console.log("formData", formData);
+    const userName = localStorage.getItem("userName");
     const formik = useFormik({
       initialValues: {
         pencilGrip: formData.pencilGrip || "",
@@ -25,10 +27,12 @@ const Form2 = forwardRef(
         writeLowerAToZ: formData.writeLowerAToZ || "",
         soundOfAToZ: formData.soundOfAToZ || "",
         canReadSimpleSentence: formData.canReadSimpleSentence,
+        createdBy: userName,
       },
       validationSchema: validationSchema,
       onSubmit: async (data) => {
         setLoadIndicators(true);
+        data.createdBy = userName;
         const uppercase = data.writeUpperAToZ === "Yes" ? true : false;
         const lowercase = data.writeLowerAToZ === "Yes" ? true : false;
         const sound = data.soundOfAToZ === "Yes" ? true : false;
@@ -59,12 +63,31 @@ const Form2 = forwardRef(
             toast.error(response.data.message);
           }
         } catch (error) {
-          toast.error(error.message);
+          toast.error(error);
         } finally {
           setLoadIndicators(false);
         }
       },
+      validateOnChange: false, // Enable validation on change
+      validateOnBlur: true, // Enable validation on blur
     });
+
+    // Function to scroll to the first error field
+    const scrollToError = (errors) => {
+      const errorField = Object.keys(errors)[0]; // Get the first error field
+      const errorElement = document.querySelector(`[name="${errorField}"]`); // Find the DOM element
+      if (errorElement) {
+        errorElement.scrollIntoView({ behavior: "smooth", block: "center" });
+        errorElement.focus(); // Set focus to the error element
+      }
+    };
+
+    // Watch for form submit and validation errors
+    useEffect(() => {
+      if (formik.submitCount > 0 && Object.keys(formik.errors).length > 0) {
+        scrollToError(formik.errors);
+      }
+    }, [formik.submitCount, formik.errors]);
 
     useImperativeHandle(ref, () => ({
       form2: formik.handleSubmit,
@@ -72,7 +95,14 @@ const Form2 = forwardRef(
 
     return (
       <section>
-        <form onSubmit={formik.handleSubmit}>
+        <form
+          onSubmit={formik.handleSubmit}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !formik.isSubmitting) {
+              e.preventDefault(); // Prevent default form submission
+            }
+          }}
+        >
           <div className="container">
             <div className="row px-1">
               <div className="py-3">
@@ -85,13 +115,13 @@ const Form2 = forwardRef(
                 </label>
                 <div className="input-group">
                   <select
-                    className="form-select form-select-sm"
+                    className="form-select"
                     name="pencilGrip"
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.pencilGrip}
                   >
-                    <option selected>--Select--</option>
+                    <option selected></option>
                     <option value="Steady">Steady</option>
                     <option value="Loose">Loose</option>
                     {/* <option value="Unable">Unable</option> */}
@@ -111,13 +141,13 @@ const Form2 = forwardRef(
                   </label>
                   <div className="input-group ">
                     <select
-                      className="form-select form-select-sm"
+                      className="form-select"
                       name="writing"
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
                       value={formik.values.writing}
                     >
-                      <option selected>--Select--</option>
+                      <option selected></option>
                       <option value="Straight & Firm Lines">
                         Straight & Firm Lines
                       </option>
@@ -142,13 +172,13 @@ const Form2 = forwardRef(
                   </label>
                   <div className="input-group ">
                     <select
-                      className="form-select form-select-sm"
+                      className="form-select"
                       name="recognizeAToZ"
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
                       value={formik.values.recognizeAToZ}
                     >
-                      <option selected>--Select--</option>
+                      <option selected></option>
                       <option value="Uppercase">Uppercase</option>
                       <option value="Lowercase">Lowercase</option>
                       <option value="Both">Both</option>

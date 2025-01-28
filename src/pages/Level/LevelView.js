@@ -1,10 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import api from "../../config/URL";
+import fetchAllSubjectsWithIds from "../List/SubjectList";
+import { toast } from "react-toastify";
 
 export default function LevelView() {
   const { id } = useParams();
   const [data, setData] = useState([]);
+  const [subjectData, setSubjectData] = useState(null);
+
+  const fetchData = async () => {
+    try {
+      const subjectData = await fetchAllSubjectsWithIds();
+      setSubjectData(subjectData);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
 
   useEffect(() => {
     const getData = async () => {
@@ -12,37 +24,79 @@ export default function LevelView() {
         const response = await api.get(`/getAllCourseLevels/${id}`);
         setData(response.data);
       } catch (error) {
-        console.error("Error fetching data ", error.message);
+        console.error("Error fetching data ", error);
       }
     };
     getData();
+    fetchData();
   }, [id]);
 
   return (
-    <div className="container-fluid center">
-      <div className="card shadow border-0 mb-2 top-header">
-        <div className="container-fluid py-4">
-          <div className="row align-items-center">
-            <div className="col">
-              <div className="d-flex align-items-center gap-4">
-                <h2 className="h2 ls-tight headingColor">View Level</h2>
-              </div>
+    <div className="container-fluid">
+      <ol
+        className="breadcrumb my-3 px-2"
+        style={{ listStyle: "none", padding: 0, margin: 0 }}
+      >
+        <li>
+          <Link to="/" className="custom-breadcrumb">
+            Home
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          &nbsp;Course Management
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          <Link to="/level" className="custom-breadcrumb">
+            &nbsp;Level
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li className="breadcrumb-item active" aria-current="page">
+          &nbsp;Level View
+        </li>
+      </ol>
+
+      <div className="card">
+        <div
+          className="d-flex px-4 justify-content-between align-items-center p-1 mb-4"
+          style={{ background: "#f5f7f9" }}
+        >
+          <div class="d-flex align-items-center">
+            <div class="d-flex">
+              <div class="dot active"></div>
             </div>
-            <div className="col-auto">
-              <div className="hstack gap-2 justify-content-end">
-                <Link to="/level">
-                  <button type="submit" className="btn btn-sm btn-light">
-                    <span>Back</span>
-                  </button>
-                </Link>
-              </div>
-            </div>
+            <span class="me-2 text-muted">View Level</span>
+          </div>
+          <div className="my-2 pe-3 d-flex align-items-center">
+            <Link to="/level">
+              <button type="button " className="btn btn-sm btn-border   ">
+                Back
+              </button>
+            </Link>
           </div>
         </div>
-      </div>
-      <div className="card shadow border-0 mb-2" style={{height:"70vh"}}>
-        <div className="container p-5">
-          <div className="row mt-5 ">
+        <div className="container-fluid px-4">
+          <div className="row mt-2 pb-3">
+            <div className="col-md-6 col-12">
+              <div className="row  mb-2">
+                <div className="col-6  ">
+                  <p className="fw-medium">Subject</p>
+                </div>
+                <div className="col-6">
+                  <p className="text-muted text-sm">
+                    :{" "}
+                    {subjectData &&
+                      subjectData.map((subjectId) =>
+                        parseInt(data.subjectId) === subjectId.id
+                          ? subjectId.subjects || "--"
+                          : ""
+                      )}
+                  </p>
+                </div>
+              </div>
+            </div>
             <div className="col-md-6 col-12">
               <div className="row   mb-2">
                 <div className="col-6 ">

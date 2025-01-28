@@ -3,7 +3,7 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { FaCircleExclamation } from "react-icons/fa6";
 import api from "../../config/URL";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 
 function BlockTimeSlot({ onSuccess, id }) {
   const [show, setShow] = useState(false);
@@ -31,7 +31,7 @@ function BlockTimeSlot({ onSuccess, id }) {
         toast.error(response.data.message);
       }
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error);
     }
   };
   return (
@@ -46,7 +46,10 @@ function BlockTimeSlot({ onSuccess, id }) {
         </Modal.Header>
         <Modal.Body>Are you sure you want to Block the Slot?</Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary btn-sm" onClick={handleClose}>
+          <Button
+            className="btn btn-sm btn-border bg-light text-dark"
+            onClick={handleClose}
+          >
             Close
           </Button>
           <Button variant="danger" onClick={handelBlock}>

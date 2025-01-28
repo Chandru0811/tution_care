@@ -10,7 +10,12 @@ function StudentChangeClass() {
     lastLessonDate: Yup.string().required("*Select a Last Lesson Date"),
     preferStartDate: Yup.date().required("*Prefer Start Date is required"),
     reason: Yup.string().required("*Select a Reason"),
-    centerRemark: Yup.string().required("*Centre Remark is required"),
+    centerRemark: Yup.string()
+      .required("*Leave Reason is required")
+      .max(200, "*The maximum length is 200 characters"),
+    parentRemark: Yup.string()
+      .notRequired("*Leave Reason is required")
+      .max(200, "*The maximum length is 200 characters"),
   });
 
   const formik = useFormik({
@@ -35,19 +40,23 @@ function StudentChangeClass() {
 
   return (
     <div className="container">
-      <form onSubmit={formik.handleSubmit}>
+       <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
+          if (e.key === 'Enter' && !formik.isSubmitting) {
+            e.preventDefault();  // Prevent default form submission
+          }
+        }}>
         <div className="my-3 d-flex justify-content-end align-items-end  mb-5">
-          <Link to="/studentlisting">
+          <Link to="/student/view">
             <button type="button" className="btn btn-sm btn-border">
               Back
             </button>
           </Link>
           &nbsp;&nbsp;
-          <Link to="/studentlisting"> 
+          {/* {/ <Link to="/student"> /} */}
           <button type="submit" className="btn btn-button btn-sm ">
             Save
           </button>
-           </Link> 
+          {/* {/ </Link> /} */}
         </div>
         <div className="container">
           <div className="row py-4">
@@ -150,6 +159,7 @@ function StudentChangeClass() {
               </label>
               <input
                 type="date"
+                onFocus={(e) => e.target.showPicker()}
                 class={`form-control  ${
                   formik.touched.preferStartDate &&
                   formik.errors.preferStartDate

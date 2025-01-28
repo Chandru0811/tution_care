@@ -1,30 +1,44 @@
-import React, { forwardRef, useEffect, useImperativeHandle } from "react";
+import React, {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useState,
+} from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import api from "../../../config/URL";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 
 const validationSchema = Yup.object().shape({
-  email: Yup.string().email("*Invalid Email").required("*Email is required!"),
+  // email: Yup.string()
+  //   .email('Invalid email format')
+  //   // .matches(/^[a-zA-Z0-9._%+-]+@gmail\.com$/, 'Invalid Email')
+  //   .required('Email is required'),
   contactNumber: Yup.string()
     .matches(
       /^(?:\+?65)?\s?(?:\d{4}\s?\d{4}|\d{3}\s?\d{3}\s?\d{4})$/,
       "*Invalid Phone Number"
     )
-    .required("*Contact Number is required!"),
-  address: Yup.string().required("*Address is required!"),
+    .required("*Contact Number is required"),
+  address: Yup.string().required("*Address is required"),
   postalCode: Yup.string()
     .matches(/^[0-9]+$/, "*Postal Code Must be numbers")
-    .required("*Postal Code is required!"),
+    .required("*Postal Code is required"),
 });
+
 const StaffContactEdit = forwardRef(
-  ({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
+  ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
+    console.log("form", formData);
+    const userName = localStorage.getItem("userName");
+    const [datas, setDatas] = useState();
+
     const formik = useFormik({
       initialValues: {
-        email: "",
+        // email: "",
         contactNumber: "",
         address: "",
         postalCode: "",
+        updatedBy: userName,
       },
       validationSchema: validationSchema,
       // onSubmit: async (data) => {
@@ -51,6 +65,7 @@ const StaffContactEdit = forwardRef(
       // },
       onSubmit: async (values) => {
         setLoadIndicators(true);
+        values.updatedBy = userName;
         // console.log("Api Data:", values);
         try {
           if (values.contactId !== null) {
@@ -63,7 +78,7 @@ const StaffContactEdit = forwardRef(
                 },
               }
             );
-            if (response.status === 200) {
+            if (response.status === 200 || response.status === 201) {
               toast.success(response.data.message);
               setFormData((prv) => ({ ...prv, ...values }));
               handleNext();
@@ -80,7 +95,7 @@ const StaffContactEdit = forwardRef(
                 },
               }
             );
-            if (response.status === 201) {
+            if (response.status === 201 || response.status === 200) {
               toast.success(response.data.message);
               setFormData((prv) => ({ ...prv, ...values }));
               handleNext();
@@ -89,8 +104,15 @@ const StaffContactEdit = forwardRef(
             }
           }
         } catch (error) {
-          toast.error(error.message);
-        }finally{
+          if (error?.response?.status === 409) {
+            toast.warning(error?.response?.data?.message);
+          } else {
+            toast.error(
+              "Error Submiting data ",
+              error?.response?.data?.message
+            );
+          }
+        } finally {
           setLoadIndicators(false);
         }
       },
@@ -113,12 +135,13 @@ const StaffContactEdit = forwardRef(
       const getData = async () => {
         try {
           const response = await api.get(
-            `/getAllUsersById/${formData.staff_id}`
+            `/getAllUserById/${formData.staff_id}`
           );
           if (
             response.data.userContactInfo &&
             response.data.userContactInfo.length > 0
           ) {
+            setDatas(response.data.userContactInfo[0]);
             formik.setValues({
               ...response.data.userContactInfo[0],
               contactId: response.data.userContactInfo[0].id,
@@ -126,7 +149,7 @@ const StaffContactEdit = forwardRef(
           } else {
             formik.setValues({
               contactId: null,
-              email: "",
+              // email: "",
               contactNumber: "",
               address: "",
               postalCode: "",
@@ -148,36 +171,46 @@ const StaffContactEdit = forwardRef(
     }));
 
     return (
-      <form onsubmit={formik.handleSubmit}>
+      <form
+        onSubmit={formik.handleSubmit}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && !formik.isSubmitting) {
+            e.preventDefault(); // Prevent default form submission
+          }
+        }}
+      >
         <section>
-          <div className="container">
+          <div className="container-fluid">
             <p className="headColor my-4">Contact Information</p>
             <div class="row">
-              <div class="col-md-6 col-12 mb-2 mt-3">
+              {/* <div class="col-md-6 col-12 mb-2 mt-3">
                 <label>
                   Email Id<span class="text-danger">*</span>
                 </label>
+
                 <input
                   type="email"
-                  className="form-control form-control-sm"
+                  className="form-control"
                   name="email"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   value={formik.values.email}
-                />
+                  readOnly={datas?.email}                
+                   />
                 {formik.touched.email && formik.errors.email && (
                   <div className="error text-danger ">
                     <small>{formik.errors.email}</small>
                   </div>
                 )}
-              </div>
+              </div> */}
+
               <div class="col-md-6 col-12 mb-2 mt-3">
                 <label>
                   Contact Number<span class="text-danger">*</span>
                 </label>
                 <input
                   type="text"
-                  className="form-control form-control-sm"
+                  className="form-control"
                   name="contactNumber"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -196,7 +229,7 @@ const StaffContactEdit = forwardRef(
                 </label>
                 <textarea
                   type="text"
-                  className="form-control form-control-sm"
+                  className="form-control"
                   name="address"
                   rows="3"
                   onChange={formik.handleChange}
@@ -215,7 +248,7 @@ const StaffContactEdit = forwardRef(
                 </label>
                 <input
                   type="text"
-                  className="form-control form-control-sm"
+                  className="form-control"
                   name="postalCode"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}

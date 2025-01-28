@@ -1,17 +1,15 @@
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 import api from "../../config/URL";
 
 
 const fetchAllEmployeeListByCenter = async (id) => {
   try {
-    console.log("id",id)
-    const response = await api.get(`getUserListByTuitionId/${id}`);
-
+    const response = await api.get(`getUserListByCenterId/${id}`);
     return response.data;
   } catch (error) {
-    toast.error("Error fetching Employee data:", error.message);
+    toast.error(error);
     throw error;
   }
- 
 };
+
 export default fetchAllEmployeeListByCenter;

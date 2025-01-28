@@ -1,160 +1,356 @@
-import React, { useEffect, useRef, useState } from "react";
-import "datatables.net-dt";
-import "datatables.net-responsive-dt";
-import $ from "jquery";
-import { Link } from "react-router-dom";
-import { FaEye } from "react-icons/fa";
+import React, { useEffect, useMemo, useState } from "react";
+import {
+  ThemeProvider,
+  createTheme,
+  Menu,
+  MenuItem,
+  IconButton,
+} from "@mui/material";
+import { Link, useNavigate } from "react-router-dom";
 import SubjectAdd from "./SubjectAdd";
 import SubjectEdit from "./SubjectEdit";
 import api from "../../config/URL";
 import { SCREENS } from "../../config/ScreenFilter";
-import toast from "react-hot-toast";
-import Delete from "../../components/common/DeleteModel";
+import { MoreVert as MoreVertIcon } from "@mui/icons-material";
+import { MaterialReactTable } from "material-react-table";
+import GlobalDelete from "../../components/common/GlobalDelete";
 
 const Subject = () => {
-  const tableRef = useRef(null);
-
-  const [datas, setDatas] = useState([]);
+  const [filters, setFilters] = useState({
+    subject: "",
+    code: "",
+  });
+  const navigate = useNavigate();
+  const [allData, setAllData] = useState([]);
+  const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [menuAnchor, setMenuAnchor] = useState(null);
+  const [selectedId, setSelectedId] = useState(null);
+  const centerId = localStorage.getItem("centerId");
+  const centerName = localStorage.getItem("centerName");
 
-  const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
+  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
   console.log("Screens : ", SCREENS);
 
+  const columns = useMemo(
+    () => [
+      {
+        accessorFn: (row, index) => index + 1,
+        header: "S.NO",
+        enableSorting: true,
+        enableHiding: false,
+        size: 40,
+        cell: ({ cell }) => (
+          <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
+        ),
+      },
+      {
+        accessorKey: "id",
+        header: "",
+        enableHiding: false,
+        enableSorting: false,
+        size: 20,
+        Cell: ({ cell }) => (
+          <IconButton
+            onClick={(e) => {
+              e.stopPropagation();
+              setMenuAnchor(e.currentTarget);
+              setSelectedId(cell.getValue());
+            }}
+          >
+            <MoreVertIcon />
+          </IconButton>
+        ),
+      },
+      {
+        accessorKey: "status",
+        enableHiding: false,
+        header: "Status",
+        Cell: ({ row }) =>
+          row.original.status === "ACTIVE" ||
+          row.original.status === "active" ||
+          row.original.status === "Active" ? (
+            <span
+              className="badge badges-Green fw-light"
+              // style={{ backgroundColor: "#287f71" }}
+            >
+              Active
+            </span>
+          ) : row.original.status === "In Active" ||
+            row.original.status === "Inactive" ||
+            row.original.status === "string" ? (
+            <span
+              className="badge badges-orange fw-light"
+              // style={{ backgroundColor: "#eb862a" }}
+            >
+              In Active
+            </span>
+          ) : null,
+      },
+      { accessorKey: "subject", enableHiding: false, header: "Subject" },
+      {
+        accessorKey: "code",
+        enableHiding: false,
+        header: "Subject Code",
+      },
+
+      {
+        accessorKey: "createdBy",
+        header: "Created By",
+        Cell: ({ cell }) => cell.getValue() || "",
+      },
+      {
+        accessorKey: "createdAt",
+        header: "Created At",
+        Cell: ({ cell }) => cell.getValue()?.substring(0, 10),
+      },
+      {
+        accessorKey: "updatedAt",
+        header: "Updated At",
+        Cell: ({ cell }) => cell.getValue()?.substring(0, 10) || "",
+      },
+      {
+        accessorKey: "updatedBy",
+        header: "Updated By",
+        Cell: ({ cell }) => cell.getValue() || "",
+      },
+    ],
+    []
+  );
+
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      const response = await api.get(`/getCourseSubjectsByCenterId/${centerId}`);
+      setAllData(response.data);
+      setData(response.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const getData = async () => {
-      try {
-        const response = await api.get("/getAllCourseSubjects");
-        setDatas(response.data);
-        setLoading(false);
-      } catch (error) {
-        toast.error("Error Fetching Data ", error.message);
-      }
-    };
-    getData();
+    fetchData();
   }, []);
 
-  useEffect(() => {
-    if (!loading) {
-      initializeDataTable();
-    }
-    return () => {
-      destroyDataTable();
-    };
-  }, [loading]);
+  const theme = createTheme({
+    components: {
+      MuiTableCell: {
+        styleOverrides: {
+          head: {
+            color: "#535454 !important",
+            backgroundColor: "#e6edf7 !important",
+            fontWeight: "400 !important",
+            fontSize: "13px !important",
+            textAlign: "center !important",
+          },
+        },
+      },
+      // Switch (Toggle button) customization
+      MuiSwitch: {
+        styleOverrides: {
+          root: {
+            "&.Mui-disabled .MuiSwitch-track": {
+              backgroundColor: "#f5e1d0", // Track color when disabled
+              opacity: 1, // Ensures no opacity reduction
+            },
+            "&.Mui-disabled .MuiSwitch-thumb": {
+              color: "#eb862a", // Thumb (circle) color when disabled
+            },
+          },
+          track: {
+            backgroundColor: "#e0e0e0", // Default track color
+          },
+          thumb: {
+            color: "#eb862a", // Default thumb color
+          },
+          switchBase: {
+            "&.Mui-checked": {
+              color: "#eb862a", // Thumb color when checked
+            },
+            "&.Mui-checked + .MuiSwitch-track": {
+              backgroundColor: "#eb862a", // Track color when checked
+            },
+          },
+        },
+      },
+    },
+  });
 
-  const initializeDataTable = () => {
-    if ($.fn.DataTable.isDataTable(tableRef.current)) {
-      // DataTable already initialized, no need to initialize again
-      return;
-    }
-    $(tableRef.current).DataTable({
-      responsive: true,
+  useEffect(() => {
+    const filteredData = allData.filter((item) => {
+      const subjectMatch = filters.subject
+        ? item.subject?.toLowerCase().includes(filters.subject.toLowerCase())
+        : true;
+
+      const codeMatch = filters.code
+        ? item.code?.toLowerCase().includes(filters.code.toLowerCase())
+        : true;
+
+      return subjectMatch && codeMatch;
+    });
+
+    setData(filteredData);
+  }, [filters, allData]);
+
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      [name]: value,
+    }));
+  };
+
+  const clearFilter = () => {
+    setFilters({
+      subject: "",
+      code: "",
     });
   };
 
-  const destroyDataTable = () => {
-    const table = $(tableRef.current).DataTable();
-    if (table && $.fn.DataTable.isDataTable(tableRef.current)) {
-      table.destroy();
-    }
-  };
-
-  const refreshData = async () => {
-    destroyDataTable();
-    setLoading(true);
-    try {
-      const response = await api.get("/getAllCourseSubjects");
-      setDatas(response.data);
-      initializeDataTable(); // Reinitialize DataTable after successful data update
-    } catch (error) {
-      console.error("Error refreshing data:", error.message);
-    }
-    setLoading(false);
-  };
+  const handleMenuClose = () => setMenuAnchor(null);
 
   return (
-    <div>
-      {loading ? (
-        <div className="loader-container">
-          <div class="loading">
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
+    <div className="container-fluid my-4 center">
+      <ol
+        className="breadcrumb my-3 px-1"
+        style={{ listStyle: "none", padding: 0, margin: 0 }}
+      >
+        <li>
+          <Link to="/" className="custom-breadcrumb">
+            Home
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          &nbsp;Course Management
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li className="breadcrumb-item active" aria-current="page">
+          &nbsp;Subject
+        </li>
+      </ol>
+
+      <div className="card">
+        <div
+          className="mb-3 d-flex justify-content-between align-items-center p-1"
+          style={{ background: "#f5f7f9" }}
+        >
+          <div class="d-flex align-items-center">
+            <div class="d-flex">
+              <div class="dot active"></div>
+            </div>
+            <span class="me-2 text-muted">
+              This database shows the list of{" "}
+              <span className="bold" style={{ color: "#287f71" }}>
+                Subject
+              </span>
+            </span>
           </div>
         </div>
-      ) : (
-        <div className="container-fluid  center">
-          <div className="card shadow border-0 mb-2 top-header minHeight">
-            <div className="container-fluid px-0">
-              <div className="my-3 d-flex justify-content-between mb-5 px-4">
-              <h2>Subject</h2>
-                 {storedScreens?.subjectCreate && ( 
-                
-                <SubjectAdd onSuccess={refreshData} />
-                 )}
-              </div>
-              <hr />
-              <div className="table-responsiv px-4">
-                <table ref={tableRef} className="display ">
-                  <thead>
-                    <tr>
-                      <th scope="col" style={{ whiteSpace: "nowrap" }}>
-                        S No
-                      </th>
-                      <th scope="col">Subject</th>
-                      <th scope="col">Subject Code</th>
-                      <th scope="col">Status</th>
-
-                      <th scope="col">Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {datas.map((data, index) => (
-                      <tr key={index}>
-                        <th scope="row">{index + 1}</th>
-                        <td>{data.subject}</td>
-                        <td>{data.code}</td>
-                        <td>
-                          {" "}
-                          {data.status === "Active" ? (
-                            <span className="badge badges-Green">Active</span>
-                          ) : (
-                            <span className="badge badges-Red">Inactive</span>
-                          )}
-                        </td>
-                        <td>
-                          <div className="d-flex">
-                            {storedScreens?.subjectRead && ( 
-                            <Link to={`/subject/view/${data.id}`}>
-                              <button className="btn btn-sm">
-                                <FaEye />
-                              </button>
-                            </Link>
-                           )} 
-
-                            {storedScreens?.subjectUpdate && ( 
-                            <SubjectEdit id={data.id} onSuccess={refreshData} />
-                          )} 
-
-                            {storedScreens?.subjectDelete && ( 
-                            <Delete
-                              onSuccess={refreshData}
-                              path={`/deleteCourseSubject/${data.id}`}
-                            />
-                          )}
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+        <div className="mb-3 d-flex justify-content-between">
+          <div className="individual_fliters d-lg-flex ">
+            <div className="form-group mb-0 ms-2 mb-1">
+              <input
+                type="text"
+                className="form-control form-control-sm center_list"
+                style={{ width: "160px" }}
+                placeholder="Subject"
+                name="subject"
+                value={filters.subject}
+                onChange={handleFilterChange}
+              />
+            </div>
+            <div className="form-group mb-0 ms-2 mb-1">
+              <input
+                type="text"
+                className="form-control form-control-sm center_list"
+                style={{ width: "160px" }}
+                placeholder="Subject Code"
+                name="code"
+                value={filters.code}
+                onChange={handleFilterChange}
+              />
+            </div>
+            <div className="form-group mb-0 ms-2 mb-1 ">
+              <button
+                type="button"
+                className="btn btn-sm btn-border"
+                onClick={clearFilter}
+              >
+                Clear
+              </button>
             </div>
           </div>
+          {storedScreens?.subjectCreate && (
+            <div className="d-flex justify-content-end align-items-center me-2">
+              <span>
+                <SubjectAdd onSuccess={fetchData} />
+              </span>
+            </div>
+          )}
         </div>
-      )}
+
+        {loading ? (
+          <div className="loader-container">
+            <div class="loading">
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </div>
+        ) : (
+          <>
+            <ThemeProvider theme={theme}>
+              <MaterialReactTable
+                columns={columns}
+                data={data}
+                enableColumnActions={false}
+                enableColumnFilters={false}
+                enableDensityToggle={false}
+                enableFullScreenToggle={false}
+                initialState={{
+                  columnVisibility: {
+                    createdBy: false,
+                    createdAt: false,
+                    updatedBy: false,
+                    updatedAt: false,
+                  },
+                }}
+              />
+            </ThemeProvider>
+
+            <Menu
+              id="action-menu"
+              anchorEl={menuAnchor}
+              open={Boolean(menuAnchor)}
+              onClose={handleMenuClose}
+            >
+              {/* <MenuItem onClick={() => navigate(`/subject/view/${selectedId}`)}>
+                View
+              </MenuItem> */}
+              <MenuItem>
+                <SubjectEdit
+                  onSuccess={fetchData}
+                  id={selectedId}
+                  handleMenuClose={handleMenuClose}
+                />
+              </MenuItem>
+              <MenuItem>
+                <GlobalDelete
+                  path={`/deleteCourseSubject/${selectedId}`}
+                  onDeleteSuccess={fetchData}
+                  onOpen={handleMenuClose}
+                />
+              </MenuItem>
+            </Menu>
+          </>
+        )}
+      </div>
     </div>
   );
 };

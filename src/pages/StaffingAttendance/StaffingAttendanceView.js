@@ -3,7 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import api from "../../config/URL";
 import fetchAllCentersWithIds from "../List/CenterList";
 import fetchAllTeachersWithIds from "../List/TeacherList";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 
 function StaffingAttendanceView() {
   const [data, setData] = useState([]);
@@ -19,7 +19,7 @@ function StaffingAttendanceView() {
       setCenterData(centerData);
       setTeacherData(teacherData);
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error);
     }
   };
 
@@ -29,42 +29,67 @@ function StaffingAttendanceView() {
         const response = await api.get(`/getUserAttendanceById/${id}`);
         setData(response.data);
       } catch (error) {
-        console.error("Error fetching data:", error.message);
+        console.error("Error fetching data:", error);
       }
     };
     getData();
     fetchData();
   }, []);
 
+  const formatTimeTo12Hour = (time) => {
+    if (!time) return "--";
+    const [hours, minutes] = time.split(":");
+    const period = hours >= 12 ? "PM" : "AM";
+    const formattedHours = hours % 12 || 12;
+    return `${formattedHours}:${minutes} ${period}`;
+  };
+
   return (
-    <div className="container ">
-      <div className="card shadow border-0 mb-2 top-header">
-        <div className="container-fluid py-4">
-          <div className="row align-items-center">
-            <div className="col">
-              <div className="d-flex align-items-center gap-4">
-                <h2 className="h2 ls-tight headingColor">
-                  Staffing Attendance
-                </h2>
-              </div>
+    <div className="container-fluid">
+      <ol
+        className="breadcrumb my-3"
+        style={{ listStyle: "none", padding: 0, margin: 0 }}
+      >
+        <li>
+          <Link to="/" className="custom-breadcrumb">
+            Home
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          Staffing
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          <Link to="/staffing/attendance" className="custom-breadcrumb">
+            Attendance
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li className="breadcrumb-item active" aria-current="page">
+          Attendance View
+        </li>
+      </ol>
+      <div className="card">
+        <div
+          className="d-flex px-4 justify-content-between align-items-center p-1 mb-4"
+          style={{ background: "#f5f7f9" }}
+        >
+          <div class="d-flex align-items-center">
+            <div class="d-flex">
+              <div class="dot active"></div>
             </div>
-            <div className="col-auto">
-              <div className="hstack gap-2 justify-content-end">
-                <Link to="/staffing/attendance">
-                  <button type="submit" className="btn btn-sm btn-light">
-                    <span>Back</span>
-                  </button>
-                </Link>
-              </div>
-            </div>
+            <span class="me-2 text-muted">View Attendance</span>
+          </div>
+          <div className="my-2 pe-3 d-flex align-items-center">
+            <Link to="/staffing/attendance">
+              <button type="button " className="btn btn-sm btn-border   ">
+                Back
+              </button>
+            </Link>
           </div>
         </div>
-      </div>
-      <div>
-        <div
-          className="container card shadow border-0 mb-2 top-header"
-          style={{ height: "70vh" }}
-        >
+        <div className="container-fluid">
           <div className="row mt-5 pb-3">
             <div className="col-md-6 col-12">
               <div className="row    mb-2">
@@ -76,7 +101,7 @@ function StaffingAttendanceView() {
                     :{" "}
                     {centerData &&
                       centerData.map((centerId) =>
-                        parseInt(data.tuitionId) === centerId.id
+                        parseInt(data.centerId) === centerId.id
                           ? centerId.centerNames || "--"
                           : ""
                       )}
@@ -118,28 +143,46 @@ function StaffingAttendanceView() {
                 </div>
               </div>
             </div>
+
+            <div className="col-md-6 col-12">
+              <div className="row    mb-2">
+                <div className="col-6 ">
+                  <p className="fw-medium">Mode Of Working</p>
+                </div>
+                <div className="col-6">
+                  <p className="text-muted text-sm">
+                    : {(data.modeOfWorking || "--").replace(/_/g, " ")}
+                  </p>
+                </div>
+              </div>
+            </div>
+
             <div className="col-md-6 col-12">
               <div className="row    mb-2">
                 <div className="col-6 ">
                   <p className="fw-medium">Check In</p>
                 </div>
                 <div className="col-6">
-                  <p className="text-muted text-sm">: {data.checkIn || "--"}</p>
-                </div>
-              </div>
-            </div>
-            <div className="col-md-6 col-12">
-              <div className="row    mb-2">
-                <div className="col-6 ">
-                  <p className="fw-medium">Check Out</p>
-                </div>
-                <div className="col-6">
                   <p className="text-muted text-sm">
-                    : {data.checkOut || "--"}
+                    : {formatTimeTo12Hour(data.checkIn)}
                   </p>
                 </div>
               </div>
             </div>
+
+            <div className="col-md-6 col-12">
+              <div className="row    mb-2">
+                <div className="col-6 ">
+                  <p className="fw-medium">OT Start Time</p>
+                </div>
+                <div className="col-6">
+                  <p className="text-muted text-sm">
+                    : {formatTimeTo12Hour(data.otStartTime)}
+                  </p>
+                </div>
+              </div>
+            </div>
+
             {/* <div className="col-md-6 col-12">
               <div className="row    mb-2">
                 <div className="col-6 ">
@@ -160,26 +203,15 @@ function StaffingAttendanceView() {
                 </div>
               </div>
             </div> */}
+
             <div className="col-md-6 col-12">
               <div className="row    mb-2">
                 <div className="col-6 ">
-                  <p className="fw-medium">Mode Of Working</p>
+                  <p className="fw-medium">Check Out</p>
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">
-                    : {data.modeOfWorking || "--"}
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="col-md-6 col-12">
-              <div className="row    mb-2">
-                <div className="col-6 ">
-                  <p className="fw-medium">OT Start Time</p>
-                </div>
-                <div className="col-6">
-                  <p className="text-muted text-sm">
-                    : {data.otStartTime || "--"}
+                    : {formatTimeTo12Hour(data.checkOut)}
                   </p>
                 </div>
               </div>
@@ -191,7 +223,7 @@ function StaffingAttendanceView() {
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">
-                    : {data.otEndTime || "--"}
+                    : {formatTimeTo12Hour(data.otEndTime)}
                   </p>
                 </div>
               </div>
@@ -202,7 +234,7 @@ function StaffingAttendanceView() {
                   <p className="fw-medium">Attendance Remark</p>
                 </div>
                 <div className="col-6">
-                  <p className="text-muted text-sm">
+                  <p className="text-muted text-sm text-break">
                     : {data.attendanceRemark || "--"}
                   </p>
                 </div>

@@ -1,4 +1,4 @@
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 import api from "../../config/URL";
 
 const fetchAllTeachersWithIdsC = async (id) => {
@@ -6,7 +6,7 @@ const fetchAllTeachersWithIdsC = async (id) => {
     const response = await api.get(`getTeacherIdsAndTeacherNamesByClassId/${id}`);
     return response.data;
   } catch (error) {
-    toast.error("Error fetching center data:", error.message);
+    toast.error("Error fetching center data:", error);
     throw error;
   }
 };

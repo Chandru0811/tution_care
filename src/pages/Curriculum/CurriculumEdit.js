@@ -2,35 +2,62 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import { useFormik } from "formik";
 import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
 import { FaEdit } from "react-icons/fa";
 import * as Yup from "yup";
 import api from "../../config/URL";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+} from "@mui/material";
 
-function CurriculumEdit({ id, onSuccess }) {
+function CurriculumEdit({
+  id,
+  onSuccess,
+  curriculumOutletId,
+  handleMenuClose,
+}) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
+  const [isModified, setIsModified] = useState(false);
 
-  const handleShow = () => setShow(true);
-  const handleClose = () => setShow(false);
+  const handleShow = () => {
+    setShow(true);
+    setIsModified(false);
+  };
+  const handleClose = () => {
+    handleMenuClose()
+    setShow(false);
+  };
+  const userName = localStorage.getItem("userName");
 
   const validationSchema = Yup.object({
     curriculumCode: Yup.string().required("*Curriculum Code is required"),
     lessonNo: Yup.string().required("*Lesson No is required"),
+    curriculumNo: Yup.string().required("*Curriculum Code is required"),
+    // description: Yup.string().required("*Description is required"),
     status: Yup.string().required("*Status is required"),
+    description: Yup.string()
+      .notRequired()
+      .max(200, "*The maximum length is 200 characters"),
   });
 
   const formik = useFormik({
     initialValues: {
       curriculumCode: "",
       lessonNo: "",
+      curriculumNo: "",
+      description: "",
       status: "",
+      updatedBy: userName,
     },
     validationSchema: validationSchema, // Assign the validation schema
     onSubmit: async (values) => {
       setLoadIndicator(true);
       // console.log(values);
+      values.curriculumOutletId = curriculumOutletId;
       try {
         const response = await api.put(
           `/updateCourseCurriculumCode/${id}`,
@@ -49,11 +76,24 @@ function CurriculumEdit({ id, onSuccess }) {
           toast.error(response.data.message);
         }
       } catch (error) {
-        toast.error(error.message);
+        toast.error(error);
+      } finally {
+        setLoadIndicator(false);
       }
-      finally {
-              setLoadIndicator(false);
-            }
+    },
+    enableReinitialize: true,
+    validateOnChange: true,
+    validateOnBlur: true,
+    validate: (values) => {
+      if (
+        Object.values(values).some(
+          (value) => typeof value === "string" && value.trim() !== ""
+        )
+      ) {
+        setIsModified(true);
+      } else {
+        setIsModified(false);
+      }
     },
   });
 
@@ -62,28 +102,42 @@ function CurriculumEdit({ id, onSuccess }) {
       const response = await api.get(`/getAllCourseCurriculumCodesById/${id}`);
       formik.setValues(response.data);
     };
-
-    getData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    if (show) {
+      getData();
+    }
+  }, [show]);
 
   return (
     <>
-      <button className="btn btn-sm" onClick={handleShow}>
-        <FaEdit />
-      </button>
-      <Modal
-        show={show}
-        onHide={handleClose}
-        size="lg"
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
+      <p
+      className="text-start mb-0 menuitem-style"
+        onClick={handleShow}
+        style={{
+          whiteSpace: "nowrap",
+          width: "100%",
+        }}
       >
-        <Modal.Header closeButton>
-          <Modal.Title className="headColor">Edit Curriculum</Modal.Title>
-        </Modal.Header>
-        <form onSubmit={formik.handleSubmit}>
-          <Modal.Body>
+        Edit
+      </p>
+      <Dialog
+        open={show}
+        onClose={handleClose}
+        fullWidth
+        maxWidth="md"
+        disableBackdropClick={isModified}
+        disableEscapeKeyDown={isModified}
+      >
+        <DialogTitle className="headColor">Edit Curriculum</DialogTitle>
+
+        <form
+          onSubmit={formik.handleSubmit}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !formik.isSubmitting) {
+              e.preventDefault(); // Prevent default form submission
+            }
+          }}
+        >
+          <DialogContent>
             <div className="container">
               <div className="row py-4">
                 <div className="col-md-6 col-12 mb-2">
@@ -117,6 +171,7 @@ function CurriculumEdit({ id, onSuccess }) {
                   </label>
                   <input
                     type="text"
+                    onKeyDown={(e) => e.stopPropagation()}
                     {...formik.getFieldProps("curriculumCode")}
                     className={`form-control  ${
                       formik.touched.curriculumCode &&
@@ -129,6 +184,27 @@ function CurriculumEdit({ id, onSuccess }) {
                     formik.errors.curriculumCode && (
                       <div className="invalid-feedback">
                         {formik.errors.curriculumCode}
+                      </div>
+                    )}
+                </div>
+                <div className="col-md-6 col-12 mb-2">
+                  <label className="form-label">
+                    Curriculum Number<span className="text-danger">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    onKeyDown={(e) => e.stopPropagation()}
+                    {...formik.getFieldProps("curriculumNo")}
+                    className={`form-control  ${
+                      formik.touched.curriculumNo && formik.errors.curriculumNo
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                  />
+                  {formik.touched.curriculumNo &&
+                    formik.errors.curriculumNo && (
+                      <div className="invalid-feedback">
+                        {formik.errors.curriculumNo}
                       </div>
                     )}
                 </div>
@@ -147,8 +223,8 @@ function CurriculumEdit({ id, onSuccess }) {
                     aria-label="Default select example"
                   >
                     <option value=""></option>
-                    <option value="Active">Active</option>
-                    <option value="Inactive">Inactive</option>
+                    <option value="ACTIVE">Active</option>
+                    <option value="INACTIVE">Inactive</option>
                   </select>
                   {formik.touched.status && formik.errors.status && (
                     <div className="invalid-feedback">
@@ -156,26 +232,50 @@ function CurriculumEdit({ id, onSuccess }) {
                     </div>
                   )}
                 </div>
+                <div className="col-md-6 col-12 mb-2">
+                  <label className="form-label">Description</label>
+                  <textarea
+                    type="text"
+                    onKeyDown={(e) => e.stopPropagation()}
+                    {...formik.getFieldProps("description")}
+                    className={`form-control  ${
+                      formik.touched.description && formik.errors.description
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                  />
+                  {formik.touched.description && formik.errors.description && (
+                    <div className="invalid-feedback">
+                      {formik.errors.description}
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
-            <Modal.Footer>
-              <Button variant="secondary" onClick={handleClose}>
-                Cancel
-              </Button>
-              <Button variant="danger" type="submit"disabled={loadIndicator}
-              >
-                {loadIndicator && (
-                    <span
-                      className="spinner-border spinner-border-sm me-2"
-                      aria-hidden="true"
-                    ></span>
-                  )}
-                Update
-              </Button>
-            </Modal.Footer>
-          </Modal.Body>
+            <DialogActions>
+            <button type="button"
+              className="btn btn-sm btn-border bg-light text-dark"
+              onClick={handleClose}
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="btn btn-button btn-sm"
+              disabled={loadIndicator}
+            >
+              {loadIndicator && (
+                <span
+                  className="spinner-border spinner-border-sm me-2"
+                  aria-hidden="true"
+                ></span>
+              )}
+              Update
+            </button>
+          </DialogActions>
+          </DialogContent>
         </form>
-      </Modal>
+      </Dialog>
     </>
   );
 }

@@ -7,8 +7,10 @@ import React, {
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import api from "../../../../config/URL";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 import fetchAllSubjectsWithIds from "../../../List/SubjectList";
+import fetchAllRaceWithIds from "../../../List/RaceList";
+import fetchAllCentersWithIds from "../../../List/CenterList";
 
 const validationSchema = Yup.object().shape({
   studentName: Yup.string().required("*Name is required"),
@@ -16,445 +18,446 @@ const validationSchema = Yup.object().shape({
   gender: Yup.string().required("*Gender is required"),
   dateOfBirth: Yup.date()
     .required("*Date of Birth is required")
-    .max(new Date(), "*Date of Birth cannot be in the future"),
-  medicalCondition: Yup.string().required("*Allergy is required"),
-  ethnicGroup: Yup.string().required("*Ethnic group is required"),
+    .max(
+      new Date(new Date().setFullYear(new Date().getFullYear() - 1)),
+      "*Date of Birth must be at least 1 year ago"
+    ),
+  // medicalCondition: Yup.string().required("*Medical Condition is required"),
+  // ethnicGroup: Yup.string().required("*Ethnic group is required"),
   schoolType: Yup.string().required("*School type is required"),
-  nameOfSchool: Yup.string().required("*School Name is required"),
-  nameOfChildrenInTotal: Yup.string().required("*Name of Children is required"),
-  fathersFullName: Yup.string().required("*Father Name is required"),
-  status: Yup.string().required("*Status is required"),
+  // nameOfSchool: Yup.string().required("*School Name is required"),
+  centerId: Yup.string().required("*Centre is required"),
+  // nameOfChildrenInTotal: Yup.number()
+  //   .typeError("*Enter a valid number")
+  //   .required("*Name of Children is required"),
+  // fathersFullName: Yup.string().required("*Father Name is required"),
+  // leadStatus: Yup.string().required("*Status is required"),
 });
 
-const Form1 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
-  const [subjecdData, setSubjectData] = useState(null);
+const Form1 = forwardRef(
+  ({ formData, setFormData, handleNext, setLoadIndicators }, ref) => {
+    const [subjectData, setSubjectData] = useState(null);
+    const [raceData, setRaceData] = useState(null);
+    const [centerData, setCenterData] = useState(null);
+    console.log("Form data is ", formData);
+    const userName = localStorage.getItem("userName");
 
-  const formik = useFormik({
-    initialValues: {
-      studentName: formData.studentName || "",
-      subjectId: formData.subjectId,
-      gender: formData.gender || "",
-      dateOfBirth: formData.dateOfBirth || "",
-      medicalCondition: formData.medicalCondition || "",
-      ethnicGroup: formData.ethnicGroup || "",
-      schoolType: formData.schoolType || "",
-      nameOfSchool: formData.nameOfSchool || "",
-      nameOfChildrenInTotal: formData.nameOfChildrenInTotal || "",
-      fathersFullName: formData.fathersFullName || "",
-      status: formData.status || "",
-    },
-    validationSchema: validationSchema,
-    onSubmit: async (data) => {
-      try {
-        const response = await api.post("/createLeadInfo", data, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        if (response.status === 201) {
-          const lead_id = response.data.lead_id;
-          toast.success(response.data.message);
-          setFormData((prv) => ({ ...prv, ...data, lead_id }));
-          // console.log("Form data is ",formData)
-          handleNext();
-        } else {
-          toast.error(response.data.message);
+    const formik = useFormik({
+      initialValues: {
+        studentName: formData.studentName || "",
+        subjectId: formData.subjectId,
+        gender: formData.gender || "",
+        dateOfBirth: formData.dateOfBirth || "",
+        medicalCondition: formData.medicalCondition || "",
+        ethnicGroup: formData.ethnicGroup || "",
+        schoolType: formData.schoolType || "",
+        nameOfSchool: formData.nameOfSchool || "",
+        centerId: formData.centerId || "",
+        // nameOfChildrenInTotal: formData.nameOfChildrenInTotal || "",
+        fathersFullName: formData.fathersFullName || "",
+        leadStatus: "NEW_WAITLIST" || "",
+        referby: "",
+        createdBy: userName,
+      },
+      validationSchema: validationSchema,
+      onSubmit: async (data) => {
+        setLoadIndicators(true);
+        data.createdBy = userName;
+        try {
+          // console.log("Before API Call - formData:", formData);
+
+          let response;
+          if (formData.lead_id !== null) {
+            response = await api.put(
+              `/updateLeadInfo/${formData.lead_id}`,
+              data,
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              }
+            );
+          } else {
+            response = await api.post("/createLeadInfo", data, {
+              headers: {
+                "Content-Type": "application/json",
+              },
+            });
+          }
+
+          if (response.status === 200 || response.status === 201) {
+            const lead_id = response.data.id;
+            console.log("New lead_id:", lead_id);
+            toast.success(response.data.message);
+
+            setFormData((prev) => ({
+              ...prev,
+              ...data,
+              lead_id,
+            }));
+
+            // console.log("Updated formData:", {
+            //   ...formData,
+            //   ...data,
+            //   lead_id,
+            // });
+
+            handleNext();
+          } else {
+            toast.error(response.data.message);
+          }
+        } catch (error) {
+          toast.error(error);
+        } finally {
+          setLoadIndicators(false);
         }
-      } catch (error) {
-        toast.error(error.message);
+      },
+      validateOnChange: false, // Enable validation on change
+      validateOnBlur: true, // Enable validation on blur
+    });
+
+    // Function to scroll to the first error field
+    const scrollToError = (errors) => {
+      const errorField = Object.keys(errors)[0]; // Get the first error field
+      const errorElement = document.querySelector(`[name="${errorField}"]`); // Find the DOM element
+      if (errorElement) {
+        errorElement.scrollIntoView({ behavior: "smooth", block: "center" });
+        errorElement.focus(); // Set focus to the error element
       }
-    },
-  });
+    };
 
-  const fetchData = async () => {
-    try {
-      const subjectData = await fetchAllSubjectsWithIds();
-      setSubjectData(subjectData);
-      console.log("subjectData", subjectData);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
+    // Watch for form submit and validation errors
+    useEffect(() => {
+      if (formik.submitCount > 0 && Object.keys(formik.errors).length > 0) {
+        scrollToError(formik.errors);
+      }
+    }, [formik.submitCount, formik.errors]);
+    const fetchData = async () => {
+      try {
+        const subjectData = await fetchAllSubjectsWithIds();
+        const raceData = await fetchAllRaceWithIds();
+        const centerData = await fetchAllCentersWithIds();
+        setRaceData(raceData);
+        setSubjectData(subjectData);
+        setCenterData(centerData);
+      } catch (error) {
+        toast.error(error);
+      }
+    };
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+    useEffect(() => {
+      fetchData();
+    }, []);
 
-  useImperativeHandle(ref, () => ({
-    form1: formik.handleSubmit,
-  }));
+    useImperativeHandle(ref, () => ({
+      form1: formik.handleSubmit,
+    }));
 
-  return (
-    <form onSubmit={formik.handleSubmit}>
-      <div className="container py-4">
-        <h5 className="headColor mb-5">Student Information</h5>
-        <div className="row">
-          <div className="col-md-6 col-12">
-            <div className="mb-3">
-              <label for="exampleFormControlInput1" className="form-label">
-                Name Of Child<span className="text-danger">*</span>
-              </label>
-              <input
-                type="text"
-                className="form-control form-control-sm"
-                name="studentName"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.studentName}
-              />
-              {formik.touched.studentName && formik.errors.studentName && (
-                <div className="error text-danger ">
-                  <small>{formik.errors.studentName}</small>
-                </div>
-              )}
-            </div>
-          </div>
-          <div class="col-md-6 col-12 mb-2">
-            <label className="form-label">Subject</label>
-            <span className="text-danger">*</span>
-            <select
-              className="form-select form-select-sm"
-              name="subjectId"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.subjectId}
-            >
-              <option selected></option>
-              {subjecdData &&
-                subjecdData.map((subjectId) => (
-                  <option key={subjectId.subjectId} value={subjectId.id}>
-                    {subjectId.subjects}
-                  </option>
-                ))}
-            </select>
-            {formik.touched.subjectId && formik.errors.subjectId && (
-              <div className="text-danger">
-                <small>{formik.errors.subjectId}</small>
-              </div>
-            )}
-          </div>
-          <div className="col-md-6 col-12 ">
-            <div className="mb-3">
-              <div>
+    return (
+      <form onSubmit={formik.handleSubmit}>
+        <div className="container py-4">
+          <h5 className="headColor mb-5">Student Information</h5>
+          <div className="row">
+            <div className="col-md-6 col-12">
+              <div className="mb-3">
                 <label for="exampleFormControlInput1" className="form-label">
-                  Gender<span className="text-danger">*</span>
+                  Name Of Child<span className="text-danger">*</span>
                 </label>
-              </div>
-              <div className="form-check form-check-inline">
                 <input
-                  className="form-check-input"
-                  value="Male"
-                  name="gender"
-                  type="radio"
-                  checked={formik.values.gender === "Male"}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                />
-                <label className="form-check-label" for="inlineRadio1">
-                  Male
-                </label>
-              </div>
-              <div className="form-check form-check-inline">
-                <input
-                  className="form-check-input mx-2"
-                  value="Female"
-                  name="gender"
-                  type="radio"
-                  checked={formik.values.gender === "Female"}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                />
-                <label className="form-check-label" for="inlineRadio2">
-                  Female
-                </label>
-              </div>
-              {formik.touched.gender && formik.errors.gender && (
-                <div className="error text-danger ">
-                  <small>{formik.errors.gender}</small>
-                </div>
-              )}
-            </div>
-          </div>
-          <div className="col-md-6 col-12">
-            <div className="mb-3">
-              <label for="exampleFormControlInput1" className="form-label">
-                Child’s Date of Birth<span className="text-danger">*</span>
-              </label>
-              <input
-                type="date"
-                name="dateOfBirth"
-                className="form-control form-control-sm"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.dateOfBirth}
-              />
-              {formik.touched.dateOfBirth && formik.errors.dateOfBirth && (
-                <div className="error text-danger ">
-                  <small>{formik.errors.dateOfBirth}</small>
-                </div>
-              )}
-            </div>
-          </div>
-          <div className="col-md-12 col-12">
-            <div className="mb-3">
-              <div>
-                <label for="exampleFormControlInput1" className="form-label">
-                  Allergy / Medical Condition (For Instance: Asthma)
-                  <span className="text-danger">*</span>
-                </label>
-              </div>
-              <div className="">
-                <textarea
                   type="text"
-                  name="medicalCondition"
-                  className="form-control form-control-sm"
+                  className="form-control "
+                  name="studentName"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  value={formik.values.medicalCondition}
+                  value={formik.values.studentName}
                 />
-                {formik.touched.medicalCondition &&
-                  formik.errors.medicalCondition && (
-                    <div className="error text-danger ">
-                      <small>{formik.errors.medicalCondition}</small>
-                    </div>
-                  )}
+                {formik.touched.studentName && formik.errors.studentName && (
+                  <div className="error text-danger ">
+                    <small>{formik.errors.studentName}</small>
+                  </div>
+                )}
               </div>
             </div>
-          </div>
-          <div className="col-md-6 col-12 ">
-            <div className="mb-3">
-              <div>
-                <label for="exampleFormControlInpu  t1" className="form-label">
-                  Ethnic Group<span className="text-danger">*</span>
-                </label>
-              </div>
-              <div className="form-check form-check-inline">
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  name="ethnicGroup"
-                  value="CHINESE"
-                  checked={formik.values.ethnicGroup === "CHINESE"}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                />
-                <label className="form-check-label" for="inlineRadio1">
-                  Chinese
-                </label>
-              </div>
-              <div className="form-check form-check-inline">
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  name="ethnicGroup"
-                  value="MALAY"
-                  checked={formik.values.ethnicGroup === "MALAY"}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                />
-                <label className="form-check-label" for="inlineRadio2">
-                  Malay
-                </label>
-              </div>
-              <div className="form-check form-check-inline">
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  name="ethnicGroup"
-                  value="INDIA"
-                  checked={formik.values.ethnicGroup === "INDIA"}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                />
-                <label className="form-check-label" for="inlineRadio2">
-                  Indian
-                </label>
-              </div>
-              <div className="form-check form-check-inline">
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  name="ethnicGroup"
-                  value="EURASIAN"
-                  checked={formik.values.ethnicGroup === "EURASIAN"}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                />
-                <label className="form-check-label" for="inlineRadio2">
-                  Eurasian
-                </label>
-              </div>
-              <div className="form-check form-check-inline">
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  name="ethnicGroup"
-                  value="OTHERS"
-                  checked={formik.values.ethnicGroup === "OTHERS"}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                />
-                <label className="form-check-label" for="inlineRadio2">
-                  Others
-                </label>
-              </div>
-              {formik.touched.ethnicGroup && formik.errors.ethnicGroup && (
-                <div className="error text-danger ">
-                  <small>{formik.errors.ethnicGroup}</small>
+            <div class="col-md-6 col-12 mb-2">
+              <label className="form-label">Subject</label>
+              <span className="text-danger">*</span>
+              <select
+                className="form-select"
+                name="subjectId"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.subjectId}
+              >
+                <option selected></option>
+                {/* <option value="ENGLISH">English</option>
+              <option value="CHINESE" >Chinese</option> */}
+                {subjectData &&
+                  subjectData.map((subjectId) => (
+                    <option key={subjectId.id} value={subjectId.id}>
+                      {subjectId.subjects}
+                    </option>
+                  ))}
+              </select>
+              {formik.touched.subjectId && formik.errors.subjectId && (
+                <div className="text-danger">
+                  <small>{formik.errors.subjectId}</small>
                 </div>
               )}
             </div>
-          </div>
-          <div class="col-md-6 col-12 mb-4">
-            <label>
-              Status<span class="text-danger">*</span>
-            </label>
-            <select
-              className={`form-select form-select-sm ${
-                formik.touched.status && formik.errors.status
-                  ? "is-invalid"
-                  : ""
-              }`}
-              name="status"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.status}
-            >
-              <option></option>
-              <option value="Pending">Pending</option>
-              <option value="Arranging assessment">Arranging assessment</option>
-              <option value="Assessment confirmed">Assessment confirmed</option>
-              <option value="Waiting for payment">Waiting for payment</option>
-              <option value="Rejected">Rejected</option>
-              <option value="KIV">KIV</option>
-            </select>
-            {formik.touched.status && formik.errors.status && (
-              <div className="invalid-feedback">{formik.errors.status}</div>
-            )}
-          </div>
-          <div className="col-md-6 col-12">
-            <div className="mb-3">
-              <div>
+
+            <div className="col-md-6 col-12 ">
+              <div className="mb-3">
+                <div>
+                  <label for="exampleFormControlInput1" className="form-label">
+                    Gender<span className="text-danger">*</span>
+                  </label>
+                </div>
+                <div className="form-check form-check-inline">
+                  <input
+                    className="form-check-input"
+                    value="Male"
+                    name="gender"
+                    type="radio"
+                    checked={formik.values.gender === "Male"}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                  />
+                  <label className="form-check-label" for="inlineRadio1">
+                    Male
+                  </label>
+                </div>
+                <div className="form-check form-check-inline">
+                  <input
+                    className="form-check-input mx-2"
+                    value="Female"
+                    name="gender"
+                    type="radio"
+                    checked={formik.values.gender === "Female"}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                  />
+                  <label className="form-check-label" for="inlineRadio2">
+                    Female
+                  </label>
+                </div>
+                {formik.touched.gender && formik.errors.gender && (
+                  <div className="error text-danger ">
+                    <small>{formik.errors.gender}</small>
+                  </div>
+                )}
+              </div>
+            </div>
+            <div className="col-md-6 col-12">
+              <div className="mb-3">
                 <label for="exampleFormControlInput1" className="form-label">
-                  School Type<span className="text-danger">*</span>
+                  Child’s Date of Birth<span className="text-danger">*</span>
                 </label>
-              </div>
-              <div className="form-check form-check-inline">
                 <input
-                  className="form-check-input"
-                  type="radio"
-                  name="schoolType"
-                  value="CHILDCARE"
-                  checked={formik.values.schoolType === "CHILDCARE"}
+                  type="date"
+                  name="dateOfBirth"
+                  className="form-control"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
+                  value={formik.values.dateOfBirth}
                 />
-                <label className="form-check-label" for="inlineRadio1">
-                  Childcare
-                </label>
-              </div>
-              <div className="form-check form-check-inline">
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  name="schoolType"
-                  value="KINDERGARTEN"
-                  checked={formik.values.schoolType === "KINDERGARTEN"}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                />
-                <label className="form-check-label" for="inlineRadio2">
-                  Kindergarten
-                </label>
-              </div>
-              <div className="form-check form-check-inline">
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  name="schoolType"
-                  value="OTHERS"
-                  checked={formik.values.schoolType === "OTHERS"}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                />
-                <label className="form-check-label" for="inlineRadio2">
-                  Others
-                </label>
-              </div>
-              {formik.touched.schoolType && formik.errors.schoolType && (
-                <div className="error text-danger ">
-                  <small>{formik.errors.schoolType}</small>
-                </div>
-              )}
-            </div>
-          </div>
-          <div className="col-md-6 col-12 ">
-            <div className="mb-3">
-              <label for="exampleFormControlInput1" className="form-label">
-                Name Of School<span className="text-danger">*</span>
-              </label>
-              <input
-                type="text"
-                name="nameOfSchool"
-                className="form-control form-control-sm"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.nameOfSchool}
-              />
-              {formik.touched.nameOfSchool && formik.errors.nameOfSchool && (
-                <div className="error text-danger ">
-                  <small>{formik.errors.nameOfSchool}</small>
-                </div>
-              )}
-            </div>
-          </div>
-          <div className="col-md-6 col-12 ">
-            <div className="mb-3">
-              <label for="exampleFormControlInput1" className="form-label">
-                Number Of Children In Total
-                <span className="text-danger">*</span>
-              </label>
-              <input
-                type="text"
-                name="nameOfChildrenInTotal"
-                className="form-control form-control-sm"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.nameOfChildrenInTotal}
-              />
-              {formik.touched.nameOfChildrenInTotal &&
-                formik.errors.nameOfChildrenInTotal && (
+                {formik.touched.dateOfBirth && formik.errors.dateOfBirth && (
                   <div className="error text-danger ">
-                    <small>{formik.errors.nameOfChildrenInTotal}</small>
+                    <small>{formik.errors.dateOfBirth}</small>
                   </div>
                 )}
+              </div>
             </div>
-          </div>
-          <div className="col-md-6 col-12 ">
-            <div className="mb-3">
-              <label for="exampleFormControlInput1" className="form-label">
-                Father's Full Name<span className="text-danger">*</span>
-              </label>
-              <input
-                type="text"
-                name="fathersFullName"
-                className="form-control form-control-sm"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.fathersFullName}
-              />
-              {formik.touched.fathersFullName &&
-                formik.errors.fathersFullName && (
+            <div className="col-md-6 col-12">
+              <div className="mb-3">
+                <div>
+                  <label for="exampleFormControlInput1" className="form-label">
+                    Allergy / Medical Condition (For Instance: Asthma)
+                  </label>
+                </div>
+                <div className="">
+                  <input
+                    type="text"
+                    name="medicalCondition"
+                    className="form-control"
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    value={formik.values.medicalCondition}
+                  />
+                  {formik.touched.medicalCondition &&
+                    formik.errors.medicalCondition && (
+                      <div className="error text-danger ">
+                        <small>{formik.errors.medicalCondition}</small>
+                      </div>
+                    )}
+                </div>
+              </div>
+            </div>
+            {/* <div className="col-md-6 col-12">
+              <div className="mb-3">
+                <div>
+                  <label for="exampleFormControlInput1" className="form-label">
+                    Refer By
+                  </label>
+                </div>
+                <div className="">
+                  <input
+                    type="text"
+                    name="referby"
+                    className="form-control"
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    value={formik.values.referby}
+                  />
+                  {formik.touched.referby &&
+                    formik.errors.referby && (
+                      <div className="error text-danger ">
+                        <small>{formik.errors.referby}</small>
+                      </div>
+                    )}
+                </div>
+              </div>
+            </div> */}
+            <div className="col-md-6 col-12 ">
+              <div className="mb-3">
+                <div>
+                  <label for="exampleFormControlInpu t1" className="form-label">
+                    Ethnic Group
+                    {/* <span className="text-danger">*</span> */}
+                  </label>
+                </div>
+                <select
+                  name="ethnicGroup"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.ethnicGroup}
+                  className="form-select"
+                >
+                  <option selected></option>
+                  {raceData &&
+                    raceData.map((raceId) => (
+                      <option key={raceId.id} value={raceId.race}>
+                        {raceId.race}
+                      </option>
+                    ))}
+                </select>
+                {formik.touched.ethnicGroup && formik.errors.ethnicGroup && (
                   <div className="error text-danger ">
-                    <small>{formik.errors.fathersFullName}</small>
+                    <small>{formik.errors.ethnicGroup}</small>
                   </div>
                 )}
+              </div>
+            </div>
+            <div className="col-md-6 col-12">
+              <div className="mb-3">
+                <div>
+                  <label for="exampleFormControlInput1" className="form-label">
+                    School Type
+                    <span className="text-danger">*</span>
+                  </label>
+                </div>
+                <div className="form-check form-check-inline">
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    name="schoolType"
+                    value="CHILDCARE"
+                    checked={formik.values.schoolType === "CHILDCARE"}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                  />
+                  <label className="form-check-label" for="inlineRadio1">
+                    Childcare
+                  </label>
+                </div>
+                <div className="form-check form-check-inline">
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    name="schoolType"
+                    value="KINDERGARTEN"
+                    checked={formik.values.schoolType === "KINDERGARTEN"}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                  />
+                  <label className="form-check-label" for="inlineRadio2">
+                    Kindergarten
+                  </label>
+                </div>
+                <div className="form-check form-check-inline">
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    name="schoolType"
+                    value="OTHERS"
+                    checked={formik.values.schoolType === "OTHERS"}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                  />
+                  <label className="form-check-label" for="inlineRadio2">
+                    Others
+                  </label>
+                </div>
+                {formik.touched.schoolType && formik.errors.schoolType && (
+                  <div className="error text-danger ">
+                    <small>{formik.errors.schoolType}</small>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="col-md-6 col-12 ">
+              <div className="mb-3">
+                <label for="exampleFormControlInput1" className="form-label">
+                  Name Of School
+                  {/* <span className="text-danger">*</span> */}
+                </label>
+                <input
+                  type="text"
+                  name="nameOfSchool"
+                  className="form-control"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.nameOfSchool}
+                />
+                {formik.touched.nameOfSchool && formik.errors.nameOfSchool && (
+                  <div className="error text-danger ">
+                    <small>{formik.errors.nameOfSchool}</small>
+                  </div>
+                )}
+              </div>
+            </div>
+            <div className="col-md-6 col-12 ">
+              <div className="mb-3">
+                <label for="exampleFormControlInput1" className="form-label">
+                  Centre<span className="text-danger">*</span>
+                </label>
+                <select
+                  className="form-select"
+                  name="centerId"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.centerId}
+                >
+                  <option selected></option>
+                  {centerData &&
+                    centerData.map((centerId) => (
+                      <option key={centerId.id} value={centerId.id}>
+                        {centerId.centerNames}
+                      </option>
+                    ))}
+                </select>
+                {formik.touched.centerId && formik.errors.centerId && (
+                  <div className="error text-danger">
+                    <small>{formik.errors.centerId}</small>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </form>
-  );
-});
+      </form>
+    );
+  }
+);
 
 export default Form1;

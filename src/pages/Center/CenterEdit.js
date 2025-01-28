@@ -7,14 +7,15 @@ import EditBreak from "./Edit/EditBreak";
 import EditClass from "./Edit/EditClass";
 import EditPackage from "./Edit/EditPackage";
 import api from "../../config/URL";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
+import fetchAllCentreManager from "../List/CentreMangerList";
+import Delete from "../../components/common/Delete";
 
 const validationSchema = Yup.object().shape({
-  tuitionCareName: Yup.string().required("*Centre Name is required"),
-  code: Yup.number()
-    .typeError("*Enter a valid number")
-    .required("*Code is required"),
-  tuitionManager: Yup.string().required("*Select the Center Manager"),
+  centerName: Yup.string().required("*Centre Name is required"),
+  code: Yup.string().required("*Code is required"),
+  address: Yup.string().required("*Address is required"),
+  // userId: Yup.string().required("*Select the Centre Manager"),
   zipCode: Yup.number()
     .typeError("*Zip Code must be number")
     .required("*Zip Code is required")
@@ -23,9 +24,9 @@ const validationSchema = Yup.object().shape({
   mobile: Yup.string()
     .matches(
       /^(?:\+?65)?\s?(?:\d{4}\s?\d{4}|\d{3}\s?\d{3}\s?\d{4})$/,
-      "*Invalid Phone Number!"
+      "*Invalid Phone Number"
     )
-    .required("*Mobile Number is required!"),
+    .required("*Mobile Number is required"),
   email: Yup.string()
     .matches(
       /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
@@ -34,70 +35,152 @@ const validationSchema = Yup.object().shape({
     .required("*Email is required"),
   openingDate: Yup.date().required("*Date is required"),
   uenNumber: Yup.string().required("*UEN number is required"),
-  taxRegistrationNumber: Yup.number()
-    .typeError("*Tax Registration Number be numeric")
-    .required("*Tax Registration Number is required")
-    .positive("*Please enter a valid number")
-    .integer("*Tax Registration Number be numeric"),
   bankName: Yup.string().required("*Bank Name is required"),
   bankBranch: Yup.string().required("*Bank Branch is required"),
-  bankAccountNumber: Yup.number()
-    .typeError("*Bank Account Number be numeric")
-    .required("*Bank Account Number is required")
-    .positive("*Please enter a valid number")
-    .integer("*Bank Account Number must be Numeric"),
+  bankAccountNumber: Yup.string().required("*Bank Account Number is required"),
   bankAccountName: Yup.string().required("*Bank Account Name is required"),
+  invoiceNotes: Yup.string()
+    .notRequired()
+    .max(200, "*The maximum length is 200 characters"),
+  // file: Yup.mixed()
+  //   .required("*File is required")
+  //   .test(
+  //     "max-file-name-length",
+  //     "*File name must be at most 50 characters",
+  //     (value) => !value || value.name.length <= 50
+  //   ),
+  target: Yup.number()
+    .typeError("*Must be a number")
+    .required("*Target is required")
+    .positive("*Must be a positive number")
+    .integer("*Must be a whole number"),
 });
 
-function CenterEdit() {
+function CenterEdit({ handleCenterChanged }) {
   const { id } = useParams();
   const [data, setData] = useState([]);
   const [loadIndicator, setLoadIndicator] = useState(false);
+  const [teacherData, setTeacherData] = useState(null);
   const navigate = useNavigate();
+  const [taxTypeData, setTaxTypeData] = useState(null);
+  const userName = localStorage.getItem("userName");
+
+  useEffect(() => {
+    fetchTeacher();
+  }, []);
+  const fetchTeacher = async () => {
+    try {
+      const manager = await fetchAllCentreManager();
+      setTeacherData(manager);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
   const formik = useFormik({
     initialValues: {
-      tuitionCareName: "",
+      centerName: "",
       code: "",
-      tuitionManager: "",
+      userId: "",
       address: "",
       zipCode: "",
       mobile: "",
       email: "",
       openingDate: "",
       uenNumber: "",
-      gst: data.gst || false,
+      gst: "",
       taxRegistrationNumber: "",
       bankName: "",
       bankBranch: "",
       bankAccountNumber: "",
       bankAccountName: "",
       invoiceNotes: "",
+      target: "",
+      file: null,
+      updatedBy: userName,
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       setLoadIndicator(true);
+      setLoadIndicator(true);
+      const formData = new FormData();
+      formData.append("centerName", values.centerName);
+      formData.append("code", values.code);
+      if (values.userId) {
+        formData.append("userId", values.userId);
+      }
+      formData.append("address", values.address);
+      formData.append("zipCode", values.zipCode);
+      formData.append("mobile", values.mobile);
+      formData.append("email", values.email);
+      formData.append("openingDate", values.openingDate);
+      formData.append("uenNumber", values.uenNumber);
+      formData.append("gst", values.gst);
+      formData.append("taxRegistrationNumber", values.taxRegistrationNumber);
+      formData.append("bankName", values.bankName);
+      formData.append("bankBranch", values.bankBranch);
+      formData.append("bankAccountNumber", values.bankAccountNumber);
+      formData.append("bankAccountName", values.bankAccountName);
+      formData.append("invoiceNotes", values.invoiceNotes);
+      formData.append("file", values.file);
+      formData.append("updatedBy", userName);
+      formData.append("target", values.target);
       try {
-        const response = await api.put(`/updateTuition/${id}`, values, {
+        const response = await api.put(`/updateCenters/${id}`, formData, {
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type": "multipart/form-data",
           },
         });
         if (response.status === 200) {
           toast.success(response.data.message);
           navigate("/center");
+          handleCenterChanged();
         } else {
           toast.error(response.data.message);
         }
       } catch (error) {
-        toast.error(error.message);
-      }finally {
+        if (error.response.status === 409) {
+          toast.warning(error?.response?.data?.message);
+        } else {
+          toast.error(error.response.data.message);
+        }
+      } finally {
         setLoadIndicator(false);
       }
     },
+    validateOnChange: false, // Enable validation on change
+    validateOnBlur: true, // Enable validation on blur
   });
+
+  // Function to scroll to the first error field
+  const scrollToError = (errors) => {
+    const errorField = Object.keys(errors)[0]; // Get the first error field
+    const errorElement = document.querySelector(`[name="${errorField}"]`); // Find the DOM element
+    if (errorElement) {
+      errorElement.scrollIntoView({ behavior: "smooth", block: "center" });
+      errorElement.focus(); // Set focus to the error element
+    }
+  };
+
+  // Watch for form submit and validation errors
+  useEffect(() => {
+    if (formik.submitCount > 0 && Object.keys(formik.errors).length > 0) {
+      scrollToError(formik.errors);
+    }
+  }, [formik.submitCount, formik.errors]);
+
+  const fetchTaxData = async () => {
+    try {
+      const response = await api.get("getAllTaxSetting");
+      setTaxTypeData(response.data);
+    } catch (error) {
+      toast.error("Error fetching tax data:", error);
+    }
+  };
+
   useEffect(() => {
     const getData = async () => {
-      const response = await api.get(`/getAllTuitionById/${id}`);
+      const response = await api.get(`/getAllCenterById/${id}`);
+      console.log("response", response.data);
       const formattedData = {
         ...response.data,
         openingDate: response.data.openingDate
@@ -109,7 +192,8 @@ function CenterEdit() {
     };
 
     getData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    fetchTeacher();
+    fetchTaxData();
   }, [id]);
 
   const refreshData = async () => {
@@ -122,46 +206,73 @@ function CenterEdit() {
   };
 
   return (
-    <div className="container-fluid center">
-      <form onSubmit={formik.handleSubmit}>
-        <div className="card shadow border-0 mb-2 top-header">
-          <div className="container-fluid py-4">
-            <div className="row align-items-center">
-              <div className="col">
-                <div className="d-flex align-items-center gap-4">
-                  <h2 className="h2 ls-tight headingColor">
-                    Update Centre Listing
-                  </h2>
-                </div>
+    <div className="container-fluid">
+      <ol
+        className="breadcrumb my-3 px-2"
+        style={{ listStyle: "none", padding: 0, margin: 0 }}
+      >
+        <li>
+          <Link to="/" className="custom-breadcrumb">
+            Home
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          &nbsp;Centre Management
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          <Link to="/center" className="custom-breadcrumb">
+            &nbsp;Centre Listing
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li className="breadcrumb-item active" aria-current="page">
+          &nbsp;Centre Listing Edit
+        </li>
+      </ol>
+      <form
+        onSubmit={formik.handleSubmit}
+        // onKeyDown={(e) => {
+        //   if (e.key === "Enter" && !formik.isSubmitting) {
+        //     e.preventDefault(); // Prevent default form submission
+        //   }
+        // }}
+      >
+        <div className="card">
+          <div
+            className="d-flex px-4 justify-content-between align-items-center p-1 mb-4"
+            style={{ background: "#f5f7f9" }}
+          >
+            <div class="d-flex align-items-center">
+              <div class="d-flex">
+                <div class="dot active"></div>
               </div>
-              <div className="col-auto">
-                <div className="hstack gap-2 justify-content-end">
-                  <Link to="/center">
-                    <button type="submit" className="btn btn-sm btn-light">
-                      <span>Back</span>
-                    </button>
-                  </Link>
-                  &nbsp;&nbsp;
-                  <button
-                    type="submit"
-                    className="btn btn-button btn-sm"
-                    disabled={loadIndicator}
-                  >
-                    {loadIndicator && (
-                      <span
-                        className="spinner-border spinner-border-sm me-2 "
-                        // aria-hidden="true"
-                      ></span>
-                    )}
-                    Update
-                  </button>
-                </div>
-              </div>
+              <span class="me-2 text-muted">Edit Centre</span>
+            </div>
+            <div className="my-2 pe-3 d-flex align-items-center">
+              <Link to="/center">
+                <button type="button " className="btn btn-sm btn-border   ">
+                  Back
+                </button>
+              </Link>
+              &nbsp;&nbsp;
+              <button
+                type="submit"
+                className="btn btn-button btn-sm"
+                disabled={loadIndicator}
+              >
+                {loadIndicator && (
+                  <span
+                    className="spinner-border spinner-border-sm me-2"
+                    aria-hidden="true"
+                  ></span>
+                )}
+                Update
+              </button>
             </div>
           </div>
-        </div>
-        <div className="card shadow border-0 mb-2 top-header">
-          <div className="container p-5">
+          <div className="container-fluid px-4">
             <div className="row">
               <div className="col-md-6 col-12">
                 <div className="mb-3">
@@ -170,19 +281,19 @@ function CenterEdit() {
                   </label>
                   <input
                     type="text"
-                    name="tuitionCareName"
-                    className={`form-control form-control-sm  ${
-                      formik.touched.tuitionCareName && formik.errors.tuitionCareName
+                    name="centerName"
+                    className={`form-control  ${
+                      formik.touched.centerName && formik.errors.centerName
                         ? "is-invalid"
                         : ""
                     }`}
                     aria-label="Username"
                     aria-describedby="basic-addon1"
-                    {...formik.getFieldProps("tuitionCareName")}
+                    {...formik.getFieldProps("centerName")}
                   />
-                  {formik.touched.tuitionCareName && formik.errors.tuitionCareName && (
+                  {formik.touched.centerName && formik.errors.centerName && (
                     <div className="invalid-feedback">
-                      {formik.errors.tuitionCareName}
+                      {formik.errors.centerName}
                     </div>
                   )}
                 </div>
@@ -195,7 +306,7 @@ function CenterEdit() {
                   <input
                     {...formik.getFieldProps("code")}
                     type="text"
-                    className={`form-control form-control-sm  ${
+                    className={`form-control  ${
                       formik.touched.code && formik.errors.code
                         ? "is-invalid"
                         : ""
@@ -207,45 +318,56 @@ function CenterEdit() {
                   )}
                 </div>
               </div>
-              <div className="col-md-6 col-12">
-                <div className="mb-3">
-                  <label for="exampleFormControlInput1" className="form-label">
-                    Centre Manager<span className="text-danger">*</span>
-                  </label>
-                  <select
-                    {...formik.getFieldProps("tuitionManager")}
-                    className={`form-select form-select-sm   ${
-                      formik.touched.tuitionManager &&
-                      formik.errors.tuitionManager
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    aria-label="Default select example"
-                  >
-                    <option selected></option>
-                    <option value="Ang Peng Siong">Ang Peng Siong</option>
-                    <option value="Jeanette Aw">Jeanette Aw</option>
-                    <option value="Baey Yam Keng">Baey Yam Keng</option>
-                  </select>
-                  {formik.touched.tuitionManager &&
-                    formik.errors.tuitionManager && (
-                      <div className="invalid-feedback">
-                        {formik.errors.tuitionManager}
-                      </div>
-                    )}
-                </div>
+              <div className="col-md-6 col-12 mb-3">
+                <label className="form-label">Centre Manager</label>
+                <select
+                  {...formik.getFieldProps("userId")}
+                  name="userId"
+                  className={`form-select  ${
+                    formik.touched.userId && formik.errors.userId
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                >
+                  <option selected></option>
+                  {teacherData &&
+                    teacherData.map((manager) => (
+                      <option key={manager.id} value={manager.id}>
+                        {manager.userNames}
+                      </option>
+                    ))}
+                </select>
+                {formik.touched.userId && formik.errors.userId && (
+                  <div className="invalid-feedback">{formik.errors.userId}</div>
+                )}
               </div>
               <div className="col-md-6 col-12">
                 <div className="mb-3">
                   <label for="exampleFormControlInput1" className="form-label">
-                    Address
+                    Address<span className="text-danger">*</span>
                   </label>
                   <textarea
-                    className="form-control form-control-sm"
+                    className={`form-control ${
+                      formik.touched.address && formik.errors.address
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("address")}
                     id="exampleFormControlTextarea1"
                     rows="3"
+                    onBlur={formik.handleBlur}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        // Allow the default behavior for Enter key
+                        console.log("Enter key pressed: moving to the next line");
+                      }
+                    }}
                   ></textarea>
+                  {formik.touched.address && formik.errors.address && (
+                    <div className="invalid-feedback">
+                      {formik.errors.address}
+                    </div>
+                  )}
                 </div>
               </div>
               <div className="col-md-6 col-12">
@@ -256,7 +378,7 @@ function CenterEdit() {
                   <input
                     {...formik.getFieldProps("zipCode")}
                     type="text"
-                    className={`form-control form-control-sm   ${
+                    className={`form-control    ${
                       formik.touched.zipCode && formik.errors.zipCode
                         ? "is-invalid"
                         : ""
@@ -277,7 +399,7 @@ function CenterEdit() {
                   <input
                     {...formik.getFieldProps("mobile")}
                     type="text"
-                    className={`form-control form-control-sm  ${
+                    className={`form-control   ${
                       formik.touched.mobile && formik.errors.mobile
                         ? "is-invalid"
                         : ""
@@ -298,7 +420,7 @@ function CenterEdit() {
                   <input
                     {...formik.getFieldProps("email")}
                     type="text"
-                    className={`form-control form-control-sm ${
+                    className={`form-control   ${
                       formik.touched.email && formik.errors.email
                         ? "is-invalid"
                         : ""
@@ -321,7 +443,8 @@ function CenterEdit() {
                   <input
                     {...formik.getFieldProps("openingDate")}
                     type="date"
-                    className={`form-control form-control-sm   ${
+                    // onFocus={(e) => e.target.showPicker()}
+                    className={`form-control   ${
                       formik.touched.openingDate && formik.errors.openingDate
                         ? "is-invalid"
                         : ""
@@ -392,7 +515,7 @@ function CenterEdit() {
                   <input
                     {...formik.getFieldProps("uenNumber")}
                     type="text"
-                    className={`form-control form-control-sm  ${
+                    className={`form-control ${
                       formik.touched.uenNumber && formik.errors.uenNumber
                         ? "is-invalid"
                         : ""
@@ -409,12 +532,11 @@ function CenterEdit() {
                 <div className="mb-3">
                   <label for="exampleFormControlInput1" className="form-label">
                     TAX Registration Number
-                    <span className="text-danger">*</span>
                   </label>
                   <input
                     {...formik.getFieldProps("taxRegistrationNumber")}
                     type="text"
-                    className={`form-control form-control-sm  ${
+                    className={`form-control   ${
                       formik.touched.taxRegistrationNumber &&
                       formik.errors.taxRegistrationNumber
                         ? "is-invalid"
@@ -437,7 +559,7 @@ function CenterEdit() {
                   <input
                     {...formik.getFieldProps("bankName")}
                     type="text"
-                    className={`form-control form-control-sm   ${
+                    className={`form-control    ${
                       formik.touched.bankName && formik.errors.bankName
                         ? "is-invalid"
                         : ""
@@ -458,7 +580,7 @@ function CenterEdit() {
                   <input
                     {...formik.getFieldProps("bankBranch")}
                     type="text"
-                    className={`form-control form-control-sm  ${
+                    className={`form-control   ${
                       formik.touched.bankBranch && formik.errors.bankBranch
                         ? "is-invalid"
                         : ""
@@ -479,7 +601,7 @@ function CenterEdit() {
                   <input
                     {...formik.getFieldProps("bankAccountName")}
                     type="text"
-                    className={`form-control form-control-sm  ${
+                    className={`form-control    ${
                       formik.touched.bankAccountName &&
                       formik.errors.bankAccountName
                         ? "is-invalid"
@@ -502,7 +624,7 @@ function CenterEdit() {
                   <input
                     {...formik.getFieldProps("bankAccountNumber")}
                     type="text"
-                    className={`form-control form-control-sm   ${
+                    className={`form-control    ${
                       formik.touched.bankAccountNumber &&
                       formik.errors.bankAccountNumber
                         ? "is-invalid"
@@ -517,222 +639,302 @@ function CenterEdit() {
                     )}
                 </div>
               </div>
+              <div className="col-md-6 col-12">
+                <div className="text-start mt-2">
+                  <label htmlFor="" className="mb-1 fw-medium">
+                    <small>QR Code</small>
+                    <span className="text-danger">*</span>
+                  </label>
+                  <br />
+                  <input
+                    type="file"
+                    accept=".png"
+                    name="file"
+                    className="form-control"
+                    onChange={(event) => {
+                      formik.setFieldValue("file", event.target.files[0]);
+                    }}
+                    onBlur={formik.handleBlur}
+                  />
+                  {formik.touched.file && formik.errors.file && (
+                    <div className="error text-danger">
+                      <small>{formik.errors.file}</small>
+                    </div>
+                  )}
+                </div>
+                <img
+                  src={data.qrCode}
+                  className="img-fluid ms-2 w-50 rounded mt-2"
+                  alt="Profile"
+                />
+              </div>
+              <div className="col-md-6 col-12">
+                <div className="mb-3">
+                  <label for="exampleFormControlInput1" className="form-label">
+                    Target<span className="text-danger">*</span>
+                  </label>
+                  <input
+                    {...formik.getFieldProps("target")}
+                    type="text"
+                    className={`form-control   ${
+                      formik.touched.target && formik.errors.target
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                  />
+                  {formik.touched.target && formik.errors.target && (
+                    <div className="invalid-feedback">
+                      {formik.errors.target}
+                    </div>
+                  )}
+                </div>
+              </div>
               <div className="col-12">
                 <label for="exampleFormControlInput1" className="form-label">
                   Invoice Notes
                 </label>
                 <div class="input-group mb-3">
                   <textarea
-                    class="form-control form-control-sm"
-                    {...formik.getFieldProps("invoiceNotes")}
-                    id="exampleFormControlTextarea1"
+                    class="form-control"
+                    name="invoiceNotes"
+                    {...(formik.getFieldProps("invoiceNotes") || " ")}
+                    id="invoiceNotes"
                     rows="5"
                   ></textarea>
                 </div>
               </div>
             </div>
           </div>
+          <div className="container-fluid">
+            <div className="row">
+              {/* Centre Registrations */}
+              <div className="col-md-12 col-12 mt-4">
+                <h5 className="headColor mb-3">Centre Registrations</h5>
+                <table className="table table-border-solid">
+                  <thead>
+                    <tr>
+                      <th scope="col" className="fw-medium">
+                        S.No
+                      </th>
+                      <th scope="col" className="fw-medium">
+                        Effective Date
+                      </th>
+                      <th scope="col" className="fw-medium">
+                        Amount Including (GST)
+                      </th>
+                      <th scope="col" className="fw-medium">
+                        Tax Type
+                      </th>
+                      <th scope="col" className="fw-medium text-center">
+                        Action
+                      </th>
+                      {/* <th scope="col" className="fw-medium">
+                    Delete
+                  </th> */}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {data.centerRegistrations &&
+                      data.centerRegistrations.map((registration, index) => (
+                        <tr key={index} className="mt-1">
+                          <td>{index + 1}</td>
+                          <td>
+                            {registration.effectiveDate?.substring(0, 10)}
+                          </td>
+                          <td>{registration.amount}</td>
+                          <td>
+                            {taxTypeData &&
+                              taxTypeData.map((tax) =>
+                                parseInt(registration.taxId) === tax.id
+                                  ? tax.taxType || "--"
+                                  : ""
+                              )}
+                          </td>
+                          <td className="text-center">
+                            <EditRegisteration
+                              id={registration.id}
+                              onSuccess={refreshData}
+                            />
+                            <Delete
+                              onSuccess={refreshData}
+                              path={`/deleteCenterRegistrations/${registration.id}`}
+                            />
+                          </td>
+                        </tr>
+                      ))}
+                  </tbody>
+                </table>
+              </div>
+              {/* Centre Break */}
+              <div className="col-md-12 col-12 mt-4">
+                <h5 className="headColor mb-3">Centre Break</h5>
+                <table class="table table-border-solid">
+                  <thead>
+                    <tr>
+                      <th scope="col" className="fw-medium">
+                        S.No
+                      </th>
+                      <th scope="col" className="fw-medium">
+                        Break Name
+                      </th>
+                      <th scope="col" className="fw-medium">
+                        From Date
+                      </th>
+                      <th scope="col" className="fw-medium">
+                        To date
+                      </th>
+                      <th scope="col" className="fw-medium text-center">
+                        Action
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {data.centerBreaks &&
+                      data.centerBreaks.map((centerBreak, index) => (
+                        <tr key={index}>
+                          <td>{index + 1}</td>
+                          <td>{centerBreak.breakName}</td>
+                          <td>{centerBreak.fromDate.substring(0, 10)}</td>
+                          <td>{centerBreak.toDate.substring(0, 10)}</td>
+                          <td className="text-center">
+                            <EditBreak
+                              id={centerBreak.id}
+                              onSuccess={refreshData}
+                            />
+                            <Delete
+                              onSuccess={refreshData}
+                              path={`/deleteCenterBreaks/${centerBreak.id}`}
+                            />
+                          </td>
+                        </tr>
+                      ))}
+                  </tbody>
+                </table>
+              </div>
+              {/* class Room  */}
+              <div className="col-md-12 col-12 mt-4">
+                <h5 className="headColor mb-3">Centre Classroom</h5>
+                <div className="table-responsive">
+                  <table class="table table-border-solid">
+                    <thead>
+                      <tr>
+                        <th scope="col" className="fw-medium">
+                          S.No
+                        </th>
+                        <th
+                          scope="col"
+                          className="fw-medium"
+                          style={{ whiteSpace: "nowrap" }}
+                        >
+                          Classroom Name
+                        </th>
+                        <th
+                          scope="col"
+                          className="fw-medium"
+                          style={{ whiteSpace: "nowrap" }}
+                        >
+                          Classroom Code
+                        </th>
+                        <th
+                          scope="col"
+                          className="fw-medium"
+                          style={{ whiteSpace: "nowrap" }}
+                        >
+                          Classroom Type
+                        </th>
+                        <th
+                          scope="col"
+                          className="fw-medium"
+                          style={{ whiteSpace: "nowrap" }}
+                        >
+                          Capacity
+                        </th>
+                        <th
+                          scope="col"
+                          className="fw-medium"
+                          style={{ whiteSpace: "nowrap" }}
+                        >
+                          Description
+                        </th>
+                        <th scope="col" className="fw-medium ps-4">
+                          Action
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {data.centerClassRooms &&
+                        data.centerClassRooms.map((centerClassRoom, index) => (
+                          <tr key={index}>
+                            <td>{index + 1}</td>
+                            <td>{centerClassRoom.classRoomName}</td>
+                            <td>{centerClassRoom.classRoomCode}</td>
+                            <td>{centerClassRoom.classRoomType}</td>
+                            <td>{centerClassRoom.capacity}</td>
+                            <td className="text-break">
+                              {centerClassRoom.description}
+                            </td>
+                            <td>
+                              <EditClass
+                                id={centerClassRoom.id}
+                                onSuccess={refreshData}
+                              />
+                              <Delete
+                                onSuccess={refreshData}
+                                path={`/deleteCenterClassRooms/${centerClassRoom.id}`}
+                              />
+                            </td>
+                          </tr>
+                        ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              {/* Package  */}
+              <div className="col-md-12 col-12 mt-4">
+                <h5 className="headColor mb-3">Centre Package</h5>
+                <table class="table table-border-solid">
+                  <thead>
+                    <tr>
+                      <th scope="col" className="fw-medium">
+                        S.No
+                      </th>
+                      <th scope="col" className="fw-medium">
+                        Package
+                      </th>
+                      <th scope="col" className="fw-medium">
+                        Number Of Lesson
+                      </th>
+                      <th scope="col" className="fw-medium text-center">
+                        Action
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {data.centerPackages &&
+                      data.centerPackages.map((centerPackage, index) => (
+                        <tr key={index}>
+                          <td>{index + 1}</td>
+                          <td>{centerPackage.packageName || "--"}</td>
+                          <td>{centerPackage.noOfLesson || "--"}</td>
+                          <td className="text-center">
+                            <EditPackage
+                              id={centerPackage.id}
+                              onSuccess={refreshData}
+                            />
+                            <Delete
+                              onSuccess={refreshData}
+                              path={`/deleteCenterPackages/${centerPackage.id}`}
+                            />
+                          </td>
+                        </tr>
+                      ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
         </div>
       </form>
-
-      <div className="container card shadow border-0 mb-2 top-header ">
-        <div className="row">
-          {/* Centre Registrations */}
-          <div className="col-md-12 col-12 mt-4 p-4">
-            <h5 className="headColor mb-3">Centre Registrations</h5>
-            <table className="table table-border-solid">
-              <thead>
-                <tr>
-                  <th scope="col" className="fw-medium">
-                    S.No
-                  </th>
-                  <th scope="col" className="fw-medium">
-                    Registration Date
-                  </th>
-                  <th scope="col" className="fw-medium">
-                    Effective Date
-                  </th>
-                  <th scope="col" className="fw-medium">
-                    Amount Including (GST)
-                  </th>
-                  <th scope="col" className="fw-medium">
-                    Tax Type
-                  </th>
-                  <th>Edit</th>
-                </tr>
-              </thead>
-              <tbody>
-                {data.tuitionCareRegistration &&
-                  data.tuitionCareRegistration.map((registration, index) => (
-                    <tr key={index}>
-                      <td>{registration.id}</td>
-                      <td>{registration.registrationDate.substring(0, 10)}</td>
-                      <td>{registration.effectiveDate.substring(0, 10)}</td>
-                      <td>{registration.amount}</td>
-                      <td>{registration.taxType}</td>
-                      <td>
-                        <EditRegisteration
-                          id={registration.id}
-                          onSuccess={refreshData}
-                        />
-                      </td>
-                    </tr>
-                  ))}
-              </tbody>
-            </table>
-          </div>
-          {/* Centre Break */}
-          <div className="col-md-12 col-12 mt-4 p-4">
-            <h5 className="headColor mb-3">Centre Break</h5>
-            <table class="table table-border-solid">
-              <thead>
-                <tr>
-                  <th scope="col" className="fw-medium">
-                    S.No
-                  </th>
-                  <th scope="col" className="fw-medium">
-                    Break Name
-                  </th>
-                  <th scope="col" className="fw-medium">
-                    From Date
-                  </th>
-                  <th scope="col" className="fw-medium">
-                    To date
-                  </th>
-                  <th scope="col" className="fw-medium">
-                    Edit
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {data.tuitionCareBreak &&
-                  data.tuitionCareBreak.map((centerBreak, index) => (
-                    <tr key={index}>
-                      <td>{index + 1}</td>
-                      <td>{centerBreak.breakName}</td>
-                      <td>{centerBreak.fromDate.substring(0, 10)}</td>
-                      <td>{centerBreak.toDate.substring(0, 10)}</td>
-                      <td>
-                        <EditBreak
-                          id={centerBreak.id}
-                          onSuccess={refreshData}
-                        />
-                      </td>
-                    </tr>
-                  ))}
-              </tbody>
-            </table>
-          </div>
-          {/* class Room  */}
-          <div className="col-md-12 col-12 mt-4 p-4">
-            <h5 className="headColor mb-3">Centre Classroom</h5>
-            <table class="table table-border-solid">
-              <thead>
-                <tr>
-                  <th scope="col" className="fw-medium">
-                    S.No
-                  </th>
-                  <th
-                    scope="col"
-                    className="fw-medium"
-                    style={{ whiteSpace: "nowrap" }}
-                  >
-                    Classroom Name
-                  </th>
-                  <th
-                    scope="col"
-                    className="fw-medium"
-                    style={{ whiteSpace: "nowrap" }}
-                  >
-                    Classroom Code
-                  </th>
-                  <th
-                    scope="col"
-                    className="fw-medium"
-                    style={{ whiteSpace: "nowrap" }}
-                  >
-                    Classroom Type
-                  </th>
-                  <th
-                    scope="col"
-                    className="fw-medium"
-                    style={{ whiteSpace: "nowrap" }}
-                  >
-                    Capacity
-                  </th>
-                  <th
-                    scope="col"
-                    className="fw-medium"
-                    style={{ whiteSpace: "nowrap" }}
-                  >
-                    Description
-                  </th>
-                  <th scope="col" className="fw-medium">
-                    Edit
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {data.tuitionCareClassRoom &&
-                  data.tuitionCareClassRoom.map((centerClassRoom, index) => (
-                    <tr key={index}>
-                      <td>{index + 1}</td>
-                      <td>{centerClassRoom.classRoomName}</td>
-                      <td>{centerClassRoom.classRoomCode}</td>
-                      <td>{centerClassRoom.classRoomType}</td>
-                      <td>{centerClassRoom.capacity}</td>
-                      <td>{centerClassRoom.description}</td>
-                      <td>
-                        <EditClass
-                          id={centerClassRoom.id}
-                          onSuccess={refreshData}
-                        />
-                      </td>
-                    </tr>
-                  ))}
-              </tbody>
-            </table>
-          </div>
-          .{/* Package  */}
-          <div className="col-md-12 col-12 mt-4 p-4">
-            <h5 className="headColor mb-3">Centre Package</h5>
-            <table class="table table-border-solid">
-              <thead>
-                <tr>
-                  <th scope="col" className="fw-medium">
-                    S.No
-                  </th>
-                  <th scope="col" className="fw-medium">
-                    Package
-                  </th>
-                  <th scope="col" className="fw-medium">
-                    Number Of Lesson
-                  </th>
-                  <th scope="col" className="fw-medium">
-                    Edit
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {data.tuitionCarePackage &&
-                  data.tuitionCarePackage.map((centerPackage, index) => (
-                    <tr key={index}>
-                      <td>{index + 1}</td>
-                      <td>{centerPackage.packageName || "--"}</td>
-                      <td>{centerPackage.noOfLesson || "--"}</td>
-                      <td>
-                        <EditPackage
-                          id={centerPackage.id}
-                          onSuccess={refreshData}
-                        />
-                      </td>
-                    </tr>
-                  ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
     </div>
   );
 }

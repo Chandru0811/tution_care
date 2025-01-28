@@ -7,52 +7,57 @@ import React, {
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import api from "../../../config/URL";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 import fetchAllCentersWithIds from "../../List/CenterList";
 
 const validationSchema = Yup.object().shape({
-  centerId: Yup.string().required("*Centre is required!"),
-  studentName: Yup.string().required("*Student Name is required!"),
+  centerId: Yup.string().required("*Centre is required"),
+  studentName: Yup.string().required("*Student Name is required"),
   dateOfBirth: Yup.date()
-    .required("*Date of Birth is required!")
-    .max(new Date(), "*Date of Birth cannot be in the future!"),
+    .required("*Date of Birth is required")
+    .max(new Date(), "*Date of Birth cannot be in the future"),
   age: Yup.string()
-    .matches(/^\d+$/, "*Age is required!")
-    .required("*Age is required!"),
-  gender: Yup.string().required("*Gender is required!"),
-  schoolType: Yup.string().required("*School Type is required!"),
-  schoolName: Yup.string().required("*School Name is required!"),
-  allowMagazine: Yup.string().required("*Select a filed!"),
-  allowSocialMedia: Yup.string().required("*Select a filed!"),
+    .matches(/^\d+$/, "*Age is required")
+    .required("*Age is required"),
+  gender: Yup.string().required("*Gender is required"),
+  schoolType: Yup.string().required("*School Type is required"),
+  schoolName: Yup.string().required("*School Name is required"),
+  allowMagazine: Yup.string().required("*Select a filed"),
+  allowSocialMedia: Yup.string().required("*Select a filed"),
   studentChineseName: Yup.string().required(
-    "*Student Chinese Name is required!"
+    "*Student Chinese Name is required"
   ),
   // profileImage: Yup.string().required("*Select a Profile Image!"),
   preAssessmentResult: Yup.string().required(
-    "*Pre-Assessment Result is required!"
+    "*Pre-Assessment Result is required"
   ),
   medicalCondition: Yup.string().required(
-    "*Medical Condition Result is required!"
+    "*Medical Condition Result is required"
   ),
-  nationality: Yup.string().required("*Select a Nationality!"),
-  remark: Yup.string().required("*Remark is required!"),
+  nationality: Yup.string().required("*Select a Nationality"),
+  remark: Yup.string()
+    .notRequired()
+    .max(200, "*The maximum length is 200 characters"),
   primaryLanguageSpokenEnglish: Yup.string().required(
-    "*Primary Language is required!"
+    "*Primary Language is required"
   ),
-  race: Yup.string().required("*Select a Race!"),
-  referByStudent: Yup.string().required("*Refer By Student is required!"),
-  referByParent: Yup.string().required("*Refer By Parent is required!"),
+  race: Yup.string().required("*Select a Race"),
+  referByStudent: Yup.string().required("*Refer By Student is required"),
+  referByParent: Yup.string().required("*Refer By Parent is required"),
 });
 
 const AddStudentDetails = forwardRef(
-  ({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
+  ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const [centerData, setCenterData] = useState(null);
+    const [imagePreviewUrl, setImagePreviewUrl] = useState(null);
+    const userName  = localStorage.getItem('userName');
+
     const fetchData = async () => {
       try {
         const centerData = await fetchAllCentersWithIds();
         setCenterData(centerData);
       } catch (error) {
-        toast.error(error.message);
+        toast.error(error);
       }
     };
 
@@ -78,6 +83,8 @@ const AddStudentDetails = forwardRef(
         remark: formData.remark || "",
         allowMagazine: false || "",
         allowSocialMedia: false || "",
+        updatedBy:userName,
+
       },
       validationSchema: validationSchema,
       onSubmit: async (data) => {
@@ -113,8 +120,8 @@ const AddStudentDetails = forwardRef(
             toast.error(response.data.message);
           }
         } catch (error) {
-          toast.error(error.message);
-        }finally {
+          toast.error(error);
+        } finally {
           setLoadIndicators(false);
         }
       },
@@ -123,9 +130,7 @@ const AddStudentDetails = forwardRef(
     useEffect(() => {
       const getData = async () => {
         try {
-          const response = await api.get(
-            `/getAllStudentDetails/${formData.id}`
-          );
+          const response = await api.get(`/getAllStudentById/${formData.id}`);
           const { allowMagazine, allowSocialMedia, ...otherData } =
             response.data;
           const updatedValues = {
@@ -135,7 +140,7 @@ const AddStudentDetails = forwardRef(
           };
           formik.setValues(updatedValues);
         } catch (error) {
-          console.error("Error fetching data:", error.message);
+          console.error("Error fetching data:", error);
         }
       };
       getData();
@@ -149,7 +154,11 @@ const AddStudentDetails = forwardRef(
 
     return (
       <div className="container-fluid">
-        <form onSubmit={formik.handleSubmit}>
+         <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
+          if (e.key === 'Enter' && !formik.isSubmitting) {
+            e.preventDefault();  // Prevent default form submission
+          }
+        }}>
           <div className=" border-0 mb-5">
             <div className="mb-3">
               <p class="headColor">Student Details</p>
@@ -217,6 +226,7 @@ const AddStudentDetails = forwardRef(
                         className="form-control  form-contorl-sm"
                         name="dateOfBirth"
                         type="date"
+                        // onFocus={(e) => e.target.showPicker()}
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values.dateOfBirth}
@@ -401,29 +411,42 @@ const AddStudentDetails = forwardRef(
                         )}
                     </div>
                     <div className="text-start mt-4">
-                      <label htmlFor="" className=" fw-medium">
+                      <label htmlFor="file" className="fw-medium">
                         <small>Profile Image</small>
                         <span className="text-danger">*</span>
                       </label>
                       <br />
                       <input
                         type="file"
-                        name="profileImage"
+                        name="file"
                         className="form-control"
                         onChange={(event) => {
-                          formik.setFieldValue(
-                            "profileImage",
-                            event.target.files[0]
-                          );
+                          const file = event.target.files[0];
+                          formik.setFieldValue("file", file);
+                          if (file) {
+                            const previewUrl = URL.createObjectURL(file);
+                            setImagePreviewUrl(previewUrl);
+                          } else {
+                            setImagePreviewUrl(null);
+                          }
                         }}
                         onBlur={formik.handleBlur}
+                        accept=".jpg, .jpeg, .png"
                       />
-                      {/* {formik.touched.profileImage &&
-                        formik.errors.profileImage && (
-                          <div className="error text-danger ">
-                            <small>{formik.errors.profileImage}</small>
-                          </div>
-                        )} */}
+                      {formik.touched.file && formik.errors.file && (
+                        <div className="error text-danger">
+                          <small>{formik.errors.file}</small>
+                        </div>
+                      )}
+                      {imagePreviewUrl && (
+                        <div className="mt-3">
+                          <img
+                            src={imagePreviewUrl}
+                            alt="Profile Preview"
+                            className="w-25"
+                          />
+                        </div>
+                      )}
                     </div>
                     <div className="text-start mt-4">
                       <label htmlFor="" className=" fw-medium">

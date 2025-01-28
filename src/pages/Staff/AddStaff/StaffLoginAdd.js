@@ -1,31 +1,36 @@
 import React, { forwardRef, useImperativeHandle } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 import api from "../../../config/URL";
 import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 
 const validationSchema = Yup.object().shape({
   password: Yup.string()
-    .min(8, "*Password must be at least 8 characters")
-    .required("*Password is required"),
+    .matches(/^\S*$/, "*Password must not contain spaces.")
+    .required("*Enter the valid Password"),
   confirmPassword: Yup.string()
     .oneOf([Yup.ref("password"), null], "*Passwords must match")
     .required("*Confirm Password is required"),
 });
 const StaffLoginAdd = forwardRef(
-  ({formData,setLoadIndicators, setFormData, handleNext }, ref) => {
+  ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
+    const userName = localStorage.getItem("userName");
+
     const formik = useFormik({
       initialValues: {
         password: formData.password,
         confirmPassword: formData.confirmPassword,
+        createdBy: userName,
       },
       validationSchema: validationSchema,
       onSubmit: async (values) => {
         setLoadIndicators(true);
+        values.createdBy = userName;
         try {
+          const userId = formData.user_id;
           const response = await api.post(
-            `/createUserLoginInfo/${formData.user_id}`,
+            `/createUserLoginInfo/${userId}`,
             values,
             {
               headers: {
@@ -41,8 +46,8 @@ const StaffLoginAdd = forwardRef(
             toast.error(response.data.message);
           }
         } catch (error) {
-          toast.error(error.message);
-        }finally {
+          toast.error(error);
+        } finally {
           setLoadIndicators(false);
         }
       },
@@ -64,8 +69,15 @@ const StaffLoginAdd = forwardRef(
     };
 
     return (
-      <form onSubmit={formik.handleSubmit}>
-        <div className="container" style={{ minHeight: "60vh" }}>
+      <form
+        onSubmit={formik.handleSubmit}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && !formik.isSubmitting) {
+            e.preventDefault(); // Prevent default form submission
+          }
+        }}
+      >
+        <div className="container-fluid" style={{ minHeight: "50vh" }}>
           <p className="headColor my-4">Login Information</p>
           <div class="row">
             <div class="col-md-6 col-12 mb-2">
@@ -77,7 +89,7 @@ const StaffLoginAdd = forwardRef(
                   <input
                     type={showPassword ? "text" : "password"}
                     placeholder="Enter password"
-                    className={`form-control form-control-sm ${
+                    className={`form-control ${
                       formik.touched.password && formik.errors.password
                         ? "is-invalid"
                         : ""
@@ -116,7 +128,7 @@ const StaffLoginAdd = forwardRef(
                   <input
                     type={showConfirmPassword ? "text" : "password"}
                     placeholder="Enter confirm password"
-                    className={`form-control form-control-sm ${
+                    className={`form-control ${
                       formik.touched.confirmPassword &&
                       formik.errors.confirmPassword
                         ? "is-invalid"

@@ -1,58 +1,105 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import api from "../../config/URL";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
+import fetchAllCentreManager from "../List/CentreMangerList";
 
 function CenterView() {
   const { id } = useParams();
   const [data, setData] = useState([]);
-  console.log(data);
+  const [centerManagerData, setCenterManagerData] = useState(null);
+  const [taxTypeData, setTaxTypeData] = useState(null);
+
+  const fetchData = async () => {
+    try {
+      const centerManagerData = await fetchAllCentreManager();
+      setCenterManagerData(centerManagerData);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
+
+  const fetchTaxData = async () => {
+    try {
+      const response = await api.get("getAllTaxSetting");
+      setTaxTypeData(response.data);
+    } catch (error) {
+      toast.error("Error fetching tax data:", error);
+    }
+  };
 
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await api.get(`/getAllTuitionById/${id}`);
+        const response = await api.get(`/getAllCenterById/${id}`);
         setData(response.data);
       } catch (error) {
-        toast.error("Error Fetching Data", error.message);
+        toast.error("Error Fetching Data", error);
       }
     };
     getData();
+    fetchData();
+    fetchTaxData();
   }, [id]);
+  const formatValue = (value) => {
+    return value === null || value === "null" ? "" : value;
+  };
+
   return (
-    <div className="container-fluid center">
-        <div className="card shadow border-0 mb-2 top-header">
-        <div className="container-fluid py-4">
-          <div className="row align-items-center">
-            <div className="col">
-              <div className="d-flex align-items-center gap-4">
-                <h2 className="h2 ls-tight headingColor">View Centre Listing</h2>
-              </div>
+    <div className="container-fluid ">
+      <ol
+        className="breadcrumb my-3 px-2"
+        style={{ listStyle: "none", padding: 0, margin: 0 }}
+      >
+        <li>
+          <Link to="/" className="custom-breadcrumb">
+            Home
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          &nbsp;Centre Management
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          <Link to="/center" className="custom-breadcrumb">
+            &nbsp;Centre Listing
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li className="breadcrumb-item active" aria-current="page">
+          &nbsp;Centre Listing view
+        </li>
+      </ol>
+      <div className="card">
+        <div
+          className="d-flex px-4 justify-content-between align-items-center p-1 mb-4"
+          style={{ background: "#f5f7f9" }}
+        >
+          <div class="d-flex align-items-center">
+            <div class="d-flex">
+              <div class="dot active"></div>
             </div>
-            <div className="col-auto">
-              <div className="hstack gap-2 justify-content-end">
-                <Link to="/center">
-                  <button type="submit" className="btn btn-sm btn-light">
-                    <span>Back</span>
-                  </button>
-                </Link>
-              </div>
-            </div>
+            <span class="me-2 text-muted">View Centre</span>
+          </div>
+          <div className="my-2 pe-3 d-flex align-items-center">
+            <Link to="/center">
+              <button type="button " className="btn btn-sm btn-border   ">
+                Back
+              </button>
+            </Link>
           </div>
         </div>
-      </div>
-      <div className="card shadow border-0 mb-2 top-header">
-        <div className="container p-5">
-          <div className="row mt-5 pb-3">
-            <h4 className="headColor mb-4">Centre</h4>
+        <div className="container-fluid px-4">
+          <div className="row pb-3">
             <div className="col-md-6 col-12">
               <div className="row mt-3  mb-2">
                 <div className="col-6 ">
-                  <p className="fw-medium">Centre Name</p>
+                  <p className="">Centre Name</p>
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">
-                    : {data.tuitionCareName || "--"}
+                    : {data.centerName || "--"}
                   </p>
                 </div>
               </div>
@@ -60,7 +107,7 @@ function CenterView() {
             <div className="col-md-6 col-12">
               <div className="row  mb-2 mt-3">
                 <div className="col-6  ">
-                  <p className="fw-medium">Code</p>
+                  <p className="">Code</p>
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">: {data.code || "--"}</p>
@@ -70,11 +117,11 @@ function CenterView() {
             <div className="col-md-6 col-12">
               <div className="row  mb-2">
                 <div className="col-6  ">
-                  <p className="fw-medium">Centre Manager</p>
+                  <p className="">Centre Manager</p>
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">
-                    : {data.tuitionManager || "--"}
+                    : {formatValue(data.centerManager) || "--"}
                   </p>
                 </div>
               </div>
@@ -82,7 +129,7 @@ function CenterView() {
             <div className="col-md-6 col-12">
               <div className="row  mb-2">
                 <div className="col-6  ">
-                  <p className="fw-medium">Address</p>
+                  <p className="">Address</p>
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">: {data.address || "--"}</p>
@@ -92,7 +139,7 @@ function CenterView() {
             <div className="col-md-6 col-12">
               <div className="row  mb-2">
                 <div className="col-6  ">
-                  <p className="fw-medium">Zip Code</p>
+                  <p className="">Zip Code</p>
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">: {data.zipCode || "--"}</p>
@@ -102,7 +149,7 @@ function CenterView() {
             <div className="col-md-6 col-12">
               <div className="row  mb-2">
                 <div className="col-6  ">
-                  <p className="fw-medium">Mobile</p>
+                  <p className="">Mobile</p>
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">: {data.mobile || "--"}</p>
@@ -112,21 +159,31 @@ function CenterView() {
             <div className="col-md-6 col-12">
               <div className="row  mb-2">
                 <div className="col-6">
-                  <p className="fw-medium">Email</p>
+                  <p className="">Email</p>
                 </div>
                 <div className="col-6">
-                  <div className="text-muted text-sm" style={{ whiteSpace: "nowrap", textOverflow: "ellipsis", overflow: "hidden"  }}>: {data.email || "--"}</div>
+                  <div
+                    className="text-muted text-sm"
+                    style={{
+                      whiteSpace: "nowrap",
+                      textOverflow: "ellipsis",
+                      overflow: "hidden",
+                    }}
+                  >
+                    : {data.email || "--"}
+                  </div>
                 </div>
               </div>
             </div>
             <div className="col-md-6 col-12">
               <div className="row  mb-2">
                 <div className="col-6  ">
-                  <p className="fw-medium">Opening Date</p>
+                  <p className="">Opening Date</p>
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">
-                    : {data.openingDate
+                    :{" "}
+                    {data.openingDate
                       ? data.openingDate.substring(0, 10)
                       : "--"}
                   </p>
@@ -136,7 +193,7 @@ function CenterView() {
             <div className="col-md-6 col-12">
               <div className="row  mb-2">
                 <div className="col-6  ">
-                  <p className="fw-medium">UEN Number</p>
+                  <p className="">UEN Number</p>
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">
@@ -148,7 +205,7 @@ function CenterView() {
             <div className="col-md-6 col-12">
               <div className="row  mb-2">
                 <div className="col-6  ">
-                  <p className="fw-medium">GST</p>
+                  <p className="">GST</p>
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">
@@ -160,7 +217,7 @@ function CenterView() {
             <div className="col-md-6 col-12">
               <div className="row  mb-2">
                 <div className="col-6  ">
-                  <p className="fw-medium">Tax Registration Number</p>
+                  <p className="">Tax Registration Number</p>
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">
@@ -172,7 +229,7 @@ function CenterView() {
             <div className="col-md-6 col-12">
               <div className="row  mb-2">
                 <div className="col-6  ">
-                  <p className="fw-medium">Bank Name</p>
+                  <p className="">Bank Name</p>
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">: {data.bankName}</p>
@@ -182,7 +239,7 @@ function CenterView() {
             <div className="col-md-6 col-12">
               <div className="row  mb-2">
                 <div className="col-6  ">
-                  <p className="fw-medium">Bank Branch</p>
+                  <p className="">Bank Branch</p>
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">: {data.bankBranch}</p>
@@ -192,7 +249,7 @@ function CenterView() {
             <div className="col-md-6 col-12">
               <div className="row  mb-2">
                 <div className="col-6  ">
-                  <p className="fw-medium">Bank Account Number</p>
+                  <p className="">Bank Account Number</p>
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">
@@ -204,7 +261,7 @@ function CenterView() {
             <div className="col-md-6 col-12">
               <div className="row  mb-2">
                 <div className="col-6  ">
-                  <p className="fw-medium">Bank Account Name</p>
+                  <p className="">Bank Account Name</p>
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">: {data.bankAccountName}</p>
@@ -214,53 +271,78 @@ function CenterView() {
             <div className="col-md-6 col-12">
               <div className="row  mb-2">
                 <div className="col-6  ">
-                  <p className="fw-medium">Invoice Notes</p>
+                  <p className="">Invoice Notes</p>
                 </div>
-                <div className="col-6">
-                  <p className="text-muted text-sm">: {data.invoiceNotes}</p>
+                <div className="col-6  ">
+                  <p className="text-muted text-sm d-flex text-truncate">
+                    : {data.invoiceNotes || "--"}
+                    {/* : {formatValue(data.invoiceNotes) || "--"} */}
+                  </p>
                 </div>
               </div>
             </div>
+            <div className="col-md-6 col-12">
+              <div className="row  mb-2">
+                <div className="col-6  ">
+                  <p className="">Target</p>
+                </div>
+                <div className="col-6  ">
+                  <p className="text-muted text-sm d-flex text-truncate">
+                    : {data.target || "--"}
+                    {/* : {formatValue(data.invoiceNotes) || "--"} */}
+                  </p>
+                </div>
+              </div>
             </div>
+            <div className="col-md-6 col-12">
+              <div className="row  mb-2">
+                <div className="col-6  ">
+                  <p className="">QR Code </p>
+                </div>
+                <div className="col-6">
+                  <p className="my-2 d-flex">
+                    :{" "}
+                    {data.qrCode ? (
+                      <img
+                        src={data.qrCode}
+                        className="img-fluid ms-2 w-100 rounded"
+                        alt="Profile Image"
+                      />
+                    ) : (
+                      <></>
+                    )}
+                  </p>
+                </div>
+              </div>
             </div>
-            </div>
-            <div className="card shadow border-0 mb-2 top-header">
-            <div className="container">
-          <div className="row">
             {/* Center Registrations */}
             <div className="col-md-12 col-12 mt-4">
               <h5 className="headColor mb-3">Centre Registrations</h5>
               <table className="table table-border-solid">
                 <thead>
                   <tr>
-                    <th scope="col" className="fw-medium">
-                      S.No
-                    </th>
-                    <th scope="col" className="fw-medium">
-                      Registration Date
-                    </th>
-                    <th scope="col" className="fw-medium">
-                      Effective Date
-                    </th>
-                    <th scope="col" className="fw-medium">
-                      Amount Including(GST)
-                    </th>
-                    <th scope="col" className="fw-medium">
-                      Tax Type
-                    </th>
+                    <td className="">S.No</td>
+                    <td className="">Effective Date</td>
+                    <td className="">Amount Including(GST)</td>
+                    <td className="">Tax Type</td>
                   </tr>
                 </thead>
                 <tbody>
-                  {data.tuitionCareRegistration &&
-                    data.tuitionCareRegistration.map((registration, index) => (
+                  {data.centerRegistrations &&
+                    data.centerRegistrations.map((registration, index) => (
                       <tr key={index}>
                         <td>{index + 1}</td>
-                        <td>
-                          {registration.registrationDate.substring(0, 10)}
-                        </td>
-                        <td>{registration.effectiveDate.substring(0, 10)}</td>
+                        <td>{registration.effectiveDate?.substring(0, 10)}</td>
                         <td>{registration.amount}</td>
-                        <td>{registration.taxType}</td>
+                        {/* <td>{registration.taxId || "--"}</td> */}
+                        <td>
+                          {taxTypeData &&
+                            taxTypeData.map((tax) =>
+                              parseInt(registration.taxId) === tax.id
+                                ? tax.taxType || "--"
+                                : ""
+                            )}
+                        </td>
                       </tr>
                     ))}
                 </tbody>
@@ -272,23 +354,15 @@ function CenterView() {
               <table class="table table-border-solid">
                 <thead>
                   <tr>
-                    <th scope="col" className="fw-medium">
-                      S.No
-                    </th>
-                    <th scope="col" className="fw-medium">
-                      Break Name
-                    </th>
-                    <th scope="col" className="fw-medium">
-                      From Date
-                    </th>
-                    <th scope="col" className="fw-medium">
-                      To date
-                    </th>
+                    <td className="">S.No</td>
+                    <td className="">Break Name</td>
+                    <td className="">From Date</td>
+                    <td className="">To date</td>
                   </tr>
                 </thead>
                 <tbody>
-                  {data.tuitionCareBreak &&
-                    data.tuitionCareBreak.map((centerBreak, index) => (
+                  {data.centerBreaks &&
+                    data.centerBreaks.map((centerBreak, index) => (
                       <tr key={index}>
                         <td>{index + 1}</td>
                         <td>{centerBreak.breakName}</td>
@@ -305,81 +379,55 @@ function CenterView() {
               <table class="table table-border-solid">
                 <thead>
                   <tr>
-                    <th scope="col" className="fw-medium">
-                      S.No
-                    </th>
-                    <th
-                      scope="col"
-                      className="fw-medium"
-                      style={{ whiteSpace: "nowrap" }}
-                    >
+                    <td className="">S.No</td>
+                    <td className="" style={{ whiteSpace: "nowrap" }}>
                       Class Room Name
-                    </th>
-                    <th
-                      scope="col"
-                      className="fw-medium"
-                      style={{ whiteSpace: "nowrap" }}
-                    >
+                    </td>
+                    <td className="" style={{ whiteSpace: "nowrap" }}>
                       Class Room Code
-                    </th>
-                    <th
-                      scope="col"
-                      className="fw-medium"
-                      style={{ whiteSpace: "nowrap" }}
-                    >
+                    </td>
+                    <td className="" style={{ whiteSpace: "nowrap" }}>
                       Class Room Type
-                    </th>
-                    <th
-                      scope="col"
-                      className="fw-medium"
-                      style={{ whiteSpace: "nowrap" }}
-                    >
+                    </td>
+                    <td className="" style={{ whiteSpace: "nowrap" }}>
                       Capacity
-                    </th>
-                    <th
-                      scope="col"
-                      className="fw-medium"
-                      style={{ whiteSpace: "nowrap" }}
-                    >
+                    </td>
+                    <td className="" style={{ whiteSpace: "nowrap" }}>
                       Description
-                    </th>
+                    </td>
                   </tr>
                 </thead>
                 <tbody>
-                  {data.tuitionCareClassRoom &&
-                    data.tuitionCareClassRoom.map((centerClassRoom, index) => (
+                  {data.centerClassRooms &&
+                    data.centerClassRooms.map((centerClassRoom, index) => (
                       <tr key={index}>
                         <td>{index + 1}</td>
                         <td>{centerClassRoom.classRoomName}</td>
                         <td>{centerClassRoom.classRoomCode}</td>
                         <td>{centerClassRoom.classRoomType}</td>
                         <td>{centerClassRoom.capacity}</td>
-                        <td>{centerClassRoom.description}</td>
+                        <td className="text-break">
+                          {centerClassRoom.description}
+                        </td>
                       </tr>
                     ))}
                 </tbody>
               </table>
             </div>
-            .{/* Package  */}
+            {/* Package  */}
             <div className="col-md-12 col-12 mt-4">
               <h5 className="headColor mb-3">Centre Package</h5>
               <table class="table table-border-solid">
                 <thead>
                   <tr>
-                    <th scope="col" className="fw-medium">
-                      S.No
-                    </th>
-                    <th scope="col" className="fw-medium">
-                      Package
-                    </th>
-                    <th scope="col" className="fw-medium">
-                      Number Of Lesson
-                    </th>
+                    <td className="">S.No</td>
+                    <td className="">Package</td>
+                    <td className="">Number Of Lesson</td>
                   </tr>
                 </thead>
                 <tbody>
-                  {data.tuitionCarePackage &&
-                    data.tuitionCarePackage.map((centerPackage, index) => (
+                  {data.centerPackages &&
+                    data.centerPackages.map((centerPackage, index) => (
                       <tr key={index}>
                         <td>{index + 1}</td>
                         <td>{centerPackage.packageName || "--"}</td>
@@ -389,10 +437,10 @@ function CenterView() {
                 </tbody>
               </table>
             </div>
+          </div>
         </div>
       </div>
-      </div>
-      </div>
+    </div>
   );
 }
 

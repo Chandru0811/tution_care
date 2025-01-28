@@ -2,39 +2,61 @@ import React, { forwardRef, useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import api from "../../../config/URL";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import { FaEdit } from "react-icons/fa";
-import { data } from "jquery";
+import { CiEdit } from "react-icons/ci";
 
 const validationSchema = Yup.object().shape({
-  parentName: Yup.string().required("*Guardian Name is required!"),
+  parentName: Yup.string().required("*Guardian Name is required"),
   parentDateOfBirth: Yup.date()
-    .required("*Date Of Birth is required!")
-    .max(new Date(), "*Date Of Birth cannot be in the future!"),
-  email: Yup.string().required("*Email is required!"),
-  relation: Yup.string().required("*Relation is required!"),
+    .required("*Date Of Birth is required")
+    .max(new Date(), "*Date Of Birth cannot be in the future"),
+  email: Yup.string().required("*Email is required"),
+  relation: Yup.string().required("*Relation is required"),
   mobileNumber: Yup.string()
     .matches(
       /^(?:\+?65)?\s?(?:\d{4}\s?\d{4}|\d{3}\s?\d{3}\s?\d{4})$/,
-      "Invalid Phone Number!"
+      "Invalid Phone Number"
     )
-    .required("Phone Number is required!"),
+    .required("Phone Number is required"),
   postalCode: Yup.string()
     .matches(/^\d+$/, "Invalid Postal Code")
-    .required("*Postal code is required!"),
+    .required("*Postal code is required"),
   address: Yup.string().required("*Address is required"),
+  files: Yup.mixed()
+    .notRequired()
+    .test(
+      "max-file-name-length",
+      "*File name must be at most 50 characters",
+      (value) => !value || (value.name && value.name.length <= 50)
+    ),
 });
 
 const EditParentDetailModel = forwardRef(({ id, getData }) => {
   const [show, setShow] = useState(false);
   const [data, setData] = useState([]);
   const [loadIndicator, setLoadIndicator] = useState(false);
+  const userName = localStorage.getItem("userName");
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => {
+  const handleClose = () => {
+    setShow(false);
+    formik.resetForm();
+  };
+  const handleShow = async () => {
     setShow(true);
+    try {
+      const response = await api.get(`/getAllStudentParentsDetailsById/${id}`);
+      const getFormData = {
+        ...response.data,
+        parentDateOfBirth: response.data.parentDateOfBirth.substring(0, 10),
+      };
+      formik.setValues(getFormData);
+      setData(response.data);
+      console.log("Student ParentsDetails Data:", getFormData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
     console.log("Id:", id);
   };
 
@@ -50,7 +72,7 @@ const EditParentDetailModel = forwardRef(({ id, getData }) => {
       postalCode: "",
       address: "",
     },
-    // validationSchema: validationSchema,
+    validationSchema: validationSchema,
     onSubmit: async (data) => {
       console.log("Api Data:", data);
       setLoadIndicator(true);
@@ -67,6 +89,7 @@ const EditParentDetailModel = forwardRef(({ id, getData }) => {
         formDatas.append("address", data.address);
         // formDatas.append('parentId', id);
         formDatas.append("password", "12345678");
+        formDatas.append("updatedBy", userName);
 
         const response = await api.put(
           `/updateStudentParentsDetailsWithProfileImages/${id}`,
@@ -80,43 +103,32 @@ const EditParentDetailModel = forwardRef(({ id, getData }) => {
         if (response.status === 201) {
           toast.success(response.data.message);
           handleClose();
-          fetchParentData();
+          // fetchParentData();
           getData();
         } else {
           toast.error(response.data.message);
         }
       } catch (error) {
-        toast.error(error.message);
+        toast.error(error);
       } finally {
         setLoadIndicator(false);
       }
     },
   });
 
-  const fetchParentData = async () => {
-    try {
-      const response = await api.get(`/getAllStudentParentsDetailsById/${id}`);
-      const getFormData = {
-        ...response.data,
-        parentDateOfBirth: response.data.parentDateOfBirth.substring(0, 10),
-      };
-      formik.setValues(getFormData);
-      setData(response.data);
-      console.log("Student ParentsDetails Data:", getFormData);
-    } catch (error) {
-      console.error("Error fetching data:", error.message);
-    }
-  };
+  // const fetchParentData = async () => {
 
-  useEffect(() => {
-    fetchParentData();
-  }, []);
+  // };
+
+  // useEffect(() => {
+  //   fetchParentData();
+  // }, []);
 
   return (
     <div className="container-fluid">
       <div className="row">
-        <button className="btn">
-          <FaEdit onClick={handleShow} />
+        <button className="btn" type="button">
+          <CiEdit onClick={handleShow} />
         </button>
 
         <Modal
@@ -126,7 +138,14 @@ const EditParentDetailModel = forwardRef(({ id, getData }) => {
           centered
           onHide={handleClose}
         >
-          <form onSubmit={formik.handleSubmit}>
+          <form
+            onSubmit={formik.handleSubmit}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !formik.isSubmitting) {
+                e.preventDefault(); // Prevent default form submission
+              }
+            }}
+          >
             <Modal.Header closeButton>
               <Modal.Title>
                 <p className="headColor">Edit Parent/Guardian Detail</p>
@@ -180,6 +199,7 @@ const EditParentDetailModel = forwardRef(({ id, getData }) => {
                   </lable>
                   <input
                     type="date"
+                    // onFocus={(e) => e.target.showPicker()}
                     name="parentDateOfBirth"
                     className={`form-control ${
                       formik.touched.parentDateOfBirth &&
@@ -206,14 +226,39 @@ const EditParentDetailModel = forwardRef(({ id, getData }) => {
                       formik.setFieldValue("file", event.target.files[0]);
                     }}
                     onBlur={formik.handleBlur}
+                    accept=".jpg, .jpeg, .png, .gif, .bmp"
                   />
-                  <div className="my-2 text-center">
-                    <img
-                      src={data.profileImage}
-                      className="img-fluid rounded"
-                      style={{ width: "60%" }}
-                      alt="Parent Signature Img"
-                    ></img>
+                  {formik.touched.file && formik.errors.file && (
+                    <div className="error text-danger">
+                      <small>{formik.errors.file}</small>
+                    </div>
+                  )}
+                  <div className="my-2">
+                    {data.profileImage ? (
+                      <img
+                        src={data.profileImage}
+                        className="img-fluid rounded"
+                        style={{
+                          width: "100px",
+                          height: "100px",
+                          objectFit: "cover",
+                        }}
+                        alt="Profile"
+                      />
+                    ) : (
+                      <div
+                        style={{
+                          width: "100px",
+                          height: "100px",
+                          backgroundColor: "#e0e0e0",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        No Image
+                      </div>
+                    )}
                   </div>
                 </div>
                 <div className="col-md-6 col-12 mb-2">
@@ -325,7 +370,10 @@ const EditParentDetailModel = forwardRef(({ id, getData }) => {
               </div>
             </Modal.Body>
             <Modal.Footer className="mt-3">
-              <Button variant="secondary btn-sm" onClick={handleClose}>
+              <Button
+                className="btn btn-sm btn-border bg-light text-dark"
+                onClick={handleClose}
+              >
                 Cancel
               </Button>
 
@@ -343,13 +391,6 @@ const EditParentDetailModel = forwardRef(({ id, getData }) => {
                 )}
                 Update
               </button>
-              {/* <Button
-                type="submit"
-                variant="danger"
-               
-              >
-                Update
-              </Button> */}
             </Modal.Footer>
           </form>
         </Modal>

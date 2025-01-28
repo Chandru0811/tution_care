@@ -6,65 +6,54 @@ import React, {
 } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 import api from "../../../config/URL";
-// import BlockImg from "../.././../assets/images/Block_Img1.jpg";
 
 const validationSchema = Yup.object().shape({
   emergencyContactNo: Yup.string()
-    .matches(
-      /^(?:\+?65)?\s?(?:\d{4}\s?\d{4}|\d{3}\s?\d{3}\s?\d{4})$/,
-      "Invalid Phone Number"
-    )
-    .required("*Emergency Contact Number is Required!"),
-  contactNo: Yup.string()
-    .matches(/^\d+$/, "Invalid Phone Number")
-    .notRequired(""),
-  postalCode: Yup.string()
-    .matches(/^\d+$/, "Invalid Phone Number")
-    .notRequired(""),
+    .matches(/^\d{7,10}$/, "Invalid Number")
+    .notRequired(),
+  emergencyContactInformation: Yup.array().of(
+    Yup.object().shape({
+      contactNo: Yup.string()
+        .matches(/^\d{7,10}$/, "Invalid Number")
+        .notRequired(),
+      postalCode: Yup.string()
+        .matches(/^\d{6}$/, "Invalid Number(6 digit)")
+        .notRequired(),
+      files: Yup.mixed()
+        .notRequired()
+        .test(
+          "max-file-name-length",
+          "*File name must be at most 50 characters",
+          (value) => !value || (value.name && value.name.length <= 50)
+        ),
+    })
+  ),
 });
 
 const EditEmergencyContact = forwardRef(
-  ({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
-    const [rows, setRows] = useState([{}]);
-    const [data, setData] = useState([]);
-    console.log("Data is", rows);
-
-    const handleDelete = () => {
-      formik.setFieldValue(
-        "emergencyAuthorizedContactModels",
-        formik.values.emergencyAuthorizedContactModels.slice(0, -1)
-      );
-      setRows((prev) => prev.slice(0, -1));
-    };
-
-    const handleAddRow = () => {
-      const newContactModel = {
-        name: "",
-        emergencyRelation: "",
-        contactNo: "",
-        postalCode: "",
-        emergencyContactAddress: "",
-        files: null,
-      };
-      formik.setFieldValue("emergencyAuthorizedContactModels", [
-        ...formik.values.emergencyAuthorizedContactModels,
-        newContactModel,
-      ]);
-      setRows((prev) => [...prev, {}]);
-    };
+  ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
+    const userName = localStorage.getItem("userName");
+    const [profileImage, setProfileImage] = useState([]);
+    // Initialize rows based on emergencyContactInformation length
+    const initialRows = formData.emergencyContactInformation
+      ? formData.emergencyContactInformation.map(() => ({}))
+      : [{}];
+    const [rows, setRows] = useState(initialRows);
+    const [leadDataTrue, setleadDataTrue] = useState(true);
+    console.log("leadDataTrue", leadDataTrue);
 
     const formik = useFormik({
       initialValues: {
         emergencyContactId: "",
         emergencyContactName: formData.emergencyContactName || "",
-        authorizedRelation: formData.authorizedRelation || "",
+        emergencyRelation: formData.emergencyContactName || "",
         emergencyContactNo: formData.emergencyContactNo || "",
-        emergencyAuthorizedContactModels: [
+        emergencyContactInformation: [
           {
             name: formData.name || "",
-            emergencyRelation: formData.emergencyRelation || "",
+            authorizedRelation: formData.authorizedRelation || "",
             contactNo: formData.contactNo || "",
             postalCode: formData.postalCode || "",
             emergencyContactAddress: formData.emergencyContactAddress || "",
@@ -72,34 +61,42 @@ const EditEmergencyContact = forwardRef(
           },
         ],
       },
-      // validationSchema: validationSchema,
+      validationSchema: validationSchema,
       onSubmit: async (data) => {
         setLoadIndicators(true);
         try {
-          if (data.emergencyContactId !== null) {
-            // console.log("ID :",data.emergencyContactId);
-            const formDatas = new FormData();
-            formDatas.append("emergencyContactName", data.emergencyContactName);
-            formDatas.append("emergencyRelation", data.emergencyRelation);
-            formDatas.append("emergencyContactNo", data.emergencyContactNo);
-            data.emergencyAuthorizedContactModels.forEach((contact) => {
-              if (contact.id) {
-                formDatas.append("emergencyAuthorizedContactIds", contact.id);
-              }
-              formDatas.append("name", contact.name);
-              formDatas.append("contactNo", contact.contactNo);
+          const formDatas = new FormData();
+          formDatas.append(
+            "emergencyContactName",
+            data.emergencyContactName || ""
+          );
+          formDatas.append("emergencyRelation", "Brother");
+          formDatas.append("emergencyContactNo", data.emergencyContactNo || "");
+          data.emergencyContactInformation?.map((contact, index) => {
+            formDatas.append(`name[${index}]`, contact.name || "");
+            formDatas.append(`contactNo[${index}]`, contact.contactNo || "");
+            formDatas.append(
+              `authorizedRelation[${index}]`,
+              contact.authorizedRelation || ""
+            );
+            formDatas.append(`postalCode[${index}]`, contact.postalCode || "");
+            formDatas.append(
+              `emergencyContactAddress[${index}]`,
+              contact.emergencyContactAddress || ""
+            );
+            // Append files only if it's not a URL and not null/empty
+            if (contact.files && !String(contact.files).startsWith("http")) {
+              formDatas.append(`files[${index}]`, contact.files || "");
+            }
+            if (contact.id) {
               formDatas.append(
-                "authorizedRelation",
-                contact.authorizedRelation
+                `emergencyAuthorizedContactIds[${index}]`,
+                contact.id
               );
-              formDatas.append("postalCode", contact.postalCode);
-              formDatas.append(
-                "emergencyContactAddress",
-                contact.emergencyContactAddress
-              );
-              formDatas.append("files", contact.files);
-            });
-            formDatas.append("deleteEmergencyAuthorizedContactIds", 1);
+            }
+            // formDatas.append(`index[${index}]`, index);
+          });
+          if (data.emergencyContactId) {
             const response = await api.put(
               `/updateEmergencyContactWithEmergencyAuthorizedContact/${data.emergencyContactId}`,
               formDatas,
@@ -109,34 +106,17 @@ const EditEmergencyContact = forwardRef(
                 },
               }
             );
-            if (response.status === 200) {
+
+            if (response.status === 200 || response.status === 201) {
               toast.success(response.data.message);
               handleNext();
-              fetchData();
+              setleadDataTrue(false);
             } else {
               toast.error(response.data.message);
             }
           } else {
-            const formDatas = new FormData();
-            formDatas.append("emergencyContactName", data.emergencyContactName);
-            formDatas.append("emergencyRelation", data.emergencyRelation);
-            formDatas.append("emergencyContactNo", data.emergencyContactNo);
-            data.emergencyAuthorizedContactModels.forEach((contact) => {
-              formDatas.append("name", contact.name);
-              formDatas.append("contactNo", contact.contactNo);
-              formDatas.append(
-                "authorizedRelation",
-                contact.authorizedRelation
-              );
-              formDatas.append("postalCode", contact.postalCode);
-              formDatas.append(
-                "emergencyContactAddress",
-                contact.emergencyContactAddress
-              );
-              formDatas.append("files", contact.files || undefined);
-            });
             const response = await api.post(
-              `/createEmergencyContactWithEmergencyAuthorizedContact/${formData.id}`,
+              `/createEmergencyContactWithEmergencyAuthorizedContact/${formData.student_id}`,
               formDatas,
               {
                 headers: {
@@ -144,375 +124,529 @@ const EditEmergencyContact = forwardRef(
                 },
               }
             );
-            if (response.status === 201) {
+
+            if (response.status === 200 || response.status === 201) {
               toast.success(response.data.message);
               handleNext();
-              fetchData();
             } else {
               toast.error(response.data.message);
             }
           }
         } catch (error) {
-          toast.error(error.message);
-        }finally {
+          toast.error(error);
+        } finally {
           setLoadIndicators(false);
         }
       },
     });
 
-    const fetchData = async () => {
+    const getLeadData = async () => {
+      if (formData.LeadId && leadDataTrue) {
+        try {
+          const response = await api.get(
+            `/getAllLeadInfoById/${formData.LeadId}`
+          );
+          const leadData = response.data;
+          console.log("Lead Data ", leadData);
+          if (!formData.emergencyContactInformation) {
+            formik.setValues({
+              emergencyContactName: leadData.nameOfEmergency || "",
+              emergencyContactNo: leadData.emergencyContact || "",
+              emergencyRelation: leadData.nameOfEmergency || "",
+              emergencyContactInformation: [
+                {
+                  name: leadData.nameOfAuthorised || "",
+                  authorizedRelation: leadData.relationToChils || "",
+                  contactNo: leadData.contactOfAuthorised || "",
+                  postalCode: leadData.postalCode || "",
+                  emergencyContactAddress: leadData.address || "",
+                  files: null || "",
+                },
+              ],
+            });
+            // Set rows based on emergencyContactInformation
+            setRows([
+              {
+                /* Each object can be empty since it's used to map rows */
+              },
+            ]);
+          }
+        } catch (error) {
+          console.error("Error fetching lead data:", error);
+          toast.error("Error fetching lead data");
+        }
+      } else {
+        // If LeadId is not present, ensure rows match emergencyContactInformation
+        setRows(
+          formData.emergencyContactInformation
+            ? formData.emergencyContactInformation.map(() => ({}))
+            : [{}]
+        );
+        formik.setValues((prevValues) => ({
+          ...prevValues,
+          emergencyContactInformation:
+            formData.emergencyContactInformation ||
+            prevValues.emergencyContactInformation,
+        }));
+      }
+    };
+
+    const getStudentData = async () => {
       try {
-        const response = await api.get(`/getAllStudentDetails/${formData.id}`);
+        const response = await api.get(`/getAllStudentById/${formData.id}`);
+
         if (
           response.data.studentEmergencyContacts &&
           response.data.studentEmergencyContacts.length > 0
         ) {
+          const contactData = response.data.studentEmergencyContacts[0];
           formik.setValues({
-            ...response.data.studentEmergencyContacts[0],
-            emergencyContactId: response.data.studentEmergencyContacts[0].id,
+            ...contactData,
+            emergencyContactId: contactData.id,
+            emergencyContactInformation:
+              contactData.emergencyAuthorizedContactModels?.map((item) => ({
+                ...item,
+                emergencyAuthorizedContactIds: item.id,
+                files: item.personProfile,
+              })) || [],
           });
-          setRows(
-            response.data.studentEmergencyContacts[0]
-              .emergencyAuthorizedContactModels
+
+          const profile = contactData.emergencyAuthorizedContactModels?.map(
+            (item) => item.personProfile
           );
-          // setData(
-          //   response.data.studentEmergencyContacts[0].emergencyAuthorizedContactModels
-          // );
-          console.log(
-            "AuthorizedContactModels:",
-            response.data.studentEmergencyContacts[0]
-              .emergencyAuthorizedContactModels
-          );
+          console.log("Profile data: ", profile);
+          setProfileImage(profile);
         } else {
-          // If there are no emergency contacts, set default values or handle the case as needed
           formik.setValues({
             emergencyContactId: null,
             emergencyContactName: "",
             authorizedRelation: "",
             emergencyContactNo: "",
-            emergencyAuthorizedContactModels: [
+            emergencyContactInformation: [
               {
                 name: "",
                 emergencyRelation: "",
                 contactNo: "",
                 postalCode: "",
                 emergencyContactAddress: "",
-                files: null || "",
+                files: null,
               },
             ],
           });
         }
       } catch (error) {
-        console.error("Error fetching data:", error.message);
+        console.error("Error fetching data:", error);
       }
-      // console.log("Emergency Contact ID:", response.data.emergencyContactId);
     };
 
-    // const fetchEmergencyData = async () => {
-    //   try {
-    //     const response = await api.get(
-    //       `/getAllStudentEmergencyContactsById/${formData.id}`
-    //     );
-    //     let EmergencyData = response.data.emergencyAuthorizedContactModels;
-    //     console.log(response.data);
-    //     EmergencyData.forEach((emergency) => {
-    //       if (parseInt(id) === emergency.id) {
-    //         console.log("emergency", emergency);
-    //         formik.setValues(emergency || "");
-    //         setData(emergency);
-    //       }
-    //     });
-    //     console.log("getAllStudentEmergencyContactsById",EmergencyData);
-    //   } catch (error) {
-    //     console.error("Error fetching data:", error);
-    //   }
-    // };
-
-    console.log("Formik values is ", formik.values);
-
     useEffect(() => {
-      fetchData();
-      // fetchEmergencyData();
+      getStudentData();
     }, [formData.id]);
 
-    // const handleNextStep = () => {
-    //   formik.validateForm().then((errors) => {
-    //     formik.handleSubmit();
-    //     if (Object.keys(errors).length === 0) {
-    //       handleNext();
-    //     }
-    //   });
-    // };
+    const handleRemoveRow = (index) => {
+      const updatedEmergencyInformation = [
+        ...formik.values.emergencyContactInformation,
+      ];
+      updatedEmergencyInformation.splice(index, 1); // Remove the selected row
+      formik.setFieldValue(
+        "emergencyContactInformation",
+        updatedEmergencyInformation
+      );
+    };
+
+    const handleDeleteRow = async (index) => {
+      try {
+        const contactId = formik.values.emergencyContactInformation[index]?.id;
+        if (contactId) {
+          const response = await api.delete(
+            `/deleteEmergencyAuthorizedContact/${contactId}`
+          );
+          if (response.status === 200 || response.status === 201) {
+            toast.success("Contact deleted successfully");
+            getStudentData();
+            const updatedRows = [...formik.values.emergencyContactInformation];
+            updatedRows.splice(index, 1); // Remove from form values after successful API call
+            formik.setFieldValue("emergencyContactInformation", updatedRows);
+          }
+        }
+      } catch (error) {
+        toast.error("Failed to delete the contact");
+        console.error(error);
+      }
+    };
 
     useImperativeHandle(ref, () => ({
       emergencyContact: formik.handleSubmit,
     }));
 
+    useEffect(() => {
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    }, []);
+
     return (
       <div className="container-fluid">
-        <div className="container-fluid">
+        <form
+          onSubmit={formik.handleSubmit}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !formik.isSubmitting) {
+              e.preventDefault(); // Prevent default form submission
+            }
+          }}
+        >
+          {/* Emergency Contact Section */}
           <div className="border-0 mb-5">
-            <div className="border-0 my-2">
-              <form onSubmit={formik.handleSubmit}>
-                <div className="border-0 mb-5">
-                  <div className="mb-5">
-                    <div className="border-0 my-2">
-                      <p className="headColor">Emergency Contact</p>
-                      <div className="container py-3">
-                        <div className="row mt-3">
-                          <div className="col-lg-6 col-md-6 col-12">
-                            <div className="text-start mt-4">
-                              <label htmlFor="" className="mb-1 fw-medium">
-                                <small>Emergency Contact Name</small>&nbsp;
-                              </label>
-                              <br />
-                              <input
-                                className="form-control form-control-sm"
-                                type="text"
-                                name="emergencyContactName"
-                                onChange={formik.handleChange}
-                                onBlur={formik.handleBlur}
-                                value={formik.values.emergencyContactName}
-                              />
-                            </div>
-                            <div className="text-start mt-4">
-                              <label htmlFor="" className="mb-1 fw-medium">
-                                <small>Relation</small>&nbsp;
-                              </label>
-                              <br />
-                              <select
-                                name="emergencyRelation"
-                                onChange={formik.handleChange}
-                                onBlur={formik.handleBlur}
-                                value={formik.values.emergencyRelation}
-                                className="form-select form-select-sm"
-                                aria-label="example"
-                              >
-                                <option value=""></option>
-                                <option value="Mother">Mother</option>
-                                <option value="Father">Father</option>
-                              </select>
-                            </div>
-                          </div>
-                          <div className="col-lg-6 col-md-6 col-12 px-5">
-                            <div className="text-start mt-4">
-                              <label htmlFor="" className="mb-1 fw-medium">
-                                <small>Emergency Contact No</small>
-                                <span className="text-danger">*</span>
-                              </label>
-                              <br />
-                              <input
-                                className="form-control form-control-sm"
-                                type="text"
-                                name="emergencyContactNo"
-                                onChange={formik.handleChange}
-                                onBlur={formik.handleBlur}
-                                value={formik.values.emergencyContactNo}
-                              />
-                              {formik.touched.emergencyContactNo &&
-                                formik.errors.emergencyContactNo && (
-                                  <div className="text-danger">
-                                    <small>
-                                      {formik.errors.emergencyContactNo}
-                                    </small>
-                                  </div>
-                                )}
-                            </div>
-                          </div>
+            <p className="headColor">Emergency Contact</p>
+            <div className="container py-3">
+              <div className="row mt-3">
+                {/* Emergency Contact Name */}
+                <div className="col-lg-6 col-md-6 col-12">
+                  <div className="text-start mt-4">
+                    <label className="mb-1 fw-medium">
+                      <small>Emergency Contact Name</small>&nbsp;
+                    </label>
+                    <br />
+                    <input
+                      className="form-control"
+                      type="text"
+                      name="emergencyContactName"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      value={formik.values.emergencyContactName}
+                    />
+                    {formik.touched.emergencyContactName &&
+                      formik.errors.emergencyContactName && (
+                        <div className="text-danger">
+                          <small>{formik.errors.emergencyContactName}</small>
                         </div>
-                      </div>
-                    </div>
+                      )}
                   </div>
                 </div>
-              </form>
+                {/* Emergency Contact No */}
+                <div className="col-lg-6 col-md-6 col-12 px-5">
+                  <div className="text-start mt-4">
+                    <label className="mb-1 fw-medium">
+                      <small>Emergency Contact No</small>
+                    </label>
+                    <br />
+                    <input
+                      className="form-control"
+                      type="text"
+                      name="emergencyContactNo"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      value={formik.values.emergencyContactNo}
+                    />
+                    {formik.touched.emergencyContactNo &&
+                      formik.errors.emergencyContactNo && (
+                        <div className="text-danger">
+                          <small>{formik.errors.emergencyContactNo}</small>
+                        </div>
+                      )}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
+
+          {/* Authorized Persons Section */}
           <div className="border-0 mb-5">
-            {rows.map((row, index) => (
-              <div className="border-0 mb-5" key={index}>
-                <div className="border-0 my-2">
-                  <form onSubmit={formik.handleSubmit}>
+            {formik.values.emergencyContactInformation.map((row, index) => (
+              <>
+                <div className="border-0 mb-5" key={index}>
+                  <div className="border-0 my-2">
                     <p className="headColor">
-                      Authorized Person to Take Child from Class
+                      Authorized Person to Take Child from Class #{index + 1}
                     </p>
                     <div className="container py-3">
                       <div className="row mt-3">
+                        {/* Left Column */}
                         <div className="col-lg-6 col-md-6 col-12">
+                          {/* Name */}
                           <div className="text-start mt-4">
-                            <label htmlFor="" className="mb-1 fw-medium">
+                            <label className="mb-1 fw-medium">
                               <small>Name</small>&nbsp;
                             </label>
                             <br />
                             <input
-                              className="form-control form-control-sm"
+                              className="form-control"
                               type="text"
-                              name={`emergencyAuthorizedContactModels[${index}].name`}
+                              name={`emergencyContactInformation[${index}].name`}
                               onChange={formik.handleChange}
                               onBlur={formik.handleBlur}
                               value={
-                                formik.values.emergencyAuthorizedContactModels[
+                                formik.values.emergencyContactInformation?.[
                                   index
                                 ]?.name || ""
                               }
                             />
+                            {formik.touched.emergencyContactInformation?.[index]
+                              ?.name &&
+                              formik.errors.emergencyContactInformation?.[index]
+                                ?.name && (
+                                <div className="text-danger">
+                                  <small>
+                                    {
+                                      formik.errors.emergencyContactInformation[
+                                        index
+                                      ].name
+                                    }
+                                  </small>
+                                </div>
+                              )}
                           </div>
+                          {/* Relation */}
                           <div className="text-start mt-4">
-                            <label htmlFor="" className="mb-1 fw-medium">
+                            <label className="mb-1 fw-medium">
                               <small>Relation</small>&nbsp;
                             </label>
                             <br />
                             <select
-                              name={`emergencyAuthorizedContactModels[${index}].authorizedRelation`}
+                              name={`emergencyContactInformation[${index}].authorizedRelation`}
                               onChange={formik.handleChange}
                               onBlur={formik.handleBlur}
-                              className="form-select form-select-sm"
-                              aria-label=" example"
+                              className="form-select"
                               value={
-                                formik.values.emergencyAuthorizedContactModels[
+                                formik.values.emergencyContactInformation?.[
                                   index
                                 ]?.authorizedRelation || ""
                               }
                             >
-                              <option value=""></option>
+                              <option value="">Select Relation</option>
                               <option value="Mother">Mother</option>
                               <option value="Father">Father</option>
                               <option value="Sister">Sister</option>
                               <option value="Brother">Brother</option>
+                              {/* Add more options as needed */}
                             </select>
+                            {formik.touched.emergencyContactInformation?.[index]
+                              ?.authorizedRelation &&
+                              formik.errors.emergencyContactInformation?.[index]
+                                ?.authorizedRelation && (
+                                <div className="text-danger">
+                                  <small>
+                                    {
+                                      formik.errors.emergencyContactInformation[
+                                        index
+                                      ].authorizedRelation
+                                    }
+                                  </small>
+                                </div>
+                              )}
                           </div>
+                          {/* Emergency Contact Address */}
                           <div className="text-start mt-4">
-                            <label htmlFor="" className="mb-1 fw-medium">
+                            <label className="mb-1 fw-medium">
                               <small>Emergency Contact Address</small>&nbsp;
                             </label>
                             <br />
-                            <input
-                              className="form-control form-control-sm"
-                              type="text"
+                            <textarea
+                              className="form-control"
+                              rows={5}
+                              name={`emergencyContactInformation[${index}].emergencyContactAddress`}
                               onChange={formik.handleChange}
                               onBlur={formik.handleBlur}
-                              name={`emergencyAuthorizedContactModels[${index}].emergencyContactAddress`}
                               value={
-                                formik.values.emergencyAuthorizedContactModels[
+                                formik.values.emergencyContactInformation?.[
                                   index
                                 ]?.emergencyContactAddress || ""
                               }
                             />
+                            {formik.touched.emergencyContactInformation?.[index]
+                              ?.emergencyContactAddress &&
+                              formik.errors.emergencyContactInformation?.[index]
+                                ?.emergencyContactAddress && (
+                                <div className="text-danger">
+                                  <small>
+                                    {
+                                      formik.errors.emergencyContactInformation[
+                                        index
+                                      ].emergencyContactAddress
+                                    }
+                                  </small>
+                                </div>
+                              )}
                           </div>
                         </div>
+                        {/* Right Column */}
                         <div className="col-lg-6 col-md-6 col-12 px-5">
+                          {/* Contact No */}
                           <div className="text-start mt-4">
-                            <label htmlFor="" className="mb-1 fw-medium">
+                            <label className="mb-1 fw-medium">
                               <small>Contact No</small>&nbsp;
                             </label>
                             <br />
                             <input
-                              className="form-control form-control-sm"
+                              className="form-control"
                               type="text"
+                              name={`emergencyContactInformation[${index}].contactNo`}
                               onChange={formik.handleChange}
                               onBlur={formik.handleBlur}
-                              name={`emergencyAuthorizedContactModels[${index}].contactNo`}
                               value={
-                                formik.values.emergencyAuthorizedContactModels[
+                                formik.values.emergencyContactInformation?.[
                                   index
                                 ]?.contactNo || ""
                               }
                             />
+                            {formik.touched.emergencyContactInformation?.[index]
+                              ?.contactNo &&
+                              formik.errors.emergencyContactInformation?.[index]
+                                ?.contactNo && (
+                                <div className="text-danger">
+                                  <small>
+                                    {
+                                      formik.errors.emergencyContactInformation[
+                                        index
+                                      ].contactNo
+                                    }
+                                  </small>
+                                </div>
+                              )}
                           </div>
+                          {/* Postal Code */}
                           <div className="text-start mt-4">
-                            <label htmlFor="" className="mb-1 fw-medium">
+                            <label className="mb-1 fw-medium">
                               <small>Postal Code</small>&nbsp;
                             </label>
                             <br />
                             <input
-                              className="form-control form-control-sm"
+                              className="form-control"
                               type="text"
+                              name={`emergencyContactInformation[${index}].postalCode`}
                               onChange={formik.handleChange}
                               onBlur={formik.handleBlur}
-                              name={`emergencyAuthorizedContactModels[${index}].postalCode`}
                               value={
-                                formik.values.emergencyAuthorizedContactModels[
+                                formik.values.emergencyContactInformation?.[
                                   index
                                 ]?.postalCode || ""
                               }
                             />
+                            {formik.touched.emergencyContactInformation?.[index]
+                              ?.postalCode &&
+                              formik.errors.emergencyContactInformation?.[index]
+                                ?.postalCode && (
+                                <div className="text-danger">
+                                  <small>
+                                    {
+                                      formik.errors.emergencyContactInformation[
+                                        index
+                                      ].postalCode
+                                    }
+                                  </small>
+                                </div>
+                              )}
                           </div>
+                          {/* Profile */}
                           <div className="text-start mt-4">
-                            <label htmlFor="" className="mb-1 fw-medium">
-                              <small>Person Profile</small>&nbsp;
+                            <label htmlFor="" className="fw-medium">
+                              <small>Person Profile</small>
                             </label>
                             <br />
                             <input
-                              className="form-control form-control-sm"
                               type="file"
-                              name="files"
+                              name={`emergencyContactInformation[${index}].files`}
+                              className="form-control"
                               onChange={(event) => {
+                                const file = event.target.files[0];
                                 formik.setFieldValue(
-                                  `emergencyAuthorizedContactModels[${index}].files`,
-                                  event.target.files[0]
+                                  `emergencyContactInformation[${index}].files`,
+                                  file
                                 );
+
+                                const reader = new FileReader();
+                                reader.onload = (e) => {
+                                  const updatedProfileImage = [...profileImage];
+                                  updatedProfileImage[index] = e.target.result;
+                                  setProfileImage(updatedProfileImage);
+                                };
+                                reader.readAsDataURL(file);
                               }}
                               onBlur={formik.handleBlur}
-                              accept=".jpg, .jpeg, .png"
+                              accept=".jpg, .jpeg, .png, .gif, .bmp"
                             />
-                            <div className="my-2 text-center">
-                              {/* <img
-                                src={row.personProfile}
-                                className="img-fluid rounded"
-                                style={{ width: "60%" }}
-                                alt="Parent Signature Img"
-                              ></img> */}
-                              {/* <p className="my-2 d-flex">
-                                {row.personProfile ? (
-                                  <img
-                                    src={row.personProfile}
-                                    onError={(e) => {
-                                      e.target.src = BlockImg;
-                                    }}
-                                    alt="Person Profile"
-                                    style={{ width: "60%" }}
-                                    className="img-fluid rounded"
-                                  />
-                                ) : (
-                                  <img
-                                    src={BlockImg}
-                                    alt="Person Profile"
-                                    style={{ width: "60%" }}
-                                    className="img-fluid rounded"
-                                  />
-                                )}
-                              </p> */}
-                            </div>
+                            {formik.touched.emergencyContactInformation?.[index]
+                              ?.files &&
+                              formik.errors.emergencyContactInformation?.[index]
+                                ?.files && (
+                                <div className="error text-danger">
+                                  <small>
+                                    {
+                                      formik.errors
+                                        .emergencyContactInformation?.[index]
+                                        ?.files
+                                    }
+                                  </small>
+                                </div>
+                              )}
+                            {profileImage[index] ? (
+                              <img
+                                src={profileImage[index]}
+                                alt="Uploaded Preview"
+                                style={{
+                                  width: "100px",
+                                  height: "100px",
+                                  objectFit: "cover",
+                                  marginTop: "10px",
+                                }}
+                              />
+                            ) : (
+                              <></>
+                            )}
                           </div>
                         </div>
                       </div>
                     </div>
-                  </form>
+                    {/* Delete Button */}
+                    {formik.values.emergencyContactInformation.length > 1 && (
+                      <button
+                        type="button"
+                        className="btn btn-danger btn-sm"
+                        onClick={() => {
+                          if (row.id) {
+                            handleDeleteRow(index);
+                          } else if (row) {
+                            handleRemoveRow(index);
+                          }
+                        }}
+                      >
+                        Delete
+                      </button>
+                    )}
+                  </div>
                 </div>
-              </div>
+              </>
             ))}
           </div>
+
+          {/* Add Buttons */}
           <div className="row">
             <div className="col-12 mb-4">
               <button
                 type="button"
-                onClick={handleAddRow}
-                className="btn btn-border btn-sm"
+                className="btn btn-sm text-white"
+                style={{
+                  fontWeight: "600px !important",
+                  background: "#eb862a",
+                }}
+                onClick={() => {
+                  setRows((prev) => [...prev, {}]);
+                  formik.setFieldValue("emergencyContactInformation", [
+                    ...formik.values.emergencyContactInformation,
+                    {
+                      name: "",
+                      authorizedRelation: "",
+                      contactNo: "",
+                      postalCode: "",
+                      emergencyContactAddress: "",
+                      files: null,
+                    },
+                  ]);
+                }}
               >
-                <i className="bx bx-plus"></i>   Add More
+                Add More
               </button>
-              &nbsp;&nbsp;
-              {rows.length > 1 && (
-                <button
-                  type="button"
-                  onClick={handleDelete}
-                  className="btn btn-outline-danger"
-                >
-                  Delete
-                </button>
-              )}
             </div>
           </div>
-        </div>
+        </form>
       </div>
     );
   }

@@ -12,11 +12,16 @@ const validationSchema = Yup.object().shape({
   pace: Yup.string().required("*Select the Type"),
   curriculamCode: Yup.string().required("*Curriculam Code is required"),
   bodyTemperature: Yup.string().required("*Body Temperature is required"),
+  remark: Yup.string()
+    .max(200, "*The maximum length is 200 characters")
+    .required("*Only 200 Letters"),
 });
 
 function AttendancesAdd() {
   const navigate = useNavigate();
   const [loadIndicator, setLoadIndicator] = useState(false);
+  const userName = localStorage.getItem("userName");
+
   const formik = useFormik({
     initialValues: {
       studentid: "",
@@ -28,6 +33,7 @@ function AttendancesAdd() {
       remark: "",
       curriculamCode: "",
       bodyTemperature: "",
+      createdBy: userName,
     },
     validationSchema: validationSchema,
     onSubmit: async (data) => {
@@ -37,16 +43,23 @@ function AttendancesAdd() {
         alert("Attendance Created Successfully");
         navigate("/attendance");
       } catch (error) {
-        console.error("Error submitting form", error.message);
+        console.error("Error submitting form", error);
         alert("Failed to Create Attendance");
-      }finally {
+      } finally {
         setLoadIndicator(false);
       }
     },
   });
   return (
     <div className="container">
-      <form onSubmit={formik.handleSubmit}>
+      <form
+        onSubmit={formik.handleSubmit}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && !formik.isSubmitting) {
+            e.preventDefault(); // Prevent default form submission
+          }
+        }}
+      >
         <div className="my-3 d-flex justify-content-end align-items-end  mb-2">
           <Link to="/attendance">
             <button type="button " className="btn btn-sm btn-border   ">
@@ -54,15 +67,19 @@ function AttendancesAdd() {
             </button>
           </Link>
           &nbsp;&nbsp;
-          <button type="submit" className="btn btn-button btn-sm" disabled={loadIndicator}>
-                {loadIndicator && (
-                    <span
-                      className="spinner-border spinner-border-sm me-2"
-                      aria-hidden="true"
-                    ></span>
-                  )}
-                Save
-              </button>
+          <button
+            type="submit"
+            className="btn btn-button btn-sm"
+            disabled={loadIndicator}
+          >
+            {loadIndicator && (
+              <span
+                className="spinner-border spinner-border-sm me-2"
+                aria-hidden="true"
+              ></span>
+            )}
+            Save
+          </button>
         </div>
         <div className="container">
           <div className="row py-4">
@@ -178,11 +195,12 @@ function AttendancesAdd() {
                 aria-describedby="basic-addon1"
                 {...formik.getFieldProps("curriculamCode")}
               />
-              {formik.touched.curriculamCode && formik.errors.curriculamCode && (
-                <div className="invalid-feedback">
-                  {formik.errors.curriculamCode}
-                </div>
-              )}
+              {formik.touched.curriculamCode &&
+                formik.errors.curriculamCode && (
+                  <div className="invalid-feedback">
+                    {formik.errors.curriculamCode}
+                  </div>
+                )}
             </div>
 
             <div className="col-md-6 col-12 mb-4">
@@ -192,7 +210,8 @@ function AttendancesAdd() {
                 type="number"
                 name="bodyTemperature"
                 className={`form-control  ${
-                  formik.touched.bodyTemperature && formik.errors.bodyTemperature
+                  formik.touched.bodyTemperature &&
+                  formik.errors.bodyTemperature
                     ? "is-invalid"
                     : ""
                 }`}
@@ -200,11 +219,12 @@ function AttendancesAdd() {
                 aria-describedby="basic-addon1"
                 {...formik.getFieldProps("bodyTemperature")}
               />
-              {formik.touched.bodyTemperature && formik.errors.bodyTemperature && (
-                <div className="invalid-feedback">
-                  {formik.errors.bodyTemperature}
-                </div>
-              )}
+              {formik.touched.bodyTemperature &&
+                formik.errors.bodyTemperature && (
+                  <div className="invalid-feedback">
+                    {formik.errors.bodyTemperature}
+                  </div>
+                )}
             </div>
 
             <div className="col-md-6 col-12">
@@ -312,6 +332,7 @@ function AttendancesAdd() {
                 class="form-control"
                 {...formik.getFieldProps("remark")}
                 rows="3"
+                maxLength={200}
               ></textarea>
             </div>
           </div>
