@@ -116,11 +116,13 @@ const ReferalFees = () => {
 
       const centerId =
         !isClearFilterClicked &&
-          (filters.centerId || (centerLocalId && centerLocalId !== "undefined"))
+        (filters.centerId || (centerLocalId && centerLocalId !== "undefined"))
           ? filters.centerId || centerLocalId
           : "";
 
-      const response = await api.get(`getGenerateInvoiceByCenterId/${centerId}`);
+      const response = await api.get(
+        `getGenerateInvoiceByCenterId/${centerId}`
+      );
       setData(response.data);
     } catch (error) {
       toast.error(`Error Fetching Data: ${error.message}`);
@@ -161,8 +163,6 @@ const ReferalFees = () => {
   useEffect(() => {
     fetchData();
   }, [filters]);
-
-
 
   const theme = createTheme({
     components: {
@@ -210,7 +210,7 @@ const ReferalFees = () => {
   const clearFilter = () => {
     localStorage.removeItem("selectedCenterId"); // Clear center ID from local storage
     setFilters({
-      centerId: "", // Reset filters
+      centerId: centerId, // Reset filters
       centerName: "",
     });
     // setCenterId(""); // Clear local state for center ID
@@ -254,7 +254,7 @@ const ReferalFees = () => {
         </div>
         <div className="mb-3 d-flex justify-content-between">
           <div className="individual_fliters d-lg-flex ">
-            <div className="form-group mb-0 ms-2 mb-1">
+            {/* <div className="form-group mb-0 ms-2 mb-1">
               <select
                 className="form-select form-select-sm center_list"
                 style={{ width: "100%" }}
@@ -285,7 +285,7 @@ const ReferalFees = () => {
               >
                 Clear
               </button>
-            </div>
+            </div> */}
           </div>
           <ReferalFeesAdd onSuccess={fetchData} />
         </div>
@@ -315,10 +315,10 @@ const ReferalFees = () => {
                     updatedAt: false,
                   },
                 }}
-              // muiTableBodyRowProps={({ row }) => ({
-              //   onClick: () => navigate(`/center/view/${row.original.id}`),
-              //   style: { cursor: "pointer" },
-              // })}
+                // muiTableBodyRowProps={({ row }) => ({
+                //   onClick: () => navigate(`/center/view/${row.original.id}`),
+                //   style: { cursor: "pointer" },
+                // })}
               />
             </ThemeProvider>
 

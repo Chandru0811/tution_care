@@ -61,11 +61,11 @@ const Course = () => {
           </IconButton>
         ),
       },
-      {
-        accessorFn: (row) => row.centerName[0],
-        enableHiding: false,
-        header: "Center Name",
-      },
+      // {
+      //   accessorFn: (row) => row.centerName?.[0] || "",
+      //   enableHiding: false,
+      //   header: "Center Name",
+      // },
       { accessorKey: "levelName", enableHiding: false, header: "Level" },
       {
         accessorKey: "courseName",

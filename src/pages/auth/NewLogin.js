@@ -45,6 +45,7 @@ export default function NewLogin({ onLogin }) {
             localStorage.setItem("role", response.data.role);
             localStorage.setItem("token", response.data.accessToken);
             localStorage.setItem("userId", response.data.userId);
+            localStorage.setItem("centerName", response.data.centerName);
             localStorage.setItem("email", values.email);
             onLogin(response.data.roleId);
             navigate("/dashboard");

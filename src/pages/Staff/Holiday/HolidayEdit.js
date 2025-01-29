@@ -2,13 +2,13 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import fetchAllCentersWithIds from "../../List/CenterList";
+// import fetchAllCentersWithIds from "../../List/CenterList";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
 
 function HolidayEdit() {
   const validationSchema = Yup.object({
-    centerId: Yup.string().required("*Centre Name is required"),
+    // centerId: Yup.string().required("*Centre Name is required"),
     holidayName: Yup.string().required("*Holiday Name is required"),
     startDate: Yup.string().required("*Start Date is required"),
     endDate: Yup.string()
@@ -25,15 +25,16 @@ function HolidayEdit() {
       "*Holiday Description is required"
     ),
   });
-  const [centerData, setCenterData] = useState(null);
+  // const [centerData, setCenterData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const userName = localStorage.getItem("userName");
+  const centerId = localStorage.getItem("centerId");
 
   const navigate = useNavigate();
   const { id } = useParams();
   const formik = useFormik({
     initialValues: {
-      centerId: "",
+      centerId: centerId,
       holidayName: "",
       startDate: "",
       endDate: "",
@@ -45,7 +46,7 @@ function HolidayEdit() {
       console.log(values);
       try {
         const payload = {
-          centerId: values.centerId,
+          centerId:centerId,
           holidayName: values.holidayName,
           startDate: values.startDate,
           endDate: values.endDate,
@@ -74,14 +75,14 @@ function HolidayEdit() {
     },
   });
 
-  const fetchData = async () => {
-    try {
-      const centerData = await fetchAllCentersWithIds();
-      setCenterData(centerData);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
+  // const fetchData = async () => {
+  //   try {
+  //     const centerData = await fetchAllCentersWithIds();
+  //     setCenterData(centerData);
+  //   } catch (error) {
+  //     toast.error(error);
+  //   }
+  // };
 
   useEffect(() => {
     const getData = async () => {
@@ -99,7 +100,7 @@ function HolidayEdit() {
     };
 
     getData();
-    fetchData();
+    // fetchData();
   }, []);
 
   return (
@@ -171,7 +172,7 @@ function HolidayEdit() {
           </div>
           <div className="container-fluid px-4">
             <div className="row">
-              <div className="col-lg-6 col-md-6 col-12">
+              {/* <div className="col-lg-6 col-md-6 col-12">
                 <div className="text-start mt-2 mb-3">
                   <label className="form-label m-0">
                     Centre Name<span className="text-danger">*</span>
@@ -199,7 +200,7 @@ function HolidayEdit() {
                     </div>
                   )}
                 </div>
-              </div>
+              </div> */}
               <div className="col-lg-6 col-md-6 col-12">
                 <div className="text-start mt-2 mb-3">
                   <lable className="form-lable">

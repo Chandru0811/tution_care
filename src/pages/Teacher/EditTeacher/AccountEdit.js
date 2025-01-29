@@ -27,25 +27,25 @@ const validationSchema = Yup.object().shape({
 
 const AccountEdit = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
-    const [centerData, setCenterData] = useState([]);
+    // const [centerData, setCenterData] = useState([]);
     const colorInputRef = useRef(null);
     const [shgData, setShgData] = useState([]);
-    const [selectedCenters, setSelectedCenters] = useState([]);
-    const centerOptions = centerData.map((center) => ({
-      label: center.centerNames,
-      value: center.id,
-    }));
+    // const [selectedCenters, setSelectedCenters] = useState([]);
+    // const centerOptions = centerData.map((center) => ({
+    //   label: center.centerNames,
+    //   value: center.id,
+    // }));
     const userName = localStorage.getItem("userName");
     const centerId = localStorage.getItem("centerId");
 
-    const fetchData = async () => {
-      try {
-        const centers = await fetchAllCentersWithIds();
-        setCenterData(centers);
-      } catch (error) {
-        toast.error(error);
-      }
-    };
+    // const fetchData = async () => {
+    //   try {
+    //     const centers = await fetchAllCentersWithIds();
+    //     setCenterData(centers);
+    //   } catch (error) {
+    //     toast.error(error);
+    //   }
+    // };
 
     const formik = useFormik({
       initialValues: {
@@ -59,7 +59,7 @@ const AccountEdit = forwardRef(
         endDate: "",
         approvelContentRequired: "",
         workingDays: [],
-        centerIds: [],
+        centerId: centerId,
         updatedBy: userName,
       },
       validationSchema: validationSchema,
@@ -72,6 +72,7 @@ const AccountEdit = forwardRef(
           values.approvelContentRequired === "Yes" ? true : false;
         const updatedData = {
           ...values,
+          centerId:centerId,
           approvelContentRequired: Approval,
         };
         try {
@@ -97,6 +98,7 @@ const AccountEdit = forwardRef(
               values.approvelContentRequired === "Yes" ? true : false;
             const updatedData = {
               ...values,
+              centerId:centerId,
               approvelContentRequired: Approval,
               userId: formData.staff_id,
             };
@@ -184,13 +186,13 @@ const AccountEdit = forwardRef(
             });
             const centers = response.data.userAccountInfo[0].centers;
             const selectedCenterIds = centers.map((center) => center.id);
-            formik.setFieldValue("centerIds", selectedCenterIds);
-            setSelectedCenters(
-              centers.map((center) => ({
-                label: center.centerName,
-                value: center.id,
-              }))
-            );
+            // formik.setFieldValue("centerIds", selectedCenterIds);
+            // setSelectedCenters(
+            //   centers.map((center) => ({
+            //     label: center.centerName,
+            //     value: center.id,
+            //   }))
+            // );
           } else {
             formik.setValues({
               accountId: null,
@@ -204,7 +206,7 @@ const AccountEdit = forwardRef(
               endDate: "",
               approvelContentRequired: "",
               workingDays: [],
-              centerIds: [],
+              // centerIds: [],
             });
             // console.log("Account ID:", formik.values.accountId);
           }
@@ -213,7 +215,7 @@ const AccountEdit = forwardRef(
         }
       };
       getData();
-      fetchData();
+      // fetchData();
       ShgType();
       window.scrollTo({ top: 0, left: 0, behavior: "instant" });
     }, []);
@@ -259,7 +261,8 @@ const AccountEdit = forwardRef(
                 </div>
               )}
             </div>
-            <div className="col-md-6 col-12 my-2">
+
+            {/* <div className="col-md-6 col-12 my-2">
               <label className="form-label m-0">
                 Centre<span className="text-danger">*</span>
               </label>
@@ -287,7 +290,7 @@ const AccountEdit = forwardRef(
                   {formik.errors.centerIds}
                 </div>
               )}
-            </div>
+            </div> */}
             {/* <div class="col-md-6 col-12 mb-2 mt-3">
               <label>
                 Teacher ID<span class="text-danger">*</span>

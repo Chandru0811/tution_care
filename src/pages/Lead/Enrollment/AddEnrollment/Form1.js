@@ -26,7 +26,7 @@ const validationSchema = Yup.object().shape({
   // ethnicGroup: Yup.string().required("*Ethnic group is required"),
   schoolType: Yup.string().required("*School type is required"),
   // nameOfSchool: Yup.string().required("*School Name is required"),
-  centerId: Yup.string().required("*Centre is required"),
+  // centerId: Yup.string().required("*Centre is required"),
   // nameOfChildrenInTotal: Yup.number()
   //   .typeError("*Enter a valid number")
   //   .required("*Name of Children is required"),
@@ -41,6 +41,7 @@ const Form1 = forwardRef(
     const [centerData, setCenterData] = useState(null);
     console.log("Form data is ", formData);
     const userName = localStorage.getItem("userName");
+    const centerId = localStorage.getItem("centerId");
 
     const formik = useFormik({
       initialValues: {
@@ -63,6 +64,7 @@ const Form1 = forwardRef(
       onSubmit: async (data) => {
         setLoadIndicators(true);
         data.createdBy = userName;
+        data.centerId = centerId;
         try {
           // console.log("Before API Call - formData:", formData);
 
@@ -426,7 +428,7 @@ const Form1 = forwardRef(
                 )}
               </div>
             </div>
-            <div className="col-md-6 col-12 ">
+            {/* <div className="col-md-6 col-12 ">
               <div className="mb-3">
                 <label for="exampleFormControlInput1" className="form-label">
                   Centre<span className="text-danger">*</span>
@@ -452,7 +454,7 @@ const Form1 = forwardRef(
                   </div>
                 )}
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </form>

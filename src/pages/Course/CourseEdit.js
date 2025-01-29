@@ -55,8 +55,7 @@ function CourseEdit() {
   const [subjectData, setSubjectData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const centerId = localStorage.getItem("centerId");
-  const userName = localStorage.getItem("userName");
-  console.log("object", userName);
+  const role = localStorage.getItem("role");
   const centerOptions = centerData.map((center) => ({
     label: center.centerNames,
     value: center.id,
@@ -83,7 +82,7 @@ function CourseEdit() {
       status: "",
       classReplacementAllowed: false,
       description: "",
-      updatedBy: userName,
+      updatedBy: role,
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
@@ -91,7 +90,7 @@ function CourseEdit() {
       console.log(values);
       const updatedValues = {
         ...values,
-        updatedBy: userName,
+        updatedBy: role,
         minClassSize: values.minClassSize === "" ? 0 : values.minClassSize,
         maxClassSize: values.maxClassSize === "" ? 0 : values.maxClassSize,
       };
@@ -156,7 +155,7 @@ function CourseEdit() {
         // setSelectedCenters(response.data.centers.map(center => (console.log("object",center.id))));
         console.log("selectedCenters", selectedCenters);
       } catch (error) {
-        toast.error("Error fetching data:", error);
+        toast.error(error);
       }
     };
 
@@ -299,23 +298,6 @@ function CourseEdit() {
                   </div>
                 )}
               </div> */}
-              <div className="col-md-6 col-12 mb-2">
-                <lable className="form-lable">Color Code</lable>
-                <div className="input-group mt-2 mb-3">
-                  <div className="input-group-text inputGroup">
-                    <input
-                      type="color"
-                      {...formik.getFieldProps("colorCode")}
-                      className="form-control-color circle"
-                    />
-                  </div>
-                  <input
-                    type="text"
-                    className={`form-control iconInput `}
-                    value={formik.values.colorCode}
-                  />
-                </div>
-              </div>
             </div>
             <div className="row">
               <div className="col-md-6 col-12 mb-2">
@@ -597,6 +579,23 @@ function CourseEdit() {
                     {formik.errors.status}
                   </div>
                 )}
+              </div>
+              <div className="col-md-6 col-12 mb-2">
+                <lable className="form-lable">Color Code</lable>
+                <div className="input-group mt-2 mb-3">
+                  <div className="input-group-text inputGroup">
+                    <input
+                      type="color"
+                      {...formik.getFieldProps("colorCode")}
+                      className="form-control-color circle"
+                    />
+                  </div>
+                  <input
+                    type="text"
+                    className={`form-control iconInput `}
+                    value={formik.values.colorCode}
+                  />
+                </div>
               </div>
               <div className="col-md-6 col-12 mb-2">
                 <lable>

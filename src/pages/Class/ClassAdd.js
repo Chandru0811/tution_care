@@ -16,10 +16,10 @@ function ClassAdd() {
   const [teacherData, setTeacherData] = useState(null);
   const [batchData, setBatchData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
-  const userName = localStorage.getItem("userName");
+  const centerId = localStorage.getItem("centerId");
+  const role = localStorage.getItem("role");
 
   const validationSchema = Yup.object({
-    centerId: Yup.string().required("*Centre Name is required"),
     courseId: Yup.string().required("*Course Name is required"),
     className: Yup.string().required("*Class Name is required"),
     classType: Yup.string().required("*Class Type is required"),
@@ -43,8 +43,7 @@ function ClassAdd() {
 
   const formik = useFormik({
     initialValues: {
-      centerId: "",
-      centerName: "",
+      centerId: centerId,
       courseId: "",
       className: "",
       courseName: "",
@@ -61,12 +60,12 @@ function ClassAdd() {
       endTime: "",
       day: "",
       remark: "",
-      createdBy: userName,
+      createdBy: role,
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       setLoadIndicator(true);
-      values.createdBy = userName;
+      values.createdBy = role;
       const selectedValue = formik.values.centerId;
       let selectedOptionName = "";
 
@@ -115,6 +114,7 @@ function ClassAdd() {
     try {
       const courseData = await fetchAllCoursesWithIdsC(centerId);
       setCourseData(courseData);
+      console.log("coursedataaa", courseData)
     } catch (error) {
       toast.error(error);
     }
@@ -130,7 +130,7 @@ function ClassAdd() {
     }
   };
 
-  const fetchBatchandTeacherData = async (day ,centerId) => {
+  const fetchBatchandTeacherData = async (day, centerId) => {
     try {
       const response = await api.get(`getTeacherWithBatchListByDay?day=${day}&centerId=${centerId}`);
       setTeacherData(response.data.teacherList);
@@ -146,7 +146,7 @@ function ClassAdd() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.day, formik.values.centerId]);
-  
+
 
   useEffect(() => {
     const getData = async () => {
@@ -166,20 +166,21 @@ function ClassAdd() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.courseId]);
 
-  const handleCenterChange = (event) => {
-    const center = event.target.value;
-    formik.setFieldValue("centerId", center);
-    formik.setFieldValue("classId", "");
-    formik.setFieldValue("userId", "");
+  const handleCenterChange = async (event) => {
     setCourseData(null);
+    // const center = event.target.value;
+    formik.setFieldValue("centerId", centerId);
+    formik.setFieldValue("classId", centerId);
+    formik.setFieldValue("userId", "");
     setClassRoomData(null);
     setTeacherData(null);
-    fetchCourses(center);
-    fetchClassRoom(center);
+    fetchCourses(centerId);
+    fetchClassRoom(centerId);
   };
 
   useEffect(() => {
     fetchData();
+    handleCenterChange();
   }, []);
 
   const calculateEndTime = () => {
@@ -318,47 +319,16 @@ function ClassAdd() {
           <div className="container-fluid px-4">
             <div className="row">
               <div class="col-md-6 col-12 mb-4">
-                <lable class="">
-                  Centre<span class="text-danger">*</span>
-                </lable>
-                <select
-                  {...formik.getFieldProps("centerId")}
-                  name="centerId"
-                  className={`form-select   ${
-                    formik.touched.centerId && formik.errors.centerId
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  aria-label="Default select example"
-                  class="form-select "
-                  onChange={handleCenterChange}
-                >
-                  <option selected></option>
-                  {centerData &&
-                    centerData.map((centerId) => (
-                      <option key={centerId.id} value={centerId.id}>
-                        {centerId.centerNames}
-                      </option>
-                    ))}
-                </select>
-                {formik.touched.centerId && formik.errors.centerId && (
-                  <div className="invalid-feedback">
-                    {formik.errors.centerId}
-                  </div>
-                )}
-              </div>
-              <div class="col-md-6 col-12 mb-4">
                 <label>
                   Course<span class="text-danger">*</span>
                 </label>
                 <select
                   {...formik.getFieldProps("courseId")}
                   name="courseId"
-                  className={`form-select   ${
-                    formik.touched.courseId && formik.errors.courseId
+                  className={`form-select   ${formik.touched.courseId && formik.errors.courseId
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   aria-label="Default select example"
                   class="form-select "
                 >
@@ -384,11 +354,10 @@ function ClassAdd() {
                   name="className"
                   class="form-control "
                   type="text"
-                  className={`form-control  ${
-                    formik.touched.className && formik.errors.className
+                  className={`form-control  ${formik.touched.className && formik.errors.className
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   {...formik.getFieldProps("className")}
                 />
                 {formik.touched.className && formik.errors.className && (
@@ -442,11 +411,10 @@ function ClassAdd() {
                 </label>
                 <select
                   {...formik.getFieldProps("durationInHrs")}
-                  className={`form-select  ${
-                    formik.touched.durationInHrs && formik.errors.durationInHrs
+                  className={`form-select  ${formik.touched.durationInHrs && formik.errors.durationInHrs
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   name="durationInHrs"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -477,12 +445,11 @@ function ClassAdd() {
                 </label>
                 <select
                   {...formik.getFieldProps("durationInMins")}
-                  className={`form-select  ${
-                    formik.touched.durationInMins &&
-                    formik.errors.durationInMins
+                  className={`form-select  ${formik.touched.durationInMins &&
+                      formik.errors.durationInMins
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   name="durationInMins"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -507,11 +474,10 @@ function ClassAdd() {
                 </label>
                 <input
                   {...formik.getFieldProps("startDate")}
-                  className={`form-control  ${
-                    formik.touched.startDate && formik.errors.startDate
+                  className={`form-control  ${formik.touched.startDate && formik.errors.startDate
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   name="startDate"
                   type="date"
                   onChange={formik.handleChange}
@@ -530,11 +496,10 @@ function ClassAdd() {
                 </label>
                 <input
                   {...formik.getFieldProps("endDate")}
-                  className={`form-control  ${
-                    formik.touched.endDate && formik.errors.endDate
+                  className={`form-control  ${formik.touched.endDate && formik.errors.endDate
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   name="endDate"
                   type="date"
                   onChange={formik.handleChange}
@@ -553,9 +518,8 @@ function ClassAdd() {
                 </label>
                 <select
                   {...formik.getFieldProps("day")}
-                  className={`form-select  ${
-                    formik.touched.day && formik.errors.day ? "is-invalid" : ""
-                  }`}
+                  className={`form-select  ${formik.touched.day && formik.errors.day ? "is-invalid" : ""
+                    }`}
                   name="day"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -578,11 +542,10 @@ function ClassAdd() {
                 <label>Teacher</label>
                 <select
                   {...formik.getFieldProps("userId")}
-                  className={`form-select  ${
-                    formik.touched.userId && formik.errors.userId
+                  className={`form-select  ${formik.touched.userId && formik.errors.userId
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   name="userId"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -606,11 +569,10 @@ function ClassAdd() {
                 </label>
                 <select
                   {...formik.getFieldProps("startTime")}
-                  className={`form-select  ${
-                    formik.touched.startTime && formik.errors.startTime
+                  className={`form-select  ${formik.touched.startTime && formik.errors.startTime
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   name="startTime"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -644,11 +606,10 @@ function ClassAdd() {
                 </label>
                 <input
                   {...formik.getFieldProps("endTime")}
-                  className={`form-control  ${
-                    formik.touched.endTime && formik.errors.endTime
+                  className={`form-control  ${formik.touched.endTime && formik.errors.endTime
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   name="endTime"
                   type="time"
                   onChange={formik.handleChange}
@@ -665,11 +626,10 @@ function ClassAdd() {
                 <label>Class Room</label>
                 <select
                   {...formik.getFieldProps("classId")}
-                  className={`form-select  ${
-                    formik.touched.classId && formik.errors.classId
+                  className={`form-select  ${formik.touched.classId && formik.errors.classId
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   name="classId"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -693,11 +653,10 @@ function ClassAdd() {
                 <label>Remark</label>
                 <textarea
                   name="remark"
-                  className={`form-control ${
-                    formik.touched.remark && formik.errors.remark
+                  className={`form-control ${formik.touched.remark && formik.errors.remark
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   {...formik.getFieldProps("remark")}
                   maxLength={200}
                 />

@@ -64,18 +64,18 @@ function Sidebar() {
 
     // Define your menu items based on screen access values
     const updatedMenuItems = [
-      {
-        title: "Centre Management",
-        icon: "PiBuildings",
-        isOpen: false,
-        subMenus: [
-          {
-            title: "Centre Listing",
-            path: "/center",
-            access: storedScreens.centerListingIndex,
-          },
-        ],
-      },
+      // {
+      //   title: "Centre Management",
+      //   icon: "PiBuildings",
+      //   isOpen: false,
+      //   subMenus: [
+      //     {
+      //       title: "Centre Listing",
+      //       path: "/center",
+      //       access: storedScreens.centerListingIndex,
+      //     },
+      //   ],
+      // },
       {
         title: "Course Management",
         icon: "PiBookOpenText",
@@ -105,11 +105,11 @@ function Sidebar() {
             path: "lead/lead",
             access: storedScreens.leadListingIndex,
           },
-          {
-            title: "Contacts",
-            path: "/lead/contacted",
-            access: storedScreens.enrollmentIndex,
-          },
+          // {
+          //   title: "Contacts",
+          //   path: "/lead/contacted",
+          //   access: storedScreens.enrollmentIndex,
+          // },
         ],
       },
       {
@@ -351,68 +351,68 @@ function Sidebar() {
           // },
         ],
       },
-      {
-        title: "Content Management",
-        icon: "LiaUserEditSolid",
-        isOpen: false,
-        subMenus: [
-          {
-            title: "Header & Footer",
-            path: "/cms/header",
-            access: storedScreens.headerIndex,
-          },
-          {
-            title: "Home",
-            path: "/cms/home",
-            access: storedScreens.homeIndex,
-          },
-          {
-            title: "Blog",
-            path: "/cms/cmsBlog",
-            access: storedScreens.blogIndex,
-          },
-          {
-            title: "Testimonial",
-            path: "/cms/testimonial",
-            access: storedScreens.testimonialIndex,
-          },
-          {
-            title: "About",
-            path: "/cms/aboutus",
-            access: storedScreens.aboutIndex,
-          },
-          {
-            title: "Courses",
-            path: "/cms/CmsCourses",
-            access: storedScreens.englishCourseIndex,
-          },
-          {
-            title: "Teachers",
-            path: "/cms/teacher",
-            access: storedScreens.teacherSaveIndex,
-          },
-          {
-            title: "Products",
-            path: "/cms/products",
-            access: storedScreens.productSaveIndex,
-          },
-          {
-            title: "Products Items",
-            path: "/cms/productsitem",
-            access: storedScreens.productImageSaveIndex,
-          },
-          {
-            title: "News & Updates",
-            path: "/cms/newsupdate",
-            access: storedScreens.newsUpdatesIndex,
-          },
-          {
-            title: "Contact Us",
-            path: "/cms/contact",
-            access: storedScreens.contactUsIndex,
-          },
-        ],
-      },
+      // {
+      //   title: "Content Management",
+      //   icon: "LiaUserEditSolid",
+      //   isOpen: false,
+      //   subMenus: [
+      //     {
+      //       title: "Header & Footer",
+      //       path: "/cms/header",
+      //       access: storedScreens.headerIndex,
+      //     },
+      //     {
+      //       title: "Home",
+      //       path: "/cms/home",
+      //       access: storedScreens.homeIndex,
+      //     },
+      //     {
+      //       title: "Blog",
+      //       path: "/cms/cmsBlog",
+      //       access: storedScreens.blogIndex,
+      //     },
+      //     {
+      //       title: "Testimonial",
+      //       path: "/cms/testimonial",
+      //       access: storedScreens.testimonialIndex,
+      //     },
+      //     {
+      //       title: "About",
+      //       path: "/cms/aboutus",
+      //       access: storedScreens.aboutIndex,
+      //     },
+      //     {
+      //       title: "Courses",
+      //       path: "/cms/CmsCourses",
+      //       access: storedScreens.englishCourseIndex,
+      //     },
+      //     {
+      //       title: "Teachers",
+      //       path: "/cms/teacher",
+      //       access: storedScreens.teacherSaveIndex,
+      //     },
+      //     {
+      //       title: "Products",
+      //       path: "/cms/products",
+      //       access: storedScreens.productSaveIndex,
+      //     },
+      //     {
+      //       title: "Products Items",
+      //       path: "/cms/productsitem",
+      //       access: storedScreens.productImageSaveIndex,
+      //     },
+      //     {
+      //       title: "News & Updates",
+      //       path: "/cms/newsupdate",
+      //       access: storedScreens.newsUpdatesIndex,
+      //     },
+      //     {
+      //       title: "Contact Us",
+      //       path: "/cms/contact",
+      //       access: storedScreens.contactUsIndex,
+      //     },
+      //   ],
+      // },
       {
         title: "Settings",
         icon: "GrUserSettings",

@@ -8,7 +8,7 @@ import fetchAllCentersWithIds from "../../List/CenterList";
 import fetchAllEmployeeListByCenter from "../../List/EmployeeList";
 
 const validationSchema = Yup.object({
-  centerId: Yup.string().required("*Center Name is required"),
+  // centerId: Yup.string().required("*Center Name is required"),
   userId: Yup.string().required("*Employee Name is required"),
   deductionName: Yup.string().required("*Select the Deduction Name"),
   deductionMonth: Yup.string().required("*Select the Deduction Month"),
@@ -23,12 +23,13 @@ function DeductionEdit() {
   const [userNamesData, setUserNameData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const userName = localStorage.getItem("userName");
+  const centerId = localStorage.getItem("centerId");
   const navigate = useNavigate();
   const { id } = useParams();
 
   const formik = useFormik({
     initialValues: {
-      centerId: "",
+      centerId:centerId,
       userId: "",
       deductionMonth: "",
       deductionAmount: "",
@@ -39,6 +40,7 @@ function DeductionEdit() {
     onSubmit: async (values) => {
       setLoadIndicator(true);
       values.updatedBy = userName;
+      values.centerId = centerId;
       try {
         const response = await api.put(`/updateUserDeduction/${id}`, values, {
           headers: {
@@ -60,8 +62,8 @@ function DeductionEdit() {
   });
 
   const handleCenterChange = async (event) => {
-    setUserNameData(null);
-    const centerId = event.target.value;
+    // setUserNameData(null);
+    // const centerId = event.target.value;
     formik.setFieldValue("centerId", centerId);
     try {
       await fetchUserName(centerId);
@@ -70,14 +72,14 @@ function DeductionEdit() {
     }
   };
 
-  const fetchData = async () => {
-    try {
-      const centers = await fetchAllCentersWithIds();
-      setCenterData(centers);
-    } catch (error) {
-      toast.error(error.message);
-    }
-  };
+  // const fetchData = async () => {
+  //   try {
+  //     const centers = await fetchAllCentersWithIds();
+  //     setCenterData(centers);
+  //   } catch (error) {
+  //     toast.error(error.message);
+  //   }
+  // };
 
   const fetchUserName = async (centerId) => {
     try {
@@ -99,7 +101,7 @@ function DeductionEdit() {
       }
     };
     getData();
-    fetchData();
+    handleCenterChange();
   }, []);
 
   return (
@@ -171,7 +173,7 @@ function DeductionEdit() {
           </div>
           <div className="container-fluid px-4">
             <div className="row">
-              <div className="col-md-6 col-12 mb-3">
+              {/* <div className="col-md-6 col-12 mb-3">
                 <label className="form-label">Centre Name</label>
                 <span className="text-danger">*</span>
                 <select
@@ -197,7 +199,7 @@ function DeductionEdit() {
                     {formik.errors.centerId}
                   </div>
                 )}
-              </div>
+              </div> */}
               <div className="col-md-6 col-12 mb-3">
                 <label className="form-label">Employee Name</label>{" "}
                 <span className="text-danger">*</span>

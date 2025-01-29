@@ -21,6 +21,8 @@ function Datatable2() {
   const [selectedCenterId, setSelectedCenterId] = useState(null);
   const [selectedDay, setSelectedDay] = useState("ALL");
   const centerLocalId = localStorage.getItem("selectedCenterId");
+  const centerId = localStorage.getItem("centerId");
+
   const [chartData, setChartData] = useState({
     dayData: [],
     labels: [],
@@ -86,7 +88,7 @@ function Datatable2() {
         // Map for "ALL" days structure
         const dayData = data.dayData || {};
         const labels = data.labels || [];
-        
+
         const bookedSlots = labels.map(
           (label) => dayData[label]?.bookSlot || 0
         );
@@ -118,15 +120,15 @@ function Datatable2() {
             { name: "Available Slots", data: availableSlots },
           ],
           labels: Object.keys(timeData).map((key) => {
-              if (key.toLowerCase() === "total") return key;
-              const [hours, minutes] = key.split(":").map(Number);
-              const period = hours >= 12 ? "PM" : "AM";
-              const formattedHours = hours % 12 || 12;
-              return `${formattedHours}:${String(minutes).padStart(
-                2,
-                "0"
-              )} ${period}`;
-            }),
+            if (key.toLowerCase() === "total") return key;
+            const [hours, minutes] = key.split(":").map(Number);
+            const period = hours >= 12 ? "PM" : "AM";
+            const formattedHours = hours % 12 || 12;
+            return `${formattedHours}:${String(minutes).padStart(
+              2,
+              "0"
+            )} ${period}`;
+          }),
         });
       }
     } catch (error) {
@@ -135,10 +137,10 @@ function Datatable2() {
   };
 
   useEffect(() => {
-    if (selectedCenterId) {
-      fetchEnrollmentData(selectedCenterId, selectedType, selectedDay);
+    if (centerId) {
+      fetchEnrollmentData(centerId, selectedType, selectedDay);
     }
-  }, [selectedType, selectedDay, selectedCenterId]);
+  }, [selectedType, selectedDay, centerId]);
 
   const options = {
     chart: {
@@ -204,7 +206,7 @@ function Datatable2() {
           </div>
           <div className="container">
             <div className="row my-5">
-              <div className="col-md-4 col-12">
+              {/* <div className="col-md-4 col-12">
                 <label className="form-label">Centre</label>
                 <select
                   className="form-select"
@@ -219,7 +221,7 @@ function Datatable2() {
                       </option>
                     ))}
                 </select>
-              </div>
+              </div> */}
               <div className="col-md-4 col-12">
                 <label className="form-label">Week</label>
                 <input

@@ -14,7 +14,7 @@ import fetchAllNationalityeWithIds from "../../List/NationalityAndCountryList";
 import fetchAllStudentsWithIds from "../../List/StudentList";
 
 const validationSchema = Yup.object().shape({
-  centerId: Yup.string().required("*Centre is required"),
+  // centerId: Yup.string().required("*Centre is required"),
   studentName: Yup.string().required("*Student Name is required"),
   dateOfBirth: Yup.date()
     .required("*Date of Birth is required")
@@ -60,6 +60,7 @@ const AddStudentDetails = forwardRef(
     const [raceData, setRaceData] = useState(null);
     const [nationalityData, setNationalityData] = useState(null);
     const userName = localStorage.getItem("userName");
+    const centerId = localStorage.getItem("centerId");
 
     // console.log("FormData is ", formData);
 
@@ -129,6 +130,7 @@ const AddStudentDetails = forwardRef(
       validationSchema: validationSchema,
       onSubmit: async (values) => {
         setLoadIndicators(true);
+        values.centerId = centerId;
         try {
           let selectedCenter = "";
 
@@ -293,7 +295,7 @@ const AddStudentDetails = forwardRef(
               <div className="container">
                 <div className="row mt-3">
                   <div className="col-lg-6 col-md-6 col-12">
-                    <div className="text-start mt-2">
+                    {/* <div className="text-start mt-2">
                       <label htmlFor="" className="mb-1 fw-medium">
                         <small>Centre</small>
                         <span className="text-danger">*</span>
@@ -319,7 +321,7 @@ const AddStudentDetails = forwardRef(
                           <small>{formik.errors.centerId}</small>
                         </div>
                       )}
-                    </div>
+                    </div> */}
                     <div className="text-start mt-4">
                       <label className=" fw-medium">
                         <small>

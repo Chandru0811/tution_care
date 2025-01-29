@@ -24,12 +24,13 @@ const Attendance = () => {
   };
   const [selectedDate, setSelectedDate] = useState(getCurrentDate());
   const centerLocalId = localStorage.getItem("selectedCenterId");
+  const centerId = localStorage.getItem("centerId");
 
   const validationSchema = Yup.object({});
 
   const formik = useFormik({
     initialValues: {
-      centerId: "",
+      centerId: centerId,
       courseId: "",
       attendanceDate: "",
       attendanceStatus: "",
@@ -62,26 +63,26 @@ const Attendance = () => {
     },
   });
 
-  const fetchData = async () => {
-    try {
-      const centers = await fetchAllCentersWithIds();
-      if (centers.length > 0) {
-        const defaultCenterId = centers[0].id;
-        if (centerLocalId !== null && centerLocalId !== "undefined") {
-          formik.setFieldValue("centerId", centerLocalId);
-          await fetchCourses(centerLocalId);
-        } else if (centerData !== null && centerData.length > 0) {
-          formik.setFieldValue("centerId", defaultCenterId);
-          await fetchCourses(defaultCenterId);
-        }
-        setCenterData(centers);
-      } else {
-        console.error("No centers found!");
-      }
-    } catch (error) {
-      toast.error(error.message || "Error fetching centers.");
-    }
-  };
+  // const fetchData = async () => {
+  //   try {
+  //     const centers = await fetchAllCentersWithIds();
+  //     if (centers.length > 0) {
+  //       const defaultCenterId = centers[0].id;
+  //       if (centerLocalId !== null && centerLocalId !== "undefined") {
+  //         formik.setFieldValue("centerId", centerLocalId);
+  //         await fetchCourses(centerLocalId);
+  //       } else if (centerData !== null && centerData.length > 0) {
+  //         formik.setFieldValue("centerId", defaultCenterId);
+  //         await fetchCourses(defaultCenterId);
+  //       }
+  //       setCenterData(centers);
+  //     } else {
+  //       console.error("No centers found!");
+  //     }
+  //   } catch (error) {
+  //     toast.error(error.message || "Error fetching centers.");
+  //   }
+  // };
 
   const fetchCourses = async (centerId) => {
     try {
@@ -99,8 +100,8 @@ const Attendance = () => {
   };
 
   const handleCenterChange = (event) => {
-    setCourseData(null);
-    const centerId = event.target.value;
+    // setCourseData(null);
+    // const centerId = event.target.value;
     formik.setFieldValue("centerId", centerId);
     fetchCourses(centerId);
   };
@@ -110,7 +111,8 @@ const Attendance = () => {
   };
 
   useEffect(() => {
-    fetchData();
+    // fetchData();
+    handleCenterChange();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -156,7 +158,7 @@ const Attendance = () => {
           </div>
           <div className="container-fluid">
             <div className="row my-4">
-              <div className="col-md-4 col-12 mb-2">
+              {/* <div className="col-md-4 col-12 mb-2">
                 <label className="form-label">Centre</label>
                 <select
                   {...formik.getFieldProps("centerId")}
@@ -181,7 +183,7 @@ const Attendance = () => {
                     {formik.errors.centerId}
                   </div>
                 )}
-              </div>
+              </div> */}
               <div className="col-md-4 col-12 mb-2">
                 <label className="form-label">Course</label>
                 <select

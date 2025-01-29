@@ -9,7 +9,7 @@ import fetchAllEmployeeListByCenter from "../List/EmployeeList";
 import { format } from "date-fns";
 
 const validationSchema = Yup.object({
-  centerId: Yup.string().required("*Centre name is required"),
+  // centerId: Yup.string().required("*Centre name is required"),
   userId: Yup.string().required("*Employee name is required"),
   date: Yup.date()
     .transform((value, originalValue) =>
@@ -47,18 +47,19 @@ const validationSchema = Yup.object({
 });
 
 function StaffingAttendanceAdd() {
-  const [centerData, setCenterData] = useState(null);
+  // const [centerData, setCenterData] = useState(null);
   const [userNamesData, setUserNameData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const currentDate = format(new Date(), "yyyy-MM-dd");
   const navigate = useNavigate();
   const userName = localStorage.getItem("userName");
+  const centerId = localStorage.getItem("centerId");
   // const timestamp = 1723141800000;
   // const date = new Date(timestamp).toISOString().substring(0, 10);
 
   const formik = useFormik({
     initialValues: {
-      centerId: "",
+      centerId: centerId,
       userId: "",
       date: currentDate,
       attendanceStatus: "",
@@ -75,14 +76,14 @@ function StaffingAttendanceAdd() {
     onSubmit: async (values) => {
       setLoadIndicator(true);
       console.log("Attendance Emp:", values);
-      let selectedCenterName = "";
+      // let selectedCenterName = "";
       let selectedEmployeeName = "";
 
-      centerData.forEach((center) => {
-        if (parseInt(values.centerId) === center.id) {
-          selectedCenterName = center.centerNames || "--";
-        }
-      });
+      // centerData.forEach((center) => {
+      //   if (parseInt(values.centerId) === center.id) {
+      //     selectedCenterName = center.centerNames || "--";
+      //   }
+      // });
 
       userNamesData.forEach((employee) => {
         if (parseInt(values.userId) === employee.id) {
@@ -91,9 +92,9 @@ function StaffingAttendanceAdd() {
       });
 
       let payload = {
-        centerId: values.centerId,
+        centerId: centerId,
         createdBy: userName,
-        centerName: selectedCenterName,
+        // centerName: selectedCenterName,
         userId: values.userId,
         employeeName: selectedEmployeeName,
         date: values.date,
@@ -183,7 +184,6 @@ function StaffingAttendanceAdd() {
 
   const handleCenterChange = async (event) => {
     setUserNameData(null);
-    const centerId = event.target.value;
     formik.setFieldValue("centerId", centerId);
     try {
       await fetchUserName(centerId);
@@ -192,17 +192,17 @@ function StaffingAttendanceAdd() {
     }
   };
 
-  const fetchData = async () => {
-    try {
-      const centers = await fetchAllCentersWithIds();
-      setCenterData(centers);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
+  // const fetchData = async () => {
+  //   try {
+  //     const centers = await fetchAllCentersWithIds();
+  //     setCenterData(centers);
+  //   } catch (error) {
+  //     toast.error(error);
+  //   }
+  // };
 
   useEffect(() => {
-    fetchData();
+    handleCenterChange();
   }, []);
 
   const fetchUserName = async (centerId) => {
@@ -284,7 +284,7 @@ function StaffingAttendanceAdd() {
             </div>
             <div className="container-fluid px-4 pb-3">
               <div className="row">
-                <div className="col-md-6 col-12 mb-3 ">
+                {/* <div className="col-md-6 col-12 mb-3 ">
                   <lable className="">Centre Name</lable>
                   <span className="text-danger">*</span>
                   <select
@@ -310,7 +310,7 @@ function StaffingAttendanceAdd() {
                       {formik.errors.centerId}
                     </div>
                   )}
-                </div>
+                </div> */}
 
                 <div className="col-md-6 col-12 mb-3 ">
                   <lable className="">Employee Name</lable>
