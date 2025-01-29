@@ -16,10 +16,10 @@ function ClassEdit() {
   const [classRoomData, setClassRoomData] = useState(null);
   const [teacherData, setTeacherData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
-  const userName = localStorage.getItem("userName");
+  const role = localStorage.getItem("role");
+  const centerId = localStorage.getItem("centerId");
 
   const validationSchema = Yup.object({
-    centerId: Yup.string().required("*Centre Name is required"),
     courseId: Yup.string().required("*Course Name is required"),
     className: Yup.string().required("*Class Name is required"),
     classType: Yup.string().required("*Class Type is required"),
@@ -45,8 +45,7 @@ function ClassEdit() {
 
   const formik = useFormik({
     initialValues: {
-      centerId: "",
-      courseId: "",
+      courseId: centerId,
       className: "",
       classType: "",
       durationInHrs: "01",
@@ -59,12 +58,12 @@ function ClassEdit() {
       teacher: "",
       classId: "",
       remark: "",
-      updatedBy: userName,
+      updatedBy: role,
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       setLoadIndicator(true);
-      values.updatedBy = userName;
+      values.updatedBy = role;
       const selectedValue = formik.values.centerId;
       let selectedOptionName = "";
 
@@ -321,37 +320,6 @@ function ClassEdit() {
           </div>
           <div className="container-fluid px-4">
             <div className="row">
-              <div class="col-md-6 col-12 mb-4">
-                <lable class="">
-                  Centre<span class="text-danger">*</span>
-                </lable>
-                <select
-                  {...formik.getFieldProps("centerId")}
-                  name="centerId"
-                  className={`form-select   ${
-                    formik.touched.centerId && formik.errors.centerId
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  aria-label="Default select example"
-                  class="form-select "
-                  onChange={handleCenterChange}
-                  disabled
-                >
-                  <option selected></option>
-                  {centerData &&
-                    centerData.map((centerId) => (
-                      <option key={centerId.id} value={centerId.id}>
-                        {centerId.centerNames}
-                      </option>
-                    ))}
-                </select>
-                {formik.touched.centerId && formik.errors.centerId && (
-                  <div className="invalid-feedback">
-                    {formik.errors.centerId}
-                  </div>
-                )}
-              </div>
               <div class="col-md-6 col-12 mb-4">
                 <label>
                   Course<span class="text-danger">*</span>

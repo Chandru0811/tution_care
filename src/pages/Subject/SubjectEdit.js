@@ -14,7 +14,7 @@ import api from "../../config/URL";
 function SubjectEdit({ id, onSuccess, handleMenuClose }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
-  const userName = localStorage.getItem("userName");
+  const role = localStorage.getItem("role");
   const [isModified, setIsModified] = useState(false);
 
   const handleClose = () => {
@@ -40,12 +40,12 @@ function SubjectEdit({ id, onSuccess, handleMenuClose }) {
       subject: "",
       code: "",
       status: "",
-      updatedBy: userName,
+      updatedBy: role,
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       setLoadIndicator(true);
-      values.updatedBy= userName;
+      values.updatedBy= role;
       try {
         const response = await api.put(`/updateCourseSubject/${id}`, values, {
           headers: {
