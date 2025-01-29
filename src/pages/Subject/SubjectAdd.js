@@ -14,7 +14,7 @@ function SubjectAdd({ onSuccess }) {
   const navigate = useNavigate();
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [levelData, setLevelData] = useState(null);
-  const userName = localStorage.getItem("userName");
+  const role = localStorage.getItem("role");
   const [isModified, setIsModified] = useState(false);
   const centerId = localStorage.getItem("centerId");
 
@@ -54,7 +54,7 @@ function SubjectAdd({ onSuccess }) {
       subject: "",
       code: "",
       status: "",
-      createdBy: userName,
+      createdBy: role,
 
       // levelId: "",
     },
@@ -69,7 +69,7 @@ function SubjectAdd({ onSuccess }) {
       //     selectedLevelName = level.levels || "--";
       //   }
       // });
-      values.createdBy= userName;
+      values.createdBy= role;
       try {
         const response = await api.post("/createCourseSubjectWithCenterId", values, {
           headers: {

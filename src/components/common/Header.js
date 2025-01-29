@@ -11,6 +11,7 @@ function Header({ onLogout, centerChange }) {
   const userName = localStorage.getItem("userName");
   const centerName = localStorage.getItem("centerName");
   const userEmail = localStorage.getItem("email");
+  const role = localStorage.getItem("role")?.replace(/_/g, " ");
   const selectedCenterId = localStorage.getItem("selectedCenterId");
   const [centerData, setCenterData] = useState(null);
   const [selectedCenter, setSelectedCenter] = useState("");
@@ -63,7 +64,7 @@ function Header({ onLogout, centerChange }) {
               <CiCalendarDate
                 style={{
                   color: "#287f71",
-                  fontSize: "25px",
+                  fontSize: "30px",
                   fontWeight: "bolder",
                 }}
               />
@@ -134,7 +135,7 @@ function Header({ onLogout, centerChange }) {
         <div className="offcanvas-body d-flex flex-column">
           <div className="flex-grow-1">
             <div className="text-center">
-              <h3 className="cname_canvas">Tution Care</h3>
+              <h3 className="cname_canvas" style={{ fontSize: "30px" }} >{centerName || "Tuition Care"}</h3>
             </div>
             <div className="text-center mt-3">
               <i
@@ -153,6 +154,7 @@ function Header({ onLogout, centerChange }) {
             <div className="list-group list-group-flush pt-4 text-center">
               <p>{userName?.replace(/_/g, " ")}</p>
               <p>{userEmail}</p>
+              <p>{role}</p>
             </div>
           </div>
 

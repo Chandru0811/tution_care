@@ -19,7 +19,7 @@ function Edit({ id, onSuccess, handleMenuClose }) {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [subjectData, setSubjectData] = useState(null);
   const [isModified, setIsModified] = useState(false);
-  const userName = localStorage.getItem("userName");
+  const role = localStorage.getItem("role");
 
   const fetchData = async () => {
     try {
@@ -51,12 +51,12 @@ function Edit({ id, onSuccess, handleMenuClose }) {
       levelCode: "",
       status: "",
       subjectId: "",
-      updatedBy: userName,
+      updatedBy: role,
     },
     validationSchema: validationSchema, // Assign the validation schema
     onSubmit: async (values) => {
       setLoadIndicator(true);
-       values.updatedBy= userName;
+       values.updatedBy= role;
       try {
         const response = await api.put(`/updateCourseLevel/${id}`, values, {
           headers: {

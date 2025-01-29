@@ -93,26 +93,7 @@ function CourseView() {
         </div>
         <div className="container-fluid px-4">
           <div className="row pb-3">
-            <div className="col-md-12 col-12">
-              <div className="row mt-3">
-                <div className="col-3 ">
-                  <p className="fw-medium">Centre Name</p>
-                </div>
-                <div className="col-9">
-                  <p className="text-muted text-sm">
-                    :{" "}
-                    {data.centers && data.centers.length > 0
-                      ? data.centers.map((center, index) => (
-                          <span key={index}>
-                            {index > 0 && ", "}
-                            {center.centerName}
-                          </span>
-                        ))
-                      : ""}
-                  </p>
-                </div>
-              </div>
-            </div>
+            
             <div className="col-md-6 col-12">
               <div className="row  mb-2 mt-1">
                 <div className="col-6">
