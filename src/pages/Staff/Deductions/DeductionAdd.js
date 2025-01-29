@@ -9,7 +9,7 @@ import { format } from "date-fns";
 import fetchUserListWithoutFreelancerByCenterId from "../../List/UserListWithoutFreelancer";
 
 const validationSchema = Yup.object({
-  centerId: Yup.number().required("*Center Name is required"),
+  // centerId: Yup.number().required("*Center Name is required"),
   userId: Yup.number().required("*Employee Name is required"),
   deductionName: Yup.string().required("*Select the Deduction Name"),
   deductionMonth: Yup.string().required("*Select the Deduction Month"),

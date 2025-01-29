@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 
 function HolidayAdd() {
   const validationSchema = Yup.object({
-    centerId: Yup.string().required("*Centre Name is required"),
+    // centerId: Yup.string().required("*Centre Name is required"),
     holidayName: Yup.string().required("*Holiday Name is required"),
     startDate: Yup.string().required("*Start Date is required"),
     endDate: Yup.string()
@@ -45,7 +45,7 @@ function HolidayAdd() {
       console.log(values);
       try {
         const payload = {
-          centerId: values.centerId,
+          centerId: centerId,
           holidayName: values.holidayName,
           startDate: values.startDate,
           endDate: values.endDate,

@@ -21,11 +21,13 @@ function AssignmentAdd() {
   const [userData, setUserData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const userName = localStorage.getItem("userName");
+  const centerId = localStorage.getItem("centerId");
   const [batchData, setBatchData] = useState(null);
   const [selectedStudents, setSelectedStudents] = useState([]);
+  const [selectedBatchTimes, setSelectedBatchTimes] = useState([]);
 
   const validationSchema = Yup.object({
-    center: Yup.string().required("*Centre is required"),
+    // center: Yup.string().required("*Centre is required"),
     course: Yup.string().required("*Course is required"),
     userId: Yup.string().required("*Teacher is required"),
     day: Yup.string().required("*Days is required"),
@@ -171,32 +173,32 @@ function AssignmentAdd() {
       setLoadIndicator(true);
       try {
         // Find selected center, class, and course names
-        const selectedValue = formik.values.center;
+        // const selectedValue = formik.values.center;
         let selectedOptionName = "";
         let selectedClassName = "";
         let selectedCourseName = "";
-    
-        centerData.forEach((center) => {
-          if (parseInt(selectedValue) === center.id) {
-            selectedOptionName = center.centerNames || "--";
-          }
-        });
-    
+
+        // centerData.forEach((center) => {
+        //   if (parseInt(selectedValue) === center.id) {
+        //     selectedOptionName = center.centerNames || "--";
+        //   }
+        // });
+
         classData.forEach((cls) => {
           if (parseInt(values.classListing) === cls.id) {
             selectedClassName = cls.classNames || "--";
           }
         });
-    
+
         courseData.forEach((course) => {
           if (parseInt(values.course) === course.id) {
             selectedCourseName = course.courseNames || "--";
           }
         });
-    
+
         // Create FormData object
         const formData = new FormData();
-        formData.append("centerId", values.center);
+        formData.append("centerId", centerId);
         formData.append("userId", values.userId);
         formData.append("day", values.day);
         formData.append("center", selectedOptionName);
@@ -209,7 +211,7 @@ function AssignmentAdd() {
         formData.append("date", values.date);
         formData.append("expiredDate", values.expiredDate);
         formData.append("createdBy", userName);
-    
+
         if (folderCategory === "group") {
           formData.append("isGroupUpload", true);
         } else {
@@ -220,14 +222,14 @@ function AssignmentAdd() {
             );
           }
         }
-    
+
         // Append files
         if (values.files && values.files.length > 0) {
           values.files.forEach((file, index) =>
             formData.append(`files[${index}]`, file)
           );
         }
-    
+
         // Send the request
         const response = await api.post(
           "/uploadStudentFilesWithSingleOrGroup",
@@ -238,7 +240,7 @@ function AssignmentAdd() {
             },
           }
         );
-    
+
         // Handle the response
         if (response.status === 201) {
           toast.success(response.data.message);
@@ -247,7 +249,10 @@ function AssignmentAdd() {
           toast.error(response.data.message);
         }
       } catch (error) {
-        if (error?.response?.status === 409 || error?.response?.status === 404) {
+        if (
+          error?.response?.status === 409 ||
+          error?.response?.status === 404
+        ) {
           toast.warning(error?.response?.data?.message);
         } else {
           toast.error("Error deleting data:", error.message);
@@ -256,7 +261,6 @@ function AssignmentAdd() {
         setLoadIndicator(false);
       }
     },
-    
   });
 
   // Function to scroll to the first error field
@@ -276,19 +280,19 @@ function AssignmentAdd() {
     }
   }, [formik.submitCount, formik.errors]);
 
-  const fetchData = async () => {
-    try {
-      const centerData = await fetchAllCentersWithIds();
+  // const fetchData = async () => {
+  //   try {
+  //     const centerData = await fetchAllCentersWithIds();
 
-      setCenterData(centerData);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
+  //     setCenterData(centerData);
+  //   } catch (error) {
+  //     toast.error(error);
+  //   }
+  // };
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+  // useEffect(() => {
+  //   fetchData();
+  // }, []);
 
   const fetchCourses = async (centerId) => {
     try {
@@ -340,11 +344,11 @@ function AssignmentAdd() {
     setCourseData(null);
     setUserData(null);
     setStudentData(null);
-    const center = event.target.value;
-    formik.setFieldValue("center", center);
-    fetchCourses(center);
-    fetchTeacher(center);
-    fetchStudent(center); // Fetch courses for the selected center
+
+    formik.setFieldValue("center", centerId);
+    fetchCourses(centerId);
+    fetchTeacher(centerId);
+    fetchStudent(centerId); // Fetch courses for the selected center
   };
 
   const fetchBatchandTeacherData = async (day) => {
@@ -410,10 +414,8 @@ function AssignmentAdd() {
   };
 
   useEffect(() => {
-    if (formik.values.center) {
-      fetchStudent(formik.values.center); // Fetch students for the selected center
-    }
-  }, [formik.values.center]);
+    handleCenterChange();
+  }, []);
 
   return (
     <div className="container">
@@ -485,7 +487,7 @@ function AssignmentAdd() {
 
           <div className="container">
             <div className="row py-4">
-              <div class="col-md-6 col-12 mb-4">
+              {/* <div class="col-md-6 col-12 mb-4">
                 <lable class="">
                   Centre<span class="text-danger">*</span>
                 </lable>
@@ -511,7 +513,7 @@ function AssignmentAdd() {
                 {formik.touched.center && formik.errors.center && (
                   <div className="invalid-feedback">{formik.errors.center}</div>
                 )}
-              </div>
+              </div> */}
 
               <div class="col-md-6 col-12 mb-4">
                 <lable class="">
@@ -625,40 +627,7 @@ function AssignmentAdd() {
                 )}
               </div>
 
-              <div className="col-md-6 col-12 mb-4">
-                <label className="">
-                  Batch Time<span className="text-danger">*</span>
-                </label>
-                <select
-                  {...formik.getFieldProps("batchTime")}
-                  className={`form-select ${
-                    formik.touched.batchTime && formik.errors.batchTime
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                >
-                  <option></option>
-                  {batchData &&
-                    batchData.map((time) => {
-                      const displayTime = normalizeTime(time);
-                      const valueTime =
-                        time.includes("AM") || time.includes("PM")
-                          ? convertTo24Hour(time)
-                          : time;
-
-                      return (
-                        <option key={time} value={valueTime}>
-                          {displayTime}
-                        </option>
-                      );
-                    })}
-                </select>
-                {formik.touched.batchTime && formik.errors.batchTime && (
-                  <div className="invalid-feedback">
-                    {formik.errors.batchTime}
-                  </div>
-                )}
-              </div>
+        
 
               {/* Radio buttons for selecting folder category */}
               <div className="col-md-6 col-12 mb-4">
@@ -736,7 +705,43 @@ function AssignmentAdd() {
                   </div>
                 )}
               </div>
-
+              <div className="col-md-6 col-12 mb-4">
+                <label className="">
+                  Batch Time<span className="text-danger">*</span>
+                </label>
+                <MultiSelect
+                  options={
+                    batchData
+                      ? batchData.map((time) => ({
+                          label: normalizeTime(time),
+                          value:
+                            time.includes("AM") || time.includes("PM")
+                              ? convertTo24Hour(time)
+                              : time,
+                        }))
+                      : []
+                  }
+                  value={selectedBatchTimes}
+                  onChange={(selected) => {
+                    setSelectedBatchTimes(selected);
+                    formik.setFieldValue(
+                      "batchTime",
+                      selected.map((option) => option.value)
+                    );
+                  }}
+                  labelledBy="Select Batch Time"
+                  className={`form-multi-select ${
+                    formik.touched.batchTime && formik.errors.batchTime
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                />
+                {formik.touched.batchTime && formik.errors.batchTime && (
+                  <div className="invalid-feedback">
+                    {formik.errors.batchTime}
+                  </div>
+                )}
+              </div>
               <div className="col-md-6 col-12 mb-4">
                 <label className="form-label">
                   Date<span className="text-danger">*</span>

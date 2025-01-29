@@ -35,14 +35,14 @@ const StaffAccountEdit = forwardRef(
       value: center.id,
     }));
 
-    const fetchData = async () => {
-      try {
-        const centerData = await fetchAllCentersWithIds();
-        setCenterData(centerData);
-      } catch (error) {
-        toast.error(error);
-      }
-    };
+    // const fetchData = async () => {
+    //   try {
+    //     const centerData = await fetchAllCentersWithIds();
+    //     setCenterData(centerData);
+    //   } catch (error) {
+    //     toast.error(error);
+    //   }
+    // };
     const userName = localStorage.getItem("userName");
 
     const formik = useFormik({
@@ -56,7 +56,7 @@ const StaffAccountEdit = forwardRef(
         endDate: "",
         approvelContentRequired: "",
         workingDays: [],
-        centerIds: [],
+        centerId: centerId,
         updatedBy: userName,
       },
       validationSchema: validationSchema,
@@ -91,6 +91,7 @@ const StaffAccountEdit = forwardRef(
         // console.log("Api Data:", values);
         setLoadIndicators(true);
         values.updatedBy = userName;
+        values.centerId = centerId;
         const Approval =
           values.approvelContentRequired === "Yes" ? true : false;
         const updatedData = {
@@ -206,12 +207,12 @@ const StaffAccountEdit = forwardRef(
               "shgTypeId",
               response.data.userAccountInfo[0]?.shgTypeId
             );
-            setSelectedCenters(
-              centers.map((center) => ({
-                label: center.centerName,
-                value: center.id,
-              }))
-            );
+            // setSelectedCenters(
+            //   centers.map((center) => ({
+            //     label: center.centerName,
+            //     value: center.id,
+            //   }))
+            // );
           } else {
             formik.setValues({
               accountId: null,
@@ -224,7 +225,7 @@ const StaffAccountEdit = forwardRef(
               endDate: "",
               approvelContentRequired: "",
               workingDays: [],
-              centerIds: "",
+              // centerIds: "",
             });
           }
         } catch (error) {
@@ -232,7 +233,7 @@ const StaffAccountEdit = forwardRef(
         }
       };
       getData();
-      fetchData();
+      // fetchData();
       ShgType();
       window.scrollTo({ top: 0, left: 0, behavior: "instant" });
     }, []);
@@ -280,7 +281,7 @@ const StaffAccountEdit = forwardRef(
                 </div>
               )}
             </div>
-            <div className="col-md-6 col-12 mb-4">
+            {/* <div className="col-md-6 col-12 mb-4">
               <label className="form-label">
                 Centre<span className="text-danger">*</span>
               </label>
@@ -307,7 +308,7 @@ const StaffAccountEdit = forwardRef(
                   {formik.errors.centerIds}
                 </div>
               )}
-            </div>
+            </div> */}
 
             <div class="col-md-6 col-12 mb-2 mt-3">
               <label>

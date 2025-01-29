@@ -8,7 +8,7 @@ import pdfLogo from "../../../assets/images/Attactmentpdf.jpg";
 import { MdOutlineDownloadForOffline } from "react-icons/md";
 
 const validationSchema = Yup.object({
-  centerName: Yup.string().required("*Select a Centre Name"),
+  // centerName: Yup.string().required("*Select a Centre Name"),
   userId: Yup.string().required("*Employee Name is required"),
   leaveType: Yup.string().required("*Select a Leave Type"),
   fromDate: Yup.string().required("*From Date is required"),
@@ -43,7 +43,7 @@ function LeaveAdminEdit() {
   const formik = useFormik({
     initialValues: {
       userId: userId,
-      centerId: "",
+      centerId: centerId,
       centerName: "",
       employeeName: "",
       leaveType: "",
@@ -202,7 +202,7 @@ function LeaveAdminEdit() {
           </div>
           <div className="container-fluid">
             <div className="row">
-              <div className="col-md-6 col-12 mb-3">
+              {/* <div className="col-md-6 col-12 mb-3">
                 <label className="form-label">
                   Centre Name<span className="text-danger">*</span>
                 </label>
@@ -213,7 +213,7 @@ function LeaveAdminEdit() {
                   {...formik.getFieldProps("centerName")}
                   readOnly
                 />
-              </div>
+              </div> */}
 
               <div className="col-md-6 col-12 mb-3">
                 <label className="form-label">

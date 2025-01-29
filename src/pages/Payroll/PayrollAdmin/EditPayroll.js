@@ -20,12 +20,13 @@ function EditPayroll() {
   const [userSalaryInfo, setUserSalaryInfo] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const userName = localStorage.getItem("userName");
+  const centerId = localStorage.getItem("centerId");
   const [bonus, setBonus] = useState(0);
   const [netPay, setNetPay] = useState(0);
   console.log("NET PAY:", netPay);
   const navigate = useNavigate();
   const validationSchema = Yup.object().shape({
-    centerId: Yup.string().required("*Centre name is required"),
+    // centerId: Yup.string().required("*Centre name is required"),
     // userId: Yup.string().required("*Employee name is required"),
     payrollMonth: Yup.string().test(
       "Payroll Month-required",
@@ -95,7 +96,7 @@ function EditPayroll() {
 
   const formik = useFormik({
     initialValues: {
-      centerId: "",
+      centerId: centerId,
       userId: "",
       userRole: "",
       grossPay: "",
@@ -115,7 +116,7 @@ function EditPayroll() {
 
       setLoadIndicator(true);
       let payload = {
-        centerId: payrollData.centerId,
+        centerId: centerId,
         centerName: payrollData?.centerName,
         userId: payrollData?.userId,
         employeeName: payrollData?.employeeName,
@@ -160,8 +161,8 @@ function EditPayroll() {
   });
 
   const handleCenterChange = async (event) => {
-    setUserNameData(null);
-    const centerId = event.target.value;
+    // setUserNameData(null);
+    // const centerId = event.target.value;
     formik.setFieldValue("centerId", centerId);
     formik.setFieldValue("deductionAmount", "");
     formik.setFieldValue("grossPay", "");
@@ -325,6 +326,7 @@ function EditPayroll() {
       }
     };
     getData();
+    handleCenterChange();
     // fetchData();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -398,7 +400,7 @@ function EditPayroll() {
           </div>
           <div className="container-fluid px-4">
             <div className="row">
-              <div className="col-md-6 col-12 mb-3 ">
+              {/* <div className="col-md-6 col-12 mb-3 ">
                 <lable className="">Centre Name</lable>
                 <span className="text-danger">*</span>
                 <input
@@ -417,7 +419,7 @@ function EditPayroll() {
                     {formik.errors.centerId}
                   </div>
                 )}
-              </div>
+              </div> */}
               <div className="col-md-6 col-12 mb-3 ">
                 <lable className="">Employee Name</lable>{" "}
                 <span className="text-danger">*</span>

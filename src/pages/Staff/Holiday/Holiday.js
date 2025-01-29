@@ -57,11 +57,11 @@ const Holiday = () => {
           </IconButton>
         ),
       },
-      {
-        accessorKey: "centerName",
-        enableHiding: false,
-        header: "Center Name",
-      },
+      // {
+      //   accessorKey: "centerName",
+      //   enableHiding: false,
+      //   header: "Center Name",
+      // },
       {
         accessorKey: "holidayName",
         enableHiding: false,

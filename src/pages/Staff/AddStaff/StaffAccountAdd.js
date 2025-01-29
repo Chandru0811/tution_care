@@ -29,7 +29,7 @@ const validationSchema = Yup.object().shape({
   workingDays: Yup.array()
     .of(Yup.string().required("*Working Days is required"))
     .min(1, "*Working Days is required"),
-  centerIds: Yup.array().min(1, "*At least one Centre must be selected"),
+  // centerIds: Yup.array().min(1, "*At least one Centre must be selected"),
 });
 
 const StaffAccountAdd = forwardRef(
@@ -43,19 +43,20 @@ const StaffAccountAdd = forwardRef(
       value: center.id,
     }));
     const userName = localStorage.getItem("userName");
+    const centerId = localStorage.getItem("centerId");
 
-    const fetchData = async () => {
-      try {
-        const centers = await fetchAllCentersWithIds();
-        setCenterData(centers);
-      } catch (error) {
-        toast.error(error);
-      }
-    };
+    // const fetchData = async () => {
+    //   try {
+    //     const centers = await fetchAllCentersWithIds();
+    //     setCenterData(centers);
+    //   } catch (error) {
+    //     toast.error(error);
+    //   }
+    // };
 
-    useEffect(() => {
-      fetchData();
-    }, []);
+    // useEffect(() => {
+    //   fetchData();
+    // }, []);
 
     useEffect(() => {
       const getData = async () => {
@@ -84,13 +85,14 @@ const StaffAccountAdd = forwardRef(
         endDate: formData.endDate,
         approvelContentRequired: formData.approvelContentRequired,
         workingDays: formData.workingDays || [],
-        centerIds: formData.centerIds || [],
+        centerId: centerId,
         createdBy: userName,
       },
       validationSchema: validationSchema,
       onSubmit: async (values) => {
         setLoadIndicators(true);
         values.userId = formData.user_id;
+        values.centerId =centerId;
         values.createdBy = userName;
         const Approval =
           values.approvelContentRequired === "Yes" ? true : false;
@@ -108,7 +110,7 @@ const StaffAccountAdd = forwardRef(
               },
             }
           );
-          if (response.status === 200) {
+          if (response.status === 201) {
             console.log("Response Status:", response.status);
             // console.log("Response Data Message:",response.data.message);
             toast.success("User Account Created Successfully");
@@ -161,14 +163,14 @@ const StaffAccountAdd = forwardRef(
         colorInputRef.current.click();
       }
     };
-    useEffect(() => {
-      if (formik.values.centerIds && formik.values.centerIds.length) {
-        const initializedCenters = centerOptions.filter((option) =>
-          formik.values.centerIds.includes(option.value)
-        );
-        setSelectedCenters(initializedCenters);
-      }
-    }, [formik.values.centerIds.length, centerOptions]);
+    // useEffect(() => {
+    //   if (formik.values.centerIds && formik.values.centerIds.length) {
+    //     const initializedCenters = centerOptions.filter((option) =>
+    //       formik.values.centerIds.includes(option.value)
+    //     );
+    //     setSelectedCenters(initializedCenters);
+    //   }
+    // }, [formik.values.centerIds.length, centerOptions]);
 
     return (
       <form
@@ -202,7 +204,7 @@ const StaffAccountAdd = forwardRef(
               )}
             </div>
 
-            <div className="col-md-6 col-12 mb-4">
+            {/* <div className="col-md-6 col-12 mb-4">
               <label className="form-label">
                 Centre<span className="text-danger">*</span>
               </label>
@@ -229,7 +231,7 @@ const StaffAccountAdd = forwardRef(
                   {formik.errors.centerIds}
                 </div>
               )}
-            </div>
+            </div> */}
             <div class="col-md-6 col-12 mb-2 mt-3">
               <label>
                 Staff ID<span class="text-danger">*</span>

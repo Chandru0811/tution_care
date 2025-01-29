@@ -35,22 +35,23 @@ const AccountAdd = forwardRef(
     const [shgData, setShgData] = useState([]);
     const [selectedCenters, setSelectedCenters] = useState([]);
     const userName = localStorage.getItem("userName");
+    const centerId = localStorage.getItem("centerId");
 
     const empRole = formData.role;
 
-    const centerOptions = centerData.map((center) => ({
-      label: center.centerNames,
-      value: center.id,
-    }));
+    // const centerOptions = centerData.map((center) => ({
+    //   label: center.centerNames,
+    //   value: center.id,
+    // }));
 
-    const fetchData = async () => {
-      try {
-        const centers = await fetchAllCentersWithIds();
-        setCenterData(centers);
-      } catch (error) {
-        toast.error(error);
-      }
-    };
+    // const fetchData = async () => {
+    //   try {
+    //     const centers = await fetchAllCentersWithIds();
+    //     setCenterData(centers);
+    //   } catch (error) {
+    //     toast.error(error);
+    //   }
+    // };
 
     const fetchShgType = async () => {
       try {
@@ -63,7 +64,7 @@ const AccountAdd = forwardRef(
     };
 
     useEffect(() => {
-      fetchData();
+      // fetchData();
       fetchShgType();
       window.scrollTo({ top: 0, left: 0, behavior: "instant" });
     }, []);
@@ -80,13 +81,14 @@ const AccountAdd = forwardRef(
         status: formData.status || "",
         approvelContentRequired: formData.approvelContentRequired || "",
         workingDays: formData.workingDays || [],
-        centerIds: formData.centerIds || [],
+        centerId: centerId,
         createdBy: userName,
       },
       validationSchema: validationSchema,
       onSubmit: async (values) => {
         setLoadIndicators(true);
         values.createdBy = userName;
+        values.centerId = centerId;
         values.userId = formData.user_id;
         const Approval =
           values.approvelContentRequired === "Yes" ? true : false;
@@ -156,14 +158,14 @@ const AccountAdd = forwardRef(
         colorInputRef.current.click();
       }
     };
-    useEffect(() => {
-      if (formik.values.centerIds) {
-        const initializedCenters = centerOptions.filter((option) =>
-          formik.values.centerIds.includes(option.value)
-        );
-        setSelectedCenters(initializedCenters);
-      }
-    }, [formik.values.centerIds, centerOptions]);
+    // useEffect(() => {
+    //   if (formik.values.centerIds) {
+    //     const initializedCenters = centerOptions.filter((option) =>
+    //       formik.values.centerIds.includes(option.value)
+    //     );
+    //     setSelectedCenters(initializedCenters);
+    //   }
+    // }, [formik.values.centerIds, centerOptions]);
 
     return (
       <form
@@ -197,7 +199,7 @@ const AccountAdd = forwardRef(
                 </div>
               )}
             </div>
-            <div className="col-md-6 col-12 mb-4">
+            {/* <div className="col-md-6 col-12 mb-4">
               <label className="form-label">
                 Centre<span className="text-danger">*</span>
               </label>
@@ -223,7 +225,7 @@ const AccountAdd = forwardRef(
                   {formik.errors.centerIds}
                 </div>
               )}
-            </div>
+            </div> */}
 
             {/* <div className="col-md-6 col-12 mb-2 mt-3">
               <label>
