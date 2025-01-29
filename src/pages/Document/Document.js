@@ -15,12 +15,12 @@ import fetchAllClassesWithIdsC from "../List/ClassListByCourse";
 import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
 import fetchAllTeacherListByCenter from "../List/TeacherListByCenter";
 import { toast } from "react-toastify";
-import fetchAllCentersWithIds from "../List/CenterList";
 import GlobalDelete from "../../components/common/GlobalDelete";
 
 const Document = () => {
+  const centerId = localStorage.getItem("centerId");
   const [filters, setFilters] = useState({
-    centerId: "",
+    centerId: centerId,
     courseId: "",
     classId: "",
     userId: "",
@@ -28,7 +28,6 @@ const Document = () => {
     date: "",
   });
   const [data, setData] = useState([]);
-  const [centerData, setCenterData] = useState([]);
   const centerIDLocal = localStorage.getItem("selectedCenterId");
   const [courseData, setCourseData] = useState([]);
   const [classData, setClassData] = useState([]);
@@ -173,7 +172,7 @@ const Document = () => {
     },
   });
 
-  const fetchListData = async (centerId) => {
+  const fetchListData = async () => {
     try {
       const courseDatas = await fetchAllCoursesWithIdsC(centerId);
       const teacherDatas = await fetchAllTeacherListByCenter(centerId);
@@ -184,53 +183,53 @@ const Document = () => {
     }
   };
 
-  const fetchData = async () => {
-    try {
-      const centerData = await fetchAllCentersWithIds();
-      if (centerIDLocal !== null && centerIDLocal !== "undefined") {
-        setFilters((prevFilters) => ({
-          ...prevFilters,
-          centerId: centerIDLocal,
-        }));
-        fetchListData(centerIDLocal);
-      } else if (centerData !== null && centerData.length > 0) {
-        setFilters((prevFilters) => ({
-          ...prevFilters,
-          centerId: centerData[0].id,
-        }));
-        fetchListData(centerData[0].id);
-      }
+  // const fetchData = async () => {
+  //   try {
+  //     const centerData = await fetchAllCentersWithIds();
+  //     if (centerIDLocal !== null && centerIDLocal !== "undefined") {
+  //       setFilters((prevFilters) => ({
+  //         ...prevFilters,
+  //         centerId: centerIDLocal,
+  //       }));
+  //       fetchListData(centerIDLocal);
+  //     } else if (centerData !== null && centerData.length > 0) {
+  //       setFilters((prevFilters) => ({
+  //         ...prevFilters,
+  //         centerId: centerData[0].id,
+  //       }));
+  //       fetchListData(centerData[0].id);
+  //     }
       
-      setCenterData(centerData);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
+  //     setCenterData(centerData);
+  //   } catch (error) {
+  //     toast.error(error);
+  //   }
+  // };
 
-  const handleCenterChange = async (event) => {
-  const centerId = event.target.value;
+//   const handleCenterChange = async (event) => {
+//   const centerId = event.target.value;
 
-  // Update the filters state
-  setFilters((prevFilters) => ({ ...prevFilters, centerId }));
+//   // Update the filters state
+//   setFilters((prevFilters) => ({ ...prevFilters, centerId }));
 
-  if (centerId) {
-    try {
-      // Fetch the associated data
-      const courseDatas = await fetchAllCoursesWithIdsC(centerId);
-      const teacherDatas = await fetchAllTeacherListByCenter(centerId);
+//   if (centerId) {
+//     try {
+//       // Fetch the associated data
+//       const courseDatas = await fetchAllCoursesWithIdsC(centerId);
+//       const teacherDatas = await fetchAllTeacherListByCenter(centerId);
 
-      // Update the respective state variables
-      setCourseData(courseDatas);
-      setTeacherData(teacherDatas);
-    } catch (error) {
-      toast.error("Error fetching data: " + error.message);
-    }
-  } else {
-    // Clear dependent data if no center is selected
-    setCourseData([]);
-    setTeacherData([]);
-  }
-};
+//       // Update the respective state variables
+//       setCourseData(courseDatas);
+//       setTeacherData(teacherDatas);
+//     } catch (error) {
+//       toast.error("Error fetching data: " + error.message);
+//     }
+//   } else {
+//     // Clear dependent data if no center is selected
+//     setCourseData([]);
+//     setTeacherData([]);
+//   }
+// };
 
 
   const handleCourseChange = async (event) => {
@@ -277,7 +276,7 @@ const Document = () => {
   };
 
   useEffect(() => {
-    fetchData();
+    fetchListData();
   }, []);
 
   const handleFilterChange = (e) => {
@@ -288,7 +287,7 @@ const Document = () => {
   const clearFilter = () => {
     // Reset filter state to initial empty values
     setFilters({
-      centerId: "",
+      centerId: centerId,
       courseId: "",
       classId: "",
       userId: "",
@@ -346,7 +345,7 @@ const Document = () => {
         </div>
         <div className="mb-3">
           <div className="individual_fliters d-lg-flex">
-            <div className="form-group mb-0 ms-2 mb-1">
+            {/* <div className="form-group mb-0 ms-2 mb-1">
               <select
                 className="form-select form-select-sm center_list"
                 name="centerId"
@@ -361,7 +360,7 @@ const Document = () => {
                   </option>
                 ))}
               </select>
-            </div>
+            </div> */}
             <div className="form-group mb-0 ms-2 mb-1">
               <select
                 className="form-select form-select-sm center_list"
@@ -520,7 +519,7 @@ const Document = () => {
             >
               <MenuItem>
                 <DocumentEdit
-                  onSuccess={fetchData}
+                  // onSuccess={fetchData}
                   id={selectedId}
                   handleMenuClose={handleMenuClose}
                 />
@@ -528,7 +527,7 @@ const Document = () => {
               <MenuItem>
                 <GlobalDelete
                   path={`/deleteDocumentFolder/${selectedId}`}
-                  onDeleteSuccess={fetchData}
+                  // onDeleteSuccess={fetchData}
                   onOpen={handleMenuClose}
                 />
               </MenuItem>
