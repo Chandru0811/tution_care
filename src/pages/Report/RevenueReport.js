@@ -22,6 +22,7 @@ const RevenueReport = () => {
   const lineChartCanvasRef = useRef(null);
   const lineChartRef = useRef(null);
   const centerLocalId = localStorage.getItem("selectedCenterId");
+  const centerId = localStorage.getItem("centerId");
 
   const [chartData, setChartData] = useState({
     series: [{ name: "Sales Rate", data: [] }],
@@ -46,7 +47,7 @@ const RevenueReport = () => {
   };
 
   const handleTypeChange = (e) => setSelectedType(e.target.value);
-  const handleCenterChange = (e) => setSelectedCenterId(e.target.value);
+  // const handleCenterChange = (e) => setSelectedCenterId();
   const handleCourseChange = (e) => setSelectedCourseId(e.target.value);
   const handleSubjectChange = (e) => setSelectedSubjectId(e.target.value);
 
@@ -70,13 +71,14 @@ const RevenueReport = () => {
     };
     fetchData();
     setDefaultWeekAndMonth();
+    // handleCenterChange();
   }, [selectedCenterId]);
 
   useEffect(() => {
-    if (selectedCenterId) {
+    if (centerId) {
       const fetchCourseData = async () => {
         try {
-          const courses = await fetchAllCoursesWithIdsC(selectedCenterId);
+          const courses = await fetchAllCoursesWithIdsC(centerId);
           setCourseData(courses);
         } catch (error) {
           toast.error(
@@ -88,11 +90,11 @@ const RevenueReport = () => {
     } else {
       setCourseData(null);
     }
-  }, [selectedCenterId]);
+  }, [centerId]);
 
   const fetchRevenueData = async () => {
     const params = {
-      center: selectedCenterId,
+      center: centerId,
       courseId: selectedCourseId,
       subjectId: selectedSubjectId,
     };
@@ -198,7 +200,7 @@ const RevenueReport = () => {
           </div>
           <div className="container-fluid">
             <div className="row my-5">
-              <div className="col-md-4 col-12">
+              {/* <div className="col-md-4 col-12">
                 <label className="form-label">Centre</label>
                 <select
                   className="form-select"
@@ -211,7 +213,7 @@ const RevenueReport = () => {
                     </option>
                   ))}
                 </select>
-              </div>
+              </div> */}
               <div className="col-md-4 col-12">
                 <label className="form-label">Select Type</label>
                 <select

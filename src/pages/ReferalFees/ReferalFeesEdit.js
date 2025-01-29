@@ -19,9 +19,10 @@ function ReferalFeesEdit({ id, onSuccess, onOpen }) {
   const [dialogOpen, setDialogOpen] = useState(false);
   // const userName = localStorage.getItem("userName");
   const userName = localStorage.getItem("userName");
+  const centerId = localStorage.getItem("centerId");
 
   const validationSchema = yup.object().shape({
-    centerId: yup.string().required("*Centre is required"),
+    // centerId: yup.string().required("*Centre is required"),
     effectiveDate: yup.string().required("*Effective Date is required"),
     referralFee: yup
       .number()
@@ -32,7 +33,7 @@ function ReferalFeesEdit({ id, onSuccess, onOpen }) {
 
   const formik = useFormik({
     initialValues: {
-      centerId: "",
+      centerId: centerId,
       effectiveDate: "",
       referralFee: "",
       status: "",
@@ -42,7 +43,7 @@ function ReferalFeesEdit({ id, onSuccess, onOpen }) {
     onSubmit: async (values) => {
       // console.log(values);
       setLoadIndicator(true);
-      values.updatedBy= userName;
+      values.updatedBy = userName;
       try {
         const response = await api.put(`/updateReferralFees/${id}`, values, {
           headers: {
@@ -123,7 +124,7 @@ function ReferalFeesEdit({ id, onSuccess, onOpen }) {
   return (
     <>
       <p
-      className="text-start mb-0 menuitem-style"
+        className="text-start mb-0 menuitem-style"
         onClick={handleOpenDialog}
         style={{
           whiteSpace: "nowrap",
@@ -153,7 +154,7 @@ function ReferalFeesEdit({ id, onSuccess, onOpen }) {
           <DialogContent>
             <div className="container">
               <div className="row py-4">
-                <div class="col-md-6 col-12 mb-4">
+                {/* <div class="col-md-6 col-12 mb-4">
                   <lable className="form-label">
                     Centre<span class="text-danger">*</span>
                   </lable>
@@ -181,7 +182,7 @@ function ReferalFeesEdit({ id, onSuccess, onOpen }) {
                       {formik.errors.centerId}
                     </div>
                   )}
-                </div>
+                </div> */}
                 <div className="col-md-6 col-12 mb-2">
                   <label className="form-label">
                     Effective Date<span className="text-danger">*</span>

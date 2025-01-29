@@ -30,9 +30,10 @@ function ReferalFeesAdd({ onSuccess }) {
     setShow(true);
     setIsModified(false);
   };
+  const centerId = localStorage.getItem("centerId");
 
   const validationSchema = yup.object().shape({
-    centerId: yup.string().required("*Centre is required"),
+    // centerId: yup.string().required("*Centre is required"),
     effectiveDate: yup.string().required("*Effective Date is required"),
     referralFee: yup
       .number()
@@ -43,10 +44,10 @@ function ReferalFeesAdd({ onSuccess }) {
 
   const formik = useFormik({
     initialValues: {
-      centerId: "",
+      centerId: centerId,
       effectiveDate: "",
       referralFee: "",
-      status:"ACTIVE",
+      status: "ACTIVE",
       createdBy: createdBy,
     },
     validationSchema,
@@ -131,7 +132,7 @@ function ReferalFeesAdd({ onSuccess }) {
           <Modal.Body>
             <div className="container">
               <div className="row py-4">
-                <div class="col-md-6 col-12 mb-4">
+                {/* <div class="col-md-6 col-12 mb-4">
                   <lable class="">
                     Centre<span class="text-danger">*</span>
                   </lable>
@@ -159,7 +160,7 @@ function ReferalFeesAdd({ onSuccess }) {
                       {formik.errors.centerId}
                     </div>
                   )}
-                </div>
+                </div> */}
                 <div className="col-md-6 col-12 mb-2">
                   <label className="form-label">
                     Effective Date<span className="text-danger">*</span>

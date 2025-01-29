@@ -143,16 +143,16 @@ const Lead = () => {
       console.error(error.message || "An error occurred");
     }
   };
-  
+
   const getData = async () => {
     setLoading(true);
     let params = {};
 
     const centerId =
-    !isClearFilterClicked &&
-    (filters.centerId || (centerLocalId && centerLocalId !== "undefined"))
-      ? filters.centerId || centerLocalId
-      : "";
+      !isClearFilterClicked &&
+      (filters.centerId || (centerLocalId && centerLocalId !== "undefined"))
+        ? filters.centerId || centerLocalId
+        : "";
 
     if (centerId !== "") {
       params.centerId = centerId;
@@ -205,7 +205,7 @@ const Lead = () => {
   useEffect(() => {
     const fetchData = async () => {
       await fetchCenterData(); // Fetch center data and subjects
-  
+
       // Check if local storage has center ID
       if (centerLocalId && centerLocalId !== "undefined") {
         setFilters((prevFilters) => ({
@@ -228,13 +228,13 @@ const Lead = () => {
   }, [filters]);
 
   const ResetFilter = () => {
-  localStorage.removeItem("selectedCenterId"); // Clear center ID from local storage
+    localStorage.removeItem("selectedCenterId"); // Clear center ID from local storage
     setFilters({
       centerId: "",
       subjectId: "",
       leadStatus: "",
     });
-  setIsClearFilterClicked(true);
+    setIsClearFilterClicked(true);
   };
 
   useEffect(() => {
@@ -966,7 +966,7 @@ const Lead = () => {
           </div>
           <div className="d-flex justify-content-between mb-3 px-2">
             <div className="individual_fliters d-lg-flex ">
-              <div className="form-group mb-0 ms-2 mb-1">
+              {/* <div className="form-group mb-0 ms-2 mb-1">
                 <select
                   className="form-select form-select-sm mb-2 mb-md-0 me-md-3"
                   name="centerId"
@@ -1015,7 +1015,7 @@ const Lead = () => {
                 >
                   Clear
                 </button>
-              </div>
+              </div> */}
             </div>
             {storedScreens?.centerListingCreate && (
               <Link to="/lead/lead/add">
