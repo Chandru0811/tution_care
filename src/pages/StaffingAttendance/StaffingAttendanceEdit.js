@@ -51,8 +51,8 @@ function StaffingAttendanceEdit() {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [userNamesData, setUserNameData] = useState(null);
   const navigate = useNavigate();
-  const userName = localStorage.getItem("userName");
-  const centerId = localStorage.getItem("centerId");
+  const userName = localStorage.getItem("tmsuserName");
+  const centerId = localStorage.getItem("tmscenterId");
   const { id } = useParams();
 
   const formik = useFormik({

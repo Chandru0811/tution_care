@@ -111,7 +111,7 @@ const validationSchema = Yup.object({
 
 function CmsCourseAdd() {
   const [loadIndicator, setLoadIndicator] = useState(false);
-  const userName = localStorage.getItem("userName");
+  const userName = localStorage.getItem("tmsuserName");
   const navigate = useNavigate();
 
   const formik = useFormik({

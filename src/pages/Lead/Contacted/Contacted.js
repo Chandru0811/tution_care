@@ -17,7 +17,7 @@ import GlobalDelete from "../../../components/common/GlobalDelete";
 
 const Level = () => {
   const navigate = useNavigate();
-  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
+  const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [contactedName, setContactedName] = useState("");

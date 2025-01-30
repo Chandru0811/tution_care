@@ -59,8 +59,8 @@ const AddStudentDetails = forwardRef(
     const [imagePreviewUrl, setImagePreviewUrl] = useState(null);
     const [raceData, setRaceData] = useState(null);
     const [nationalityData, setNationalityData] = useState(null);
-    const userName = localStorage.getItem("userName");
-    const centerId = localStorage.getItem("centerId");
+    const userName = localStorage.getItem("tmsuserName");
+    const centerId = localStorage.getItem("tmscenterId");
 
     // console.log("FormData is ", formData);
 

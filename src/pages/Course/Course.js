@@ -17,7 +17,7 @@ import fetchAllSubjectsWithIds from "../List/SubjectList";
 import { toast } from "react-toastify";
 
 const Course = () => {
-  const centerId = localStorage.getItem("centerId");
+  const centerId = localStorage.getItem("tmscenterId");
 
   const [filters, setFilters] = useState({
     centerId: centerId,
@@ -27,7 +27,7 @@ const Course = () => {
   const navigate = useNavigate();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
+  const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
   const [isClearFilterClicked, setIsClearFilterClicked] = useState(false);

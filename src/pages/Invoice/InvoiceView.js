@@ -21,7 +21,7 @@ function InvoiceView() {
   const [studentData, setStudentData] = useState(null);
   const [centerData, setcenterData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
-  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
+  const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   const [taxData, setTaxData] = useState([]);
   console.log("Tax Type:", taxData);
 

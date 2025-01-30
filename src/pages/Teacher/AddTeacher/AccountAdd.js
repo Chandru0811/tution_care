@@ -34,8 +34,8 @@ const AccountAdd = forwardRef(
     const colorInputRef = useRef(null);
     const [shgData, setShgData] = useState([]);
     const [selectedCenters, setSelectedCenters] = useState([]);
-    const userName = localStorage.getItem("userName");
-    const centerId = localStorage.getItem("centerId");
+    const userName = localStorage.getItem("tmsuserName");
+    const centerId = localStorage.getItem("tmscenterId");
 
     const empRole = formData.role;
 

@@ -21,14 +21,14 @@ import fetchAllPackageListByCenter from "../List/PackageListByCenter";
 
 const Invoice = () => {
   const [filters, setFilters] = useState({
-    centerId: "",
+    centerId:centerId,
     courseId: "",
     studentId: "",
     packageId: "",
   });
   const [centerData, setCenterData] = useState([]);
-  const centerIDLocal = localStorage.getItem("selectedCenterId");
-  const centerId = localStorage.getItem("centerId");
+  const centerIDLocal = localStorage.getItem("tmsselectedCenterId");
+  const centerId = localStorage.getItem("tmscenterId");
   const [centerManagerData, setCenterManagerData] = useState([]);
   const [packageData, setPackageData] = useState(null);
   const [studentData, setStudentData] = useState(null);
@@ -83,11 +83,11 @@ const Invoice = () => {
             <span className="badge badges-orange fw-light">Pending</span>
           ),
       },
-      {
-        accessorKey: "centerName",
-        enableHiding: false,
-        header: "Centre",
-      },
+      // {
+      //   accessorKey: "centerName",
+      //   enableHiding: false,
+      //   header: "Centre",
+      // },
       {
         accessorKey: "courseName",
         enableHiding: false,
@@ -263,27 +263,27 @@ const Invoice = () => {
     setFilters((prevFilters) => ({ ...prevFilters, [name]: value }));
   };
 
-  const fetchData = async () => {
-    try {
-      const centerData = await fetchAllCentersWithIds();
-      if (centerIDLocal !== null && centerIDLocal !== "undefined") {
-        setFilters((prevFilters) => ({
-          ...prevFilters,
-          centerId: centerIDLocal,
-        }));
-        fetchListData(centerIDLocal);
-      } else if (centerData !== null && centerData.length > 0) {
-        setFilters((prevFilters) => ({
-          ...prevFilters,
-          centerId: centerData[0].id,
-        }));
-        fetchListData(centerData[0].id);
-      }
-      setCenterData(centerData);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
+  // const fetchData = async () => {
+  //   try {
+  //     const centerData = await fetchAllCentersWithIds();
+  //     if (centerIDLocal !== null && centerIDLocal !== "undefined") {
+  //       setFilters((prevFilters) => ({
+  //         ...prevFilters,
+  //         centerId: centerIDLocal,
+  //       }));
+  //       fetchListData(centerIDLocal);
+  //     } else if (centerData !== null && centerData.length > 0) {
+  //       setFilters((prevFilters) => ({
+  //         ...prevFilters,
+  //         centerId: centerData[0].id,
+  //       }));
+  //       fetchListData(centerData[0].id);
+  //     }
+  //     setCenterData(centerData);
+  //   } catch (error) {
+  //     toast.error(error);
+  //   }
+  // };
 
   const clearFilters = () => {
     setFilters({
@@ -295,12 +295,12 @@ const Invoice = () => {
     getInvoiceData();
     setIsClearFilterClicked(true);
   };
-  useEffect(() => {
-    const fetchDatas = async () => {
-      await fetchData(); // Fetch center data
-    };
-    fetchDatas();
-  }, []);
+  // useEffect(() => {
+  //   const fetchDatas = async () => {
+  //     await fetchData(); // Fetch center data
+  //   };
+  //   fetchDatas();
+  // }, []);
 
   const fetchListData = async (centerId) => {
     try {
@@ -362,7 +362,7 @@ const Invoice = () => {
         </div>
         <div className="mb-3 d-flex justify-content-between">
           <div className="individual_fliters d-lg-flex ">
-            <div className="form-group mb-0 ms-2 mb-1">
+            {/* <div className="form-group mb-0 ms-2 mb-1">
               <select
                 className="form-select form-select-sm center_list"
                 name="centerId"
@@ -377,7 +377,7 @@ const Invoice = () => {
                   </option>
                 ))}
               </select>
-            </div>
+            </div> */}
             <div className="form-group mb-0 ms-2 mb-1">
               <select
                 className="form-select form-select-sm center_list"
@@ -502,7 +502,7 @@ const Invoice = () => {
               <MenuItem>
                 <GlobalDelete
                   path={`/deleteGenerateInvoice/${selectedId}`}
-                  onDeleteSuccess={fetchData}
+                  // onDeleteSuccess={fetchData}
                   onOpen={handleMenuClose}
                 />
               </MenuItem>

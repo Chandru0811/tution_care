@@ -17,7 +17,7 @@ const validationSchema = Yup.object().shape({
 const Form2 = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     console.log("formData", formData);
-    const userName = localStorage.getItem("userName");
+    const userName = localStorage.getItem("tmsuserName");
     const formik = useFormik({
       initialValues: {
         pencilGrip: formData.pencilGrip || "",

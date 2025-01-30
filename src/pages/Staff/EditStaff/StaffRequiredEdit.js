@@ -13,7 +13,7 @@ import { MdOutlineDownloadForOffline } from "react-icons/md";
 const StaffRequiredEdit = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const [datas, setDatas] = useState();
-    const centerId = localStorage.getItem("centerId");
+    const centerId = localStorage.getItem("tmscenterId");
     // const formik = useFormik({
     //   initialValues: {
     //     resume: null || "",
@@ -28,7 +28,7 @@ const StaffRequiredEdit = forwardRef(
     //     setLoadIndicators(false);
     //   },
     // });
-    const userName = localStorage.getItem("userName");
+    const userName = localStorage.getItem("tmsuserName");
 
     console.log("object", formData);
     const formik = useFormik({

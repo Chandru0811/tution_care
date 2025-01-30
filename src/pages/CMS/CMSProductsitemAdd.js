@@ -11,7 +11,7 @@ function CMSProductsItemAdd({ onSuccess }) {
   const handleCloseModal = () => setShowModal(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
-  const userName = localStorage.getItem("userName");
+  const userName = localStorage.getItem("tmsuserName");
 
   const handleSaveChanges = () => {
     setShowModal(false);

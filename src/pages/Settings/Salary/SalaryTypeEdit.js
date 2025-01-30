@@ -22,7 +22,7 @@ const validationSchema = Yup.object({
 function SalaryEdit({ id, onSuccess, handleMenuClose }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
-  const userName = localStorage.getItem("userName");
+  const userName = localStorage.getItem("tmsuserName");
   const [isModified, setIsModified] = useState(false);
 
   const getData = async () => {

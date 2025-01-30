@@ -21,7 +21,7 @@ const validationSchema = Yup.object().shape({
 const StaffSalaryAdd = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const [salaryTypeData, setSalaryTypeData] = useState(null);
-    const userName = localStorage.getItem("userName");
+    const userName = localStorage.getItem("tmsuserName");
 
     const fetchData = async () => {
       try {

@@ -29,7 +29,7 @@ const StaffAccountEdit = forwardRef(
     const [centerData, setCenterData] = useState([]);
     const [shgData, setShgData] = useState([]);
     const [selectedCenters, setSelectedCenters] = useState([]);
-    const centerId = localStorage.getItem("centerId");
+    const centerId = localStorage.getItem("tmscenterId");
     const centerOptions = centerData.map((center) => ({
       label: center.centerNames,
       value: center.id,
@@ -43,7 +43,7 @@ const StaffAccountEdit = forwardRef(
     //     toast.error(error);
     //   }
     // };
-    const userName = localStorage.getItem("userName");
+    const userName = localStorage.getItem("tmsuserName");
 
     const formik = useFormik({
       initialValues: {

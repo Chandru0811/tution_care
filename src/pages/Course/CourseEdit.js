@@ -54,8 +54,8 @@ function CourseEdit() {
   const [levelData, setLevelData] = useState(null);
   const [subjectData, setSubjectData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
-  const centerId = localStorage.getItem("centerId");
-  const role = localStorage.getItem("role");
+  const centerId = localStorage.getItem("tmscenterId");
+  const role = localStorage.getItem("tmsrole");
   const centerOptions = centerData.map((center) => ({
     label: center.centerNames,
     value: center.id,

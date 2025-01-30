@@ -18,7 +18,7 @@ import Button from "react-bootstrap/Button"; // Still using Bootstrap's Button f
 function IDTypeEdit({ id, onSuccess, handleMenuClose }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
-  const userName = localStorage.getItem("userName");
+  const userName = localStorage.getItem("tmsuserName");
   const [isModified, setIsModified] = useState(false);
 
   const handleClose = () => {

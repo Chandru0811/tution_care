@@ -18,7 +18,7 @@ function StaffView() {
   const [salaryTypeData, setSalaryTypeData] = useState(null);
 
   console.log("Api Staff data:", data);
-  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
+  const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   const fetchSalaryTypeData = async () => {
     try {
       const salarytype = await fetchAllSalaryTypeWithIds();

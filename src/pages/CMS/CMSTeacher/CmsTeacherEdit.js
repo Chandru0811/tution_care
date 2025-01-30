@@ -12,9 +12,9 @@ const CmsTeacherEdit = ({ id, fetchData }) => {
   const [showModal, setShowModal] = useState(false);
   const handleShowModal = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
-  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
+  const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   const [selectedFile, setSelectedFile] = useState(null);
-  const userName = localStorage.getItem("userName");
+  const userName = localStorage.getItem("tmsuserName");
   const [datas, setDatas] = useState([]);
 
   const formik = useFormik({

@@ -19,8 +19,8 @@ const MyMessages = () => {
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
   const navigate = useNavigate();
-  const id = localStorage.getItem("userId");
-  const userName = localStorage.getItem("userName");
+  const id = localStorage.getItem("tmsuserId");
+  const userName = localStorage.getItem("tmsuserName");
 
   const getData = async () => {
     if (userName === "SMS_BRANCH_ADMIN") {

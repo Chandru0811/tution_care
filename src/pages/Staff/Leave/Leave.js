@@ -18,8 +18,8 @@ const Leave = () => {
   const [loading, setLoading] = useState(true);
   const [selectedId, setSelectedId] = useState(null);
   const [menuAnchor, setMenuAnchor] = useState(null);
-  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
-  const userId = localStorage.getItem("userId");
+  const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
+  const userId = localStorage.getItem("tmsuserId");
 
   const getData = async () => {
     try {

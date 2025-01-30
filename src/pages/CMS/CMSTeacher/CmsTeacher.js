@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 
 export const CmsTeacher = () => {
   const [datas, setDatas] = useState([]);
-  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
+  const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
 
   const getData = async () => {
     try {

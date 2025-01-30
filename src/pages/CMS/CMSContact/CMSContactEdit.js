@@ -18,7 +18,7 @@ import CloseIcon from "@mui/icons-material/Close";
 function CMSContactEdit({ id, onSuccess, handleMenuClose }) {
   const [open, setOpen] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
-  const userName = localStorage.getItem("userName");
+  const userName = localStorage.getItem("tmsuserName");
 
   const handleClose = () => {
     handleMenuClose();

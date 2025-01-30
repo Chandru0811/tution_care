@@ -13,7 +13,7 @@ function ChangePassword({ onLogout }) {
   const [confirmPassword, setConfirmPassword] = useState(false);
   // const [oldPassword, setOldPassword] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const email = localStorage.getItem("email")
+  const email = localStorage.getItem("tmsemail")
   const [loadIndicator, setLoadIndicator] = useState(false);
 
   const togglePasswordVisibility = (type) => {

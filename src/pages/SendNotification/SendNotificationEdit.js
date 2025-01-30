@@ -26,7 +26,7 @@ function SendNotificationEdit() {
   const [selectedCenters, setSelectedCenters] = useState([]);
   const [selectedCourses, setSelectedCourses] = useState([]);
   const [selectedClasses, setSelectedClasses] = useState([]);
-  const userName = localStorage.getItem("userName");
+  const userName = localStorage.getItem("tmsuserName");
 
   const MAX_FILE_SIZE = 1024 * 1024 * 1024; // 1 GB
   const MAX_FILE_NAME_LENGTH = 50;

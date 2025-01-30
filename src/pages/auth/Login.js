@@ -12,7 +12,7 @@ function Login({ onLogin }) {
 
   // useEffect(() => {
   //   // Check if already logged in, redirect to dashboard
-  //   const isAuthenticated = localStorage.getItem("isAuthenticated");
+  //   const isAuthenticated = localStorage.getItem("tmsisAuthenticated");
   //   if (isAuthenticated) {
   //     navigate("/dashboard");
   //   }
@@ -51,12 +51,12 @@ function Login({ onLogin }) {
           } else {
             // Proceed with login for other roles
             toast.success(response.data.message);
-            localStorage.setItem("centerId", response.data.centerId);
-            localStorage.setItem("roleId", response.data.roleId);
-            localStorage.setItem("role", response.data.role);
-            localStorage.setItem("token", response.data.accessToken);
-            localStorage.setItem("userId", response.data.userId);
-            localStorage.setItem("email", values.email);
+            localStorage.setItem("tmscenterId", response.data.centerId);
+            localStorage.setItem("tmsroleId", response.data.roleId);
+            localStorage.setItem("tmsrole", response.data.role);
+            localStorage.setItem("tmstoken", response.data.accessToken);
+            localStorage.setItem("tmsuserId", response.data.userId);
+            localStorage.setItem("tmsemail", values.email);
             onLogin(response.data.roleId);
             navigate("/dashboard");
           }

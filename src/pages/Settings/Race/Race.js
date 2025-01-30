@@ -20,7 +20,7 @@ import { MaterialReactTable } from "material-react-table";
 import GlobalDelete from "../../../components/common/GlobalDelete";
 
 const Race = () => {
-  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
+  const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate(); // Replace useHistory with useNavigate

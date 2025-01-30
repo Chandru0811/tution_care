@@ -24,13 +24,13 @@ import { IoIosAddCircle } from "react-icons/io";
 
 const ScheduleTeacher = () => {
   const tableRef = useRef(null);
-  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
+  const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   const deleteButtonRef = useRef(null);
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [extraData, setExtraData] = useState(false);
-  const roles = localStorage.getItem("userName");
-  const rolesUserId = localStorage.getItem("userId");
+  const roles = localStorage.getItem("tmsuserName");
+  const rolesUserId = localStorage.getItem("tmsuserId");
 
   console.log("courseId pass ScheduleTeacher:", datas.courseId);
 

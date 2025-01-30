@@ -24,7 +24,7 @@ function LeadNewView() {
   //   const [paymentStatus, setPaymentStatus] = useState("PENDING");
   //   const [showPaymentStatusModal, setShowPaymentStatusModal] = useState(false);
   //   const [showSummaryModal, setShowSummaryModal] = useState(false);
-  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
+  const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
 
   const fetchData = async () => {
     try {

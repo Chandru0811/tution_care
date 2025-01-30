@@ -17,10 +17,10 @@ const Deduction = () => {
   const [datas, setDatas] = useState([]);
   console.log(datas);
   const [loading, setLoading] = useState(true);
-  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
+  const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
-  const centerId = localStorage.getItem("centerId");
+  const centerId = localStorage.getItem("tmscenterId");
 
   const columns = useMemo(
     () => [

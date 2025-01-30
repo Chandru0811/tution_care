@@ -23,8 +23,8 @@ const Staff = () => {
   });
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
-  const centerId = localStorage.getItem("centerId");
+  const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
+  const centerId = localStorage.getItem("tmscenterId");
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
 

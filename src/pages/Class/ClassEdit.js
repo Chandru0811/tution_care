@@ -16,8 +16,8 @@ function ClassEdit() {
   const [classRoomData, setClassRoomData] = useState(null);
   const [teacherData, setTeacherData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
-  const role = localStorage.getItem("role");
-  const centerId = localStorage.getItem("centerId");
+  const role = localStorage.getItem("tmsrole");
+  const centerId = localStorage.getItem("tmscenterId");
 
   const validationSchema = Yup.object({
     courseId: Yup.string().required("*Course Name is required"),

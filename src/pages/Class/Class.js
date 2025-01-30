@@ -18,13 +18,13 @@ import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
 import fetchAllTeacherListByCenter from "../List/TeacherListByCenter";
 
 const Class = () => {
-  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
+  const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   const navigate = useNavigate();
  
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
-  const centerIDLocal = localStorage.getItem("selectedCenterId");
-  const centerId = localStorage.getItem("centerId");
+  const centerIDLocal = localStorage.getItem("tmsselectedCenterId");
+  const centerId = localStorage.getItem("tmscenterId");
   const [courseData, setCourseData] = useState([]);
   const [teacherData, setTeacherData] = useState([]);
   const [menuAnchor, setMenuAnchor] = useState(null);

@@ -24,7 +24,7 @@ function StudentView() {
   console.log("datacenterid", centerId);
   console.log("studentRelationId", studentRelationId);
 
-  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
+  const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   const [centerData, setCenterData] = useState(null);
   const [packageData, setPackageData] = useState(null);
   const [studentData, setStudentData] = useState(null);

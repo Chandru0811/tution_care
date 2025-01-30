@@ -13,7 +13,7 @@ function StaffNewView() {
   const [data, setData] = useState({});
   const [centerData, setCenterData] = useState(null);
   const [packageData, setPackageData] = useState(null);
-  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
+  const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   const table1Ref = useRef();
   const [shgData, setShgData] = useState([]);
   const [salaryTypeData, setSalaryTypeData] = useState(null);

@@ -13,8 +13,8 @@ function LevelAdd({ onSuccess }) {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [subjectData, setSubjectData] = useState(null);
   const [isModified, setIsModified] = useState(false);
-  const role = localStorage.getItem("role");
-  const centerId = localStorage.getItem("centerId");
+  const role = localStorage.getItem("tmsrole");
+  const centerId = localStorage.getItem("tmscenterId");
 
   const handleClose = () => {
     setShow(false);

@@ -20,7 +20,7 @@ const validationSchema = Yup.object().shape({
 function AttendancesAdd() {
   const navigate = useNavigate();
   const [loadIndicator, setLoadIndicator] = useState(false);
-  const userName = localStorage.getItem("userName");
+  const userName = localStorage.getItem("tmsuserName");
 
   const formik = useFormik({
     initialValues: {

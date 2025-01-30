@@ -18,7 +18,7 @@ import GlobalDelete from "../../../components/common/GlobalDelete";
 
 const IDType = () => {
   const tableRef = useRef(null);
-  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
+  const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();

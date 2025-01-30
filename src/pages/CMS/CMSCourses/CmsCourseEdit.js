@@ -8,7 +8,7 @@ import CmsCourseListing from "./CmsCourseListing";
 export default function CmsCourseEdit() {
   const { id } = useParams();
   const [data, setData] = useState([]);
-  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
+  const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   const getData = async () => {
     try {
       const response = await api.get(`/getCoursesSaveById/${id}`);

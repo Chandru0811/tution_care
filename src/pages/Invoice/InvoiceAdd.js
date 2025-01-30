@@ -27,7 +27,7 @@ const invoiceItemSchema = Yup.object().shape({
 });
 
 const validationSchema = Yup.object({
-  center: Yup.string().required("*Select a Centre"),
+  // center: Yup.string().required("*Select a Centre"),
   parent: Yup.string().required("*Parent is required"),
   student: Yup.string().required("*Select a Student"),
   course: Yup.string().required("*Select a course"),
@@ -56,7 +56,8 @@ export default function InvoiceAdd() {
   const navigate = useNavigate();
   const [centerData, setCenterData] = useState(null);
   const [courseData, setCourseData] = useState(null);
-  const userName = localStorage.getItem("userName");
+  const userName = localStorage.getItem("tmsuserName");
+  const centerId = localStorage.getItem("tmscenterId");
   const [studentData, setStudentData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [taxData, setTaxData] = useState([]);
@@ -69,7 +70,7 @@ export default function InvoiceAdd() {
 
   const formik = useFormik({
     initialValues: {
-      center: "",
+      center: centerId,
       parent: "",
       student: "",
       course: "",
@@ -107,7 +108,7 @@ export default function InvoiceAdd() {
         // Prepare the payload to send to the API
         const payload = {
           generateInvoice: {
-            centerId: values.center,
+            centerId: centerId,
             parent: values.parent,
             studentId: values.student,
             courseId: values.course,
@@ -181,14 +182,14 @@ export default function InvoiceAdd() {
     }
   }, [formik.submitCount, formik.errors]);
 
-  const fetchCenterData = async () => {
-    try {
-      const centerData = await fetchAllCentersWithStudentList();
-      setCenterData(centerData);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
+  // const fetchCenterData = async () => {
+  //   try {
+  //     const centerData = await fetchAllCentersWithStudentList();
+  //     setCenterData(centerData);
+  //   } catch (error) {
+  //     toast.error(error);
+  //   }
+  // };
 
   const fetchCourses = async (centerId) => {
     try {
@@ -227,19 +228,19 @@ export default function InvoiceAdd() {
   };
 
   useEffect(() => {
-    fetchCenterData();
+    handleCenterChange();
     fetchTaxData();
   }, []);
 
   const handleCenterChange = (event) => {
-    setCourseData(null);
-    setPackageData(null);
-    setStudentData(null);
-    const center = event.target.value;
-    formik.setFieldValue("center", center);
-    fetchCourses(center); // Fetch courses for the selected center
-    fetchPackage(center); // Fetch courses for the selected center
-    fetchStudent(center);
+    // setCourseData(null);
+    // setPackageData(null);
+    // setStudentData(null);
+    // const center = event.target.value;
+    formik.setFieldValue("center", centerId);
+    fetchCourses(centerId); // Fetch courses for the selected centerId
+    fetchPackage(centerId); // Fetch courses for the selected centerId
+    fetchStudent(centerId);
   };
 
   const handleStudentChange = (studentId) => {
@@ -960,7 +961,7 @@ export default function InvoiceAdd() {
           <div className="container-fluid py-3">
             <div className="row mt-3">
               <div className="col-lg-6 col-md-6 col-12 px-5">
-                <div className="text-start mt-3">
+                {/* <div className="text-start mt-3">
                   <label htmlFor="" className="mb-1 fw-medium">
                     Centre<span class="text-danger">*</span>
                   </label>
@@ -988,7 +989,7 @@ export default function InvoiceAdd() {
                       {formik.errors.center}
                     </div>
                   )}
-                </div>
+                </div> */}
                 <div className="text-start mt-3">
                   <label htmlFor="" className="mb-1 fw-medium">
                     Student<span class="text-danger">*</span>

@@ -58,8 +58,8 @@ function CourseAdd({ onSuccess }) {
     label: center.centerNames,
     value: center.id,
   }));
-  const role = localStorage.getItem("role");
-  const centerId = localStorage.getItem("centerId");
+  const role = localStorage.getItem("tmsrole");
+  const centerId = localStorage.getItem("tmscenterId");
 
   const formik = useFormik({
     initialValues: {

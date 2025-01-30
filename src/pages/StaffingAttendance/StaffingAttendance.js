@@ -20,7 +20,7 @@ const StaffingAttendance = () => {
   console.log("Leave Data:", data);
   const [loading, setLoading] = useState(true);
   const [centerData, setCenterData] = useState(null);
-  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
+  const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
 

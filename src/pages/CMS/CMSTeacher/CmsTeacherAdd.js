@@ -20,7 +20,7 @@ const CmsTeacherAdd = ({ getData }) => {
   const [showModal, setShowModal] = useState(false);
   const handleShowModal = () => setShowModal(true);
   const [selectedFile, setSelectedFile] = useState(null);
-  const userName = localStorage.getItem("userName");
+  const userName = localStorage.getItem("tmsuserName");
 
   const handleSaveChanges = () => {
     setShowModal(false);

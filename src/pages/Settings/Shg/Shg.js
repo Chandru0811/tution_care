@@ -17,7 +17,7 @@ import { MaterialReactTable } from "material-react-table";
 import GlobalDelete from "../../../components/common/GlobalDelete";
 
 const Shg = () => {
-  // const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
+  // const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [extraData, setExtraData] = useState(false);

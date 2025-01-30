@@ -12,8 +12,8 @@ import { MdOutlineDownloadForOffline } from "react-icons/md";
 
 const RequiredEdit = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
-    const userName = localStorage.getItem("userName");
-    const centerId = localStorage.getItem("centerId");
+    const userName = localStorage.getItem("tmsuserName");
+    const centerId = localStorage.getItem("tmscenterId");
     const [datas, setDatas] = useState();
     console.log("required", formData);
     const formik = useFormik({

@@ -23,7 +23,7 @@ const NewTable1 = () => {
     email: "",
     centerManagerId: "",
   });
-  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
+  const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   const [centerManagerData, setCenterManagerData] = useState([]);
 
   const [data, setData] = useState([]);

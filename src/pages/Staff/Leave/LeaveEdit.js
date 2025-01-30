@@ -39,13 +39,13 @@ function LeaveEdit() {
   const [datas, setDatas] = useState([]);
   const [leavedatas, setLeaveDatas] = useState([]);
   console.log("Datas:", datas);
-  const userId = localStorage.getItem("userId");
-  const centerId = localStorage.getItem("centerId");
+  const userId = localStorage.getItem("tmsuserId");
+  const centerId = localStorage.getItem("tmscenterId");
   const navigate = useNavigate();
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [daysDifference, setDaysDifference] = useState(0);
   const [leaveTypeData, setLeaveTypeData] = useState([]);
-  const userName = localStorage.getItem("userName");
+  const userName = localStorage.getItem("tmsuserName");
 
   const [selectedDate, setSelectedDate] = useState(
     new Date().toISOString().split("T")[0]

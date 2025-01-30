@@ -11,7 +11,7 @@ import { Link, useNavigate } from "react-router-dom";
 function CurriculumAdd({ onSuccess, curriculumOutletId, courseId }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
-  const userName = localStorage.getItem("userName");
+  const userName = localStorage.getItem("tmsuserName");
   const [isModified, setIsModified] = useState(false);
 
   const navigate = useNavigate();

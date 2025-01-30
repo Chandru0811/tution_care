@@ -21,7 +21,7 @@ function TaxAdd({ onSuccess }) {
     setShow(true);
     setIsModified(false);
   };
-  const userName = localStorage.getItem("userName");
+  const userName = localStorage.getItem("tmsuserName");
 
   const validationSchema = Yup.object({
     taxType: Yup.string().required("*Tax Type is required"),

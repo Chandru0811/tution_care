@@ -10,8 +10,8 @@ function CmsAboutMichelleandAmanda({ datas, getData }) {
   const [editingField, setEditingField] = useState(null);
   const [michelleimg, setMischelleimg] = useState(null);
   const [ammandaimg, setAmandaimg] = useState(null);
-  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
-  const userName = localStorage.getItem("userName");
+  const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
+  const userName = localStorage.getItem("tmsuserName");
 
   // const [content, setContent] = useState({
   //   name1: "Michelle",

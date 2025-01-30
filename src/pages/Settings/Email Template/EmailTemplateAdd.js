@@ -72,7 +72,7 @@ const formats = [
 
 function EmailTemplateAdd({ onSuccess }) {
   const [show, setShow] = useState(false);
-  const userName = localStorage.getItem("userName");
+  const userName = localStorage.getItem("tmsuserName");
 
   const handleClose = () => {
     formik.resetForm();

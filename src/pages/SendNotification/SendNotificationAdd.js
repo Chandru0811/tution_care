@@ -39,7 +39,7 @@ function SendNotificationAdd() {
   const [selectedCenters, setSelectedCenters] = useState([]);
   const [selectedCourses, setSelectedCourses] = useState([]);
   const [selectedClasses, setSelectedClasses] = useState([]);
-  const userName = localStorage.getItem("userName");
+  const userName = localStorage.getItem("tmsuserName");
 
   const centerOptions = centerData.map((center) => ({
     label: center.centerNames,

@@ -14,7 +14,7 @@ import api from "../../config/URL";
 function SubjectEdit({ id, onSuccess, handleMenuClose }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
-  const role = localStorage.getItem("role");
+  const role = localStorage.getItem("tmsrole");
   const [isModified, setIsModified] = useState(false);
 
   const handleClose = () => {

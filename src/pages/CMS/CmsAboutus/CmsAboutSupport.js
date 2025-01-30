@@ -8,8 +8,8 @@ import { useFormik } from "formik";
 function CmsAboutSupport({ getData, datas }) {
   const [editingField, setEditingField] = useState(null);
   const [glassImgUrl, setGlassImgUrl] = useState(null);
-  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
-  const userName = localStorage.getItem("userName");
+  const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
+  const userName = localStorage.getItem("tmsuserName");
 
   console.log("object", datas);
   // const [content, setContent] = useState({

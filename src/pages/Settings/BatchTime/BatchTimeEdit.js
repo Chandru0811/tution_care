@@ -17,7 +17,7 @@ import CloseIcon from "@mui/icons-material/Close";
 function BatchTimeEdit({ id, onSuccess, handleMenuClose }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
-  const userName = localStorage.getItem("userName");
+  const userName = localStorage.getItem("tmsuserName");
   const [isModified, setIsModified] = useState(false);
   const [fields, setFields] = useState([]); // No default field
 

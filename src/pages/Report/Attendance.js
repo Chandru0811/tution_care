@@ -23,8 +23,8 @@ const Attendance = () => {
     return formattedDate;
   };
   const [selectedDate, setSelectedDate] = useState(getCurrentDate());
-  const centerLocalId = localStorage.getItem("selectedCenterId");
-  const centerId = localStorage.getItem("centerId");
+  const centerLocalId = localStorage.getItem("tmsselectedCenterId");
+  const centerId = localStorage.getItem("tmscenterId");
 
   const validationSchema = Yup.object({});
 

@@ -37,13 +37,13 @@ function LeaveAdd() {
   const [centerData, setCenterData] = useState(null);
   const [datas, setDatas] = useState([]);
   console.log("Datas:", datas);
-  const userId = localStorage.getItem("userId");
-  const centerId = localStorage.getItem("centerId");
+  const userId = localStorage.getItem("tmsuserId");
+  const centerId = localStorage.getItem("tmscenterId");
   const navigate = useNavigate();
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [daysDifference, setDaysDifference] = useState(0);
   const [leaveTypeData, setLeaveTypeData] = useState([]);
-  const userName = localStorage.getItem("userName");
+  const userName = localStorage.getItem("tmsuserName");
 
   const formik = useFormik({
     initialValues: {

@@ -23,9 +23,9 @@ const ReferalFees = () => {
   const [selectedId, setSelectedId] = useState(null);
   const [isClearFilterClicked, setIsClearFilterClicked] = useState(false);
   const [centerData, setCenterData] = useState([]);
-  const centerId = localStorage.getItem("centerId");
+  const centerId = localStorage.getItem("tmscenterId");
 
-  const centerLocalId = localStorage.getItem("selectedCenterId");
+  const centerLocalId = localStorage.getItem("tmsselectedCenterId");
   const [filters, setFilters] = useState({
     centerName: "",
   });
@@ -208,7 +208,7 @@ const ReferalFees = () => {
   });
 
   const clearFilter = () => {
-    localStorage.removeItem("selectedCenterId"); // Clear center ID from local storage
+    localStorage.removeItem("tmsselectedCenterId"); // Clear center ID from local storage
     setFilters({
       centerId: centerId, // Reset filters
       centerName: "",

@@ -20,8 +20,8 @@ function Datatable2() {
   const [centerData, setCenterData] = useState(null);
   const [selectedCenterId, setSelectedCenterId] = useState(null);
   const [selectedDay, setSelectedDay] = useState("ALL");
-  const centerLocalId = localStorage.getItem("selectedCenterId");
-  const centerId = localStorage.getItem("centerId");
+  const centerLocalId = localStorage.getItem("tmsselectedCenterId");
+  const centerId = localStorage.getItem("tmscenterId");
 
   const [chartData, setChartData] = useState({
     dayData: [],

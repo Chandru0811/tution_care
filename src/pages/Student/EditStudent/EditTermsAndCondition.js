@@ -26,7 +26,7 @@ const EditTermsAndCondition = forwardRef(
     const [data, setData] = useState([]);
     const [isEditing, setIsEditing] = useState(false);
     const [showImage, setShowImage] = useState(true);
-    const userName = localStorage.getItem("userName");
+    const userName = localStorage.getItem("tmsuserName");
 
     const [sign, setSign] = useState();
     const [url, setUrl] = useState();

@@ -18,7 +18,7 @@ function CMSProductsItemEdit({ id, getData, handleMenuClose }) {
   const [open, setOpen] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
-  const userName = localStorage.getItem("userName");
+  const userName = localStorage.getItem("tmsuserName");
   const [datas, setDatas] = useState([]);
 
   const handleClose = () => {

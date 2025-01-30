@@ -26,8 +26,8 @@ const PersonalEdit = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const [idTypeData, setIdTypeData] = useState(null);
     const [nationalityData, setNationalityData] = useState(null);
-    const userName = localStorage.getItem("userName");
-    const centerId = localStorage.getItem("centerId");
+    const userName = localStorage.getItem("tmsuserName");
+    const centerId = localStorage.getItem("tmscenterId");
 
     const formik = useFormik({
       initialValues: {

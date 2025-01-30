@@ -18,7 +18,7 @@ const validationSchema = Yup.object().shape({
 const AddTermsAndCondition = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const navigate = useNavigate();
-    const userName = localStorage.getItem("userName");
+    const userName = localStorage.getItem("tmsuserName");
 
     const [sign, setSign] = useState();
     const [url, setUrl] = useState();

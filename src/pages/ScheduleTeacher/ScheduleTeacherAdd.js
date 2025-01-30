@@ -36,7 +36,7 @@ function ScheduleTeacherAdd({ onSuccess }) {
   const [teacherData, setTeacherData] = useState(null);
   const [classRoomData, setClassRoomData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
-  const userName = localStorage.getItem("userName");
+  const userName = localStorage.getItem("tmsuserName");
   const [isModified, setIsModified] = useState(false);
   const daysOfWeek = [
     "SUNDAY",

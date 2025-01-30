@@ -8,8 +8,8 @@ const CheckIndex = () => {
   const [attendanceAction, setAttendanceAction] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const centerId = localStorage.getItem("centerId");
-  const userId = localStorage.getItem("userId");
+  const centerId = localStorage.getItem("tmscenterId");
+  const userId = localStorage.getItem("tmsuserId");
 
   const handleSubmit = (event) => {
     event.preventDefault();

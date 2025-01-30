@@ -21,8 +21,8 @@ const RevenueReport = () => {
   const [selectedSubjectId, setSelectedSubjectId] = useState("All");
   const lineChartCanvasRef = useRef(null);
   const lineChartRef = useRef(null);
-  const centerLocalId = localStorage.getItem("selectedCenterId");
-  const centerId = localStorage.getItem("centerId");
+  const centerLocalId = localStorage.getItem("tmsselectedCenterId");
+  const centerId = localStorage.getItem("tmscenterId");
 
   const [chartData, setChartData] = useState({
     series: [{ name: "Sales Rate", data: [] }],

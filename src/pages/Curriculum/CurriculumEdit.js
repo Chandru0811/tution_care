@@ -31,7 +31,7 @@ function CurriculumEdit({
     handleMenuClose()
     setShow(false);
   };
-  const userName = localStorage.getItem("userName");
+  const userName = localStorage.getItem("tmsuserName");
 
   const validationSchema = Yup.object({
     curriculumCode: Yup.string().required("*Curriculum Code is required"),

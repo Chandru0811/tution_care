@@ -11,11 +11,11 @@ import SuperAdmin from "./layouts/SuperAdmin";
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const role = localStorage.getItem("role");
+  const role = localStorage.getItem("tmsrole");
   // const role = "TUITION_SUPER_ADMIN";  
 
   useEffect(() => {
-    const isAdminFromStorage = localStorage.getItem("isAuthenticated");
+    const isAdminFromStorage = localStorage.getItem("tmsisAuthenticated");
     const isAdminBoolean = isAdminFromStorage === "true";
     if (isAuthenticated !== isAdminBoolean) {
       setIsAuthenticated(isAdminBoolean);
@@ -50,8 +50,8 @@ function App() {
         const rolePermissions = response.data;
         updateScreens(rolePermissions);
         setIsAuthenticated(true);
-        localStorage.setItem("isAuthenticated", true);
-        // localStorage.setItem("userName", userName);
+        localStorage.setItem("tmsisAuthenticated", true);
+        // localStorage.setItem("tmsuserName", userName);
       } else {
         setIsLoading(false);
         toast.error("Invalid email or password");
@@ -65,16 +65,18 @@ function App() {
 
   const handleLogout = () => {
     setIsAuthenticated(false);
-    localStorage.removeItem("isAuthenticated");
-    localStorage.removeItem("screens");
-    localStorage.removeItem("roleId");
-    localStorage.removeItem("token");
-    localStorage.removeItem("userId");
-    localStorage.removeItem("userName");
-    localStorage.removeItem("loginUserId");
-    localStorage.removeItem("centerId");
-    localStorage.removeItem("selectedCenterId");
-    localStorage.removeItem("email");
+    localStorage.removeItem("tmsisAuthenticated");
+    localStorage.removeItem("tmsscreens");
+    localStorage.removeItem("tmsroleId");
+    localStorage.removeItem("tmstoken");
+    localStorage.removeItem("tmsuserId");
+    localStorage.removeItem("tmsuserName");
+    localStorage.removeItem("tmsloginUserId");
+    localStorage.removeItem("tmscenterId");
+    localStorage.removeItem("tmsselectedCenterId");
+    localStorage.removeItem("tmsemail");
+    localStorage.removeItem("tmscenterName");
+    localStorage.removeItem("tmsrole");
   };
 
   return (

@@ -11,7 +11,7 @@ import { MoreVert as MoreVertIcon } from "@mui/icons-material";
 import GlobalDelete from "../../../components/common/GlobalDelete";
 
 const CMSBlog = () => {
-  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
+  const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   const [datas, setDatas] = useState([]);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);

@@ -24,7 +24,7 @@ const Tax = () => {
   const [selectedId, setSelectedId] = useState(null);
   const [menuAnchor, setMenuAnchor] = useState(null);
 
-  // const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
+  // const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   // console.log("Screens : ", SCREENS);
 
   const getData = async () => {

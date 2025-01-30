@@ -8,11 +8,11 @@ import { CiCalendarDate } from "react-icons/ci";
 
 function Header({ onLogout, centerChange }) {
   const navigate = useNavigate();
-  const userName = localStorage.getItem("userName");
-  const centerName = localStorage.getItem("centerName");
-  const userEmail = localStorage.getItem("email");
-  const role = localStorage.getItem("role")?.replace(/_/g, " ");
-  const selectedCenterId = localStorage.getItem("selectedCenterId");
+  const userName = localStorage.getItem("tmsuserName");
+  const centerName = localStorage.getItem("tmscenterName");
+  const userEmail = localStorage.getItem("tmsemail");
+  const role = localStorage.getItem("tmsrole")?.replace(/_/g, " ");
+  const selectedCenterId = localStorage.getItem("tmsselectedCenterId");
   const [centerData, setCenterData] = useState(null);
   const [selectedCenter, setSelectedCenter] = useState("");
 
@@ -27,7 +27,7 @@ function Header({ onLogout, centerChange }) {
   const handleCenterChange = (e) => {
     const centerId = e.target.value; // Get the selected value
     setSelectedCenter(centerId); // Update the component state
-    localStorage.setItem("selectedCenterId", centerId); // Store in localStorage
+    localStorage.setItem("tmsselectedCenterId", centerId); // Store in localStorage
     console.log("Selected Center:", centerId); // Log for debugging
   };
 
@@ -38,10 +38,10 @@ function Header({ onLogout, centerChange }) {
         setCenterData(centerData);
         if (selectedCenterId !== null && selectedCenterId !== "undefined") {
           setSelectedCenter(selectedCenterId);
-          localStorage.setItem("selectedCenterId", selectedCenterId);
+          localStorage.setItem("tmsselectedCenterId", selectedCenterId);
         } else if (centerData && centerData.length > 0) {
           setSelectedCenter(centerData[0].id);
-          localStorage.setItem("selectedCenterId", centerData[0].id); // Set in localStorage
+          localStorage.setItem("tmsselectedCenterId", centerData[0].id); // Set in localStorage
         }
       } catch (error) {
         toast.error(error.message);

@@ -19,7 +19,7 @@ export default function ScheduleTime() {
   const courseId = searchParams.get("courseId");
 
   console.log("courseId pass ScheduleTime:", courseId);
-  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
+  const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
 
   useEffect(() => {
     const fetchData = async () => {

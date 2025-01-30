@@ -16,8 +16,8 @@ function CmsAboutUs() {
   const [editingField, setEditingField] = useState(null);
   const [datas, setDatas] = useState([]);
   const [adminImgUrl, setAdminImgUrl] = useState(null);
-  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
-  const userName = localStorage.getItem("userName");
+  const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
+  const userName = localStorage.getItem("tmsuserName");
 
   const toggleEdit = (field) => {
     setEditingField(field);

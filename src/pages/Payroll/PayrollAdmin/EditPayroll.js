@@ -19,8 +19,8 @@ function EditPayroll() {
   const [empRole, setEmpRole] = useState(null);
   const [userSalaryInfo, setUserSalaryInfo] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
-  const userName = localStorage.getItem("userName");
-  const centerId = localStorage.getItem("centerId");
+  const userName = localStorage.getItem("tmsuserName");
+  const centerId = localStorage.getItem("tmscenterId");
   const [bonus, setBonus] = useState(0);
   const [netPay, setNetPay] = useState(0);
   console.log("NET PAY:", netPay);

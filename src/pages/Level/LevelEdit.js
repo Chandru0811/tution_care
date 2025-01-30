@@ -19,7 +19,7 @@ function Edit({ id, onSuccess, handleMenuClose }) {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [subjectData, setSubjectData] = useState(null);
   const [isModified, setIsModified] = useState(false);
-  const role = localStorage.getItem("role");
+  const role = localStorage.getItem("tmsrole");
 
   const fetchData = async () => {
     try {

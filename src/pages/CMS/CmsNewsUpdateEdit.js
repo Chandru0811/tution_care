@@ -10,12 +10,12 @@ import Delete from "../../components/common/Delete.js";
 function CmsNewsUpdateEdit({ id, onSuccess }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
-  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
+  const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   const [datas, setDatas] = useState([]);
   const [selectedFile, setSelectedFile] = useState(null);
   const handleShow = () => setShow(true);
   const currentData = new Date().toISOString().split("T")[0];
-  const userName = localStorage.getItem("userName");
+  const userName = localStorage.getItem("tmsuserName");
 
   const validationSchema = yup.object().shape({
     // file: yup

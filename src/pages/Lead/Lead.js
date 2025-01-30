@@ -32,8 +32,8 @@ const Lead = () => {
   const [selectedRow, setSelectedRow] = useState("");
   const [activeButton, setActiveButton] = useState("All");
 
-  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
-  const centerLocalId = localStorage.getItem("selectedCenterId");
+  const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
+  const centerLocalId = localStorage.getItem("tmsselectedCenterId");
   const [centerData, setCenterData] = useState(null);
   const [subjectData, setSubjectData] = useState(null);
   const [isSmallScreen, setIsSmallScreen] = useState(false);
@@ -228,7 +228,7 @@ const Lead = () => {
   }, [filters]);
 
   const ResetFilter = () => {
-    localStorage.removeItem("selectedCenterId"); // Clear center ID from local storage
+    localStorage.removeItem("tmsselectedCenterId"); // Clear center ID from local storage
     setFilters({
       centerId: "",
       subjectId: "",

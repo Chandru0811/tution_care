@@ -16,8 +16,8 @@ function ClassAdd() {
   const [teacherData, setTeacherData] = useState(null);
   const [batchData, setBatchData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
-  const centerId = localStorage.getItem("centerId");
-  const role = localStorage.getItem("role");
+  const centerId = localStorage.getItem("tmscenterId");
+  const role = localStorage.getItem("tmsrole");
 
   const validationSchema = Yup.object({
     courseId: Yup.string().required("*Course Name is required"),

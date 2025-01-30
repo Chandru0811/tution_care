@@ -30,7 +30,7 @@ function CourseFeesAdd({ onSuccess, centerId }) {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [packageData, setPackageData] = useState([]);
   const [taxData, setTaxData] = useState([]);
-  const userName = localStorage.getItem("userName");
+  const userName = localStorage.getItem("tmsuserName");
   const [isModified, setIsModified] = useState(false);
 
   console.log("centerId", centerId);

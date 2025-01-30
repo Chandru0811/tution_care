@@ -21,7 +21,7 @@ const LeaveAdmin = () => {
   const [leaveTypeData, setLeaveTypeData] = useState([]);
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
-  const centerId = localStorage.getItem("centerId");
+  const centerId = localStorage.getItem("tmscenterId");
 
   const columns = useMemo(
     () => [

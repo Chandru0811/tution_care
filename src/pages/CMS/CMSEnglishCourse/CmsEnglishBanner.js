@@ -14,7 +14,7 @@ function CmsEnglishBanner({
   const [editingField, setEditingField] = useState(null);
   const [logoUrl, setLogoUrl] = useState(null);
   const [content, setContent] = useState();
-  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
+  const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   useEffect(() => {
     setContent({
       img: img,

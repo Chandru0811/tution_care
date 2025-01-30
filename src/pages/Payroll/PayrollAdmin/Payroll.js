@@ -21,14 +21,14 @@ const Payroll = () => {
     roll: "",
   });
   const navigate = useNavigate();
-  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
+  const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   const [datas, setDatas] = useState([]);
   const [allData, setAllData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [centerData, setCenterData] = useState(null);
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
-  const centerId = localStorage.getItem("centerId");
+  const centerId = localStorage.getItem("tmscenterId");
 
   const columns = useMemo(
     () => [

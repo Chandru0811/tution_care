@@ -47,7 +47,7 @@ const StaffPersonalAdd = forwardRef(
     const [idTypeData, setIdTypeData] = useState(null);
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-    const userName = localStorage.getItem("userName");
+    const userName = localStorage.getItem("tmsuserName");
     const [nationalityData, setNationalityData] = useState(null);
 
     const formik = useFormik({

@@ -17,7 +17,7 @@ const EditStudentRelation = forwardRef(
   ({ formData, setFormData, setLoadIndicators, handleNext }, ref) => {
     const [centerData, setCenterData] = useState([]);
     const [studentData, setStudentData] = useState([]);
-    const userName = localStorage.getItem("userName");
+    const userName = localStorage.getItem("tmsuserName");
 
     useEffect(() => {
       // Fetch center data when component mounts

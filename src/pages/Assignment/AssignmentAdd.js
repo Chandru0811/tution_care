@@ -20,8 +20,8 @@ function AssignmentAdd() {
   const [studentData, setStudentData] = useState(false);
   const [userData, setUserData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
-  const userName = localStorage.getItem("userName");
-  const centerId = localStorage.getItem("centerId");
+  const userName = localStorage.getItem("tmsuserName");
+  const centerId = localStorage.getItem("tmscenterId");
   const [batchData, setBatchData] = useState(null);
   const [selectedStudents, setSelectedStudents] = useState([]);
   const [selectedBatchTimes, setSelectedBatchTimes] = useState([]);

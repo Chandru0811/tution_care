@@ -25,9 +25,9 @@ function LeaveAdminEdit() {
   const { id } = useParams();
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [daysDifference, setDaysDifference] = useState(0);
-  const userId = localStorage.getItem("userId");
-  const centerId = localStorage.getItem("centerId");
-  const userName = localStorage.getItem("userName");
+  const userId = localStorage.getItem("tmsuserId");
+  const centerId = localStorage.getItem("tmscenterId");
+  const userName = localStorage.getItem("tmsuserName");
   const navigate = useNavigate();
 
   const fileName = data?.attachment?.split("/").pop();

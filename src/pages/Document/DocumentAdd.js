@@ -25,7 +25,7 @@ const validationSchema = Yup.object({
 
 function DocumentAdd() {
   const navigate = useNavigate();
-  const centerId = localStorage.getItem("centerId");
+  const centerId = localStorage.getItem("tmscenterId");
   const [folderCategory, setFolderCategory] = useState("group");
   const [centerData, setCenterData] = useState(null);
   const [classData, setClassData] = useState(null);
@@ -33,7 +33,7 @@ function DocumentAdd() {
   const [studentData, setStudentData] = useState(false);
   const [userData, setUserData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
-  const userName = localStorage.getItem("userName");
+  const userName = localStorage.getItem("tmsuserName");
   const [batchData, setBatchData] = useState(null);
 
   const formik = useFormik({

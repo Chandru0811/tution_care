@@ -55,7 +55,7 @@ const formats = [
 
 function EmailTemplateEdit({ id, onSuccess, handleMenuClose }) {
   const [open, setOpen] = useState(false);
-  const userName = localStorage.getItem("userName");
+  const userName = localStorage.getItem("tmsuserName");
     const [loadIndicator, setLoadIndicator] = useState(false);
 
   const handleClose = () => {

@@ -24,8 +24,8 @@ const validationSchema = Yup.object().shape({
 });
 const ContactEdit = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
-    const userName = localStorage.getItem("userName");
-    const centerId = localStorage.getItem("centerId");
+    const userName = localStorage.getItem("tmsuserName");
+    const centerId = localStorage.getItem("tmscenterId");
     const [datas, setDatas] = useState();
 
     const formik = useFormik({

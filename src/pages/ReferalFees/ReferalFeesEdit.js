@@ -17,9 +17,9 @@ function ReferalFeesEdit({ id, onSuccess, onOpen }) {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [isModified, setIsModified] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
-  // const userName = localStorage.getItem("userName");
-  const userName = localStorage.getItem("userName");
-  const centerId = localStorage.getItem("centerId");
+  // const userName = localStorage.getItem("tmsuserName");
+  const userName = localStorage.getItem("tmsuserName");
+  const centerId = localStorage.getItem("tmscenterId");
 
   const validationSchema = yup.object().shape({
     // centerId: yup.string().required("*Centre is required"),

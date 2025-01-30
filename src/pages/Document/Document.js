@@ -18,7 +18,7 @@ import { toast } from "react-toastify";
 import GlobalDelete from "../../components/common/GlobalDelete";
 
 const Document = () => {
-  const centerId = localStorage.getItem("centerId");
+  const centerId = localStorage.getItem("tmscenterId");
   const [filters, setFilters] = useState({
     centerId: centerId,
     courseId: "",
@@ -28,7 +28,7 @@ const Document = () => {
     date: "",
   });
   const [data, setData] = useState([]);
-  const centerIDLocal = localStorage.getItem("selectedCenterId");
+  const centerIDLocal = localStorage.getItem("tmsselectedCenterId");
   const [courseData, setCourseData] = useState([]);
   const [classData, setClassData] = useState([]);
   const [teacherData, setTeacherData] = useState([]);

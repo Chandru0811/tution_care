@@ -12,12 +12,12 @@ const CmsNewsUpdate = () => {
   const [showAddModal, setShowAddModal] = useState(false);
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
-  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
+  const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
   const currentData = new Date().toISOString().split("T")[0];
   const [selectedFile, setSelectedFile] = useState(null);
-  const role = localStorage.getItem("userName")?.replace(/_/g, " ");
+  const role = localStorage.getItem("tmsuserName")?.replace(/_/g, " ");
 
   console.log("role", role);
 

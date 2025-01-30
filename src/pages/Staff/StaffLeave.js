@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import { FaEye } from "react-icons/fa";
 function StaffLeave() {
   const tableRef = useRef(null);
-  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
+  const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
 
   const data = [
     {

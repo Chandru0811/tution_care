@@ -18,8 +18,8 @@ function MyMessagesView() {
   const { senderId, receiverId, senderName, receiverName, message } =
     location.state || {};
   const [fileCount, setFileCount] = useState(0);
-  const userId = localStorage.getItem("userId");
-  const userName = localStorage.getItem("userName");
+  const userId = localStorage.getItem("tmsuserId");
+  const userName = localStorage.getItem("tmsuserName");
   const { id } = useParams();
   console.log("Data From My Message:", data);
 

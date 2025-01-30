@@ -20,7 +20,7 @@ function DocumentView() {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [approveStatus, setApproveStatus] = useState(initialApproveStatus);
 
-  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
+  const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
 
   useEffect(() => {
     const fetchData = async () => {

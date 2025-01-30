@@ -25,7 +25,7 @@ function CourseFeesEdit({ id, onSuccess, handleMenuClose, centerId }) {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [packageData, setPackageData] = useState(null);
   const [taxData, setTaxData] = useState([]);
-  const userName = localStorage.getItem("userName");
+  const userName = localStorage.getItem("tmsuserName");
 
   // const fetchPackageData = async () => {
   //   try {

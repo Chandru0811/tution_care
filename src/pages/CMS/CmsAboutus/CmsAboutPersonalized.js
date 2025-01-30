@@ -14,7 +14,7 @@ function CmsAboutPersonalized({ getData, datas }) {
   const [animation2, setAnimation2] = useState(null);
   const [animation3, setAnimation3] = useState(null);
   const [animation4, setAnimation4] = useState(null);
-  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
+  const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   const userName = localStorage.getItem('userName');
 
 

@@ -52,8 +52,8 @@ function StaffingAttendanceAdd() {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const currentDate = format(new Date(), "yyyy-MM-dd");
   const navigate = useNavigate();
-  const userName = localStorage.getItem("userName");
-  const centerId = localStorage.getItem("centerId");
+  const userName = localStorage.getItem("tmsuserName");
+  const centerId = localStorage.getItem("tmscenterId");
   // const timestamp = 1723141800000;
   // const date = new Date(timestamp).toISOString().substring(0, 10);
 

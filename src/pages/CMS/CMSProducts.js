@@ -22,7 +22,7 @@ function CMSProducts() {
   const [data, setData] = useState([]);
   console.log("DATA:", data);
 
-  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
+  const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   const [selectedFile, setSelectedFile] = useState(null);
 
   const handleClose = () => {

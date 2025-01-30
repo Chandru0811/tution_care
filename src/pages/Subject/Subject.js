@@ -26,10 +26,10 @@ const Subject = () => {
   const [loading, setLoading] = useState(true);
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
-  const centerId = localStorage.getItem("centerId");
-  const centerName = localStorage.getItem("centerName");
+  const centerId = localStorage.getItem("tmscenterId");
+  const centerName = localStorage.getItem("tmscenterName");
 
-  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
+  const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   console.log("Screens : ", SCREENS);
 
   const columns = useMemo(

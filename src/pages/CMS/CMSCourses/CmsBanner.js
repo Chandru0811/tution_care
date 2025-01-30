@@ -17,9 +17,9 @@ function CmsBanner({
   const [editingField, setEditingField] = useState(null);
   const [logoUrl, setLogoUrl] = useState(null);
   const [menulogoUrl, setMenuLogoUrl] = useState(null);
-  const userName = localStorage.getItem("userName");
+  const userName = localStorage.getItem("tmsuserName");
   const [content, setContent] = useState();
-  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
+  const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   useEffect(() => {
     setContent({
       menuLogo: menuLogo,

@@ -40,13 +40,13 @@ export default function NewLogin({ onLogin }) {
             );
           } else {
             toast.success(response.data.message);
-            localStorage.setItem("centerId", response.data.centerId);
-            localStorage.setItem("roleId", response.data.roleId);
-            localStorage.setItem("role", response.data.role);
-            localStorage.setItem("token", response.data.accessToken);
-            localStorage.setItem("userId", response.data.userId);
-            localStorage.setItem("centerName", response.data.centerName);
-            localStorage.setItem("email", values.email);
+            localStorage.setItem("tmscenterId", response.data.centerId);
+            localStorage.setItem("tmsroleId", response.data.roleId);
+            localStorage.setItem("tmsrole", response.data.role);
+            localStorage.setItem("tmstoken", response.data.accessToken);
+            localStorage.setItem("tmsuserId", response.data.userId);
+            localStorage.setItem("tmscenterName", response.data.centerName);
+            localStorage.setItem("tmsemail", values.email);
             onLogin(response.data.roleId);
             navigate("/dashboard");
           }

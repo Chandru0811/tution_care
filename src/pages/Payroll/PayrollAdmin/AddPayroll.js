@@ -14,10 +14,10 @@ function AddPayroll() {
   const [empRole, setEmpRole] = useState(null);
   const [userSalaryInfo, setUserSalaryInfo] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
-  const userName = localStorage.getItem("userName");
+  const userName = localStorage.getItem("tmsuserName");
   const [bonus, setBonus] = useState(0);
   const [netPay, setNetPay] = useState(0);
-  const centerId = localStorage.getItem("centerId");
+  const centerId = localStorage.getItem("tmscenterId");
 
   console.log("NET PAY:", netPay);
 

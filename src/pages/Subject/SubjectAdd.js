@@ -14,9 +14,9 @@ function SubjectAdd({ onSuccess }) {
   const navigate = useNavigate();
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [levelData, setLevelData] = useState(null);
-  const role = localStorage.getItem("role");
+  const role = localStorage.getItem("tmsrole");
   const [isModified, setIsModified] = useState(false);
-  const centerId = localStorage.getItem("centerId");
+  const centerId = localStorage.getItem("tmscenterId");
 
   const handleClose = () => {
     setShow(false);

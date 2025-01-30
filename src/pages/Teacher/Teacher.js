@@ -22,10 +22,10 @@ const Teacher = () => {
   const navigate = useNavigate();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const roles = localStorage.getItem("userName");
-  const centerId = localStorage.getItem("centerId");
+  const roles = localStorage.getItem("tmsuserName");
+  const centerId = localStorage.getItem("tmscenterId");
 
-  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
+  const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
 
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [selectedId, setSelectedId] = useState(null);

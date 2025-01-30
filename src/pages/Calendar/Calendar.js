@@ -26,7 +26,7 @@ function Calendar() {
   const [centerData, setCenterData] = useState(null);
   const [courseData, setCourseData] = useState(null);
   const [teacherData, setTeachereData] = useState(null);
-  const centerIDLocal = localStorage.getItem("selectedCenterId");
+  const centerIDLocal = localStorage.getItem("tmsselectedCenterId");
   const [filters, setFilters] = useState({
     centerId: "",
     courseId: "",

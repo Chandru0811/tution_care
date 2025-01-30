@@ -17,7 +17,7 @@ const Addrelation = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const [centerData, setCenterData] = useState(null);
     const [studentData, setStudentData] = useState(null);
-    const userName = localStorage.getItem("userName");
+    const userName = localStorage.getItem("tmsuserName");
 
     const fetchData = async () => {
       try {

@@ -51,7 +51,7 @@ const EditStudentDetails = forwardRef(
     const [studentData, setStudentData] = useState(null);
     const [raceData, setRaceData] = useState(null);
     const [nationalityData, setNationalityData] = useState(null);
-    const userName = localStorage.getItem("userName");
+    const userName = localStorage.getItem("tmsuserName");
 
     const fetchData = async () => {
       try {

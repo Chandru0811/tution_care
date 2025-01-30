@@ -14,7 +14,7 @@ const CenterManager = () => {
 
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
-  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
+  const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   // console.log("Screens : ", SCREENS);
 
   useEffect(() => {

@@ -28,7 +28,7 @@ const invoiceItemSchema = Yup.object().shape({
 });
 
 const validationSchema = Yup.object({
-  centerId: Yup.string().required("*Select a Centre"),
+  // centerId: Yup.string().required("*Select a Centre"),
   parent: Yup.string().required("*Select a parent"),
   studentId: Yup.string().required("*Select a Student"),
   courseId: Yup.string().required("*Select a Course"),
@@ -41,9 +41,9 @@ const validationSchema = Yup.object({
   receiptAmount: Yup.number()
     .required("*Receipt Amount is required")
     .typeError("*Must be a Number"),
-   invoiceItems: Yup.array()
-      .of(invoiceItemSchema)
-      .required("Invoice items are required"),
+  invoiceItems: Yup.array()
+    .of(invoiceItemSchema)
+    .required("Invoice items are required"),
   remark: Yup.string()
     .max(200, "*The maximum length is 200 characters")
     .notRequired(),
@@ -61,7 +61,8 @@ export default function InvoiceEdit() {
   const [itemToDelete, setItemToDelete] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
-  const userName = localStorage.getItem("userName");
+  const userName = localStorage.getItem("tmsuserName");
+  const centerId = localStorage.getItem("tmscenterId");
 
   const lessonOptions = [];
   for (let i = 1; i <= 50; i++) {
@@ -74,7 +75,7 @@ export default function InvoiceEdit() {
 
   const formik = useFormik({
     initialValues: {
-      centerId: "",
+      centerId: centerId,
       parent: "",
       studentId: "",
       courseId: "",
@@ -109,7 +110,7 @@ export default function InvoiceEdit() {
       setLoadIndicator(true);
       const payload = {
         generateInvoice: {
-          centerId: values.centerId,
+          centerId: centerId,
           parent: values.parent,
           studentId: values.studentId,
           courseId: values.courseId,
@@ -244,15 +245,19 @@ export default function InvoiceEdit() {
   };
 
   const handleCenterChange = (event) => {
-    setCourseData(null);
-    setPackageData(null);
-    setStudentData(null);
-    const centerId = event.target.value;
+    // setCourseData(null);
+    // setPackageData(null);
+    // setStudentData(null);
+    // const centerId = event.target.value;
     formik.setFieldValue("centerId", centerId);
     fetchCourses(centerId);
     fetchPackage(centerId);
     fetchStudent(centerId);
   };
+
+  useEffect(() => {
+    handleCenterChange();
+  }, [centerId]);
 
   // NEW Code
   const handleSelectChange = (index, value) => {
@@ -326,8 +331,8 @@ export default function InvoiceEdit() {
     const getData = async () => {
       try {
         const response = await api.get(`/getAllGenerateInvoicesById/${id}`);
-        console.log("Invoice Data byID :: ",response.data.remark);
-        
+        console.log("Invoice Data byID :: ", response.data.remark);
+
         const formattedResponseData = {
           ...response.data,
           invoiceDate: response.data.invoiceDate.substring(0, 10),
@@ -498,7 +503,7 @@ export default function InvoiceEdit() {
           <div className="container-fluid py-3">
             <div className="row mt-3">
               <div className="col-lg-6 col-md-6 col-12 px-5">
-                <div className="text-start mt-3">
+                {/* <div className="text-start mt-3">
                   <label htmlFor="" className="mb-1 fw-medium">
                     Centre<span class="text-danger">*</span>
                   </label>
@@ -527,7 +532,7 @@ export default function InvoiceEdit() {
                       {formik.errors.centerId}
                     </div>
                   )}
-                </div>
+                </div> */}
                 <div className="text-start mt-3">
                   <label htmlFor="" className="mb-1 fw-medium">
                     Parent<span class="text-danger">*</span>

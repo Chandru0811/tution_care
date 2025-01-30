@@ -20,7 +20,7 @@ function ShgAdd({ onSuccess }) {
     setShow(true);
     setIsModified(false);
   };
-  const userName = localStorage.getItem("userName");
+  const userName = localStorage.getItem("tmsuserName");
 
   const validationSchema = Yup.object({
     shgType: Yup.string()

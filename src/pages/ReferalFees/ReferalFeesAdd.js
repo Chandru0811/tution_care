@@ -14,7 +14,7 @@ function ReferalFeesAdd({ onSuccess }) {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [selectedCenters, setSelectedCenters] = useState([]);
   const [isModified, setIsModified] = useState(false);
-  const createdBy = localStorage.getItem("userName");
+  const createdBy = localStorage.getItem("tmsuserName");
   const centerOptions = centerData?.map((center) => ({
     label: center.centerNames,
     value: center.id,
@@ -30,7 +30,7 @@ function ReferalFeesAdd({ onSuccess }) {
     setShow(true);
     setIsModified(false);
   };
-  const centerId = localStorage.getItem("centerId");
+  const centerId = localStorage.getItem("tmscenterId");
 
   const validationSchema = yup.object().shape({
     // centerId: yup.string().required("*Centre is required"),
