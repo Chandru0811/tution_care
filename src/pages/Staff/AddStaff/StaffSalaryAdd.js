@@ -22,6 +22,7 @@ const StaffSalaryAdd = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const [salaryTypeData, setSalaryTypeData] = useState(null);
     const userName = localStorage.getItem("tmsuserName");
+    const centerId = localStorage.getItem("tmscenterId");
 
     const fetchData = async () => {
       try {
@@ -42,14 +43,16 @@ const StaffSalaryAdd = forwardRef(
         effectiveDate: formData.effectiveDate || "",
         salaryTypeId: formData.salaryTypeId || "",
         createdBy: userName,
+        centerId: centerId,
       },
       validationSchema: validationSchema,
       onSubmit: async (values) => {
         setLoadIndicators(true);
         values.createdBy = userName;
+        values.centerId = centerId;
         try {
           const response = await api.post(
-            `/createSalaryCreationWithCenterId/${formData.user_id}`,
+            `/createUserSalaryCreation/${formData.user_id}`,
             values,
             {
               headers: {

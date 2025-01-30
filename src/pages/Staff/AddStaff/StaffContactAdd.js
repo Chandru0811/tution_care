@@ -19,21 +19,24 @@ const validationSchema = Yup.object().shape({
 const StaffContactAdd = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const userName = localStorage.getItem("tmsuserName");
+    const centerId = localStorage.getItem("tmscenterId");
 
     const formik = useFormik({
       initialValues: {
         contactNumber: formData.contactNumber,
         address: formData.address,
         postalCode: formData.postalCode,
+        centerId: centerId,
         createdBy: userName,
       },
       validationSchema: validationSchema,
       onSubmit: async (values) => {
         setLoadIndicators(true);
         values.createdBy = userName;
+        values.centerId = centerId;
         try {
           const response = await api.post(
-            `/createUserContactInfoWithCenterId/${formData.user_id}`,
+            `/createUserContactInfo/${formData.user_id}`,
             values,
             {
               headers: {

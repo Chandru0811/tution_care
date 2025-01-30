@@ -92,7 +92,7 @@ const StaffAccountAdd = forwardRef(
       onSubmit: async (values) => {
         setLoadIndicators(true);
         values.userId = formData.user_id;
-        values.centerId =centerId;
+        values.centerId = centerId;
         values.createdBy = userName;
         const Approval =
           values.approvelContentRequired === "Yes" ? true : false;
@@ -102,7 +102,7 @@ const StaffAccountAdd = forwardRef(
         };
         try {
           const response = await api.post(
-            `/createUserAccountInfoWithCenterId`,
+            `/createUserAccountInfos`,
             updatedData,
             {
               headers: {

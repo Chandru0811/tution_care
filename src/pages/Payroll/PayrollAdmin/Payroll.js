@@ -88,7 +88,7 @@ const Payroll = () => {
             </span>
           ) : null,
       },
-      { accessorKey: "centerName", enableHiding: false, header: "Center Name" },
+      // { accessorKey: "centerName", enableHiding: false, header: "Center Name" },
       {
         accessorKey: "employeeName",
         enableHiding: false,

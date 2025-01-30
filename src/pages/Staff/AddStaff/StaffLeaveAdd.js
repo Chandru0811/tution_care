@@ -26,6 +26,7 @@ const validationSchema = Yup.object().shape({
 const StaffLeaveAdd = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const userName = localStorage.getItem("tmsuserName");
+    const centerId = localStorage.getItem("tmscenterId");
 
     const formik = useFormik({
       initialValues: {
@@ -34,15 +35,17 @@ const StaffLeaveAdd = forwardRef(
         medicalLeave: formData.medicalLeave,
         otherLeave: formData.otherLeave,
         carryForwardLeave: formData.carryForwardLeave,
+        centerId: centerId || "",
         createdBy: userName,
       },
       validationSchema: validationSchema,
       onSubmit: async (values) => {
         setLoadIndicators(true);
         values.createdBy = userName;
+        values.centerId = centerId || "";
         try {
           const response = await api.post(
-            `/createUserLeaveCreationWithCenterId/${formData.user_id}`,
+            `/createUserLeaveCreation/${formData.user_id}`,
             values,
             {
               headers: {

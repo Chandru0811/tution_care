@@ -14,6 +14,8 @@ import { MdOutlineDownloadForOffline } from "react-icons/md";
 const StaffRequiredAdd = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const userName = localStorage.getItem("tmsuserName");
+    const centerId = localStorage.getItem("tmscenterId");
+
     const [datas, setDatas] = useState();
 
     const validationSchema = Yup.object().shape({
@@ -49,6 +51,7 @@ const StaffRequiredAdd = forwardRef(
       initialValues: {
         resume: null || "",
         educationCertificate: null || "",
+        centerId: centerId || "",
       },
       // validationSchema: validationSchema,
       onSubmit: async (values) => {
@@ -62,10 +65,10 @@ const StaffRequiredAdd = forwardRef(
           formDatas.append("resume", values.resume);
           formDatas.append("educationCertificate", values.educationCertificate);
           formDatas.append("educationCertificate", values.educationCertificate);
-          formDatas.append("createdBy", userName);
+          formDatas.append("centerId", centerId);
 
           const response = await api.post(
-            `/createUserRequireInformationWithCenterId`,
+            `/createUserRequireInformation`,
             formDatas,
             {
               headers: {
@@ -102,9 +105,7 @@ const StaffRequiredAdd = forwardRef(
     useEffect(() => {
       const getData = async () => {
         try {
-          const response = await api.get(
-            `/getAllUserById/${formData.user_id}`
-          );
+          const response = await api.get(`/getAllUserById/${formData.user_id}`);
           if (
             response.data.userRequireInformationModels &&
             response.data.userRequireInformationModels.length > 0

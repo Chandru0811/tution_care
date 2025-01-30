@@ -16,17 +16,21 @@ const validationSchema = Yup.object().shape({
 const StaffLoginAdd = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const userName = localStorage.getItem("tmsuserName");
+    const centerId = localStorage.getItem("tmscenterId");
 
     const formik = useFormik({
       initialValues: {
         password: formData.password,
         confirmPassword: formData.confirmPassword,
+        centerId: centerId || "",
+
         createdBy: userName,
       },
       validationSchema: validationSchema,
       onSubmit: async (values) => {
         setLoadIndicators(true);
         values.createdBy = userName;
+        values.centerId = centerId;
         try {
           const userId = formData.user_id;
           const response = await api.post(

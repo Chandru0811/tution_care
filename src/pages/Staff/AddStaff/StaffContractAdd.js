@@ -58,6 +58,7 @@ const StaffContractAdd = forwardRef(
     console.log("ContractformData", formData);
     const [centerData, setCenterData] = useState(null);
     const userName = localStorage.getItem("tmsuserName");
+    const centerId = localStorage.getItem("tmscenterId");
 
     const navigate = useNavigate();
     const formik = useFormik({
@@ -85,15 +86,17 @@ const StaffContractAdd = forwardRef(
         internetBanking: formData.internetBanking || "",
         contractDate: formData.contractDate || "",
         terminationNotice: formData.terminationNotice || "",
+        centerId: centerId || "",
         createdBy: userName,
       },
       validationSchema: validationSchema,
       onSubmit: async (values) => {
         setLoadIndicators(true);
         values.createdBy = userName;
+        values.centerId = centerId;
         try {
           const response = await api.post(
-            `/createUserContractCreationWithCenterId/${formData.user_id}`,
+            `/createUserContractCreation/${formData.user_id}`,
             values,
             {
               headers: {

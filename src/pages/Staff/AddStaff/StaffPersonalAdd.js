@@ -49,6 +49,7 @@ const StaffPersonalAdd = forwardRef(
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const userName = localStorage.getItem("tmsuserName");
     const [nationalityData, setNationalityData] = useState(null);
+    const centerId = localStorage.getItem("tmscenterId");
 
     const formik = useFormik({
       initialValues: {
@@ -68,10 +69,12 @@ const StaffPersonalAdd = forwardRef(
         citizenship: formData.citizenship || "",
         nationalityId: formData.nationalityId || "",
         status: formData.status || "",
+        centerId: formData.centerId || "",
       },
       validationSchema: validationSchema,
       onSubmit: async (values) => {
         setLoadIndicators(true);
+        values.centerId = centerId;
         try {
           const formData = new FormData();
           let nationalityName;
@@ -79,6 +82,7 @@ const StaffPersonalAdd = forwardRef(
             nationalityName = nationalityData.find(
               (prv) => prv.id === parseInt(values.nationalityId)
             );
+          formData.append("centerId", values.centerId);
           formData.append("role", values.role);
           formData.append("teacherName", values.teacherName);
           formData.append("dateOfBirth", values.dateOfBirth);
@@ -379,10 +383,10 @@ const StaffPersonalAdd = forwardRef(
                   onBlur={formik.handleBlur}
                 />
                 {formik.touched.file && formik.errors.file && (
-                    <div className="error text-danger">
-                      <small>{formik.errors.file}</small>
-                    </div>
-                  )}
+                  <div className="error text-danger">
+                    <small>{formik.errors.file}</small>
+                  </div>
+                )}
               </div>
             </div>
             <div class="col-md-6 col-12 mb-3">
