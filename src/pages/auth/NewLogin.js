@@ -105,11 +105,10 @@ export default function NewLogin({ onLogin }) {
                     </label>
                     <input
                       type="email"
-                      className={`form-control ${
-                        formik.touched.email && formik.errors.email
-                          ? "is-invalid"
-                          : ""
-                      }`}
+                      className={`form-control ${formik.touched.email && formik.errors.email
+                        ? "is-invalid"
+                        : ""
+                        }`}
                       placeholder="Enter email"
                       {...formik.getFieldProps("email")}
                     />
@@ -125,11 +124,10 @@ export default function NewLogin({ onLogin }) {
                       <input
                         type={showPassword ? "text" : "password"}
                         placeholder="Enter password"
-                        className={`form-control ${
-                          formik.touched.password && formik.errors.password
-                            ? "is-invalid"
-                            : ""
-                        }`}
+                        className={`form-control ${formik.touched.password && formik.errors.password
+                          ? "is-invalid"
+                          : ""
+                          }`}
                         {...formik.getFieldProps("password")}
                       />
                       <span
@@ -166,6 +164,15 @@ export default function NewLogin({ onLogin }) {
                     Submit
                   </button>
                 </form>
+                <p className="text-center mt-3">
+                  <Link
+                    to="/companyRegister"
+                    className="text-muted fw-medium"
+                    style={{ textDecoration: "none", fontSize: "14px" }}
+                  >
+                    Company Register
+                  </Link>
+                </p>
               </div>
             </div>
           </div>

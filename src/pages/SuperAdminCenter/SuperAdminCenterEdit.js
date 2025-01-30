@@ -132,7 +132,7 @@ function SuperAdminCenterEdit({ handleCenterChanged }) {
         });
         if (response.status === 200) {
           toast.success(response.data.message);
-          navigate("/center");
+          navigate("/companyregistration");
           handleCenterChanged();
         } else {
           toast.error(response.data.message);
@@ -218,17 +218,17 @@ function SuperAdminCenterEdit({ handleCenterChanged }) {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          &nbsp;Centre Management
+          &nbsp;Organization Management
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
           <Link to="/center" className="custom-breadcrumb">
-            &nbsp;Centre Listing
+            &nbsp;Company Listing
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          &nbsp;Centre Listing Edit
+          &nbsp;Company Listing Edit
         </li>
       </ol>
       <form
@@ -248,10 +248,10 @@ function SuperAdminCenterEdit({ handleCenterChanged }) {
               <div class="d-flex">
                 <div class="dot active"></div>
               </div>
-              <span class="me-2 text-muted">Edit Centre</span>
+              <span class="me-2 text-muted">Edit Company</span>
             </div>
             <div className="my-2 pe-3 d-flex align-items-center">
-              <Link to="/center">
+              <Link to="/companyregistration">
                 <button type="button " className="btn btn-sm btn-border   ">
                   Back
                 </button>
@@ -294,99 +294,6 @@ function SuperAdminCenterEdit({ handleCenterChanged }) {
                   {formik.touched.centerName && formik.errors.centerName && (
                     <div className="invalid-feedback">
                       {formik.errors.centerName}
-                    </div>
-                  )}
-                </div>
-              </div>
-              <div className="col-md-6 col-12">
-                <div className="mb-3">
-                  <label for="exampleFormControlInput1" className="form-label">
-                    Code<span className="text-danger">*</span>
-                  </label>
-                  <input
-                    {...formik.getFieldProps("code")}
-                    type="text"
-                    className={`form-control  ${
-                      formik.touched.code && formik.errors.code
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    placeholder=""
-                  />
-                  {formik.touched.code && formik.errors.code && (
-                    <div className="invalid-feedback">{formik.errors.code}</div>
-                  )}
-                </div>
-              </div>
-              <div className="col-md-6 col-12 mb-3">
-                <label className="form-label">Centre Manager</label>
-                <select
-                  {...formik.getFieldProps("userId")}
-                  name="userId"
-                  className={`form-select  ${
-                    formik.touched.userId && formik.errors.userId
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                >
-                  <option selected></option>
-                  {teacherData &&
-                    teacherData.map((manager) => (
-                      <option key={manager.id} value={manager.id}>
-                        {manager.userNames}
-                      </option>
-                    ))}
-                </select>
-                {formik.touched.userId && formik.errors.userId && (
-                  <div className="invalid-feedback">{formik.errors.userId}</div>
-                )}
-              </div>
-              <div className="col-md-6 col-12">
-                <div className="mb-3">
-                  <label for="exampleFormControlInput1" className="form-label">
-                    Address<span className="text-danger">*</span>
-                  </label>
-                  <textarea
-                    className={`form-control ${
-                      formik.touched.address && formik.errors.address
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    {...formik.getFieldProps("address")}
-                    id="exampleFormControlTextarea1"
-                    rows="3"
-                    onBlur={formik.handleBlur}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") {
-                        // Allow the default behavior for Enter key
-                        console.log("Enter key pressed: moving to the next line");
-                      }
-                    }}
-                  ></textarea>
-                  {formik.touched.address && formik.errors.address && (
-                    <div className="invalid-feedback">
-                      {formik.errors.address}
-                    </div>
-                  )}
-                </div>
-              </div>
-              <div className="col-md-6 col-12">
-                <div className="mb-3">
-                  <label for="exampleFormControlInput1" className="form-label">
-                    Zip Code<span className="text-danger">*</span>
-                  </label>
-                  <input
-                    {...formik.getFieldProps("zipCode")}
-                    type="text"
-                    className={`form-control    ${
-                      formik.touched.zipCode && formik.errors.zipCode
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                  />
-                  {formik.touched.zipCode && formik.errors.zipCode && (
-                    <div className="invalid-feedback">
-                      {formik.errors.zipCode}
                     </div>
                   )}
                 </div>
@@ -438,269 +345,30 @@ function SuperAdminCenterEdit({ handleCenterChanged }) {
               <div className="col-md-6 col-12">
                 <div className="mb-3">
                   <label for="exampleFormControlInput1" className="form-label">
-                    Opening Date<span className="text-danger">*</span>
+                    Address<span className="text-danger">*</span>
                   </label>
-                  <input
-                    {...formik.getFieldProps("openingDate")}
-                    type="date"
-                    // onFocus={(e) => e.target.showPicker()}
-                    className={`form-control   ${
-                      formik.touched.openingDate && formik.errors.openingDate
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    aria-label="Username"
-                    aria-describedby="basic-addon1"
-                  />
-                  {formik.touched.openingDate && formik.errors.openingDate && (
-                    <div className="invalid-feedback">
-                      {formik.errors.openingDate}
-                    </div>
-                  )}
-                </div>
-              </div>
-              <div className="col-md-6 col-12">
-                <div className="mb-3">
-                  <div>
-                    <label
-                      for="exampleFormControlInput1"
-                      className="form-label"
-                    >
-                      GST<span className="text-danger">*</span>
-                    </label>
-                  </div>
-                  <div className="form-check form-check-inline">
-                    <input
-                      className="form-check-input"
-                      type="radio"
-                      name="gst"
-                      id="inlineRadio1"
-                      value="true"
-                      onChange={() => formik.setFieldValue("gst", true)}
-                      checked={formik.values.gst === true}
-                    />
-                    <label className="form-check-label" htmlFor="inlineRadio1">
-                      Yes
-                    </label>
-                  </div>
-                  <div className="form-check form-check-inline">
-                    <input
-                      className="form-check-input"
-                      type="radio"
-                      name="gst"
-                      id="inlineRadio2"
-                      value="false"
-                      onChange={() => formik.setFieldValue("gst", false)}
-                      checked={formik.values.gst === false}
-                    />
-                    <label className="form-check-label" htmlFor="inlineRadio2">
-                      No
-                    </label>
-                  </div>
-                  {formik.errors.gst && formik.touched.gst && (
-                    <div
-                      className="text-danger  "
-                      style={{ fontSize: ".875em" }}
-                    >
-                      {formik.errors.gst}
-                    </div>
-                  )}
-                </div>
-              </div>
-              <div className="col-md-6 col-12">
-                <div className="mb-3">
-                  <label for="exampleFormControlInput1" className="form-label">
-                    UEN Number<span class="text-danger">*</span>
-                  </label>
-                  <input
-                    {...formik.getFieldProps("uenNumber")}
-                    type="text"
-                    className={`form-control ${
-                      formik.touched.uenNumber && formik.errors.uenNumber
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                  />
-                  {formik.touched.uenNumber && formik.errors.uenNumber && (
-                    <div className="invalid-feedback">
-                      {formik.errors.uenNumber}
-                    </div>
-                  )}
-                </div>
-              </div>
-              <div className="col-md-6 col-12">
-                <div className="mb-3">
-                  <label for="exampleFormControlInput1" className="form-label">
-                    TAX Registration Number
-                  </label>
-                  <input
-                    {...formik.getFieldProps("taxRegistrationNumber")}
-                    type="text"
-                    className={`form-control   ${
-                      formik.touched.taxRegistrationNumber &&
-                      formik.errors.taxRegistrationNumber
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                  />
-                  {formik.touched.taxRegistrationNumber &&
-                    formik.errors.taxRegistrationNumber && (
-                      <div className="invalid-feedback">
-                        {formik.errors.taxRegistrationNumber}
-                      </div>
-                    )}
-                </div>
-              </div>
-              <div className="col-md-6 col-12">
-                <div className="mb-3">
-                  <label for="exampleFormControlInput1" className="form-label">
-                    Bank Name<span className="text-danger">*</span>
-                  </label>
-                  <input
-                    {...formik.getFieldProps("bankName")}
-                    type="text"
-                    className={`form-control    ${
-                      formik.touched.bankName && formik.errors.bankName
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                  />
-                  {formik.touched.bankName && formik.errors.bankName && (
-                    <div className="invalid-feedback">
-                      {formik.errors.bankName}
-                    </div>
-                  )}
-                </div>
-              </div>
-              <div className="col-md-6 col-12">
-                <div className="mb-3">
-                  <label for="exampleFormControlInput1" className="form-label">
-                    Bank Branch<span className="text-danger">*</span>
-                  </label>
-                  <input
-                    {...formik.getFieldProps("bankBranch")}
-                    type="text"
-                    className={`form-control   ${
-                      formik.touched.bankBranch && formik.errors.bankBranch
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                  />
-                  {formik.touched.bankBranch && formik.errors.bankBranch && (
-                    <div className="invalid-feedback">
-                      {formik.errors.bankBranch}
-                    </div>
-                  )}
-                </div>
-              </div>
-              <div className="col-md-6 col-12">
-                <div className="mb-3">
-                  <label for="exampleFormControlInput1" className="form-label">
-                    Bank Account Name<span className="text-danger">*</span>
-                  </label>
-                  <input
-                    {...formik.getFieldProps("bankAccountName")}
-                    type="text"
-                    className={`form-control    ${
-                      formik.touched.bankAccountName &&
-                      formik.errors.bankAccountName
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                  />
-                  {formik.touched.bankAccountName &&
-                    formik.errors.bankAccountName && (
-                      <div className="invalid-feedback">
-                        {formik.errors.bankAccountName}
-                      </div>
-                    )}
-                </div>
-              </div>
-              <div className="col-md-6 col-12">
-                <div className="mb-3">
-                  <label for="exampleFormControlInput1" className="form-label">
-                    Bank Account Number<span className="text-danger">*</span>
-                  </label>
-                  <input
-                    {...formik.getFieldProps("bankAccountNumber")}
-                    type="text"
-                    className={`form-control    ${
-                      formik.touched.bankAccountNumber &&
-                      formik.errors.bankAccountNumber
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                  />
-                  {formik.touched.bankAccountNumber &&
-                    formik.errors.bankAccountNumber && (
-                      <div className="invalid-feedback">
-                        {formik.errors.bankAccountNumber}
-                      </div>
-                    )}
-                </div>
-              </div>
-              <div className="col-md-6 col-12">
-                <div className="text-start mt-2">
-                  <label htmlFor="" className="mb-1 fw-medium">
-                    <small>QR Code</small>
-                    <span className="text-danger">*</span>
-                  </label>
-                  <br />
-                  <input
-                    type="file"
-                    accept=".png"
-                    name="file"
-                    className="form-control"
-                    onChange={(event) => {
-                      formik.setFieldValue("file", event.target.files[0]);
-                    }}
-                    onBlur={formik.handleBlur}
-                  />
-                  {formik.touched.file && formik.errors.file && (
-                    <div className="error text-danger">
-                      <small>{formik.errors.file}</small>
-                    </div>
-                  )}
-                </div>
-                <img
-                  src={data.qrCode}
-                  className="img-fluid ms-2 w-50 rounded mt-2"
-                  alt="Profile"
-                />
-              </div>
-              <div className="col-md-6 col-12">
-                <div className="mb-3">
-                  <label for="exampleFormControlInput1" className="form-label">
-                    Target<span className="text-danger">*</span>
-                  </label>
-                  <input
-                    {...formik.getFieldProps("target")}
-                    type="text"
-                    className={`form-control   ${
-                      formik.touched.target && formik.errors.target
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                  />
-                  {formik.touched.target && formik.errors.target && (
-                    <div className="invalid-feedback">
-                      {formik.errors.target}
-                    </div>
-                  )}
-                </div>
-              </div>
-              <div className="col-12">
-                <label for="exampleFormControlInput1" className="form-label">
-                  Invoice Notes
-                </label>
-                <div class="input-group mb-3">
                   <textarea
-                    class="form-control"
-                    name="invoiceNotes"
-                    {...(formik.getFieldProps("invoiceNotes") || " ")}
-                    id="invoiceNotes"
-                    rows="5"
+                    className={`form-control ${
+                      formik.touched.address && formik.errors.address
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                    {...formik.getFieldProps("address")}
+                    id="exampleFormControlTextarea1"
+                    rows="3"
+                    onBlur={formik.handleBlur}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        // Allow the default behavior for Enter key
+                        console.log("Enter key pressed: moving to the next line");
+                      }
+                    }}
                   ></textarea>
+                  {formik.touched.address && formik.errors.address && (
+                    <div className="invalid-feedback">
+                      {formik.errors.address}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

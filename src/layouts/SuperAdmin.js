@@ -45,8 +45,8 @@ function SuperAdmin({ handleLogout }) {
               {/* SuperAdminCenter */}
               <Route path="/companyregistration" element={<SuperAdminCenter />} />
               <Route path="/companyregistration/add" element={<SuperAdminCenterAdd />} />
-              <Route path="/companyregistration/view/:id" element={<SuperAdminCenterEdit />} />
-              <Route path="/companyregistration/edit/:id" element={<SuperAdminCenterView />} />
+              <Route path="/companyregistration/edit/:id" element={<SuperAdminCenterEdit />} />
+              <Route path="/companyregistration/view/:id" element={<SuperAdminCenterView />} />
 
               {/* Setting */}
               <Route path="/moduleaccess" element={<ModuleAccess />} />

@@ -12,7 +12,9 @@ import {
   DialogTitle,
   DialogContent,
 } from "@mui/material";
-function AddPackage({ id, onSuccess,handleMenuClose }) {
+import { FiPlusCircle } from "react-icons/fi";
+
+function AddPackage({ id, onSuccess, handleMenuClose }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [isModified, setIsModified] = useState(false);
@@ -82,31 +84,31 @@ function AddPackage({ id, onSuccess,handleMenuClose }) {
 
   return (
     <>
-       <p
+      <p
         className="text-start mb-0 menuitem-style"
         style={{ whiteSpace: "nowrap", width: "100%" }}
         onClick={handleShow}
       >
-      Add Package
+        <FiPlusCircle size={20} style={{color:"#287f71"}} />
       </p>
 
       <Dialog
         open={show}
-        onClose={handleClose} 
+        onClose={handleClose}
         maxWidth="md"
         fullWidth
       >
         <form
           onSubmit={formik.handleSubmit}
-          // onKeyDown={(e) => {
-          //   if (e.key === "Enter" && !formik.isSubmitting) {
-          //     e.preventDefault(); // Prevent default form submission
-          //   }
-          // }}
+        // onKeyDown={(e) => {
+        //   if (e.key === "Enter" && !formik.isSubmitting) {
+        //     e.preventDefault(); // Prevent default form submission
+        //   }
+        // }}
         >
-            <DialogTitle>
-              <p className="headColor">Add Package</p>
-            </DialogTitle>
+          <DialogTitle>
+            <p className="headColor">Add Package</p>
+          </DialogTitle>
           <DialogContent>
             <div className="row">
               <div class="col-md-6 col-12 mb-2">
@@ -117,11 +119,10 @@ function AddPackage({ id, onSuccess,handleMenuClose }) {
                   <input
                     type="text"
                     onKeyDown={(e) => e.stopPropagation()}
-                    className={`form-control   ${
-                      formik.touched.packageName && formik.errors.packageName
+                    className={`form-control   ${formik.touched.packageName && formik.errors.packageName
                         ? "is-invalid"
                         : ""
-                    }`}
+                      }`}
                     {...formik.getFieldProps("packageName")}
                   />
                   {formik.touched.packageName && formik.errors.packageName && (
@@ -136,11 +137,10 @@ function AddPackage({ id, onSuccess,handleMenuClose }) {
                   Number of Lesson<span className="text-danger">*</span>
                 </label>
                 <select
-                  className={`form-select ${
-                    formik.touched.quantity && formik.errors.quantity
+                  className={`form-select ${formik.touched.quantity && formik.errors.quantity
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   {...formik.getFieldProps("noOfLesson")}
                   style={{ width: "100%" }}
                 >

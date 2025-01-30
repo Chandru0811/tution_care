@@ -351,9 +351,9 @@ function Admin({ handleLogout }) {
 
               {/* Center */}
               <Route path="/cen" element={<Center handleCenterChanged={handleCenterChanged} />} />
-              <Route path="/cent/add" element={<CenterAdd handleCenterChanged={handleCenterChanged} />} />
-              <Route path="/cent/view/:id" element={<CenterView />} />
-              <Route path="/cent/edit/:id" element={<CenterEdit handleCenterChanged={handleCenterChanged}/>} />
+              <Route path="/centerRegister/add" element={<CenterAdd handleCenterChanged={handleCenterChanged} />} />
+              <Route path="/centerRegister/view/:id" element={<CenterView />} />
+              <Route path="/centerRegister/edit/:id" element={<CenterEdit handleCenterChanged={handleCenterChanged}/>} />
 
               <Route path="/centermanager" element={<CenterManager />} />
               <Route path="/centermanager/add" element={<CenterManagerAdd />} />
