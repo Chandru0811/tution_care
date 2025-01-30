@@ -248,6 +248,8 @@ import AssignmentAdd from "../pages/Assignment/AssignmentAdd";
 import AssignmentResult from "../pages/Assignment/AssignmentResult";
 import AssignmentResultView from "../pages/Assignment/AssignmentResultView";
 import AssignmentView from "../pages/Assignment/AssignmentView";
+import { Payments } from "@mui/icons-material";
+import PaymentsAdd from "../pages/Payment/PaymentsAdd";
 
 function Admin({ handleLogout }) {
   const [centerChange, setCenterChange] = useState(0);
@@ -535,15 +537,18 @@ function Admin({ handleLogout }) {
                 element={<CurriculumOutletView />}
               />
 
-              {/* Payment  */}
-              <Route path="/payment" element={<Payment />} />
-
               {/* Invoice  */}
               <Route path="/invoice" element={<Invoice />} />
               <Route path="/invoice/add" element={<InvoiceAdd />} />
               <Route path="/invoice/edit/:id" element={<InvoiceEdit />} />
               <Route path="/invoice/view/:id" element={<InvoiceView />} />
               <Route path="/invoice/payment" element={<InvoicePayment />} />
+
+              {/* Payment  */}
+              <Route path="/payment" element={<Payments />} />
+              <Route path="/payment/add" element={<PaymentsAdd />} />
+              <Route path="/payment/edit/:id" element={<Payments />} />
+              <Route path="/payment/view/:id" element={<Payments />} />
 
               {/* Document  */}
               <Route path="/document" element={<Document />} />

@@ -275,6 +275,11 @@ function Sidebar() {
             path: "/invoice",
             access: storedScreens.invoiceIndex,
           },
+          {
+            title: "Payment",
+            path: "/payment",
+            access: storedScreens.invoiceIndex,
+          },
         ],
       },
       {
