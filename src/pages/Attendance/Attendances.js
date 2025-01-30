@@ -15,9 +15,10 @@ function Attendances() {
   const [selectedCenter, setSelectedCenter] = useState("");
   const [selectedCourse, setSelectedCourse] = useState("");
   const [selectedBatch, setSelectedBatch] = useState("");
-  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
+  const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   const [batchData, setBatchData] = useState(null);
-  const centerLocalId = localStorage.getItem("selectedCenterId");
+  const centerLocalId = localStorage.getItem("tmsselectedCenterId");
+  const centerId = localStorage.getItem("tmscenterId");
 
   const getCurrentDate = () => {
     const today = new Date();
@@ -98,9 +99,9 @@ function Attendances() {
 
       if (centerData?.length > 0) {
         const defaultCenterId = centerData[0].id;
-        if (centerLocalId !== null && centerLocalId !== "undefined") {
-          setSelectedCenter(centerLocalId);
-          fetchCourses(centerLocalId);
+        if (centerId !== null && centerId !== "undefined") {
+          setSelectedCenter(centerId);
+          fetchCourses(centerId);
         } else if (centerData !== null && centerData.length > 0) {
           setSelectedCenter(defaultCenterId);
           fetchCourses(defaultCenterId);
@@ -121,7 +122,7 @@ function Attendances() {
   };
 
   const handleCenterChange = (e) => {
-    const centerId = e.target.value;
+    // const centerId = e.target.value;
     setSelectedCenter(centerId);
     setSelectedCourse("");
     setCourseData([]);
@@ -250,7 +251,7 @@ function Attendances() {
             </div>
           </div>
           <div className="row px-2">
-            <div className="col-md-6 col-12 mb-2">
+            {/* <div className="col-md-6 col-12 mb-2">
               <label className="form-lable">
                 Centre<span class="text-danger">*</span>
               </label>
@@ -266,7 +267,7 @@ function Attendances() {
                     </option>
                   ))}
               </select>
-            </div>
+            </div> */}
             <div className="col-md-6 col-12">
               <label className="form-lable">
                 Attendance Date<span class="text-danger">*</span>

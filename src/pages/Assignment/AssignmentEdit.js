@@ -48,7 +48,7 @@ function AssignmentEdit() {
     : []; // Fallback to an empty array if studentData is invalid
   const [userData, setUserData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
-  const userName = localStorage.getItem("userName");
+  const userName = localStorage.getItem("tmsuserName");
   const [batchData, setBatchData] = useState(null);
 
   const formik = useFormik({
@@ -360,33 +360,6 @@ function AssignmentEdit() {
 
           <div className="container">
             <div className="row py-4">
-              <div class="col-md-6 col-12 mb-4">
-                <lable class="">
-                  Centre<span class="text-danger">*</span>
-                </lable>
-                <select
-                  {...formik.getFieldProps("center")}
-                  name="center"
-                  className={`form-select  ${
-                    formik.touched.center && formik.errors.center
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  aria-label="Default select example"
-                  onChange={handleCenterChange}
-                >
-                  <option disabled></option>
-                  {centerData &&
-                    centerData.map((center) => (
-                      <option key={center.id} value={center.id}>
-                        {center.centerNames}
-                      </option>
-                    ))}
-                </select>
-                {formik.touched.center && formik.errors.center && (
-                  <div className="invalid-feedback">{formik.errors.center}</div>
-                )}
-              </div>
               <div class="col-md-6 col-12 mb-4">
                 <lable class="">
                   Course<span class="text-danger">*</span>

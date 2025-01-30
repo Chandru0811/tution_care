@@ -19,6 +19,7 @@ const ReplaceClassLesson = () => {
   const [centerData, setCenterData] = useState([]);
   const [courseData, setCourseData] = useState([]);
   const navigate = useNavigate();
+  const centerId = localStorage.getItem("tmscenterId");
 
   const columns = useMemo(
     () => [
@@ -46,11 +47,11 @@ const ReplaceClassLesson = () => {
             <span className="badge bg-warning fw-light">Pending</span>
           ),
       },
-      {
-        accessorKey: "centerName",
-        enableHiding: false,
-        header: "Centre Name",
-      },
+      // {
+      //   accessorKey: "centerName",
+      //   enableHiding: false,
+      //   header: "Centre Name",
+      // },
       {
         accessorKey: "studentUniqueId",
         header: "Student ID",
@@ -128,7 +129,7 @@ const ReplaceClassLesson = () => {
 
   useEffect(() => {
     fetchData();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filters]);
 
   const getCenter = async () => {
@@ -276,7 +277,7 @@ const ReplaceClassLesson = () => {
         </div>
         <div className="mb-3 d-flex justify-content-between">
           <div className="individual_fliters d-lg-flex ">
-            <div className="form-group mb-0 ms-2 mb-1">
+            {/* <div className="form-group mb-0 ms-2 mb-1">
               <select
                 className="form-select form-select-sm center_list"
                 name="centerId"
@@ -291,7 +292,7 @@ const ReplaceClassLesson = () => {
                   </option>
                 ))}
               </select>
-            </div>
+            </div> */}
             <div className="form-group mb-0 ms-2 mb-1">
               <select
                 className="form-select form-select-sm center_list"
@@ -373,7 +374,8 @@ const ReplaceClassLesson = () => {
                   },
                 }}
                 muiTableBodyRowProps={({ row }) => ({
-                  onClick: () => navigate(`/replaceclasslesson/view/${row.original.id}`),
+                  onClick: () =>
+                    navigate(`/replaceclasslesson/view/${row.original.id}`),
                   style: { cursor: "pointer" },
                 })}
               />
