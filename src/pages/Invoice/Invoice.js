@@ -21,7 +21,7 @@ import fetchAllPackageListByCenter from "../List/PackageListByCenter";
 
 const Invoice = () => {
   const [filters, setFilters] = useState({
-    centerId:centerId,
+    centerId:"",
     courseId: "",
     studentId: "",
     packageId: "",

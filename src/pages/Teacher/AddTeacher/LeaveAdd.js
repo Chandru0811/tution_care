@@ -42,7 +42,7 @@ const LeaveAdd = forwardRef(
         values.createdBy = userName;
         try {
           const response = await api.post(
-            `/createUserLeaveCreationWithCenterId/${formData.user_id}`,
+            `/createUserLeaveCreation/${formData.user_id}`,
             values,
             {
               headers: {

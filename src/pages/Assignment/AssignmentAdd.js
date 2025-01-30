@@ -14,7 +14,6 @@ import { MultiSelect } from "react-multi-select-component";
 function AssignmentAdd() {
   const navigate = useNavigate();
   const [folderCategory, setFolderCategory] = useState("group");
-  const [centerData, setCenterData] = useState(null);
   const [classData, setClassData] = useState(null);
   const [courseData, setCourseData] = useState(null);
   const [studentData, setStudentData] = useState(false);
@@ -27,7 +26,6 @@ function AssignmentAdd() {
   const [selectedBatchTimes, setSelectedBatchTimes] = useState([]);
 
   const validationSchema = Yup.object({
-    // center: Yup.string().required("*Centre is required"),
     course: Yup.string().required("*Course is required"),
     userId: Yup.string().required("*Teacher is required"),
     day: Yup.string().required("*Days is required"),
@@ -74,7 +72,7 @@ function AssignmentAdd() {
 
   const formik = useFormik({
     initialValues: {
-      center: "",
+      center: centerId,
       course: "",
       userId: "",
       classListing: "",
@@ -86,103 +84,15 @@ function AssignmentAdd() {
       groupSelect: "",
       studentSelect: "",
       createdBy: userName,
-      studentId: [],
+      studentIds: [],
       files: [] || null,
     },
-    validationSchema: validationSchema,
-
-    // onSubmit: async (values) => {
-    //   setLoadIndicator(true);
-    //   try {
-    //     const selectedValue = formik.values.center; // Assuming formik is in scope
-    //     let selectedOptionName = "";
-    //     let selectedClassName = "";
-    //     let selectedCourseName = "";
-
-    //     centerData.forEach((center) => {
-    //       if (parseInt(selectedValue) === center.id) {
-    //         selectedOptionName = center.centerNames || "--";
-    //       }
-    //     });
-
-    //     // Find selected class name
-    //     classData.forEach((cls) => {
-    //       if (parseInt(values.classListing) === cls.id) {
-    //         selectedClassName = cls.classNames || "--";
-    //       }
-    //     });
-
-    //     // Find selected course name
-    //     courseData.forEach((course) => {
-    //       if (parseInt(values.course) === course.id) {
-    //         selectedCourseName = course.courseNames || "--";
-    //       }
-    //     });
-
-    //     let requestBody = {
-    //       centerId: values.center,
-    //       userId: values.userId,
-    //       day: values.day,
-    //       center: selectedOptionName,
-    //       classListing: selectedClassName,
-    //       course: selectedCourseName,
-    //       courseId: values.course,
-    //       classId: values.classListing,
-    //       folderCategory: folderCategory,
-    //       batchTime: values.batchTime,
-    //       date: values.date,
-    //       expiredDate: values.expiredDate,
-    //       createdBy: userName,
-    //     };
-
-    //     if (folderCategory === "group") {
-    //       requestBody.isGroupUpload = true;
-    //     } else {
-    //       requestBody.isGroupUpload = false;
-    //       requestBody.studentId = values.studentSelect;
-    //     }
-    //     // console.log(requestBody);
-
-    //     const response = await api.post(
-    //       "/uploadStudentFilesWithSingleOrGroup",
-    //       requestBody
-    //     );
-
-    //     if (response.status === 201) {
-    //       toast.success(response.data.message);
-    //       navigate("/assignment");
-    //     } else {
-    //       toast.error(response.data.message);
-    //     }
-    //   } catch (error) {
-    //     if (
-    //       error?.response?.status === 409 ||
-    //       error?.response?.status === 404
-    //     ) {
-    //       toast.warning(error?.response?.data?.message);
-    //     } else {
-    //       toast.error("Error deleting data:", error);
-    //     }
-    //   } finally {
-    //     setLoadIndicator(false);
-    //   }
-    // },
-    // validateOnChange: false, // Enable validation on change
-    // validateOnBlur: true, // Enable validation on blur
+    // validationSchema: validationSchema,
     onSubmit: async (values) => {
       setLoadIndicator(true);
       try {
-        // Find selected center, class, and course names
-        // const selectedValue = formik.values.center;
-        let selectedOptionName = "";
         let selectedClassName = "";
         let selectedCourseName = "";
-
-        // centerData.forEach((center) => {
-        //   if (parseInt(selectedValue) === center.id) {
-        //     selectedOptionName = center.centerNames || "--";
-        //   }
-        // });
 
         classData.forEach((cls) => {
           if (parseInt(values.classListing) === cls.id) {
@@ -195,13 +105,10 @@ function AssignmentAdd() {
             selectedCourseName = course.courseNames || "--";
           }
         });
-
-        // Create FormData object
         const formData = new FormData();
         formData.append("centerId", centerId);
-        formData.append("userId", values.userId);
+        formData.append("userId", 12);
         formData.append("day", values.day);
-        formData.append("center", selectedOptionName);
         formData.append("classListing", selectedClassName);
         formData.append("course", selectedCourseName);
         formData.append("courseId", values.course);
@@ -216,11 +123,7 @@ function AssignmentAdd() {
           formData.append("isGroupUpload", true);
         } else {
           formData.append("isGroupUpload", false);
-          if (values.studentSelect && values.studentSelect.length > 0) {
-            values.studentSelect.forEach((studentId) =>
-              formData.append("studentId[]", studentId)
-            );
-          }
+          formData.append("studentIds", JSON.stringify(values.studentIds));
         }
 
         // Append files
@@ -232,7 +135,7 @@ function AssignmentAdd() {
 
         // Send the request
         const response = await api.post(
-          "/uploadStudentFilesWithSingleOrGroup",
+          "/createAssignmentWithSingleOrGroup",
           formData,
           {
             headers: {
@@ -279,20 +182,6 @@ function AssignmentAdd() {
       scrollToError(formik.errors);
     }
   }, [formik.submitCount, formik.errors]);
-
-  // const fetchData = async () => {
-  //   try {
-  //     const centerData = await fetchAllCentersWithIds();
-
-  //     setCenterData(centerData);
-  //   } catch (error) {
-  //     toast.error(error);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   fetchData();
-  // }, []);
 
   const fetchCourses = async (centerId) => {
     try {
@@ -341,11 +230,6 @@ function AssignmentAdd() {
   };
 
   const handleCenterChange = (event) => {
-    setCourseData(null);
-    setUserData(null);
-    setStudentData(null);
-
-    formik.setFieldValue("center", centerId);
     fetchCourses(centerId);
     fetchTeacher(centerId);
     fetchStudent(centerId); // Fetch courses for the selected center
@@ -675,34 +559,26 @@ function AssignmentAdd() {
                   <></>
                 ) : (
                   <div className="">
-                    <label className="form-label">Student Name</label>
-                    <MultiSelect
-                      options={studentData || []} // Use fetched data or an empty array
-                      value={selectedStudents}
-                      onChange={(selected) => {
-                        setSelectedStudents(selected); // Update the selected students in state
-                        formik.setFieldValue(
-                          "studentId",
-                          selected.map((option) => option.value) // Update Formik's value
-                        );
-                      }}
-                      labelledBy="Select Student"
-                      className={`form-multi-select ${
-                        formik.touched.studentId && formik.errors.studentId
-                          ? "is-invalid"
-                          : ""
-                      }`}
-                      style={{
-                        height: "37.6px !important", // Set desired height
-                        minHeight: "37.6px", // Ensure the height doesn't shrink
-                      }}
-                    />
-                    {formik.touched.studentId && formik.errors.studentId && (
-                      <div className="invalid-feedback">
-                        {formik.errors.studentId}
-                      </div>
-                    )}
-                  </div>
+                  <label className="form-label">Student Name</label>
+                  <MultiSelect
+                    options={studentData || []}
+                    value={selectedStudents}
+                    onChange={(selected) => {
+                      setSelectedStudents(selected);
+                      formik.setFieldValue(
+                        "studentIds",
+                        selected.map((option) => option.value) // Ensures studentIds is an array
+                      );
+                    }}
+                    labelledBy="Select Student"
+                    className={`form-multi-select ${
+                      formik.touched.studentIds && formik.errors.studentIds ? "is-invalid" : ""
+                    }`}
+                  />
+                  {formik.touched.studentIds && formik.errors.studentIds && (
+                    <div className="invalid-feedback">{formik.errors.studentIds}</div>
+                  )}
+                </div>
                 )}
               </div>
               <div className="col-md-6 col-12 mb-4">
