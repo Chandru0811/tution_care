@@ -28,10 +28,11 @@ const Student = () => {
   const navigate = useNavigate();
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
-  const [centerId, setCenterId] = useState("");
-  const centerIDLocal = localStorage.getItem("selectedCenterId");
-  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
+  const centerIDLocal = localStorage.getItem("tmsselectedCenterId");
+  const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   const [isClearFilterClicked, setIsClearFilterClicked] = useState(false);
+  const centerId = localStorage.getItem("tmscenterId");
+
   const columns = useMemo(
     () => [
       {
@@ -73,11 +74,11 @@ const Student = () => {
         enableHiding: false,
         size: 40,
       },
-      {
-        accessorKey: "center",
-        header: "Centre Name",
-        enableHiding: false,
-      },
+      // {
+      //   accessorKey: "center",
+      //   header: "Centre Name",
+      //   enableHiding: false,
+      // },
       {
         accessorKey: "studentName",
         header: "Student Name",
@@ -192,8 +193,8 @@ const Student = () => {
       if (!isClearFilterClicked) {
         if (filters.centerId) {
           queryParams.append("centerId", filters.centerId);
-        } else if (centerIDLocal && centerIDLocal !== "undefined") {
-          queryParams.append("centerId", centerIDLocal);
+        } else if (centerId && centerId !== "undefined") {
+          queryParams.append("centerId", centerId);
         }
       }
 
@@ -350,7 +351,7 @@ const Student = () => {
         </div>
         <div className="mb-3 d-flex justify-content-between">
           <div className="individual_fliters d-lg-flex ">
-            <div className="form-group mb-0 ms-2 mb-1">
+            {/* <div className="form-group mb-0 ms-2 mb-1">
               <select
                 className="form-select form-select-sm center_list"
                 name="centerId"
@@ -372,7 +373,7 @@ const Student = () => {
                   </option>
                 ))}
               </select>
-            </div>
+            </div> */}
             <div className="form-group mb-0 ms-2 mb-1">
               <input
                 type="text"
@@ -397,10 +398,6 @@ const Student = () => {
                 autoComplete="off"
               />
             </div>
-          </div>
-        </div>
-        <div className="mb-3 d-flex justify-content-between">
-          <div className="individual_fliters d-lg-flex ">
             <div className="form-group mb-0 ms-2 mb-1">
               <input
                 type="text"
@@ -435,6 +432,9 @@ const Student = () => {
               </button>
             </div>
           </div>
+        </div>
+        <div className="mb-3 d-flex justify-content-between">
+          <div className="individual_fliters d-lg-flex "></div>
           <div>
             {storedScreens?.studentListingCreate && (
               <Link to="/student/add">
@@ -505,7 +505,10 @@ const Student = () => {
               onClose={handleMenuClose}
               disableScrollLock
             >
-              <MenuItem onClick={() => navigate(`/student/edit/${selectedId}`)} className="text-start mb-0 menuitem-style">
+              <MenuItem
+                onClick={() => navigate(`/student/edit/${selectedId}`)}
+                className="text-start mb-0 menuitem-style"
+              >
                 Edit
               </MenuItem>
               <MenuItem>
