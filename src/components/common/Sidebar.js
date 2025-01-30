@@ -277,7 +277,7 @@ function Sidebar() {
           },
           {
             title: "Payment",
-            path: "/payment",
+            path: "/payments",
             access: storedScreens.invoiceIndex,
           },
         ],
