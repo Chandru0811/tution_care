@@ -35,7 +35,7 @@ const ContactAdd = forwardRef(
         values.createdBy = userName;
         try {
           const response = await api.post(
-            `/createUserContactInfoWithCenterId/${formData.user_id}`,
+            `/createUserContactInfo/${formData.user_id}`,
             values,
             {
               headers: {

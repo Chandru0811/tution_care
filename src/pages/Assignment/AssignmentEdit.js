@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import api from "../../config/URL";
@@ -12,7 +12,7 @@ import fetchAllCentersWithIds from "../List/CenterList";
 import { MultiSelect } from "react-multi-select-component";
 
 const validationSchema = Yup.object({
-  center: Yup.string().required("*Centre is required"),
+  // center: Yup.string().required("*Centre is required"),
   course: Yup.string().required("*Course is required"),
   userId: Yup.string().required("*Teacher is required"),
   day: Yup.string().required("*Days is required"),
@@ -33,6 +33,7 @@ const validationSchema = Yup.object({
 });
 
 function AssignmentEdit() {
+  const { id } = useParams();
   const navigate = useNavigate();
   const [folderCategory, setFolderCategory] = useState("group");
   const [centerData, setCenterData] = useState(null);
@@ -49,11 +50,12 @@ function AssignmentEdit() {
   const [userData, setUserData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const userName = localStorage.getItem("tmsuserName");
+  const centerId = localStorage.getItem("tmscenterId");
   const [batchData, setBatchData] = useState(null);
 
   const formik = useFormik({
     initialValues: {
-      center: "",
+      center: centerId,
       course: "",
       userId: "",
       classListing: "",
@@ -71,16 +73,16 @@ function AssignmentEdit() {
     onSubmit: async (values) => {
       setLoadIndicator(true);
       try {
-        const selectedValue = formik.values.center; // Assuming formik is in scope
+        // const selectedValue = formik.values.center; // Assuming formik is in scope
         let selectedOptionName = "";
         let selectedClassName = "";
         let selectedCourseName = "";
 
-        centerData.forEach((center) => {
-          if (parseInt(selectedValue) === center.id) {
-            selectedOptionName = center.centerNames || "--";
-          }
-        });
+        // centerData.forEach((center) => {
+        //   if (parseInt(selectedValue) === center.id) {
+        //     selectedOptionName = center.centerNames || "--";
+        //   }
+        // });
 
         // Find selected class name
         classData.forEach((cls) => {
@@ -97,7 +99,7 @@ function AssignmentEdit() {
         });
 
         let requestBody = {
-          centerId: values.center,
+          centerId: centerId,
           userId: values.userId,
           day: values.day,
           center: selectedOptionName,
@@ -121,8 +123,8 @@ function AssignmentEdit() {
         }
         // console.log(requestBody);
 
-        const response = await api.post(
-          "/uploadStudentFilesWithSingleOrGroup",
+        const response = await api.put(
+          `/updateAssignmentFolders/${id}`,
           requestBody
         );
 
@@ -217,15 +219,10 @@ function AssignmentEdit() {
   };
 
   const handleCenterChange = (event) => {
-    setCourseData(null);
-    setClassData(null);
-    setUserData(null);
-    setStudentData(null);
-    const center = event.target.value;
-    formik.setFieldValue("center", center);
-    fetchCourses(center);
-    fetchTeacher(center);
-    fetchStudent(center); // Fetch courses for the selected center
+    formik.setFieldValue("center", centerId);
+    fetchCourses(centerId);
+    fetchTeacher(centerId);
+    fetchStudent(centerId); // Fetch courses for the selected center
   };
 
   const fetchBatchandTeacherData = async (day) => {
@@ -241,8 +238,28 @@ function AssignmentEdit() {
     if (formik.values.day) {
       fetchBatchandTeacherData(formik.values.day);
     }
+    handleCenterChange();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.day]);
+
+  useEffect(() => {
+    handleCenterChange();
+  }, []);
+
+  const getData = async () => {
+    try {
+      const response = await api.get(`/getAssignmentFolderById/${id}`);
+      console.log("first", response.data);
+      formik.setValues(response.data);
+    } catch (error) {
+      console.error("Error fetching data ", error);
+    }
+  };
+
+  useEffect(() => {
+    getData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
 
   const formatTo12Hour = (time) => {
     const [hours, minutes] = time.split(":");

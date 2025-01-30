@@ -47,6 +47,7 @@ const PersonalAdd = forwardRef(
     const [idTypeData, setIdTypeData] = useState(null);
     const [nationalityData, setNationalityData] = useState(null);
     const userName = localStorage.getItem("tmsuserName");
+    const centerId = localStorage.getItem("tmscenterId");
 
     const formik = useFormik({
       initialValues: {
@@ -72,6 +73,7 @@ const PersonalAdd = forwardRef(
       onSubmit: async (values) => {
         setLoadIndicators(true);
         values.createdBy = userName;
+        values.centerId = centerId;
         try {
           const formData = new FormData();
           let nationalityName;
@@ -81,6 +83,7 @@ const PersonalAdd = forwardRef(
             );
           // Add each data field manually to the FormData object
           formData.append("role", values.role);
+          formData.append("centerId",centerId);
           formData.append("teacherName", values.teacherName);
           formData.append("dateOfBirth", values.dateOfBirth);
           formData.append("idTypeId", values.idTypeId);

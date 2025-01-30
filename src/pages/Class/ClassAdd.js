@@ -49,7 +49,7 @@ function ClassAdd() {
       courseName: "",
       classType: "",
       classCode: "",
-      userId: 0,
+      userId: 12,
       teacherName: "",
       classId: "",
       durationInHrs: "",
@@ -62,20 +62,20 @@ function ClassAdd() {
       remark: "",
       createdBy: role,
     },
-    validationSchema: validationSchema,
+    // validationSchema: validationSchema,
     onSubmit: async (values) => {
       setLoadIndicator(true);
       values.createdBy = role;
-      const selectedValue = formik.values.centerId;
-      let selectedOptionName = "";
+      // const selectedValue = formik.values.centerId;
+      // let selectedOptionName = "";
 
-      centerData.forEach((center) => {
-        if (parseInt(selectedValue) === center.id) {
-          selectedOptionName = center.centerNames || "--";
-        }
-      });
+      // centerData.forEach((center) => {
+      //   if (parseInt(selectedValue) === center.id) {
+      //     selectedOptionName = center.centerNames || "--";
+      //   }
+      // });
 
-      values.centerName = selectedOptionName;
+      // values.centerName = selectedOptionName;
       try {
         const response = await api.post("/createClassSchedules", values, {
           headers: {
@@ -101,16 +101,7 @@ function ClassAdd() {
     },
   });
 
-  const fetchData = async () => {
-    try {
-      const centerData = await fetchAllCentersWithIds();
-      setCenterData(centerData);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
-
-  const fetchCourses = async (centerId) => {
+  const fetchCourses = async () => {
     try {
       const courseData = await fetchAllCoursesWithIdsC(centerId);
       setCourseData(courseData);
@@ -120,7 +111,7 @@ function ClassAdd() {
     }
   };
 
-  const fetchClassRoom = async (centerId) => {
+  const fetchClassRoom = async () => {
     try {
       const classId = await fetchAllClassRoomWithCenterIds(centerId);
       setClassRoomData(classId);
@@ -130,7 +121,7 @@ function ClassAdd() {
     }
   };
 
-  const fetchBatchandTeacherData = async (day, centerId) => {
+  const fetchBatchandTeacherData = async (day) => {
     try {
       const response = await api.get(`getTeacherWithBatchListByDay?day=${day}&centerId=${centerId}`);
       setTeacherData(response.data.teacherList);
@@ -141,11 +132,17 @@ function ClassAdd() {
   };
 
   useEffect(() => {
-    if (formik.values.day && formik.values.centerId) {
-      fetchBatchandTeacherData(formik.values.day, formik.values.centerId);
+    if (formik.values.day) {
+      fetchBatchandTeacherData(formik.values.day);
     }
+    
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formik.values.day, formik.values.centerId]);
+  }, [formik.values.day]);
+  useEffect(() => {
+   fetchCourses();
+   fetchClassRoom();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formik.values.day]);
 
 
   useEffect(() => {
@@ -165,23 +162,6 @@ function ClassAdd() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.courseId]);
-
-  const handleCenterChange = async (event) => {
-    setCourseData(null);
-    // const center = event.target.value;
-    formik.setFieldValue("centerId", centerId);
-    formik.setFieldValue("classId", centerId);
-    formik.setFieldValue("userId", "");
-    setClassRoomData(null);
-    setTeacherData(null);
-    fetchCourses(centerId);
-    fetchClassRoom(centerId);
-  };
-
-  useEffect(() => {
-    fetchData();
-    handleCenterChange();
-  }, []);
 
   const calculateEndTime = () => {
     const { durationInHrs, durationInMins, startTime } = formik.values;
