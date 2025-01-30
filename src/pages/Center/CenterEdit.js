@@ -10,6 +10,11 @@ import api from "../../config/URL";
 import { toast } from "react-toastify";
 import fetchAllCentreManager from "../List/CentreMangerList";
 import Delete from "../../components/common/Delete";
+import AddRegister from "./Add/AddRegister";
+import AddBreak from "./Add/AddBreak";
+import AddClass from "./Add/AddClass";
+import AddPackage from "./Add/AddPackage";
+import { Menu, MenuItem, } from "@mui/material";
 
 const validationSchema = Yup.object().shape({
   centerName: Yup.string().required("*Centre Name is required"),
@@ -64,6 +69,8 @@ function CenterEdit({ handleCenterChanged }) {
   const navigate = useNavigate();
   const [taxTypeData, setTaxTypeData] = useState(null);
   const userName = localStorage.getItem("tmsuserName");
+  const centerId = localStorage.getItem("tmscenterId");
+  const [menuAnchor, setMenuAnchor] = useState(null);
 
   useEffect(() => {
     fetchTeacher();
@@ -205,6 +212,8 @@ function CenterEdit({ handleCenterChanged }) {
     }
   };
 
+  const handleMenuClose = () => setMenuAnchor(null);
+
   return (
     <div className="container-fluid">
       <ol
@@ -233,11 +242,11 @@ function CenterEdit({ handleCenterChanged }) {
       </ol>
       <form
         onSubmit={formik.handleSubmit}
-        // onKeyDown={(e) => {
-        //   if (e.key === "Enter" && !formik.isSubmitting) {
-        //     e.preventDefault(); // Prevent default form submission
-        //   }
-        // }}
+      // onKeyDown={(e) => {
+      //   if (e.key === "Enter" && !formik.isSubmitting) {
+      //     e.preventDefault(); // Prevent default form submission
+      //   }
+      // }}
       >
         <div className="card">
           <div
@@ -282,11 +291,10 @@ function CenterEdit({ handleCenterChanged }) {
                   <input
                     type="text"
                     name="centerName"
-                    className={`form-control  ${
-                      formik.touched.centerName && formik.errors.centerName
-                        ? "is-invalid"
-                        : ""
-                    }`}
+                    className={`form-control  ${formik.touched.centerName && formik.errors.centerName
+                      ? "is-invalid"
+                      : ""
+                      }`}
                     aria-label="Username"
                     aria-describedby="basic-addon1"
                     {...formik.getFieldProps("centerName")}
@@ -306,11 +314,10 @@ function CenterEdit({ handleCenterChanged }) {
                   <input
                     {...formik.getFieldProps("code")}
                     type="text"
-                    className={`form-control  ${
-                      formik.touched.code && formik.errors.code
-                        ? "is-invalid"
-                        : ""
-                    }`}
+                    className={`form-control  ${formik.touched.code && formik.errors.code
+                      ? "is-invalid"
+                      : ""
+                      }`}
                     placeholder=""
                   />
                   {formik.touched.code && formik.errors.code && (
@@ -323,11 +330,10 @@ function CenterEdit({ handleCenterChanged }) {
                 <select
                   {...formik.getFieldProps("userId")}
                   name="userId"
-                  className={`form-select  ${
-                    formik.touched.userId && formik.errors.userId
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-select  ${formik.touched.userId && formik.errors.userId
+                    ? "is-invalid"
+                    : ""
+                    }`}
                 >
                   <option selected></option>
                   {teacherData &&
@@ -347,11 +353,10 @@ function CenterEdit({ handleCenterChanged }) {
                     Address<span className="text-danger">*</span>
                   </label>
                   <textarea
-                    className={`form-control ${
-                      formik.touched.address && formik.errors.address
-                        ? "is-invalid"
-                        : ""
-                    }`}
+                    className={`form-control ${formik.touched.address && formik.errors.address
+                      ? "is-invalid"
+                      : ""
+                      }`}
                     {...formik.getFieldProps("address")}
                     id="exampleFormControlTextarea1"
                     rows="3"
@@ -378,11 +383,10 @@ function CenterEdit({ handleCenterChanged }) {
                   <input
                     {...formik.getFieldProps("zipCode")}
                     type="text"
-                    className={`form-control    ${
-                      formik.touched.zipCode && formik.errors.zipCode
-                        ? "is-invalid"
-                        : ""
-                    }`}
+                    className={`form-control    ${formik.touched.zipCode && formik.errors.zipCode
+                      ? "is-invalid"
+                      : ""
+                      }`}
                   />
                   {formik.touched.zipCode && formik.errors.zipCode && (
                     <div className="invalid-feedback">
@@ -399,11 +403,10 @@ function CenterEdit({ handleCenterChanged }) {
                   <input
                     {...formik.getFieldProps("mobile")}
                     type="text"
-                    className={`form-control   ${
-                      formik.touched.mobile && formik.errors.mobile
-                        ? "is-invalid"
-                        : ""
-                    }`}
+                    className={`form-control   ${formik.touched.mobile && formik.errors.mobile
+                      ? "is-invalid"
+                      : ""
+                      }`}
                   />
                   {formik.touched.mobile && formik.errors.mobile && (
                     <div className="invalid-feedback">
@@ -420,11 +423,10 @@ function CenterEdit({ handleCenterChanged }) {
                   <input
                     {...formik.getFieldProps("email")}
                     type="text"
-                    className={`form-control   ${
-                      formik.touched.email && formik.errors.email
-                        ? "is-invalid"
-                        : ""
-                    }`}
+                    className={`form-control   ${formik.touched.email && formik.errors.email
+                      ? "is-invalid"
+                      : ""
+                      }`}
                     aria-label="Username"
                     aria-describedby="basic-addon1"
                   />
@@ -444,11 +446,10 @@ function CenterEdit({ handleCenterChanged }) {
                     {...formik.getFieldProps("openingDate")}
                     type="date"
                     // onFocus={(e) => e.target.showPicker()}
-                    className={`form-control   ${
-                      formik.touched.openingDate && formik.errors.openingDate
-                        ? "is-invalid"
-                        : ""
-                    }`}
+                    className={`form-control   ${formik.touched.openingDate && formik.errors.openingDate
+                      ? "is-invalid"
+                      : ""
+                      }`}
                     aria-label="Username"
                     aria-describedby="basic-addon1"
                   />
@@ -515,11 +516,10 @@ function CenterEdit({ handleCenterChanged }) {
                   <input
                     {...formik.getFieldProps("uenNumber")}
                     type="text"
-                    className={`form-control ${
-                      formik.touched.uenNumber && formik.errors.uenNumber
-                        ? "is-invalid"
-                        : ""
-                    }`}
+                    className={`form-control ${formik.touched.uenNumber && formik.errors.uenNumber
+                      ? "is-invalid"
+                      : ""
+                      }`}
                   />
                   {formik.touched.uenNumber && formik.errors.uenNumber && (
                     <div className="invalid-feedback">
@@ -536,12 +536,11 @@ function CenterEdit({ handleCenterChanged }) {
                   <input
                     {...formik.getFieldProps("taxRegistrationNumber")}
                     type="text"
-                    className={`form-control   ${
-                      formik.touched.taxRegistrationNumber &&
+                    className={`form-control   ${formik.touched.taxRegistrationNumber &&
                       formik.errors.taxRegistrationNumber
-                        ? "is-invalid"
-                        : ""
-                    }`}
+                      ? "is-invalid"
+                      : ""
+                      }`}
                   />
                   {formik.touched.taxRegistrationNumber &&
                     formik.errors.taxRegistrationNumber && (
@@ -559,11 +558,10 @@ function CenterEdit({ handleCenterChanged }) {
                   <input
                     {...formik.getFieldProps("bankName")}
                     type="text"
-                    className={`form-control    ${
-                      formik.touched.bankName && formik.errors.bankName
-                        ? "is-invalid"
-                        : ""
-                    }`}
+                    className={`form-control    ${formik.touched.bankName && formik.errors.bankName
+                      ? "is-invalid"
+                      : ""
+                      }`}
                   />
                   {formik.touched.bankName && formik.errors.bankName && (
                     <div className="invalid-feedback">
@@ -580,11 +578,10 @@ function CenterEdit({ handleCenterChanged }) {
                   <input
                     {...formik.getFieldProps("bankBranch")}
                     type="text"
-                    className={`form-control   ${
-                      formik.touched.bankBranch && formik.errors.bankBranch
-                        ? "is-invalid"
-                        : ""
-                    }`}
+                    className={`form-control   ${formik.touched.bankBranch && formik.errors.bankBranch
+                      ? "is-invalid"
+                      : ""
+                      }`}
                   />
                   {formik.touched.bankBranch && formik.errors.bankBranch && (
                     <div className="invalid-feedback">
@@ -601,12 +598,11 @@ function CenterEdit({ handleCenterChanged }) {
                   <input
                     {...formik.getFieldProps("bankAccountName")}
                     type="text"
-                    className={`form-control    ${
-                      formik.touched.bankAccountName &&
+                    className={`form-control    ${formik.touched.bankAccountName &&
                       formik.errors.bankAccountName
-                        ? "is-invalid"
-                        : ""
-                    }`}
+                      ? "is-invalid"
+                      : ""
+                      }`}
                   />
                   {formik.touched.bankAccountName &&
                     formik.errors.bankAccountName && (
@@ -624,12 +620,11 @@ function CenterEdit({ handleCenterChanged }) {
                   <input
                     {...formik.getFieldProps("bankAccountNumber")}
                     type="text"
-                    className={`form-control    ${
-                      formik.touched.bankAccountNumber &&
+                    className={`form-control    ${formik.touched.bankAccountNumber &&
                       formik.errors.bankAccountNumber
-                        ? "is-invalid"
-                        : ""
-                    }`}
+                      ? "is-invalid"
+                      : ""
+                      }`}
                   />
                   {formik.touched.bankAccountNumber &&
                     formik.errors.bankAccountNumber && (
@@ -676,11 +671,10 @@ function CenterEdit({ handleCenterChanged }) {
                   <input
                     {...formik.getFieldProps("target")}
                     type="text"
-                    className={`form-control   ${
-                      formik.touched.target && formik.errors.target
-                        ? "is-invalid"
-                        : ""
-                    }`}
+                    className={`form-control   ${formik.touched.target && formik.errors.target
+                      ? "is-invalid"
+                      : ""
+                      }`}
                   />
                   {formik.touched.target && formik.errors.target && (
                     <div className="invalid-feedback">
@@ -709,7 +703,24 @@ function CenterEdit({ handleCenterChanged }) {
             <div className="row">
               {/* Centre Registrations */}
               <div className="col-md-12 col-12 mt-4">
-                <h5 className="headColor mb-3">Centre Registrations</h5>
+                <div className="d-flex justify-content-between align-items-center">
+                  <div class="d-flex align-items-start">
+                    <h5 className="headColor mb-3">Centre Registrations</h5>
+                  </div>
+                  <div className="my-2 pe-3 d-flex align-items-center">
+                    <AddRegister id={centerId} onSuccess={refreshData} handleMenuClose={handleMenuClose} />
+                  </div>
+                </div>
+                <Menu
+                  id="action-menu"
+                  anchorEl={menuAnchor}
+                  open={Boolean(menuAnchor)}
+                  onClose={handleMenuClose}
+                >
+                  <MenuItem>
+                  </MenuItem>
+                </Menu>
+
                 <table className="table table-border-solid">
                   <thead>
                     <tr>
@@ -767,7 +778,23 @@ function CenterEdit({ handleCenterChanged }) {
               </div>
               {/* Centre Break */}
               <div className="col-md-12 col-12 mt-4">
-                <h5 className="headColor mb-3">Centre Break</h5>
+                <div className="d-flex justify-content-between align-items-center">
+                  <div class="d-flex align-items-start">
+                    <h5 className="headColor mb-3">Centre Break</h5>
+                  </div>
+                  <div className="my-2 pe-3 d-flex align-items-center">
+                    <AddBreak id={centerId} onSuccess={refreshData} handleMenuClose={handleMenuClose} />
+                  </div>
+                </div>
+                <Menu
+                  id="action-menu"
+                  anchorEl={menuAnchor}
+                  open={Boolean(menuAnchor)}
+                  onClose={handleMenuClose}
+                >
+                  <MenuItem>
+                  </MenuItem>
+                </Menu>
                 <table class="table table-border-solid">
                   <thead>
                     <tr>
@@ -813,7 +840,23 @@ function CenterEdit({ handleCenterChanged }) {
               </div>
               {/* class Room  */}
               <div className="col-md-12 col-12 mt-4">
-                <h5 className="headColor mb-3">Centre Classroom</h5>
+                <div className="d-flex justify-content-between align-items-center">
+                  <div class="d-flex align-items-start">
+                    <h5 className="headColor mb-3">Centre Classroom</h5>
+                  </div>
+                  <div className="my-2 pe-3 d-flex align-items-center">
+                    <AddClass id={centerId} onSuccess={refreshData} handleMenuClose={handleMenuClose} />
+                  </div>
+                </div>
+                <Menu
+                  id="action-menu"
+                  anchorEl={menuAnchor}
+                  open={Boolean(menuAnchor)}
+                  onClose={handleMenuClose}
+                >
+                  <MenuItem>
+                  </MenuItem>
+                </Menu>
                 <div className="table-responsive">
                   <table class="table table-border-solid">
                     <thead>
@@ -891,7 +934,23 @@ function CenterEdit({ handleCenterChanged }) {
               </div>
               {/* Package  */}
               <div className="col-md-12 col-12 mt-4">
-                <h5 className="headColor mb-3">Centre Package</h5>
+                <div className="d-flex justify-content-between align-items-center">
+                  <div class="d-flex align-items-start">
+                    <h5 className="headColor mb-3">Centre Package</h5>
+                  </div>
+                  <div className="my-2 pe-3 d-flex align-items-center">
+                    <AddPackage id={centerId} onSuccess={refreshData} handleMenuClose={handleMenuClose} />
+                  </div>
+                </div>
+                <Menu
+                  id="action-menu"
+                  anchorEl={menuAnchor}
+                  open={Boolean(menuAnchor)}
+                  onClose={handleMenuClose}
+                >
+                  <MenuItem>
+                  </MenuItem>
+                </Menu>
                 <table class="table table-border-solid">
                   <thead>
                     <tr>

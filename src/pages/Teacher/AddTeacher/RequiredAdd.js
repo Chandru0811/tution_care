@@ -14,6 +14,7 @@ const RequiredAdd = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext, roleF }, ref) => {
 
     const userName = localStorage.getItem("tmsuserName");
+    const centerId = localStorage.getItem("tmscenterId");
     const [datas, setDatas] = useState();
     const role = formData.role;
     console.log("Role:", formData.role);
@@ -30,12 +31,13 @@ const RequiredAdd = forwardRef(
 
           const userId = formData.user_id;
           formDatas.append("userId", userId);
+          formDatas.append("centerId", centerId);
           formDatas.append("resume", values.resume);
           formDatas.append("educationCertificate", values.educationCertificate);
           formDatas.append("createdBy", userName);
 
           const response = await api.post(
-            `/createUserRequireInformationWithCenterId`,
+            `/createUserRequireInformation`,
             formDatas,
             {
               headers: {

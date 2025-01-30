@@ -107,7 +107,7 @@ const AccountAdd = forwardRef(
               },
             }
           );
-          if (response.status === 200) {
+          if (response.status === 201) {
             toast.success("User Account Created Successfully");
             setFormData((prv) => ({ ...prv, ...values }));
             handleNext();

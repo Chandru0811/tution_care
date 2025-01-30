@@ -19,6 +19,7 @@ import BlogView from "../components/client/Blogs/BlogView.js";
 import Blogs from "../pages/Client/Blogs.js";
 import ParticulerCourse from "../pages/Client/ParticulerCourse.js";
 import NewLogin from "../pages/auth/NewLogin.js";
+import CompanyRegister from "../pages/auth/CompanyRegister.js";
 
 function Auth({ handleLogin }) {
   return (
@@ -28,6 +29,7 @@ function Auth({ handleLogin }) {
       {/* <Header /> */}
       <Routes>
         <Route path="/login" element={<NewLogin onLogin={handleLogin} />} />
+        <Route path="/companyRegister" element={<CompanyRegister onLogin={handleLogin} />} />
         {/* <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />

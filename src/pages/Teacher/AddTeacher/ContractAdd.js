@@ -14,13 +14,14 @@ import fetchAllCentersWithIds from "../../List/CenterList";
 const ContractAdd = forwardRef(
   ({ formData, setLoadIndicators, setFormData }, ref) => {
     // console.log("formDataContractAdd", formData);
-    const [centerData, setCenterData] = useState(null);
+    // const [centerData, setCenterData] = useState(null);
     const userName = localStorage.getItem("tmsuserName");
+    const centerId = localStorage.getItem("tmscenterId");
     const empRole = formData.role;
     const validationSchema = Yup.object().shape({
       // const validationSchema = (empRole) => {
       //   return Yup.object().shape({
-      employer: Yup.string().required("*Employer is required"),
+      // employer: Yup.string().required("*Employer is required"),
       employee: Yup.string().required("*Employee is required"),
       uen: Yup.string().required("*UEN is required"),
       addressOfEmployment: Yup.string().required("*Address is required"),
@@ -114,9 +115,10 @@ const ContractAdd = forwardRef(
       onSubmit: async (values) => {
         setLoadIndicators(true);
         values.createdBy = userName;
+        values.centerId = centerId;
         try {
           const response = await api.post(
-            `/createUserContractCreationWithCenterId/${formData.user_id}`,
+            `/createUserContractCreation/${formData.user_id}`,
             values,
             {
               headers: {
@@ -158,14 +160,14 @@ const ContractAdd = forwardRef(
       }
     }, [formik.submitCount, formik.errors]);
 
-    const fetchData = async () => {
-      try {
-        const centerData = await fetchAllCentersWithIds();
-        setCenterData(centerData);
-      } catch (error) {
-        toast.error(error);
-      }
-    };
+    // const fetchData = async () => {
+    //   try {
+    //     const centerData = await fetchAllCentersWithIds();
+    //     setCenterData(centerData);
+    //   } catch (error) {
+    //     toast.error(error);
+    //   }
+    // };
 
     // const errors = {};
     // const { userContractStartDate, userContractEndDate } = values;
@@ -183,12 +185,12 @@ const ContractAdd = forwardRef(
     //   }
     // }
 
-    const filteredCenters = centerData?.filter((center) =>
-      formData.centerIds.includes(center.id)
-    );
-    const getData = async (id) => {
+    // const filteredCenters = centerData?.filter((center) =>
+    //   formData.centerId?.includes(center.id)
+    // );
+    const getData = async () => {
       try {
-        const response = await api.get(`/getAllCenterById/${id}`);
+        const response = await api.get(`/getAllCenterById/${centerId}`);
         formik.setFieldValue("uen", response.data.uenNumber);
         formik.setFieldValue("addressOfEmployment", response.data.address);
         console.log("response", response.data);
@@ -197,8 +199,7 @@ const ContractAdd = forwardRef(
       }
     };
     useEffect(() => {
-      // getData();
-      fetchData();
+      getData();
       window.scrollTo({ top: 0, left: 0, behavior: "instant" });
     }, []);
 
@@ -252,7 +253,7 @@ const ContractAdd = forwardRef(
           <div className="container-fluid mt-5" style={{ minHeight: "95vh" }}>
             <span className="mt-3 fw-bold">Details of EMPLOYER</span>
             <div class="row mt-4">
-              <div class="col-md-6 col-12 mb-2 mt-3">
+              {/* <div class="col-md-6 col-12 mb-2 mt-3">
                 <label>Employer</label>
                 <span className="text-danger">*</span>
                 <select
@@ -279,7 +280,7 @@ const ContractAdd = forwardRef(
                     <small>{formik.errors.employer}</small>
                   </div>
                 )}
-              </div>
+              </div> */}
               <div class="col-md-6 col-12 mb-2 mt-3">
                 <label>UEN</label>
                 <span className="text-danger">*</span>
@@ -298,26 +299,27 @@ const ContractAdd = forwardRef(
                   </div>
                 )}
               </div>
+              <div class="col-md-6 col-12 mb-2 mt-3">
+                <label>Address of Employment</label>
+                <span className="text-danger">*</span>
+                <input
+                  type="text"
+                  className="form-control"
+                  name="addressOfEmployment"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.addressOfEmployment}
+                  readOnly
+                />
+                {formik.touched.addressOfEmployment &&
+                  formik.errors.addressOfEmployment && (
+                    <div className="error text-danger ">
+                      <small>{formik.errors.addressOfEmployment}</small>
+                    </div>
+                  )}
+              </div>
             </div>
-            <div class="col-md-6 col-12 mb-2 mt-3">
-              <label>Address of Employment</label>
-              <span className="text-danger">*</span>
-              <input
-                type="text"
-                className="form-control"
-                name="addressOfEmployment"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.addressOfEmployment}
-                readOnly
-              />
-              {formik.touched.addressOfEmployment &&
-                formik.errors.addressOfEmployment && (
-                  <div className="error text-danger ">
-                    <small>{formik.errors.addressOfEmployment}</small>
-                  </div>
-                )}
-            </div>
+
             <div class="row mt-3 ">
               <span className="mt-3 fw-bold ">Details of EMPLOYEE</span>
               <div class="col-md-6 col-12 mb-2 mt-3">

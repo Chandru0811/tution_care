@@ -235,7 +235,7 @@ const SuperAdminCenter = ({handleCenterChanged}) => {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          &nbsp;Centre Listing
+          &nbsp;Company Listing
         </li>
       </ol>
       <div className="card">
@@ -245,7 +245,7 @@ const SuperAdminCenter = ({handleCenterChanged}) => {
         >
           <span className="text-muted">
             This database shows the list of{" "}
-            <strong style={{ color: "#287f71" }}>Centre</strong>
+            <strong style={{ color: "#287f71" }}>Company</strong>
           </span>
         </div>
         <div className="mb-3 d-flex justify-content-between">
@@ -312,7 +312,7 @@ const SuperAdminCenter = ({handleCenterChanged}) => {
               </button>
             </div>
           </div>
-          <Link to="/superadmincenter/add">
+          <Link to="/companyregistration/add">
             <button
               type="button"
               className="btn btn-button btn-sm me-2"
@@ -361,7 +361,7 @@ const SuperAdminCenter = ({handleCenterChanged}) => {
                   },
                 }}
                 muiTableBodyRowProps={({ row }) => ({
-                  onClick: () => navigate(`/superadmincenter/view/${row.original.id}`),
+                  onClick: () => navigate(`/companyregistration/view/${row.original.id}`),
                   style: { cursor: "pointer" },
                 })}
               />
@@ -387,7 +387,7 @@ const SuperAdminCenter = ({handleCenterChanged}) => {
               <MenuItem >
                 <AddBreak id={selectedId} onSuccess={fetchData} handleMenuClose={handleMenuClose}/>
               </MenuItem>
-              <MenuItem onClick={() => navigate(`/superadmincenter/edit/${selectedId}`)} className="text-start mb-0 menuitem-style">
+              <MenuItem onClick={() => navigate(`/companyregistration/edit/${selectedId}`)} className="text-start mb-0 menuitem-style">
                 Edit
               </MenuItem>
               <MenuItem>

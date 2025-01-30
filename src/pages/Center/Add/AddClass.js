@@ -12,6 +12,7 @@ import {
   DialogTitle,
   DialogContent,
 } from "@mui/material";
+import { FiPlusCircle } from "react-icons/fi";
 
 function AddClass({ id, onSuccess, handleMenuClose }) {
   const [show, setShow] = useState(false);
@@ -97,7 +98,7 @@ function AddClass({ id, onSuccess, handleMenuClose }) {
         style={{ whiteSpace: "nowrap", width: "100%" }}
         onClick={handleShow}
       >
-        Add Classroom
+        <FiPlusCircle size={20} style={{color:"#287f71"}} />
       </p>
 
       <Dialog open={show} onClose={handleClose} maxWidth="md" fullWidth>
@@ -122,12 +123,11 @@ function AddClass({ id, onSuccess, handleMenuClose }) {
                   <input
                     type="text"
                     onKeyDown={(e) => e.stopPropagation()}
-                    className={`form-control   ${
-                      formik.touched.classRoomName &&
-                      formik.errors.classRoomName
+                    className={`form-control   ${formik.touched.classRoomName &&
+                        formik.errors.classRoomName
                         ? "is-invalid"
                         : ""
-                    }`}
+                      }`}
                     {...formik.getFieldProps("classRoomName")}
                   />
                   {formik.touched.classRoomName &&
@@ -145,11 +145,10 @@ function AddClass({ id, onSuccess, handleMenuClose }) {
                 <input
                   type="text"
                   onKeyDown={(e) => e.stopPropagation()}
-                  className={`form-control   ${
-                    formik.touched.classRoomCode && formik.errors.classRoomCode
+                  className={`form-control   ${formik.touched.classRoomCode && formik.errors.classRoomCode
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   {...formik.getFieldProps("classRoomCode")}
                 />
                 {formik.touched.classRoomCode &&
@@ -165,12 +164,11 @@ function AddClass({ id, onSuccess, handleMenuClose }) {
                 </lable>
                 <div class="input-group mb-3">
                   <select
-                    className={`form-select   ${
-                      formik.touched.classRoomType &&
-                      formik.errors.classRoomType
+                    className={`form-select   ${formik.touched.classRoomType &&
+                        formik.errors.classRoomType
                         ? "is-invalid"
                         : ""
-                    }`}
+                      }`}
                     {...formik.getFieldProps("classRoomType")}
                   >
                     <option></option>
@@ -194,11 +192,10 @@ function AddClass({ id, onSuccess, handleMenuClose }) {
                   onKeyDown={(e) => e.stopPropagation()}
                   type="text"
                   pattern="^\d+$"
-                  className={`form-control   ${
-                    formik.touched.capacity && formik.errors.capacity
+                  className={`form-control   ${formik.touched.capacity && formik.errors.capacity
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   {...formik.getFieldProps("capacity")}
                 />
                 {formik.touched.capacity && formik.errors.capacity && (
@@ -210,7 +207,7 @@ function AddClass({ id, onSuccess, handleMenuClose }) {
               <div className="form-floating">
                 <lable>Description</lable>
                 <textarea
-                onKeyDown={(e) => e.stopPropagation()}
+                  onKeyDown={(e) => e.stopPropagation()}
                   className="form-control p-1"
                   {...formik.getFieldProps("description")}
                   placeholder=""

@@ -22,6 +22,7 @@ const SalaryAdd = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const [salaryTypeData, setSalaryTypeData] = useState(null);
     const userName = localStorage.getItem("tmsuserName");
+    const centerId = localStorage.getItem("tmscenterId");
 
     const fetchData = async () => {
       try {
@@ -47,9 +48,10 @@ const SalaryAdd = forwardRef(
       onSubmit: async (values) => {
         setLoadIndicators(false);
         values.createdBy = userName;
+        values.centerId = centerId;
         try {
           const response = await api.post(
-            `/createSalaryCreationWithCenterId/${formData.user_id}`,
+            `/createUserSalaryCreation/${formData.user_id}`,
             values,
             {
               headers: {
