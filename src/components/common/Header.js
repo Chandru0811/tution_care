@@ -5,11 +5,13 @@ import { toast } from "react-toastify";
 import ChangePassword from "./ChangePassword";
 import { BiLogOut } from "react-icons/bi";
 import { CiCalendarDate } from "react-icons/ci";
+import { GrUserSettings } from "react-icons/gr";
 
 function Header({ onLogout, centerChange }) {
   const navigate = useNavigate();
   const userName = localStorage.getItem("tmsuserName");
   const centerName = localStorage.getItem("tmscenterName");
+  const centerId = localStorage.getItem("tmscenterId");
   const userEmail = localStorage.getItem("tmsemail");
   const role = localStorage.getItem("tmsrole")?.replace(/_/g, " ");
   const selectedCenterId = localStorage.getItem("tmsselectedCenterId");
@@ -155,6 +157,12 @@ function Header({ onLogout, centerChange }) {
               <p>{userName?.replace(/_/g, " ")}</p>
               <p>{userEmail}</p>
               <p>{role}</p>
+            </div>
+            <div className="text-center cursor-pointer">
+              <Link to={`/center/edit/${centerId}`}>
+                <GrUserSettings className="mx-2" />
+                <span>Edit Company</span>
+              </Link>
             </div>
           </div>
 
