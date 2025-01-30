@@ -25,6 +25,7 @@ const validationSchema = Yup.object({
 
 function DocumentAdd() {
   const navigate = useNavigate();
+  const centerId = localStorage.getItem("centerId");
   const [folderCategory, setFolderCategory] = useState("group");
   const [centerData, setCenterData] = useState(null);
   const [classData, setClassData] = useState(null);
@@ -37,7 +38,7 @@ function DocumentAdd() {
 
   const formik = useFormik({
     initialValues: {
-      center: "",
+      center: centerId,
       course: "",
       userId: "",
       classListing: "",
@@ -59,11 +60,11 @@ function DocumentAdd() {
         let selectedClassName = "";
         let selectedCourseName = "";
 
-        centerData.forEach((center) => {
-          if (parseInt(selectedValue) === center.id) {
-            selectedOptionName = center.centerNames || "--";
-          }
-        });
+        // centerData.forEach((center) => {
+        //   if (parseInt(selectedValue) === center.id) {
+        //     selectedOptionName = center.centerNames || "--";
+        //   }
+        // });
 
         // Find selected class name
         classData.forEach((cls) => {
@@ -80,7 +81,7 @@ function DocumentAdd() {
         });
 
         let requestBody = {
-          centerId: values.center,
+          centerId: centerId,
           userId: values.userId,
           day: values.day,
           center: selectedOptionName,
@@ -115,7 +116,10 @@ function DocumentAdd() {
           toast.error(response.data.message);
         }
       } catch (error) {
-        if (error?.response?.status === 409 || error?.response?.status === 404) {
+        if (
+          error?.response?.status === 409 ||
+          error?.response?.status === 404
+        ) {
           toast.warning(error?.response?.data?.message);
         } else {
           toast.error("Error deleting data:", error);
@@ -145,21 +149,21 @@ function DocumentAdd() {
     }
   }, [formik.submitCount, formik.errors]);
 
-  const fetchData = async () => {
-    try {
-      const centerData = await fetchAllCentersWithIds();
+  // const fetchData = async () => {
+  //   try {
+  //     const centerData = await fetchAllCentersWithIds();
 
-      setCenterData(centerData);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
+  //     setCenterData(centerData);
+  //   } catch (error) {
+  //     toast.error(error);
+  //   }
+  // };
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+  // useEffect(() => {
+  //   fetchData();
+  // }, []);
 
-  const fetchCourses = async (centerId) => {
+  const fetchCourses = async () => {
     try {
       const courses = await fetchAllCoursesWithIdsC(centerId);
       setCourseData(courses);
@@ -168,7 +172,7 @@ function DocumentAdd() {
     }
   };
 
-  const fetchTeacher = async (centerId) => {
+  const fetchTeacher = async () => {
     try {
       const teacher = await fetchAllTeacherListByCenter(centerId);
       setUserData(teacher);
@@ -177,7 +181,7 @@ function DocumentAdd() {
     }
   };
 
-  const fetchStudent = async (centerId) => {
+  const fetchStudent = async () => {
     try {
       const teacher = await fetchAllStudentListByCenter(centerId);
       setStudentData(teacher);
@@ -218,17 +222,17 @@ function DocumentAdd() {
     return `${year}-${month}-${day}`;
   };
 
-  const handleCenterChange = (event) => {
-    setCourseData(null);
-    setClassData(null);
-    setUserData(null);
-    setStudentData(null);
-    const center = event.target.value;
-    formik.setFieldValue("center", center);
-    fetchCourses(center);
-    fetchTeacher(center);
-    fetchStudent(center); // Fetch courses for the selected center
-  };
+  // const handleCenterChange = (event) => {
+  //   setCourseData(null);
+  //   setClassData(null);
+  //   setUserData(null);
+  //   setStudentData(null);
+  //   const center = event.target.value;
+  //   formik.setFieldValue("center", center);
+  //   fetchCourses(center);
+  //   fetchTeacher(center);
+  //   fetchStudent(center); // Fetch courses for the selected center
+  // };
 
   const fetchBatchandTeacherData = async (day) => {
     try {
@@ -362,7 +366,7 @@ function DocumentAdd() {
 
           <div className="container">
             <div className="row py-4">
-              <div class="col-md-6 col-12 mb-4">
+              {/* <div class="col-md-6 col-12 mb-4">
                 <lable class="">
                   Centre<span class="text-danger">*</span>
                 </lable>
@@ -388,8 +392,7 @@ function DocumentAdd() {
                 {formik.touched.center && formik.errors.center && (
                   <div className="invalid-feedback">{formik.errors.center}</div>
                 )}
-              </div>
-
+              </div> */}
               <div class="col-md-6 col-12 mb-4">
                 <lable class="">
                   Course<span class="text-danger">*</span>
@@ -537,8 +540,28 @@ function DocumentAdd() {
                 )}
               </div>
 
-              {/* Radio buttons for selecting folder category */}
               <div className="col-md-6 col-12 mb-4">
+                <label className="form-label">
+                  Date<span className="text-danger">*</span>
+                </label>
+                <div className="input-group mb-3">
+                  <input
+                    name="date"
+                    type="date"
+                    className={`form-control  ${
+                      formik.touched.date && formik.errors.date
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                    {...formik.getFieldProps("date")}
+                  />
+                  {formik.touched.date && formik.errors.date && (
+                    <div className="invalid-feedback">{formik.errors.date}</div>
+                  )}
+                </div>
+              </div>
+               {/* Radio buttons for selecting folder category */}
+               <div className="col-md-6 col-12 mb-4">
                 <label className="form-label">
                   Folder Category<span className="text-danger">*</span>
                 </label>
@@ -579,6 +602,29 @@ function DocumentAdd() {
                   )}
               </div>
 
+              <div className="col-md-6 col-12 mb-4">
+                <label className="form-label">
+                  Expired Date<span className="text-danger">*</span>
+                </label>
+                <input
+                  name="expiredDate"
+                  type="date"
+                  className={`form-control  ${
+                    formik.touched.expiredDate && formik.errors.expiredDate
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  {...formik.getFieldProps("expiredDate")}
+                  value={calculateExpiryDate(formik.values.date)}
+                />
+                {formik.touched.expiredDate && formik.errors.expiredDate && (
+                  <div className="invalid-feedback">
+                    {formik.errors.expiredDate}
+                  </div>
+                )}
+              </div>
+             
+
               <div class="col-md-6 col-12 mb-3">
                 {folderCategory === "group" ? (
                   <></>
@@ -608,49 +654,6 @@ function DocumentAdd() {
                           {formik.errors.studentSelect}
                         </div>
                       )}
-                  </div>
-                )}
-              </div>
-
-              <div className="col-md-6 col-12 mb-4">
-                <label className="form-label">
-                  Date<span className="text-danger">*</span>
-                </label>
-                <div className="input-group mb-3">
-                  <input
-                    name="date"
-                    type="date"
-                    className={`form-control  ${
-                      formik.touched.date && formik.errors.date
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    {...formik.getFieldProps("date")}
-                  />
-                  {formik.touched.date && formik.errors.date && (
-                    <div className="invalid-feedback">{formik.errors.date}</div>
-                  )}
-                </div>
-              </div>
-
-              <div className="col-md-6 col-12 mb-4">
-                <label className="form-label">
-                  Expired Date<span className="text-danger">*</span>
-                </label>
-                <input
-                  name="expiredDate"
-                  type="date"
-                  className={`form-control  ${
-                    formik.touched.expiredDate && formik.errors.expiredDate
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  {...formik.getFieldProps("expiredDate")}
-                  value={calculateExpiryDate(formik.values.date)}
-                />
-                {formik.touched.expiredDate && formik.errors.expiredDate && (
-                  <div className="invalid-feedback">
-                    {formik.errors.expiredDate}
                   </div>
                 )}
               </div>
