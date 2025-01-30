@@ -29,7 +29,7 @@ const Assignment = () => {
   });
   const [data, setData] = useState([]);
   const [centerData, setCenterData] = useState([]);
-  const centerIDLocal = localStorage.getItem("selectedCenterId");
+  const centerIDLocal = localStorage.getItem("tmsselectedCenterId");
   const [courseData, setCourseData] = useState([]);
   const [classData, setClassData] = useState([]);
   const [teacherData, setTeacherData] = useState([]);
@@ -346,22 +346,6 @@ const Assignment = () => {
         </div>
         <div className="mb-3">
           <div className="individual_fliters d-lg-flex">
-            <div className="form-group mb-0 ms-2 mb-1">
-              <select
-                className="form-select form-select-sm center_list"
-                name="centerId"
-                style={{ width: "100%" }}
-                onChange={handleCenterChange}
-                value={filters.centerId}
-              >
-                <option>Select the Centre</option>
-                {centerData?.map((center) => (
-                  <option key={center.id} value={center.id} selected>
-                    {center.centerNames}
-                  </option>
-                ))}
-              </select>
-            </div>
             <div className="form-group mb-0 ms-2 mb-1">
               <select
                 className="form-select form-select-sm center_list"

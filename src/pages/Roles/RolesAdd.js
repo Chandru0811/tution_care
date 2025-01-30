@@ -9,7 +9,7 @@ const validationSchema = Yup.object().shape({});
 
 function RolesAdd() {
   const [role, setRole] = useState("1");
-  const userName = localStorage.getItem("userName");
+  const userName = localStorage.getItem("tmsuserName");
   const [roleName, setRoleName] = useState("SMS_ADMIN");
 
   const roleMapping = {
@@ -18,7 +18,7 @@ function RolesAdd() {
     "4": "SMS_STAFF",
     "5": "SMS_STAFF_ADMIN",
     "6": "SMS_TEACHER",
-    "7":"CENTER_MANAGER",
+    "7": "CENTER_MANAGER",
     "8": "SMS_FREELANCER",
   };
 
@@ -200,6 +200,16 @@ function RolesAdd() {
       documentFileCreate: true,
       documentFileUpdate: true,
       documentFileDelete: true,
+      assignmentListingIndex:true,
+      assignmentListingRead:true,
+      assignmentListingCreate:true,
+      assignmentListingUpdate:true,
+      assignmentListingDelete:true,
+      assignmentResultIndex:true,
+      assignmentResultRead:true,
+      assignmentResultCreate:true,
+      assignmentResultUpdate:true,
+      assignmentResultDelete:true,
       invoiceIndex: true,
       invoiceRead: true,
       invoiceCreate: true,
@@ -469,7 +479,7 @@ function RolesAdd() {
       curriculumOutlineCreate: true,
       centerListingCreate: true,
       leadListingCreate: true,
-      leadListingUpdate:true,
+      leadListingUpdate: true,
       enrollmentCreate: true,
       staffCreate: true,
       teacherCreate: true,
@@ -493,6 +503,8 @@ function RolesAdd() {
       deductDepositCreate: true,
       documentListingCreate: true,
       documentFileCreate: true,
+      assignmentListingCreate: true,
+      assignmentResultCreate: true,
       invoiceCreate: true,
       paymentCreate: true,
       scheduleTeacherCreate: true,
@@ -568,6 +580,8 @@ function RolesAdd() {
       deductDepositRead: true,
       documentListingRead: true,
       documentFileRead: true,
+      assignmentListingRead: true,
+      assignmentResultRead: true,
       invoiceRead: true,
       paymentRead: true,
       scheduleTeacherRead: true,
@@ -643,6 +657,8 @@ function RolesAdd() {
       deductDepositUpdate: true,
       documentListingUpdate: true,
       documentFileUpdate: true,
+      assignmentListingUpdate: true,
+      assignmentResultUpdate: true,
       invoiceUpdate: true,
       paymentUpdate: true,
       scheduleTeacherUpdate: true,
@@ -718,6 +734,8 @@ function RolesAdd() {
       deductDepositDelete: true,
       documentListingDelete: true,
       documentFileDelete: true,
+      assignmentListingDelete: true,
+      assignmentResultDelete: true,
       invoiceDelete: true,
       paymentDelete: true,
       scheduleTeacherDelete: true,
@@ -793,6 +811,8 @@ function RolesAdd() {
       deductDepositIndex: true,
       documentListingIndex: true,
       documentFileIndex: true,
+      assignmentListingIndex: true,
+      assignmentResultIndex: true,
       invoiceIndex: true,
       paymentIndex: true,
       scheduleTeacherIndex: true,
@@ -1619,7 +1639,7 @@ function RolesAdd() {
                             />
                           </td>
                         </tr>
-                        
+
                         {/* User Management  */}
                         <tr>
                           <th colspan="6">User Management</th>
@@ -2884,6 +2904,142 @@ function RolesAdd() {
                         /> */}
                           </td>
                         </tr>
+
+                        {/* Assignment Management  */}
+                        <tr>
+                          <th colspan="6">Assignment Management</th>
+                        </tr>
+                        <tr>
+                          <td>
+                            <p
+                              style={{
+                                marginLeft: "30px",
+                                marginBottom: "0px",
+                              }}
+                            >
+                              Assignment Listing
+                            </p>
+                          </td>
+                          <td>
+                            <input
+                              class="form-check-input"
+                              type="checkbox"
+                              name="assignmentListingIndex"
+                              checked={formik.values.assignmentListingIndex}
+                              onChange={handleCheckboxChange(
+                                `assignmentListingIndex`
+                              )}
+                            />
+                          </td>
+                          <td>
+                            <input
+                              class="form-check-input"
+                              type="checkbox"
+                              name="assignmentListingRead"
+                              checked={formik.values.assignmentListingRead}
+                              onChange={handleCheckboxChange(
+                                `assignmentListingRead`
+                              )}
+                            />
+                          </td>
+                          <td>
+                            <input
+                              class="form-check-input"
+                              type="checkbox"
+                              name="assignmentListingCreate"
+                              checked={formik.values.assignmentListingCreate}
+                              onChange={handleCheckboxChange(
+                                `assignmentListingCreate`
+                              )}
+                            />
+                          </td>
+                          <td>
+                            <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="assignmentListingUpdate"
+                          checked={formik.values.assignmentListingUpdate}
+                          onChange={handleCheckboxChange}
+                        />
+                          </td>
+                          <td>
+                            <input
+                              class="form-check-input"
+                              type="checkbox"
+                              name="assignmentListingDelete"
+                              checked={formik.values.assignmentListingDelete}
+                              onChange={handleCheckboxChange(
+                                `assignmentListingDelete`
+                              )}
+                            />
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <p
+                              style={{
+                                marginLeft: "30px",
+                                marginBottom: "0px",
+                              }}
+                            >
+                              Assignment Result
+                            </p>
+                          </td>
+                          <td>
+                            <input
+                              class="form-check-input"
+                              type="checkbox"
+                              name="assignmentResultIndex"
+                              checked={formik.values.assignmentResultIndex}
+                              onChange={handleCheckboxChange(
+                                `assignmentResultIndex`
+                              )}
+                            />
+                          </td>
+                          <td>
+                            <input
+                              class="form-check-input"
+                              type="checkbox"
+                              name="assignmentResultRead"
+                              checked={formik.values.assignmentResultRead}
+                              onChange={handleCheckboxChange(
+                                `assignmentResultRead`
+                              )}
+                            />
+                          </td>
+                          <td>
+                            <input
+                              class="form-check-input"
+                              type="checkbox"
+                              name="assignmentResultCreate"
+                              checked={formik.values.assignmentResultCreate}
+                              onChange={handleCheckboxChange(
+                                `assignmentResultCreate`
+                              )}
+                            />
+                          </td>
+                          <td>
+                            <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="assignmentResultUpdate"
+                          checked={formik.values.assignmentResultUpdate}
+                          onChange={handleCheckboxChange}
+                        />
+                          </td>
+                          <td>
+                            <input
+                              class="form-check-input"
+                              type="checkbox"
+                              name="assignmentResultDelete"
+                              checked={formik.values.assignmentResultDelete}
+                              onChange={handleCheckboxChange(
+                                `assignmentResultDelete`
+                              )}
+                            />
+                          </td>
+                        </tr>
+                    
                         {/* Invoice Management  */}
                         <tr>
                           <th colspan="6">Invoice and Payment</th>

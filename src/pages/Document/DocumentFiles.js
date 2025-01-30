@@ -230,34 +230,7 @@ function DocumentFile() {
             <div className="container-fluid">
               <div className="row px-1">
                 <div className="py-3">
-                  <p className="headColor">Centre Files</p>
-                </div>
-
-                <div className="col-md-6 col-12 mb-2">
-                  <label>
-                    Centre<span class="text-danger">*</span>
-                  </label>
-                  <div className="input-group">
-                    <select
-                      className="form-select"
-                      name="centerName"
-                      {...formik.getFieldProps("centerName")}
-                      onChange={handleCenterChange}
-                    >
-                      <option></option>
-                      {centerData &&
-                        centerData.map((center) => (
-                          <option key={center.id} value={center.id}>
-                            {center.centerNames}
-                          </option>
-                        ))}
-                    </select>
-                  </div>
-                  {formik.touched.centerName && formik.errors.centerName && (
-                    <small className="text-danger">
-                      {formik.errors.centerName}
-                    </small>
-                  )}
+                  <p className="headColor"> Files</p>
                 </div>
 
                 <div className="col-md-6 col-12 mb-2 ">
