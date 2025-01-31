@@ -105,7 +105,7 @@ function ClassAdd() {
     try {
       const courseData = await fetchAllCoursesWithIdsC(centerId);
       setCourseData(courseData);
-      console.log("coursedataaa", courseData)
+      console.log("coursedataaa", courseData);
     } catch (error) {
       toast.error(error);
     }
@@ -123,7 +123,9 @@ function ClassAdd() {
 
   const fetchBatchandTeacherData = async (day) => {
     try {
-      const response = await api.get(`getTeacherWithBatchListByDay?day=${day}&centerId=${centerId}`);
+      const response = await api.get(
+        `getTeacherWithBatchListByDay?day=${day}&centerId=${centerId}`
+      );
       setTeacherData(response.data.teacherList);
       setBatchData(response.data.batchList);
     } catch (error) {
@@ -135,15 +137,14 @@ function ClassAdd() {
     if (formik.values.day) {
       fetchBatchandTeacherData(formik.values.day);
     }
-    
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.day]);
   useEffect(() => {
-   fetchCourses();
-   fetchClassRoom();
+    fetchCourses();
+    fetchClassRoom();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.day]);
-
 
   useEffect(() => {
     const getData = async () => {
@@ -305,10 +306,11 @@ function ClassAdd() {
                 <select
                   {...formik.getFieldProps("courseId")}
                   name="courseId"
-                  className={`form-select   ${formik.touched.courseId && formik.errors.courseId
+                  className={`form-select   ${
+                    formik.touched.courseId && formik.errors.courseId
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   aria-label="Default select example"
                   class="form-select "
                 >
@@ -334,10 +336,11 @@ function ClassAdd() {
                   name="className"
                   class="form-control "
                   type="text"
-                  className={`form-control  ${formik.touched.className && formik.errors.className
+                  className={`form-control  ${
+                    formik.touched.className && formik.errors.className
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   {...formik.getFieldProps("className")}
                 />
                 {formik.touched.className && formik.errors.className && (
@@ -387,14 +390,42 @@ function ClassAdd() {
               </div>
               <div class="col-md-6 col-12 mb-4">
                 <label>
+                  Day<span class="text-danger">*</span>
+                </label>
+                <select
+                  {...formik.getFieldProps("day")}
+                  className={`form-select  ${
+                    formik.touched.day && formik.errors.day ? "is-invalid" : ""
+                  }`}
+                  name="day"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.day}
+                >
+                  <option></option>
+                  <option value="MONDAY">Monday</option>
+                  <option value="TUESDAY">Tuesday</option>
+                  <option value="WEDNESDAY">Wednesday</option>
+                  <option value="THURSDAY">Thursday</option>
+                  <option value="FRIDAY">Friday</option>
+                  <option value="SATURDAY">Saturday</option>
+                  <option value="SUNDAY">Sunday</option>
+                </select>
+                {formik.touched.day && formik.errors.day && (
+                  <div className="invalid-feedback">{formik.errors.day}</div>
+                )}
+              </div>
+              <div class="col-md-6 col-12 mb-4">
+                <label>
                   Duration(Hrs)<span class="text-danger">*</span>
                 </label>
                 <select
                   {...formik.getFieldProps("durationInHrs")}
-                  className={`form-select  ${formik.touched.durationInHrs && formik.errors.durationInHrs
+                  className={`form-select  ${
+                    formik.touched.durationInHrs && formik.errors.durationInHrs
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   name="durationInHrs"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -425,11 +456,12 @@ function ClassAdd() {
                 </label>
                 <select
                   {...formik.getFieldProps("durationInMins")}
-                  className={`form-select  ${formik.touched.durationInMins &&
-                      formik.errors.durationInMins
+                  className={`form-select  ${
+                    formik.touched.durationInMins &&
+                    formik.errors.durationInMins
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   name="durationInMins"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -448,84 +480,16 @@ function ClassAdd() {
                     </div>
                   )}
               </div>
-              <div class="col-md-6 col-12 mb-4">
-                <label>
-                  Start Date<span class="text-danger">*</span>
-                </label>
-                <input
-                  {...formik.getFieldProps("startDate")}
-                  className={`form-control  ${formik.touched.startDate && formik.errors.startDate
-                      ? "is-invalid"
-                      : ""
-                    }`}
-                  name="startDate"
-                  type="date"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.startDate}
-                />
-                {formik.touched.startDate && formik.errors.startDate && (
-                  <div className="invalid-feedback">
-                    {formik.errors.startDate}
-                  </div>
-                )}
-              </div>
-              <div class="col-md-6 col-12 mb-4">
-                <label>
-                  End Date<span class="text-danger">*</span>
-                </label>
-                <input
-                  {...formik.getFieldProps("endDate")}
-                  className={`form-control  ${formik.touched.endDate && formik.errors.endDate
-                      ? "is-invalid"
-                      : ""
-                    }`}
-                  name="endDate"
-                  type="date"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.endDate}
-                />
-                {formik.touched.endDate && formik.errors.endDate && (
-                  <div className="invalid-feedback">
-                    {formik.errors.endDate}
-                  </div>
-                )}
-              </div>
-              <div class="col-md-6 col-12 mb-4">
-                <label>
-                  Day<span class="text-danger">*</span>
-                </label>
-                <select
-                  {...formik.getFieldProps("day")}
-                  className={`form-select  ${formik.touched.day && formik.errors.day ? "is-invalid" : ""
-                    }`}
-                  name="day"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.day}
-                >
-                  <option></option>
-                  <option value="MONDAY">Monday</option>
-                  <option value="TUESDAY">Tuesday</option>
-                  <option value="WEDNESDAY">Wednesday</option>
-                  <option value="THURSDAY">Thursday</option>
-                  <option value="FRIDAY">Friday</option>
-                  <option value="SATURDAY">Saturday</option>
-                  <option value="SUNDAY">Sunday</option>
-                </select>
-                {formik.touched.day && formik.errors.day && (
-                  <div className="invalid-feedback">{formik.errors.day}</div>
-                )}
-              </div>
+              
               <div class="col-md-6 col-12 mb-4">
                 <label>Teacher</label>
                 <select
                   {...formik.getFieldProps("userId")}
-                  className={`form-select  ${formik.touched.userId && formik.errors.userId
+                  className={`form-select  ${
+                    formik.touched.userId && formik.errors.userId
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   name="userId"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -544,15 +508,91 @@ function ClassAdd() {
                 )}
               </div>
               <div class="col-md-6 col-12 mb-4">
+                <label>Class Room</label>
+                <select
+                  {...formik.getFieldProps("classId")}
+                  className={`form-select  ${
+                    formik.touched.classId && formik.errors.classId
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  name="classId"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.classId}
+                >
+                  <option></option>
+                  {classRoomData &&
+                    classRoomData.map((classId) => (
+                      <option key={classId.id} value={classId.id}>
+                        {classId.classRoomName}
+                      </option>
+                    ))}
+                </select>
+                {formik.touched.classId && formik.errors.classId && (
+                  <div className="invalid-feedback">
+                    {formik.errors.classId}
+                  </div>
+                )}
+              </div>
+              <div class="col-md-6 col-12 mb-4">
+                <label>
+                  Start Date<span class="text-danger">*</span>
+                </label>
+                <input
+                  {...formik.getFieldProps("startDate")}
+                  className={`form-control  ${
+                    formik.touched.startDate && formik.errors.startDate
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  name="startDate"
+                  type="date"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.startDate}
+                />
+                {formik.touched.startDate && formik.errors.startDate && (
+                  <div className="invalid-feedback">
+                    {formik.errors.startDate}
+                  </div>
+                )}
+              </div>
+              <div class="col-md-6 col-12 mb-4">
+                <label>
+                  End Date<span class="text-danger">*</span>
+                </label>
+                <input
+                  {...formik.getFieldProps("endDate")}
+                  className={`form-control  ${
+                    formik.touched.endDate && formik.errors.endDate
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  name="endDate"
+                  type="date"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.endDate}
+                />
+                {formik.touched.endDate && formik.errors.endDate && (
+                  <div className="invalid-feedback">
+                    {formik.errors.endDate}
+                  </div>
+                )}
+              </div>
+
+              <div class="col-md-6 col-12 mb-4">
                 <label>
                   Start Time<span class="text-danger">*</span>
                 </label>
                 <select
                   {...formik.getFieldProps("startTime")}
-                  className={`form-select  ${formik.touched.startTime && formik.errors.startTime
+                  className={`form-select  ${
+                    formik.touched.startTime && formik.errors.startTime
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   name="startTime"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -586,10 +626,11 @@ function ClassAdd() {
                 </label>
                 <input
                   {...formik.getFieldProps("endTime")}
-                  className={`form-control  ${formik.touched.endTime && formik.errors.endTime
+                  className={`form-control  ${
+                    formik.touched.endTime && formik.errors.endTime
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   name="endTime"
                   type="time"
                   onChange={formik.handleChange}
@@ -602,41 +643,16 @@ function ClassAdd() {
                   </div>
                 )}
               </div>
-              <div class="col-md-6 col-12 mb-4">
-                <label>Class Room</label>
-                <select
-                  {...formik.getFieldProps("classId")}
-                  className={`form-select  ${formik.touched.classId && formik.errors.classId
-                      ? "is-invalid"
-                      : ""
-                    }`}
-                  name="classId"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.classId}
-                >
-                  <option></option>
-                  {classRoomData &&
-                    classRoomData.map((classId) => (
-                      <option key={classId.id} value={classId.id}>
-                        {classId.classRoomName}
-                      </option>
-                    ))}
-                </select>
-                {formik.touched.classId && formik.errors.classId && (
-                  <div className="invalid-feedback">
-                    {formik.errors.classId}
-                  </div>
-                )}
-              </div>
+
               <div className="col-md-6 col-12 mb-4">
                 <label>Remark</label>
                 <textarea
                   name="remark"
-                  className={`form-control ${formik.touched.remark && formik.errors.remark
+                  className={`form-control ${
+                    formik.touched.remark && formik.errors.remark
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   {...formik.getFieldProps("remark")}
                   maxLength={200}
                 />

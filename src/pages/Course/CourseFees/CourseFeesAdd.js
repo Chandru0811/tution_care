@@ -24,7 +24,7 @@ const validationSchema = Yup.object({
   status: Yup.string().required("*Status is required"),
 });
 
-function CourseFeesAdd({ onSuccess, centerId }) {
+function CourseFeesAdd({ onSuccess}) {
   const { id } = useParams();
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
@@ -32,13 +32,14 @@ function CourseFeesAdd({ onSuccess, centerId }) {
   const [taxData, setTaxData] = useState([]);
   const userName = localStorage.getItem("tmsuserName");
   const [isModified, setIsModified] = useState(false);
+    const centerId = localStorage.getItem("tmscenterId")
 
   console.log("centerId", centerId);
   console.log("packageData", packageData);
   const fetchPackageData = async (id) => {
-    if (id) {
+    if (centerId) {
       try {
-        const newData = await fetchAllPackageListByCenter(id);
+        const newData = await fetchAllPackageListByCenter(centerId);
         setPackageData((prev) => {
           if (!Array.isArray(prev)) {
             return newData;
@@ -130,10 +131,6 @@ function CourseFeesAdd({ onSuccess, centerId }) {
   useEffect(() => {
     const fetchData = async () => {
       await fetchTaxData();
-
-      for (const center of centerId) {
-        await fetchPackageData(center.id);
-      }
     };
 
     fetchData();

@@ -24,7 +24,7 @@ const CourseFees = () => {
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
   const [packageData, setPackageData] = useState(null);
-  const [centerId, setCenterId] = useState([]);
+
 
   const columns = useMemo(
     () => [
@@ -197,7 +197,6 @@ const CourseFees = () => {
 
         if (response.status === 200 || response.status === 204) {
           console.log("course id", response.data);
-          setCenterId(response.data.centers);
         }
       } catch (error) {
         console.error("Error fetching data ", error);
@@ -255,7 +254,7 @@ const CourseFees = () => {
             </span>
           </div>
           <span>
-            <CourseFeesAdd onSuccess={getData} centerId={centerId} />
+            <CourseFeesAdd onSuccess={getData}/>
           </span>
         </div>
         {loading ? (
@@ -297,7 +296,6 @@ const CourseFees = () => {
               <MenuItem>
                 <CourseFeesEdit
                   onSuccess={getData}
-                  centerId={centerId}
                   id={selectedId}
                   handleMenuClose={handleMenuClose}
                 />

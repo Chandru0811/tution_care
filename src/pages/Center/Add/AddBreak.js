@@ -13,6 +13,7 @@ import {
   DialogContent,
 } from "@mui/material";
 import { FiPlusCircle } from "react-icons/fi";
+import { RiCloseCircleLine } from "react-icons/ri";
 
 function AddBreak({ id, onSuccess, handleMenuClose }) {
   const [show, setShow] = useState(false);
@@ -96,7 +97,7 @@ function AddBreak({ id, onSuccess, handleMenuClose }) {
         style={{ whiteSpace: "nowrap", width: "100%" }}
         onClick={handleShow}
       >
-        <FiPlusCircle size={20} style={{color:"#287f71"}} />
+        <FiPlusCircle size={20} style={{ color: "#287f71" }} />
       </p>
 
       <Dialog open={show} onClose={handleClose} maxWidth="md" fullWidth>
@@ -108,8 +109,9 @@ function AddBreak({ id, onSuccess, handleMenuClose }) {
             }
           }}
         >
-          <DialogTitle>
-            <p className="headColor">Add Centre Break</p>
+          <DialogTitle className="d-flex justify-content-between align-items-center">
+            <p className="headColor mb-0">Add Break</p>
+            <RiCloseCircleLine size={24} style={{ cursor: "pointer", color: "#287f71" }} onClick={handleClose} />
           </DialogTitle>
           <DialogContent>
             <div className="row">
@@ -122,8 +124,8 @@ function AddBreak({ id, onSuccess, handleMenuClose }) {
                     onKeyDown={(e) => e.stopPropagation()}
                     type="data"
                     className={`form-control   ${formik.touched.breakName && formik.errors.breakName
-                        ? "is-invalid"
-                        : ""
+                      ? "is-invalid"
+                      : ""
                       }`}
                     {...formik.getFieldProps("breakName")}
                   />
@@ -141,8 +143,8 @@ function AddBreak({ id, onSuccess, handleMenuClose }) {
                 <input
                   type="date"
                   className={`form-control   ${formik.touched.fromDate && formik.errors.fromDate
-                      ? "is-invalid"
-                      : ""
+                    ? "is-invalid"
+                    : ""
                     }`}
                   {...formik.getFieldProps("fromDate")}
                 />
@@ -160,8 +162,8 @@ function AddBreak({ id, onSuccess, handleMenuClose }) {
                   <input
                     type="date"
                     className={`form-control   ${formik.touched.toDate && formik.errors.toDate
-                        ? "is-invalid"
-                        : ""
+                      ? "is-invalid"
+                      : ""
                       }`}
                     {...formik.getFieldProps("toDate")}
                   />

@@ -20,12 +20,13 @@ const validationSchema = Yup.object({
   status: Yup.string().required("*Status is required"),
 });
 
-function CourseFeesEdit({ id, onSuccess, handleMenuClose, centerId }) {
+function CourseFeesEdit({ id, onSuccess, handleMenuClose }) {
   const [open, setOpen] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [packageData, setPackageData] = useState(null);
   const [taxData, setTaxData] = useState([]);
   const userName = localStorage.getItem("tmsuserName");
+  const centerId = localStorage.getItem("tmscenterId");
 
   // const fetchPackageData = async () => {
   //   try {
@@ -95,7 +96,7 @@ function CourseFeesEdit({ id, onSuccess, handleMenuClose, centerId }) {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       setLoadIndicator(true);
-      values.updatedBy = userName
+      values.updatedBy = userName;
       try {
         const response = await api.put(`/updateCourseFees/${id}`, values, {
           headers: {

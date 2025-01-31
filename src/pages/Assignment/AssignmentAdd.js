@@ -344,7 +344,7 @@ function AssignmentAdd() {
               <div class="d-flex">
                 <div class="dot active"></div>
               </div>
-              <span class="me-2 text-muted">Add Document</span>
+              <span class="me-2 text-muted">Add Assignment</span>
             </div>
             <div className="my-2 pe-3 d-flex align-items-center">
               <Link to="/assignment">

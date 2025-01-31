@@ -139,7 +139,7 @@ function CenterEdit({ handleCenterChanged }) {
         });
         if (response.status === 200) {
           toast.success(response.data.message);
-          navigate("/center");
+          navigate("/companyRegister");
           handleCenterChanged();
         } else {
           toast.error(response.data.message);
@@ -227,17 +227,17 @@ function CenterEdit({ handleCenterChanged }) {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          &nbsp;Centre Management
+          &nbsp;Company Management
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          <Link to="/center" className="custom-breadcrumb">
-            &nbsp;Centre Listing
+          <Link to="/companyRegister" className="custom-breadcrumb">
+            &nbsp;Company Listing
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          &nbsp;Centre Listing Edit
+          &nbsp;Company Listing Edit
         </li>
       </ol>
       <form
@@ -260,7 +260,7 @@ function CenterEdit({ handleCenterChanged }) {
               <span class="me-2 text-muted">Edit Centre</span>
             </div>
             <div className="my-2 pe-3 d-flex align-items-center">
-              <Link to="/center">
+              <Link to="/companyRegister">
                 <button type="button " className="btn btn-sm btn-border   ">
                   Back
                 </button>
@@ -286,7 +286,7 @@ function CenterEdit({ handleCenterChanged }) {
               <div className="col-md-6 col-12">
                 <div className="mb-3">
                   <label for="exampleFormControlInput1" className="form-label">
-                    Centre Name<span className="text-danger">*</span>
+                    Company Name<span className="text-danger">*</span>
                   </label>
                   <input
                     type="text"
@@ -326,7 +326,7 @@ function CenterEdit({ handleCenterChanged }) {
                 </div>
               </div>
               <div className="col-md-6 col-12 mb-3">
-                <label className="form-label">Centre Manager</label>
+                <label className="form-label">Company Manager</label>
                 <select
                   {...formik.getFieldProps("userId")}
                   name="userId"
@@ -705,7 +705,7 @@ function CenterEdit({ handleCenterChanged }) {
               <div className="col-md-12 col-12 mt-4">
                 <div className="d-flex justify-content-between align-items-center">
                   <div class="d-flex align-items-start">
-                    <h5 className="headColor mb-3">Centre Registrations</h5>
+                    <h5 className="headColor mb-3">Company Registrations</h5>
                   </div>
                   <div className="my-2 pe-3 d-flex align-items-center">
                     <AddRegister id={centerId} onSuccess={refreshData} handleMenuClose={handleMenuClose} />
@@ -780,7 +780,7 @@ function CenterEdit({ handleCenterChanged }) {
               <div className="col-md-12 col-12 mt-4">
                 <div className="d-flex justify-content-between align-items-center">
                   <div class="d-flex align-items-start">
-                    <h5 className="headColor mb-3">Centre Break</h5>
+                    <h5 className="headColor mb-3">Company Break</h5>
                   </div>
                   <div className="my-2 pe-3 d-flex align-items-center">
                     <AddBreak id={centerId} onSuccess={refreshData} handleMenuClose={handleMenuClose} />
@@ -842,7 +842,7 @@ function CenterEdit({ handleCenterChanged }) {
               <div className="col-md-12 col-12 mt-4">
                 <div className="d-flex justify-content-between align-items-center">
                   <div class="d-flex align-items-start">
-                    <h5 className="headColor mb-3">Centre Classroom</h5>
+                    <h5 className="headColor mb-3">Company Classroom</h5>
                   </div>
                   <div className="my-2 pe-3 d-flex align-items-center">
                     <AddClass id={centerId} onSuccess={refreshData} handleMenuClose={handleMenuClose} />
@@ -936,7 +936,7 @@ function CenterEdit({ handleCenterChanged }) {
               <div className="col-md-12 col-12 mt-4">
                 <div className="d-flex justify-content-between align-items-center">
                   <div class="d-flex align-items-start">
-                    <h5 className="headColor mb-3">Centre Package</h5>
+                    <h5 className="headColor mb-3">Company Package</h5>
                   </div>
                   <div className="my-2 pe-3 d-flex align-items-center">
                     <AddPackage id={centerId} onSuccess={refreshData} handleMenuClose={handleMenuClose} />

@@ -25,12 +25,6 @@ function Header({ onLogout, centerChange }) {
     onLogout();
     navigate("/login");
   };
-  const handleEditClick = () => {
-    document.body.classList.remove("offcanvas-backdrop", "modal-open");
-    document.body.style.overflow = "auto";
-    document.body.style.paddingRight = "0px";
-    // navigate("/login");
-  };
 
   const handleCenterChange = (e) => {
     const centerId = e.target.value; // Get the selected value
@@ -164,15 +158,15 @@ function Header({ onLogout, centerChange }) {
               <p>{userEmail}</p>
               <p>{role}</p>
             </div>
-            <div className="text-center cursor-pointer">
+            <div className="text-center cursor-pointer" data-bs-dismiss="offcanvas">
               <Link
-                to={`/centerRegister/edit/${centerId}`}
+                to={`/companyRegister/edit/${centerId}`}
                 style={{ textDecoration: "none", color: "inherit" }}
                 onMouseEnter={(e) => (e.target.style.color = "rgb(233,158,94)")}
                 onMouseLeave={(e) => (e.target.style.color = "inherit")}
               >
                 <GrUserSettings className="mx-2" />
-                <span onClick={handleEditClick}>Edit Company</span>
+                <span>Edit Company</span>
               </Link>
             </div>
 

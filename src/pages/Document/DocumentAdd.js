@@ -8,11 +8,8 @@ import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
 import fetchAllClassesWithIdsC from "../List/ClassListByCourse";
 import fetchAllTeacherListByCenter from "../List/TeacherListByCenter";
 import fetchAllStudentListByCenter from "../List/StudentListByCenter";
-import fetchAllCentersWithScheduleStudentList from "../List/CenterAvailableScheduleStudentLidt";
-import fetchAllCentersWithIds from "../List/CenterList";
 
 const validationSchema = Yup.object({
-  center: Yup.string().required("*Centre is required"),
   course: Yup.string().required("*Course is required"),
   userId: Yup.string().required("*Teacher is required"),
   day: Yup.string().required("*Days is required"),
@@ -27,7 +24,6 @@ function DocumentAdd() {
   const navigate = useNavigate();
   const centerId = localStorage.getItem("tmscenterId");
   const [folderCategory, setFolderCategory] = useState("group");
-  const [centerData, setCenterData] = useState(null);
   const [classData, setClassData] = useState(null);
   const [courseData, setCourseData] = useState(null);
   const [studentData, setStudentData] = useState(false);
@@ -51,29 +47,21 @@ function DocumentAdd() {
       studentSelect: "",
       createdBy: userName,
     },
-    validationSchema: validationSchema,
+    // validationSchema: validationSchema,
     onSubmit: async (values) => {
       setLoadIndicator(true);
       try {
-        const selectedValue = formik.values.center; // Assuming formik is in scope
+        // Assuming formik is in scope
         let selectedOptionName = "";
         let selectedClassName = "";
         let selectedCourseName = "";
 
-        // centerData.forEach((center) => {
-        //   if (parseInt(selectedValue) === center.id) {
-        //     selectedOptionName = center.centerNames || "--";
-        //   }
-        // });
-
-        // Find selected class name
         classData.forEach((cls) => {
           if (parseInt(values.classListing) === cls.id) {
             selectedClassName = cls.classNames || "--";
           }
         });
 
-        // Find selected course name
         courseData.forEach((course) => {
           if (parseInt(values.course) === course.id) {
             selectedCourseName = course.courseNames || "--";
@@ -82,7 +70,7 @@ function DocumentAdd() {
 
         let requestBody = {
           centerId: centerId,
-          userId: values.userId,
+          userId: 12,
           day: values.day,
           center: selectedOptionName,
           classListing: selectedClassName,
@@ -102,7 +90,6 @@ function DocumentAdd() {
           requestBody.isGroupUpload = false;
           requestBody.studentId = values.studentSelect;
         }
-        // console.log(requestBody);
 
         const response = await api.post(
           "/uploadStudentFilesWithSingleOrGroup",
@@ -149,20 +136,6 @@ function DocumentAdd() {
     }
   }, [formik.submitCount, formik.errors]);
 
-  // const fetchData = async () => {
-  //   try {
-  //     const centerData = await fetchAllCentersWithIds();
-
-  //     setCenterData(centerData);
-  //   } catch (error) {
-  //     toast.error(error);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   fetchData();
-  // }, []);
-
   const fetchCourses = async () => {
     try {
       const courses = await fetchAllCoursesWithIdsC(centerId);
@@ -189,6 +162,11 @@ function DocumentAdd() {
       toast.error(error);
     }
   };
+  useEffect(() => {
+    fetchCourses();
+    fetchStudent();
+    fetchTeacher();
+  }, []);
 
   const fetchClasses = async (courseId) => {
     try {
@@ -221,18 +199,6 @@ function DocumentAdd() {
     const day = String(expiryDate.getDate()).padStart(2, "0");
     return `${year}-${month}-${day}`;
   };
-
-  // const handleCenterChange = (event) => {
-  //   setCourseData(null);
-  //   setClassData(null);
-  //   setUserData(null);
-  //   setStudentData(null);
-  //   const center = event.target.value;
-  //   formik.setFieldValue("center", center);
-  //   fetchCourses(center);
-  //   fetchTeacher(center);
-  //   fetchStudent(center); // Fetch courses for the selected center
-  // };
 
   const fetchBatchandTeacherData = async (day) => {
     try {
@@ -366,33 +332,6 @@ function DocumentAdd() {
 
           <div className="container">
             <div className="row py-4">
-              {/* <div class="col-md-6 col-12 mb-4">
-                <lable class="">
-                  Centre<span class="text-danger">*</span>
-                </lable>
-                <select
-                  {...formik.getFieldProps("center")}
-                  name="center"
-                  className={`form-select  ${
-                    formik.touched.center && formik.errors.center
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  aria-label="Default select example"
-                  onChange={handleCenterChange}
-                >
-                  <option disabled></option>
-                  {centerData &&
-                    centerData.map((center) => (
-                      <option key={center.id} value={center.id}>
-                        {center.centerNames}
-                      </option>
-                    ))}
-                </select>
-                {formik.touched.center && formik.errors.center && (
-                  <div className="invalid-feedback">{formik.errors.center}</div>
-                )}
-              </div> */}
               <div class="col-md-6 col-12 mb-4">
                 <lable class="">
                   Course<span class="text-danger">*</span>
@@ -560,8 +499,8 @@ function DocumentAdd() {
                   )}
                 </div>
               </div>
-               {/* Radio buttons for selecting folder category */}
-               <div className="col-md-6 col-12 mb-4">
+              {/* Radio buttons for selecting folder category */}
+              <div className="col-md-6 col-12 mb-4">
                 <label className="form-label">
                   Folder Category<span className="text-danger">*</span>
                 </label>
@@ -623,7 +562,6 @@ function DocumentAdd() {
                   </div>
                 )}
               </div>
-             
 
               <div class="col-md-6 col-12 mb-3">
                 {folderCategory === "group" ? (
