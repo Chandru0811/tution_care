@@ -264,7 +264,7 @@ function Admin({ handleLogout }) {
   }, []);
   const handleCenterChanged = () => {
     setCenterChange((prevCount) => prevCount + 1);
-    console.log("centerChange",centerChange)
+    console.log("centerChange", centerChange)
   };
 
   return (
@@ -351,10 +351,10 @@ function Admin({ handleLogout }) {
               <Route path="/transferOut" element={<TransferOut />} />
 
               {/* Center */}
-              <Route path="/cen" element={<Center handleCenterChanged={handleCenterChanged} />} />
-              <Route path="/centerRegister/add" element={<CenterAdd handleCenterChanged={handleCenterChanged} />} />
-              <Route path="/centerRegister/view/:id" element={<CenterView />} />
-              <Route path="/centerRegister/edit/:id" element={<CenterEdit handleCenterChanged={handleCenterChanged}/>} />
+              <Route path="/companyRegister" element={<Center handleCenterChanged={handleCenterChanged} />} />
+              <Route path="/companyRegister/add" element={<CenterAdd handleCenterChanged={handleCenterChanged} />} />
+              <Route path="/companyRegister/view/:id" element={<CenterView />} />
+              <Route path="/companyRegister/edit/:id" element={<CenterEdit handleCenterChanged={handleCenterChanged} />} />
 
               <Route path="/centermanager" element={<CenterManager />} />
               <Route path="/centermanager/add" element={<CenterManagerAdd />} />
@@ -545,7 +545,7 @@ function Admin({ handleLogout }) {
 
               {/* Payment  */}
               <Route path="/payments" element={<Payments />} />
-              <Route path="/payments/add" element={<PaymentsAdd/>} />
+              <Route path="/payments/add" element={<PaymentsAdd />} />
               <Route path="/payments/edit/:id" element={<Payments />} />
               <Route path="/payments/view/:id" element={<Payments />} />
 
