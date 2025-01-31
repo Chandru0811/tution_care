@@ -22,12 +22,11 @@ import fetchAllPackageListByCenter from "../List/PackageListByCenter";
 const Payments = () => {
   const centerId = localStorage.getItem("tmscenterId");
   const [filters, setFilters] = useState({
-    centerId:centerId,
+    centerId: centerId,
     courseId: "",
     studentId: "",
     packageId: "",
   });
-  const [centerManagerData, setCenterManagerData] = useState([]);
   const [packageData, setPackageData] = useState(null);
   const [studentData, setStudentData] = useState(null);
   const [data, setData] = useState([]);
@@ -68,55 +67,32 @@ const Payments = () => {
           </IconButton>
         ),
       },
-      {
-        accessorKey: "status",
-        enableHiding: false,
-        header: "Status",
-        Cell: ({ row }) =>
-          row.original.status === "APPROVED" ? (
-            <span className="badge badges-Green fw-light">Approved</span>
-          ) : row.original.status === "REJECTED" ? (
-            <span className="badge badges-danger fw-light">Rejected</span>
-          ) : (
-            <span className="badge badges-orange fw-light">Pending</span>
-          ),
-      },
       // {
-      //   accessorKey: "centerName",
+      //   accessorKey: "status",
       //   enableHiding: false,
-      //   header: "Centre",
+      //   header: "Status",
+      //   Cell: ({ row }) =>
+      //     row.original.status === "APPROVED" ? (
+      //       <span className="badge badges-Green fw-light">Approved</span>
+      //     ) : row.original.status === "REJECTED" ? (
+      //       <span className="badge badges-danger fw-light">Rejected</span>
+      //     ) : (
+      //       <span className="badge badges-orange fw-light">Pending</span>
+      //     ),
       // },
       {
-        accessorKey: "courseName",
+        accessorKey: "studentName",
         enableHiding: false,
-        header: "Course",
+        header: "Student Name",
       },
       {
-        accessorKey: "studentUniqueId",
+        accessorKey: "paymentDate",
         enableHiding: false,
-        header: "Student ID",
+        header: "Payment Date",
       },
-      { accessorKey: "studentName", header: "Student" },
-      { accessorKey: "parent", enableHiding: false, header: "Parent Name" },
-      { accessorKey: "packageName", header: "Package" },
-      {
-        accessorKey: "invoiceNumber",
-        header: "Invoice Number",
-        enableHiding: false,
-        size: 50,
-      },
-      {
-        accessorKey: "invoiceDate",
-        header: "Invoice Date",
-        Cell: ({ cell }) => {
-          const invoiceDate = cell.getValue();
-          if (!invoiceDate) return "--";
-          const date = new Date(invoiceDate).toLocaleDateString("en-GB");
-          return date;
-        },
-      },
+      { accessorKey: "paymentMethod", header: "Payment Method" },
+      { accessorKey: "paidAmount", enableHiding: false, header: "Paid Amount" },
 
-      { accessorKey: "noOfLessons", header: "Number Of Lesson" },
       { accessorKey: "createdBy", header: "Created By" },
       {
         accessorKey: "createdAt",
@@ -136,50 +112,6 @@ const Payments = () => {
     ],
     []
   );
-
-  const fetchCenterManagerData = async () => {
-    try {
-      const centerManagerData = await fetchAllCentreManager();
-      setCenterManagerData(centerManagerData);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
-
-  useEffect(() => {
-    fetchCenterManagerData();
-  }, []);
-
-  // const fetchData = async () => {
-  //   try {
-  //     // const centerData = await fetchAllCentersWithIds();
-  //     const courseData = await fetchAllCoursesWithIds();
-  //     // const studentData = await fetchAllStudentsWithIds();
-  //     // const packageData = await api.get("getAllCentersPackageWithIds");
-  //     // setPackageData(packageData.data);
-  //     // setCenterData(centerData);
-  //     setCourseData(courseData);
-  //     // setStudentData(studentData);
-  //   } catch (error) {
-  //     toast.error(error);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   const getData = async () => {
-  //     try {
-  //       const response = await api.get("/getAllGenerateInvoices");
-  //       setData(response.data);
-  //     } catch (error) {
-  //       console.error("Error fetching data:", error);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-  //   getData();
-  //   fetchData();
-  // }, []);
-
   const theme = createTheme({
     components: {
       MuiTableCell: {
@@ -447,9 +379,6 @@ const Payments = () => {
                 enableFullScreenToggle={false}
                 initialState={{
                   columnVisibility: {
-                    gst: false,
-                    address: false,
-
                     createdBy: false,
                     createdAt: false,
                     updatedBy: false,
@@ -470,7 +399,7 @@ const Payments = () => {
               onClose={handleMenuClose}
             >
               <MenuItem
-                onClick={() => navigate(`/invoice/edit/${selectedId}`)}
+                onClick={() => navigate(`/payments/edit/${selectedId}`)}
                 className="text-start mb-0 menuitem-style"
               >
                 Edit

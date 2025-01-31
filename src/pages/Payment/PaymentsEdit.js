@@ -1,12 +1,13 @@
 import { useFormik } from "formik";
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import * as Yup from "yup";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
 import fetchAllStudentListByCenter from "../List/StudentListByCenter";
 
-function PaymentsAdd() {
+function PaymentsEdit() {
+    const {id} = useParams();
   const navigate = useNavigate();
   const [loadIndicator, setLoadIndicator] = useState(false);
   const userName = localStorage.getItem("tmsuserName");
@@ -132,7 +133,7 @@ function PaymentsAdd() {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          &nbsp;Payment Add
+          &nbsp;Payment Edit
         </li>
       </ol>
       <form onSubmit={formik.handleSubmit}>
@@ -145,7 +146,7 @@ function PaymentsAdd() {
               <div class="d-flex">
                 <div class="dot active"></div>
               </div>
-              <span class="me-2 text-muted">Add Payment</span>
+              <span class="me-2 text-muted">Edit Payment</span>
             </div>
             <div className="my-2 pe-3 d-flex align-items-center">
               <Link to="/payment">
@@ -165,7 +166,7 @@ function PaymentsAdd() {
                     aria-hidden="true"
                   ></span>
                 )}
-                <span className="fw-medium">Save</span>
+                <span className="fw-medium">Update</span>
               </button>
             </div>
           </div>
@@ -388,4 +389,4 @@ function PaymentsAdd() {
   );
 }
 
-export default PaymentsAdd;
+export default PaymentsEdit;

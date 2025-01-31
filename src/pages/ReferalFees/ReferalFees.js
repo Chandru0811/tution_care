@@ -13,7 +13,6 @@ import { MoreVert as MoreVertIcon } from "@mui/icons-material";
 import GlobalDelete from "../../components/common/GlobalDelete";
 import ReferalFeesAdd from "./ReferalFeesAdd";
 import ReferalFeesEdit from "./ReferalFeesEdit";
-import fetchAllCentersWithIds from "../List/CenterList";
 import { toast } from "react-toastify";
 
 const ReferalFees = () => {
@@ -22,10 +21,7 @@ const ReferalFees = () => {
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
   const [isClearFilterClicked, setIsClearFilterClicked] = useState(false);
-  const [centerData, setCenterData] = useState([]);
   const centerId = localStorage.getItem("tmscenterId");
-
-  const centerLocalId = localStorage.getItem("tmsselectedCenterId");
   const [filters, setFilters] = useState({
     centerName: "",
   });
@@ -70,7 +66,7 @@ const ReferalFees = () => {
             <span className="badge badges-Red fw-light">Inactive</span>
           ),
       },
-      { accessorKey: "center", enableHiding: false, header: "Centre Name" },
+      // { accessorKey: "center", enableHiding: false, header: "Centre Name" },
       {
         accessorKey: "effectiveDate",
         enableHiding: false,
@@ -114,15 +110,9 @@ const ReferalFees = () => {
     try {
       setLoading(true);
 
-      const centerId =
-        !isClearFilterClicked &&
-        (filters.centerId || (centerLocalId && centerLocalId !== "undefined"))
-          ? filters.centerId || centerLocalId
-          : "";
-
-      const response = await api.get(
-        `getGenerateInvoiceByCenterId/${centerId}`
-      );
+      const response = await api.get(`/getReferralFeeByCenterId`, {
+        params: { centerId: centerId },
+      });
       setData(response.data);
     } catch (error) {
       toast.error(`Error Fetching Data: ${error.message}`);
@@ -132,34 +122,6 @@ const ReferalFees = () => {
     }
   };
 
-  const fetchCenterData = async () => {
-    try {
-      const centerData = await fetchAllCentersWithIds();
-      if (centerLocalId !== null && centerLocalId !== "undefined") {
-        setFilters((prevFilters) => ({
-          ...prevFilters,
-          centerId: centerLocalId,
-        }));
-        setCenterData(centerData);
-      } else if (centerData !== null && centerData.length > 0) {
-        setFilters((prevFilters) => ({
-          ...prevFilters,
-          centerId: centerData[0].id,
-        }));
-        setCenterData(centerData);
-      }
-    } catch (error) {
-      toast.error(error);
-    }
-  };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      await fetchCenterData(); // Fetch center data
-    };
-    fetchData();
-  }, []);
-  console.log("centerData", centerData);
   useEffect(() => {
     fetchData();
   }, [filters]);

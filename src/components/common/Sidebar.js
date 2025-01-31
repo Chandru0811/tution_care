@@ -292,11 +292,11 @@ function Sidebar() {
             path: "/referalFees",
             access: storedScreens.invoiceIndex,
           },
-          {
-            title: "Referal History",
-            path: "/referalHistory",
-            access: storedScreens.paymentIndex,
-          },
+          // {
+          //   title: "Referal History",
+          //   path: "/referalHistory",
+          //   access: storedScreens.paymentIndex,
+          // },
         ],
       },
       {
