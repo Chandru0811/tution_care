@@ -20,7 +20,6 @@ const validationSchema = Yup.object({
 });
 
 function DeductionAdd() {
-  const [centerData, setCenterData] = useState(null);
   const [userNamesData, setUserNameData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const userName = localStorage.getItem("tmsuserName");
@@ -42,14 +41,7 @@ function DeductionAdd() {
       setLoadIndicator(true);
       values.createdBy = userName;
       console.log("Attendance Emp:", values);
-      let selectedCenterName = "";
       let selectedEmployeeName = "";
-
-      centerData.forEach((center) => {
-        if (parseInt(values.centerId) === center.id) {
-          selectedCenterName = center.centerNames || "--";
-        }
-      });
 
       userNamesData.forEach((employee) => {
         if (parseInt(values.userId) === employee.id) {
@@ -58,8 +50,7 @@ function DeductionAdd() {
       });
 
       let payload = {
-        centerId: values.centerId,
-        centerName: selectedCenterName,
+        centerId:centerId,
         userId: values.userId,
         employeeName: selectedEmployeeName,
         deductionName: values.deductionName,
@@ -91,32 +82,9 @@ function DeductionAdd() {
     },
   });
 
-  const handleCenterChange = async (event) => {
-    setUserNameData(null);
-    // const centerId = event.target.value;
-    formik.setFieldValue("centerId", centerId);
-    try {
-      await fetchUserName(centerId);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
 
-  const fetchData = async () => {
-    try {
-      const centers = await fetchAllCentersWithIds();
-      setCenterData(centers);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
 
-  useEffect(() => {
-    fetchData();
-    handleCenterChange();
-  }, []);
-
-  const fetchUserName = async (centerId) => {
+  const fetchUserName = async () => {
     try {
       const userNames = await fetchUserListWithoutFreelancerByCenterId(
         centerId
@@ -126,6 +94,9 @@ function DeductionAdd() {
       toast.error(error);
     }
   };
+  useEffect(() => {
+    fetchUserName();
+  }, []);
 
   useEffect(() => {
     const currentMonth = format(new Date(), "yyyy-MM");

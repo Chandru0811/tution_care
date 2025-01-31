@@ -43,7 +43,7 @@ const StaffAccountAdd = forwardRef(
       value: center.id,
     }));
     const userName = localStorage.getItem("userName");
-    const centerId = localStorage.getItem("centerId");
+    const centerId = localStorage.getItem("tmscenterId");
 
     // const fetchData = async () => {
     //   try {
@@ -98,6 +98,7 @@ const StaffAccountAdd = forwardRef(
           values.approvelContentRequired === "Yes" ? true : false;
         const updatedData = {
           ...values,
+          centerId:centerId,
           approvelContentRequired: Approval,
         };
         try {
@@ -110,7 +111,7 @@ const StaffAccountAdd = forwardRef(
               },
             }
           );
-          if (response.status === 201) {
+          if (response.status === 200) {
             console.log("Response Status:", response.status);
             // console.log("Response Data Message:",response.data.message);
             toast.success("User Account Created Successfully");

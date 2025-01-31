@@ -12,7 +12,6 @@ import * as Yup from "yup";
 import fetchAllCentersWithIds from "../../List/CenterList";
 
 const validationSchema = Yup.object().shape({
-  employer: Yup.string().required("*Employer is required"),
   employee: Yup.string().required("*Employee is required"),
   uen: Yup.string().required("*UEN is required"),
   addressOfEmployment: Yup.string().required("*Address is required"),
@@ -150,12 +149,9 @@ const StaffContractAdd = forwardRef(
       }
     };
 
-    const filteredCenters = centerData?.filter((center) =>
-      formData.centerIds.includes(center.id)
-    );
-    const getData = async (id) => {
+    const getData = async () => {
       try {
-        const response = await api.get(`/getAllCenterById/${id}`);
+        const response = await api.get(`/getAllCenterById/${centerId}`);
         formik.setFieldValue("uen", response.data.uenNumber);
         formik.setFieldValue("addressOfEmployment", response.data.address);
         console.log("response", response.data);
@@ -165,7 +161,7 @@ const StaffContractAdd = forwardRef(
     };
     useEffect(() => {
       window.scrollTo({ top: 0, left: 0, behavior: "instant" });
-      // getData();
+      getData();
       fetchData();
     }, []);
 
@@ -224,34 +220,6 @@ const StaffContractAdd = forwardRef(
           <div className="container-fluid mt-5" style={{ minHeight: "95vh" }}>
             <span className="mt-3 fw-bold">Details of EMPLOYER</span>
             <div class="row mt-4">
-              <div class="col-md-6 col-12 mb-2 mt-3">
-                <label>Employer</label>
-                <span className="text-danger">*</span>
-                <select
-                  type="text"
-                  className="form-select"
-                  name="employer"
-                  onChange={(e) => {
-                    const selectedId = e.target.value;
-                    formik.setFieldValue("employer", selectedId);
-                    getData(selectedId);
-                  }}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.employer}
-                >
-                  <option selected></option>
-                  {filteredCenters?.map((center) => (
-                    <option key={center.id} value={center.id}>
-                      {center.centerNames}
-                    </option>
-                  ))}
-                </select>
-                {formik.touched.employer && formik.errors.employer && (
-                  <div className="error text-danger ">
-                    <small>{formik.errors.employer}</small>
-                  </div>
-                )}
-              </div>
               <div class="col-md-6 col-12 mb-2 mt-3">
                 <label>UEN</label>
                 <span className="text-danger">*</span>

@@ -33,9 +33,8 @@ const Lead = () => {
   const [activeButton, setActiveButton] = useState("All");
 
   const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
-  const centerLocalId = localStorage.getItem("tmsselectedCenterId");
+  const centerId = localStorage.getItem("tmscenterId");
   const [centerData, setCenterData] = useState(null);
-  const [subjectData, setSubjectData] = useState(null);
   const [isSmallScreen, setIsSmallScreen] = useState(false);
   const [isClearFilterClicked, setIsClearFilterClicked] = useState(false);
 
@@ -63,28 +62,28 @@ const Lead = () => {
     // formik.resetForm();
   };
 
-  const fetchCenterData = async () => {
-    try {
-      const centerData = await fetchAllCentersWithIds();
-      const subjectDatas = await fetchAllSubjectsWithIds();
+  // const fetchCenterData = async () => {
+  //   try {
+  //     const centerData = await fetchAllCentersWithIds();
+  //     const subjectDatas = await fetchAllSubjectsWithIds();
 
-      if (centerLocalId !== null && centerLocalId !== "undefined") {
-        setFilters((prevFilters) => ({
-          ...prevFilters,
-          centerId: centerLocalId,
-        }));
-      } else if (centerData !== null && centerData.length > 0) {
-        setFilters((prevFilters) => ({
-          ...prevFilters,
-          centerId: centerData[0].id,
-        }));
-      }
-      setCenterData(centerData);
-      setSubjectData(subjectDatas);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
+  //     if (centerLocalId !== null && centerLocalId !== "undefined") {
+  //       setFilters((prevFilters) => ({
+  //         ...prevFilters,
+  //         centerId: centerLocalId,
+  //       }));
+  //     } else if (centerData !== null && centerData.length > 0) {
+  //       setFilters((prevFilters) => ({
+  //         ...prevFilters,
+  //         centerId: centerData[0].id,
+  //       }));
+  //     }
+  //     setCenterData(centerData);
+  //     setSubjectData(subjectDatas);
+  //   } catch (error) {
+  //     toast.error(error);
+  //   }
+  // };
 
   const handleStatusChange = async (row, status) => {
     setSelectedRow(row);
@@ -147,17 +146,7 @@ const Lead = () => {
   const getData = async () => {
     setLoading(true);
     let params = {};
-
-    const centerId =
-      !isClearFilterClicked &&
-      (filters.centerId || (centerLocalId && centerLocalId !== "undefined"))
-        ? filters.centerId || centerLocalId
-        : "";
-
-    if (centerId !== "") {
       params.centerId = centerId;
-    }
-
     if (filters.subjectId !== "") {
       params.subjectId = filters.subjectId;
     }
@@ -174,20 +163,20 @@ const Lead = () => {
           ? "All"
           : [
               { displayName: "New / Waitlist", backendName: "NEW_WAITLIST" },
-              {
-                displayName: "Assessment Arranged",
-                backendName: "ARRANGING_ASSESSMENT",
-              },
+              // {
+              //   displayName: "Assessment Arranged",
+              //   backendName: "ARRANGING_ASSESSMENT",
+              // },
               { displayName: "KIV", backendName: "KIV" },
               {
                 displayName: "Waiting for Payment",
                 backendName: "WAITING_FOR_PAYMENT",
               },
               { displayName: "Confirmed", backendName: "CONFIRMED" },
-              {
-                displayName: "Assessment Done",
-                backendName: "ASSESSMENT_DONE",
-              },
+              // {
+              //   displayName: "Assessment Done",
+              //   backendName: "ASSESSMENT_DONE",
+              // },
               { displayName: "Enrolled", backendName: "ENROLLED" },
               { displayName: "Drop", backendName: "DROP" },
               { displayName: "All", backendName: "ALL" },
@@ -202,35 +191,34 @@ const Lead = () => {
     }
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      await fetchCenterData(); // Fetch center data and subjects
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     await fetchCenterData(); // Fetch center data and subjects
 
-      // Check if local storage has center ID
-      if (centerLocalId && centerLocalId !== "undefined") {
-        setFilters((prevFilters) => ({
-          ...prevFilters,
-          centerId: centerLocalId,
-        }));
-      } else if (centerData && centerData.length > 0) {
-        // Use the first center's ID as the default if no center is in local storage
-        setFilters((prevFilters) => ({
-          ...prevFilters,
-          centerId: centerData[0].id,
-        }));
-      }
-    };
-    fetchData();
-  }, []);
+  //     // Check if local storage has center ID
+  //     if (centerLocalId && centerLocalId !== "undefined") {
+  //       setFilters((prevFilters) => ({
+  //         ...prevFilters,
+  //         centerId: centerLocalId,
+  //       }));
+  //     } else if (centerData && centerData.length > 0) {
+  //       // Use the first center's ID as the default if no center is in local storage
+  //       setFilters((prevFilters) => ({
+  //         ...prevFilters,
+  //         centerId: centerData[0].id,
+  //       }));
+  //     }
+  //   };
+  //   fetchData();
+  // }, []);
 
   useEffect(() => {
     getData();
   }, [filters]);
 
   const ResetFilter = () => {
-    localStorage.removeItem("tmsselectedCenterId"); // Clear center ID from local storage
     setFilters({
-      centerId: "",
+      centerId: centerId,
       subjectId: "",
       leadStatus: "",
     });
@@ -765,12 +753,6 @@ const Lead = () => {
         ),
       },
       {
-        header: "Centre Name",
-        accessorKey: "center",
-        enableHiding: false,
-        cell: ({ cell }) => <span>{cell.getValue()}</span>,
-      },
-      {
         accessorKey: "studentName",
         enableHiding: false,
         header: "Student Name",
@@ -909,20 +891,20 @@ const Lead = () => {
                   displayName: "New / Waitlist",
                   backendName: "NEW_WAITLIST",
                 },
-                {
-                  displayName: "Assessment Arranged",
-                  backendName: "ARRANGING_ASSESSMENT",
-                },
+                // {
+                //   displayName: "Assessment Arranged",
+                //   backendName: "ARRANGING_ASSESSMENT",
+                // },
                 { displayName: "KIV", backendName: "KIV" },
                 {
                   displayName: "Waiting for Payment",
                   backendName: "WAITING_FOR_PAYMENT",
                 },
                 { displayName: "Confirmed", backendName: "CONFIRMED" },
-                {
-                  displayName: "Assessment Done",
-                  backendName: "ASSESSMENT_DONE",
-                },
+                // {
+                //   displayName: "Assessment Done",
+                //   backendName: "ASSESSMENT_DONE",
+                // },
                 { displayName: "Enrolled", backendName: "ENROLLED" },
                 { displayName: "Drop", backendName: "DROP" },
                 { displayName: "All", backendName: "ALL" },
@@ -1143,7 +1125,7 @@ const Lead = () => {
           </div>
         </Modal.Body>
       </Modal>
-      <ArrangeAssesmentAdd
+      {/* <ArrangeAssesmentAdd
         leadId={selectedRow.id}
         onSuccess={getData}
         centerId={selectedRow.centerId}
@@ -1169,7 +1151,7 @@ const Lead = () => {
         handleShow={handleEditShowDialog}
         handleClose={handleEditCloseDialog}
         centerDatas={centerData}
-      />
+      /> */}
     </div>
   );
 };

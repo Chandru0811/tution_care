@@ -20,6 +20,7 @@ const validationSchema = Yup.object().shape({
 const ContactAdd = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const userName = localStorage.getItem("tmsuserName");
+    const centerId = localStorage.getItem("tmscenterId");
 
     const formik = useFormik({
       initialValues: {
@@ -32,6 +33,7 @@ const ContactAdd = forwardRef(
       validationSchema: validationSchema,
       onSubmit: async (values) => {
         setLoadIndicators(true);
+        values.centerId = centerId;
         values.createdBy = userName;
         try {
           const response = await api.post(

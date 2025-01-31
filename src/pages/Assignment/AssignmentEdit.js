@@ -52,6 +52,7 @@ function AssignmentEdit() {
   const userName = localStorage.getItem("tmsuserName");
   const centerId = localStorage.getItem("tmscenterId");
   const [batchData, setBatchData] = useState(null);
+  const [selectedBatchTimes, setSelectedBatchTimes] = useState([]);
 
   const formik = useFormik({
     initialValues: {
@@ -67,67 +68,67 @@ function AssignmentEdit() {
       groupSelect: "",
       studentSelect: "",
       createdBy: userName,
-      files: null,
+      studentIds: [],
+      files: [] || null,
     },
-    validationSchema: validationSchema,
+    // validationSchema: validationSchema,
     onSubmit: async (values) => {
       setLoadIndicator(true);
       try {
-        // const selectedValue = formik.values.center; // Assuming formik is in scope
-        let selectedOptionName = "";
         let selectedClassName = "";
         let selectedCourseName = "";
 
-        // centerData.forEach((center) => {
-        //   if (parseInt(selectedValue) === center.id) {
-        //     selectedOptionName = center.centerNames || "--";
-        //   }
-        // });
-
-        // Find selected class name
         classData.forEach((cls) => {
           if (parseInt(values.classListing) === cls.id) {
             selectedClassName = cls.classNames || "--";
           }
         });
 
-        // Find selected course name
         courseData.forEach((course) => {
           if (parseInt(values.course) === course.id) {
             selectedCourseName = course.courseNames || "--";
           }
         });
-
-        let requestBody = {
-          centerId: centerId,
-          userId: values.userId,
-          day: values.day,
-          center: selectedOptionName,
-          classListing: selectedClassName,
-          course: selectedCourseName,
-          courseId: values.course,
-          classId: values.classListing,
-          folderCategory: folderCategory,
-          batchTime: values.batchTime,
-          date: values.date,
-          expiredDate: values.expiredDate,
-          createdBy: userName,
-          files: null,
-        };
+        const formData = new FormData();
+        formData.append("centerId", centerId);
+        formData.append("userId", 12);
+        formData.append("day", values.day);
+        formData.append("classListing", selectedClassName);
+        formData.append("course", selectedCourseName);
+        formData.append("courseId", values.course);
+        formData.append("classId", values.classListing);
+        formData.append("folderCategory", folderCategory);
+        formData.append("batchTime", values.batchTime);
+        formData.append("date", values.date);
+        formData.append("expiredDate", values.expiredDate);
+        formData.append("createdBy", userName);
 
         if (folderCategory === "group") {
-          requestBody.isGroupUpload = true;
+          formData.append("isGroupUpload", true);
         } else {
-          requestBody.isGroupUpload = false;
-          requestBody.studentId = values.studentSelect || [];
+          formData.append("isGroupUpload", false);
+          formData.append("studentIds", JSON.stringify(values.studentIds));
         }
-        // console.log(requestBody);
 
-        const response = await api.put(
-          `/updateAssignmentFolders/${id}`,
-          requestBody
+        // Append files
+        if (values.files && values.files.length > 0) {
+          values.files.forEach((file, index) =>
+            formData.append(`files[${index}]`, file)
+          );
+        }
+
+        // Send the request
+        const response = await api.post(
+          "/createAssignmentWithSingleOrGroup",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
         );
 
+        // Handle the response
         if (response.status === 201) {
           toast.success(response.data.message);
           navigate("/assignment");
@@ -141,14 +142,12 @@ function AssignmentEdit() {
         ) {
           toast.warning(error?.response?.data?.message);
         } else {
-          toast.error("Error deleting data:", error);
+          toast.error("Error deleting data:", error.message);
         }
       } finally {
         setLoadIndicator(false);
       }
     },
-    validateOnChange: false, // Enable validation on change
-    validateOnBlur: true, // Enable validation on blur
   });
 
   // Function to scroll to the first error field
@@ -218,7 +217,7 @@ function AssignmentEdit() {
     }
   };
 
-  const handleCenterChange = (event) => {
+  const handleCenterChange = () => {
     formik.setFieldValue("center", centerId);
     fetchCourses(centerId);
     fetchTeacher(centerId);
@@ -330,7 +329,7 @@ function AssignmentEdit() {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          Assignment Add
+          Assignment Edit
         </li>
       </ol>
       <form
@@ -350,7 +349,7 @@ function AssignmentEdit() {
               <div class="d-flex">
                 <div class="dot active"></div>
               </div>
-              <span class="me-2 text-muted">Add Document</span>
+              <span class="me-2 text-muted">Edit Assignment</span>
             </div>
             <div className="my-2 pe-3 d-flex align-items-center">
               <Link to="/assignment">
@@ -370,13 +369,41 @@ function AssignmentEdit() {
                     aria-hidden="true"
                   ></span>
                 )}
-                <span className="fw-medium">Save</span>
+                <span className="fw-medium">Update</span>
               </button>
             </div>
           </div>
 
           <div className="container">
             <div className="row py-4">
+              {/* <div class="col-md-6 col-12 mb-4">
+                   <lable class="">
+                     Centre<span class="text-danger">*</span>
+                   </lable>
+                   <select
+                     {...formik.getFieldProps("center")}
+                     name="center"
+                     className={`form-select  ${
+                       formik.touched.center && formik.errors.center
+                         ? "is-invalid"
+                         : ""
+                     }`}
+                     aria-label="Default select example"
+                     onChange={handleCenterChange}
+                   >
+                     <option disabled></option>
+                     {centerData &&
+                       centerData.map((center) => (
+                         <option key={center.id} value={center.id}>
+                           {center.centerNames}
+                         </option>
+                       ))}
+                   </select>
+                   {formik.touched.center && formik.errors.center && (
+                     <div className="invalid-feedback">{formik.errors.center}</div>
+                   )}
+                 </div> */}
+
               <div class="col-md-6 col-12 mb-4">
                 <lable class="">
                   Course<span class="text-danger">*</span>
@@ -404,6 +431,7 @@ function AssignmentEdit() {
                   <div className="invalid-feedback">{formik.errors.course}</div>
                 )}
               </div>
+
               <div class="col-md-6 col-12 mb-4 d-flex flex-column justify-content-end">
                 <lable class="">
                   Class Listing<span class="text-danger">*</span>
@@ -432,6 +460,7 @@ function AssignmentEdit() {
                   </div>
                 )}
               </div>
+
               <div class="col-md-6 col-12 mb-4">
                 <lable class="">
                   Teacher<span class="text-danger">*</span>
@@ -458,6 +487,7 @@ function AssignmentEdit() {
                   <div className="invalid-feedback">{formik.errors.userId}</div>
                 )}
               </div>
+
               <div className="col-md-6 col-12 mb-4">
                 <label className="">
                   Days<span className="text-danger">*</span>
@@ -485,40 +515,8 @@ function AssignmentEdit() {
                   <div className="invalid-feedback">{formik.errors.day}</div>
                 )}
               </div>
-              <div className="col-md-6 col-12 mb-4">
-                <label className="">
-                  Batch Time<span className="text-danger">*</span>
-                </label>
-                <select
-                  {...formik.getFieldProps("batchTime")}
-                  className={`form-select ${
-                    formik.touched.batchTime && formik.errors.batchTime
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                >
-                  <option value="">Select Batch Time</option>
-                  {batchData?.map((time, index) => {
-                    const displayTime = normalizeTime(time);
-                    const valueTime =
-                      time.includes("AM") || time.includes("PM")
-                        ? convertTo24Hour(time)
-                        : time;
 
-                    return (
-                      <option key={index} value={valueTime}>
-                        {displayTime}
-                      </option>
-                    );
-                  })}
-                </select>
-                {formik.touched.batchTime && formik.errors.batchTime && (
-                  <div className="invalid-feedback">
-                    {formik.errors.batchTime}
-                  </div>
-                )}
-              </div>
-              {/* Folder Category Selection */}
+              {/* Radio buttons for selecting folder category */}
               <div className="col-md-6 col-12 mb-4">
                 <label className="form-label">
                   Folder Category<span className="text-danger">*</span>
@@ -526,38 +524,29 @@ function AssignmentEdit() {
                 <div className="d-flex">
                   <div>
                     <input
-                      className="form-check-input"
+                      className="form-check-input "
                       type="radio"
                       id="group"
                       name="folderCategoryListing"
                       value="group"
                       checked={folderCategory === "group"}
-                      onChange={() => {
-                        setFolderCategory("group");
-                        formik.setFieldValue("folderCategoryListing", "group");
-                        formik.setFieldValue("studentId", []); // Clear student selection
-                        setSelectedStudents([]);
-                      }}
+                      onChange={() => setFolderCategory("group")}
                     />{" "}
+                    &nbsp;
                     <label htmlFor="group">Group</label>
                   </div>
                   &nbsp;&nbsp;&nbsp;
                   <div>
                     <input
-                      className="form-check-input"
+                      className="form-check-input "
                       type="radio"
                       id="individual"
                       name="folderCategoryListing"
                       value="individual"
                       checked={folderCategory === "individual"}
-                      onChange={() => {
-                        setFolderCategory("individual");
-                        formik.setFieldValue(
-                          "folderCategoryListing",
-                          "individual"
-                        );
-                      }}
+                      onChange={() => setFolderCategory("individual")}
                     />
+                    &nbsp;
                     <label htmlFor="individual">Individual</label>
                   </div>
                 </div>
@@ -568,56 +557,73 @@ function AssignmentEdit() {
                     </div>
                   )}
               </div>
-              {/* Conditional Student Selection */}
-              {folderCategory === "individual" && (
-                <div className="col-md-6 col-12 mb-4">
-                  <label className="form-label">
-                    Student<span className="text-danger">*</span>
-                  </label>
-                  <MultiSelect
-                    options={studentDataOptions}
-                    value={selectedStudents}
-                    onChange={(selected) => {
-                      setSelectedStudents(selected);
-                      formik.setFieldValue(
-                        "studentId",
-                        selected.map((option) => option.value)
-                      );
-                    }}
-                    labelledBy="Select Students"
-                    className={
-                      formik.touched.studentId && formik.errors.studentId
-                        ? "is-invalid"
-                        : ""
-                    }
-                  />
-                  {formik.touched.studentId && formik.errors.studentId && (
-                    <div className="invalid-feedback">
-                      {formik.errors.studentId}
-                    </div>
-                  )}
-                </div>
-              )}
-              <div className="col-md-6 col-12 mb-2">
-                <div className="row">
-                  <label className="form-label">
-                    Assignment<span className="text-danger">*</span>
-                  </label>
-                  <div className="input-group">
-                    <input
-                      className="form-control"
-                      type="file"
-                      multiple
-                      accept=".jpeg, .png, .jpg, .pdf, .doc, .docx"
-                      onChange={(event) => {
-                        formik.setFieldValue("files", event.target.files[0]);
+              <div class="col-md-6 col-12 mb-3">
+                {folderCategory === "group" ? (
+                  <></>
+                ) : (
+                  <div className="">
+                    <label className="form-label">Student Name</label>
+                    <MultiSelect
+                      options={studentData || []}
+                      value={selectedStudents}
+                      onChange={(selected) => {
+                        setSelectedStudents(selected);
+                        formik.setFieldValue(
+                          "studentIds",
+                          selected.map((option) => option.value) // Ensures studentIds is an array
+                        );
                       }}
+                      labelledBy="Select Student"
+                      className={`form-multi-select ${
+                        formik.touched.studentIds && formik.errors.studentIds
+                          ? "is-invalid"
+                          : ""
+                      }`}
                     />
+                    {formik.touched.studentIds && formik.errors.studentIds && (
+                      <div className="invalid-feedback">
+                        {formik.errors.studentIds}
+                      </div>
+                    )}
                   </div>
-                  {formik.touched.files && formik.errors.files && (
-                    <small className="text-danger">{formik.errors.files}</small>
-                  )}
-                </div>
+                )}
+              </div>
+              <div className="col-md-6 col-12 mb-4">
+                <label className="">
+                  Batch Time<span className="text-danger">*</span>
+                </label>
+                <MultiSelect
+                  options={
+                    batchData
+                      ? batchData.map((time) => ({
+                          label: normalizeTime(time),
+                          value:
+                            time.includes("AM") || time.includes("PM")
+                              ? convertTo24Hour(time)
+                              : time,
+                        }))
+                      : []
+                  }
+                  value={selectedBatchTimes}
+                  onChange={(selected) => {
+                    setSelectedBatchTimes(selected);
+                    formik.setFieldValue(
+                      "batchTime",
+                      selected.map((option) => option.value)
+                    );
+                  }}
+                  labelledBy="Select Batch Time"
+                  className={`form-multi-select ${
+                    formik.touched.batchTime && formik.errors.batchTime
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                />
+                {formik.touched.batchTime && formik.errors.batchTime && (
+                  <div className="invalid-feedback">
+                    {formik.errors.batchTime}
+                  </div>
+                )}
               </div>
               <div className="col-md-6 col-12 mb-4">
                 <label className="form-label">
@@ -639,6 +645,7 @@ function AssignmentEdit() {
                   )}
                 </div>
               </div>
+
               <div className="col-md-6 col-12 mb-4">
                 <label className="form-label">Expired Date</label>
                 <input
@@ -651,6 +658,111 @@ function AssignmentEdit() {
                   }`}
                   {...formik.getFieldProps("expiredDate")}
                 />
+                {formik.touched.expiredDate && formik.errors.expiredDate && (
+                  <div className="invalid-feedback">
+                    {formik.errors.expiredDate}
+                  </div>
+                )}
+              </div>
+
+              {/* <div className="col-md-6 col-12 mb-2">
+                   <div className="row">
+                     <label>
+                       Files<span className="text-danger">*</span>
+                     </label>
+                     <div className="input-group">
+                       <input
+                         className="form-control"
+                         type="file"
+                         multiple
+                         accept="image/jpeg, image/png, application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                         onChange={(event) => {
+                           const files = Array.from(event.target.files);
+                           formik.setFieldValue("files", files); // Update Formik field
+                         }}
+                       />
+                     </div>
+                     {formik.touched.files && formik.errors.files && (
+                       <small className="text-danger">{formik.errors.files}</small>
+                     )}
+                     <label className="text-muted">
+                       Note: Only JPG, PNG, PDF, DOC, or DOCX files are allowed.
+                       Each file must be less than 5MB. Total size must be under
+                       1GB, and file names must not exceed 50 characters.
+                     </label>
+                   </div>
+                 </div> */}
+              <div className="col-md-6 col-12 mb-2">
+                <div className="row">
+                  <label>
+                    Files<span className="text-danger">*</span>
+                  </label>
+                  <div className="input-group">
+                    <input
+                      className="form-control"
+                      type="file"
+                      multiple
+                      accept="image/jpeg, image/png, application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                      onChange={(event) => {
+                        const files = Array.from(event.target.files);
+                        let errors = [];
+
+                        // Validate each file
+                        files.forEach((file) => {
+                          if (
+                            ![
+                              "image/jpeg",
+                              "image/png",
+                              "application/pdf",
+                              "application/msword",
+                              "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                            ].includes(file.type)
+                          ) {
+                            errors.push(
+                              `${file.name} is not an allowed file type.`
+                            );
+                          }
+
+                          if (file.size > 5 * 1024 * 1024) {
+                            errors.push(
+                              `${file.name} exceeds the 5MB size limit.`
+                            );
+                          }
+
+                          if (file.name.length > 50) {
+                            errors.push(
+                              `${file.name} has a name longer than 50 characters.`
+                            );
+                          }
+                        });
+
+                        // Check total size
+                        const totalSize = files.reduce(
+                          (total, file) => total + file.size,
+                          0
+                        );
+                        if (totalSize > 1024 * 1024 * 1024) {
+                          errors.push("Total file size exceeds 1GB.");
+                        }
+
+                        if (errors.length > 0) {
+                          formik.setFieldError("files", errors.join(" "));
+                        } else {
+                          formik.setFieldValue("files", files); // Set files if valid
+                          formik.setFieldError("files", null); // Clear errors
+                        }
+                      }}
+                    />
+                  </div>
+                  {formik.errors.files && (
+                    <small className="text-danger">{formik.errors.files}</small>
+                  )}
+                  <label className="text-muted">
+                    Note: Only JPG, PNG, PDF, DOC, or DOCX files are allowed.
+                    Each file must be less than 5MB. Total size must be under
+                    1GB, and file names must not exceed 50 characters.
+                  </label>
+                </div>
               </div>
             </div>
           </div>
