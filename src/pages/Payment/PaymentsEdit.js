@@ -127,7 +127,7 @@ function PaymentsEdit() {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          <Link to="/payment" className="custom-breadcrumb">
+          <Link to="/payments" className="custom-breadcrumb">
             &nbsp;Payment
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
@@ -149,7 +149,7 @@ function PaymentsEdit() {
               <span class="me-2 text-muted">Edit Payment</span>
             </div>
             <div className="my-2 pe-3 d-flex align-items-center">
-              <Link to="/payment">
+              <Link to="/payments">
                 <button type="button " className="btn btn-sm btn-border">
                   Back
                 </button>
