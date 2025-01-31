@@ -13,6 +13,7 @@ import {
   DialogContent,
 } from "@mui/material";
 import { FiPlusCircle } from "react-icons/fi";
+import { RiCloseCircleLine } from "react-icons/ri";
 
 function AddPackage({ id, onSuccess, handleMenuClose }) {
   const [show, setShow] = useState(false);
@@ -89,7 +90,7 @@ function AddPackage({ id, onSuccess, handleMenuClose }) {
         style={{ whiteSpace: "nowrap", width: "100%" }}
         onClick={handleShow}
       >
-        <FiPlusCircle size={20} style={{color:"#287f71"}} />
+        <FiPlusCircle size={20} style={{ color: "#287f71" }} />
       </p>
 
       <Dialog
@@ -106,8 +107,9 @@ function AddPackage({ id, onSuccess, handleMenuClose }) {
         //   }
         // }}
         >
-          <DialogTitle>
-            <p className="headColor">Add Package</p>
+          <DialogTitle className="d-flex justify-content-between align-items-center">
+            <p className="headColor mb-0">Add Package</p>
+            <RiCloseCircleLine size={24} style={{ cursor: "pointer", color: "#287f71" }} onClick={handleClose} />
           </DialogTitle>
           <DialogContent>
             <div className="row">
@@ -120,8 +122,8 @@ function AddPackage({ id, onSuccess, handleMenuClose }) {
                     type="text"
                     onKeyDown={(e) => e.stopPropagation()}
                     className={`form-control   ${formik.touched.packageName && formik.errors.packageName
-                        ? "is-invalid"
-                        : ""
+                      ? "is-invalid"
+                      : ""
                       }`}
                     {...formik.getFieldProps("packageName")}
                   />
@@ -138,8 +140,8 @@ function AddPackage({ id, onSuccess, handleMenuClose }) {
                 </label>
                 <select
                   className={`form-select ${formik.touched.quantity && formik.errors.quantity
-                      ? "is-invalid"
-                      : ""
+                    ? "is-invalid"
+                    : ""
                     }`}
                   {...formik.getFieldProps("noOfLesson")}
                   style={{ width: "100%" }}

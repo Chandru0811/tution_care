@@ -13,6 +13,7 @@ import {
   DialogContent,
 } from "@mui/material";
 import { FiPlusCircle } from "react-icons/fi";
+import { RiCloseCircleLine } from "react-icons/ri";
 
 function AddRegister({ id, onSuccess, handleMenuClose }) {
   const [show, setShow] = useState(false);
@@ -113,7 +114,7 @@ function AddRegister({ id, onSuccess, handleMenuClose }) {
         style={{ whiteSpace: "nowrap", width: "100%" }}
         onClick={handleShow}
       >
-        <FiPlusCircle size={20} style={{color:"#287f71"}} />
+        <FiPlusCircle size={20} style={{ color: "#287f71" }} />
       </p>
 
       <Dialog
@@ -130,9 +131,11 @@ function AddRegister({ id, onSuccess, handleMenuClose }) {
             }
           }}
         >
-          <DialogTitle>
-            <p className="headColor">Add Centre Registration Fees</p>
+          <DialogTitle className="d-flex justify-content-between align-items-center">
+            <p className="headColor mb-0">Add Registration Fees</p>
+            <RiCloseCircleLine size={24} style={{ cursor: "pointer", color: "#287f71" }} onClick={handleClose} />
           </DialogTitle>
+
           <DialogContent>
             <div className="row">
               <div className="col-md-6 col-12 mb-2">
@@ -142,8 +145,8 @@ function AddRegister({ id, onSuccess, handleMenuClose }) {
                 <input
                   type="date"
                   className={`form-control ${formik.touched.effectiveDate && formik.errors.effectiveDate
-                      ? "is-invalid"
-                      : ""
+                    ? "is-invalid"
+                    : ""
                     }`}
                   {...formik.getFieldProps("effectiveDate")}
                 />
@@ -163,8 +166,8 @@ function AddRegister({ id, onSuccess, handleMenuClose }) {
                     onKeyDown={(e) => e.stopPropagation()}
                     type="text"
                     className={`form-control ${formik.touched.amount && formik.errors.amount
-                        ? "is-invalid"
-                        : ""
+                      ? "is-invalid"
+                      : ""
                       }`}
                     {...formik.getFieldProps("amount")}
                   />
@@ -181,8 +184,8 @@ function AddRegister({ id, onSuccess, handleMenuClose }) {
                 </label>
                 <select
                   className={`form-select ${formik.touched.taxId && formik.errors.taxId
-                      ? "is-invalid"
-                      : ""
+                    ? "is-invalid"
+                    : ""
                     }`}
                   {...formik.getFieldProps("taxId")}
                   style={{ width: "100%" }}
@@ -205,8 +208,8 @@ function AddRegister({ id, onSuccess, handleMenuClose }) {
                 </label>
                 <select
                   className={`form-select ${formik.touched.status && formik.errors.status
-                      ? "is-invalid"
-                      : ""
+                    ? "is-invalid"
+                    : ""
                     }`}
                   {...formik.getFieldProps("status")}
                   style={{ width: "100%" }}

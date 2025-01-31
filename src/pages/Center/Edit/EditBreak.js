@@ -138,7 +138,7 @@ function EditBreak({ id, onSuccess }) {
         >
           <Modal.Header closeButton>
             <Modal.Title>
-              <p className="headColor">Edit Centre Break</p>
+              <p className="headColor">Edit Break</p>
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>

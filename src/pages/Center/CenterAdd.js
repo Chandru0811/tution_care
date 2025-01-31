@@ -138,7 +138,7 @@ function CenterAdd({ handleCenterChanged }) {
         if (response.status === 201) {
           toast.success(response.data.message);
           handleCenterChanged();
-          navigate("/center");
+          navigate("/companyRegister");
         } else {
           toast.error(response.data.message);
         }
@@ -181,17 +181,17 @@ function CenterAdd({ handleCenterChanged }) {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          &nbsp;Centre Management
+          &nbsp;Company Management
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
           <Link to="/center" className="custom-breadcrumb">
-            &nbsp;Centre Listing
+            &nbsp;Company Listing
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          &nbsp;Centre Listing Add
+          &nbsp;Company Listing Add
         </li>
       </ol>
       <form
@@ -214,7 +214,7 @@ function CenterAdd({ handleCenterChanged }) {
               <span class="me-2 text-muted">Add Centre</span>
             </div>
             <div className="my-2 pe-3 d-flex align-items-center">
-              <Link to="/center">
+              <Link to="/companyRegister">
                 <button type="button " className="btn btn-sm btn-border">
                   Back
                 </button>
