@@ -5,15 +5,7 @@ import * as yup from "yup";
 import { useFormik } from "formik";
 import { toast } from "react-toastify";
 import api from "../../../config/URL";
-import { SiGoogleclassroom } from "react-icons/si";
-import {
-  Dialog,
-  DialogActions,
-  DialogTitle,
-  DialogContent,
-} from "@mui/material";
 import { FiPlusCircle } from "react-icons/fi";
-import { RiCloseCircleLine } from "react-icons/ri";
 
 function AddClass({ id, onSuccess, handleMenuClose }) {
   const [show, setShow] = useState(false);
@@ -94,15 +86,23 @@ function AddClass({ id, onSuccess, handleMenuClose }) {
 
   return (
     <>
-      <p
-        className="text-start mb-0 menuitem-style"
-        style={{ whiteSpace: "nowrap", width: "100%" }}
-        onClick={handleShow}
-      >
+      <button type="button"
+        style={{
+          whiteSpace: "nowrap",
+        }}
+        className="btn btn-normal text-start" onClick={handleShow}>
         <FiPlusCircle size={20} style={{ color: "#287f71" }} />
-      </p>
+      </button>
 
-      <Dialog open={show} onClose={handleClose} maxWidth="md" fullWidth>
+      <Modal
+        show={show}
+        size="lg"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+        onHide={handleClose}
+        backdrop={isModified ? "static" : true}
+        keyboard={isModified ? false : true}
+      >
         <form
           onSubmit={formik.handleSubmit}
           onKeyDown={(e) => {
@@ -111,20 +111,20 @@ function AddClass({ id, onSuccess, handleMenuClose }) {
             }
           }}
         >
-          <DialogTitle className="d-flex justify-content-between align-items-center">
-            <p className="headColor mb-0">Add Classroom</p>
-            <RiCloseCircleLine size={24} style={{ cursor: "pointer", color: "#287f71" }} onClick={handleClose} />
-          </DialogTitle>
-          <DialogContent>
+          <Modal.Header closeButton>
+            <Modal.Title>
+              <p className="headColor">Add Classroom</p>
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
             <div className="row">
               <div class="col-md-6 col-12 mb-2">
                 <lable className="form-lable">
-                  Classroom Name<span className="text-danger">*</span>
+                  Classroom Name<span class="text-danger">*</span>
                 </lable>
                 <div class="input-group mb-3">
                   <input
                     type="text"
-                    onKeyDown={(e) => e.stopPropagation()}
                     className={`form-control   ${formik.touched.classRoomName &&
                       formik.errors.classRoomName
                       ? "is-invalid"
@@ -146,7 +146,6 @@ function AddClass({ id, onSuccess, handleMenuClose }) {
                 </lable>
                 <input
                   type="text"
-                  onKeyDown={(e) => e.stopPropagation()}
                   className={`form-control   ${formik.touched.classRoomCode && formik.errors.classRoomCode
                     ? "is-invalid"
                     : ""
@@ -191,7 +190,6 @@ function AddClass({ id, onSuccess, handleMenuClose }) {
                   Capacity<span class="text-danger">*</span>
                 </lable>
                 <input
-                  onKeyDown={(e) => e.stopPropagation()}
                   type="text"
                   pattern="^\d+$"
                   className={`form-control   ${formik.touched.capacity && formik.errors.capacity
@@ -206,21 +204,19 @@ function AddClass({ id, onSuccess, handleMenuClose }) {
                   </div>
                 )}
               </div>
-              <div className="form-floating">
+              <div class="">
                 <lable>Description</lable>
                 <textarea
-                  onKeyDown={(e) => e.stopPropagation()}
-                  className="form-control p-1"
+                  class="form-control"
                   {...formik.getFieldProps("description")}
                   placeholder=""
                   id="floatingTextarea2"
-                  eration
                   style={{ height: 100 }}
                 ></textarea>
               </div>
             </div>
-          </DialogContent>
-          <DialogActions className="mt-3">
+          </Modal.Body>
+          <Modal.Footer className="mt-3">
             <Button
               className="btn btn-sm btn-border bg-light text-dark"
               onClick={handleClose}
@@ -228,7 +224,8 @@ function AddClass({ id, onSuccess, handleMenuClose }) {
               Cancel
             </Button>
             <Button
-              type="submit"
+              type="button"
+              onClick={formik.handleSubmit}
               className="btn btn-button btn-sm"
               disabled={loadIndicator}
             >
@@ -238,11 +235,18 @@ function AddClass({ id, onSuccess, handleMenuClose }) {
                   aria-hidden="true"
                 ></span>
               )}
-              Submit
+              Update
             </Button>
-          </DialogActions>
+            {/* <Button
+              type="submit"
+              variant="danger"
+              onSubmit={formik.handleSubmit}
+            >
+              Update
+            </Button> */}
+          </Modal.Footer>
         </form>
-      </Dialog>
+      </Modal>
     </>
   );
 }

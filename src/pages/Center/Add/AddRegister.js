@@ -5,15 +5,7 @@ import * as yup from "yup";
 import { useFormik } from "formik";
 import { toast } from "react-toastify";
 import api from "../../../config/URL";
-import { MdOutlineAttachMoney } from "react-icons/md";
-import {
-  Dialog,
-  DialogActions,
-  DialogTitle,
-  DialogContent,
-} from "@mui/material";
 import { FiPlusCircle } from "react-icons/fi";
-import { RiCloseCircleLine } from "react-icons/ri";
 
 function AddRegister({ id, onSuccess, handleMenuClose }) {
   const [show, setShow] = useState(false);
@@ -107,39 +99,59 @@ function AddRegister({ id, onSuccess, handleMenuClose }) {
     },
   });
 
+  const handleSubmit = () => {
+    const selectedTaxType = formik.values.taxId;
+
+    const activeTaxTypes = taxData.filter((tax) => tax.status === "ACTIVE");
+
+    const isValidTaxType = activeTaxTypes.some(
+      (tax) => tax.id === parseInt(selectedTaxType)
+    );
+
+    if (!isValidTaxType) {
+      formik.setFieldValue("taxId", "");
+      formik.handleSubmit();
+    } else {
+      formik.handleSubmit();
+    }
+  };
+
   return (
     <>
-      <p
-        className="text-start mb-0 menuitem-style"
-        style={{ whiteSpace: "nowrap", width: "100%" }}
-        onClick={handleShow}
-      >
+      <button type="button"
+        style={{
+          whiteSpace: "nowrap",
+        }}
+        className="btn btn-normal text-start" onClick={handleShow}>
         <FiPlusCircle size={20} style={{ color: "#287f71" }} />
-      </p>
+      </button>
 
-      <Dialog
-        open={show}
-        onClose={handleClose}
-        maxWidth="md"
-        fullWidth
+      <Modal
+        show={show}
+        size="lg"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+        onHide={handleClose}
+        backdrop={isModified ? "static" : true}
+        keyboard={isModified ? false : true}
       >
         <form
           onSubmit={formik.handleSubmit}
           onKeyDown={(e) => {
             if (e.key === "Enter" && !formik.isSubmitting) {
-              e.preventDefault();
+              e.preventDefault(); // Prevent default form submission
             }
           }}
         >
-          <DialogTitle className="d-flex justify-content-between align-items-center">
-            <p className="headColor mb-0">Add Registration Fees</p>
-            <RiCloseCircleLine size={24} style={{ cursor: "pointer", color: "#287f71" }} onClick={handleClose} />
-          </DialogTitle>
-
-          <DialogContent>
+          <Modal.Header closeButton>
+            <Modal.Title>
+              <p className="headColor">Add Registration Fees</p>
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
             <div className="row">
               <div className="col-md-6 col-12 mb-2">
-                <label>
+                <label className="">
                   Effective Date<span className="text-danger">*</span>
                 </label>
                 <input
@@ -158,12 +170,11 @@ function AddRegister({ id, onSuccess, handleMenuClose }) {
                   )}
               </div>
               <div className="col-md-6 col-12 mb-2">
-                <label>
+                <label className="form-lable">
                   Amount (Including GST)<span className="text-danger">*</span>
                 </label>
                 <div className="input-group mb-3">
                   <input
-                    onKeyDown={(e) => e.stopPropagation()}
                     type="text"
                     className={`form-control ${formik.touched.amount && formik.errors.amount
                       ? "is-invalid"
@@ -179,7 +190,7 @@ function AddRegister({ id, onSuccess, handleMenuClose }) {
                 </div>
               </div>
               <div className="col-md-6 col-12 mb-2">
-                <label>
+                <label className="">
                   Tax Type<span className="text-danger">*</span>
                 </label>
                 <select
@@ -203,7 +214,7 @@ function AddRegister({ id, onSuccess, handleMenuClose }) {
                 )}
               </div>
               <div className="col-md-6 col-12 mb-2">
-                <label>
+                <label className="">
                   Status<span className="text-danger">*</span>
                 </label>
                 <select
@@ -223,8 +234,8 @@ function AddRegister({ id, onSuccess, handleMenuClose }) {
                 )}
               </div>
             </div>
-          </DialogContent>
-          <DialogActions className="mt-3">
+          </Modal.Body>
+          <Modal.Footer className="mt-3">
             <Button
               className="btn btn-sm btn-border bg-light text-dark"
               onClick={handleClose}
@@ -232,7 +243,8 @@ function AddRegister({ id, onSuccess, handleMenuClose }) {
               Cancel
             </Button>
             <Button
-              type="submit"
+              type="button"
+              onClick={handleSubmit}
               className="btn btn-button btn-sm"
               disabled={loadIndicator}
             >
@@ -242,11 +254,11 @@ function AddRegister({ id, onSuccess, handleMenuClose }) {
                   aria-hidden="true"
                 ></span>
               )}
-              Submit
+              Update
             </Button>
-          </DialogActions>
+          </Modal.Footer>
         </form>
-      </Dialog>
+      </Modal>
     </>
   );
 }

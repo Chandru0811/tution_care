@@ -5,15 +5,7 @@ import * as yup from "yup";
 import { useFormik } from "formik";
 import { toast } from "react-toastify";
 import api from "../../../config/URL";
-import { MdOutlineFreeBreakfast } from "react-icons/md";
-import {
-  Dialog,
-  DialogActions,
-  DialogTitle,
-  DialogContent,
-} from "@mui/material";
 import { FiPlusCircle } from "react-icons/fi";
-import { RiCloseCircleLine } from "react-icons/ri";
 
 function AddBreak({ id, onSuccess, handleMenuClose }) {
   const [show, setShow] = useState(false);
@@ -92,15 +84,23 @@ function AddBreak({ id, onSuccess, handleMenuClose }) {
   });
   return (
     <>
-      <p
-        className="text-start mb-0 menuitem-style"
-        style={{ whiteSpace: "nowrap", width: "100%" }}
-        onClick={handleShow}
-      >
+      <button type="button"
+        style={{
+          whiteSpace: "nowrap",
+        }}
+        className="btn btn-normal text-start" onClick={handleShow}>
         <FiPlusCircle size={20} style={{ color: "#287f71" }} />
-      </p>
+      </button>
 
-      <Dialog open={show} onClose={handleClose} maxWidth="md" fullWidth>
+      <Modal
+        show={show}
+        size="lg"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+        onHide={handleClose}
+        backdrop={isModified ? "static" : true}
+        keyboard={isModified ? false : true}
+      >
         <form
           onSubmit={formik.handleSubmit}
           onKeyDown={(e) => {
@@ -109,20 +109,21 @@ function AddBreak({ id, onSuccess, handleMenuClose }) {
             }
           }}
         >
-          <DialogTitle className="d-flex justify-content-between align-items-center">
-            <p className="headColor mb-0">Add Break</p>
-            <RiCloseCircleLine size={24} style={{ cursor: "pointer", color: "#287f71" }} onClick={handleClose} />
-          </DialogTitle>
-          <DialogContent>
+          <Modal.Header closeButton>
+            <Modal.Title>
+              <p className="headColor">Add Break</p>
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
             <div className="row">
-              <div className="col-md-6 col-12 mb-2">
+              <div class="col-md-6 col-12 mb-2">
                 <lable className="form-lable">
-                  Break Name<span className="text-danger">*</span>
+                  Break Name<span class="text-danger">*</span>
                 </lable>
-                <div className="input-group mb-3">
+                <div class="input-group mb-3">
                   <input
-                    onKeyDown={(e) => e.stopPropagation()}
                     type="data"
+                    value="New Year Chinese"
                     className={`form-control   ${formik.touched.breakName && formik.errors.breakName
                       ? "is-invalid"
                       : ""
@@ -136,7 +137,7 @@ function AddBreak({ id, onSuccess, handleMenuClose }) {
                   )}
                 </div>
               </div>
-              <div className="col-md-6 col-12 mb-2">
+              <div class="col-md-6 col-12 mb-2">
                 <lable>
                   From Date<span class="text-danger">*</span>
                 </lable>
@@ -156,7 +157,7 @@ function AddBreak({ id, onSuccess, handleMenuClose }) {
               </div>
               <div class="col-md-6 col-12 mb-2">
                 <lable className="form-lable">
-                  To Date<span className="text-danger">*</span>
+                  To Date<span class="text-danger">*</span>
                 </lable>
                 <div class="input-group mb-3">
                   <input
@@ -175,8 +176,8 @@ function AddBreak({ id, onSuccess, handleMenuClose }) {
                 </div>
               </div>
             </div>
-          </DialogContent>
-          <DialogActions className="mt-3">
+          </Modal.Body>
+          <Modal.Footer className="mt-3">
             <Button
               className="btn btn-sm btn-border bg-light text-dark"
               onClick={handleClose}
@@ -184,7 +185,8 @@ function AddBreak({ id, onSuccess, handleMenuClose }) {
               Cancel
             </Button>
             <Button
-              type="submit"
+              type="button"
+              onClick={formik.handleSubmit}
               className="btn btn-button btn-sm"
               disabled={loadIndicator}
             >
@@ -194,11 +196,11 @@ function AddBreak({ id, onSuccess, handleMenuClose }) {
                   aria-hidden="true"
                 ></span>
               )}
-              Submit
+              Update
             </Button>
-          </DialogActions>
+          </Modal.Footer>
         </form>
-      </Dialog>
+      </Modal>
     </>
   );
 }
