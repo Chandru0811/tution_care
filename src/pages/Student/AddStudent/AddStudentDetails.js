@@ -8,7 +8,6 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
-import fetchAllCentersWithIds from "../../List/CenterList";
 import fetchAllRaceWithIds from "../../List/RaceList";
 import fetchAllNationalityeWithIds from "../../List/NationalityAndCountryList";
 import fetchAllStudentsWithIds from "../../List/StudentList";
@@ -54,13 +53,13 @@ const validationSchema = Yup.object().shape({
 
 const AddStudentDetails = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
-    const [centerData, setCenterData] = useState(null);
     const [studentData, setStudentData] = useState(null);
     const [imagePreviewUrl, setImagePreviewUrl] = useState(null);
     const [raceData, setRaceData] = useState(null);
     const [nationalityData, setNationalityData] = useState(null);
     const userName = localStorage.getItem("tmsuserName");
     const centerId = localStorage.getItem("tmscenterId");
+    const center = localStorage.getItem("tmscenterName");
 
     // console.log("FormData is ", formData);
 
@@ -69,8 +68,8 @@ const AddStudentDetails = forwardRef(
 
     const fetchData = async () => {
       try {
-        const centerData = await fetchAllCentersWithIds();
-        setCenterData(centerData);
+        // const centerData = await fetchAllCentersWithIds();
+        // setCenterData(centerData);
 
         const studentData = await fetchAllStudentsWithIds();
         setStudentData(studentData);
@@ -106,7 +105,7 @@ const AddStudentDetails = forwardRef(
 
     const formik = useFormik({
       initialValues: {
-        centerId: formData.centerId || "",
+        centerId: centerId || "",
         studentName: formData.studentName || "",
         studentChineseName: formData.studentChineseName || "",
         file: null || "",
@@ -132,16 +131,6 @@ const AddStudentDetails = forwardRef(
         setLoadIndicators(true);
         values.centerId = centerId;
         try {
-          let selectedCenter = "";
-
-          centerData.forEach((center) => {
-            if (parseInt(values.centerId) === center.id) {
-              selectedCenter = center.centerNames || "--";
-            }
-          });
-
-          // console.log("Center ", selectedCenter);
-
           const formDatas = new FormData();
 
           // Add each data field manually to the FormData object
@@ -162,8 +151,8 @@ const AddStudentDetails = forwardRef(
           formDatas.append("remark", values.remark || "");
           formDatas.append("allowMagazine", values.allowMagazine);
           formDatas.append("allowSocialMedia", values.allowSocialMedia);
-          formDatas.append("centerId", values.centerId);
-          formDatas.append("center", selectedCenter);
+          formDatas.append("centerId", centerId);
+          formDatas.append("center", center);
           formDatas.append("primaryLanguage", values.primaryLanguage);
           formDatas.append("groupName", values.groupName);
           formDatas.append("file", values.file);
@@ -323,26 +312,23 @@ const AddStudentDetails = forwardRef(
                       )}
                     </div> */}
                     <div className="text-start mt-4">
-                      <label className=" fw-medium">
-                        <small>
-                          Student Chinese Name (put N/A if not applicable)
-                          <span className="text-danger">*</span>
-                        </small>
-                        &nbsp;
+                      <label htmlFor="" className="mb-1 fw-medium">
+                        <small>Student Name / as per ID</small>
+                        <span className="text-danger">*</span>
                       </label>
                       <br />
                       <input
-                        className="form-control "
-                        type="text"
-                        name="studentChineseName"
+                        name="studentName"
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
-                        value={formik.values.studentChineseName}
+                        value={formik.values.studentName}
+                        className="form-control "
+                        type="text"
                       />
-                      {formik.touched.studentChineseName &&
-                        formik.errors.studentChineseName && (
+                      {formik.touched.studentName &&
+                        formik.errors.studentName && (
                           <div className="text-danger">
-                            <small>{formik.errors.studentChineseName}</small>
+                            <small>{formik.errors.studentName}</small>
                           </div>
                         )}
                     </div>
@@ -374,7 +360,6 @@ const AddStudentDetails = forwardRef(
                         <small>Gender</small>
                         <span className="text-danger">*</span>
                       </label>
-                      <br />
                       <div className="mt-1">
                         <input
                           className="form-check-input mx-2"
@@ -520,24 +505,27 @@ const AddStudentDetails = forwardRef(
                     </div>
                   </div>
                   <div className="col-lg-6 col-md-6 col-12 px-5">
-                    <div className="text-start mt-2">
-                      <label htmlFor="" className="mb-1 fw-medium">
-                        <small>Student Name / as per ID</small>
-                        <span className="text-danger">*</span>
+                  <div className="text-start mt-4">
+                      <label className=" fw-medium">
+                        <small>
+                          Student Chinese Name (put N/A if not applicable)
+                          <span className="text-danger">*</span>
+                        </small>
+                        &nbsp;
                       </label>
                       <br />
                       <input
-                        name="studentName"
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        value={formik.values.studentName}
                         className="form-control "
                         type="text"
+                        name="studentChineseName"
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        value={formik.values.studentChineseName}
                       />
-                      {formik.touched.studentName &&
-                        formik.errors.studentName && (
+                      {formik.touched.studentChineseName &&
+                        formik.errors.studentChineseName && (
                           <div className="text-danger">
-                            <small>{formik.errors.studentName}</small>
+                            <small>{formik.errors.studentChineseName}</small>
                           </div>
                         )}
                     </div>

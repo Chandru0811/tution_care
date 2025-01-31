@@ -415,7 +415,7 @@ const Payments = () => {
               </button>
             </div>
           </div>
-          <Link to="/payment/add">
+          <Link to="/payments/add">
             <button
               type="button"
               className="btn btn-button btn-sm me-2"

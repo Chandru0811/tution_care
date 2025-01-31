@@ -18,8 +18,10 @@ const Form2 = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     console.log("formData", formData);
     const userName = localStorage.getItem("tmsuserName");
+    const centerId = localStorage.getItem("tmscenterId");
     const formik = useFormik({
       initialValues: {
+        centerId:centerId,
         pencilGrip: formData.pencilGrip || "",
         writing: formData.writing || "",
         recognizeAToZ: formData.recognizeAToZ || "",

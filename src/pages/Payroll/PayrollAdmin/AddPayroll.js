@@ -2,20 +2,17 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { useFormik } from "formik";
-import { format } from "date-fns"; // Import format function from date-fns
-import fetchAllCentersWithIds from "../../List/CenterList";
+import { format } from "date-fns";
 import { toast } from "react-toastify";
 import api from "../../../config/URL";
 import fetchAllEmployeeListByCenter from "../../List/EmployeeList";
 
 function AddPayroll() {
-  const [centerData, setCenterData] = useState(null);
   const [userNamesData, setUserNameData] = useState(null);
   const [empRole, setEmpRole] = useState(null);
   const [userSalaryInfo, setUserSalaryInfo] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const userName = localStorage.getItem("tmsuserName");
-  const [bonus, setBonus] = useState(0);
   const [netPay, setNetPay] = useState(0);
   const centerId = localStorage.getItem("tmscenterId");
 
@@ -89,9 +86,6 @@ function AddPayroll() {
         return empRole === "freelancer" ? !!value : true;
       }
     ),
-    // netPay: Yup.number()
-    //   .required("*Net pay is required")
-    //   .typeError("Net pay must be a number"),
     status: Yup.string().required("*Status is required"),
   });
 
@@ -121,12 +115,6 @@ function AddPayroll() {
       let selectedCenterName = "";
       let selectedEmployeeName = "";
 
-      centerData.forEach((center) => {
-        if (parseInt(values.centerId) === center.id) {
-          selectedCenterName = center.centerNames || "--";
-        }
-      });
-
       userNamesData.forEach((employee) => {
         if (parseInt(values.userId) === employee.id) {
           selectedEmployeeName = employee.userNames || "--";
@@ -135,7 +123,7 @@ function AddPayroll() {
 
       let payload = {
         centerName: selectedCenterName,
-        centerId: values.centerId,
+        centerId: centerId,
         userId: values.userId,
         employeeName: selectedEmployeeName,
         netPay: values.netPay,
@@ -211,19 +199,6 @@ function AddPayroll() {
     const currentMonth = format(new Date(), "yyyy-MM");
     formik.setFieldValue("payrollMonth", currentMonth);
     handleCenterChange();
-  }, []);
-
-  const fetchData = async () => {
-    try {
-      const centers = await fetchAllCentersWithIds();
-      setCenterData(centers);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
-
-  useEffect(() => {
-    fetchData();
   }, []);
 
   const fetchUserName = async (centerId) => {

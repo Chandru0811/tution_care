@@ -56,15 +56,7 @@ function CourseEdit() {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const centerId = localStorage.getItem("tmscenterId");
   const role = localStorage.getItem("tmsrole");
-  const centerOptions = centerData.map((center) => ({
-    label: center.centerNames,
-    value: center.id,
-  }));
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
+    
   const formik = useFormik({
     initialValues: {
       centerId: [centerId],

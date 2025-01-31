@@ -32,7 +32,6 @@ import CenterManager from "../pages/centerManager/CenterManager";
 import CenterManagerAdd from "../pages/centerManager/CenterManagerAdd";
 
 import Staff from "../pages/Staff/Staff";
-import Payment from "../pages/Payment/Payment";
 import Invoice from "../pages/Invoice/Invoice";
 import Document from "../pages/Document/Document";
 import CourseAdd from "../pages/Course/CourseAdd";

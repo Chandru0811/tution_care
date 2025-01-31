@@ -11,25 +11,19 @@ import {
 } from "@mui/material";
 import { MoreVert as MoreVertIcon } from "@mui/icons-material";
 import { toast } from "react-toastify";
-import fetchAllCentreManager from "../List/CentreMangerList";
 import GlobalDelete from "../../components/common/GlobalDelete";
-import fetchAllCoursesWithIds from "../List/CourseList";
-import fetchAllCentersWithIds from "../List/CenterList";
 import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
 import fetchAllStudentListByCenter from "../List/StudentListByCenter";
 import fetchAllPackageListByCenter from "../List/PackageListByCenter";
 
 const Invoice = () => {
+  const centerId = localStorage.getItem("tmscenterId");
   const [filters, setFilters] = useState({
-    centerId:"",
+    centerId:centerId,
     courseId: "",
     studentId: "",
     packageId: "",
   });
-  const [centerData, setCenterData] = useState([]);
-  const centerIDLocal = localStorage.getItem("tmsselectedCenterId");
-  const centerId = localStorage.getItem("tmscenterId");
-  const [centerManagerData, setCenterManagerData] = useState([]);
   const [packageData, setPackageData] = useState(null);
   const [studentData, setStudentData] = useState(null);
   const [data, setData] = useState([]);
@@ -139,49 +133,6 @@ const Invoice = () => {
     []
   );
 
-  const fetchCenterManagerData = async () => {
-    try {
-      const centerManagerData = await fetchAllCentreManager();
-      setCenterManagerData(centerManagerData);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
-
-  useEffect(() => {
-    fetchCenterManagerData();
-  }, []);
-
-  // const fetchData = async () => {
-  //   try {
-  //     // const centerData = await fetchAllCentersWithIds();
-  //     const courseData = await fetchAllCoursesWithIds();
-  //     // const studentData = await fetchAllStudentsWithIds();
-  //     // const packageData = await api.get("getAllCentersPackageWithIds");
-  //     // setPackageData(packageData.data);
-  //     // setCenterData(centerData);
-  //     setCourseData(courseData);
-  //     // setStudentData(studentData);
-  //   } catch (error) {
-  //     toast.error(error);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   const getData = async () => {
-  //     try {
-  //       const response = await api.get("/getAllGenerateInvoices");
-  //       setData(response.data);
-  //     } catch (error) {
-  //       console.error("Error fetching data:", error);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-  //   getData();
-  //   fetchData();
-  // }, []);
-
   const theme = createTheme({
     components: {
       MuiTableCell: {
@@ -233,8 +184,8 @@ const Invoice = () => {
       if (!isClearFilterClicked) {
         if (filters.centerId) {
           queryParams.append("centerId", filters.centerId);
-        } else if (centerIDLocal && centerIDLocal !== "undefined") {
-          queryParams.append("centerId", centerIDLocal);
+        } else if (centerId && centerId !== "undefined") {
+          queryParams.append("centerId", centerId);
         }
       }
 
@@ -263,31 +214,9 @@ const Invoice = () => {
     setFilters((prevFilters) => ({ ...prevFilters, [name]: value }));
   };
 
-  // const fetchData = async () => {
-  //   try {
-  //     const centerData = await fetchAllCentersWithIds();
-  //     if (centerIDLocal !== null && centerIDLocal !== "undefined") {
-  //       setFilters((prevFilters) => ({
-  //         ...prevFilters,
-  //         centerId: centerIDLocal,
-  //       }));
-  //       fetchListData(centerIDLocal);
-  //     } else if (centerData !== null && centerData.length > 0) {
-  //       setFilters((prevFilters) => ({
-  //         ...prevFilters,
-  //         centerId: centerData[0].id,
-  //       }));
-  //       fetchListData(centerData[0].id);
-  //     }
-  //     setCenterData(centerData);
-  //   } catch (error) {
-  //     toast.error(error);
-  //   }
-  // };
-
   const clearFilters = () => {
     setFilters({
-      centerId: "",
+      centerId: centerId,
       courseId: "",
       studentId: "",
       packageId: "",
@@ -295,12 +224,6 @@ const Invoice = () => {
     getInvoiceData();
     setIsClearFilterClicked(true);
   };
-  // useEffect(() => {
-  //   const fetchDatas = async () => {
-  //     await fetchData(); // Fetch center data
-  //   };
-  //   fetchDatas();
-  // }, []);
 
   const fetchListData = async (centerId) => {
     try {
@@ -362,22 +285,6 @@ const Invoice = () => {
         </div>
         <div className="mb-3 d-flex justify-content-between">
           <div className="individual_fliters d-lg-flex ">
-            {/* <div className="form-group mb-0 ms-2 mb-1">
-              <select
-                className="form-select form-select-sm center_list"
-                name="centerId"
-                style={{ width: "100%" }}
-                onChange={handleFilterChange}
-                value={filters.centerId}
-              >
-                <option>Select the centre</option>
-                {centerData?.map((center) => (
-                  <option key={center.id} value={center.id} selected>
-                    {center.centerNames}
-                  </option>
-                ))}
-              </select>
-            </div> */}
             <div className="form-group mb-0 ms-2 mb-1">
               <select
                 className="form-select form-select-sm center_list"
@@ -502,7 +409,7 @@ const Invoice = () => {
               <MenuItem>
                 <GlobalDelete
                   path={`/deleteGenerateInvoice/${selectedId}`}
-                  // onDeleteSuccess={fetchData}
+                  onDeleteSuccess={getInvoiceData}
                   onOpen={handleMenuClose}
                 />
               </MenuItem>

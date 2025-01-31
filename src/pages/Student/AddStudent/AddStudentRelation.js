@@ -136,101 +136,67 @@ const Addrelation = forwardRef(
                 <div className="container py-3">
                   <div className="row">
                     <div className="col-lg-6 col-md-6 col-12">
-                      <div className="text-start">
-                        <label htmlFor="" className="mb-1 fw-medium">
-                          <small>Centre</small>
-                        </label>
-                        <br />
-                        <select
-                          {...formik.getFieldProps("studentRelationCenter")}
-                          name="studentRelationCenter"
-                          className={`form-select ${
-                            formik.touched.studentRelationCenter &&
-                            formik.errors.studentRelationCenter
-                              ? "is-invalid"
-                              : ""
-                          }`}
-                          onBlur={formik.handleBlur}
-                          onChange={handleCenterChange}
-                        >
-                          <option selected></option>
-                          {centerData &&
-                            centerData.map((studentRelationCenter) => (
-                              <option
-                                key={studentRelationCenter.id}
-                                value={studentRelationCenter.id}
-                              >
-                                {studentRelationCenter.centerNames}
+                      <label htmlFor="" className="mb-1 fw-medium">
+                        <small>Student Name</small>
+                      </label>
+                      <br />
+                      <select
+                        {...formik.getFieldProps("studentRelationStudentName")}
+                        className={`form-select ${
+                          formik.touched.studentRelationStudentName &&
+                          formik.errors.studentRelationStudentName
+                            ? "is-invalid"
+                            : ""
+                        }`}
+                      >
+                        <option selected></option>
+                        {studentData &&
+                          studentData.map((student) => (
+                            <option
+                              key={student.id}
+                              value={student.id === formData.student_id}
+                            >
+                              {student.studentNames ? "" : student.studentNames}
+                            </option>
+                          ))}
+                        {studentData &&
+                          studentData
+                            .filter(
+                              (student) => student.id !== formData.student_id
+                            ) // Filter students with matching id
+                            .map((student) => (
+                              <option key={student.id} value={student.id}>
+                                {student.studentNames}{" "}
                               </option>
                             ))}
-                        </select>
-                      </div>
-                      <div className="text-start mt-2">
-                        <label htmlFor="" className="mb-1 fw-medium">
-                          <small>Relation</small>
-                        </label>
-                        <br />
-                        <select
-                          onChange={formik.handleChange}
-                          onBlur={formik.handleBlur}
-                          value={formik.values.studentRelation}
-                          className="form-select "
-                          name="studentRelation"
-                        >
-                          <option value=""></option>
-                          <option value="Mother">Mother</option>
-                          <option value="Father">Father</option>
-                          <option value="Brother">Brother</option>
-                          <option value="Sister">Sister</option>
-                        </select>
-                      </div>
+                      </select>
+                      {formik.touched.studentRelationStudentName &&
+                        formik.errors.studentRelationStudentName && (
+                          <div className="text-danger">
+                            <small>
+                              {formik.errors.studentRelationStudentName}
+                            </small>
+                          </div>
+                        )}
                     </div>
                     <div className="col-lg-6 col-md-6 col-12">
-                      <div className="text-start">
-                        <label htmlFor="" className="mb-1 fw-medium">
-                          <small>Student Name</small>
-                          {/* <span className="text-danger">*</span> */}
-                        </label>
-                        <br />
-                        <select
-                          {...formik.getFieldProps(
-                            "studentRelationStudentName"
-                          )}
-                          className={`form-select ${
-                            formik.touched.studentRelationStudentName &&
-                            formik.errors.studentRelationStudentName
-                              ? "is-invalid"
-                              : ""
-                          }`}
-                        >
-                          <option selected></option>
-                          {/* {studentData &&
-                            studentData.map((student) => (
-                              <option key={student.id} value={student.id === formData.student_id}>
-                                {student.studentNames ? "" : student.studentNames}
-                              </option>
-                            ))} */}
-                           {studentData &&
-                            studentData
-                              .filter(
-                                (student) => student.id !== formData.student_id
-                              ) // Filter students with matching id
-                              .map((student) => (
-                                <option key={student.id} value={student.id}>
-                                  {student.studentNames}{" "}
-                                  {/* Display the student name */}
-                                </option>
-                              ))}
-                        </select>
-                        {formik.touched.studentRelationStudentName &&
-                          formik.errors.studentRelationStudentName && (
-                            <div className="text-danger">
-                              <small>
-                                {formik.errors.studentRelationStudentName}
-                              </small>
-                            </div>
-                          )}
-                      </div>
+                      <label htmlFor="" className="mb-1 fw-medium">
+                        <small>Relation</small>
+                      </label>
+                      <br />
+                      <select
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        value={formik.values.studentRelation}
+                        className="form-select "
+                        name="studentRelation"
+                      >
+                        <option value=""></option>
+                        <option value="Mother">Mother</option>
+                        <option value="Father">Father</option>
+                        <option value="Brother">Brother</option>
+                        <option value="Sister">Sister</option>
+                      </select>
                     </div>
                   </div>
                 </div>

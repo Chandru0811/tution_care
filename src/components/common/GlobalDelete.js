@@ -12,8 +12,6 @@ function GlobalDelete({
   path,
   onDeleteSuccess,
   onOpen,
-  // deleteCenterData,
-  handleCenterChanged,
 }) {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
@@ -43,8 +41,6 @@ function GlobalDelete({
       if (response.status === 200 || response.status === 201 || response.status === 204) {
         onDeleteSuccess();
         toast.success(response.data.message);
-        if (typeof onOpen === "function") onOpen();
-        handleCenterChanged();
       }
     } catch (error) {
       if (error?.response?.status === 409) {

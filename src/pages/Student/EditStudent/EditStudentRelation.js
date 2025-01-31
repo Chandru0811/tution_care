@@ -15,24 +15,12 @@ const validationSchema = Yup.object().shape({});
 
 const EditStudentRelation = forwardRef(
   ({ formData, setFormData, setLoadIndicators, handleNext }, ref) => {
-    const [centerData, setCenterData] = useState([]);
     const [studentData, setStudentData] = useState([]);
     const userName = localStorage.getItem("tmsuserName");
+    const centerId = localStorage.getItem("tmscenterId");
+    const center = localStorage.getItem("tmscenterName");
 
-    useEffect(() => {
-      // Fetch center data when component mounts
-      const fetchCenterData = async () => {
-        try {
-          const data = await fetchAllCentersWithIds();
-          setCenterData(data);
-        } catch (error) {
-          toast.error(error.message || "Failed to load centers.");
-        }
-      };
-      fetchCenterData();
-    }, []);
-
-    const fetchStudent = async (centerId) => {
+    const fetchStudent = async () => {
       try {
         const students = await fetchAllStudentListByCenter(centerId);
         setStudentData(students);
@@ -41,17 +29,10 @@ const EditStudentRelation = forwardRef(
       }
     };
 
-    const handleCenterChange = (event) => {
-      const selectedCenterId = event.target.value;
-      setStudentData([]);
-      formik.setFieldValue("studentRelationCenter", selectedCenterId);
-      fetchStudent(selectedCenterId);
-    };
-
     const formik = useFormik({
       initialValues: {
-        studentRelationCenter: formData.studentRelationCenter || "",
-        centerId: formData.centerId || "",
+        studentRelationCenter: center || "",
+        centerId: centerId || "",
         studentRelation: formData.studentRelation || "",
         studentRelationStudentName: formData.studentRelationStudentName || "",
         studentId: formData.id || "",
@@ -142,87 +123,56 @@ const EditStudentRelation = forwardRef(
                 <div className="container-fluid py-3">
                   <div className="row">
                     <div className="col-lg-6 col-md-6 col-12">
-                      <div className="text-start">
-                        <label
-                          htmlFor="studentRelationCenter"
-                          className="mb-1 fw-medium"
-                        >
-                          <small>Centre</small>
-                        </label>
-                        <select
-                          {...formik.getFieldProps("studentRelationCenter")}
-                          className={`form-select ${
-                            formik.touched.studentRelationCenter &&
-                            formik.errors.studentRelationCenter
-                              ? "is-invalid"
-                              : ""
-                          }`}
-                          onChange={handleCenterChange}
-                        >
-                          <option value=""></option>
-                          {centerData.map((center) => (
-                            <option key={center.id} value={center.id}>
-                              {center.centerNames}
+                      <label
+                        htmlFor="studentRelationStudentName"
+                        className="mb-1 fw-medium"
+                      >
+                        <small>Student Name</small>
+                      </label>
+                      <select
+                        {...formik.getFieldProps("studentRelationStudentName")}
+                        className={`form-select ${
+                          formik.touched.studentRelationStudentName &&
+                          formik.errors.studentRelationStudentName
+                            ? "is-invalid"
+                            : ""
+                        }`}
+                      >
+                        <option value="" disabled></option>
+                        {studentData
+                          .filter((student) => student.id !== formData.id)
+                          .map((student) => (
+                            <option key={student.id} value={student.id}>
+                              {student.studentNames}
                             </option>
                           ))}
-                        </select>
-                      </div>
-                      <div className="text-start mt-2">
-                        <label
-                          htmlFor="studentRelation"
-                          className="mb-1 fw-medium"
-                        >
-                          <small>Relation</small>
-                        </label>
-                        <select
-                          {...formik.getFieldProps("studentRelation")}
-                          className="form-select"
-                        >
-                          <option value=""></option>
-                          <option value="Mother">Mother</option>
-                          <option value="Father">Father</option>
-                          <option value="Brother">Brother</option>
-                          <option value="Sister">Sister</option>
-                        </select>
-                      </div>
+                      </select>
+                      {formik.touched.studentRelationStudentName &&
+                        formik.errors.studentRelationStudentName && (
+                          <div className="text-danger">
+                            <small>
+                              {formik.errors.studentRelationStudentName}
+                            </small>
+                          </div>
+                        )}
                     </div>
                     <div className="col-lg-6 col-md-6 col-12">
-                      <div className="text-start">
-                        <label
-                          htmlFor="studentRelationStudentName"
-                          className="mb-1 fw-medium"
-                        >
-                          <small>Student Name</small>
-                        </label>
-                        <select
-                          {...formik.getFieldProps(
-                            "studentRelationStudentName"
-                          )}
-                          className={`form-select ${
-                            formik.touched.studentRelationStudentName &&
-                            formik.errors.studentRelationStudentName
-                              ? "is-invalid"
-                              : ""
-                          }`}
-                        >
-                          <option value="" disabled></option>
-                          {studentData
-                            .filter((student) => student.id !== formData.id)
-                            .map((student) => (
-                              <option key={student.id} value={student.id}>
-                                {student.studentNames}
-                              </option>
-                            ))}
-                        </select>
-                        {formik.touched.studentRelationStudentName &&
-                          formik.errors.studentRelationStudentName && (
-                            <div className="text-danger">
-                              <small>
-                                {formik.errors.studentRelationStudentName}
-                              </small>
-                            </div>
-                          )}
-                      </div>
+                      <label
+                        htmlFor="studentRelation"
+                        className="mb-1 fw-medium"
+                      >
+                        <small>Relation</small>
+                      </label>
+                      <select
+                        {...formik.getFieldProps("studentRelation")}
+                        className="form-select"
+                      >
+                        <option value=""></option>
+                        <option value="Mother">Mother</option>
+                        <option value="Father">Father</option>
+                        <option value="Brother">Brother</option>
+                        <option value="Sister">Sister</option>
+                      </select>
                     </div>
                   </div>
                 </div>
