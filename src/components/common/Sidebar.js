@@ -22,7 +22,7 @@ import { GiExitDoor } from "react-icons/gi";
 import { MdOutlineAssignment } from "react-icons/md";
 
 const iconMapping = {
-  "Centre Management": <PiBuildings />,
+  "Company Management": <PiBuildings />,
   "Course Management": <PiBookOpenText />,
   "Lead Management": <GiExitDoor />,
   Staffing: <HiOutlineUserGroup />,
@@ -64,18 +64,18 @@ function Sidebar() {
 
     // Define your menu items based on screen access values
     const updatedMenuItems = [
-      // {
-      //   title: "Centre Management",
-      //   icon: "PiBuildings",
-      //   isOpen: false,
-      //   subMenus: [
-      //     {
-      //       title: "Centre Listing",
-      //       path: "/center",
-      //       access: storedScreens.centerListingIndex,
-      //     },
-      //   ],
-      // },
+      {
+        title: "Company Management",
+        icon: "PiBuildings",
+        isOpen: false,
+        subMenus: [
+          {
+            title: "Company Listing",
+            path: "/companyRegister",
+            access: storedScreens.centerListingIndex,
+          },
+        ],
+      },
       {
         title: "Course Management",
         icon: "PiBookOpenText",

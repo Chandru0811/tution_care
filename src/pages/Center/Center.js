@@ -18,7 +18,7 @@ import AddBreak from "./Add/AddBreak";
 import AddClass from "./Add/AddClass";
 import AddPackage from "./Add/AddPackage";
 
-const Center = ({handleCenterChanged}) => {
+const Center = ({ handleCenterChanged }) => {
   const [filters, setFilters] = useState({
     centerName: "",
     centerCode: "",
@@ -31,6 +31,8 @@ const Center = ({handleCenterChanged}) => {
   const navigate = useNavigate();
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
+  const tmscenterName = localStorage.getItem("tmscenterName");
+  // const tmsemail = localStorage.getItem("tmsemail");
 
   const columns = useMemo(
     () => [
@@ -62,11 +64,11 @@ const Center = ({handleCenterChanged}) => {
           </IconButton>
         ),
       },
-      { accessorKey: "centerName", enableHiding: false, header: "Centre Name" },
+      { accessorKey: "centerName", enableHiding: false, header: "Company Name" },
       {
         accessorKey: "centerManager",
         enableHiding: false,
-        header: "Centre Manager",
+        header: "Company Manager",
       },
       { accessorKey: "code", header: "Code", enableHiding: false, size: 40 },
       {
@@ -136,15 +138,15 @@ const Center = ({handleCenterChanged}) => {
   const fetchData = async () => {
     try {
       setLoading(true);
-  
+
       // Filter out empty or null values from the filters
       const nonEmptyFilters = Object.fromEntries(
         Object.entries(filters).filter(([key, value]) => value !== "")
       );
-  
+
       const queryParams = new URLSearchParams(nonEmptyFilters).toString();
-      const response = await api.get(`/getCenterWithCustomInfo?${queryParams}`);
-  
+      const response = await api.get(`/getCenterWithCustomInfo?centerName=${tmscenterName}`);
+
       setData(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -153,7 +155,7 @@ const Center = ({handleCenterChanged}) => {
     }
   };
 
-  
+
   useEffect(() => {
     fetchData();
   }, [filters]);
@@ -231,11 +233,11 @@ const Center = ({handleCenterChanged}) => {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          &nbsp;Centre Management
+          &nbsp;Company Management
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          &nbsp;Centre Listing
+          &nbsp;Company Listing
         </li>
       </ol>
       <div className="card">
@@ -245,10 +247,10 @@ const Center = ({handleCenterChanged}) => {
         >
           <span className="text-muted">
             This database shows the list of{" "}
-            <strong style={{ color: "#287f71" }}>Centre</strong>
+            <strong style={{ color: "#287f71" }}>Company</strong>
           </span>
         </div>
-        <div className="mb-3 d-flex justify-content-between">
+        {/* <div className="mb-3 d-flex justify-content-between">
           <div className="individual_fliters d-lg-flex ">
             <div className="form-group mb-0 ms-2 mb-1">
               <input
@@ -258,7 +260,7 @@ const Center = ({handleCenterChanged}) => {
                 onChange={handleFilterChange}
                 className="form-control form-control-sm center_list"
                 style={{ width: "160px" }}
-                placeholder="Centre Name"
+                placeholder="Company Name"
                 autoComplete="off"
               />
             </div>
@@ -294,7 +296,7 @@ const Center = ({handleCenterChanged}) => {
                 className="form-select form-select-sm center_list"
                 style={{ width: "100%" }}
               >
-                <option value="">Select Centre Manager</option>
+                <option value="">Select Company Manager</option>
                 {centerManagerData.map((manager) => (
                   <option key={manager.id} value={manager.id}>
                     {manager.userNames}
@@ -312,7 +314,7 @@ const Center = ({handleCenterChanged}) => {
               </button>
             </div>
           </div>
-          <Link to="/center/add">
+          <Link to="/companyRegister/add">
             <button
               type="button"
               className="btn btn-button btn-sm me-2"
@@ -321,7 +323,7 @@ const Center = ({handleCenterChanged}) => {
               &nbsp; Add &nbsp;&nbsp; <i className="bx bx-plus"></i>
             </button>
           </Link>
-        </div>
+        </div> */}
         {loading ? (
           <div className="loader-container">
             <div className="loading">
@@ -361,7 +363,7 @@ const Center = ({handleCenterChanged}) => {
                   },
                 }}
                 muiTableBodyRowProps={({ row }) => ({
-                  onClick: () => navigate(`/center/view/${row.original.id}`),
+                  onClick: () => navigate(`/companyRegister/view/${row.original.id}`),
                   style: { cursor: "pointer" },
                 })}
               />
@@ -374,8 +376,8 @@ const Center = ({handleCenterChanged}) => {
               onClose={handleMenuClose}
               disableScrollLock
             >
-              
-              <MenuItem >
+
+              {/* <MenuItem >
                 <AddRegister id={selectedId} onSuccess={fetchData} handleMenuClose={handleMenuClose}/>
               </MenuItem>
               <MenuItem >
@@ -386,8 +388,8 @@ const Center = ({handleCenterChanged}) => {
               </MenuItem>
               <MenuItem >
                 <AddBreak id={selectedId} onSuccess={fetchData} handleMenuClose={handleMenuClose}/>
-              </MenuItem>
-              <MenuItem onClick={() => navigate(`/center/edit/${selectedId}`)} className="text-start mb-0 menuitem-style">
+              </MenuItem> */}
+              <MenuItem onClick={() => navigate(`/companyRegister/edit/${selectedId}`)} className="text-start mb-0 menuitem-style">
                 Edit
               </MenuItem>
               <MenuItem>
