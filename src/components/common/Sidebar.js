@@ -47,20 +47,22 @@ function Sidebar() {
   const location = useLocation();
   const hasRenderedOnce = useRef(false);
 
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const response = await api.get(`/getAllHeaderSavePublish`);
-        setData(response.data);
-      } catch (error) {
-        console.error("Error Fetching Data: " + error.message);
-      }
-    };
-    getData();
-  }, []);
+  // useEffect(() => {
+  //   const getData = async () => {
+  //     try {
+  //       const response = await api.get(`/getAllHeaderSavePublish`);
+  //       setData(response.data);
+  //     } catch (error) {
+  //       console.error("Error Fetching Data: " + error.message);
+  //     }
+  //   };
+  //   getData();
+  // }, []);
 
   useEffect(() => {
-    const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
+    const storedScreens = JSON.parse(
+      localStorage.getItem("tmsscreens") || "{}"
+    );
 
     // Define your menu items based on screen access values
     const updatedMenuItems = [
