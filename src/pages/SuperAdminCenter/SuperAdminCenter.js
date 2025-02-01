@@ -11,7 +11,6 @@ import {
 } from "@mui/material";
 import { MoreVert as MoreVertIcon } from "@mui/icons-material";
 import { toast } from "react-toastify";
-import fetchAllCentreManager from "../List/CentreMangerList";
 import GlobalDelete from "../../components/common/GlobalDelete";
 
 const SuperAdminCenter = ({ handleCenterChanged }) => {
@@ -21,51 +20,16 @@ const SuperAdminCenter = ({ handleCenterChanged }) => {
     email: "",
     centerManagerId: "",
   });
-  const [centerManagerData, setCenterManagerData] = useState([]);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
 
-  const fetchCenterManagerData = async () => {
-    try {
-      const centerManagerData = await fetchAllCentreManager();
-      setCenterManagerData(centerManagerData);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
-
-  useEffect(() => {
-    fetchCenterManagerData();
-  }, []);
-
-  // const fetchData = async () => {
-  //   try {
-  //     setLoading(true);
-  //     const queryParams = new URLSearchParams(filters).toString();
-  //     const response = await api.get(`/getCenterWithCustomInfo?${queryParams}`);
-  //     setData(response.data);
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
   const fetchData = async () => {
     try {
       setLoading(true);
-
-      // Filter out empty or null values from the filters
-      const nonEmptyFilters = Object.fromEntries(
-        Object.entries(filters).filter(([key, value]) => value !== "")
-      );
-
-      const queryParams = new URLSearchParams(nonEmptyFilters).toString();
-      const response = await api.get(`/getCenterWithCustomInfo?${queryParams}`);
-
+      const response = await api.get(`/getAllCenter`);
       setData(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -108,31 +72,6 @@ const SuperAdminCenter = ({ handleCenterChanged }) => {
           </IconButton>
         ),
       },
-      // {
-      //   accessorKey: "centerStatus",
-      //   enableHiding: false,
-      //   header: "Company Status",
-      //   Cell: ({ row }) =>
-      //     row.original.centerStatus === "APPROVE" ||
-      //       row.original.centerStatus === "approve" ||
-      //       row.original.centerStatus === "Approve" ? (
-      //       <span
-      //         className="badge badges-Green fw-light"
-      //       // style={{ backgroundColor: "#287f71" }}
-      //       >
-      //         Approve
-      //       </span>
-      //     ) : row.original.centerStatus === "PENDING" ||
-      //       row.original.centerStatus === "pending" ||
-      //       row.original.centerStatus === "Pending" ? (
-      //       <span
-      //         className="badge badges-orange fw-light"
-      //       // style={{ backgroundColor: "#eb862a" }}
-      //       >
-      //         Pending
-      //       </span>
-      //     ) : null,
-      // },
       {
         accessorKey: "centerStatus",
         enableHiding: false,
@@ -415,26 +354,12 @@ const SuperAdminCenter = ({ handleCenterChanged }) => {
                 enableFullScreenToggle={false}
                 initialState={{
                   columnVisibility: {
-                    gst: false,
-                    address: false,
-                    bankAccountName: false,
-                    bankAccountNumber: false,
-                    bankBranch: false,
-                    bankName: false,
                     createdBy: false,
                     createdAt: false,
                     updatedBy: false,
                     updatedAt: false,
-                    invoiceNotes: false,
-                    openingDate: false,
-                    taxRegistrationNumber: false,
-                    zipCode: false,
                   },
                 }}
-                // muiTableBodyRowProps={({ row }) => ({
-                //   onClick: () => navigate(`/companyregistration/view/${row.original.id}`),
-                //   style: { cursor: "pointer" },
-                // })}
               />
             </ThemeProvider>
 
@@ -445,18 +370,6 @@ const SuperAdminCenter = ({ handleCenterChanged }) => {
               onClose={handleMenuClose}
               disableScrollLock
             >
-              {/* <MenuItem >
-                <AddRegister id={selectedId} onSuccess={fetchData} handleMenuClose={handleMenuClose} />
-              </MenuItem>
-              <MenuItem >
-                <AddClass id={selectedId} onSuccess={fetchData} handleMenuClose={handleMenuClose} />
-              </MenuItem>
-              <MenuItem >
-                <AddPackage id={selectedId} onSuccess={fetchData} handleMenuClose={handleMenuClose} />
-              </MenuItem>
-              <MenuItem >
-                <AddBreak id={selectedId} onSuccess={fetchData} handleMenuClose={handleMenuClose} />
-              </MenuItem> */}
               <MenuItem
                 onClick={() =>
                   navigate(`/companyregistration/edit/${selectedId}`)
