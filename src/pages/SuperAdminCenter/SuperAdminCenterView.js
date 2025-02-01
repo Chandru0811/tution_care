@@ -80,10 +80,10 @@ function SuperAdminCenterView() {
             <div class="d-flex">
               <div class="dot active"></div>
             </div>
-            <span class="me-2 text-muted">View Centre</span>
+            <span class="me-2 text-muted">View Company</span>
           </div>
           <div className="my-2 pe-3 d-flex align-items-center">
-            <Link to="/center">
+            <Link to="/companyregistration">
               <button type="button " className="btn btn-sm btn-border   ">
                 Back
               </button>
@@ -95,7 +95,7 @@ function SuperAdminCenterView() {
             <div className="col-md-6 col-12">
               <div className="row mt-3  mb-2">
                 <div className="col-6 ">
-                  <p className="">Centre Name</p>
+                  <p className="">Company Name</p>
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">
@@ -117,7 +117,7 @@ function SuperAdminCenterView() {
             <div className="col-md-6 col-12">
               <div className="row  mb-2">
                 <div className="col-6  ">
-                  <p className="">Centre Manager</p>
+                  <p className="">Company Manager</p>
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">
@@ -317,7 +317,7 @@ function SuperAdminCenterView() {
             </div>
             {/* Center Registrations */}
             <div className="col-md-12 col-12 mt-4">
-              <h5 className="headColor mb-3">Centre Registrations</h5>
+              <h5 className="headColor mb-3">Company Registrations</h5>
               <table className="table table-border-solid">
                 <thead>
                   <tr>
@@ -350,7 +350,7 @@ function SuperAdminCenterView() {
             </div>
             {/* Center Break */}
             <div className="col-md-12 col-12 mt-4">
-              <h5 className="headColor mb-3">Centre Break</h5>
+              <h5 className="headColor mb-3">Company Break</h5>
               <table class="table table-border-solid">
                 <thead>
                   <tr>
@@ -375,7 +375,7 @@ function SuperAdminCenterView() {
             </div>
             {/* class Room  */}
             <div className="col-md-12 col-12 mt-4">
-              <h5 className="headColor mb-3">Centre Class Room</h5>
+              <h5 className="headColor mb-3">Company Class Room</h5>
               <table class="table table-border-solid">
                 <thead>
                   <tr>
@@ -416,7 +416,7 @@ function SuperAdminCenterView() {
             </div>
             {/* Package  */}
             <div className="col-md-12 col-12 mt-4">
-              <h5 className="headColor mb-3">Centre Package</h5>
+              <h5 className="headColor mb-3">Company Package</h5>
               <table class="table table-border-solid">
                 <thead>
                   <tr>

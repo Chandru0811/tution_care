@@ -95,7 +95,7 @@ function AddBreak({ id, onSuccess, handleMenuClose }) {
         style={{ whiteSpace: "nowrap", width: "100%" }}
         onClick={handleShow}
       >
-        Add Centre Break
+        Add Break
       </p>
 
       <Dialog open={show} onClose={handleClose} maxWidth="md" fullWidth>
@@ -118,13 +118,12 @@ function AddBreak({ id, onSuccess, handleMenuClose }) {
                 </lable>
                 <div className="input-group mb-3">
                   <input
-                  onKeyDown={(e) => e.stopPropagation()}
+                    onKeyDown={(e) => e.stopPropagation()}
                     type="data"
-                    className={`form-control   ${
-                      formik.touched.breakName && formik.errors.breakName
+                    className={`form-control   ${formik.touched.breakName && formik.errors.breakName
                         ? "is-invalid"
                         : ""
-                    }`}
+                      }`}
                     {...formik.getFieldProps("breakName")}
                   />
                   {formik.touched.breakName && formik.errors.breakName && (
@@ -140,11 +139,10 @@ function AddBreak({ id, onSuccess, handleMenuClose }) {
                 </lable>
                 <input
                   type="date"
-                  className={`form-control   ${
-                    formik.touched.fromDate && formik.errors.fromDate
+                  className={`form-control   ${formik.touched.fromDate && formik.errors.fromDate
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   {...formik.getFieldProps("fromDate")}
                 />
                 {formik.touched.fromDate && formik.errors.fromDate && (
@@ -160,11 +158,10 @@ function AddBreak({ id, onSuccess, handleMenuClose }) {
                 <div class="input-group mb-3">
                   <input
                     type="date"
-                    className={`form-control   ${
-                      formik.touched.toDate && formik.errors.toDate
+                    className={`form-control   ${formik.touched.toDate && formik.errors.toDate
                         ? "is-invalid"
                         : ""
-                    }`}
+                      }`}
                     {...formik.getFieldProps("toDate")}
                   />
                   {formik.touched.toDate && formik.errors.toDate && (

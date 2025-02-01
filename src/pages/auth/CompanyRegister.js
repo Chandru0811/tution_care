@@ -14,40 +14,42 @@ export default function CompanyRegister({ onLogin }) {
         name: Yup.string().required("*Name is required"),
         centerName: Yup.string().required("*Company Name is required"),
         mobile: Yup.string()
-        .matches(
-            /^(?:\+?65)?\s?(?:\d{4}\s?\d{4}|\d{3}\s?\d{3}\s?\d{4})$/,
-            "*Invalid Phone Number"
-        )
-        .required("*Mobile Number is required"),
+            .matches(
+                /^(?:\+?65)?\s?(?:\d{4}\s?\d{4}|\d{3}\s?\d{3}\s?\d{4})$/,
+                "*Invalid Phone Number"
+            )
+            .required("*Mobile Number is required"),
         email: Yup.string()
-        .matches(
-            /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-            "*Enter a valid email address"
-        )
-        .required("*Email is required"),
+            .matches(
+                /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                "*Enter a valid email address"
+            )
+            .required("*Email is required"),
         // address: Yup.string().required("*Address is required"),
     });
 
     const formik = useFormik({
         initialValues: {
+            userId: "",
             name: "",
             centerName: "",
             email: "",
             mobile: "",
+            centerStatus: "Pending",
             // address: "",
         },
         validationSchema: validationSchema,
         onSubmit: async (values, { resetForm }) => {
             try {
-                const response = await api.post("/createCenters", values, {
+                const response = await api.post("/tuitionRegister", values, {
                     headers: {
                         "Content-Type": "application/json",
                     },
                 });
                 if (response.status === 201) {
                     resetForm();
-                    toast.success(response.data.message);
-                    navigate("/dashboard");
+                    toast.success("Company Register Successfully!");
+                    // navigate("/dashboard");
                 } else {
                     toast.error(response.data.message);
                 }

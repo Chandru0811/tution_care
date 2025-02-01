@@ -18,7 +18,7 @@ import AddBreak from "./Add/AddBreak";
 import AddClass from "./Add/AddClass";
 import AddPackage from "./Add/AddPackage";
 
-const SuperAdminCenter = ({handleCenterChanged}) => {
+const SuperAdminCenter = ({ handleCenterChanged }) => {
   const [filters, setFilters] = useState({
     centerName: "",
     centerCode: "",
@@ -62,31 +62,34 @@ const SuperAdminCenter = ({handleCenterChanged}) => {
           </IconButton>
         ),
       },
-      { accessorKey: "centerName", enableHiding: false, header: "Centre Name" },
       {
-        accessorKey: "centerManager",
+        accessorKey: "centerStatus",
         enableHiding: false,
-        header: "Centre Manager",
+        header: "Company Status",
+        Cell: ({ row }) =>
+          row.original.centerStatus === "APPROVE" ||
+            row.original.centerStatus === "approve" ||
+            row.original.centerStatus === "Approve" ? (
+            <span
+              className="badge badges-Green fw-light"
+            // style={{ backgroundColor: "#287f71" }}
+            >
+              Approve
+            </span>
+          ) : row.original.centerStatus === "PENDING" ||
+            row.original.centerStatus === "pending" ||
+            row.original.centerStatus === "Pending" ? (
+            <span
+              className="badge badges-orange fw-light"
+            // style={{ backgroundColor: "#eb862a" }}
+            >
+              Pending
+            </span>
+          ) : null,
       },
-      { accessorKey: "code", header: "Code", enableHiding: false, size: 40 },
-      {
-        accessorKey: "uenNumber",
-        header: "UEN Number",
-        enableHiding: false,
-        size: 50,
-      },
+      { accessorKey: "centerName", enableHiding: false, header: "Company Name" },
       { accessorKey: "email", enableHiding: false, header: "Email" },
       { accessorKey: "mobile", enableHiding: false, header: "Mobile" },
-      { accessorKey: "address", header: "Address" },
-      { accessorKey: "invoiceNotes", header: "Invoice Notes" },
-      { accessorKey: "openingDate", header: "Opening Date" },
-      { accessorKey: "bankAccountName", header: "Bank A/C Name" },
-      { accessorKey: "bankAccountNumber", header: "Bank A/C Number" },
-      { accessorKey: "bankBranch", header: "Bank Branch" },
-      { accessorKey: "bankName", header: "Bank Name" },
-      { accessorKey: "gst", header: "GST" },
-      { accessorKey: "taxRegistrationNumber", header: "Tax Reg Number" },
-      { accessorKey: "zipCode", header: "Zip Code" },
       { accessorKey: "createdBy", header: "Created By" },
       {
         accessorKey: "createdAt",
@@ -136,15 +139,15 @@ const SuperAdminCenter = ({handleCenterChanged}) => {
   const fetchData = async () => {
     try {
       setLoading(true);
-  
+
       // Filter out empty or null values from the filters
       const nonEmptyFilters = Object.fromEntries(
         Object.entries(filters).filter(([key, value]) => value !== "")
       );
-  
+
       const queryParams = new URLSearchParams(nonEmptyFilters).toString();
       const response = await api.get(`/getCenterWithCustomInfo?${queryParams}`);
-  
+
       setData(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -153,7 +156,7 @@ const SuperAdminCenter = ({handleCenterChanged}) => {
     }
   };
 
-  
+
   useEffect(() => {
     fetchData();
   }, [filters]);
@@ -231,7 +234,7 @@ const SuperAdminCenter = ({handleCenterChanged}) => {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          &nbsp;Centre Management
+          &nbsp;Company Management
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
@@ -258,7 +261,7 @@ const SuperAdminCenter = ({handleCenterChanged}) => {
                 onChange={handleFilterChange}
                 className="form-control form-control-sm center_list"
                 style={{ width: "160px" }}
-                placeholder="Centre Name"
+                placeholder="Company Name"
                 autoComplete="off"
               />
             </div>
@@ -285,22 +288,6 @@ const SuperAdminCenter = ({handleCenterChanged}) => {
                 placeholder="Email"
                 autoComplete="off"
               />
-            </div>
-            <div className="form-group mb-0 ms-2 mb-1">
-              <select
-                name="centerManagerId"
-                value={filters.centerManagerId}
-                onChange={handleFilterChange}
-                className="form-select form-select-sm center_list"
-                style={{ width: "100%" }}
-              >
-                <option value="">Select Centre Manager</option>
-                {centerManagerData.map((manager) => (
-                  <option key={manager.id} value={manager.id}>
-                    {manager.userNames}
-                  </option>
-                ))}
-              </select>
             </div>
             <div className="form-group mb-2 ms-2">
               <button
@@ -360,10 +347,10 @@ const SuperAdminCenter = ({handleCenterChanged}) => {
                     zipCode: false,
                   },
                 }}
-                muiTableBodyRowProps={({ row }) => ({
-                  onClick: () => navigate(`/companyregistration/view/${row.original.id}`),
-                  style: { cursor: "pointer" },
-                })}
+                // muiTableBodyRowProps={({ row }) => ({
+                //   onClick: () => navigate(`/companyregistration/view/${row.original.id}`),
+                //   style: { cursor: "pointer" },
+                // })}
               />
             </ThemeProvider>
 
@@ -374,19 +361,19 @@ const SuperAdminCenter = ({handleCenterChanged}) => {
               onClose={handleMenuClose}
               disableScrollLock
             >
-              
-              <MenuItem >
-                <AddRegister id={selectedId} onSuccess={fetchData} handleMenuClose={handleMenuClose}/>
+
+              {/* <MenuItem >
+                <AddRegister id={selectedId} onSuccess={fetchData} handleMenuClose={handleMenuClose} />
               </MenuItem>
               <MenuItem >
-                <AddClass id={selectedId} onSuccess={fetchData} handleMenuClose={handleMenuClose}/>
+                <AddClass id={selectedId} onSuccess={fetchData} handleMenuClose={handleMenuClose} />
               </MenuItem>
               <MenuItem >
-                <AddPackage id={selectedId} onSuccess={fetchData} handleMenuClose={handleMenuClose}/>
+                <AddPackage id={selectedId} onSuccess={fetchData} handleMenuClose={handleMenuClose} />
               </MenuItem>
               <MenuItem >
-                <AddBreak id={selectedId} onSuccess={fetchData} handleMenuClose={handleMenuClose}/>
-              </MenuItem>
+                <AddBreak id={selectedId} onSuccess={fetchData} handleMenuClose={handleMenuClose} />
+              </MenuItem> */}
               <MenuItem onClick={() => navigate(`/companyregistration/edit/${selectedId}`)} className="text-start mb-0 menuitem-style">
                 Edit
               </MenuItem>

@@ -8,7 +8,7 @@ import fetchAllCentreManager from "../List/CentreMangerList";
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required("*Name is required"),
-  centerName: Yup.string().required("*Centre Name is required"),
+  centerName: Yup.string().required("*Company Name is required"),
   address: Yup.string().required("*Address is required"),
   mobile: Yup.string()
     .matches(
@@ -50,59 +50,15 @@ function SuperAdminCenterAdd({ handleCenterChanged }) {
       email: "",
       mobile: "",
       address: "",
-      zipCode: "",
-      openingDate: "",
-      uenNumber: "",
-      gst: "",
-      taxRegistrationNumber: "",
-      bankName: "",
-      bankBranch: "",
-      bankAccountNumber: "",
-      bankAccountName: "",
-      target: "",
       file: null,
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      // let selectedTeacherName = "";
       setLoadIndicator(true);
-      // managerData.forEach((teacher) => {
-      //   if (parseInt(values.centerManager) === teacher.id) {
-      //     selectedTeacherName = teacher.userNames || "--";
-      //   }
-      // });
-
-      // Convert gst value to boolean
-      // values.gst = values.gst === "true";
-      const formData = new FormData();
-      formData.append("name", values.name);
-      formData.append("centerName", values.centerName);
-      formData.append("email", values.email);
-      formData.append("mobile", values.mobile);
-      formData.append("address", values.address);
-      formData.append("code", values.code);
-      formData.append("userId", values.centerManager);
-      formData.append("zipCode", values.zipCode);
-      formData.append("openingDate", values.openingDate);
-      formData.append("uenNumber", values.uenNumber);
-      formData.append("gst", values.gst);
-      formData.append("taxRegistrationNumber", values.taxRegistrationNumber);
-      formData.append("bankName", values.bankName);
-      formData.append("bankBranch", values.bankBranch);
-      formData.append("bankAccountNumber", values.bankAccountNumber);
-      formData.append("bankAccountName", values.bankAccountName);
-      formData.append("invoiceNotes  ", values.invoiceNotes || " ");
-      formData.append("file", values.file);
-      formData.append("target", values.target);
-      formData.append("createdBy", userName);
-
-      // for (let [key, value] of formData.entries()) {
-      //   console.log(`${key}: ${value}`);
-      // }
       try {
-        const response = await api.post("/createCenters", formData, {
+        const response = await api.post("/tuitionRegister", values, {
           headers: {
-            "Content-Type": "multipart/form-data",
+            "Content-Type": "Application/json",
           },
         });
         if (response.status === 201) {
@@ -233,7 +189,7 @@ function SuperAdminCenterAdd({ handleCenterChanged }) {
               <div className="col-md-6 col-12">
                 <div className="mb-3">
                   <label for="exampleFormControlInput1" className="form-label">
-                    Centre Name<span className="text-danger">*</span>
+                    Company Name<span className="text-danger">*</span>
                   </label>
                   <input
                     type="text"
