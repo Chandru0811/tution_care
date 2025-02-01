@@ -13,10 +13,6 @@ import { MoreVert as MoreVertIcon } from "@mui/icons-material";
 import { toast } from "react-toastify";
 import fetchAllCentreManager from "../List/CentreMangerList";
 import GlobalDelete from "../../components/common/GlobalDelete";
-import AddRegister from "./Add/AddRegister";
-import AddBreak from "./Add/AddBreak";
-import AddClass from "./Add/AddClass";
-import AddPackage from "./Add/AddPackage";
 
 const SuperAdminCenter = ({ handleCenterChanged }) => {
   const [filters, setFilters] = useState({
@@ -31,84 +27,6 @@ const SuperAdminCenter = ({ handleCenterChanged }) => {
   const navigate = useNavigate();
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
-
-  const columns = useMemo(
-    () => [
-      {
-        accessorFn: (row, index) => index + 1,
-        header: "S.NO",
-        enableSorting: true,
-        enableHiding: false,
-        size: 40,
-        cell: ({ cell }) => (
-          <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
-        ),
-      },
-      {
-        accessorKey: "id",
-        header: "",
-        enableHiding: false,
-        enableSorting: false,
-        size: 20,
-        Cell: ({ cell }) => (
-          <IconButton
-            onClick={(e) => {
-              e.stopPropagation();
-              setMenuAnchor(e.currentTarget);
-              setSelectedId(cell.getValue());
-            }}
-          >
-            <MoreVertIcon />
-          </IconButton>
-        ),
-      },
-      {
-        accessorKey: "centerStatus",
-        enableHiding: false,
-        header: "Company Status",
-        Cell: ({ row }) =>
-          row.original.centerStatus === "APPROVE" ||
-            row.original.centerStatus === "approve" ||
-            row.original.centerStatus === "Approve" ? (
-            <span
-              className="badge badges-Green fw-light"
-            // style={{ backgroundColor: "#287f71" }}
-            >
-              Approve
-            </span>
-          ) : row.original.centerStatus === "PENDING" ||
-            row.original.centerStatus === "pending" ||
-            row.original.centerStatus === "Pending" ? (
-            <span
-              className="badge badges-orange fw-light"
-            // style={{ backgroundColor: "#eb862a" }}
-            >
-              Pending
-            </span>
-          ) : null,
-      },
-      { accessorKey: "centerName", enableHiding: false, header: "Company Name" },
-      { accessorKey: "email", enableHiding: false, header: "Email" },
-      { accessorKey: "mobile", enableHiding: false, header: "Mobile" },
-      { accessorKey: "createdBy", header: "Created By" },
-      {
-        accessorKey: "createdAt",
-        header: "Created At",
-        Cell: ({ cell }) => cell.getValue()?.substring(0, 10),
-      },
-      {
-        accessorKey: "updatedAt",
-        header: "Updated At",
-        Cell: ({ cell }) => cell.getValue()?.substring(0, 10) || "",
-      },
-      {
-        accessorKey: "updatedBy",
-        header: "Updated By",
-        Cell: ({ cell }) => cell.getValue() || "",
-      },
-    ],
-    []
-  );
 
   const fetchCenterManagerData = async () => {
     try {
@@ -156,10 +74,176 @@ const SuperAdminCenter = ({ handleCenterChanged }) => {
     }
   };
 
-
   useEffect(() => {
     fetchData();
   }, [filters]);
+
+  const columns = useMemo(
+    () => [
+      {
+        accessorFn: (row, index) => index + 1,
+        header: "S.NO",
+        enableSorting: true,
+        enableHiding: false,
+        size: 40,
+        cell: ({ cell }) => (
+          <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
+        ),
+      },
+      {
+        accessorKey: "id",
+        header: "",
+        enableHiding: false,
+        enableSorting: false,
+        size: 20,
+        Cell: ({ cell }) => (
+          <IconButton
+            onClick={(e) => {
+              e.stopPropagation();
+              setMenuAnchor(e.currentTarget);
+              setSelectedId(cell.getValue());
+            }}
+          >
+            <MoreVertIcon />
+          </IconButton>
+        ),
+      },
+      // {
+      //   accessorKey: "centerStatus",
+      //   enableHiding: false,
+      //   header: "Company Status",
+      //   Cell: ({ row }) =>
+      //     row.original.centerStatus === "APPROVE" ||
+      //       row.original.centerStatus === "approve" ||
+      //       row.original.centerStatus === "Approve" ? (
+      //       <span
+      //         className="badge badges-Green fw-light"
+      //       // style={{ backgroundColor: "#287f71" }}
+      //       >
+      //         Approve
+      //       </span>
+      //     ) : row.original.centerStatus === "PENDING" ||
+      //       row.original.centerStatus === "pending" ||
+      //       row.original.centerStatus === "Pending" ? (
+      //       <span
+      //         className="badge badges-orange fw-light"
+      //       // style={{ backgroundColor: "#eb862a" }}
+      //       >
+      //         Pending
+      //       </span>
+      //     ) : null,
+      // },
+      {
+        accessorKey: "centerStatus",
+        enableHiding: false,
+        header: "Company Status",
+        Cell: ({ row }) => {
+          const statusOptions = [
+            {
+              label: "Approve",
+              value: "Approve",
+              className: "badges-Green",
+              bgColor: "#28a745",
+            },
+            {
+              label: "Pending",
+              value: "Pending",
+              className: "badges-orange",
+              bgColor: "#ffc107",
+            },
+            {
+              label: "Rejected",
+              value: "Rejected",
+              className: "badges-red",
+              bgColor: "#dc3545",
+            },
+          ];
+
+          const [selectedStatus, setSelectedStatus] = useState(
+            row.original.centerStatus || "Pending"
+          );
+
+          useEffect(() => {
+            setSelectedStatus(row.original.centerStatus);
+          }, [row.original.centerStatus]);
+
+          const handleStatusChange = async (event) => {
+            const newStatus = event.target.value;
+
+            try {
+              const response = await api.put(
+                `/statusApproval/${
+                  row.original.id
+                }?newStatus=${encodeURIComponent(newStatus)}`
+              );
+
+              if (response.status === 200) {
+                toast.success("Status updated successfully");
+                setSelectedStatus(newStatus);
+                fetchData();
+              }
+            } catch (error) {
+              toast.error("Failed to update status");
+            }
+          };
+
+          const selectedOption = statusOptions.find(
+            (opt) => opt.value === selectedStatus
+          );
+
+          return (
+            <select
+              className="form-control badge w-50"
+              value={selectedStatus}
+              onChange={handleStatusChange}
+              style={{
+                height: "20px",
+                textAlign: "center",
+                borderRadius: "5px",
+                backgroundColor: selectedOption?.bgColor,
+                cursor: "pointer",
+              }}
+            >
+              {statusOptions.map((status) => (
+                <option
+                  key={status.value}
+                  value={status.value}
+                  style={{ backgroundColor: "white", color: "black" }}
+                >
+                  {status.label}
+                </option>
+              ))}
+            </select>
+          );
+        },
+      },
+
+      {
+        accessorKey: "centerName",
+        enableHiding: false,
+        header: "Company Name",
+      },
+      { accessorKey: "email", enableHiding: false, header: "Email" },
+      { accessorKey: "mobile", enableHiding: false, header: "Mobile" },
+      { accessorKey: "createdBy", header: "Created By" },
+      {
+        accessorKey: "createdAt",
+        header: "Created At",
+        Cell: ({ cell }) => cell.getValue()?.substring(0, 10),
+      },
+      {
+        accessorKey: "updatedAt",
+        header: "Updated At",
+        Cell: ({ cell }) => cell.getValue()?.substring(0, 10) || "",
+      },
+      {
+        accessorKey: "updatedBy",
+        header: "Updated By",
+        Cell: ({ cell }) => cell.getValue() || "",
+      },
+    ],
+    []
+  );
 
   const theme = createTheme({
     components: {
@@ -361,7 +445,6 @@ const SuperAdminCenter = ({ handleCenterChanged }) => {
               onClose={handleMenuClose}
               disableScrollLock
             >
-
               {/* <MenuItem >
                 <AddRegister id={selectedId} onSuccess={fetchData} handleMenuClose={handleMenuClose} />
               </MenuItem>
@@ -374,7 +457,12 @@ const SuperAdminCenter = ({ handleCenterChanged }) => {
               <MenuItem >
                 <AddBreak id={selectedId} onSuccess={fetchData} handleMenuClose={handleMenuClose} />
               </MenuItem> */}
-              <MenuItem onClick={() => navigate(`/companyregistration/edit/${selectedId}`)} className="text-start mb-0 menuitem-style">
+              <MenuItem
+                onClick={() =>
+                  navigate(`/companyregistration/edit/${selectedId}`)
+                }
+                className="text-start mb-0 menuitem-style"
+              >
                 Edit
               </MenuItem>
               <MenuItem>
