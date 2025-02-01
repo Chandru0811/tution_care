@@ -15,11 +15,12 @@ function TimeTable() {
   const [courseData, setCourseData] = useState([]);
   const [teacherData, setTeacherData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const centerId = localStorage.getItem("tmscenterId");
 
   console.log("DATA ::", data);
 
   const [filters, setFilters] = useState({
-    centerId: localStorage.getItem("tmsselectedCenterId") || "",
+    centerId: centerId,
     courseId: "",
     teacherId: "",
     date: new Date().toISOString().split("T")[0], // Default to today's date
@@ -28,17 +29,17 @@ function TimeTable() {
   const fetchData = async () => {
     try {
       // Fetch center data
-      const centers = await fetchAllCentersWithIds();
-      setCenterData(centers);
+      // const centers = await fetchAllCentersWithIds();
+      // setCenterData(centers);
 
-      // Set default center ID if not available
-      if (!filters.centerId && centers.length > 0) {
-        setFilters((prev) => ({ ...prev, centerId: centers[0].id }));
-      }
+      // // Set default center ID if not available
+      // if (!filters.centerId && centers.length > 0) {
+      //   setFilters((prev) => ({ ...prev, centerId: centers[0].id }));
+      // }
 
       // Fetch course and teacher data for default center
-      if (filters.centerId) {
-        fetchCourseAndTeacherData(filters.centerId);
+      if (centerId) {
+        fetchCourseAndTeacherData(centerId);
       }
     } catch (error) {
       toast.error("Error fetching center data");
@@ -218,7 +219,7 @@ function TimeTable() {
         </div> */}
         <div className="container">
           <div className="row py-3 px-2">
-            <div className="col-md-6 col-lg-3 mb-2">
+            {/* <div className="col-md-6 col-lg-3 mb-2">
               <div className="form-group">
                 <select
                   className="form-select form-select-sm"
@@ -237,7 +238,7 @@ function TimeTable() {
                   ))}
                 </select>
               </div>
-            </div>
+            </div> */}
 
             <div className="col-md-6 col-lg-2 mb-2">
               <div className="form-group">

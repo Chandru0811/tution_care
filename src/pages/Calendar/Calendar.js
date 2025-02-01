@@ -23,18 +23,18 @@ function Calendar() {
   const [selectedId, setSelectedId] = useState(null);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [initialLoad, SetInitialLoad] = useState(true);
-  const [centerData, setCenterData] = useState(null);
   const [courseData, setCourseData] = useState(null);
   const [teacherData, setTeachereData] = useState(null);
-  const centerIDLocal = localStorage.getItem("tmsselectedCenterId");
+  const centerId = localStorage.getItem("tmscenterId");
+
   const [filters, setFilters] = useState({
-    centerId: "",
+    centerId: centerId,
     courseId: "",
     userId: "",
     date: "",
   });
-  console.log("filters:",filters.centerId);
-  
+  console.log("filters:", filters.centerId);
+
   // Process event data for calendar rendering
   const processEventData = (apiData) => {
     const filteredEvents = apiData.map((item) => ({
@@ -86,28 +86,6 @@ function Calendar() {
     }
   };
 
-  const fetchData = async () => {
-    try {
-      const centerData = await fetchAllCentersWithIds();
-      if (centerIDLocal !== null && centerIDLocal !== "undefined") {
-        setFilters((prevFilters) => ({
-          ...prevFilters,
-          centerId: centerIDLocal,
-        }));
-        fetchListData(centerIDLocal);
-      } else if (centerData !== null && centerData.length > 0) {
-        setFilters((prevFilters) => ({
-          ...prevFilters,
-          centerId: centerData[0].id,
-        }));
-        fetchListData(centerData[0].id);
-      }
-      setCenterData(centerData);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
-
   const fetchListData = async (centerId) => {
     try {
       const courseDatas = await fetchAllCoursesWithIdsC(centerId);
@@ -119,11 +97,8 @@ function Calendar() {
     }
   };
 
- 
-
   useEffect(() => {
     SearchShedule();
-    fetchData();
   }, []);
 
   useEffect(() => {
@@ -197,23 +172,6 @@ function Calendar() {
   return (
     <div className="container-fluid card my-2 py-2">
       <div className="d-flex justify-content-between align-items-center pb-3">
-        <div className="form-group mb-0 ms-2 mb-1">
-          <select
-            className="form-select form-select-sm center_list"
-            name="centerId"
-            style={{ width: "100%" }}
-            onChange={handleFilterChange}
-            value={filters.centerId}
-          >
-            <option value="">Select a Center</option>
-            {centerData?.map((center) => (
-              <option key={center.id} value={center.id}>
-                {center.centerNames}
-              </option>
-            ))}
-          </select>
-        </div>
-
         <div className="form-group mb-0 ms-2 mb-1">
           <select
             className="form-select form-select-sm center_list"
