@@ -10,16 +10,16 @@ const validationSchema = Yup.object().shape({});
 function RolesAdd() {
   const [role, setRole] = useState("1");
   const userName = localStorage.getItem("tmsuserName");
-  const [roleName, setRoleName] = useState("SMS_ADMIN");
+  const [roleName, setRoleName] = useState("TUITION_ADMIN");
 
   const roleMapping = {
-    "1": "SMS_ADMIN",
-    "2": "SMS_BRANCH_ADMIN",
-    "4": "SMS_STAFF",
-    "5": "SMS_STAFF_ADMIN",
-    "6": "SMS_TEACHER",
-    "7": "CENTER_MANAGER",
-    "8": "SMS_FREELANCER",
+    "1": "TUITION_SUPER_ADMIN",
+    "2": "TUITION_ADMIN",
+    // "4": "SMS_STAFF",
+    // "5": "SMS_STAFF_ADMIN",
+    // "6": "SMS_TEACHER",
+    // "7": "CENTER_MANAGER",
+    // "8": "SMS_FREELANCER",
   };
 
   const handleRoleChange = (e) => {

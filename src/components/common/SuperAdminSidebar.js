@@ -73,7 +73,7 @@ function SuperAdminSidebar() {
           {
             title: "Company Listing",
             path: "/companyregistration",
-            access: storedScreens.centerListingIndex,
+            access: true,
           },
         ],
       },

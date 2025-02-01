@@ -3,8 +3,6 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "../styles/sidebar.css";
 import "boxicons/css/boxicons.min.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
-import Sidebar from "../components/common/Sidebar";
-import Header from "../components/common/Header";
 import Footer from "../components/common/Footer";
 import ScrollToTop from "../pages/ScrollToTop";
 import NewDashboard from "../pages/NewDashboard";
@@ -15,6 +13,7 @@ import SuperAdminCenterAdd from "../pages/SuperAdminCenter/SuperAdminCenterAdd";
 import SuperAdminCenterEdit from "../pages/SuperAdminCenter/SuperAdminCenterEdit";
 import SuperAdminCenterView from "../pages/SuperAdminCenter/SuperAdminCenterView";
 import ModuleAccess from "../pages/ModuleAccess/ModuleAccess";
+import SuperAdminHeader from "../components/common/SuperAdminHeader";
 
 function SuperAdmin({ handleLogout }) {
   useEffect(() => {
@@ -34,7 +33,7 @@ function SuperAdmin({ handleLogout }) {
         <ToastContainer position="top-center" />
         <SuperAdminSidebar />
         <section className="home-section">
-          <Header onLogout={handleLogout} />
+          <SuperAdminHeader onLogout={handleLogout} />
           <ScrollToTop />
           <div className="home-content" style={{ minHeight: "95vh" }}>
             <Routes>

@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
-import fetchAllCentreManager from "../List/CentreMangerList";
+import { Modal, Button } from "react-bootstrap";
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required("*Name is required"),
@@ -27,21 +27,11 @@ const validationSchema = Yup.object().shape({
 function SuperAdminCenterAdd({ handleCenterChanged }) {
   const navigate = useNavigate();
   const [loadIndicator, setLoadIndicator] = useState(false);
-  const [managerData, setmanagerData] = useState(null);
   const userName = localStorage.getItem("tmsuserName");
+  const [showModal, setShowModal] = useState(false);
 
-  useEffect(() => {
-    fetchTeacher();
-  }, []);
-
-  const fetchTeacher = async () => {
-    try {
-      const manager = await fetchAllCentreManager();
-      setmanagerData(manager);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
+  const handleClose = () => setShowModal(false);
+  const handleShow = () => setShowModal(true);
 
   const formik = useFormik({
     initialValues: {
@@ -94,6 +84,7 @@ function SuperAdminCenterAdd({ handleCenterChanged }) {
       scrollToError(formik.errors);
     }
   }, [formik.submitCount, formik.errors]);
+
   return (
     <div className="container-fluid">
       <ol
@@ -120,24 +111,17 @@ function SuperAdminCenterAdd({ handleCenterChanged }) {
           &nbsp;Company Listing Add
         </li>
       </ol>
-      <form
-        onSubmit={formik.handleSubmit}
-      // onKeyDown={(e) => {
-      //   if (e.key === "Enter" && !formik.isSubmitting) {
-      //     e.preventDefault(); // Prevent default form submission
-      //   }
-      // }}
-      >
+      <form onSubmit={formik.handleSubmit}>
         <div className="card">
           <div
             className="d-flex justify-content-between align-items-center p-1 mb-4 px-4"
             style={{ background: "#f5f7f9" }}
           >
-            <div class="d-flex align-items-center">
-              <div class="d-flex">
-                <div class="dot active"></div>
+            <div className="d-flex align-items-center">
+              <div className="d-flex">
+                <div className="dot active"></div>
               </div>
-              <span class="me-2 text-muted">Add Company</span>
+              <span className="me-2 text-muted">Add Company</span>
             </div>
             <div className="my-2 pe-3 d-flex align-items-center">
               <Link to="/companyregistration">
@@ -145,6 +129,14 @@ function SuperAdminCenterAdd({ handleCenterChanged }) {
                   Back
                 </button>
               </Link>
+              &nbsp;&nbsp;
+              <button
+                type="button"
+                className="btn btn-warning btn-sm text-white"
+                onClick={handleShow}
+              >
+                Allow Access
+              </button>
               &nbsp;&nbsp;
               <button
                 type="submit"
@@ -171,18 +163,17 @@ function SuperAdminCenterAdd({ handleCenterChanged }) {
                   <input
                     type="text"
                     name="name"
-                    className={`form-control  ${formik.touched.name && formik.errors.name
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-control  ${
+                      formik.touched.name && formik.errors.name
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     aria-label="Username"
                     aria-describedby="basic-addon1"
                     {...formik.getFieldProps("name")}
                   />
                   {formik.touched.name && formik.errors.name && (
-                    <div className="invalid-feedback">
-                      {formik.errors.name}
-                    </div>
+                    <div className="invalid-feedback">{formik.errors.name}</div>
                   )}
                 </div>
               </div>
@@ -194,10 +185,11 @@ function SuperAdminCenterAdd({ handleCenterChanged }) {
                   <input
                     type="text"
                     name="centerName"
-                    className={`form-control  ${formik.touched.centerName && formik.errors.centerName
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-control  ${
+                      formik.touched.centerName && formik.errors.centerName
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     aria-label="Username"
                     aria-describedby="basic-addon1"
                     {...formik.getFieldProps("centerName")}
@@ -217,10 +209,11 @@ function SuperAdminCenterAdd({ handleCenterChanged }) {
                   <input
                     {...formik.getFieldProps("email")}
                     type="text"
-                    className={`form-control   ${formik.touched.email && formik.errors.email
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-control   ${
+                      formik.touched.email && formik.errors.email
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     aria-label="Username"
                     aria-describedby="basic-addon1"
                   />
@@ -239,10 +232,11 @@ function SuperAdminCenterAdd({ handleCenterChanged }) {
                   <input
                     {...formik.getFieldProps("mobile")}
                     type="text"
-                    className={`form-control   ${formik.touched.mobile && formik.errors.mobile
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-control   ${
+                      formik.touched.mobile && formik.errors.mobile
+                        ? "is-invalid"
+                        : ""
+                    }`}
                   />
                   {formik.touched.mobile && formik.errors.mobile && (
                     <div className="invalid-feedback">
@@ -251,23 +245,26 @@ function SuperAdminCenterAdd({ handleCenterChanged }) {
                   )}
                 </div>
               </div>
-              <div className="col-md-6 col-12">
+              <div className="col-md-12 col-12">
                 <div className="mb-3">
                   <label for="exampleFormControlInput1" className="form-label">
                     Address<span className="text-danger">*</span>
                   </label>
                   <textarea
-                    className={`form-control  ${formik.touched.address && formik.errors.address
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-control  ${
+                      formik.touched.address && formik.errors.address
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("address")}
                     id="exampleFormControlTextarea1"
                     rows="3"
                     onKeyDown={(e) => {
                       if (e.key === "Enter") {
                         // Allow the default behavior for Enter key
-                        console.log("Enter key pressed: moving to the next line");
+                        console.log(
+                          "Enter key pressed: moving to the next line"
+                        );
                       }
                     }}
                   ></textarea>
@@ -282,6 +279,127 @@ function SuperAdminCenterAdd({ handleCenterChanged }) {
           </div>
         </div>
       </form>
+
+      {/* Modal for Access Modules */}
+      <Modal show={showModal} onHide={handleClose} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Access Modules</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="table-responsive">
+            <table className="table">
+              <thead>
+                <tr>
+                  <th scope="col">Access Module</th>
+                  <th scope="col">Mode</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Lead Management</td>
+                  <td className="text-center">
+                    <div className="form-check form-switch">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        id="module1"
+                      />
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Staff Management</td>
+                  <td>
+                    <div className="form-check form-switch">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        id="module2"
+                      />
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Document Management</td>
+                  <td>
+                    <div className="form-check form-switch">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        id="module3"
+                      />
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Assessment Management</td>
+                  <td>
+                    <div className="form-check form-switch">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        id="module3"
+                      />
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Referal Management</td>
+                  <td>
+                    <div className="form-check form-switch">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        id="module3"
+                      />
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Report Management</td>
+                  <td>
+                    <div className="form-check form-switch">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        id="module3"
+                      />
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Messages</td>
+                  <td>
+                    <div className="form-check form-switch">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        id="module3"
+                      />
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <button
+            type="button"
+            className="btn btn-border btn-sm"
+            onClick={handleClose}
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            className="btn btn-button btn-sm"
+            onClick={handleClose}
+          >
+            Allow
+          </button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }
