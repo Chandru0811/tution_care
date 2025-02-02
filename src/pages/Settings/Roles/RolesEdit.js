@@ -22,7 +22,7 @@ function RolesEdit({ id, onSuccess, handleMenuClose }) {
 
   const getData = async () => {
     try {
-      const response = await api.get(`/getAllRaceSettingById/${id}`);
+      const response = await api.get(`/getUserRolesById/${id}`);
       formik.setValues(response.data);
     } catch (error) {
       console.error("Error fetching data ", error);
@@ -66,7 +66,7 @@ function RolesEdit({ id, onSuccess, handleMenuClose }) {
           toast.error(response.data.message);
         }
       } catch (error) {
-        toast.error("An error occurred.");
+        toast.error(error.message);
       } finally {
         handleClose();
         setLoadIndicator(false);
