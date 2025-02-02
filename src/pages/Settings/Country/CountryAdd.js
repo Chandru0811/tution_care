@@ -64,7 +64,7 @@ function CountryAdd({ onSuccess }) {
     validateOnChange: true,
     validateOnBlur: true,
     validate: (values) => {
-      if (Object.values(values).some((value) => value.trim() !== "")) {
+      if (Object.values(values).some((value) => (value && typeof value === 'string' ? value.trim() !== "" : value))) {
         setIsModified(true);
       } else {
         setIsModified(false);
@@ -114,11 +114,10 @@ function CountryAdd({ onSuccess }) {
                   </label>
                   <input
                     type="text"
-                    className={`form-control  ${
-                      formik.touched.country && formik.errors.country
+                    className={`form-control  ${formik.touched.country && formik.errors.country
                         ? "is-invalid"
                         : ""
-                    }`}
+                      }`}
                     {...formik.getFieldProps("country")}
                   />
                   {formik.touched.country && formik.errors.country && (
@@ -134,11 +133,10 @@ function CountryAdd({ onSuccess }) {
                   </label>
                   <input
                     type="text"
-                    className={`form-control  ${
-                      formik.touched.nationality && formik.errors.nationality
+                    className={`form-control  ${formik.touched.nationality && formik.errors.nationality
                         ? "is-invalid"
                         : ""
-                    }`}
+                      }`}
                     {...formik.getFieldProps("nationality")}
                   />
                   {formik.touched.nationality && formik.errors.nationality && (
@@ -154,11 +152,10 @@ function CountryAdd({ onSuccess }) {
                   </label>
                   <input
                     type="text"
-                    className={`form-control  ${
-                      formik.touched.citizenship && formik.errors.citizenship
+                    className={`form-control  ${formik.touched.citizenship && formik.errors.citizenship
                         ? "is-invalid"
                         : ""
-                    }`}
+                      }`}
                     {...formik.getFieldProps("citizenship")}
                   />
                   {formik.touched.citizenship && formik.errors.citizenship && (

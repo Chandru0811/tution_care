@@ -76,9 +76,7 @@ function TaxEdit({ id, onSuccess, handleMenuClose }) {
     validateOnBlur: true,
     validate: (values) => {
       if (
-        Object.values(values).some(
-          (value) => typeof value === "string" && value.trim() !== ""
-        )
+        Object.values(values).some((value) => (value && typeof value === 'string' ? value.trim() !== "" : value))
       ) {
         setIsModified(true);
       } else {
@@ -138,11 +136,10 @@ function TaxEdit({ id, onSuccess, handleMenuClose }) {
                   </label>
                   <input
                     type="text"
-                    className={`form-control ${
-                      formik.touched.taxType && formik.errors.taxType
+                    className={`form-control ${formik.touched.taxType && formik.errors.taxType
                         ? "is-invalid"
                         : ""
-                    }`}
+                      }`}
                     {...formik.getFieldProps("taxType")}
                     onKeyDown={(e) => e.stopPropagation()}
                   />
@@ -161,11 +158,10 @@ function TaxEdit({ id, onSuccess, handleMenuClose }) {
                     min={0}
                     max={100}
                     step="0.01"
-                    className={`form-control ${
-                      formik.touched.rate && formik.errors.rate
+                    className={`form-control ${formik.touched.rate && formik.errors.rate
                         ? "is-invalid"
                         : ""
-                    }`}
+                      }`}
                     {...formik.getFieldProps("rate")}
                     onKeyDown={(e) => e.stopPropagation()}
                   />
@@ -179,14 +175,13 @@ function TaxEdit({ id, onSuccess, handleMenuClose }) {
                   </label>
                   <input
                     type="date"
-                    className={`form-control ${
-                      formik.touched.effectiveDate &&
-                      formik.errors.effectiveDate
+                    className={`form-control ${formik.touched.effectiveDate &&
+                        formik.errors.effectiveDate
                         ? "is-invalid"
                         : ""
-                    }`}
+                      }`}
                     {...formik.getFieldProps("effectiveDate")}
-                     onKeyDown={(e) => e.stopPropagation()}
+                    onKeyDown={(e) => e.stopPropagation()}
                   />
                   {formik.touched.effectiveDate &&
                     formik.errors.effectiveDate && (
@@ -201,11 +196,10 @@ function TaxEdit({ id, onSuccess, handleMenuClose }) {
                   </label>
                   <select
                     {...formik.getFieldProps("status")}
-                    className={`form-select ${
-                      formik.touched.status && formik.errors.status
+                    className={`form-select ${formik.touched.status && formik.errors.status
                         ? "is-invalid"
                         : ""
-                    }`}
+                      }`}
                     aria-label="Default select example"
                   >
                     <option></option>

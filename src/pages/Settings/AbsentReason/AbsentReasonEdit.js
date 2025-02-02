@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
-function AbsentReasonEdit({ id, onSuccess,handleMenuClose }) {
+function AbsentReasonEdit({ id, onSuccess, handleMenuClose }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const userName = localStorage.getItem("tmsuserName");
@@ -31,7 +31,8 @@ function AbsentReasonEdit({ id, onSuccess,handleMenuClose }) {
 
   const handleClose = () => {
     handleMenuClose();
-    setShow(false);}
+    setShow(false);
+  }
 
   const handleShow = () => {
     setShow(true);
@@ -77,9 +78,7 @@ function AbsentReasonEdit({ id, onSuccess,handleMenuClose }) {
     validateOnBlur: true,
     validate: (values) => {
       if (
-        Object.values(values).some(
-          (value) => typeof value === "string" && value.trim() !== ""
-        )
+        Object.values(values).some((value) => (value && typeof value === 'string' ? value.trim() !== "" : value))
       ) {
         setIsModified(true);
       } else {
@@ -126,11 +125,10 @@ function AbsentReasonEdit({ id, onSuccess,handleMenuClose }) {
                 </label>
                 <input
                   type="text"
-                  className={`form-control ${
-                    formik.touched.absentReason && formik.errors.absentReason
+                  className={`form-control ${formik.touched.absentReason && formik.errors.absentReason
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   {...formik.getFieldProps("absentReason")}
                   onKeyDown={(e) => e.stopPropagation()}
                 />

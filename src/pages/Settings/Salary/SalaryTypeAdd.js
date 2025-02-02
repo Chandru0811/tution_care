@@ -58,7 +58,7 @@ function SalaryTypeAdd({ onSuccess }) {
     validateOnChange: true,
     validateOnBlur: true,
     validate: (values) => {
-      if (Object.values(values).some((value) => value.trim() !== "")) {
+      if (Object.values(values).some((value) => (value && typeof value === 'string' ? value.trim() !== "" : value))) {
         setIsModified(true);
       } else {
         setIsModified(false);
@@ -106,11 +106,10 @@ function SalaryTypeAdd({ onSuccess }) {
                   </label>
                   <input
                     type="text"
-                    className={`form-control  ${
-                      formik.touched.salaryType && formik.errors.salaryType
+                    className={`form-control  ${formik.touched.salaryType && formik.errors.salaryType
                         ? "is-invalid"
                         : ""
-                    }`}
+                      }`}
                     {...formik.getFieldProps("salaryType")}
                   />
                   {formik.touched.salaryType && formik.errors.salaryType && (

@@ -57,7 +57,7 @@ function RaceAdd({ onSuccess }) {
     validateOnChange: true,
     validateOnBlur: true,
     validate: (values) => {
-      if (Object.values(values).some((value) => value.trim() !== "")) {
+      if (Object.values(values).some((value) => (value && typeof value === 'string' ? value.trim() !== "" : value))) {
         setIsModified(true);
       } else {
         setIsModified(false);
@@ -105,11 +105,10 @@ function RaceAdd({ onSuccess }) {
                   </label>
                   <input
                     type="text"
-                    className={`form-control  ${
-                      formik.touched.race && formik.errors.race
+                    className={`form-control  ${formik.touched.race && formik.errors.race
                         ? "is-invalid"
                         : ""
-                    }`}
+                      }`}
                     {...formik.getFieldProps("race")}
                   />
                   {formik.touched.race && formik.errors.race && (

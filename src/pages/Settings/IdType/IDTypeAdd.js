@@ -57,7 +57,7 @@ function IDTypeAdd({ onSuccess }) {
     validateOnChange: true,
     validateOnBlur: true,
     validate: (values) => {
-      if (Object.values(values).some((value) => value.trim() !== "")) {
+      if (Object.values(values).some((value) => (value && typeof value === 'string' ? value.trim() !== "" : value))) {
         setIsModified(true);
       } else {
         setIsModified(false);
@@ -105,11 +105,10 @@ function IDTypeAdd({ onSuccess }) {
                   </label>
                   <input
                     type="text"
-                    className={`form-control  ${
-                      formik.touched.idType && formik.errors.idType
+                    className={`form-control  ${formik.touched.idType && formik.errors.idType
                         ? "is-invalid"
                         : ""
-                    }`}
+                      }`}
                     {...formik.getFieldProps("idType")}
                   />
                   {formik.touched.idType && formik.errors.idType && (

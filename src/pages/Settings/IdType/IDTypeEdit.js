@@ -69,9 +69,7 @@ function IDTypeEdit({ id, onSuccess, handleMenuClose }) {
     validateOnBlur: true,
     validate: (values) => {
       if (
-        Object.values(values).some(
-          (value) => typeof value === "string" && value.trim() !== ""
-        )
+        Object.values(values).some((value) => (value && typeof value === 'string' ? value.trim() !== "" : value))
       ) {
         setIsModified(true);
       } else {
@@ -141,11 +139,10 @@ function IDTypeEdit({ id, onSuccess, handleMenuClose }) {
                   <input
                     onKeyDown={(e) => e.stopPropagation()}
                     type="text"
-                    className={`form-control ${
-                      formik.touched.idType && formik.errors.idType
+                    className={`form-control ${formik.touched.idType && formik.errors.idType
                         ? "is-invalid"
                         : ""
-                    }`}
+                      }`}
                     {...formik.getFieldProps("idType")}
                   />
                   {formik.touched.idType && formik.errors.idType && (

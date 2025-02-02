@@ -69,12 +69,12 @@ function TaxAdd({ onSuccess }) {
     validateOnChange: true,
     validateOnBlur: true,
     validate: (values) => {
-      if (Object.values(values).some((value) => value.trim() !== "")) {
-        setIsModified(true);
+      if (Object.values(values).some((value) => (value && typeof value === 'string' ? value.trim() !== "" : value))) {
+          setIsModified(true);
       } else {
-        setIsModified(false);
+          setIsModified(false);
       }
-    },
+  },
   });
 
   return (

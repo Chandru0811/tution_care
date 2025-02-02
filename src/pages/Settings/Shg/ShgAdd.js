@@ -27,8 +27,8 @@ function ShgAdd({ onSuccess }) {
       .required("*SHG Type is required") // SHG Type is required and must be a valid string
       .min(2, "*SHG Type must be at least 2 characters") // Optional: Minimum character length
       .max(100, "*SHG Type must not exceed 100 characters"), // Optional: Maximum character length
-  
-      shgAmount: Yup.number()
+
+    shgAmount: Yup.number()
       .typeError("*SHG Amount must be a number") // Ensures value is a valid number
       .required("*SHG Amount is required") // Required validation
       .positive("*SHG Amount must be a positive number") // Only positive values allowed
@@ -39,9 +39,9 @@ function ShgAdd({ onSuccess }) {
           // Test allows numbers with up to 2 decimal places
           return value ? /^\d+(\.\d{1,2})?$/.test(value) : true;
         }
-      ), 
+      ),
   });
-  
+
 
   const formik = useFormik({
     initialValues: {
@@ -76,7 +76,7 @@ function ShgAdd({ onSuccess }) {
     validateOnChange: true,
     validateOnBlur: true,
     validate: (values) => {
-      if (Object.values(values).some((value) => value.trim() !== "")) {
+      if (Object.values(values).some((value) => (value && typeof value === 'string' ? value.trim() !== "" : value))) {
         setIsModified(true);
       } else {
         setIsModified(false);
@@ -124,11 +124,10 @@ function ShgAdd({ onSuccess }) {
                   </label>
                   <input
                     type="text"
-                    className={`form-control  ${
-                      formik.touched.shgType && formik.errors.shgType
+                    className={`form-control  ${formik.touched.shgType && formik.errors.shgType
                         ? "is-invalid"
                         : ""
-                    }`}
+                      }`}
                     {...formik.getFieldProps("shgType")}
                   />
                   {formik.touched.shgType && formik.errors.shgType && (
@@ -143,11 +142,10 @@ function ShgAdd({ onSuccess }) {
                   </label>
                   <input
                     type="text"
-                    className={`form-control  ${
-                      formik.touched.shgAmount && formik.errors.shgAmount
+                    className={`form-control  ${formik.touched.shgAmount && formik.errors.shgAmount
                         ? "is-invalid"
                         : ""
-                    }`}
+                      }`}
                     {...formik.getFieldProps("shgAmount")}
                   />
                   {formik.touched.shgAmount && formik.errors.shgAmount && (

@@ -78,9 +78,7 @@ function LeaveEdit({ id, onSuccess, handleMenuClose }) {
     validateOnBlur: true,
     validate: (values) => {
       if (
-        Object.values(values).some(
-          (value) => typeof value === "string" && value.trim() !== ""
-        )
+        Object.values(values).some((value) => (value && typeof value === 'string' ? value.trim() !== "" : value))
       ) {
         setIsModified(true);
       } else {
@@ -138,11 +136,10 @@ function LeaveEdit({ id, onSuccess, handleMenuClose }) {
                   <input
                     onKeyDown={(e) => e.stopPropagation()}
                     type="text"
-                    className={`form-control  ${
-                      formik.touched.leaveType && formik.errors.leaveType
+                    className={`form-control  ${formik.touched.leaveType && formik.errors.leaveType
                         ? "is-invalid"
                         : ""
-                    }`}
+                      }`}
                     {...formik.getFieldProps("leaveType")}
                   />
                   {formik.touched.leaveType && formik.errors.leaveType && (

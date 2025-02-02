@@ -80,9 +80,7 @@ function RaceEdit({ id, onSuccess, handleMenuClose }) {
     validateOnBlur: true,
     validate: (values) => {
       if (
-        Object.values(values).some(
-          (value) => typeof value === "string" && value.trim() !== ""
-        )
+        Object.values(values).some((value) => (value && typeof value === 'string' ? value.trim() !== "" : value))
       ) {
         setIsModified(true);
       } else {
@@ -138,11 +136,10 @@ function RaceEdit({ id, onSuccess, handleMenuClose }) {
                   <input
                     onKeyDown={(e) => e.stopPropagation()}
                     type="text"
-                    className={`form-control  ${
-                      formik.touched.race && formik.errors.race
+                    className={`form-control  ${formik.touched.race && formik.errors.race
                         ? "is-invalid"
                         : ""
-                    }`}
+                      }`}
                     {...formik.getFieldProps("race")}
                   />
                   {formik.touched.race && formik.errors.race && (

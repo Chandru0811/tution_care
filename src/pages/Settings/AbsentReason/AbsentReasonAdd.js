@@ -59,7 +59,7 @@ function AbsentReasonAdd({ onSuccess }) {
     validateOnChange: true,
     validateOnBlur: true,
     validate: (values) => {
-      if (Object.values(values).some((value) => value.trim() !== "")) {
+      if (Object.values(values).some((value) => (value && typeof value === 'string' ? value.trim() !== "" : value))) {
         setIsModified(true);
       } else {
         setIsModified(false);
@@ -94,11 +94,10 @@ function AbsentReasonAdd({ onSuccess }) {
                 </label>
                 <input
                   type="text"
-                  className={`form-control ${
-                    formik.touched.absentReason && formik.errors.absentReason
+                  className={`form-control ${formik.touched.absentReason && formik.errors.absentReason
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   {...formik.getFieldProps("absentReason")}
                 />
                 {formik.touched.absentReason && formik.errors.absentReason && (

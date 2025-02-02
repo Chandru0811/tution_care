@@ -14,18 +14,18 @@ import * as Yup from "yup";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
 
-  const validationSchema = Yup.object({
-    shgType: Yup.string()
-      .required("*SHG Type is required") // SHG Type is required and must be a valid string
-      .min(2, "*SHG Type must be at least 2 characters") // Optional: Minimum character length
-      .max(100, "*SHG Type must not exceed 100 characters"), // Optional: Maximum character length
-  
-    shgAmount: Yup.number()
-      .typeError("*SHG Amount must be a number") // Ensures value is a valid number
-      .required("*SHG Amount is required") // Required validation
-      .positive("*SHG Amount must be a positive number") // Only positive values allowed
-      .integer("*SHG Amount must be an integer"), // Only integer values allowed (no decimals)
-  });
+const validationSchema = Yup.object({
+  shgType: Yup.string()
+    .required("*SHG Type is required") // SHG Type is required and must be a valid string
+    .min(2, "*SHG Type must be at least 2 characters") // Optional: Minimum character length
+    .max(100, "*SHG Type must not exceed 100 characters"), // Optional: Maximum character length
+
+  shgAmount: Yup.number()
+    .typeError("*SHG Amount must be a number") // Ensures value is a valid number
+    .required("*SHG Amount is required") // Required validation
+    .positive("*SHG Amount must be a positive number") // Only positive values allowed
+    .integer("*SHG Amount must be an integer"), // Only integer values allowed (no decimals)
+});
 
 function ShgEdit({ id, onSuccess, handleMenuClose }) {
   const [open, setOpen] = useState(false);
@@ -36,8 +36,8 @@ function ShgEdit({ id, onSuccess, handleMenuClose }) {
   const getData = async () => {
     try {
       const response = await api.get(`/getAllSHGSettingById/${id}`);
-      formik.setFieldValue("shgAmount",response.data.shgAmount);
-      formik.setFieldValue("shgType",response.data.shgType);
+      formik.setFieldValue("shgAmount", response.data.shgAmount);
+      formik.setFieldValue("shgType", response.data.shgType);
     } catch (error) {
       console.error("Error fetching data ", error);
     }
@@ -77,9 +77,7 @@ function ShgEdit({ id, onSuccess, handleMenuClose }) {
     validateOnBlur: true,
     validate: (values) => {
       if (
-        Object.values(values).some(
-          (value) => typeof value === "string" && value.trim() !== ""
-        )
+        Object.values(values).some((value) => (value && typeof value === 'string' ? value.trim() !== "" : value))
       ) {
         setIsModified(true);
       } else {
@@ -144,11 +142,10 @@ function ShgEdit({ id, onSuccess, handleMenuClose }) {
                   <input
                     onKeyDown={(e) => e.stopPropagation()}
                     type="text"
-                    className={`form-control ${
-                      formik.touched.shgType && formik.errors.shgType
+                    className={`form-control ${formik.touched.shgType && formik.errors.shgType
                         ? "is-invalid"
                         : ""
-                    }`}
+                      }`}
                     {...formik.getFieldProps("shgType")}
                   />
                   {formik.touched.shgType && formik.errors.shgType && (
@@ -165,11 +162,10 @@ function ShgEdit({ id, onSuccess, handleMenuClose }) {
                   <input
                     onKeyDown={(e) => e.stopPropagation()}
                     type="text"
-                    className={`form-control ${
-                      formik.touched.shgAmount && formik.errors.shgAmount
+                    className={`form-control ${formik.touched.shgAmount && formik.errors.shgAmount
                         ? "is-invalid"
                         : ""
-                    }`}
+                      }`}
                     {...formik.getFieldProps("shgAmount")}
                   />
                   {formik.touched.shgAmount && formik.errors.shgAmount && (

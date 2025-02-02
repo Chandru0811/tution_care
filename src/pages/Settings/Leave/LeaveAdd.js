@@ -10,7 +10,7 @@ import { toast } from "react-toastify";
 function LeaveAdd({ onSuccess }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
-  const userName  = localStorage.getItem('userName');
+  const userName = localStorage.getItem('userName');
   const [isModified, setIsModified] = useState(false);
 
 
@@ -19,10 +19,10 @@ function LeaveAdd({ onSuccess }) {
     formik.resetForm();
   };
   const handleShow = () => {
-    
+
     setShow(true);
-    setIsModified(false); 
-  };  const validationSchema = Yup.object({
+    setIsModified(false);
+  }; const validationSchema = Yup.object({
     leaveType: Yup.string().required("*Leave Type is required"),
   });
 
@@ -59,7 +59,7 @@ function LeaveAdd({ onSuccess }) {
     validateOnChange: true,
     validateOnBlur: true,
     validate: (values) => {
-      if (Object.values(values).some(value => value.trim() !== "")) {
+      if (Object.values(values).some((value) => (value && typeof value === 'string' ? value.trim() !== "" : value))) {
         setIsModified(true);
       } else {
         setIsModified(false);
@@ -80,12 +80,12 @@ function LeaveAdd({ onSuccess }) {
         </button>
       </div>
       <Modal show={show} size="md" onHide={handleClose} centered
-       backdrop={isModified ? "static" : true} 
-       keyboard={isModified ? false : true} >
+        backdrop={isModified ? "static" : true}
+        keyboard={isModified ? false : true} >
         <Modal.Header closeButton>
           <Modal.Title className="headColor">Add Leave Type</Modal.Title>
         </Modal.Header>
-         <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
+        <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
           if (e.key === 'Enter' && !formik.isSubmitting) {
             e.preventDefault();  // Prevent default form submission
           }
@@ -99,11 +99,10 @@ function LeaveAdd({ onSuccess }) {
                   </label>
                   <input
                     type="text"
-                    className={`form-control  ${
-                      formik.touched.leaveType && formik.errors.leaveType
+                    className={`form-control  ${formik.touched.leaveType && formik.errors.leaveType
                         ? "is-invalid"
                         : ""
-                    }`}
+                      }`}
                     {...formik.getFieldProps("leaveType")}
                   />
                   {formik.touched.leaveType && formik.errors.leaveType && (

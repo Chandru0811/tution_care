@@ -28,7 +28,7 @@ function SalaryEdit({ id, onSuccess, handleMenuClose }) {
   const getData = async () => {
     try {
       const response = await api.get(`/getAllSalarySettingById/${id}`);
-      formik.setFieldValue("salaryType",response.data.salaryType);
+      formik.setFieldValue("salaryType", response.data.salaryType);
     } catch (error) {
       console.error("Error fetching data ", error);
     }
@@ -68,9 +68,7 @@ function SalaryEdit({ id, onSuccess, handleMenuClose }) {
     validateOnBlur: true,
     validate: (values) => {
       if (
-        Object.values(values).some(
-          (value) => typeof value === "string" && value.trim() !== ""
-        )
+        Object.values(values).some((value) => (value && typeof value === 'string' ? value.trim() !== "" : value))
       ) {
         setIsModified(true);
       } else {
@@ -140,11 +138,10 @@ function SalaryEdit({ id, onSuccess, handleMenuClose }) {
                   <input
                     onKeyDown={(e) => e.stopPropagation()}
                     type="text"
-                    className={`form-control  ${
-                      formik.touched.salaryType && formik.errors.salaryType
+                    className={`form-control  ${formik.touched.salaryType && formik.errors.salaryType
                         ? "is-invalid"
                         : ""
-                    }`}
+                      }`}
                     {...formik.getFieldProps("salaryType")}
                   />
                   {formik.touched.salaryType && formik.errors.salaryType && (
