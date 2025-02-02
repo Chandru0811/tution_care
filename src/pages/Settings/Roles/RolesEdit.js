@@ -1,22 +1,28 @@
 import React from "react";
 import { useState } from "react";
 import { useFormik } from "formik";
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  IconButton,
+} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 import * as Yup from "yup";
-import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
 
-function RolesEdit({  id, onSuccess, handleMenuClose }) {
+function RolesEdit({ id, onSuccess, handleMenuClose }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const userName = localStorage.getItem("tmsuserName");
-  const centerId = localStorage.getItem("tmscenterId");
   const [isModified, setIsModified] = useState(false);
+  const centerId = localStorage.getItem("tmscenterId");
 
   const getData = async () => {
     try {
-      const response = await api.get(`/getUserRolesById/${id}`);
+      const response = await api.get(`/getAllRaceSettingById/${id}`);
       formik.setValues(response.data);
     } catch (error) {
       console.error("Error fetching data ", error);
@@ -26,81 +32,80 @@ function RolesEdit({  id, onSuccess, handleMenuClose }) {
   const handleClose = () => {
     handleMenuClose();
     setShow(false);
-    formik.resetForm();
   };
   const handleShow = () => {
-    getData();
     setShow(true);
     setIsModified(false);
+    getData();
   };
-  const validationSchema = Yup.object({
-    name: Yup.string().required("*Name is required"),
-  });
+
+  const validationSchema = Yup.object({});
 
   const formik = useFormik({
     initialValues: {
       name: "",
-      createdBy: userName,
+      centerId: centerId,
+      updatedBy: userName,
     },
-    validationSchema: validationSchema, // Assign the validation schema
+    validationSchema: validationSchema,
     onSubmit: async (values) => {
       setLoadIndicator(true);
-      // console.log(values);
       values.centerId = centerId;
       try {
-        const response = await api.post(`/updateUserRole/${id}`, values, {
+        values.updatedBy = userName;
+        const response = await api.put(`/updateUserRole/${id}`, values, {
           headers: {
             "Content-Type": "application/json",
           },
         });
-        if (response.status === 201) {
+        if (response.status === 200) {
           onSuccess();
-          handleClose();
+
           toast.success(response.data.message);
         } else {
           toast.error(response.data.message);
         }
       } catch (error) {
-        toast.error(error);
+        toast.error("An error occurred.");
       } finally {
+        handleClose();
         setLoadIndicator(false);
       }
     },
     enableReinitialize: true,
     validateOnChange: true,
     validateOnBlur: true,
-    validate: (values) => {
-      if (Object.values(values).some((value) => value.trim() !== "")) {
-        setIsModified(true);
-      } else {
-        setIsModified(false);
-      }
-    },
   });
 
   return (
     <>
-      <div className="mb-3 d-flex justify-content-end">
-        <button
-          type="button"
-          className="btn btn-button btn-sm me-2"
-          style={{ fontWeight: "600px !important" }}
-          onClick={handleShow}
-        >
-          &nbsp; Add &nbsp;&nbsp; <i className="bx bx-plus"></i>
-        </button>
-      </div>
-      <Modal
-        show={show}
-        size="md"
-        onHide={handleClose}
-        centered
-        backdrop={isModified ? "static" : true}
-        keyboard={isModified ? false : true}
+      <p
+        style={{
+          whiteSpace: "nowrap",
+          width: "100%",
+        }}
+        className="text-start mb-0 menuitem-style"
+        onClick={handleShow}
       >
-        <Modal.Header closeButton>
-          <Modal.Title className="headColor">Add Role</Modal.Title>
-        </Modal.Header>
+        Edit
+      </p>
+
+      <Dialog
+        open={show}
+        onClose={!isModified ? handleClose : null}
+        fullWidth
+        maxWidth="sm"
+      >
+        <DialogTitle className="headColor">
+          Roles Edit{" "}
+          <IconButton
+            aria-label="close"
+            onClick={handleClose}
+            style={{ position: "absolute", right: 8, top: 8 }}
+          >
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
         <form
           onSubmit={formik.handleSubmit}
           onKeyDown={(e) => {
@@ -109,7 +114,7 @@ function RolesEdit({  id, onSuccess, handleMenuClose }) {
             }
           }}
         >
-          <Modal.Body>
+          <DialogContent>
             <div className="container">
               <div className="row">
                 <div className="col-12 mb-2">
@@ -117,6 +122,7 @@ function RolesEdit({  id, onSuccess, handleMenuClose }) {
                     Name<span className="text-danger">*</span>
                   </label>
                   <input
+                    onKeyDown={(e) => e.stopPropagation()}
                     type="text"
                     className={`form-control  ${
                       formik.touched.name && formik.errors.name
@@ -131,31 +137,32 @@ function RolesEdit({  id, onSuccess, handleMenuClose }) {
                 </div>
               </div>
             </div>
-            <Modal.Footer className="mt-3">
-              <Button
-                type="button"
-                className="btn btn-sm btn-border bg-light text-dark"
-                onClick={handleClose}
-              >
-                Cancel
-              </Button>
-              <Button
-                type="submit"
-                className="btn btn-button btn-sm"
-                disabled={loadIndicator}
-              >
-                {loadIndicator && (
-                  <span
-                    className="spinner-border spinner-border-sm me-2"
-                    aria-hidden="true"
-                  ></span>
-                )}
-                Submit
-              </Button>
-            </Modal.Footer>
-          </Modal.Body>
+          </DialogContent>
+          <DialogActions>
+            <button
+              type="button"
+              className="btn btn-border btn-sm"
+              style={{ fontSize: "12px" }}
+              onClick={handleClose}
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="btn btn-button btn-sm"
+              disabled={loadIndicator}
+            >
+              {loadIndicator && (
+                <span
+                  className="spinner-border spinner-border-sm me-2"
+                  aria-hidden="true"
+                ></span>
+              )}
+              Update
+            </button>
+          </DialogActions>
         </form>
-      </Modal>
+      </Dialog>
     </>
   );
 }
