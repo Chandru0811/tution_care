@@ -250,6 +250,7 @@ import AssignmentView from "../pages/Assignment/AssignmentView";
 import PaymentsAdd from "../pages/Payment/PaymentsAdd";
 import Payments from "../pages/Payment/Payments";
 import PaymentsEdit from "../pages/Payment/PaymentsEdit";
+import Roles from "../pages/Settings/Roles/Roles";
 
 function Admin({ handleLogout }) {
   const [centerChange, setCenterChange] = useState(0);
@@ -590,6 +591,7 @@ function Admin({ handleLogout }) {
 
               {/* Send Notification */}
               <Route path="/sendNotification" element={<SendNotification />} />
+              <Route path="/roles" element={<Roles />} />
               <Route
                 path="/sendNotification/add"
                 element={<SendNotificationAdd />}

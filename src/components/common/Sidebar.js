@@ -435,6 +435,11 @@ function Sidebar() {
         isOpen: false,
         subMenus: [
           {
+            title: "Roles",
+            path: "/roles",
+            access: true,
+          },
+          {
             title: "Role & Matrix",
             path: "/role/add",
             access: storedScreens.rolesMatrixIndex,
