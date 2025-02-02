@@ -132,7 +132,7 @@ const SuperAdminCenter = ({ handleCenterChanged }) => {
 
           return (
             <select
-              className="form-control badge w-50"
+              className="form-control w-50"
               value={selectedStatus}
               onChange={handleStatusChange}
               style={{
@@ -147,7 +147,7 @@ const SuperAdminCenter = ({ handleCenterChanged }) => {
                 <option
                   key={status.value}
                   value={status.value}
-                  style={{ backgroundColor: "white", color: "black" }}
+                  // style={{ color: "black" }}
                 >
                   {status.label}
                 </option>

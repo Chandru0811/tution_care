@@ -20,11 +20,13 @@ import { TbMessageCode } from "react-icons/tb";
 import { GrUserSettings } from "react-icons/gr";
 import { GiExitDoor } from "react-icons/gi";
 import { MdOutlineAssignment } from "react-icons/md";
+import { RiUserAddLine } from "react-icons/ri";
 
 const iconMapping = {
   "Company Management": <PiBuildings />,
   "Course Management": <PiBookOpenText />,
   "Lead Management": <GiExitDoor />,
+  "Emaployee Info": <RiUserAddLine  />,
   Staffing: <HiOutlineUserGroup />,
   "Student Management": <TbUserSearch />,
   "Student Movement": <TbStatusChange />,
@@ -115,6 +117,18 @@ function Sidebar() {
         ],
       },
       {
+        title: "Emaployee Info",
+        icon: "RiUserAddLine",
+        isOpen: false,
+        subMenus: [
+          {
+            title: "Teacher",
+            path: "/teacher",
+            access: storedScreens.teacherIndex,
+          },
+        ],
+      },
+      {
         title: "Staffing",
         icon: "HiOutlineUserGroup",
         isOpen: false,
@@ -124,11 +138,11 @@ function Sidebar() {
             path: "/staff",
             access: storedScreens.staffIndex,
           },
-          {
-            title: "Teacher",
-            path: "/teacher",
-            access: storedScreens.teacherIndex,
-          },
+          // {
+          //   title: "Teacher",
+          //   path: "/teacher",
+          //   access: storedScreens.teacherIndex,
+          // },
           {
             title: "Attendance",
             path: "/staffing/attendance",
@@ -173,11 +187,6 @@ function Sidebar() {
             title: "Freelancer Invoice",
             path: "/freelancerPayslip",
             access: storedScreens.freeLancerIndex,
-          },
-          {
-            title: "Role & Matrix",
-            path: "/role/add",
-            access: storedScreens.rolesMatrixIndex,
           },
         ],
       },
@@ -425,6 +434,16 @@ function Sidebar() {
         icon: "GrUserSettings",
         isOpen: false,
         subMenus: [
+          {
+            title: "Roles",
+            path: "/roles",
+            access: true,
+          },
+          {
+            title: "Role & Matrix",
+            path: "/role/add",
+            access: storedScreens.rolesMatrixIndex,
+          },
           {
             title: "Tax",
             path: "/tax",

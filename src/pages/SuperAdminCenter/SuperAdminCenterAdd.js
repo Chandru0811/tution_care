@@ -40,10 +40,36 @@ function SuperAdminCenterAdd({ handleCenterChanged }) {
       email: "",
       mobile: "",
       address: "",
+      leadManagement: false,
+      staffManagement: false,
+      documentManagement: false,
+      referalManagement: false,
+      assessmentManagement: false,
+      reportManagement: false,
+      messages: false,
       file: null,
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
+      // const isAnyModuleSelected = Object.entries(values)
+      //   .filter(([key]) =>
+      //     [
+      //       "leadManagement",
+      //       "staffManagement",
+      //       "documentManagement",
+      //       "referalManagement",
+      //       "assessmentManagement",
+      //       "reportManagement",
+      //       "messages",
+      //     ].includes(key)
+      //   )
+      //   .some(([_, value]) => value === true);
+
+      // if (!isAnyModuleSelected) {
+      //   setShowModal(true);
+      //   return;
+      // }
+
       setLoadIndicator(true);
       try {
         const response = await api.post("/tuitionRegister", values, {
@@ -53,8 +79,8 @@ function SuperAdminCenterAdd({ handleCenterChanged }) {
         });
         if (response.status === 201) {
           toast.success(response.data.message);
-          handleCenterChanged();
           navigate("/companyregistration");
+          handleCenterChanged();
         } else {
           toast.error(response.data.message);
         }
@@ -84,6 +110,11 @@ function SuperAdminCenterAdd({ handleCenterChanged }) {
       scrollToError(formik.errors);
     }
   }, [formik.submitCount, formik.errors]);
+
+  const handleAllow = () => {
+    setShowModal(false);
+    toast.success("Access Modules Saved");
+  };
 
   return (
     <div className="container-fluid">
@@ -291,94 +322,38 @@ function SuperAdminCenterAdd({ handleCenterChanged }) {
               <thead>
                 <tr>
                   <th scope="col">Access Module</th>
-                  <th scope="col">Mode</th>
+                  <th scope="col">Enable</th>
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>Lead Management</td>
-                  <td className="text-center">
-                    <div className="form-check form-switch">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        id="module1"
-                      />
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Staff Management</td>
-                  <td>
-                    <div className="form-check form-switch">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        id="module2"
-                      />
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Document Management</td>
-                  <td>
-                    <div className="form-check form-switch">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        id="module3"
-                      />
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Assessment Management</td>
-                  <td>
-                    <div className="form-check form-switch">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        id="module3"
-                      />
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Referal Management</td>
-                  <td>
-                    <div className="form-check form-switch">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        id="module3"
-                      />
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Report Management</td>
-                  <td>
-                    <div className="form-check form-switch">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        id="module3"
-                      />
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Messages</td>
-                  <td>
-                    <div className="form-check form-switch">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        id="module3"
-                      />
-                    </div>
-                  </td>
-                </tr>
+                {[
+                  { label: "Lead Management", key: "leadManagement" },
+                  { label: "Staff Management", key: "staffManagement" },
+                  { label: "Document Management", key: "documentManagement" },
+                  {
+                    label: "Assessment Management",
+                    key: "assessmentManagement",
+                  },
+                  { label: "Referral Management", key: "referalManagement" },
+                  { label: "Report Management", key: "reportManagement" },
+                  { label: "Messages", key: "messages" },
+                ].map(({ label, key }) => (
+                  <tr key={key}>
+                    <td>{label}</td>
+                    <td className="text-center">
+                      <div className="form-check form-switch">
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                          checked={formik.values[key]}
+                          onChange={() =>
+                            formik.setFieldValue(key, !formik.values[key])
+                          }
+                        />
+                      </div>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
@@ -392,9 +367,9 @@ function SuperAdminCenterAdd({ handleCenterChanged }) {
             Cancel
           </button>
           <button
-            type="submit"
+            type="button"
             className="btn btn-button btn-sm"
-            onClick={handleClose}
+            onClick={handleAllow}
           >
             Allow
           </button>

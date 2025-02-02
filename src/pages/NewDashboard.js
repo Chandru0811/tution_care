@@ -11,7 +11,9 @@ function NewDashboard() {
     setLoading(true);
     try {
       const response = await api.get("getOverAllSmsRevenueReport");
-      setData(response.data);
+      if (response.status === 200) {
+        setData(response.data);
+      }
     } catch (e) {
       toast.error("Error Fetching Dashboard Data");
     } finally {
@@ -22,7 +24,6 @@ function NewDashboard() {
   useEffect(() => {
     getData();
   }, []);
-
 
   const fontFamily =
     "'Outfit', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji'";
@@ -55,7 +56,7 @@ function NewDashboard() {
       size: 0,
     },
     xaxis: {
-      categories: datas?.revenueOverTimeReport?.lineChartData?.categories,
+      categories: datas?.revenueOverTimeReport?.lineChartData?.categories || [],
       labels: {
         style: {
           fontFamily: fontFamily,
@@ -97,7 +98,7 @@ function NewDashboard() {
     colors: ["#ABBDD3", "#287F71", "#EB862A"],
   };
 
-  const lineChartSeries = datas?.revenueOverTimeReport?.lineChartData?.series;
+  const lineChartSeries = datas?.revenueOverTimeReport?.lineChartData?.series || [];
 
   const gaugeChartOptions = {
     chart: {
@@ -134,7 +135,7 @@ function NewDashboard() {
   };
 
   const gaugeChartSeries = [
-    datas?.registeredUsersReport?.gaugeChartData?.value,
+    datas?.registeredUsersReport?.gaugeChartData?.value || [],
   ];
 
   const lineChartOptions1 = {
@@ -187,7 +188,7 @@ function NewDashboard() {
     colors: ["#ABBDD3", "#287F71", "#EB862A"],
   };
 
-  const lineChartSeries1 = datas?.revenueGrowthByDay?.series;
+  const lineChartSeries1 = datas?.revenueGrowthByDay?.series ||[];
 
   return (
     <>
@@ -205,7 +206,7 @@ function NewDashboard() {
         <div className="container mt-4">
           <div className="row mt-3">
             {datas?.revenueGrowthByMonth &&
-              datas?.revenueGrowthByMonth.map((data, index) => (
+              datas?.revenueGrowthByMonth?.map((data, index) => (
                 <div className="col-md-3 mb-3">
                   <div
                     className="card shadow-sm border-0"
@@ -291,7 +292,7 @@ function NewDashboard() {
                   <h6 className="card-title">Capacity Status</h6>
                 </div>
                 {datas?.productionSalesComparisonReport?.progressValues &&
-                  datas?.productionSalesComparisonReport?.progressValues.map(
+                  datas?.productionSalesComparisonReport?.progressValues?.map(
                     (center, index) => (
                       <div key={index}>
                         <div className="d-flex justify-content-between">
