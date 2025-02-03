@@ -84,6 +84,11 @@ const SuperAdminCenter = ({ handleCenterChanged }) => {
               bgColor: "#28a745",
             },
             {
+              label: "Pending",
+              value: "Pending",
+              bgColor: "#ffc107",
+            },
+            {
               label: "Rejected",
               value: "Rejected",
               bgColor: "#dc3545",
@@ -95,7 +100,7 @@ const SuperAdminCenter = ({ handleCenterChanged }) => {
           );
 
           useEffect(() => {
-            setSelectedStatus(row.original.centerStatus || "Pending");
+            setSelectedStatus(row.original.centerStatus);
           }, [row.original.centerStatus]);
 
           const handleStatusChange = async (event) => {
@@ -120,61 +125,40 @@ const SuperAdminCenter = ({ handleCenterChanged }) => {
 
           const selectedOption = statusOptions.find(
             (opt) => opt.value === selectedStatus
-          ) || {
-            bgColor: "#ffc107", // Default color for "Pending"
-          };
+          );
 
           return (
-            <div
+            <select
+              className="form-control w-50 badge"
+              value={selectedStatus}
+              onChange={handleStatusChange}
               style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "10px",
+                height: "20px",
+                textAlign: "center",
+                borderRadius: "5px",
+                backgroundColor: selectedOption?.bgColor,
+                cursor: "pointer",
               }}
             >
-              {/* Show "Pending" as default when selected */}
-              {selectedStatus === "Pending" ? (
-                <span
-                  className="badge"
-                  style={{
-                    backgroundColor: "#ffc107",
-                    color: "white",
-                    padding: "5px 15px",
-                    borderRadius: "5px",
-                  }}
-                >
-                  Pending
-                </span>
-              ) : (
-                <select
-                  className="form-control w-50 badge"
-                  value={selectedStatus}
-                  onChange={handleStatusChange}
-                  style={{
-                    padding: "5px 5px",
-                    textAlign: "center",
-                    borderRadius: "5px",
-                    backgroundColor: selectedOption.bgColor,
-                    cursor: "pointer",
-                    color: "white",
-                  }}
-                >
-                  {statusOptions.map((status) => (
-                    <option
-                      key={status.value}
-                      value={status.value}
-                      style={{
-                        backgroundColor: "white",
-                        color: "black",
-                        fontSize: "15px",
-                      }}
-                    >
-                      {status.label}
-                    </option>
-                  ))}
-                </select>
-              )}
-            </div>
+              {statusOptions
+                .filter(
+                  (status) =>
+                    selectedStatus === "Pending" || status.value !== "Pending"
+                )
+                .map((status) => (
+                  <option
+                    key={status.value}
+                    value={status.value}
+                    style={{
+                      backgroundColor: "white",
+                      color: "black",
+                      fontSize: "15px",
+                    }}
+                  >
+                    {status.label}
+                  </option>
+                ))}
+            </select>
           );
         },
       },

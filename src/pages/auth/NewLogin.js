@@ -8,6 +8,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Logo from "../../assets/images/ECSLOGO.png";
 
 export default function NewLogin({ onLogin }) {
+  const [loadIndicator, setLoadIndicator] = useState(false);
   const navigate = useNavigate();
 
   const validationSchema = Yup.object({
@@ -26,6 +27,7 @@ export default function NewLogin({ onLogin }) {
     },
     validationSchema: validationSchema,
     onSubmit: async (values, { resetForm }) => {
+      setLoadIndicator(true);
       try {
         const response = await api.post(`smsLogin`, values, {
           headers: {
@@ -59,9 +61,10 @@ export default function NewLogin({ onLogin }) {
         } else {
           toast.error(error?.response?.data?.message);
         }
+      } finally {
+        setLoadIndicator(false);
+        resetForm();
       }
-
-      resetForm();
     },
   });
 
@@ -105,10 +108,11 @@ export default function NewLogin({ onLogin }) {
                     </label>
                     <input
                       type="email"
-                      className={`form-control ${formik.touched.email && formik.errors.email
-                        ? "is-invalid"
-                        : ""
-                        }`}
+                      className={`form-control ${
+                        formik.touched.email && formik.errors.email
+                          ? "is-invalid"
+                          : ""
+                      }`}
                       placeholder="Enter email"
                       {...formik.getFieldProps("email")}
                     />
@@ -124,10 +128,11 @@ export default function NewLogin({ onLogin }) {
                       <input
                         type={showPassword ? "text" : "password"}
                         placeholder="Enter password"
-                        className={`form-control ${formik.touched.password && formik.errors.password
-                          ? "is-invalid"
-                          : ""
-                          }`}
+                        className={`form-control ${
+                          formik.touched.password && formik.errors.password
+                            ? "is-invalid"
+                            : ""
+                        }`}
                         {...formik.getFieldProps("password")}
                       />
                       <span
@@ -160,8 +165,15 @@ export default function NewLogin({ onLogin }) {
                       height: "45px",
                       borderRadius: "8px",
                     }}
+                    disabled={loadIndicator}
                   >
-                    Submit
+                    {loadIndicator && (
+                      <span
+                        className="spinner-border spinner-border-sm me-2"
+                        aria-hidden="true"
+                      ></span>
+                    )}
+                    <span className="fw-medium">Submit</span>
                   </button>
                 </form>
                 <p className="text-center mt-3">
