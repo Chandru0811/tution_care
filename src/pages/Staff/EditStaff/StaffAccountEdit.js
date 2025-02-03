@@ -8,8 +8,6 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
 import api from "../../../config/URL";
-import fetchAllCentersWithIds from "../../List/CenterList";
-import { MultiSelect } from "react-multi-select-component";
 
 const validationSchema = Yup.object().shape({
   startDate: Yup.string().required("*Start Date is required!"),
@@ -21,28 +19,12 @@ const validationSchema = Yup.object().shape({
   workingDays: Yup.array()
     .of(Yup.string().required("*Working Days is required"))
     .min(1, "*Working Days is required"),
-  centerIds: Yup.array().min(1, "*At least one Centre must be selected"),
 });
 
 const StaffAccountEdit = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
-    const [centerData, setCenterData] = useState([]);
     const [shgData, setShgData] = useState([]);
-    const [selectedCenters, setSelectedCenters] = useState([]);
     const centerId = localStorage.getItem("tmscenterId");
-    const centerOptions = centerData.map((center) => ({
-      label: center.centerNames,
-      value: center.id,
-    }));
-
-    // const fetchData = async () => {
-    //   try {
-    //     const centerData = await fetchAllCentersWithIds();
-    //     setCenterData(centerData);
-    //   } catch (error) {
-    //     toast.error(error);
-    //   }
-    // };
     const userName = localStorage.getItem("tmsuserName");
 
     const formik = useFormik({
@@ -60,32 +42,6 @@ const StaffAccountEdit = forwardRef(
         updatedBy: userName,
       },
       validationSchema: validationSchema,
-
-      // onSubmit: async (values) => {
-      //   values.approvelContentRequired =
-      //     values.approvelContentRequired === "Yes";
-
-      //   try {
-      //     const response = await api.put(
-      //       `/updateUserAccountInfo/${values.accountId}`,
-      //       values,
-      //       {
-      //         headers: {
-      //           "Content-Type": "application/json",
-      //         },
-      //       }
-      //     );
-      //     if (response.status === 200) {
-      //       toast.success(response.data.message);
-      //       setFormData((prv) => ({ ...prv, ...values }));
-      //       handleNext();
-      //     } else {
-      //       toast.error(response.data.message);
-      //     }
-      //   } catch (error) {
-      //     toast.error(error);
-      //   }
-      // },
 
       onSubmit: async (values) => {
         // console.log("Api Data:", values);
@@ -185,7 +141,7 @@ const StaffAccountEdit = forwardRef(
       const getData = async () => {
         try {
           const response = await api.get(
-            `/getAllUserAccountInfoWithCenterId/${centerId}`
+            `/getAllUserById/${formData.staff_id}`
           );
           if (
             response.data.userAccountInfo &&

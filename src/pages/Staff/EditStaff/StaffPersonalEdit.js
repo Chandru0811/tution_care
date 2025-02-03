@@ -56,6 +56,7 @@ const StaffPersonalEdit = forwardRef(
       onSubmit: async (data) => {
         setLoadIndicators(true);
         data.updatedBy = userName;
+        data.centerId = centerId;
         setFormData((prev) => ({ ...prev, ...data }));
         let nationalityName;
         if (data.nationalityId)
@@ -140,7 +141,7 @@ const StaffPersonalEdit = forwardRef(
       const getData = async () => {
         try {
           const response = await api.get(
-            `/getAllUserWithCenterId/${centerId}`
+            `/getAllUserById/${formData.staff_id}`
           );
           const dateOfBirth = response.data.dateOfBirth.substring(0, 10);
           formik.setValues({

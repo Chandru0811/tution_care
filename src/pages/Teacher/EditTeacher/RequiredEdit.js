@@ -30,6 +30,7 @@ const RequiredEdit = forwardRef(
             const formDatas = new FormData();
             // Add each data field manually to the FormData object
             formDatas.append("resume", values.resume);
+            formDatas.append("centerId", centerId);
             formDatas.append(
               "educationCertificate",
               values.educationCertificate
@@ -56,6 +57,7 @@ const RequiredEdit = forwardRef(
             // Add each data field manually to the FormData object
             const userId = formData.staff_id;
             formDatas.append("userId", userId);
+            formDatas.append("centerId", centerId);
             formDatas.append("resume", values.resume);
             formDatas.append(
               "educationCertificate",
@@ -98,7 +100,7 @@ const RequiredEdit = forwardRef(
       const getData = async () => {
         try {
           const response = await api.get(
-            `/getAllUserRequireInformationWithCenterId/${centerId}`
+            `/getAllUserById/${formData.staff_id}`
           );
           if (
             response.data.userRequireInformationModels &&

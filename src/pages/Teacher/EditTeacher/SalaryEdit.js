@@ -72,6 +72,7 @@ const SalaryEdit = forwardRef(
       onSubmit: async (values) => {
         setLoadIndicators(true);
         values.updatedBy = userName;
+        values.centerId = centerId;
         console.log("Api Data:", values);
         try {
           if (id) {
@@ -139,7 +140,7 @@ const SalaryEdit = forwardRef(
       const getData = async () => {
         try {
           const response = await api.get(
-            `/getAllUserSalaryCreationWithCenterId/${centerId}`
+            `/getAllUserById/${formData.staff_id}`
           );
           console.log("ofirst", response);
           if (

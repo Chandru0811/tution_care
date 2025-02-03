@@ -22,7 +22,6 @@ const ContractEdit = forwardRef(
     const [workingDays, setWorkingDays] = useState([]);
     console.log("object", formData);
     const validationSchema = Yup.object().shape({
-      employer: Yup.string().required("*Employer is required"),
       employee: Yup.string().required("*Employee is required"),
       uen: Yup.string().required("*UEN is required"),
       addressOfEmployment: Yup.string().required("*Address is required"),
@@ -64,8 +63,8 @@ const ContractEdit = forwardRef(
             : Yup.string().notRequired(),
       }),
       workingDays: Yup.array()
-         .min(1, "*Working days are required")
-         .required("*Working days are required"),
+        .min(1, "*Working days are required")
+        .required("*Working days are required"),
       terminationNotice: Yup.string().required("*Notice is required"),
       allowance: Yup.number()
         .typeError("*Allowance Must be numbers")
@@ -181,7 +180,8 @@ const ContractEdit = forwardRef(
         allowance: formData.allowance || "",
         userContractStartDate:
           empRole !== "freelancer" ? formData.startDate || "" : "",
-        contactPeriod: empRole !== "freelancer" ? formData.contactPeriod || "" : "",
+        contactPeriod:
+          empRole !== "freelancer" ? formData.contactPeriod || "" : "",
         probation: formData.probation || "",
         workingDays: formData.workingDays || "",
         userContractSalary:
@@ -203,20 +203,25 @@ const ContractEdit = forwardRef(
       onSubmit: async (values) => {
         // Start loader
         setLoadIndicators(true);
-    
+        values.centerId = centerId;
+
         try {
           values.updatedBy = userName;
-    
+
           const apiCall = contactId
             ? api.put(`/updateUserContractCreation/${contactId.id}`, values, {
                 headers: { "Content-Type": "application/json" },
               })
-            : api.post(`/createUserContractCreationWithCenterId/${formData.staff_id}`, values, {
-                headers: { "Content-Type": "application/json" },
-              });
-    
+            : api.post(
+                `/createUserContractCreationWithCenterId/${formData.staff_id}`,
+                values,
+                {
+                  headers: { "Content-Type": "application/json" },
+                }
+              );
+
           const response = await apiCall;
-    
+
           if (response.status === 200 || response.status === 201) {
             toast.success(response.data.message);
             setFormData((prev) => ({ ...prev, ...values }));
@@ -225,7 +230,9 @@ const ContractEdit = forwardRef(
             toast.error(response.data.message);
           }
         } catch (error) {
-          toast.error(error?.response?.data?.message || "Something went wrong!");
+          toast.error(
+            error?.response?.data?.message || "Something went wrong!"
+          );
         } finally {
           // Stop loader
           setLoadIndicators(false);
@@ -235,7 +242,6 @@ const ContractEdit = forwardRef(
       validateOnBlur: true,
     });
 
-    
     const scrollToError = (errors) => {
       const errorField = Object.keys(errors)[0];
       const errorElement = document.querySelector(`[name="${errorField}"]`);
@@ -255,7 +261,7 @@ const ContractEdit = forwardRef(
       const fetchEmployerData = async () => {
         try {
           const response = await api.get(
-            `/getAllUserContractCreationWithCenterId/${centerId}`
+            `/getAllUserById/${formData.staff_id}`
           );
           setEmployerData(response.data.userAccountInfo[0].centers || []);
           setWorkingDays(response.data.userAccountInfo[0].workingDays);
@@ -279,7 +285,7 @@ const ContractEdit = forwardRef(
                 formData.workingDays ||
                 response.data.userAccountInfo[0].workingDays ||
                 "",
-                userContractSalary:
+              userContractSalary:
                 formData.salary ||
                 response.data.userSalaryCreationModels[0].salary ||
                 "",
@@ -299,10 +305,10 @@ const ContractEdit = forwardRef(
 
       fetchEmployerData();
     }, [formData.staff_id]);
-    
-    const getData1 = async (id) => {
+
+    const getData1 = async () => {
       try {
-        const response = await api.get(`/getAllCenterById/${id}`);
+        const response = await api.get(`/getAllCenterById/${centerId}`);
         formik.setFieldValue("uen", response.data.uenNumber);
         formik.setFieldValue("addressOfEmployment", response.data.address);
         console.log("response", response.data);
@@ -310,6 +316,10 @@ const ContractEdit = forwardRef(
         toast.error("Error Fetching Data", error);
       }
     };
+    useEffect(() => {
+      getData1();
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    }, []);
 
     useImperativeHandle(ref, () => ({
       contractEdit: formik.handleSubmit,
@@ -371,35 +381,6 @@ const ContractEdit = forwardRef(
             <span className="mt-3 fw-bold">Details of EMPLOYER</span>
             <div class="row mt-4">
               <div class="col-md-6 col-12 mb-2 mt-3">
-                <label>Employer</label>
-                <span className="text-danger">*</span>
-                <select
-                  type="text"
-                  className="form-select"
-                  name="employer"
-                  onChange={(e) => {
-                    const selectedId = e.target.value;
-                    formik.setFieldValue("employer", selectedId);
-                    getData1(selectedId);
-                  }}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.employer}
-                  // value={contactId?.employer}
-                >
-                  <option selected></option>
-                  {employerData?.map((center) => (
-                    <option key={center.id} value={center.id}>
-                      {center.centerName}
-                    </option>
-                  ))}
-                </select>
-                {formik.touched.employer && formik.errors.employer && (
-                  <div className="error text-danger ">
-                    <small>{formik.errors.employer}</small>
-                  </div>
-                )}
-              </div>
-              <div class="col-md-6 col-12 mb-2 mt-3">
                 <label>UEN</label>
                 <span className="text-danger">*</span>
                 <input
@@ -419,27 +400,28 @@ const ContractEdit = forwardRef(
                   </div>
                 )}
               </div>
+              <div class="col-md-6 col-12 mb-2 mt-3">
+                <label>Address of Employment</label>
+                <span className="text-danger">*</span>
+                <input
+                  type="text"
+                  className="form-control"
+                  name="addressOfEmployment"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.addressOfEmployment}
+                  // value={contactId?.addressOfEmployment}
+                  readOnly
+                />
+                {formik.touched.addressOfEmployment &&
+                  formik.errors.addressOfEmployment && (
+                    <div className="error text-danger ">
+                      <small>{formik.errors.addressOfEmployment}</small>
+                    </div>
+                  )}
+              </div>
             </div>
-            <div class="col-md-6 col-12 mb-2 mt-3">
-              <label>Address of Employment</label>
-              <span className="text-danger">*</span>
-              <input
-                type="text"
-                className="form-control"
-                name="addressOfEmployment"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.addressOfEmployment}
-                // value={contactId?.addressOfEmployment}
-                readOnly
-              />
-              {formik.touched.addressOfEmployment &&
-                formik.errors.addressOfEmployment && (
-                  <div className="error text-danger ">
-                    <small>{formik.errors.addressOfEmployment}</small>
-                  </div>
-                )}
-            </div>
+
             <div class="row mt-3 ">
               <span className="mt-3 fw-bold ">Details of EMPLOYEE</span>
               <div class="col-md-6 col-12 mb-2 mt-3">

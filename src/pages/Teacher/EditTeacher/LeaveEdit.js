@@ -64,6 +64,7 @@ const LeaveEdit = forwardRef(
       onSubmit: async (values) => {
         setLoadIndicators(true);
         values.updatedBy = userName;
+        values.centerId = centerId;
         // console.log("Api Data:", values);
         try {
           if (values.leaveId !== null) {
@@ -132,7 +133,7 @@ const LeaveEdit = forwardRef(
       const getData = async () => {
         try {
           const response = await api.get(
-            `/getAllUserLeaveCreationWithCenterId/${centerId}`
+            `/getAllUserById/${formData.staff_id}`
           );
           if (
             response.data.userLeaveCreationModels &&

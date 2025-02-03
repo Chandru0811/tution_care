@@ -8,12 +8,9 @@ import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
-
 import * as Yup from "yup";
-import fetchAllCentersWithIds from "../../List/CenterList";
 
 const validationSchema = Yup.object().shape({
-  employer: Yup.string().required("*Employer is required"),
   employee: Yup.string().required("*Employee is required"),
   uen: Yup.string().required("*UEN is required"),
   addressOfEmployment: Yup.string().required("*Address is required"),
@@ -59,13 +56,10 @@ const StaffContractEdit = forwardRef(
     const navigate = useNavigate();
     const userName = localStorage.getItem("tmsuserName");
     const centerId = localStorage.getItem("tmscenterId");
-    const [centerData, setCenterData] = useState(null);
-    const [employerData, setEmployerData] = useState(null);
     const [datas, setDatas] = useState();
     const [workingDays, setWorkingDays] = useState();
 
-    console.log("workingDays:",workingDays);
-    
+    console.log("workingDays:", workingDays);
 
     const formik = useFormik({
       initialValues: {
@@ -161,21 +155,9 @@ const StaffContractEdit = forwardRef(
         scrollToError(formik.errors);
       }
     }, [formik.submitCount, formik.errors]);
-
-    const fetchData = async () => {
+    const getData1 = async () => {
       try {
-        const centerData = await fetchAllCentersWithIds();
-        setCenterData(centerData);
-      } catch (error) {
-        toast.error(error);
-      }
-    };
-    // const filteredCenters = centerData?.filter((center) =>
-    //   formData.centerIds.includes(center.id)
-    // );
-    const getData1 = async (id) => {
-      try {
-        const response = await api.get(`/getAllCenterById/${id}`);
+        const response = await api.get(`/getAllCenterById/${centerId}`);
         formik.setFieldValue("uen", response.data.uenNumber);
         formik.setFieldValue("addressOfEmployment", response.data.address);
         // console.log("response", response.data);
@@ -220,10 +202,9 @@ const StaffContractEdit = forwardRef(
       const getData = async () => {
         try {
           const response = await api.get(
-            `/getAllUserContractCreationWithCenterId/${centerId}`
+            `/getAllUserById/${formData.staff_id}`
           );
           const employerData = response.data.userAccountInfo[0].centers;
-          setEmployerData(employerData);
           console.log("employerData", employerData);
           setWorkingDays(response.data.userAccountInfo[0].workingDays);
           if (
@@ -331,7 +312,7 @@ const StaffContractEdit = forwardRef(
       };
       console.log(formik.values);
       getData();
-      fetchData();
+      getData1();
       window.scrollTo({ top: 0, left: 0, behavior: "instant" });
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -365,34 +346,6 @@ const StaffContractEdit = forwardRef(
             <span className="mt-3 fw-bold">Details of EMPLOYER</span>
             <div class="row mt-4">
               <div class="col-md-6 col-12 mb-2 mt-3">
-                <label>Employer</label>
-                <span className="text-danger">*</span>
-                <select
-                  type="text"
-                  className="form-select"
-                  name="employer"
-                  onChange={(e) => {
-                    const selectedId = e.target.value;
-                    formik.setFieldValue("employer", selectedId);
-                    getData1(selectedId);
-                  }}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.employer}
-                >
-                  <option selected></option>
-                  {employerData?.map((center) => (
-                    <option key={center.id} value={center.id}>
-                      {center.centerName}
-                    </option>
-                  ))}
-                </select>
-                {formik.touched.employer && formik.errors.employer && (
-                  <div className="error text-danger ">
-                    <small>{formik.errors.employer}</small>
-                  </div>
-                )}
-              </div>
-              <div class="col-md-6 col-12 mb-2 mt-3">
                 <label>UEN</label>
                 <span className="text-danger">*</span>
                 <input
@@ -410,26 +363,27 @@ const StaffContractEdit = forwardRef(
                   </div>
                 )}
               </div>
+              <div class="col-md-6 col-12 mb-2 mt-3">
+                <label>Address of Employment</label>
+                <span className="text-danger">*</span>
+                <input
+                  type="text"
+                  className="form-control"
+                  name="addressOfEmployment"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.addressOfEmployment}
+                  readOnly={datas?.addressOfEmployment}
+                />
+                {formik.touched.addressOfEmployment &&
+                  formik.errors.addressOfEmployment && (
+                    <div className="error text-danger ">
+                      <small>{formik.errors.addressOfEmployment}</small>
+                    </div>
+                  )}
+              </div>
             </div>
-            <div class="col-md-6 col-12 mb-2 mt-3">
-              <label>Address of Employment</label>
-              <span className="text-danger">*</span>
-              <input
-                type="text"
-                className="form-control"
-                name="addressOfEmployment"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.addressOfEmployment}
-                readOnly={datas?.addressOfEmployment}
-              />
-              {formik.touched.addressOfEmployment &&
-                formik.errors.addressOfEmployment && (
-                  <div className="error text-danger ">
-                    <small>{formik.errors.addressOfEmployment}</small>
-                  </div>
-                )}
-            </div>
+
             <div class="row mt-3 ">
               <span className="mt-3 fw-bold ">Details of EMPLOYEE</span>
               <div class="col-md-6 col-12 mb-2 mt-3">

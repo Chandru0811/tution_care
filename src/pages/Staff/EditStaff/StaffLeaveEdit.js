@@ -36,33 +36,13 @@ const StaffLeaveEdit = forwardRef(
         otherLeave: "",
         carryForwardLeave: "",
         updatedBy: userName,
+        centerId: centerId,
       },
       validationSchema: validationSchema,
-      // onSubmit: async (data) => {
-      //   try {
-      //     const response = await api.put(
-      //       `/updateUserLeaveCreation/${data.leaveId}`,
-      //       data,
-      //       {
-      //         headers: {
-      //           "Content-Type": "application/json",
-      //         },
-      //       }
-      //     );
-      //     if (response.status === 200) {
-      //       toast.success(response.data.message);
-      //       setFormData((prv) => ({ ...prv, ...data }));
-      //       handleNext();
-      //     } else {
-      //       toast.error(response.data.message);
-      //     }
-      //   } catch (error) {
-      //     toast.error(error);
-      //   }
-      // },
       onSubmit: async (values) => {
         setLoadIndicators(true);
         values.updatedBy = userName;
+        values.centerId = centerId;
         // console.log("Api Data:", values);
         try {
           if (values.leaveId !== null) {
@@ -127,25 +107,12 @@ const StaffLeaveEdit = forwardRef(
       }
     }, [formik.submitCount, formik.errors]);
 
-    // useEffect(() => {
-    //   const getData = async () => {
-    //     const response = await api.get(`/getAllUsersById/${formData.staff_id}`);
-    //     console.log(response.data.userLeaveCreationModels[0]);
-    //     formik.setValues({
-    //       ...response.data.userLeaveCreationModels[0],
-    //       year: response.data.userLeaveCreationModels[0].year.substring(0, 10),
-    //       leaveId: response.data.userLeaveCreationModels[0].id,
-    //     });
-    //   };
-    //   getData();
-    //   // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, []);
 
     useEffect(() => {
       const getData = async () => {
         try {
           const response = await api.get(
-            `/getAllUserLeaveCreationWithCenterId/${centerId}`
+            `/getAllUserById/${formData.staff_id}`
           );
           if (
             response.data.userLeaveCreationModels &&

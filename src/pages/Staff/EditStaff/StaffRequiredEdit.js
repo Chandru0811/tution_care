@@ -40,6 +40,7 @@ const StaffRequiredEdit = forwardRef(
       onSubmit: async (values) => {
         setLoadIndicators(true);
         values.updatedBy = userName;
+        values.centerId = centerId;
         try {
           if (values.userEnquireId !== null || undefined) {
             const formDatas = new FormData();
@@ -115,7 +116,7 @@ const StaffRequiredEdit = forwardRef(
       const getData = async () => {
         try {
           const response = await api.get(
-            `/getAllUserRequireInformationWithCenterId/${centerId}`
+            `/getAllUserById/${formData.staff_id}`
           );
           if (
             response.data.userRequireInformationModels &&

@@ -169,7 +169,7 @@ const AccountEdit = forwardRef(
       const getData = async () => {
         try {
           const response = await api.get(
-            `/getAllUserAccountInfoWithCenterId/${centerId}`
+            `/getAllUserById/${formData.staff_id}`
           );
           if (
             response.data.userAccountInfo &&

@@ -62,6 +62,7 @@ const ContactEdit = forwardRef(
       onSubmit: async (values) => {
         setLoadIndicators(true);
         values.updatedBy = userName;
+        values.centerId = centerId;
         // console.log("Api Data:", values);
         try {
           if (values.contactId !== null) {
@@ -131,7 +132,7 @@ const ContactEdit = forwardRef(
       const getData = async () => {
         try {
           const response = await api.get(
-            `/getAllUserContactInfoWithCenterId/${centerId}`
+            `/getAllUserById/${formData.staff_id}`
           );
           if (
             response.data.userContactInfo &&
