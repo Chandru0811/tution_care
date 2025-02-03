@@ -46,6 +46,7 @@ const PersonalAdd = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const [idTypeData, setIdTypeData] = useState(null);
     const [nationalityData, setNationalityData] = useState(null);
+    const [roleData, setRoleData] = useState(null);
     const userName = localStorage.getItem("tmsuserName");
     const centerId = localStorage.getItem("tmscenterId");
 
@@ -83,7 +84,7 @@ const PersonalAdd = forwardRef(
             );
           // Add each data field manually to the FormData object
           formData.append("role", values.role);
-          formData.append("centerId",centerId);
+          formData.append("centerId", centerId);
           formData.append("teacherName", values.teacherName);
           formData.append("dateOfBirth", values.dateOfBirth);
           formData.append("idTypeId", values.idTypeId);
@@ -178,10 +179,19 @@ const PersonalAdd = forwardRef(
         toast.error(error);
       }
     };
+    const rolesData = async () => {
+      try {
+        const response = await api.get(`/getUserRolesByCenterId/${centerId}`);
+        setRoleData(response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
 
     useEffect(() => {
       fetchIDTypeData();
       fetchCitizenShipData();
+      rolesData();
     }, []);
 
     useImperativeHandle(ref, () => ({
@@ -555,9 +565,13 @@ const PersonalAdd = forwardRef(
                 onBlur={formik.handleBlur}
                 value={formik.values.role}
               >
-                <option value=""></option>
-                <option value="teacher">Teacher</option>
-                <option value="freelancer">Freelancer</option>
+                <option selected></option>
+                {roleData &&
+                  roleData.map((role) => (
+                    <option key={role.id} value={role.roleName}>
+                      {role.roleName}
+                    </option>
+                  ))}
               </select>
               {formik.touched.role && formik.errors.role && (
                 <div className="error text-danger">

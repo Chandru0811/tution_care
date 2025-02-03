@@ -47,6 +47,7 @@ const StaffPersonalAdd = forwardRef(
     const [idTypeData, setIdTypeData] = useState(null);
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const [roleData, setRoleData] = useState(null);
     const userName = localStorage.getItem("tmsuserName");
     const [nationalityData, setNationalityData] = useState(null);
     const centerId = localStorage.getItem("tmscenterId");
@@ -176,10 +177,19 @@ const StaffPersonalAdd = forwardRef(
         toast.error(error);
       }
     };
+    const rolesData = async () => {
+      try {
+        const response = await api.get(`/getUserRolesByCenterId/${centerId}`);
+        setRoleData(response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
 
     useEffect(() => {
       fetchIDTypeData();
       fetchCitizenShipData();
+      rolesData();
     }, []);
 
     useImperativeHandle(ref, () => ({
@@ -497,11 +507,13 @@ const StaffPersonalAdd = forwardRef(
                   onBlur={formik.handleBlur}
                   value={formik.values.role}
                 >
-                  <option value=""></option>
-                  <option value={"staff"}>Staff</option>
-                  <option value={"branch_admin"}>Branch Admin</option>
-                  <option value={"staff_admin"}>Staff Admin</option>
-                  <option value={"center_manager"}>Centre Manager</option>
+                   <option selected></option>
+                  {roleData &&
+                    roleData.map((role) => (
+                      <option key={role.id} value={role.id}>
+                        {role.roleName}
+                      </option>
+                    ))}
                 </select>
                 {formik.touched.role && formik.errors.role && (
                   <div className="error text-danger ">

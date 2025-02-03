@@ -55,7 +55,7 @@ function SuperAdminHeader({ onLogout }) {
         </div>
 
         <div className="d-flex align-items-center justify-content-evenly">
-          <Link to={"/calendar"}>
+          {/* <Link to={"/calendar"}>
             <button className="btn" type="button">
               <CiCalendarDate
                 style={{
@@ -65,7 +65,7 @@ function SuperAdminHeader({ onLogout }) {
                 }}
               />
             </button>
-          </Link>
+          </Link> */}
           <div className="position-relative me-3">
             <span className="badge bg-primary rounded-pill">
               ECS Tuition Care

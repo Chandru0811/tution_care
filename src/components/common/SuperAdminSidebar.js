@@ -77,18 +77,18 @@ function SuperAdminSidebar() {
           },
         ],
       },
-      {
-        title: "Settings",
-        icon: "PiBuildings",
-        isOpen: false,
-        subMenus: [
-          {
-            title: "Module Access",
-            path: "/moduleaccess",
-            access: true,
-          },
-        ],
-      },
+      // {
+      //   title: "Settings",
+      //   icon: "PiBuildings",
+      //   isOpen: false,
+      //   subMenus: [
+      //     {
+      //       title: "Module Access",
+      //       path: "/moduleaccess",
+      //       access: true,
+      //     },
+      //   ],
+      // },
     ];
     setMenuItems(updatedMenuItems);
   }, []);
