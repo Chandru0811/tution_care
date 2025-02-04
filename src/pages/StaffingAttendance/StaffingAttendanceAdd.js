@@ -158,7 +158,7 @@ function StaffingAttendanceAdd() {
       }
 
       try {
-        const response = await api.post("/createUserAttendanceModelWithCenterId", payload, {
+        const response = await api.post("/createUserAttendance", payload, {
           headers: {
             "Content-Type": "application/json",
           },
@@ -383,6 +383,32 @@ function StaffingAttendanceAdd() {
 
                 {formik.values.attendanceStatus === "Present" && (
                   <>
+                     <div className="col-md-6 col-12 mb-3">
+                      <label>Mode Of Working</label>
+                      <span className="text-danger">*</span>
+                      <select
+                        className={`form-select ${
+                          formik.touched.modeOfWorking &&
+                          formik.errors.modeOfWorking
+                            ? "is-invalid"
+                            : ""
+                        }`}
+                        {...formik.getFieldProps("modeOfWorking")}
+                      >
+                        <option value="" label="Select Mode" />
+                        <option value="WORK_FROM_HOME" label="Work From Home" />
+                        <option
+                          value="WORK_FROM_OFFICE"
+                          label="Work From Office"
+                        />
+                      </select>
+                      {formik.touched.modeOfWorking &&
+                        formik.errors.modeOfWorking && (
+                          <div className="invalid-feedback">
+                            {formik.errors.modeOfWorking}
+                          </div>
+                        )}
+                    </div>
                     <div className="col-md-6 col-12 mb-3">
                       <label>Check In</label>
                       {/* <span className="text-danger">*</span> */}
@@ -465,32 +491,7 @@ function StaffingAttendanceAdd() {
                       )}
                     </div>
 
-                    <div className="col-md-6 col-12 mb-3">
-                      <label>Mode Of Working</label>
-                      <span className="text-danger">*</span>
-                      <select
-                        className={`form-select ${
-                          formik.touched.modeOfWorking &&
-                          formik.errors.modeOfWorking
-                            ? "is-invalid"
-                            : ""
-                        }`}
-                        {...formik.getFieldProps("modeOfWorking")}
-                      >
-                        <option value="" label="Select Mode" />
-                        <option value="WORK_FROM_HOME" label="Work From Home" />
-                        <option
-                          value="WORK_FROM_OFFICE"
-                          label="Work From Office"
-                        />
-                      </select>
-                      {formik.touched.modeOfWorking &&
-                        formik.errors.modeOfWorking && (
-                          <div className="invalid-feedback">
-                            {formik.errors.modeOfWorking}
-                          </div>
-                        )}
-                    </div>
+                 
                   </>
                 )}
 

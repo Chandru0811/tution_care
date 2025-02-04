@@ -77,6 +77,18 @@ const StaffingAttendance = () => {
             <span className="badge badges-orange fw-light">Absent</span>
           ) : null,
       },
+      {
+        accessorKey: "userRole",
+        header: "User Role",
+        Cell: ({ row }) =>
+          row.original.userRole === "TUITION_TEACHER" ? (
+            <span>Teacher</span>
+          ) : row.original.userRole === "TUITION_STAFF" ? (
+            <span>Staff</span>
+          ) : row.original.userRole === "TUITION_FREELANCER" ? (
+            <span>Freelancer</span>
+          ) : null,
+      },
       { accessorKey: "centerName", enableHiding: false, header: "Centre Name" },
       {
         accessorKey: "employeeName",
@@ -147,18 +159,7 @@ const StaffingAttendance = () => {
           ) : null,
       },
       { accessorKey: "userId", header: "User Id" },
-      {
-        accessorKey: "userRole",
-        header: "User Role",
-        Cell: ({ row }) =>
-          row.original.userRole === "SMS_TEACHER" ||
-          row.original.userRole === "sms_teacher" ? (
-            <span>SMS TEACHER</span>
-          ) : row.original.userRole === "CENTER_MANAGER" ||
-            row.original.userRole === "center_manager" ? (
-            <span>CENTER MANAGER</span>
-          ) : null,
-      },
+  
       { accessorKey: "otEndTime", header: "Ot End Time" },
       { accessorKey: "otStartTime", header: "Ot Start Time" },
       {

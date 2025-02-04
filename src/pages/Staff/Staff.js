@@ -96,7 +96,7 @@ const Staff = () => {
         enableHiding: false,
         header: "Gender",
       },
-      
+
       {
         accessorKey: "contactNumber",
         enableHiding: false,
@@ -139,11 +139,35 @@ const Staff = () => {
     []
   );
 
+  // const fetchData = async () => {
+  //   try {
+  //     setLoading(true);
+  //     const response = await api.get(
+  //       `/getAllUserListExceptTeacher?centerId=${centerId}`
+  //     );
+  //     setData(response.data);
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
   const fetchData = async () => {
     try {
       setLoading(true);
+      const filteredFilters = Object.fromEntries(
+        Object.entries(filters).filter(
+          ([key, value]) =>
+            value !== "" && value !== null && value !== undefined
+        )
+      );
+      const queryParams = new URLSearchParams(filteredFilters).toString();
       const response = await api.get(
-        `/getAllUserListExceptTeacher?centerId=${centerId}`
+        // `/getAllUserListExceptTeacher?centerId=${centerId}${queryParams}`
+        `/getAllUserListExceptTeacher?centerId=${centerId}${
+          queryParams ? `&${queryParams}` : ""
+        }`
       );
       setData(response.data);
     } catch (error) {

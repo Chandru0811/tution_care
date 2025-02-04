@@ -11,6 +11,8 @@ import {
 import { MoreVert as MoreVertIcon } from "@mui/icons-material";
 import GlobalDelete from "../../../components/common/GlobalDelete";
 import api from "../../../config/URL";
+import DeductionAdd from "./DeductionAdd";
+import DeductionEdit from "./DeductionEdit";
 
 const Deduction = () => {
   const navigate = useNavigate();
@@ -102,6 +104,7 @@ const Deduction = () => {
       console.error("Error fetching data ", error);
     }
   };
+
   useEffect(() => {
     getData();
   }, []);
@@ -190,15 +193,16 @@ const Deduction = () => {
         </div>
         <div className="mb-3 d-flex justify-content-end">
           {storedScreens?.deductionCreate && (
-            <Link to="/deduction/add">
-              <button
-                type="button"
-                className="btn btn-button btn-sm me-2"
-                style={{ fontWeight: "600px !important" }}
-              >
-                &nbsp; Add &nbsp;&nbsp; <i className="bx bx-plus"></i>
-              </button>
-            </Link>
+            <DeductionAdd onSuccess={getData} />
+            // <Link to="/deduction/add">
+            //   <button
+            //     type="button"
+            //     className="btn btn-button btn-sm me-2"
+            //     style={{ fontWeight: "600px !important" }}
+            //   >
+            //     &nbsp; Add &nbsp;&nbsp; <i className="bx bx-plus"></i>
+            //   </button>
+            // </Link>
           )}
         </div>
         {loading ? (
@@ -235,10 +239,10 @@ const Deduction = () => {
                     updatedAt: false,
                   },
                 }}
-                muiTableBodyRowProps={({ row }) => ({
-                  onClick: () => navigate(`/deduction/list/${row.original.id}`),
-                  style: { cursor: "pointer" },
-                })}
+                // muiTableBodyRowProps={({ row }) => ({
+                //   onClick: () => navigate(`/deduction/list/${row.original.id}`),
+                //   style: { cursor: "pointer" },
+                // })}
               />
             </ThemeProvider>
 
@@ -248,11 +252,12 @@ const Deduction = () => {
               open={Boolean(menuAnchor)}
               onClose={handleMenuClose}
             >
-              <MenuItem
-                onClick={() => navigate(`/deduction/edit/${selectedId}`)}
-                className="text-start mb-0 menuitem-style"
-              >
-                Edit
+              <MenuItem>
+                <DeductionEdit
+                  onSuccess={getData}
+                  id={selectedId}
+                  handleMenuClose={handleMenuClose}
+                />
               </MenuItem>
               <MenuItem>
                 <GlobalDelete

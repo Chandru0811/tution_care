@@ -18,6 +18,7 @@ const ContractAdd = forwardRef(
     const userName = localStorage.getItem("tmsuserName");
     const centerId = localStorage.getItem("tmscenterId");
     const empRole = formData.role;
+    console.log("formData.role",formData.role)
     const validationSchema = Yup.object().shape({
       // const validationSchema = (empRole) => {
       //   return Yup.object().shape({
@@ -31,7 +32,7 @@ const ContractAdd = forwardRef(
       mainDuties: Yup.string().required("*Main Duties is required"),
       startDateOfEmployment: Yup.string().required("*Date is required"),
       training: Yup.string().required("*Training is required"),
-      ...(empRole !== "freelancer" && {
+      ...(empRole !== "Freelancer" && {
         userContractStartDate: Yup.string().required("*Date is required"),
         userContractEndDate: Yup.string()
           .required("*End Date Of Contract is required")
@@ -50,15 +51,15 @@ const ContractAdd = forwardRef(
           .typeError("*Salary must be a number")
           .required("*Salary is required"),
         salaryStartDate:
-          empRole !== "freelancer"
+          empRole !== "Freelancer"
             ? Yup.string().required("*Start Date is required")
             : Yup.string().notRequired(),
         contractDate:
-          empRole !== "freelancer"
+          empRole !== "Freelancer"
             ? Yup.string().required("*Contract Date is required")
             : Yup.string().notRequired(),
         contactPeriod:
-          empRole !== "freelancer"
+          empRole !== "Freelancer"
             ? Yup.string().required("*Contact is required")
             : Yup.string().notRequired(),
       }),
@@ -91,20 +92,20 @@ const ContractAdd = forwardRef(
         allowance: formData.allowance || "",
         userContractStartDate: formData.startDate || "",
         contactPeriod:
-          empRole !== "freelancer" ? formData.contactPeriod || "" : "",
+          empRole !== "Freelancer" ? formData.contactPeriod || "" : "",
         probation: formData.probation || "",
         workingDays: formData.workingDays || "",
         userContractSalary:
-          empRole !== "freelancer" ? formData.salary || "" : "",
+          empRole !== "Freelancer" ? formData.salary || "" : "",
         salaryStartDate:
-          empRole !== "freelancer" ? formData.effectiveDate || "" : "",
+          empRole !== "Freelancer" ? formData.effectiveDate || "" : "",
         // formData.effectiveDate || "",
         userContractEndDate:
-          empRole !== "freelancer" ? formData.endDate || "" : "",
+          empRole !== "Freelancer" ? formData.endDate || "" : "",
         payNow: formData.payNow || "",
         internetBanking: formData.internetBanking || "",
         contractDate:
-          empRole !== "freelancer"
+          empRole !== "Freelancer"
             ? formData.startDate || formData.userContractStartDate
             : "",
         terminationNotice: formData.terminationNotice || "",
@@ -526,7 +527,7 @@ const ContractAdd = forwardRef(
                   )}
               </div>
 
-              {empRole !== "freelancer" && (
+              {empRole !== "Freelancer" && (
                 <div className="col-md-6 col-12 mb-2 mt-3">
                   <label>Contract Period</label>
                   <span className="text-danger">*</span>
@@ -725,7 +726,7 @@ const ContractAdd = forwardRef(
                   </div>
                 )}
               </div>
-              {empRole !== "freelancer" && (
+              {empRole !== "Freelancer" && (
                 <div class="col-md-6 col-12 mb-2 mt-3">
                   <label>Salary</label>
                   <span className="text-danger">*</span>
@@ -746,7 +747,7 @@ const ContractAdd = forwardRef(
                     )}
                 </div>
               )}
-              {empRole !== "freelancer" && (
+              {empRole !== "Freelancer" && (
                 <div class="col-md-6 col-12 mb-2 mt-3">
                   <label>Salary Start Date</label>
                   <span className="text-danger">*</span>
@@ -793,7 +794,7 @@ const ContractAdd = forwardRef(
                     value={formik.values.internetBanking}
                   />
                 </div>
-                {empRole !== "freelancer" && (
+                {empRole !== "Freelancer" && (
                   <div className="col-md-6 col-12 mb-2 mt-3">
                     <label>Contract Date</label>
                     <span className="text-danger">*</span>

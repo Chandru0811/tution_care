@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
-import fetchAllCentersWithIds from "../../List/CenterList";
-import { format } from "date-fns";
 import fetchUserListWithoutFreelancerByCenterId from "../../List/UserListWithoutFreelancer";
+import { format } from "date-fns";
+import { Modal, Button } from "react-bootstrap";
 
 const validationSchema = Yup.object({
-  // centerId: Yup.number().required("*Center Name is required"),
   userId: Yup.number().required("*Employee Name is required"),
   deductionName: Yup.string().required("*Select the Deduction Name"),
   deductionMonth: Yup.string().required("*Select the Deduction Month"),
@@ -19,20 +17,28 @@ const validationSchema = Yup.object({
     .positive("*Deduction Amount must be a positive value"),
 });
 
-function DeductionAdd() {
+function DeductionAdd({ onSuccess }) {
   const [userNamesData, setUserNameData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+
   const userName = localStorage.getItem("tmsuserName");
   const centerId = localStorage.getItem("tmscenterId");
 
-  const navigate = useNavigate();
+  const handleClose = () => {
+    setShowModal(false);
+    formik.resetForm();
+  };
+  const handleShow = () => {
+    setShowModal(true);
+  };
 
   const formik = useFormik({
     initialValues: {
       centerId: centerId,
       userId: "",
       deductionName: "",
-      deductionMonth: "",
+      deductionMonth: format(new Date(), "yyyy-MM"),
       deductionAmount: "",
       createdBy: userName,
     },
@@ -40,19 +46,16 @@ function DeductionAdd() {
     onSubmit: async (values) => {
       setLoadIndicator(true);
       values.createdBy = userName;
-      console.log("Attendance Emp:", values);
-      let selectedEmployeeName = "";
 
-      userNamesData.forEach((employee) => {
-        if (parseInt(values.userId) === employee.id) {
-          selectedEmployeeName = employee.userNames || "--";
-        }
-      });
+      // let selectedEmployeeName =
+      //   userNamesData.find(
+      //     (employee) => parseInt(values.userId) === employee.id
+      //   )?.userNames || "--";
 
       let payload = {
-        centerId:centerId,
-        userId: values.userId,
-        employeeName: selectedEmployeeName,
+        centerId :centerId,
+        userId: 17,
+        // employeeName: selectedEmployeeName,
         deductionName: values.deductionName,
         deductionMonth: values.deductionMonth,
         deductionAmount: values.deductionAmount,
@@ -60,17 +63,15 @@ function DeductionAdd() {
 
       try {
         const response = await api.post(
-          "/createUserDeductionWithCenterId",
+          "/createUserDeduction",
           payload,
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
+          { headers: { "Content-Type": "application/json" } }
         );
+
         if (response.status === 201) {
+          onSuccess();
           toast.success(response.data.message);
-          navigate("/deduction");
+          setShowModal(false);
         } else {
           toast.error(response.data.message);
         }
@@ -82,8 +83,6 @@ function DeductionAdd() {
     },
   });
 
-
-
   const fetchUserName = async () => {
     try {
       const userNames = await fetchUserListWithoutFreelancerByCenterId(
@@ -94,134 +93,54 @@ function DeductionAdd() {
       toast.error(error);
     }
   };
+
   useEffect(() => {
     fetchUserName();
   }, []);
 
-  useEffect(() => {
-    const currentMonth = format(new Date(), "yyyy-MM");
-    formik.setFieldValue("deductionMonth", currentMonth);
-  }, []);
-
   return (
     <div className="container-fluid">
-      <ol
-        className="breadcrumb my-3"
-        style={{ listStyle: "none", padding: 0, margin: 0 }}
-      >
-        <li>
-          <Link to="/" className="custom-breadcrumb">
-            Home
-          </Link>
-          <span className="breadcrumb-separator"> &gt; </span>
-        </li>
-        <li>
-          &nbsp;Staffing
-          <span className="breadcrumb-separator"> &gt; </span>
-        </li>
-        <li>
-          <Link to="/deduction" className="custom-breadcrumb">
-            &nbsp;Deduction
-          </Link>
-          <span className="breadcrumb-separator"> &gt; </span>
-        </li>
-        <li className="breadcrumb-item active" aria-current="page">
-          &nbsp;Deduction Add
-        </li>
-      </ol>
-      <form
-        onSubmit={formik.handleSubmit}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" && !formik.isSubmitting) {
-            e.preventDefault(); // Prevent default form submission
-          }
-        }}
-      >
-        <div className="card">
-          <div
-            className="d-flex justify-content-between align-items-center p-1 mb-4 px-4"
-            style={{ background: "#f5f7f9" }}
-          >
-            <div class="d-flex align-items-center">
-              <div class="d-flex">
-                <div class="dot active"></div>
-              </div>
-              <span class="me-2 text-muted">Add Deduction</span>
-            </div>
-            <div className="my-2 pe-3 d-flex align-items-center">
-              <Link to="/deduction">
-                <button type="button " className="btn btn-sm btn-border">
-                  Back
-                </button>
-              </Link>
-              &nbsp;&nbsp;
-              <button
-                type="submit"
-                className="btn btn-button btn-sm"
-                disabled={loadIndicator}
-              >
-                {loadIndicator && (
-                  <span
-                    className="spinner-border spinner-border-sm me-2"
-                    aria-hidden="true"
-                  ></span>
-                )}
-                <span className="fw-medium">Save</span>
-              </button>
-            </div>
-          </div>
-          <div className="container-fluid px-4">
+      <div className="mb-3 d-flex justify-content-end">
+        <button
+          type="button"
+          className="btn btn-button btn-sm me-2"
+          style={{ fontWeight: "600px !important" }}
+          onClick={handleShow}
+        >
+          &nbsp; Add &nbsp;&nbsp; <i className="bx bx-plus"></i>
+        </button>
+      </div>
+
+      <Modal show={showModal} onHide={handleClose} size="lg" centered>
+        <Modal.Header closeButton>
+          <Modal.Title className="headColor">Add Deduction</Modal.Title>
+        </Modal.Header>
+        <form onSubmit={formik.handleSubmit}>
+          <Modal.Body>
             <div className="row">
-              {/* <div className="col-md-6 col-12 mb-3">
-                <label className="form-label">Centre Name</label>
-                <span className="text-danger">*</span>
-                <select
-                  {...formik.getFieldProps("centerId")}
-                  className={`form-select ${
-                    formik.touched.centerId && formik.errors.centerId
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  aria-label="Default select example"
-                  onChange={handleCenterChange}
-                >
-                  <option selected disabled></option>
-                  {centerData &&
-                    centerData.map((center) => (
-                      <option key={center.id} value={center.id}>
-                        {center.centerNames}
-                      </option>
-                    ))}
-                </select>
-                {formik.touched.centerId && formik.errors.centerId && (
-                  <div className="invalid-feedback">
-                    {formik.errors.centerId}
-                  </div>
-                )}
-              </div> */}
               <div className="col-md-6 col-12 mb-3">
-                <label className="form-label">Employee Name</label>{" "}
+                <label className="form-label">Employee Name</label>
                 <span className="text-danger">*</span>
                 <select
                   {...formik.getFieldProps("userId")}
-                  class={`form-select  ${
+                  className={`form-select ${
                     formik.touched.userId && formik.errors.userId
                       ? "is-invalid"
                       : ""
                   }`}
                 >
                   <option selected disabled></option>
-                  {userNamesData &&
-                    userNamesData.map((userName) => (
-                      <option key={userName.id} value={userName.id}>
-                        {userName.userNames}
-                      </option>
-                    ))}
+                  {userNamesData?.map((user) => (
+                    <option key={user.id} value={user.id}>
+                      {user.userNames}
+                    </option>
+                  ))}
                 </select>
                 {formik.touched.userId && formik.errors.userId && (
                   <div className="invalid-feedback">{formik.errors.userId}</div>
                 )}
               </div>
+
               <div className="col-md-6 col-12 mb-3">
                 <label className="form-label">Deduction Name</label>
                 <span className="text-danger">*</span>
@@ -232,7 +151,6 @@ function DeductionAdd() {
                       ? "is-invalid"
                       : ""
                   }`}
-                  aria-label="Default select example"
                 >
                   <option></option>
                   <option>CPF</option>
@@ -246,10 +164,10 @@ function DeductionAdd() {
                     </div>
                   )}
               </div>
+
               <div className="col-md-6 col-12 mb-3">
-                <label className="form-label">
-                  Deduction Month<span className="text-danger">*</span>
-                </label>
+                <label className="form-label">Deduction Month</label>
+                <span className="text-danger">*</span>
                 <input
                   type="month"
                   className={`form-control ${
@@ -267,10 +185,10 @@ function DeductionAdd() {
                     </div>
                   )}
               </div>
+
               <div className="col-md-6 col-12 mb-3">
-                <label className="form-label">
-                  Deduction Amount<span className="text-danger">*</span>
-                </label>
+                <label className="form-label">Deduction Amount</label>
+                <span className="text-danger">*</span>
                 <input
                   type="text"
                   className={`form-control ${
@@ -288,33 +206,33 @@ function DeductionAdd() {
                     </div>
                   )}
               </div>
-              {/* <div className="col-md-6 col-12">
-                <div className="text-start mb-3">
-                  <label className="form-label">
-                    Total Deduction Amount<span className="text-danger">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    className={`form-control ${
-                      formik.touched.totalDeductionAmount &&
-                      formik.errors.totalDeductionAmount
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    {...formik.getFieldProps("totalDeductionAmount")}
-                  />
-                  {formik.touched.totalDeductionAmount &&
-                    formik.errors.totalDeductionAmount && (
-                      <div className="invalid-feedback">
-                        {formik.errors.totalDeductionAmount}
-                      </div>
-                    )}
-                </div>
-              </div> */}
             </div>
-          </div>
-        </div>
-      </form>
+          </Modal.Body>
+
+          <Modal.Footer className="mt-3">
+            <Button
+              type="button"
+              className="btn btn-sm btn-border bg-light text-dark"
+              onClick={handleClose}
+            >
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              className="btn btn-button btn-sm"
+              disabled={loadIndicator}
+            >
+              {loadIndicator && (
+                <span
+                  className="spinner-border spinner-border-sm me-2"
+                  aria-hidden="true"
+                ></span>
+              )}
+              Submit
+            </Button>
+          </Modal.Footer>
+        </form>
+      </Modal>
     </div>
   );
 }

@@ -95,7 +95,7 @@ const Teacher = () => {
       },
       { accessorKey: "email", enableHiding: false, header: "Email" },
       { accessorKey: "contactNumber", enableHiding: false, header: "Mobile" },
-    
+
       {
         accessorKey: "createdAt",
         enableHiding: false,
@@ -121,8 +121,17 @@ const Teacher = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
+      const filteredFilters = Object.fromEntries(
+        Object.entries(filters).filter(
+          ([key, value]) =>
+            value !== "" && value !== null && value !== undefined
+        )
+      );
+      const queryParams = new URLSearchParams(filteredFilters).toString();
       const response = await api.get(
-        `/getAllTeachersAndFreelancers?centerId=${centerId}`
+        `/getAllTeachersAndFreelancers?centerId=${centerId}${
+          queryParams ? `&${queryParams}` : ""
+        }`
       );
       setData(response.data);
     } catch (error) {

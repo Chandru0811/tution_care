@@ -4,8 +4,15 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
-import fetchAllCentersWithIds from "../../List/CenterList";
-import fetchAllEmployeeListByCenter from "../../List/EmployeeList";
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  IconButton,
+} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import fetchUserListWithoutFreelancerByCenterId from "../../List/UserListWithoutFreelancer";
 
 const validationSchema = Yup.object({
   // centerId: Yup.string().required("*Center Name is required"),
@@ -18,18 +25,42 @@ const validationSchema = Yup.object({
     .positive("*Deduction Amount must be a positive value"),
 });
 
-function DeductionEdit() {
-  const [centerData, setCenterData] = useState(null);
+function DeductionEdit({ id, onSuccess, handleMenuClose }) {
   const [userNamesData, setUserNameData] = useState(null);
+  const [isModified, setIsModified] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
+  const [show, setShow] = useState(false);
   const userName = localStorage.getItem("tmsuserName");
   const centerId = localStorage.getItem("tmscenterId");
   const navigate = useNavigate();
-  const { id } = useParams();
+
+  const getData = async () => {
+    try {
+      const response = await api.get(`/getAllUserDeductionById/${id}`);
+      formik.setValues(response.data);
+      fetchUserName(response.data.centerId);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+  useEffect(() => {
+    getData();
+    fetchUserName();
+  }, []);
+
+  const handleClose = () => {
+    handleMenuClose();
+    setShow(false);
+  };
+  const handleShow = () => {
+    setShow(true);
+    setIsModified(false);
+    getData();
+  };
 
   const formik = useFormik({
     initialValues: {
-      centerId:centerId,
+      centerId: centerId,
       userId: "",
       deductionMonth: "",
       deductionAmount: "",
@@ -48,6 +79,7 @@ function DeductionEdit() {
           },
         });
         if (response.status === 200) {
+          onSuccess();
           toast.success(response.data.message);
           navigate("/deduction");
         } else {
@@ -57,172 +89,84 @@ function DeductionEdit() {
         toast.error(error.message);
       } finally {
         setLoadIndicator(false);
+        handleClose();
       }
     },
   });
 
-  const handleCenterChange = async (event) => {
-    // setUserNameData(null);
-    // const centerId = event.target.value;
-    formik.setFieldValue("centerId", centerId);
+  const fetchUserName = async () => {
     try {
-      await fetchUserName(centerId);
-    } catch (error) {
-      toast.error(error.message);
-    }
-  };
-
-  // const fetchData = async () => {
-  //   try {
-  //     const centers = await fetchAllCentersWithIds();
-  //     setCenterData(centers);
-  //   } catch (error) {
-  //     toast.error(error.message);
-  //   }
-  // };
-
-  const fetchUserName = async (centerId) => {
-    try {
-      const userNames = await fetchAllEmployeeListByCenter(centerId);
+      const userNames = await fetchUserListWithoutFreelancerByCenterId(
+        centerId
+      );
       setUserNameData(userNames);
     } catch (error) {
       toast.error(error.message);
     }
   };
 
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const response = await api.get(`/getAllUserDeductionById/${id}`);
-        formik.setValues(response.data);
-        fetchUserName(response.data.centerId);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-    getData();
-    handleCenterChange();
-  }, []);
-
   return (
-    <div className="container-fluid">
-      <ol
-        className="breadcrumb my-3"
-        style={{ listStyle: "none", padding: 0, margin: 0 }}
-      >
-        <li>
-          <Link to="/" className="custom-breadcrumb">
-            Home
-          </Link>
-          <span className="breadcrumb-separator"> &gt; </span>
-        </li>
-        <li>
-          &nbsp;Staffing
-          <span className="breadcrumb-separator"> &gt; </span>
-        </li>
-        <li>
-          <Link to="/deduction" className="custom-breadcrumb">
-            &nbsp;Deduction
-          </Link>
-          <span className="breadcrumb-separator"> &gt; </span>
-        </li>
-        <li className="breadcrumb-item active" aria-current="page">
-          &nbsp;Deduction Edit
-        </li>
-      </ol>
-      <form
-        onSubmit={formik.handleSubmit}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" && !formik.isSubmitting) {
-            e.preventDefault(); // Prevent default form submission
-          }
+    <>
+      <p
+        style={{
+          whiteSpace: "nowrap",
+          width: "100%",
         }}
+        className="text-start mb-0 menuitem-style"
+        onClick={handleShow}
       >
-        <div className="card">
-          <div
-            className="d-flex justify-content-between align-items-center p-1 mb-4 px-4"
-            style={{ background: "#f5f7f9" }}
+        Edit
+      </p>
+
+      <Dialog
+        open={show}
+        onClose={!isModified ? handleClose : null}
+        fullWidth
+        maxWidth="md"
+      >
+        <DialogTitle className="headColor">
+          Roles Edit{" "}
+          <IconButton
+            aria-label="close"
+            onClick={handleClose}
+            style={{ position: "absolute", right: 8, top: 8 }}
           >
-            <div class="d-flex align-items-center">
-              <div class="d-flex">
-                <div class="dot active"></div>
-              </div>
-              <span class="me-2 text-muted">Edit Deduction</span>
-            </div>
-            <div className="my-2 pe-3 d-flex align-items-center">
-              <Link to="/deduction">
-                <button type="button " className="btn btn-sm btn-border">
-                  Back
-                </button>
-              </Link>
-              &nbsp;&nbsp;
-              <button
-                type="submit"
-                className="btn btn-button btn-sm"
-                disabled={loadIndicator}
-              >
-                {loadIndicator && (
-                  <span
-                    className="spinner-border spinner-border-sm me-2"
-                    aria-hidden="true"
-                  ></span>
-                )}
-                <span className="fw-medium">Update</span>
-              </button>
-            </div>
-          </div>
-          <div className="container-fluid px-4">
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
+        <form
+          onSubmit={formik.handleSubmit}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !formik.isSubmitting) {
+              e.preventDefault(); // Prevent default form submission
+            }
+          }}
+        >
+          <DialogContent>
             <div className="row">
-              {/* <div className="col-md-6 col-12 mb-3">
-                <label className="form-label">Centre Name</label>
-                <span className="text-danger">*</span>
-                <select
-                  {...formik.getFieldProps("centerId")}
-                  className={`form-select ${
-                    formik.touched.centerId && formik.errors.centerId
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  aria-label="Default select example"
-                  onChange={handleCenterChange}
-                >
-                  <option selected disabled></option>
-                  {centerData &&
-                    centerData.map((center) => (
-                      <option key={center.id} value={center.id}>
-                        {center.centerNames}
-                      </option>
-                    ))}
-                </select>
-                {formik.touched.centerId && formik.errors.centerId && (
-                  <div className="invalid-feedback">
-                    {formik.errors.centerId}
-                  </div>
-                )}
-              </div> */}
               <div className="col-md-6 col-12 mb-3">
-                <label className="form-label">Employee Name</label>{" "}
+                <label className="form-label">Employee Name</label>
                 <span className="text-danger">*</span>
                 <select
                   {...formik.getFieldProps("userId")}
-                  class={`form-select  ${
+                  className={`form-select ${
                     formik.touched.userId && formik.errors.userId
                       ? "is-invalid"
                       : ""
                   }`}
                 >
                   <option selected disabled></option>
-                  {userNamesData &&
-                    userNamesData.map((userName) => (
-                      <option key={userName.id} value={userName.id}>
-                        {userName.userNames}
-                      </option>
-                    ))}
+                  {userNamesData?.map((user) => (
+                    <option key={user.id} value={user.id}>
+                      {user.userNames}
+                    </option>
+                  ))}
                 </select>
                 {formik.touched.userId && formik.errors.userId && (
                   <div className="invalid-feedback">{formik.errors.userId}</div>
                 )}
               </div>
+
               <div className="col-md-6 col-12 mb-3">
                 <label className="form-label">Deduction Name</label>
                 <span className="text-danger">*</span>
@@ -233,7 +177,6 @@ function DeductionEdit() {
                       ? "is-invalid"
                       : ""
                   }`}
-                  aria-label="Default select example"
                 >
                   <option></option>
                   <option>CPF</option>
@@ -247,10 +190,10 @@ function DeductionEdit() {
                     </div>
                   )}
               </div>
+
               <div className="col-md-6 col-12 mb-3">
-                <label className="form-label">
-                  Deduction Month<span className="text-danger">*</span>
-                </label>
+                <label className="form-label">Deduction Month</label>
+                <span className="text-danger">*</span>
                 <input
                   type="month"
                   className={`form-control ${
@@ -268,10 +211,10 @@ function DeductionEdit() {
                     </div>
                   )}
               </div>
+
               <div className="col-md-6 col-12 mb-3">
-                <label className="form-label">
-                  Deduction Amount<span className="text-danger">*</span>
-                </label>
+                <label className="form-label">Deduction Amount</label>
+                <span className="text-danger">*</span>
                 <input
                   type="text"
                   className={`form-control ${
@@ -289,34 +232,34 @@ function DeductionEdit() {
                     </div>
                   )}
               </div>
-              {/* <div className="col-md-6 col-12">
-                <div className="text-start mb-3">
-                  <label className="form-label">
-                    Total Deduction Amount<span className="text-danger">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    className={`form-control ${
-                      formik.touched.totalDeductionAmount &&
-                      formik.errors.totalDeductionAmount
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    {...formik.getFieldProps("totalDeductionAmount")}
-                  />
-                  {formik.touched.totalDeductionAmount &&
-                    formik.errors.totalDeductionAmount && (
-                      <div className="invalid-feedback">
-                        {formik.errors.totalDeductionAmount}
-                      </div>
-                    )}
-                </div>
-              </div> */}
             </div>
-          </div>
-        </div>
-      </form>
-    </div>
+          </DialogContent>
+          <DialogActions>
+            <button
+              type="button"
+              className="btn btn-border btn-sm"
+              style={{ fontSize: "12px" }}
+              onClick={handleClose}
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="btn btn-button btn-sm"
+              disabled={loadIndicator}
+            >
+              {loadIndicator && (
+                <span
+                  className="spinner-border spinner-border-sm me-2"
+                  aria-hidden="true"
+                ></span>
+              )}
+              Update
+            </button>
+          </DialogActions>
+        </form>
+      </Dialog>
+    </>
   );
 }
 
