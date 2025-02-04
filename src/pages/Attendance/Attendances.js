@@ -3,21 +3,17 @@ import "../../styles/sidebar.css";
 import api from "../../config/URL";
 import AddMore from "./AddMore";
 import { toast } from "react-toastify";
-import fetchAllCentersWithIds from "../List/CenterList";
 import ReplacementAdd from "./ReplacementAdd";
 import { Link } from "react-router-dom";
 import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
 
 function Attendances() {
   const [attendanceData, setAttendanceData] = useState([]);
-  const [centerData, setCenterData] = useState(null);
   const [courseData, setCourseData] = useState(null);
-  const [selectedCenter, setSelectedCenter] = useState("");
   const [selectedCourse, setSelectedCourse] = useState("");
   const [selectedBatch, setSelectedBatch] = useState("");
   const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   const [batchData, setBatchData] = useState(null);
-  const centerLocalId = localStorage.getItem("tmsselectedCenterId");
   const centerId = localStorage.getItem("tmscenterId");
 
   const getCurrentDate = () => {
@@ -92,27 +88,7 @@ function Attendances() {
     setSelectedDate(e.target.value);
   };
 
-  const fetchCentreData = async () => {
-    try {
-      const centerData = await fetchAllCentersWithIds();
-      setCenterData(centerData);
-
-      if (centerData?.length > 0) {
-        const defaultCenterId = centerData[0].id;
-        if (centerId !== null && centerId !== "undefined") {
-          setSelectedCenter(centerId);
-          fetchCourses(centerId);
-        } else if (centerData !== null && centerData.length > 0) {
-          setSelectedCenter(defaultCenterId);
-          fetchCourses(defaultCenterId);
-        }
-      }
-    } catch (error) {
-      toast.error(error.message || "Error fetching centers.");
-    }
-  };
-
-  const fetchCourses = async (centerId) => {
+  const fetchCourses = async () => {
     try {
       const courseData = await fetchAllCoursesWithIdsC(centerId);
       setCourseData(courseData);
@@ -121,24 +97,16 @@ function Attendances() {
     }
   };
 
-  const handleCenterChange = (e) => {
-    // const centerId = e.target.value;
-    setSelectedCenter(centerId);
-    setSelectedCourse("");
-    setCourseData([]);
-    fetchCourses(centerId);
-  };
-
   const fetchData = async () => {
     try {
       const requestBody = {
-        centerId: selectedCenter,
+        centerId: centerId,
         date: selectedDate,
         courseId: selectedCourse || "",
         ...(selectedBatch && { batchTime: selectedBatch }),
       };
       const response = await api.post(
-        "getAllUserAttendanceWithCenterId",
+        "getAllTeacherWithStudentAttendance",
         requestBody
       );
       setAttendanceData(response.data);
@@ -146,6 +114,24 @@ function Attendances() {
       toast.error("Error fetching data:", error);
     }
   };
+
+  // const fetchData = async () => {
+  //   try {
+  //     // Construct query parameters dynamically
+  //     const queryParams = new URLSearchParams({ centerId });
+  
+  //     if (selectedDate) queryParams.append("date", selectedDate);
+  //     if (selectedCourse) queryParams.append("courseId", selectedCourse);
+  //     if (selectedBatch) queryParams.append("batchTime", selectedBatch);
+  
+  //     const response = await api.get(`getAttendanceWithCustomInfo?${queryParams.toString()}`);
+      
+  //     setAttendanceData(response.data);
+  //   } catch (error) {
+  //     toast.error("Error fetching data:", error);
+  //   }
+  // };
+  
 
   useEffect(() => {
     if (selectedDate) {
@@ -159,12 +145,8 @@ function Attendances() {
   };
 
   useEffect(() => {
-    fetchCentreData();
+    fetchCourses();
   }, []);
-
-  // useEffect(() => {
-  //   fetchData();
-  // }, [selectedCenter]);
 
   const handleAttendanceChange = (attendanceIndex, studentIndex, value) => {
     const updatedAttendanceData = [...attendanceData];
@@ -251,23 +233,6 @@ function Attendances() {
             </div>
           </div>
           <div className="row px-2">
-            {/* <div className="col-md-6 col-12 mb-2">
-              <label className="form-lable">
-                Centre<span class="text-danger">*</span>
-              </label>
-              <select
-                className="form-select "
-                value={selectedCenter}
-                onChange={handleCenterChange}
-              >
-                {centerData &&
-                  centerData.map((center) => (
-                    <option key={center.id} value={center.id}>
-                      {center.centerNames}
-                    </option>
-                  ))}
-              </select>
-            </div> */}
             <div className="col-md-6 col-12">
               <label className="form-lable">
                 Attendance Date<span class="text-danger">*</span>
@@ -321,7 +286,7 @@ function Attendances() {
               <button
                 className="btn btn-light btn-button btn-sm mt-3"
                 onClick={handelSubmitData}
-                disabled={!selectedCenter || !selectedDate}
+                disabled={!selectedDate}
               >
                 Search
               </button>

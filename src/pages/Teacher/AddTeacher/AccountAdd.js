@@ -99,7 +99,7 @@ const AccountAdd = forwardRef(
         values.signature = null;
         try {
           const response = await api.post(
-            `/createUserAccountInfoWithCenterId`,
+            `/createUserAccountInfos`,
             updatedData,
             {
               headers: {
@@ -107,7 +107,7 @@ const AccountAdd = forwardRef(
               },
             }
           );
-          if (response.status === 201) {
+          if (response.status === 201 || response.status === 200) {
             toast.success("User Account Created Successfully");
             setFormData((prv) => ({ ...prv, ...values }));
             handleNext();

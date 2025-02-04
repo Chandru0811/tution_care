@@ -10,7 +10,6 @@ import {
   IconButton,
 } from "@mui/material";
 import { MoreVert as MoreVertIcon } from "@mui/icons-material";
-import { toast } from "react-toastify";
 import GlobalDelete from "../../components/common/GlobalDelete";
 
 const Staff = () => {
@@ -143,16 +142,8 @@ const Staff = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const filteredFilters = Object.fromEntries(
-        Object.entries(filters).filter(
-          ([key, value]) =>
-            value !== "" && value !== null && value !== undefined
-        )
-      );
-      const queryParams = new URLSearchParams(filteredFilters).toString();
       const response = await api.get(
-        // `/getAllUserWithCenterId?${queryParams}`
-        `/getAllUserWithCenterId/${centerId}`
+        `/getAllUserListExceptTeacher?centerId=${centerId}`
       );
       setData(response.data);
     } catch (error) {

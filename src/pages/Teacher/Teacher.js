@@ -75,7 +75,6 @@ const Teacher = () => {
             <span className="badge badges-orange fw-light">Freelancer</span>
           ) : null,
       },
-      { accessorKey: "countryName", enableHiding: false, header: "Country" },
       {
         accessorKey: "userUniqueId",
         enableHiding: false,
@@ -87,6 +86,7 @@ const Teacher = () => {
         enableHiding: false,
         size: 40,
       },
+      { accessorKey: "countryName", enableHiding: false, header: "Country" },
       {
         accessorKey: "teacherType",
         header: "Teacher Type",
@@ -118,41 +118,11 @@ const Teacher = () => {
     []
   );
 
-  // const fetchData = async () => {
-  //   try {
-  //     let response;
-
-  //     if (roles === "SMS_ADMIN") {
-  //       response = await api.get("/getAllTeachersAndFreelancers");
-  //     } else if (roles === "SMS_TEACHER") {
-  //       response = await api.get("/getAllUsersByRole/teacher");
-  //     } else if (roles === "SMS_FREELANCER") {
-  //       response = await api.get("/getAllFreelance");
-  //     }
-
-  //     if (response) {
-  //       setData(response.data);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
   const fetchData = async () => {
     try {
       setLoading(true);
-      const filteredFilters = Object.fromEntries(
-        Object.entries(filters).filter(
-          ([key, value]) =>
-            value !== "" && value !== null && value !== undefined
-        )
-      );
-      const queryParams = new URLSearchParams(filteredFilters).toString();
       const response = await api.get(
-        // `/getAllTeachersAndFreelancers?${queryParams}`
-        `/getAllUserWithCenterId/${centerId}`
+        `/getAllTeachersAndFreelancers?centerId=${centerId}`
       );
       setData(response.data);
     } catch (error) {

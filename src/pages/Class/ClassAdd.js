@@ -49,7 +49,7 @@ function ClassAdd() {
       courseName: "",
       classType: "",
       classCode: "",
-      userId: 12,
+      userId: 17,
       teacherName: "",
       classId: "",
       durationInHrs: "",

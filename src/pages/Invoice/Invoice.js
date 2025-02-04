@@ -83,7 +83,7 @@ const Invoice = () => {
       //   header: "Centre",
       // },
       {
-        accessorKey: "courseName",
+        accessorKey: "course",
         enableHiding: false,
         header: "Course",
       },
@@ -92,9 +92,9 @@ const Invoice = () => {
         enableHiding: false,
         header: "Student ID",
       },
-      { accessorKey: "studentName", header: "Student" },
+      { accessorKey: "student", header: "Student" },
       { accessorKey: "parent", enableHiding: false, header: "Parent Name" },
-      { accessorKey: "packageName", header: "Package" },
+      { accessorKey: "package", header: "Package" },
       {
         accessorKey: "invoiceNumber",
         header: "Invoice Number",

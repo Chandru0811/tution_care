@@ -510,7 +510,7 @@ const StaffPersonalAdd = forwardRef(
                    <option selected></option>
                   {roleData &&
                     roleData.map((role) => (
-                      <option key={role.id} value={role.id}>
+                      <option key={role.id} value={role.roleName}>
                         {role.roleName}
                       </option>
                     ))}

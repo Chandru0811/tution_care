@@ -34,7 +34,8 @@ function LevelAdd({ onSuccess }) {
 
   const fetchData = async () => {
     try {
-      const subject = await fetchAllSubjectsWithIds();
+      const response = await api.get(`getCourseSubjectsByCenterId/${centerId}`);
+      const subject = response.data;
       setSubjectData(subject);
     } catch (error) {
       toast.error(error);
@@ -141,7 +142,7 @@ function LevelAdd({ onSuccess }) {
                     {subjectData &&
                       subjectData.map((subject) => (
                         <option key={subject.id} value={subject.id}>
-                          {subject.subjects}
+                          {subject.subject}
                         </option>
                       ))}
                   </select>
