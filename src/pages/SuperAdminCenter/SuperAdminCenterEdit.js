@@ -74,7 +74,7 @@ function SuperAdminCenterEdit({ handleCenterChanged }) {
       }
       setLoadIndicator(true);
       try {
-        const response = await api.put(`/updateCenters/${id}`, values, {
+        const response = await api.put(`/updateCenter/${id}`, values, {
           headers: {
             "Content-Type": "Application/json",
           },
@@ -359,7 +359,7 @@ function SuperAdminCenterEdit({ handleCenterChanged }) {
                   { label: "Staff Management", key: "staffManagement" },
                   { label: "Document Management", key: "documentManagement" },
                   {
-                    label: "Assessment Management",
+                    label: "Assignment Management",
                     key: "assessmentManagement",
                   },
                   { label: "Referral Management", key: "referalManagement" },

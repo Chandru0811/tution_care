@@ -70,7 +70,7 @@ function DocumentAdd() {
 
         let requestBody = {
           centerId: centerId,
-          userId: 12,
+          userId:values.userId,
           day: values.day,
           center: selectedOptionName,
           classListing: selectedClassName,

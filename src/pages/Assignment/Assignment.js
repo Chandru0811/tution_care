@@ -10,17 +10,16 @@ import {
   IconButton,
 } from "@mui/material";
 import { MoreVert as MoreVertIcon } from "@mui/icons-material";
-// import DocumentEdit from "./DocumentEdit";
 import fetchAllClassesWithIdsC from "../List/ClassListByCourse";
 import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
 import fetchAllTeacherListByCenter from "../List/TeacherListByCenter";
 import { toast } from "react-toastify";
-import fetchAllCentersWithIds from "../List/CenterList";
 import GlobalDelete from "../../components/common/GlobalDelete";
 
 const Assignment = () => {
+  const centerId = localStorage.getItem("tmscenterId");
   const [filters, setFilters] = useState({
-    centerId: "",
+    centerId: centerId,
     courseId: "",
     classId: "",
     userId: "",
@@ -28,8 +27,6 @@ const Assignment = () => {
     date: "",
   });
   const [data, setData] = useState([]);
-  const [centerData, setCenterData] = useState([]);
-  const centerIDLocal = localStorage.getItem("tmsselectedCenterId");
   const [courseData, setCourseData] = useState([]);
   const [classData, setClassData] = useState([]);
   const [teacherData, setTeacherData] = useState([]);
@@ -173,7 +170,7 @@ const Assignment = () => {
     },
   });
 
-  const fetchListData = async (centerId) => {
+  const fetchListData = async () => {
     try {
       const courseDatas = await fetchAllCoursesWithIdsC(centerId);
       const teacherDatas = await fetchAllTeacherListByCenter(centerId);
@@ -184,58 +181,10 @@ const Assignment = () => {
     }
   };
 
-  const fetchData = async () => {
-    try {
-      const centerData = await fetchAllCentersWithIds();
-      if (centerIDLocal !== null && centerIDLocal !== "undefined") {
-        setFilters((prevFilters) => ({
-          ...prevFilters,
-          centerId: centerIDLocal,
-        }));
-        fetchListData(centerIDLocal);
-      } else if (centerData !== null && centerData.length > 0) {
-        setFilters((prevFilters) => ({
-          ...prevFilters,
-          centerId: centerData[0].id,
-        }));
-        fetchListData(centerData[0].id);
-      }
-      
-      setCenterData(centerData);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
-
-  const handleCenterChange = async (event) => {
-  const centerId = event.target.value;
-
-  // Update the filters state
-  setFilters((prevFilters) => ({ ...prevFilters, centerId }));
-
-  if (centerId) {
-    try {
-      // Fetch the associated data
-      const courseDatas = await fetchAllCoursesWithIdsC(centerId);
-      const teacherDatas = await fetchAllTeacherListByCenter(centerId);
-
-      // Update the respective state variables
-      setCourseData(courseDatas);
-      setTeacherData(teacherDatas);
-    } catch (error) {
-      toast.error("Error fetching data: " + error.message);
-    }
-  } else {
-    // Clear dependent data if no center is selected
-    setCourseData([]);
-    setTeacherData([]);
-  }
-};
-
-
   const handleCourseChange = async (event) => {
     const courseId = event.target.value;
-    setFilters((prevFilters) => ({ ...prevFilters, courseId })); // Update filter state
+    setFilters((prevFilters) => ({ ...prevFilters, courseId }));
+    if (!courseId) return; // Avoid making API call when courseId is empty
     try {
       const classes = await fetchAllClassesWithIdsC(courseId); // Fetch class list based on courseId
       setClassData(classes);
@@ -244,67 +193,71 @@ const Assignment = () => {
     }
   };
 
-  const getDocumentData = async () => {
+  // const getAssignmentData = async () => {
+  //   try {
+  //     setLoading(true);
+  //     const queryParams = new URLSearchParams(filters); // Ensure queryParams is properly defined
+  //     const response = await api.get(`/getAssignmentFoldersWithCustomInfo?${queryParams.toString()}`);
+  //     setData(response.data);
+  //   } catch (error) {
+  //     toast.error("Error Fetching Data : ", error);
+  //   } finally {
+  //     setLoading(false);
+  //     setIsClearFilterClicked(false);
+  //   }
+  // };
+  
+  const getAssignmentData = async () => {
     try {
       setLoading(true);
-      // Dynamically construct query parameters based on filters
-      const queryParams = new URLSearchParams();
-      if (!isClearFilterClicked) {
-        if (filters.centerId) {
-          queryParams.append("centerId", filters.centerId);
-        } else if (centerIDLocal && centerIDLocal !== "undefined") {
-          queryParams.append("centerId", centerIDLocal);
-        }
-      }
-
-      // Loop through other filters and add key-value pairs if they have a value
-      for (let key in filters) {
-        if (filters[key] && key !== "centerId") {
-          queryParams.append(key, filters[key]);
-        }
-      }
-
-      const response = await api.get(
-        `/getDocumentFolderWithCustomInfo?${queryParams.toString()}`
+      
+      // Filter out empty values before constructing query params
+      const filteredParams = Object.fromEntries(
+        Object.entries(filters).filter(([_, value]) => value !== "")
       );
+  
+      // Ensure centerId is always included
+      if (!filteredParams.centerId) {
+        filteredParams.centerId = centerId;
+      }
+  
+      const queryParams = new URLSearchParams(filteredParams);
+  
+      const response = await api.get(`/getAssignmentFoldersWithCustomInfo?${queryParams.toString()}`);
       setData(response.data);
     } catch (error) {
-      toast.error("Error Fetching Data : ", error);
+      toast.error("Error Fetching Data : " + error.message);
     } finally {
       setLoading(false);
       setIsClearFilterClicked(false);
     }
   };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
+  
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
     setFilters((prevFilters) => ({ ...prevFilters, [name]: value }));
   };
 
   const clearFilter = () => {
-    // Reset filter state to initial empty values
     setFilters({
-      centerId: "",
+      centerId: centerId,
       courseId: "",
       classId: "",
       userId: "",
       date: "",
       day: "",
     });
-  
-    // Fetch data without filters
     setIsClearFilterClicked(true); // Set flag to trigger data fetch without filters
   };
-  
+
   useEffect(() => {
-      getDocumentData();
+    fetchListData();
+  }, []);
+
+  useEffect(() => {
+      getAssignmentData();
   }, [filters]);
   
-
   const handleMenuClose = () => setMenuAnchor(null);
 
   return (
@@ -502,17 +455,10 @@ const Assignment = () => {
               open={Boolean(menuAnchor)}
               onClose={handleMenuClose}
             >
-              {/* <MenuItem>
-                <DocumentEdit
-                  onSuccess={fetchData}
-                  id={selectedId}
-                  handleMenuClose={handleMenuClose}
-                />
-              </MenuItem> */}
               <MenuItem>
                 <GlobalDelete
-                  path={`/deleteDocumentFolder/${selectedId}`}
-                  onDeleteSuccess={fetchData}
+                  path={`/deleteAssignmentFolder/${selectedId}`}
+                  onDeleteSuccess={getAssignmentData}
                   onOpen={handleMenuClose}
                 />
               </MenuItem>

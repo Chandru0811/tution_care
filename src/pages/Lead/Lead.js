@@ -360,7 +360,7 @@ const Lead = () => {
                     >
                       New / Waitlist
                     </option>
-                    <option
+                    {/* <option
                       value="ARRANGING_ASSESSMENT"
                       style={{
                         backgroundColor: "white",
@@ -370,7 +370,7 @@ const Lead = () => {
                       }}
                     >
                       Assessment Add
-                    </option>
+                    </option> */}
                     <option
                       value="KIV"
                       disabled={row.original.leadStatus === "KIV"}
@@ -502,7 +502,7 @@ const Lead = () => {
                     >
                       New / Waitlist
                     </option>
-                    <option
+                    {/* <option
                       value="ARRANGING_ASSESSMENT"
                       style={{
                         backgroundColor: "white",
@@ -511,7 +511,7 @@ const Lead = () => {
                       }}
                     >
                       Assessment Add
-                    </option>
+                    </option> */}
                     <option
                       value="WAITING_FOR_PAYMENT"
                       style={{
@@ -635,7 +635,7 @@ const Lead = () => {
                     >
                       New / Waitlist
                     </option>
-                    <option
+                    {/* <option
                       value="ARRANGING_ASSESSMENT"
                       style={{
                         backgroundColor: "white",
@@ -644,7 +644,7 @@ const Lead = () => {
                       }}
                     >
                       Assessment Add
-                    </option>
+                    </option> */}
                     <option
                       value="KIV"
                       disabled={row.original.leadStatus === "KIV"}
@@ -691,7 +691,7 @@ const Lead = () => {
                     >
                       New / Waitlist
                     </option>
-                    <option
+                    {/* <option
                       value="ARRANGING_ASSESSMENT"
                       style={{
                         backgroundColor: "white",
@@ -700,7 +700,7 @@ const Lead = () => {
                       }}
                     >
                       Assessment Add
-                    </option>
+                    </option> */}
                     <option
                       value="KIV"
                       disabled={row.original.leadStatus === "KIV"}

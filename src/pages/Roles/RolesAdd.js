@@ -8,26 +8,40 @@ import { Link } from "react-router-dom";
 const validationSchema = Yup.object().shape({});
 
 function RolesAdd() {
-  const [role, setRole] = useState("1");
   const userName = localStorage.getItem("tmsuserName");
-  const [roleName, setRoleName] = useState("TUITION_ADMIN");
+  const [roleName, setRoleName] = useState([]);
+  const centerId = localStorage.getItem("tmscenterId");
+  const role = localStorage.getItem("tmsroleId");
+  const [selectedRole, setSelectedRole] = useState("");
+  const [selectedRoleId, setSelectedRoleId] = useState("");
 
-  const roleMapping = {
-    "1": "TUITION_SUPER_ADMIN",
-    "2": "TUITION_ADMIN",
-    // "4": "SMS_STAFF",
-    // "5": "SMS_STAFF_ADMIN",
-    // "6": "SMS_TEACHER",
-    // "7": "CENTER_MANAGER",
-    // "8": "SMS_FREELANCER",
+  const fetchRole = async () => {
+    try {
+      const response = await api.get(`/getAllUserRolesByCenterId/${centerId}`);
+      if (response.data.length > 0) {
+        setRoleName(response.data);
+        setSelectedRole(response.data[0].name); // Set first role as default
+        setSelectedRoleId(response.data[0].id); // Set first role ID as default
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
+  useEffect(() => {
+    fetchRole();
+  }, []);
 
   const handleRoleChange = (e) => {
-    const selectedRole = e.target.value;
-    setRole(selectedRole);
-    setRoleName(roleMapping[selectedRole]);
-  };
+    const selectedId = e.target.value;
+    const selectedRoleObj = roleName.find(
+      (role) => role.id.toString() === selectedId
+    );
 
+    if (selectedRoleObj) {
+      setSelectedRole(selectedRoleObj.name); // Set role name (e.g., TUITION_ADMIN)
+      setSelectedRoleId(selectedRoleObj.id); // Set role ID
+    }
+  };
   const formik = useFormik({
     initialValues: {
       courseIndex: true,
@@ -200,16 +214,16 @@ function RolesAdd() {
       documentFileCreate: true,
       documentFileUpdate: true,
       documentFileDelete: true,
-      assignmentListingIndex:true,
-      assignmentListingRead:true,
-      assignmentListingCreate:true,
-      assignmentListingUpdate:true,
-      assignmentListingDelete:true,
-      assignmentResultIndex:true,
-      assignmentResultRead:true,
-      assignmentResultCreate:true,
-      assignmentResultUpdate:true,
-      assignmentResultDelete:true,
+      assignmentListingIndex: true,
+      assignmentListingRead: true,
+      assignmentListingCreate: true,
+      assignmentListingUpdate: true,
+      assignmentListingDelete: true,
+      assignmentResultIndex: true,
+      assignmentResultRead: true,
+      assignmentResultCreate: true,
+      assignmentResultUpdate: true,
+      assignmentResultDelete: true,
       invoiceIndex: true,
       invoiceRead: true,
       invoiceCreate: true,
@@ -419,20 +433,22 @@ function RolesAdd() {
       console.log("Api Data:", values);
       const payload = {
         ...values,
-        roleName: roleName,
-        id: role,
+        roleName: selectedRole,
+        id: selectedRoleId,
         updatedBy: userName,
         createdBy: userName,
-        createdAt: "2025-01-10",
-        updatedAt: "2025-01-10"
       };
 
       try {
-        const response = await api.put(`/updateRoleInfo/${role}`, payload, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+        const response = await api.put(
+          `/updateRoleInfo/${selectedRoleId}`,
+          payload,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
         if (response.status === 200) {
           toast.success(response.data.message);
         } else {
@@ -854,7 +870,9 @@ function RolesAdd() {
   };
   const getRoleData = async () => {
     try {
-      const response = await api.get(`/getAllRoleInfoById/${role}`);
+      const response = await api.get(
+        `/getAllRoleInfoById/${role || selectedRoleId}`
+      );
       formik.setValues(response.data);
       // console.log(response.data, "getroleData");
     } catch (error) {
@@ -894,21 +912,26 @@ function RolesAdd() {
           <div className="row d-flex align-items-start p-2">
             <div className="col-md-7 col-12">
               <lable className="form-lable">
-                User Role <span class="text-danger">*</span>
+                User Role <span className="text-danger">*</span>
               </lable>
-              <div class="input-group mb-3">
+              <div className="input-group mb-3">
                 <select
-                  class="form-select form-select-sm iconInput "
-                  aria-label="Default select example"
+                  className="form-select form-select-sm iconInput"
+                  name="roleName"
+                  value={selectedRole}
                   onChange={handleRoleChange}
                 >
-                  <option value="1">Admin</option>
-                  <option value="2">Branch Admin</option>
-                  <option value="4">Staff</option>
-                  <option value="5">Staff Admin</option>
-                  <option value="6">Teacher</option>
-                  <option value="7">Centre Manager</option>
-                  <option value="8">Freelancer</option>
+                  <option disabled>Select Role</option>
+                  {roleName &&
+                    roleName.map((role) => (
+                      <option key={role.id} value={role.id}>
+                        {role.name
+                          .toLowerCase()
+                          .replace(/_/g, " ") // Replace underscores with spaces
+                          .replace(/\b\w/g, (char) => char.toUpperCase())}{" "}
+                        {/* Format for display */}
+                      </option>
+                    ))}
                 </select>
               </div>
             </div>
@@ -920,52 +943,56 @@ function RolesAdd() {
           </div>
           <div>
             <div className="d-flex justify-content-start align-items-center p-2">
-              <div class="btn-group" role="group" aria-label="Basic example">
+              <div
+                className="btn-group"
+                role="group"
+                aria-label="Basic example"
+              >
                 <button
                   type="button"
-                  class="btn find_roll"
+                  className="btn find_roll"
                   onClick={handleCheckAllIndex}
                 >
                   Index
                 </button>
                 <button
                   type="button"
-                  class="btn find_roll"
+                  className="btn find_roll"
                   onClick={handleCheckAllRead}
                 >
                   Read
                 </button>
                 <button
                   type="button"
-                  class="btn find_roll"
+                  className="btn find_roll"
                   onClick={handleCheckAllCreate}
                 >
                   Create
                 </button>
                 <button
                   type="button"
-                  class="btn find_roll"
+                  className="btn find_roll"
                   onClick={handleCheckAllUpdate}
                 >
                   Update
                 </button>
                 <button
                   type="button"
-                  class="btn find_roll"
+                  className="btn find_roll"
                   onClick={handleCheckAllDelete}
                 >
                   Delete
                 </button>
                 <button
                   type="button"
-                  class="btn find_roll"
+                  className="btn find_roll"
                   onClick={handleCheckAll}
                 >
                   Check All
                 </button>
                 <button
                   type="button"
-                  class="btn find_roll"
+                  className="btn find_roll"
                   onClick={handleUncheckAll}
                 >
                   Uncheck All
@@ -979,7 +1006,7 @@ function RolesAdd() {
                     id="datatable"
                     style={{ maxHeight: "460px", overflowY: "auto" }}
                   >
-                    <table class="table table-light table-hover">
+                    <table className="table table-light table-hover">
                       <thead style={{ position: "sticky", top: 0, zIndex: 1 }}>
                         <tr>
                           <th scope="col" className="cms-header">
@@ -1020,7 +1047,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="courseIndex"
                               checked={formik.values.courseIndex}
@@ -1029,7 +1056,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="courseRead"
                               checked={formik.values.courseRead}
@@ -1038,7 +1065,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="courseCreate"
                               checked={formik.values.courseCreate}
@@ -1047,7 +1074,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="courseUpdate"
                               checked={formik.values.courseUpdate}
@@ -1056,7 +1083,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="courseDelete"
                               checked={formik.values.courseDelete}
@@ -1077,7 +1104,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="classIndex"
                               checked={formik.values.classIndex}
@@ -1086,7 +1113,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="classRead"
                               checked={formik.values.classRead}
@@ -1095,7 +1122,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="classCreate"
                               checked={formik.values.classCreate}
@@ -1104,7 +1131,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="classUpdate"
                               checked={formik.values.classUpdate}
@@ -1113,7 +1140,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="classDelete"
                               checked={formik.values.classDelete}
@@ -1134,7 +1161,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="levelIndex"
                               checked={formik.values.levelIndex}
@@ -1143,7 +1170,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="levelRead"
                               checked={formik.values.levelRead}
@@ -1152,7 +1179,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="levelCreate"
                               checked={formik.values.levelCreate}
@@ -1161,7 +1188,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="levelUpdate"
                               checked={formik.values.levelUpdate}
@@ -1170,7 +1197,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="levelDelete"
                               checked={formik.values.levelDelete}
@@ -1191,7 +1218,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="subjectIndex"
                               checked={formik.values.subjectIndex}
@@ -1200,7 +1227,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="subjectRead"
                               checked={formik.values.subjectRead}
@@ -1209,7 +1236,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="subjectCreate"
                               checked={formik.values.subjectCreate}
@@ -1218,7 +1245,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="subjectUpdate"
                               checked={formik.values.subjectUpdate}
@@ -1227,7 +1254,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="subjectDelete"
                               checked={formik.values.subjectDelete}
@@ -1249,7 +1276,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="curriculumIndex"
                               checked={formik.values.curriculumIndex}
@@ -1258,7 +1285,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="curriculumRead"
                           checked={formik.values.curriculumRead}
@@ -1267,7 +1294,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="curriculumCreate"
                               checked={formik.values.curriculumCreate}
@@ -1278,7 +1305,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="curriculumUpdate"
                               checked={formik.values.curriculumUpdate}
@@ -1289,7 +1316,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="curriculumDelete"
                               checked={formik.values.curriculumDelete}
@@ -1313,7 +1340,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="courseFeesIndex"
                               checked={formik.values.courseFeesIndex}
@@ -1322,7 +1349,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="courseFeesRead"
                               checked={formik.values.courseFeesRead}
@@ -1331,7 +1358,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="courseFeesCreate"
                               checked={formik.values.courseFeesCreate}
@@ -1342,7 +1369,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="courseFeesUpdate"
                               checked={formik.values.courseFeesUpdate}
@@ -1353,7 +1380,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="courseFeesDelete"
                               checked={formik.values.courseFeesDelete}
@@ -1377,7 +1404,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="courseDepositFeesIndex"
                               checked={formik.values.courseDepositFeesIndex}
@@ -1388,7 +1415,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="courseDepositFeesRead"
                               checked={formik.values.courseDepositFeesRead}
@@ -1399,7 +1426,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="courseDepositFeesCreate"
                               checked={formik.values.courseDepositFeesCreate}
@@ -1410,7 +1437,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="courseDepositFeesUpdate"
                               checked={formik.values.courseDepositFeesUpdate}
@@ -1421,7 +1448,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="courseDepositFeesDelete"
                               checked={formik.values.courseFeesDelete}
@@ -1445,7 +1472,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="curriculumOutlineIndex"
                               checked={formik.values.curriculumOutlineIndex}
@@ -1456,7 +1483,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="curriculumOutlineRead"
                               checked={formik.values.curriculumOutlineRead}
@@ -1467,7 +1494,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="curriculumOutlineCreate"
                               checked={formik.values.curriculumOutlineCreate}
@@ -1478,7 +1505,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="curriculumOutlineUpdate"
                               checked={formik.values.curriculumOutlineUpdate}
@@ -1489,7 +1516,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="curriculumOutlineDelete"
                               checked={formik.values.courseFeesDelete}
@@ -1516,7 +1543,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="centerListingIndex"
                               checked={formik.values.centerListingIndex}
@@ -1527,7 +1554,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="centerListingRead"
                               checked={formik.values.centerListingRead}
@@ -1538,7 +1565,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="centerListingCreate"
                               checked={formik.values.centerListingCreate}
@@ -1549,7 +1576,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="centerListingUpdate"
                               checked={formik.values.centerListingUpdate}
@@ -1560,7 +1587,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="centerListingDelete"
                               checked={formik.values.centerListingDelete}
@@ -1587,7 +1614,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="leadListingIndex"
                               checked={formik.values.leadListingIndex}
@@ -1598,7 +1625,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="leadListingRead"
                               checked={formik.values.leadListingRead}
@@ -1607,7 +1634,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="leadListingCreate"
                               checked={formik.values.leadListingCreate}
@@ -1618,7 +1645,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="leadListingUpdate"
                               checked={formik.values.leadListingUpdate}
@@ -1629,7 +1656,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="leadListingDelete"
                               checked={formik.values.leadListingDelete}
@@ -1657,7 +1684,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="staffIndex"
                               checked={formik.values.staffIndex}
@@ -1666,7 +1693,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="staffRead"
                               checked={formik.values.staffRead}
@@ -1675,7 +1702,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="staffCreate"
                               checked={formik.values.staffCreate}
@@ -1684,7 +1711,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="staffUpdate"
                               checked={formik.values.staffUpdate}
@@ -1693,7 +1720,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="staffDelete"
                               checked={formik.values.staffDelete}
@@ -1714,7 +1741,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="teacherIndex"
                               checked={formik.values.teacherIndex}
@@ -1723,7 +1750,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="teacherRead"
                               checked={formik.values.teacherRead}
@@ -1732,7 +1759,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="teacherCreate"
                               checked={formik.values.teacherCreate}
@@ -1741,7 +1768,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="teacherUpdate"
                               checked={formik.values.teacherUpdate}
@@ -1750,7 +1777,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="teacherDelete"
                               checked={formik.values.teacherDelete}
@@ -1771,7 +1798,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="staffAttendanceIndex"
                               checked={formik.values.staffAttendanceIndex}
@@ -1782,7 +1809,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="staffAttendanceRead"
                               checked={formik.values.staffAttendanceRead}
@@ -1793,7 +1820,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="staffAttendanceCreate"
                               checked={formik.values.staffAttendanceCreate}
@@ -1804,7 +1831,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="staffAttendanceUpdate"
                               checked={formik.values.staffAttendanceUpdate}
@@ -1815,7 +1842,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="staffAttendanceDelete"
                               checked={formik.values.staffAttendanceDelete}
@@ -1839,7 +1866,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="leaveAdminIndex"
                               checked={formik.values.leaveAdminIndex}
@@ -1848,7 +1875,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="leaveAdminceRead"
                               checked={formik.values.leaveAdminRead}
@@ -1857,7 +1884,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="leaveAdminceCreate"
                           checked={formik.values.leaveAdminCreate}
@@ -1866,7 +1893,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="leaveAdminUpdate"
                               checked={formik.values.leaveAdminUpdate}
@@ -1877,7 +1904,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="leaveAdminDelete"
                           checked={formik.values.leaveAdminDelete}
@@ -1899,7 +1926,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="leaveIndex"
                               checked={formik.values.leaveIndex}
@@ -1908,7 +1935,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="leaveRead"
                           checked={formik.values.leaveRead}
@@ -1926,7 +1953,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="leaveUpdate"
                           checked={formik.values.leaveUpdate}
@@ -1935,7 +1962,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="leaveDelete"
                           checked={formik.values.leaveDelete}
@@ -1957,7 +1984,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="holidayIndex"
                               checked={formik.values.holidayIndex}
@@ -1966,7 +1993,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="holidayRead"
                               checked={formik.values.holidayRead}
@@ -1975,7 +2002,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="holidayCreate"
                               checked={formik.values.holidayCreate}
@@ -1984,7 +2011,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="holidayUpdate"
                               checked={formik.values.holidayUpdate}
@@ -1993,7 +2020,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="holidayDelete"
                               checked={formik.values.holidayDelete}
@@ -2015,7 +2042,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="deductionIndex"
                               checked={formik.values.deductionIndex}
@@ -2024,7 +2051,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="deductionRead"
                               checked={formik.values.deductionRead}
@@ -2033,7 +2060,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="deductionCreate"
                               checked={formik.values.deductionCreate}
@@ -2042,7 +2069,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="deductionUpdate"
                               checked={formik.values.deductionUpdate}
@@ -2051,7 +2078,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="deductionDelete"
                               checked={formik.values.deductionDelete}
@@ -2073,7 +2100,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="payrollIndex"
                               checked={formik.values.payrollIndex}
@@ -2082,7 +2109,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="payrollRead"
                               checked={formik.values.payrollRead}
@@ -2091,7 +2118,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="payrollCreate"
                               checked={formik.values.payrollCreate}
@@ -2100,7 +2127,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="payrollUpdate"
                               checked={formik.values.payrollUpdate}
@@ -2109,7 +2136,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="payrollDelete"
                               checked={formik.values.payrollDelete}
@@ -2131,7 +2158,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="payslipIndex"
                               checked={formik.values.payslipIndex}
@@ -2156,7 +2183,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="freeLancerIndex"
                               checked={formik.values.freeLancerIndex}
@@ -2165,7 +2192,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="freeLancerRead"
                               checked={formik.values.freeLancerRead}
@@ -2189,7 +2216,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="leaveRequestIndex"
                               checked={formik.values.leaveRequestIndex}
@@ -2200,7 +2227,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="leaveRequestRead"
                               checked={formik.values.leaveRequestRead}
@@ -2211,7 +2238,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="leaveRequestIdex"
                           checked={formik.values.leaveRequestIdex}
@@ -2220,7 +2247,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="leaveRequestIdex"
                           checked={formik.values.leaveRequestIdex}
@@ -2229,7 +2256,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="leaveRequestIdex"
                           checked={formik.values.leaveRequestIdex}
@@ -2250,7 +2277,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="rolesMatrixIndex"
                               checked={formik.values.rolesMatrixIndex}
@@ -2261,7 +2288,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="teacherRead"
                           checked={formik.values.teacherRead}
@@ -2270,7 +2297,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="teacherCreate"
                           checked={formik.values.teacherCreate}
@@ -2279,7 +2306,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="teacherUpdate"
                           checked={formik.values.teacherUpdate}
@@ -2288,7 +2315,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="teacherDelete"
                           checked={formik.values.teacherDelete}
@@ -2313,7 +2340,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="studentListingIndex"
                               checked={formik.values.studentListingIndex}
@@ -2324,7 +2351,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="studentListingRead"
                               checked={formik.values.studentListingRead}
@@ -2335,7 +2362,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="studentListingCreate"
                               checked={formik.values.studentListingCreate}
@@ -2346,7 +2373,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="studentListingUpdate"
                               checked={formik.values.studentListingUpdate}
@@ -2357,7 +2384,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="studentListingDelete"
                               checked={formik.values.studentListingDelete}
@@ -2380,7 +2407,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="attendanceIndex"
                               checked={formik.values.attendanceIndex}
@@ -2389,7 +2416,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="attendanceRead"
                           checked={formik.values.attendanceRead}
@@ -2398,7 +2425,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="attendanceCreate"
                           checked={formik.values.attendanceCreate}
@@ -2407,7 +2434,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="attendanceUpdate"
                               checked={formik.values.attendanceUpdate}
@@ -2418,7 +2445,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="attendanceDelete"
                           checked={formik.values.attendanceDelete}
@@ -2439,7 +2466,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="studentListingIdex"
                           checked={formik.values.studentListingIdex}
@@ -2448,7 +2475,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="studentListingRead"
                           checked={formik.values.studentListingRead}
@@ -2457,7 +2484,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="changeClassCreate"
                               checked={formik.values.changeClassCreate}
@@ -2468,7 +2495,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="studentListingUpdate"
                           checked={formik.values.studentListingUpdate}
@@ -2477,7 +2504,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="studentListingDelete"
                           checked={formik.values.studentListingDelete}
@@ -2498,7 +2525,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="studentListingIdex"
                           checked={formik.values.studentListingIdex}
@@ -2507,7 +2534,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="studentListingRead"
                           checked={formik.values.studentListingRead}
@@ -2516,7 +2543,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="transferOutCreate"
                               checked={formik.values.transferOutCreate}
@@ -2527,7 +2554,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="studentListingUpdate"
                           checked={formik.values.studentListingUpdate}
@@ -2536,7 +2563,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="studentListingDelete"
                           checked={formik.values.studentListingDelete}
@@ -2557,7 +2584,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="studentListingIdex"
                           checked={formik.values.studentListingIdex}
@@ -2566,7 +2593,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="studentListingRead"
                           checked={formik.values.studentListingRead}
@@ -2575,7 +2602,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="withdrawIndex"
                               checked={formik.values.withdrawIndex}
@@ -2584,7 +2611,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="studentListingUpdate"
                           checked={formik.values.studentListingUpdate}
@@ -2593,7 +2620,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="studentListingDelete"
                           checked={formik.values.studentListingDelete}
@@ -2614,7 +2641,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="studentListingIdex"
                           checked={formik.values.studentListingIdex}
@@ -2623,7 +2650,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="studentListingRead"
                           checked={formik.values.studentListingRead}
@@ -2632,7 +2659,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="endClassCreate"
                               checked={formik.values.endClassCreate}
@@ -2641,7 +2668,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="studentListingUpdate"
                           checked={formik.values.studentListingUpdate}
@@ -2650,7 +2677,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="studentListingDelete"
                           checked={formik.values.studentListingDelete}
@@ -2671,7 +2698,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="studentListingIdex"
                           checked={formik.values.studentListingIdex}
@@ -2680,7 +2707,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="studentListingRead"
                           checked={formik.values.studentListingRead}
@@ -2689,7 +2716,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="registerNewCreate"
                               checked={formik.values.registerNewCreate}
@@ -2700,7 +2727,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="studentListingUpdate"
                           checked={formik.values.studentListingUpdate}
@@ -2709,7 +2736,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="studentListingDelete"
                           checked={formik.values.studentListingDelete}
@@ -2730,7 +2757,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="studentListingIdex"
                           checked={formik.values.studentListingIdex}
@@ -2739,7 +2766,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="studentListingRead"
                           checked={formik.values.studentListingRead}
@@ -2748,7 +2775,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="deductDepositCreate"
                               checked={formik.values.deductDepositCreate}
@@ -2759,7 +2786,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="studentListingUpdate"
                           checked={formik.values.studentListingUpdate}
@@ -2768,7 +2795,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="studentListingDelete"
                           checked={formik.values.studentListingDelete}
@@ -2793,7 +2820,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="documentListingIndex"
                               checked={formik.values.documentListingIndex}
@@ -2804,7 +2831,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="documentListingRead"
                               checked={formik.values.documentListingRead}
@@ -2815,7 +2842,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="documentListingCreate"
                               checked={formik.values.documentListingCreate}
@@ -2826,7 +2853,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="documentListingUpdate"
                           checked={formik.values.documentListingUpdate}
@@ -2835,7 +2862,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="documentListingDelete"
                               checked={formik.values.documentListingDelete}
@@ -2858,7 +2885,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="documentFileIndex"
                               checked={formik.values.documentFileIndex}
@@ -2869,7 +2896,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="documentFileIdex"
                           checked={formik.values.documentFileIdex}
@@ -2878,7 +2905,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="documentFileIdex"
                           checked={formik.values.documentFileIdex}
@@ -2887,7 +2914,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="documentFileIdex"
                           checked={formik.values.documentFileIdex}
@@ -2896,7 +2923,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="documentListingDelete"
                           checked={formik.values.documentListingDelete}
@@ -2922,7 +2949,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="assignmentListingIndex"
                               checked={formik.values.assignmentListingIndex}
@@ -2933,7 +2960,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="assignmentListingRead"
                               checked={formik.values.assignmentListingRead}
@@ -2944,7 +2971,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="assignmentListingCreate"
                               checked={formik.values.assignmentListingCreate}
@@ -2955,16 +2982,16 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                          class="form-check-input"
-                          type="checkbox"
-                          name="assignmentListingUpdate"
-                          checked={formik.values.assignmentListingUpdate}
-                          onChange={handleCheckboxChange}
-                        />
+                              className="form-check-input"
+                              type="checkbox"
+                              name="assignmentListingUpdate"
+                              checked={formik.values.assignmentListingUpdate}
+                              onChange={handleCheckboxChange}
+                            />
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="assignmentListingDelete"
                               checked={formik.values.assignmentListingDelete}
@@ -2987,7 +3014,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="assignmentResultIndex"
                               checked={formik.values.assignmentResultIndex}
@@ -2998,7 +3025,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="assignmentResultRead"
                               checked={formik.values.assignmentResultRead}
@@ -3009,7 +3036,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="assignmentResultCreate"
                               checked={formik.values.assignmentResultCreate}
@@ -3020,16 +3047,16 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                          class="form-check-input"
-                          type="checkbox"
-                          name="assignmentResultUpdate"
-                          checked={formik.values.assignmentResultUpdate}
-                          onChange={handleCheckboxChange}
-                        />
+                              className="form-check-input"
+                              type="checkbox"
+                              name="assignmentResultUpdate"
+                              checked={formik.values.assignmentResultUpdate}
+                              onChange={handleCheckboxChange}
+                            />
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="assignmentResultDelete"
                               checked={formik.values.assignmentResultDelete}
@@ -3039,7 +3066,7 @@ function RolesAdd() {
                             />
                           </td>
                         </tr>
-                    
+
                         {/* Invoice Management  */}
                         <tr>
                           <th colspan="6">Invoice and Payment</th>
@@ -3057,7 +3084,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="invoiceIndex"
                               checked={formik.values.invoiceIndex}
@@ -3066,7 +3093,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="invoiceRead"
                               checked={formik.values.invoiceRead}
@@ -3075,7 +3102,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="invoiceCreate"
                               checked={formik.values.invoiceCreate}
@@ -3084,7 +3111,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="invoiceUpdate"
                               checked={formik.values.invoiceUpdate}
@@ -3093,7 +3120,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="invoiceDelete"
                               checked={formik.values.invoiceDelete}
@@ -3114,7 +3141,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="paymentIndex"
                               checked={formik.values.paymentIndex}
@@ -3123,7 +3150,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="invoiceRead"
                           checked={formik.values.invoiceRead}
@@ -3132,7 +3159,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="paymentCreate"
                               checked={formik.values.paymentCreate}
@@ -3141,7 +3168,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="invoiceUpdate"
                           checked={formik.values.invoiceUpdate}
@@ -3150,7 +3177,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="invoiceDelete"
                           checked={formik.values.invoiceDelete}
@@ -3175,7 +3202,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="scheduleTeacherIndex"
                               checked={formik.values.scheduleTeacherIndex}
@@ -3186,7 +3213,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="scheduleTeacherRead"
                               checked={formik.values.scheduleTeacherRead}
@@ -3197,7 +3224,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="scheduleTeacherCreate"
                               checked={formik.values.scheduleTeacherCreate}
@@ -3208,7 +3235,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="scheduleTeacherUpdate"
                               checked={formik.values.scheduleTeacherUpdate}
@@ -3219,7 +3246,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="scheduleTeacherDelete"
                               checked={formik.values.scheduleTeacherDelete}
@@ -3247,7 +3274,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="documentReportIndex"
                               checked={formik.values.documentReportIndex}
@@ -3258,7 +3285,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="documentReportRead"
                               checked={formik.values.documentReportRead}
@@ -3269,7 +3296,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="documentReportCreate"
                           checked={formik.values.documentReportCreate}
@@ -3278,7 +3305,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="documentReportUpdate"
                           checked={formik.values.documentReportUpdate}
@@ -3287,7 +3314,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="documentReportDelete"
                           checked={formik.values.documentReportDelete}
@@ -3309,7 +3336,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="attendanceReportIndex"
                               checked={formik.values.attendanceReportIndex}
@@ -3320,7 +3347,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="attendanceReportRead"
                           checked={formik.values.attendanceReportRead}
@@ -3329,7 +3356,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="attendanceReportCreate"
                           checked={formik.values.attendanceReportCreate}
@@ -3338,7 +3365,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="attendanceReportUpdate"
                           checked={formik.values.attendanceReportUpdate}
@@ -3347,7 +3374,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="attendanceReportDelete"
                           checked={formik.values.attendanceReportDelete}
@@ -3368,7 +3395,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="studentReportIndex"
                               checked={formik.values.studentReportIndex}
@@ -3379,7 +3406,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="studentReportRead"
                           checked={formik.values.studentReportRead}
@@ -3388,7 +3415,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="studentReportCreate"
                           checked={formik.values.studentReportCreate}
@@ -3397,7 +3424,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="studentReportUpdate"
                           checked={formik.values.studentReportUpdate}
@@ -3406,7 +3433,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="studentReportDelete"
                           checked={formik.values.studentReportDelete}
@@ -3427,7 +3454,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="assessmentReportIndex"
                               checked={formik.values.assessmentReportIndex}
@@ -3438,7 +3465,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="assessmentReportRead"
                           checked={formik.values.assessmentReportRead}
@@ -3447,7 +3474,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="assessmentReportCreate"
                           checked={formik.values.assessmentReportCreate}
@@ -3456,7 +3483,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="assessmentReportUpdate"
                           checked={formik.values.assessmentReportUpdate}
@@ -3465,7 +3492,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="assessmentReportDelete"
                           checked={formik.values.assessmentReportDelete}
@@ -3486,7 +3513,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="enrollmentReportIndex"
                               checked={formik.values.enrollmentReportIndex}
@@ -3497,7 +3524,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="enrollmentReportRead"
                           checked={formik.values.enrollmentReportRead}
@@ -3506,7 +3533,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="enrollmentReportCreate"
                           checked={formik.values.enrollmentReportCreate}
@@ -3515,7 +3542,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="enrollmentReportUpdate"
                           checked={formik.values.enrollmentReportUpdate}
@@ -3524,7 +3551,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="enrollmentReportDelete"
                           checked={formik.values.enrollmentReportDelete}
@@ -3545,7 +3572,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="feeCollectionReportIndex"
                               checked={formik.values.feeCollectionReportIndex}
@@ -3556,7 +3583,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="feeCollectionReportRead"
                           checked={formik.values.feeCollectionReportRead}
@@ -3565,7 +3592,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="feeCollectionReportCreate"
                           checked={formik.values.feeCollectionReportCreate}
@@ -3574,7 +3601,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="feeCollectionReportUpdate"
                           checked={formik.values.feeCollectionReportUpdate}
@@ -3583,7 +3610,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="feeCollectionReportDelete"
                           checked={formik.values.feeCollectionReportDelete}
@@ -3604,7 +3631,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="packageBalanceReportIndex"
                               checked={formik.values.packageBalanceReportIndex}
@@ -3615,7 +3642,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="packageBalanceReportRead"
                           checked={formik.values.packageBalanceReportRead}
@@ -3624,7 +3651,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="packageBalanceReportCreate"
                           checked={formik.values.packageBalanceReportCreate}
@@ -3633,7 +3660,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="packageBalanceReportUpdate"
                           checked={formik.values.packageBalanceReportUpdate}
@@ -3642,7 +3669,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="packageBalanceReportDelete"
                           checked={formik.values.packageBalanceReportDelete}
@@ -3663,7 +3690,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="salesRevenueReportIndex"
                               checked={formik.values.salesRevenueReportIndex}
@@ -3674,7 +3701,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="salesRevenueReportRead"
                           checked={formik.values.salesRevenueReportRead}
@@ -3683,7 +3710,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="salesRevenueReportCreate"
                           checked={formik.values.salesRevenueReportCreate}
@@ -3692,7 +3719,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="salesRevenueReportUpdate"
                           checked={formik.values.salesRevenueReportUpdate}
@@ -3701,7 +3728,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="salesRevenueReportDelete"
                           checked={formik.values.salesRevenueReportDelete}
@@ -3722,7 +3749,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="replaceClassLessonListIndex"
                               checked={
@@ -3735,7 +3762,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="replaceClassLessonListRead"
                           checked={formik.values.replaceClassLessonListRead}
@@ -3744,7 +3771,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="replaceClassLessonListCreate"
                           checked={formik.values.replaceClassLessonListCreate}
@@ -3753,7 +3780,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="replaceClassLessonListUpdate"
                           checked={formik.values.replaceClassLessonListUpdate}
@@ -3762,7 +3789,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="replaceClassLessonListDelete"
                           checked={formik.values.replaceClassLessonListDelete}
@@ -3788,7 +3815,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="sendNotificationIndex"
                               checked={formik.values.sendNotificationIndex}
@@ -3799,7 +3826,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="sendNotificationRead"
                           checked={formik.values.sendNotificationRead}
@@ -3808,7 +3835,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="sendNotificationCreate"
                               checked={formik.values.sendNotificationCreate}
@@ -3819,7 +3846,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="sendNotificationUpdate"
                               checked={formik.values.sendNotificationUpdate}
@@ -3830,7 +3857,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="sendNotificationDelete"
                           checked={formik.values.sendNotificationDelete}
@@ -3854,7 +3881,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="smsMessageIndex"
                               checked={formik.values.smsMessageIndex}
@@ -3863,7 +3890,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="smsMessageRead"
                               checked={formik.values.smsMessageRead}
@@ -3872,7 +3899,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="smsMessageCreate"
                               checked={formik.values.smsMessageCreate}
@@ -3884,7 +3911,7 @@ function RolesAdd() {
 
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="smsMessageUpdate"
                           checked={formik.values.smsMessageUpdate}
@@ -3895,7 +3922,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="smsMessageDelete"
                           checked={formik.values.smsMessageDelete}
@@ -3919,7 +3946,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="smsMessageIndex"
                               checked={formik.values.smsMessageIndex}
@@ -3928,7 +3955,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="smsMessageRead"
                               checked={formik.values.smsMessageRead}
@@ -3937,7 +3964,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="smsMessageCreate"
                               checked={formik.values.smsMessageCreate}
@@ -3949,7 +3976,7 @@ function RolesAdd() {
 
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="smsMessageUpdate"
                           checked={formik.values.smsMessageUpdate}
@@ -3960,7 +3987,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="smsMessageDelete"
                           checked={formik.values.smsMessageDelete}
@@ -3988,7 +4015,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="taxSettingIndex"
                               checked={formik.values.taxSettingIndex}
@@ -3997,7 +4024,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="taxSettingRead"
                               checked={formik.values.taxSettingRead}
@@ -4006,7 +4033,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="taxSettingCreate"
                               checked={formik.values.taxSettingCreate}
@@ -4017,7 +4044,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="taxSettingUpdate"
                               checked={formik.values.taxSettingUpdate}
@@ -4028,7 +4055,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="taxSettingDelete"
                               checked={formik.values.taxSettingDelete}
@@ -4051,7 +4078,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="raceSettingIndex"
                               checked={formik.values.raceSettingIndex}
@@ -4062,7 +4089,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="raceSettingRead"
                               checked={formik.values.raceSettingRead}
@@ -4071,7 +4098,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="raceSettingCreate"
                               checked={formik.values.raceSettingCreate}
@@ -4082,7 +4109,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="raceSettingUpdate"
                               checked={formik.values.raceSettingUpdate}
@@ -4093,7 +4120,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="raceSettingDelete"
                               checked={formik.values.raceSettingDelete}
@@ -4116,7 +4143,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="countrySettingIndex"
                               checked={formik.values.countrySettingIndex}
@@ -4127,7 +4154,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="countrySettingRead"
                               checked={formik.values.countrySettingRead}
@@ -4138,7 +4165,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="countrySettingCreate"
                               checked={formik.values.countrySettingCreate}
@@ -4149,7 +4176,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="countrySettingUpdate"
                               checked={formik.values.countrySettingUpdate}
@@ -4160,7 +4187,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="countrySettingDelete"
                               checked={formik.values.countrySettingDelete}
@@ -4183,7 +4210,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="shgSettingIndex"
                               checked={formik.values.shgSettingIndex}
@@ -4192,7 +4219,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="shgSettingRead"
                               checked={formik.values.shgSettingRead}
@@ -4201,7 +4228,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="shgSettingCreate"
                               checked={formik.values.shgSettingCreate}
@@ -4212,7 +4239,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="shgSettingUpdate"
                               checked={formik.values.shgSettingUpdate}
@@ -4223,7 +4250,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="shgSettingDelete"
                               checked={formik.values.shgSettingDelete}
@@ -4246,7 +4273,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="batchtimeSettingIndex"
                               checked={formik.values.batchtimeSettingIndex}
@@ -4257,7 +4284,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="batchtimeSettingRead"
                               checked={formik.values.batchtimeSettingRead}
@@ -4268,7 +4295,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="batchtimeSettingCreate"
                               checked={formik.values.batchtimeSettingCreate}
@@ -4279,7 +4306,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="batchtimeSettingUpdate"
                               checked={formik.values.batchtimeSettingUpdate}
@@ -4290,7 +4317,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="batchtimeSettingDelete"
                               checked={formik.values.batchtimeSettingDelete}
@@ -4313,7 +4340,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="leaveSettingIndex"
                               checked={formik.values.leaveSettingIndex}
@@ -4324,7 +4351,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="leaveSettingRead"
                               checked={formik.values.leaveSettingRead}
@@ -4335,7 +4362,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="leaveSettingCreate"
                               checked={formik.values.leaveSettingCreate}
@@ -4346,7 +4373,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="leaveSettingUpdate"
                               checked={formik.values.leaveSettingUpdate}
@@ -4357,7 +4384,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="leaveSettingDelete"
                               checked={formik.values.leaveSettingDelete}
@@ -4380,7 +4407,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="idTypeSettingIndex"
                               checked={formik.values.idTypeSettingIndex}
@@ -4391,7 +4418,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="idTypeSettingRead"
                               checked={formik.values.idTypeSettingRead}
@@ -4402,7 +4429,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="idTypeSettingCreate"
                               checked={formik.values.idTypeSettingCreate}
@@ -4413,7 +4440,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="idTypeSettingUpdate"
                               checked={formik.values.idTypeSettingUpdate}
@@ -4424,7 +4451,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="idTypeSettingDelete"
                               checked={formik.values.idTypeSettingDelete}
@@ -4447,7 +4474,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="salarySettingIndex"
                               checked={formik.values.salarySettingIndex}
@@ -4458,7 +4485,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="salarySettingRead"
                               checked={formik.values.salarySettingRead}
@@ -4469,7 +4496,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="salarySettingCreate"
                               checked={formik.values.salarySettingCreate}
@@ -4480,7 +4507,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="salarySettingUpdate"
                               checked={formik.values.salarySettingUpdate}
@@ -4491,7 +4518,7 @@ function RolesAdd() {
                           </td>
                           <td>
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               name="salarySettingDelete"
                               checked={formik.values.salarySettingDelete}
@@ -4511,7 +4538,7 @@ function RolesAdd() {
             {/* <div className="row mt-4">
               <div className="clo-12">
                 <div className="table-responsive">
-                  <table class="table table-light table-hover">
+                  <table className="table table-light table-hover">
                     <thead style={{ background: "#a2bab6" }}>
                       <tr>
                         <th scope="col">Schedule</th>
@@ -4534,7 +4561,7 @@ function RolesAdd() {
                         </td>
                         <td>
                           <input
-                            class="form-check-input"
+                            className="form-check-input"
                             type="checkbox"
                             name="timeScheduleIndex"
                             checked={formik.values.timeScheduleIndex}
@@ -4543,7 +4570,7 @@ function RolesAdd() {
                         </td>
                         <td>
                           <input
-                            class="form-check-input"
+                            className="form-check-input"
                             type="checkbox"
                             name="timeScheduleBlock"
                             checked={formik.values.timeScheduleBlock}
@@ -4552,7 +4579,7 @@ function RolesAdd() {
                         </td>
                         <td>
                           <input
-                            class="form-check-input"
+                            className="form-check-input"
                             type="checkbox"
                             name="timeScheduleUnBlock"
                             checked={formik.values.timeScheduleUnBlock}
@@ -4563,7 +4590,7 @@ function RolesAdd() {
                         </td>
                         <td>
                           <input
-                            class="form-check-input"
+                            className="form-check-input"
                             type="checkbox"
                             name="timeScheduleAdd"
                             checked={formik.values.timeScheduleAdd}
@@ -4572,7 +4599,7 @@ function RolesAdd() {
                         </td>
                         <td>
                           <input
-                            class="form-check-input"
+                            className="form-check-input"
                             type="checkbox"
                             name="timeScheduleDelete"
                             checked={formik.values.timeScheduleDelete}
@@ -4583,7 +4610,7 @@ function RolesAdd() {
                         </td>
                         <td>
                           <input
-                            class="form-check-input"
+                            className="form-check-input"
                             type="checkbox"
                             name="timeScheduleApproved"
                             checked={formik.values.timeScheduleApproved}
@@ -4602,7 +4629,7 @@ function RolesAdd() {
             <div className="row mt-4">
               <div className="clo-12">
                 <div className="table-responsive">
-                  <table class="table table-light table-hover">
+                  <table className="table table-light table-hover">
                     <thead style={{ background: "#a2bab6" }}>
                       <tr>
                         <th scope="col" className="cms-header">
@@ -4640,7 +4667,7 @@ function RolesAdd() {
                         </td>
                         <td>
                           <input
-                            class="form-check-input"
+                            className="form-check-input"
                             type="checkbox"
                             name="headerIndex"
                             checked={formik.values.headerIndex}
@@ -4649,7 +4676,7 @@ function RolesAdd() {
                         </td>
                         <td>
                           {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="timeScheduleBlock"
                           checked={formik.values.timeScheduleBlock}
@@ -4658,7 +4685,7 @@ function RolesAdd() {
                         </td>
                         <td>
                           <input
-                            class="form-check-input"
+                            className="form-check-input"
                             type="checkbox"
                             name="headerUpdate"
                             checked={formik.values.headerUpdate}
@@ -4667,7 +4694,7 @@ function RolesAdd() {
                         </td>
                         <td>
                           <input
-                            class="form-check-input"
+                            className="form-check-input"
                             type="checkbox"
                             name="headerRead"
                             checked={formik.values.headerRead}
@@ -4676,7 +4703,7 @@ function RolesAdd() {
                         </td>
                         <td>
                           {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="headerPublish"
                           checked={formik.values.headerPublish}
@@ -4685,7 +4712,7 @@ function RolesAdd() {
                         </td>
                         <td>
                           <input
-                            class="form-check-input"
+                            className="form-check-input"
                             type="checkbox"
                             name="headerPublish"
                             checked={formik.values.headerPublish}
@@ -4703,7 +4730,7 @@ function RolesAdd() {
                         </td>
                         <td>
                           <input
-                            class="form-check-input"
+                            className="form-check-input"
                             type="checkbox"
                             name="homeIndex"
                             checked={formik.values.homeIndex}
@@ -4712,7 +4739,7 @@ function RolesAdd() {
                         </td>
                         <td>
                           {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="timeScheduleBlock"
                           checked={formik.values.timeScheduleBlock}
@@ -4721,7 +4748,7 @@ function RolesAdd() {
                         </td>
                         <td>
                           <input
-                            class="form-check-input"
+                            className="form-check-input"
                             type="checkbox"
                             name="homeUpdate"
                             checked={formik.values.homeUpdate}
@@ -4730,7 +4757,7 @@ function RolesAdd() {
                         </td>
                         <td>
                           <input
-                            class="form-check-input"
+                            className="form-check-input"
                             type="checkbox"
                             name="homeRead"
                             checked={formik.values.homeRead}
@@ -4739,7 +4766,7 @@ function RolesAdd() {
                         </td>
                         <td>
                           {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="homeRead"
                           checked={formik.values.homeRead}
@@ -4748,7 +4775,7 @@ function RolesAdd() {
                         </td>
                         <td>
                           <input
-                            class="form-check-input"
+                            className="form-check-input"
                             type="checkbox"
                             name="homePublish"
                             checked={formik.values.homePublish}
@@ -4766,7 +4793,7 @@ function RolesAdd() {
                         </td>
                         <td>
                           <input
-                            class="form-check-input"
+                            className="form-check-input"
                             type="checkbox"
                             name="testimonialIndex"
                             checked={formik.values.testimonialIndex}
@@ -4775,7 +4802,7 @@ function RolesAdd() {
                         </td>
                         <td>
                           <input
-                            class="form-check-input"
+                            className="form-check-input"
                             type="checkbox"
                             name="testimonialCreate"
                             checked={formik.values.testimonialCreate}
@@ -4784,7 +4811,7 @@ function RolesAdd() {
                         </td>
                         <td>
                           <input
-                            class="form-check-input"
+                            className="form-check-input"
                             type="checkbox"
                             name="testimonialUpdate"
                             checked={formik.values.testimonialUpdate}
@@ -4793,7 +4820,7 @@ function RolesAdd() {
                         </td>
                         <td>
                           <input
-                            class="form-check-input"
+                            className="form-check-input"
                             type="checkbox"
                             name="testimonialRead"
                             checked={formik.values.testimonialRead}
@@ -4802,7 +4829,7 @@ function RolesAdd() {
                         </td>
                         <td>
                           <input
-                            class="form-check-input"
+                            className="form-check-input"
                             type="checkbox"
                             name="testimonialDelete"
                             checked={formik.values.testimonialDelete}
@@ -4811,7 +4838,7 @@ function RolesAdd() {
                         </td>
                         <td>
                           <input
-                            class="form-check-input"
+                            className="form-check-input"
                             type="checkbox"
                             name="testimonialPublish"
                             checked={formik.values.testimonialPublish}
@@ -4831,7 +4858,7 @@ function RolesAdd() {
                         </td>
                         <td>
                           <input
-                            class="form-check-input"
+                            className="form-check-input"
                             type="checkbox"
                             name="aboutIndex"
                             checked={formik.values.aboutIndex}
@@ -4840,7 +4867,7 @@ function RolesAdd() {
                         </td>
                         <td>
                           {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="aboutRead"
                           checked={formik.values.aboutRead}
@@ -4849,7 +4876,7 @@ function RolesAdd() {
                         </td>
                         <td>
                           <input
-                            class="form-check-input"
+                            className="form-check-input"
                             type="checkbox"
                             name="aboutUpdate"
                             checked={formik.values.aboutUpdate}
@@ -4858,7 +4885,7 @@ function RolesAdd() {
                         </td>
                         <td>
                           <input
-                            class="form-check-input"
+                            className="form-check-input"
                             type="checkbox"
                             name="aboutRead"
                             checked={formik.values.aboutRead}
@@ -4867,7 +4894,7 @@ function RolesAdd() {
                         </td>
                         <td>
                           {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="timeScheduleDelete"
                           checked={formik.values.timeScheduleDelete}
@@ -4876,7 +4903,7 @@ function RolesAdd() {
                         </td>
                         <td>
                           <input
-                            class="form-check-input"
+                            className="form-check-input"
                             type="checkbox"
                             name="aboutPublish"
                             checked={formik.values.aboutPublish}
@@ -4894,7 +4921,7 @@ function RolesAdd() {
                         </td>
                         <td>
                           <input
-                            class="form-check-input"
+                            className="form-check-input"
                             type="checkbox"
                             name="englishCourseIndex"
                             checked={formik.values.englishCourseIndex}
@@ -4905,7 +4932,7 @@ function RolesAdd() {
                         </td>
                         <td>
                           {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="englishCourseRead"
                           checked={formik.values.englishCourseRead}
@@ -4914,7 +4941,7 @@ function RolesAdd() {
                         </td>
                         <td>
                           <input
-                            class="form-check-input"
+                            className="form-check-input"
                             type="checkbox"
                             name="englishCourseUpdate"
                             checked={formik.values.englishCourseUpdate}
@@ -4925,7 +4952,7 @@ function RolesAdd() {
                         </td>
                         <td>
                           <input
-                            class="form-check-input"
+                            className="form-check-input"
                             type="checkbox"
                             name="englishCourseRead"
                             checked={formik.values.englishCourseRead}
@@ -4934,7 +4961,7 @@ function RolesAdd() {
                         </td>
                         <td>
                           {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="timeScheduleDelete"
                           checked={formik.values.timeScheduleDelete}
@@ -4943,7 +4970,7 @@ function RolesAdd() {
                         </td>
                         <td>
                           <input
-                            class="form-check-input"
+                            className="form-check-input"
                             type="checkbox"
                             name="englishCoursePublish"
                             checked={formik.values.englishCoursePublish}
@@ -4961,7 +4988,7 @@ function RolesAdd() {
                       </td>
                       <td>
                         <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="chineseCourseIndex"
                           checked={formik.values.chineseCourseIndex}
@@ -4970,7 +4997,7 @@ function RolesAdd() {
                       </td>
                       <td>
                         <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="chineseCourseRead"
                           checked={formik.values.chineseCourseRead}
@@ -4979,7 +5006,7 @@ function RolesAdd() {
                       </td>
                       <td>
                         <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="chineseCourseUpdate"
                           checked={formik.values.chineseCourseUpdate}
@@ -4988,7 +5015,7 @@ function RolesAdd() {
                       </td>
                       <td>
                         <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="chineseCourseRead"
                           checked={formik.values.chineseCourseRead}
@@ -4999,7 +5026,7 @@ function RolesAdd() {
                       </td>
                       <td>
                         <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="timeScheduleDelete"
                           checked={formik.values.timeScheduleDelete}
@@ -5008,7 +5035,7 @@ function RolesAdd() {
                       </td>
                       <td>
                         <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="chineseCoursePublish"
                           checked={formik.values.chineseCoursePublish}
@@ -5028,7 +5055,7 @@ function RolesAdd() {
                         </td>
                         <td>
                           <input
-                            class="form-check-input"
+                            className="form-check-input"
                             type="checkbox"
                             name="teacherSaveIndex"
                             checked={formik.values.teacherSaveIndex}
@@ -5037,7 +5064,7 @@ function RolesAdd() {
                         </td>
                         <td>
                           <input
-                            class="form-check-input"
+                            className="form-check-input"
                             type="checkbox"
                             name="teacherSaveCreate"
                             checked={formik.values.teacherSaveCreate}
@@ -5046,7 +5073,7 @@ function RolesAdd() {
                         </td>
                         <td>
                           <input
-                            class="form-check-input"
+                            className="form-check-input"
                             type="checkbox"
                             name="teacherSaveUpdate"
                             checked={formik.values.teacherSaveUpdate}
@@ -5055,7 +5082,7 @@ function RolesAdd() {
                         </td>
                         <td>
                           <input
-                            class="form-check-input"
+                            className="form-check-input"
                             type="checkbox"
                             name="teacherSaveRead"
                             checked={formik.values.teacherSaveRead}
@@ -5064,7 +5091,7 @@ function RolesAdd() {
                         </td>
                         <td>
                           <input
-                            class="form-check-input"
+                            className="form-check-input"
                             type="checkbox"
                             name="teacherSaveDelete"
                             checked={formik.values.teacherSaveDelete}
@@ -5073,7 +5100,7 @@ function RolesAdd() {
                         </td>
                         <td>
                           <input
-                            class="form-check-input"
+                            className="form-check-input"
                             type="checkbox"
                             name="teacherSavePublish"
                             checked={formik.values.teacherSavePublish}
@@ -5093,7 +5120,7 @@ function RolesAdd() {
                         </td>
                         <td>
                           <input
-                            class="form-check-input"
+                            className="form-check-input"
                             type="checkbox"
                             name="productSaveIndex"
                             checked={formik.values.productSaveIndex}
@@ -5102,7 +5129,7 @@ function RolesAdd() {
                         </td>
                         <td>
                           {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="productSaveRead"
                           checked={formik.values.productSaveRead}
@@ -5111,7 +5138,7 @@ function RolesAdd() {
                         </td>
                         <td>
                           <input
-                            class="form-check-input"
+                            className="form-check-input"
                             type="checkbox"
                             name="productSaveUpdate"
                             checked={formik.values.productSaveUpdate}
@@ -5120,7 +5147,7 @@ function RolesAdd() {
                         </td>
                         <td>
                           <input
-                            class="form-check-input"
+                            className="form-check-input"
                             type="checkbox"
                             name="productSaveRead"
                             checked={formik.values.productSaveRead}
@@ -5129,7 +5156,7 @@ function RolesAdd() {
                         </td>
                         <td>
                           {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="timeScheduleDelete"
                           checked={formik.values.timeScheduleDelete}
@@ -5138,7 +5165,7 @@ function RolesAdd() {
                         </td>
                         <td>
                           <input
-                            class="form-check-input"
+                            className="form-check-input"
                             type="checkbox"
                             name="productSavePublish"
                             checked={formik.values.productSavePublish}
@@ -5158,7 +5185,7 @@ function RolesAdd() {
                         </td>
                         <td>
                           <input
-                            class="form-check-input"
+                            className="form-check-input"
                             type="checkbox"
                             name="productImageSaveIndex"
                             checked={formik.values.productImageSaveIndex}
@@ -5169,7 +5196,7 @@ function RolesAdd() {
                         </td>
                         <td>
                           <input
-                            class="form-check-input"
+                            className="form-check-input"
                             type="checkbox"
                             name="productImageSaveCreate"
                             checked={formik.values.productImageSaveCreate}
@@ -5180,7 +5207,7 @@ function RolesAdd() {
                         </td>
                         <td>
                           <input
-                            class="form-check-input"
+                            className="form-check-input"
                             type="checkbox"
                             name="productImageSaveUpdate"
                             checked={formik.values.productImageSaveUpdate}
@@ -5191,7 +5218,7 @@ function RolesAdd() {
                         </td>
                         <td>
                           <input
-                            class="form-check-input"
+                            className="form-check-input"
                             type="checkbox"
                             name="productImageSaveRead"
                             checked={formik.values.productImageSaveRead}
@@ -5202,7 +5229,7 @@ function RolesAdd() {
                         </td>
                         <td>
                           <input
-                            class="form-check-input"
+                            className="form-check-input"
                             type="checkbox"
                             name="productImageSaveDelete"
                             checked={formik.values.productImageSaveDelete}
@@ -5213,7 +5240,7 @@ function RolesAdd() {
                         </td>
                         <td>
                           <input
-                            class="form-check-input"
+                            className="form-check-input"
                             type="checkbox"
                             name="productImageSavePublish"
                             checked={formik.values.productImageSavePublish}
@@ -5233,7 +5260,7 @@ function RolesAdd() {
                         </td>
                         <td>
                           <input
-                            class="form-check-input"
+                            className="form-check-input"
                             type="checkbox"
                             name="newsUpdatesIndex"
                             checked={formik.values.newsUpdatesIndex}
@@ -5242,7 +5269,7 @@ function RolesAdd() {
                         </td>
                         <td>
                           <input
-                            class="form-check-input"
+                            className="form-check-input"
                             type="checkbox"
                             name="newsUpdatesCreate"
                             checked={formik.values.newsUpdatesCreate}
@@ -5251,7 +5278,7 @@ function RolesAdd() {
                         </td>
                         <td>
                           <input
-                            class="form-check-input"
+                            className="form-check-input"
                             type="checkbox"
                             name="newsUpdatesUpdate"
                             checked={formik.values.newsUpdatesUpdate}
@@ -5260,7 +5287,7 @@ function RolesAdd() {
                         </td>
                         <td>
                           <input
-                            class="form-check-input"
+                            className="form-check-input"
                             type="checkbox"
                             name="newsUpdatesRead"
                             checked={formik.values.newsUpdatesRead}
@@ -5269,7 +5296,7 @@ function RolesAdd() {
                         </td>
                         <td>
                           <input
-                            class="form-check-input"
+                            className="form-check-input"
                             type="checkbox"
                             name="newsUpdatesDelete"
                             checked={formik.values.newsUpdatesDelete}
@@ -5278,7 +5305,7 @@ function RolesAdd() {
                         </td>
                         <td>
                           <input
-                            class="form-check-input"
+                            className="form-check-input"
                             type="checkbox"
                             name="newsUpdatesDelete"
                             checked={formik.values.newsUpdatesPublish}
@@ -5298,7 +5325,7 @@ function RolesAdd() {
                         </td>
                         <td>
                           <input
-                            class="form-check-input"
+                            className="form-check-input"
                             type="checkbox"
                             name="contactUsIndex"
                             checked={formik.values.contactUsIndex}
@@ -5307,7 +5334,7 @@ function RolesAdd() {
                         </td>
                         <td>
                           <input
-                            class="form-check-input"
+                            className="form-check-input"
                             type="checkbox"
                             name="contactUsCreate"
                             checked={formik.values.contactUsCreate}
@@ -5316,7 +5343,7 @@ function RolesAdd() {
                         </td>
                         <td>
                           <input
-                            class="form-check-input"
+                            className="form-check-input"
                             type="checkbox"
                             name="contactUsUpdate"
                             checked={formik.values.contactUsUpdate}
@@ -5325,7 +5352,7 @@ function RolesAdd() {
                         </td>
                         <td>
                           <input
-                            class="form-check-input"
+                            className="form-check-input"
                             type="checkbox"
                             name="contactUsRead"
                             checked={formik.values.contactUsRead}
@@ -5334,7 +5361,7 @@ function RolesAdd() {
                         </td>
                         <td>
                           <input
-                            class="form-check-input"
+                            className="form-check-input"
                             type="checkbox"
                             name="contactUsDelete"
                             checked={formik.values.contactUsDelete}
@@ -5343,7 +5370,7 @@ function RolesAdd() {
                         </td>
                         <td>
                           <input
-                            class="form-check-input"
+                            className="form-check-input"
                             type="checkbox"
                             name="contactUsPublish"
                             checked={formik.values.contactUsPublish}
@@ -5361,7 +5388,7 @@ function RolesAdd() {
                         </td>
                         <td>
                           <input
-                            class="form-check-input"
+                            className="form-check-input"
                             type="checkbox"
                             name="blogIndex"
                             checked={formik.values.blogIndex}
@@ -5370,7 +5397,7 @@ function RolesAdd() {
                         </td>
                         <td>
                           <input
-                            class="form-check-input"
+                            className="form-check-input"
                             type="checkbox"
                             name="blogCreate"
                             checked={formik.values.blogCreate}
@@ -5379,7 +5406,7 @@ function RolesAdd() {
                         </td>
                         <td>
                           <input
-                            class="form-check-input"
+                            className="form-check-input"
                             type="checkbox"
                             name="blogUpdate"
                             checked={formik.values.blogUpdate}
@@ -5388,7 +5415,7 @@ function RolesAdd() {
                         </td>
                         <td>
                           <input
-                            class="form-check-input"
+                            className="form-check-input"
                             type="checkbox"
                             name="blogRead"
                             checked={formik.values.blogRead}
@@ -5397,7 +5424,7 @@ function RolesAdd() {
                         </td>
                         <td>
                           <input
-                            class="form-check-input"
+                            className="form-check-input"
                             type="checkbox"
                             name="blogDelete"
                             checked={formik.values.blogDelete}
@@ -5406,7 +5433,7 @@ function RolesAdd() {
                         </td>
                         <td>
                           <input
-                            class="form-check-input"
+                            className="form-check-input"
                             type="checkbox"
                             name="blogPublish"
                             checked={formik.values.blogPublish}
@@ -5424,7 +5451,7 @@ function RolesAdd() {
                         </td>
                         <td>
                           {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="contactUsSettingIndex"
                           checked={formik.values.contactUsSettingIndex}
@@ -5433,7 +5460,7 @@ function RolesAdd() {
                         </td>
                         <td>
                           <input
-                            class="form-check-input"
+                            className="form-check-input"
                             type="checkbox"
                             name="contactUsSettingCreate"
                             checked={formik.values.contactUsSettingCreate}
@@ -5444,7 +5471,7 @@ function RolesAdd() {
                         </td>
                         <td>
                           <input
-                            class="form-check-input"
+                            className="form-check-input"
                             type="checkbox"
                             name="contactUsSettingUpdate"
                             checked={formik.values.contactUsSettingUpdate}
@@ -5455,7 +5482,7 @@ function RolesAdd() {
                         </td>
                         <td>
                           <input
-                            class="form-check-input"
+                            className="form-check-input"
                             type="checkbox"
                             name="contactUsSettingRead"
                             checked={formik.values.contactUsSettingRead}
@@ -5466,7 +5493,7 @@ function RolesAdd() {
                         </td>
                         <td>
                           <input
-                            class="form-check-input"
+                            className="form-check-input"
                             type="checkbox"
                             name="contactUsSettingDelete"
                             checked={formik.values.contactUsSettingDelete}
@@ -5477,7 +5504,7 @@ function RolesAdd() {
                         </td>
                         <td>
                           {/* <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           name="blogPublish"
                           checked={formik.values.blogPublish}

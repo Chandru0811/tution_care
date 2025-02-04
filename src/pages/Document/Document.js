@@ -519,7 +519,7 @@ const Document = () => {
             >
               <MenuItem>
                 <DocumentEdit
-                  // onSuccess={fetchData}
+                  onSuccess={getDocumentData}
                   id={selectedId}
                   handleMenuClose={handleMenuClose}
                 />
@@ -527,7 +527,7 @@ const Document = () => {
               <MenuItem>
                 <GlobalDelete
                   path={`/deleteDocumentFolder/${selectedId}`}
-                  // onDeleteSuccess={fetchData}
+                  onDeleteSuccess={getDocumentData}
                   onOpen={handleMenuClose}
                 />
               </MenuItem>

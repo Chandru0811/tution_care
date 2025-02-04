@@ -9,75 +9,103 @@ import fetchAllStudentListByCenter from "../List/StudentListByCenter";
 function PaymentsAdd() {
   const navigate = useNavigate();
   const [loadIndicator, setLoadIndicator] = useState(false);
-  const userName = localStorage.getItem("tmsuserName");
   const centerId = localStorage.getItem("tmscenterId");
   const [studentData, setStudentData] = useState(null);
 
-  const validationSchema = Yup.object({});
+  const validationSchema = Yup.object({
+    studentId: Yup.string().required("Student Name is required"),
+    paymentDate: Yup.string().required("Payment Date is required"),
+    paymentMethod: Yup.string().required("Payment Method is required"),
+    paidAmount: Yup.number()
+      .typeError("Paid Amount must be a number")
+      .positive("Paid Amount must be positive")
+      .required("Paid Amount is required"),
+    bank: Yup.string().when("paymentMethod", {
+      is: (val) => val === "Cheque" || val === "Internet Banking",
+      then: Yup.string().required("Bank Name is required"),
+    }),
+    accountNo: Yup.string().when("paymentMethod", {
+      is: "Cheque",
+      then: Yup.string().required("Account No is required"),
+    }),
+    transactionNo: Yup.string().when("paymentMethod", {
+      is: "Internet Banking",
+      then: Yup.string().required("Transaction No is required"),
+    }),
+    mobileNumber: Yup.string()
+      .matches(/^\d{10}$/, "Mobile Number must be 10 digits")
+      .when("paymentMethod", {
+        is: "Internet Banking",
+        then: Yup.string().required("Mobile Number is required"),
+      }),
+    file: Yup.mixed().notRequired(),
+    remark: Yup.string().notRequired(),
+  });
 
+  // Formik Hook
   const formik = useFormik({
     initialValues: {
       centerId: centerId,
-      studentId: "",
+      studentId:  "",
       receiptNo: "",
       paymentDate: "",
       paymentMethod: "",
-      paymentReference: "",
+      paymentReference:"",
       paidAmount: "0.0",
-      back: "",
+      bank: "",
       accountNo: "",
       transactionNo: "",
       mobileNumber: "",
       file: null,
       remark: "",
     },
-    validationSchema: validationSchema,
+    // validationSchema: validationSchema,
+    enableReinitialize: true,
     onSubmit: async (values) => {
-      console.log("Payment Data::", values);
+      setLoadIndicator(true);
+      const formData = new FormData();
+      formData.append("centerId", centerId);
+      formData.append("studentId", values.studentId);
+      formData.append("userId", values.studentId);
+      formData.append("receiptNo", values.receiptNo);
+      formData.append("paymentDate", values.paymentDate);
+      formData.append("paymentMethod", values.paymentMethod);
+      formData.append("paymentReference", values.paymentReference);
+      formData.append("paidAmount", values.paidAmount);
+      formData.append("bank", values.bank);
+      formData.append("accountNo", values.accountNo);
+      formData.append("transactionNo", values.transactionNo);
+      formData.append("mobileNumber", values.mobileNumber);
+      formData.append("remark", values.remark);
 
-      //   setLoadIndicator(true);
-      //   const formData = new FormData();
-      //   formData.append("centerName", values.centerName);
-      //   formData.append("code", values.code);
-      //   formData.append("userId", values.studentId);
-      //   formData.append("address", values.address);
-      //   formData.append("zipCode", values.zipCode);
-      //   formData.append("mobile", values.mobile);
-      //   formData.append("email", values.email);
-      //   formData.append("openingDate", values.openingDate);
-      //   formData.append("uenNumber", values.uenNumber);
-      //   formData.append("gst", values.gst);
-      //   formData.append("taxRegistrationNumber", values.taxRegistrationNumber);
-      //   formData.append("bankName", values.bankName);
-      //   formData.append("bankBranch", values.bankBranch);
-      //   formData.append("bankAccountNumber", values.bankAccountNumber);
-      //   formData.append("bankAccountName", values.bankAccountName);
-      //   formData.append("invoiceNotes  ", values.invoiceNotes || " ");
-      //   formData.append("file", values.file);
-      //   formData.append("target", values.target);
-      //   formData.append("createdBy", userName);
+      // Append file if exists
+      if (values.file) {
+        formData.append("file", values.file);
+      }
 
-      //   try {
-      //     const response = await api.post("/paymentCreate", formData, {
-      //       headers: {
-      //         "Content-Type": "multipart/form-data",
-      //       },
-      //     });
-      //     if (response.status === 201) {
-      //       toast.success(response.data.message);
-      //       handleCenterChanged();
-      //       navigate("/payments");
-      //     } else {
-      //       toast.error(response.data.message);
-      //     }
-      //   } catch (error) {
-      //     toast.error(error);
-      //   } finally {
-      //     setLoadIndicator(false);
-      //   }
+      try {
+        const response = await api.post("/createPayment", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+
+        if (response.status === 201) {
+          toast.success(response.data.message);
+          navigate("/payments");
+        } else {
+          toast.error(response.data.message);
+        }
+      } catch (error) {
+        toast.error(
+          error.response?.data?.message || "Failed to create payment"
+        );
+      } finally {
+        setLoadIndicator(false);
+      }
     },
-    validateOnChange: false, // Enable validation on change
-    validateOnBlur: true, // Enable validation on blur
+    validateOnChange: false,
+    validateOnBlur: true,
   });
 
   // Function to scroll to the first error field

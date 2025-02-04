@@ -107,6 +107,7 @@ const AddStudentDetails = forwardRef(
       initialValues: {
         centerId: centerId || "",
         studentName: formData.studentName || "",
+        studentEmail: formData.studentEmail || "",
         studentChineseName: formData.studentChineseName || "",
         file: null || "",
         age: formData.age || "",
@@ -135,6 +136,7 @@ const AddStudentDetails = forwardRef(
 
           // Add each data field manually to the FormData object
           formDatas.append("studentName", values.studentName);
+          formDatas.append("studentEmail", values.studentEmail);
           formDatas.append("leadId", formData.LeadId || "");
           formDatas.append("studentChineseName", values.studentChineseName);
           formDatas.append("dateOfBirth", values.dateOfBirth);
@@ -284,36 +286,9 @@ const AddStudentDetails = forwardRef(
               <div className="container">
                 <div className="row mt-3">
                   <div className="col-lg-6 col-md-6 col-12">
-                    {/* <div className="text-start mt-2">
-                      <label htmlFor="" className="mb-1 fw-medium">
-                        <small>Centre</small>
-                        <span className="text-danger">*</span>
-                      </label>
-                      <br />
-                      <select
-                        name="centerId"
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        value={formik.values.centerId}
-                        className="form-select"
-                      >
-                        <option selected></option>
-                        {centerData &&
-                          centerData.map((centerId) => (
-                            <option key={centerId.id} value={centerId.id}>
-                              {centerId.centerNames}
-                            </option>
-                          ))}
-                      </select>
-                      {formik.touched.centerId && formik.errors.centerId && (
-                        <div className="text-danger">
-                          <small>{formik.errors.centerId}</small>
-                        </div>
-                      )}
-                    </div> */}
                     <div className="text-start mt-4">
                       <label htmlFor="" className="mb-1 fw-medium">
-                        <small>Student Name / as per ID</small>
+                        <small>Student Name</small>
                         <span className="text-danger">*</span>
                       </label>
                       <br />
@@ -329,6 +304,27 @@ const AddStudentDetails = forwardRef(
                         formik.errors.studentName && (
                           <div className="text-danger">
                             <small>{formik.errors.studentName}</small>
+                          </div>
+                        )}
+                    </div>
+                    <div className="text-start mt-4">
+                      <label htmlFor="" className="mb-1 fw-medium">
+                        <small>Student Email</small>
+                        <span className="text-danger">*</span>
+                      </label>
+                      <br />
+                      <input
+                        name="studentEmail"
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        value={formik.values.studentEmail}
+                        className="form-control "
+                        type="text"
+                      />
+                      {formik.touched.studentEmail &&
+                        formik.errors.studentEmail && (
+                          <div className="text-danger">
+                            <small>{formik.errors.studentEmail}</small>
                           </div>
                         )}
                     </div>
@@ -436,7 +432,7 @@ const AddStudentDetails = forwardRef(
                         )}
                     </div>
                     <div className="text-start mt-4">
-                      <label htmlFor="" className=" fw-medium">
+                      <label htmlFor="" className="mb-1 fw-medium">
                         <small>Pre-Assessment Result</small>
                       </label>
                       <br />
@@ -505,8 +501,8 @@ const AddStudentDetails = forwardRef(
                     </div>
                   </div>
                   <div className="col-lg-6 col-md-6 col-12 px-5">
-                  <div className="text-start mt-4">
-                      <label className=" fw-medium">
+                    <div className="text-start mt-4">
+                      <label className="mb-1 fw-medium">
                         <small>
                           Student Chinese Name (put N/A if not applicable)
                           <span className="text-danger">*</span>
@@ -530,7 +526,7 @@ const AddStudentDetails = forwardRef(
                         )}
                     </div>
                     <div className="text-start mt-4">
-                      <label htmlFor="file" className="fw-medium">
+                      <label htmlFor="file" className="mb-1 fw-medium">
                         <small>Profile Image</small>
                         <span className="text-danger">*</span>
                       </label>
@@ -568,7 +564,7 @@ const AddStudentDetails = forwardRef(
                       )}
                     </div>
                     <div className="text-start mt-4">
-                      <label htmlFor="" className=" fw-medium">
+                      <label htmlFor="age" className="mb-1 fw-medium">
                         <small>Age</small>
                         <span className="text-danger">*</span>
                       </label>
@@ -589,7 +585,7 @@ const AddStudentDetails = forwardRef(
                       )}
                     </div>
                     <div className="text-start mt-4">
-                      <label htmlFor="" className=" fw-medium">
+                      <label className="mb-1 fw-medium">
                         <small>Medical Condition</small>
                         <span className="text-danger">*</span>
                       </label>
@@ -658,7 +654,7 @@ const AddStudentDetails = forwardRef(
                       )}
                     </div>
                     <div className="text-start mt-4">
-                      <label htmlFor="" className=" fw-medium">
+                      <label htmlFor="" className="mb-1 fw-medium">
                         <small>Primary Language Spoken</small>
                         <span className="text-danger">*</span>
                       </label>
@@ -682,7 +678,7 @@ const AddStudentDetails = forwardRef(
                         )}
                     </div>
                     <div className="text-start mt-4">
-                      <label htmlFor="" className=" fw-medium">
+                      <label htmlFor="" className="mb-1 fw-medium">
                         <small>Refer By Student</small>
                         {/* <span className="text-danger">*</span> */}
                       </label>

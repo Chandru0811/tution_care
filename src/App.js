@@ -46,9 +46,6 @@ function App() {
     try {
       if (id) {
         if (id === 1) {
-          // const response = await api.get(`/getAllModulesInfoById/${id}`);
-          // const rolePermissions = response.data;
-          // updateModules(rolePermissions);
           setIsAuthenticated(true);
           localStorage.setItem("tmsisAuthenticated", true);
         } else {

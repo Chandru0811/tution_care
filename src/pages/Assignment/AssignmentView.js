@@ -125,7 +125,7 @@ function AssignmentView() {
 
   const getData = async () => {
     try {
-      const response = await api.get(`/getAllSmsPushNotificationsById/${id}`);
+      const response = await api.get(`/getAssignmentFolderById/${id}`);
       console.log("first", response.data);
       setData(response.data);
     } catch (error) {
@@ -155,13 +155,13 @@ function AssignmentView() {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          <Link to="/assignmentResult" className="custom-breadcrumb">
-            Assignment Result
+          <Link to="/assignment" className="custom-breadcrumb">
+            Assignment
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          Assignment Result View
+          Assignment View
         </li>
       </ol>
       <div>
@@ -174,7 +174,7 @@ function AssignmentView() {
               <div class="d-flex">
                 <div class="dot active"></div>
               </div>
-              <span class="me-2 text-muted">Assignment Result View</span>
+              <span class="me-2 text-muted">Assignment View</span>
             </div>
             <div className="my-2 pe-3 d-flex align-items-center">
               <button
@@ -184,7 +184,7 @@ function AssignmentView() {
               >
                 Remark
               </button>
-              <Link to="/assignmentResult">
+              <Link to="/assignment">
                 <button type="button " className="btn btn-sm btn-border   ">
                   Back
                 </button>
@@ -228,7 +228,7 @@ function AssignmentView() {
                     <p className="fw-medium">Class Listing</p>
                   </div>
                   <div className="col-6 text-start">
-                    <p className="text-muted">: {data.class || "--"}</p>
+                    <p className="text-muted">: {data.classListing || "--"}</p>
                   </div>
                 </div>
               </div>
@@ -239,7 +239,7 @@ function AssignmentView() {
                     <p className="fw-medium">Teacher</p>
                   </div>
                   <div className="col-6 text-start">
-                    <p className="text-muted">: {data.teacher || "--"}</p>
+                    <p className="text-muted">: {data.user || "--"}</p>
                   </div>
                 </div>
               </div>
@@ -250,7 +250,7 @@ function AssignmentView() {
                     <p className="fw-medium">Days</p>
                   </div>
                   <div className="col-6 text-start">
-                    <p className="text-muted">:{data.days || "--"}</p>
+                    <p className="text-muted">: {data.day || "--"}</p>
                   </div>
                 </div>
               </div>

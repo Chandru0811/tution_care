@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { Collapse, Nav, OverlayTrigger, Tooltip } from "react-bootstrap";
-import Logo from "../../assets/images/ECSLOGO.png";
+import Logo from "../../assets/images/TMS_LOGO.png";
 import api from "../../config/URL";
 import { PiBuildings } from "react-icons/pi";
 import { IoIosAdd, IoIosRemove } from "react-icons/io";
@@ -48,20 +48,25 @@ function Sidebar() {
   const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   const location = useLocation();
   const hasRenderedOnce = useRef(false);
+  const centerId = localStorage.getItem("tmscenterId");
 
-  // useEffect(() => {
-  //   const getData = async () => {
-  //     try {
-  //       const response = await api.get(`/getAllHeaderSavePublish`);
-  //       setData(response.data);
-  //     } catch (error) {
-  //       console.error("Error Fetching Data: " + error.message);
-  //     }
-  //   };
-  //   getData();
-  // }, []);
+
+  const getAccess = async () => {
+    try {
+      const response = await api.get(`/getAllCenterById/${centerId}`);
+      setData(response.data);
+    } catch (error) {
+      console.error("Error Fetching Data: " + error.message);
+    }
+  };
 
   useEffect(() => {
+    getAccess();
+  }, []);
+
+  useEffect(() => {
+    if (Object.keys(data).length === 0) return;
+    
     const storedScreens = JSON.parse(
       localStorage.getItem("tmsscreens") || "{}"
     );
@@ -109,12 +114,8 @@ function Sidebar() {
             path: "lead/lead",
             access: storedScreens.leadListingIndex,
           },
-          // {
-          //   title: "Contacts",
-          //   path: "/lead/contacted",
-          //   access: storedScreens.enrollmentIndex,
-          // },
         ],
+        show: data.leadManagement,
       },
       {
         title: "Emaployee Info",
@@ -527,13 +528,6 @@ function Sidebar() {
     setMenuItems(updatedMenuItems);
   }, []);
 
-  // useEffect(() => {
-  //   if (location.pathname === "/") {
-  //     setMenuItems(menuItems.map((item) => ({ ...item, isOpen: false })));
-  //     setActiveMenu(null);
-  //   }
-  // }, [location]);
-
   useEffect(() => {
     if (location.pathname === "/") {
       setMenuItems((menuItems) =>
@@ -578,8 +572,8 @@ function Sidebar() {
     <div className="sidebar">
       <div className="logo-details">
         <span className="logo_name">
-          <img src={Logo} alt="logo" width={70} className="img-fluid p-2" />
-          <span className="text-dark">ECS Cloud</span>
+          <img src={Logo} alt="logo" width={80} className="img-fluid p-2" />
+          <span className="text-dark">Tuition Care</span>
         </span>
       </div>
       <ul className="nav-links">

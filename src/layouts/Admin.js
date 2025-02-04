@@ -81,7 +81,6 @@ import AttendancesEdit from "../pages/Attendance/AttendancesEdit";
 import RolesAdd from "../pages/Roles/RolesAdd";
 import TeacherLeaveView from "../pages/Teacher/TeacherLeaveView";
 import DocumentReport from "../pages/Report/DocumentReport";
-import DocumentReportView from "../pages/Report/DocumentReportView";
 import AssessmentReport from "../pages/Report/AssessmentReport";
 import ReplaceClass from "../pages/Report/ReplaceClass";
 import WithdrawAdd from "../pages/Student/WithdrawAdd";
@@ -93,15 +92,6 @@ import Reschedule from "../pages/Reschedule/Reschedule";
 import RescheduleStudent from "../pages/Reschedule/RescheduleStudent";
 import ScheduleTeacher from "../pages/ScheduleTeacher/ScheduleTeacher";
 import AttendancesCourse from "../pages/Attendance/AttendancesCourse";
-import Campaign from "../pages/Campaign/Campaign";
-import CampaignAdd from "../pages/Campaign/CampaignAdd";
-import CampaignEdit from "../pages/Campaign/CampaignEdit";
-import CampaignView from "../pages/Campaign/CampaignView";
-import Contact from "../pages/Campaign/Contact";
-import ContactAdd from "../pages/Campaign/ContactAdd";
-import CampaignStudentAdd from "../pages/Campaign/CampaignStudentAdd";
-import ContactLists from "../pages/Campaign/ContactLists";
-import ContactEdit from "../pages/Campaign/ContactEdit";
 import DocumentFiles from "../pages/Document/DocumentFiles";
 import ScheduleTime from "../pages/ScheduleTeacher/ScheduleTime";
 import Test from "../pages/Test";
@@ -453,10 +443,10 @@ function Admin({ handleLogout }) {
               <Route path="/report/document" element={<DocumentReport />} />
               <Route path="/report/revenue" element={<RevenueReport />} />
               <Route path="/report/replace_class" element={<ReplaceClass />} />
-              <Route
+              {/* <Route
                 path="/report/document/view"
                 element={<DocumentReportView />}
-              />
+              /> */}
               <Route path="/report/assessment" element={<AssessmentReport />} />
 
               {/* staff  */}
@@ -633,23 +623,6 @@ function Admin({ handleLogout }) {
 
               {/* {/ Role /} */}
               <Route path="/role/add" element={<RolesAdd />} />
-
-              {/* Compaign */}
-              <Route path="/campaign" element={<Campaign />} />
-              <Route path="/campaign/add" element={<CampaignAdd />} />
-              <Route path="/campaign/edit" element={<CampaignEdit />} />
-              <Route path="/campaign/view" element={<CampaignView />} />
-              <Route path="/campaign/contact" element={<Contact />} />
-              <Route path="/campaign/contact/add" element={<ContactAdd />} />
-              <Route path="/campaign/contact/edit" element={<ContactEdit />} />
-              <Route
-                path="/campaign/student/add"
-                element={<CampaignStudentAdd />}
-              />
-              <Route
-                path="/campaign/student/add/list"
-                element={<ContactLists />}
-              />
 
               {/* CMS Blog */}
               <Route path="/cms/cmsBlog" element={<CMSBlog />} />

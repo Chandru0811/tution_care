@@ -107,7 +107,7 @@ function AssignmentAdd() {
         });
         const formData = new FormData();
         formData.append("centerId", centerId);
-        formData.append("userId", 12);
+        formData.append("userId", values.userId);
         formData.append("day", values.day);
         formData.append("classListing", selectedClassName);
         formData.append("course", selectedCourseName);
@@ -123,9 +123,9 @@ function AssignmentAdd() {
           formData.append("isGroupUpload", true);
         } else {
           formData.append("isGroupUpload", false);
-          formData.append("studentIds", JSON.stringify(values.studentIds));
+          formData.append("studentIds", values.studentIds.join(",")); // Convert array to comma-separated string
         }
-
+        
         // Append files
         if (values.files && values.files.length > 0) {
           values.files.forEach((file, index) =>
@@ -183,7 +183,7 @@ function AssignmentAdd() {
     }
   }, [formik.submitCount, formik.errors]);
 
-  const fetchCourses = async (centerId) => {
+  const fetchCourses = async () => {
     try {
       const courses = await fetchAllCoursesWithIdsC(centerId);
       setCourseData(courses);
@@ -192,7 +192,7 @@ function AssignmentAdd() {
     }
   };
 
-  const fetchTeacher = async (centerId) => {
+  const fetchTeacher = async () => {
     try {
       const teacher = await fetchAllTeacherListByCenter(centerId);
       setUserData(teacher);
@@ -201,7 +201,7 @@ function AssignmentAdd() {
     }
   };
 
-  const fetchStudent = async (centerId) => {
+  const fetchStudent = async () => {
     try {
       const studentList = await fetchAllStudentListByCenter(centerId); // API call to fetch students
       if (Array.isArray(studentList)) {
@@ -227,12 +227,6 @@ function AssignmentAdd() {
     } catch (error) {
       toast.error(error);
     }
-  };
-
-  const handleCenterChange = (event) => {
-    fetchCourses(centerId);
-    fetchTeacher(centerId);
-    fetchStudent(centerId); // Fetch courses for the selected center
   };
 
   const fetchBatchandTeacherData = async (day) => {
@@ -298,7 +292,9 @@ function AssignmentAdd() {
   };
 
   useEffect(() => {
-    handleCenterChange();
+    fetchCourses(centerId);
+    fetchTeacher(centerId);
+    fetchStudent(centerId);
   }, []);
 
   return (
@@ -371,34 +367,6 @@ function AssignmentAdd() {
 
           <div className="container">
             <div className="row py-4">
-              {/* <div class="col-md-6 col-12 mb-4">
-                <lable class="">
-                  Centre<span class="text-danger">*</span>
-                </lable>
-                <select
-                  {...formik.getFieldProps("center")}
-                  name="center"
-                  className={`form-select  ${
-                    formik.touched.center && formik.errors.center
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  aria-label="Default select example"
-                  onChange={handleCenterChange}
-                >
-                  <option disabled></option>
-                  {centerData &&
-                    centerData.map((center) => (
-                      <option key={center.id} value={center.id}>
-                        {center.centerNames}
-                      </option>
-                    ))}
-                </select>
-                {formik.touched.center && formik.errors.center && (
-                  <div className="invalid-feedback">{formik.errors.center}</div>
-                )}
-              </div> */}
-
               <div class="col-md-6 col-12 mb-4">
                 <lable class="">
                   Course<span class="text-danger">*</span>

@@ -88,7 +88,7 @@ const Invoice = () => {
         header: "Course",
       },
       {
-        accessorKey: "studentUniqueId",
+        accessorKey: "studentUniqId",
         enableHiding: false,
         header: "Student ID",
       },

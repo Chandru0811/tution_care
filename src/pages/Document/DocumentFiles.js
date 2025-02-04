@@ -3,37 +3,23 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
 import api from "../../config/URL";
-import fetchAllCentersWithIds from "../List/CenterList";
 import { Link, useNavigate } from "react-router-dom";
 import fetchAllClassesWithIdsC from "../List/ClassListByCourse";
 import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
 
 function DocumentFile() {
-  const [centerData, setCenterData] = useState(null);
   const [courseData, setCourseData] = useState(null);
   const [classData, setClassListtingData] = useState(null);
   const [documentData, setDocumentData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
+  const centerId = localStorage.getItem("tmscenterId");
+
   const navigate = useNavigate();
 
   const MAX_FILE_SIZE = 1024 * 1024 * 1024; // 1 GB
   const MAX_FILE_NAME_LENGTH = 50;
 
-  const fetchData = async () => {
-    try {
-      const centerData = await fetchAllCentersWithIds();
-
-      setCenterData(centerData);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const fetchCourses = async (centerId) => {
+  const fetchCourses = async () => {
     try {
       const courses = await fetchAllCoursesWithIdsC(centerId);
       setCourseData(courses);
@@ -51,7 +37,7 @@ function DocumentFile() {
     }
   };
 
-  const fetchFolders = async (centerId, courseId, classId) => {
+  const fetchFolders = async (courseId, classId) => {
     try {
       const formData = new FormData();
       formData.append("centerId", centerId);
@@ -68,7 +54,6 @@ function DocumentFile() {
     }
   };
   const validationSchema = Yup.object().shape({
-    centerName: Yup.string().required("*Centre is required"),
     course: Yup.string().required("*Course is required"),
     classListing: Yup.string().required("*Class is required"),
     folder: Yup.string().required("*Folder Name is required"),
@@ -101,7 +86,7 @@ function DocumentFile() {
 
   const formik = useFormik({
     initialValues: {
-      centerName: "",
+      centerId: centerId,
       course: "",
       classListing: "",
       folder: "",
@@ -141,14 +126,9 @@ function DocumentFile() {
     },
   });
 
-  const handleCenterChange = (event) => {
-    setCourseData(null);
-    setClassListtingData(null);
-    setDocumentData(null);
-    const centerName = event.target.value;
-    formik.setFieldValue("centerName", centerName);
-    fetchCourses(centerName); // Fetch courses for the selected center
-  };
+  useEffect(() => {
+    fetchCourses();
+  }, []);
 
   const handleCourseChange = (event) => {
     setClassListtingData(null);
@@ -162,8 +142,11 @@ function DocumentFile() {
     setDocumentData(null);
     const classId = event.target.value;
     formik.setFieldValue("classListing", classId);
-    fetchFolders(formik.values.centerName, formik.values.course, classId); // Fetch folders for the selected center, course, and class
+  
+    // Explicitly passing selected courseId from formik values
+    fetchFolders(formik.values.course, classId);
   };
+  
 
   return (
     <section>

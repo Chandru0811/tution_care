@@ -11,10 +11,7 @@ import {
 } from "@mui/material";
 import { MoreVert as MoreVertIcon } from "@mui/icons-material";
 import { toast } from "react-toastify";
-import fetchAllCentreManager from "../List/CentreMangerList";
 import GlobalDelete from "../../components/common/GlobalDelete";
-import fetchAllCoursesWithIds from "../List/CourseList";
-import fetchAllCentersWithIds from "../List/CenterList";
 import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
 import fetchAllStudentListByCenter from "../List/StudentListByCenter";
 import fetchAllPackageListByCenter from "../List/PackageListByCenter";
@@ -177,7 +174,7 @@ const Payments = () => {
 
       const response = await api.get(
         // `/getInvoiceWithCustomInfo?${queryParams.toString()}`
-        `/getGenerateInvoiceByCenterId/${centerId}`
+        `/paymentByCenterId/${centerId}`
       );
       setData(response.data);
     } catch (error) {
@@ -203,12 +200,6 @@ const Payments = () => {
     getInvoiceData();
     setIsClearFilterClicked(true);
   };
-  // useEffect(() => {
-  //   const fetchDatas = async () => {
-  //     await fetchData(); // Fetch center data
-  //   };
-  //   fetchDatas();
-  // }, []);
 
   const fetchListData = async (centerId) => {
     try {
@@ -270,22 +261,6 @@ const Payments = () => {
         </div>
         <div className="mb-3 d-flex justify-content-between">
           <div className="individual_fliters d-lg-flex ">
-            {/* <div className="form-group mb-0 ms-2 mb-1">
-              <select
-                className="form-select form-select-sm center_list"
-                name="centerId"
-                style={{ width: "100%" }}
-                onChange={handleFilterChange}
-                value={filters.centerId}
-              >
-                <option>Select the centre</option>
-                {centerData?.map((center) => (
-                  <option key={center.id} value={center.id} selected>
-                    {center.centerNames}
-                  </option>
-                ))}
-              </select>
-            </div> */}
             <div className="form-group mb-0 ms-2 mb-1">
               <select
                 className="form-select form-select-sm center_list"
@@ -407,7 +382,7 @@ const Payments = () => {
               <MenuItem>
                 <GlobalDelete
                   path={`/deleteGenerateInvoice/${selectedId}`}
-                  // onDeleteSuccess={fetchData}
+                  onDeleteSuccess={getInvoiceData}
                   onOpen={handleMenuClose}
                 />
               </MenuItem>
