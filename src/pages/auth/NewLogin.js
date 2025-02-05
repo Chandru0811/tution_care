@@ -5,7 +5,7 @@ import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 import { toast } from "react-toastify";
 import api from "../../config/URL";
 import { Link, useNavigate } from "react-router-dom";
-import Logo from "../../assets/images/ECSLOGO.png";
+import Logo from "../../assets/images/TMS_LOGO.png";
 
 export default function NewLogin({ onLogin }) {
   const [loadIndicator, setLoadIndicator] = useState(false);
@@ -79,8 +79,8 @@ export default function NewLogin({ onLogin }) {
       <div className="container-fluid p-0">
         <div className="row m-0" style={{ minHeight: "100vh" }}>
           <div className="col-md-6 col-12 left-section">
-            <img src={Logo} alt="Logo" className="ecs-logo" />
-            <h1 className="ecs-text">ECS CLOUD</h1>
+            <img src={Logo} alt="Logo" className="ecs-logo" style={{borderRadius:"50%"}} />
+            <h1 className="ecs-text">ECS Schools</h1>
           </div>
 
           <div className="col-md-6 col-12 d-flex flex-column justify-content-center align-items-center form-section">
@@ -149,7 +149,7 @@ export default function NewLogin({ onLogin }) {
                       </div>
                     )}
                   </div>
-                  <div className="text-end">
+                  {/* <div className="text-end">
                     <Link
                       to="/password"
                       className="text-muted fw-medium"
@@ -157,7 +157,7 @@ export default function NewLogin({ onLogin }) {
                     >
                       Forgot Password?
                     </Link>
-                  </div>
+                  </div> */}
                   <button
                     type="submit"
                     className="btn btn-danger mt-4 w-100"

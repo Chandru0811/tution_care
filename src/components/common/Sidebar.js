@@ -26,7 +26,7 @@ const iconMapping = {
   "Company Management": <PiBuildings />,
   "Course Management": <PiBookOpenText />,
   "Lead Management": <GiExitDoor />,
-  "Emaployee Info": <RiUserAddLine  />,
+  "Emaployee Info": <RiUserAddLine />,
   Staffing: <HiOutlineUserGroup />,
   "Student Management": <TbUserSearch />,
   "Student Movement": <TbStatusChange />,
@@ -45,11 +45,12 @@ function Sidebar() {
   const [activeMenu, setActiveMenu] = useState(null);
   const [menuItems, setMenuItems] = useState([]);
   const [data, setData] = useState({});
+  console.log("Data::", data.leadManagement);
+
   const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   const location = useLocation();
   const hasRenderedOnce = useRef(false);
   const centerId = localStorage.getItem("tmscenterId");
-
 
   const getAccess = async () => {
     try {
@@ -65,8 +66,6 @@ function Sidebar() {
   }, []);
 
   useEffect(() => {
-    // if (Object.keys(data).length === 0) return;
-    
     const storedScreens = JSON.parse(
       localStorage.getItem("tmsscreens") || "{}"
     );
@@ -115,6 +114,7 @@ function Sidebar() {
             access: storedScreens.leadListingIndex,
           },
         ],
+        show : data.leadManagement
       },
       {
         title: "Emaployee Info",
@@ -128,7 +128,7 @@ function Sidebar() {
           },
         ],
       },
-      {
+      { 
         title: "Staffing",
         icon: "HiOutlineUserGroup",
         isOpen: false,
@@ -138,11 +138,6 @@ function Sidebar() {
             path: "/staff",
             access: storedScreens.staffIndex,
           },
-          // {
-          //   title: "Teacher",
-          //   path: "/teacher",
-          //   access: storedScreens.teacherIndex,
-          // },
           {
             title: "Attendance",
             path: "/staffing/attendance",
@@ -189,6 +184,7 @@ function Sidebar() {
             access: storedScreens.freeLancerIndex,
           },
         ],
+        show : data.staffManagement
       },
       {
         title: "Student Management",
@@ -212,18 +208,6 @@ function Sidebar() {
           },
         ],
       },
-      // {
-      //   title: "Student Movement",
-      //   icon: "TbStatusChange",
-      //   isOpen: false,
-      //   subMenus: [
-      //     {
-      //       title: "Transfer Out",
-      //       path: "/transferOut",
-      //       access: storedScreens.studentListingIndex,
-      //     },
-      //   ],
-      // },
       {
         title: "Schedule",
         icon: "TbCalendarTime",
@@ -315,26 +299,11 @@ function Sidebar() {
         icon: "BsFileEarmarkRichtext ",
         isOpen: false,
         subMenus: [
-          // {
-          //   title: "Document Report",
-          //   path: "/report/document",
-          //   access: storedScreens.documentReportIndex,
-          // },
           {
             title: "Attendance Report",
             path: "/report/attendance",
             access: storedScreens.attendanceReportIndex,
           },
-          // {
-          //   title: "Student Report",
-          //   path: "/report/studentreport",
-          //   access: storedScreens.studentReportIndex,
-          // },
-          // {
-          //   title: "Assessment Report",
-          //   path: "/report/assessment",
-          //   access: storedScreens.assessmentReportIndex,
-          // },
           {
             title: "Revenue Report",
             path: "/report/revenue",
@@ -345,90 +314,8 @@ function Sidebar() {
             path: "/report/enrolment",
             access: storedScreens.enrollmentReportIndex,
           },
-          // {
-          //   title: "Fee Collection Report",
-          //   path: "/report/fee",
-          //   access: storedScreens.feeCollectionReportIndex,
-          // },
-          // {
-          //   title: "Package Balance Report",
-          //   path: "/report/package",
-          //   access: storedScreens.packageBalanceReportIndex,
-          // },
-          // {
-          //   title: "Sales Revenue Report",
-          //   path: "/report/sales",
-          //   access: storedScreens.salesRevenueReportindex,
-          // },
-          // {
-          //   title: "Replace Class Lesson List",
-          //   path: "/report/replace_class",
-          //   access: storedScreens.replaceClassLessonListindex,
-          // },
         ],
       },
-      // {
-      //   title: "Content Management",
-      //   icon: "LiaUserEditSolid",
-      //   isOpen: false,
-      //   subMenus: [
-      //     {
-      //       title: "Header & Footer",
-      //       path: "/cms/header",
-      //       access: storedScreens.headerIndex,
-      //     },
-      //     {
-      //       title: "Home",
-      //       path: "/cms/home",
-      //       access: storedScreens.homeIndex,
-      //     },
-      //     {
-      //       title: "Blog",
-      //       path: "/cms/cmsBlog",
-      //       access: storedScreens.blogIndex,
-      //     },
-      //     {
-      //       title: "Testimonial",
-      //       path: "/cms/testimonial",
-      //       access: storedScreens.testimonialIndex,
-      //     },
-      //     {
-      //       title: "About",
-      //       path: "/cms/aboutus",
-      //       access: storedScreens.aboutIndex,
-      //     },
-      //     {
-      //       title: "Courses",
-      //       path: "/cms/CmsCourses",
-      //       access: storedScreens.englishCourseIndex,
-      //     },
-      //     {
-      //       title: "Teachers",
-      //       path: "/cms/teacher",
-      //       access: storedScreens.teacherSaveIndex,
-      //     },
-      //     {
-      //       title: "Products",
-      //       path: "/cms/products",
-      //       access: storedScreens.productSaveIndex,
-      //     },
-      //     {
-      //       title: "Products Items",
-      //       path: "/cms/productsitem",
-      //       access: storedScreens.productImageSaveIndex,
-      //     },
-      //     {
-      //       title: "News & Updates",
-      //       path: "/cms/newsupdate",
-      //       access: storedScreens.newsUpdatesIndex,
-      //     },
-      //     {
-      //       title: "Contact Us",
-      //       path: "/cms/contact",
-      //       access: storedScreens.contactUsIndex,
-      //     },
-      //   ],
-      // },
       {
         title: "Settings",
         icon: "GrUserSettings",
@@ -572,7 +459,7 @@ function Sidebar() {
       <div className="logo-details">
         <span className="logo_name">
           <img src={Logo} alt="logo" width={80} className="img-fluid p-2" />
-          <span className="text-dark">Tuition Care</span>
+          <span className="text-dark">ECS Schools</span>
         </span>
       </div>
       <ul className="nav-links">
@@ -595,7 +482,7 @@ function Sidebar() {
         </li>
         {menuItems.map(
           (item, index) =>
-            item.subMenus.some((subMenu) => subMenu.access) && (
+            item?.subMenus?.some((subMenu) => subMenu?.access) && (
               <li key={index}>
                 <Nav.Link
                   to="#"
