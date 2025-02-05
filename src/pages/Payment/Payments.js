@@ -361,7 +361,7 @@ const Payments = () => {
                   },
                 }}
                 muiTableBodyRowProps={({ row }) => ({
-                  onClick: () => navigate(`/invoice/view/${row.original.id}`),
+                  onClick: () => navigate(`/payments/view/${row.original.id}`),
                   style: { cursor: "pointer" },
                 })}
               />
