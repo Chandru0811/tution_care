@@ -5,17 +5,84 @@ import * as Yup from "yup";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
 import fetchAllStudentListByCenter from "../List/StudentListByCenter";
+import { MultiSelect } from "react-multi-select-component";
 
 function PaymentsEdit() {
-    const {id} = useParams();
+  const { id } = useParams();
   const navigate = useNavigate();
   const [loadIndicator, setLoadIndicator] = useState(false);
-  const userName = localStorage.getItem("tmsuserName");
   const centerId = localStorage.getItem("tmscenterId");
   const [studentData, setStudentData] = useState(null);
+  const [invoiceData, setInvoiceData] = useState([
+    {
+      invoiceNumber: "INV001",
+      paidAmount: 100,
+    },
+    {
+      invoiceNumber: "INV002",
+      paidAmount: 100,
+    },
+    {
+      invoiceNumber: "INV003",
+      paidAmount: 100,
+    },
+  ]);
+  const invoiceOptions = invoiceData.map((invoice) => ({
+    label: invoice.invoiceNumber,
+    value: invoice.invoiceNumber,
+    paidAmount: invoice.paidAmount,
+  }));
+  const [selectedInvoice, setSelectedInvoice] = useState([]);
 
-  const validationSchema = Yup.object({});
+  const validationSchema = Yup.object({
+    studentId: Yup.string().required("Student Name is required"),
+    paymentDate: Yup.string().required("Payment Date is required"),
+    paymentMethod: Yup.string().required("Payment Method is required"),
+    invoiceIds: Yup.array()
+      .of(Yup.string())
+      .min(1, "Invoice is required")
+      .required("Invoice is required"),
+    bank: Yup.string()
+      .nullable()
+      .trim()
+      .when("paymentMethod", {
+        is: (val) => val === "Cheque" || val === "Internet Banking",
+        then: (schema) => schema.required("Bank Name is required"),
+        otherwise: (schema) => schema.notRequired(),
+      }),
 
+    accountNo: Yup.string()
+      .nullable()
+      .trim()
+      .when("paymentMethod", {
+        is: "Cheque",
+        then: (schema) => schema.required("Account No is required"),
+        otherwise: (schema) => schema.notRequired(),
+      }),
+
+    transactionNo: Yup.string()
+      .nullable()
+      .trim()
+      .when("paymentMethod", {
+        is: "Internet Banking",
+        then: (schema) => schema.required("Transaction No is required"),
+        otherwise: (schema) => schema.notRequired(),
+      }),
+
+    mobileNumber: Yup.string()
+      .matches(/^\d{10}$/, "Mobile Number must be 10 digits")
+      .nullable()
+      .when("paymentMethod", {
+        is: "Internet Banking",
+        then: (schema) => schema.required("Mobile Number is required"),
+        otherwise: (schema) => schema.notRequired(),
+      }),
+
+    file: Yup.mixed().notRequired(),
+    remark: Yup.string().notRequired(),
+  });
+
+  // Formik Hook
   const formik = useFormik({
     initialValues: {
       centerId: centerId,
@@ -24,61 +91,63 @@ function PaymentsEdit() {
       paymentDate: "",
       paymentMethod: "",
       paymentReference: "",
-      paidAmount: "0.0",
-      back: "",
+      paidAmount: "",
+      bank: "",
       accountNo: "",
       transactionNo: "",
       mobileNumber: "",
       file: null,
       remark: "",
+      invoiceIds: [],
     },
     validationSchema: validationSchema,
+    enableReinitialize: true,
     onSubmit: async (values) => {
-      console.log("Payment Data::", values);
+      setLoadIndicator(true);
+      const formData = new FormData();
+      formData.append("centerId", centerId);
+      formData.append("studentId", values.studentId);
+      formData.append("invoiceIds", values.invoiceIds);
+      formData.append("userId", values.studentId);
+      formData.append("receiptNo", values.receiptNo);
+      formData.append("paymentDate", values.paymentDate);
+      formData.append("paymentMethod", values.paymentMethod);
+      formData.append("paymentReference", values.paymentReference);
+      formData.append("paidAmount", values.paidAmount);
+      formData.append("bank", values.bank);
+      formData.append("accountNo", values.accountNo);
+      formData.append("transactionNo", values.transactionNo);
+      formData.append("mobileNumber", values.mobileNumber);
+      formData.append("remark", values.remark);
 
-      //   setLoadIndicator(true);
-      //   const formData = new FormData();
-      //   formData.append("centerName", values.centerName);
-      //   formData.append("code", values.code);
-      //   formData.append("userId", values.studentId);
-      //   formData.append("address", values.address);
-      //   formData.append("zipCode", values.zipCode);
-      //   formData.append("mobile", values.mobile);
-      //   formData.append("email", values.email);
-      //   formData.append("openingDate", values.openingDate);
-      //   formData.append("uenNumber", values.uenNumber);
-      //   formData.append("gst", values.gst);
-      //   formData.append("taxRegistrationNumber", values.taxRegistrationNumber);
-      //   formData.append("bankName", values.bankName);
-      //   formData.append("bankBranch", values.bankBranch);
-      //   formData.append("bankAccountNumber", values.bankAccountNumber);
-      //   formData.append("bankAccountName", values.bankAccountName);
-      //   formData.append("invoiceNotes  ", values.invoiceNotes || " ");
-      //   formData.append("file", values.file);
-      //   formData.append("target", values.target);
-      //   formData.append("createdBy", userName);
+      // Append file if exists
+      if (values.file) {
+        formData.append("file", values.file);
+      }
 
-      //   try {
-      //     const response = await api.post("/paymentCreate", formData, {
-      //       headers: {
-      //         "Content-Type": "multipart/form-data",
-      //       },
-      //     });
-      //     if (response.status === 201) {
-      //       toast.success(response.data.message);
-      //       handleCenterChanged();
-      //       navigate("/payments");
-      //     } else {
-      //       toast.error(response.data.message);
-      //     }
-      //   } catch (error) {
-      //     toast.error(error);
-      //   } finally {
-      //     setLoadIndicator(false);
-      //   }
+      try {
+        const response = await api.put(`/updatePayment/${id}`, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+
+        if (response.status === 200) {
+          toast.success(response.data.message);
+          navigate("/payments");
+        } else {
+          toast.error(response.data.message);
+        }
+      } catch (error) {
+        toast.error(
+          error.response?.data?.message || "Failed to create payment"
+        );
+      } finally {
+        setLoadIndicator(false);
+      }
     },
-    validateOnChange: false, // Enable validation on change
-    validateOnBlur: true, // Enable validation on blur
+    validateOnChange: false,
+    validateOnBlur: true,
   });
 
   // Function to scroll to the first error field
@@ -106,9 +175,52 @@ function PaymentsEdit() {
       toast.error(error);
     }
   };
+  const handleStudentChange = async (event) => {
+    const studentId = event.target.value;
+    formik.setFieldValue("studentId", studentId);
+    try {
+      const student = await api.get(
+        `/getinvoice?centerId=${centerId}&studentId=${studentId}`
+      );
+      // setInvoiceData(student);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
+  const handleInvoiceChange = (selected) => {
+    setSelectedInvoice(selected);
+    const totalPaidAmount = selected.reduce(
+      (sum, invoice) => sum + (invoice.paidAmount || 0),
+      0
+    );
+    formik.setFieldValue(
+      "invoiceIds",
+      selected.map((option) => option.value)
+    );
+    formik.setFieldValue("paidAmount", totalPaidAmount);
+  };
   useEffect(() => {
+    const getData = async () => {
+      try {
+        const response = await api.get(`/getPaymentById/${id}`);
+        formik.setValues(response.data);
+      } catch (error) {
+        toast.error(error);
+      }
+    };
+    getData();
     fetchStudent();
   }, []);
+
+  const handlePaymethodChange = (event) => {
+    const paymentMethod = event.target.value;
+    formik.setFieldValue("paymentMethod", paymentMethod);
+
+    formik.setFieldValue("bank", "");
+    formik.setFieldValue("accountNo", "");
+    formik.setFieldValue("transactionNo", "");
+    formik.setFieldValue("mobileNumber", "");
+  };
 
   return (
     <div className="container-fluid">
@@ -184,6 +296,7 @@ function PaymentsEdit() {
                       ? "is-invalid"
                       : ""
                   }`}
+                  onChange={handleStudentChange}
                 >
                   <option disabled selected></option>
                   {studentData &&
@@ -196,6 +309,27 @@ function PaymentsEdit() {
                 {formik.touched.studentId && formik.errors.studentId && (
                   <div className="invalid-feedback">
                     {formik.errors.studentId}
+                  </div>
+                )}
+              </div>
+              <div className="col-md-6 col-12 mb-2">
+                <label className="form-label">
+                  Invoice<span className="text-danger">*</span>
+                </label>
+                <MultiSelect
+                  options={invoiceOptions}
+                  value={selectedInvoice}
+                  onChange={(selected) => handleInvoiceChange(selected)}
+                  labelledBy="Select Student"
+                  className={`form-multi-select ${
+                    formik.touched.invoiceIds && formik.errors.invoiceIds
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                />
+                {formik.touched.invoiceIds && formik.errors.invoiceIds && (
+                  <div className="invalid-feedback">
+                    {formik.errors.invoiceIds}
                   </div>
                 )}
               </div>
@@ -236,6 +370,7 @@ function PaymentsEdit() {
                         ? "is-invalid"
                         : ""
                     }`}
+                    onChange={handlePaymethodChange}
                   >
                     <option disabled selected></option>
                     <option value="Cash">Cash</option>
@@ -288,6 +423,11 @@ function PaymentsEdit() {
                           : ""
                       }`}
                     />
+                    {formik.touched.bank && formik.errors.bank && (
+                      <div className="invalid-feedback">
+                        {formik.errors.bank}
+                      </div>
+                    )}
                   </div>
                   <div className="col-md-6 col-12 mb-2">
                     <label className="form-label">Upload File</label>
@@ -319,6 +459,11 @@ function PaymentsEdit() {
                         : ""
                     }`}
                   />
+                  {formik.touched.accountNo && formik.errors.accountNo && (
+                    <div className="invalid-feedback">
+                      {formik.errors.accountNo}
+                    </div>
+                  )}
                 </div>
               )}
               {formik.values.paymentMethod === "Internet Banking" && (
@@ -336,6 +481,12 @@ function PaymentsEdit() {
                           : ""
                       }`}
                     />
+                    {formik.touched.transactionNo &&
+                      formik.errors.transactionNo && (
+                        <div className="invalid-feedback">
+                          {formik.errors.transactionNo}
+                        </div>
+                      )}
                   </div>
                   <div className="col-md-6 col-12 mb-2">
                     <label className="form-label">Mobile Number</label>
@@ -350,6 +501,12 @@ function PaymentsEdit() {
                           : ""
                       }`}
                     />
+                    {formik.touched.mobileNumber &&
+                      formik.errors.mobileNumber && (
+                        <div className="invalid-feedback">
+                          {formik.errors.mobileNumber}
+                        </div>
+                      )}
                   </div>
                 </>
               )}
@@ -367,6 +524,11 @@ function PaymentsEdit() {
                         : ""
                     }`}
                   />
+                  {formik.touched.paidAmount && formik.errors.paidAmount && (
+                    <div className="invalid-feedback">
+                      {formik.errors.paidAmount}
+                    </div>
+                  )}
                 </div>
               </div>
               <div className="col-12">
