@@ -206,24 +206,26 @@ const Assignment = () => {
   //     setIsClearFilterClicked(false);
   //   }
   // };
-  
+
   const getAssignmentData = async () => {
     try {
       setLoading(true);
-      
+
       // Filter out empty values before constructing query params
       const filteredParams = Object.fromEntries(
         Object.entries(filters).filter(([_, value]) => value !== "")
       );
-  
+
       // Ensure centerId is always included
       if (!filteredParams.centerId) {
         filteredParams.centerId = centerId;
       }
-  
+
       const queryParams = new URLSearchParams(filteredParams);
-  
-      const response = await api.get(`/getAssignmentFoldersWithCustomInfo?${queryParams.toString()}`);
+
+      const response = await api.get(
+        `/getAssignmentFoldersWithCustomInfo?${queryParams.toString()}`
+      );
       setData(response.data);
     } catch (error) {
       toast.error("Error Fetching Data : " + error.message);
@@ -232,7 +234,7 @@ const Assignment = () => {
       setIsClearFilterClicked(false);
     }
   };
-  
+
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
     setFilters((prevFilters) => ({ ...prevFilters, [name]: value }));
@@ -255,9 +257,9 @@ const Assignment = () => {
   }, []);
 
   useEffect(() => {
-      getAssignmentData();
+    getAssignmentData();
   }, [filters]);
-  
+
   const handleMenuClose = () => setMenuAnchor(null);
 
   return (
@@ -443,7 +445,8 @@ const Assignment = () => {
                   },
                 }}
                 muiTableBodyRowProps={({ row }) => ({
-                  onClick: () => navigate(`/assignment/view/${row.original.id}`),
+                  onClick: () =>
+                    navigate(`/assignment/view/${row.original.id}`),
                   style: { cursor: "pointer" },
                 })}
               />
@@ -455,6 +458,12 @@ const Assignment = () => {
               open={Boolean(menuAnchor)}
               onClose={handleMenuClose}
             >
+              <MenuItem
+                onClick={() => navigate(`/assignment/edit/${selectedId}`)}
+                className="text-start mb-0 menuitem-style"
+              >
+                Edit
+              </MenuItem>
               <MenuItem>
                 <GlobalDelete
                   path={`/deleteAssignmentFolder/${selectedId}`}

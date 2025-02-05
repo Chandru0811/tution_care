@@ -241,6 +241,7 @@ import PaymentsAdd from "../pages/Payment/PaymentsAdd";
 import Payments from "../pages/Payment/Payments";
 import PaymentsEdit from "../pages/Payment/PaymentsEdit";
 import Roles from "../pages/Settings/Roles/Roles";
+import AssignmentEdit from "../pages/Assignment/AssignmentEdit";
 
 function Admin({ handleLogout }) {
   const [centerChange, setCenterChange] = useState(0);
@@ -256,7 +257,7 @@ function Admin({ handleLogout }) {
   }, []);
   const handleCenterChanged = () => {
     setCenterChange((prevCount) => prevCount + 1);
-    console.log("centerChange", centerChange)
+    console.log("centerChange", centerChange);
   };
 
   return (
@@ -343,10 +344,26 @@ function Admin({ handleLogout }) {
               <Route path="/transferOut" element={<TransferOut />} />
 
               {/* Center */}
-              <Route path="/companyRegister" element={<Center handleCenterChanged={handleCenterChanged} />} />
-              <Route path="/companyRegister/add" element={<CenterAdd handleCenterChanged={handleCenterChanged} />} />
-              <Route path="/companyRegister/view/:id" element={<CenterView />} />
-              <Route path="/companyRegister/edit/:id" element={<CenterEdit handleCenterChanged={handleCenterChanged} />} />
+              <Route
+                path="/companyRegister"
+                element={<Center handleCenterChanged={handleCenterChanged} />}
+              />
+              <Route
+                path="/companyRegister/add"
+                element={
+                  <CenterAdd handleCenterChanged={handleCenterChanged} />
+                }
+              />
+              <Route
+                path="/companyRegister/view/:id"
+                element={<CenterView />}
+              />
+              <Route
+                path="/companyRegister/edit/:id"
+                element={
+                  <CenterEdit handleCenterChanged={handleCenterChanged} />
+                }
+              />
 
               <Route path="/centermanager" element={<CenterManager />} />
               <Route path="/centermanager/add" element={<CenterManagerAdd />} />
@@ -552,7 +569,11 @@ function Admin({ handleLogout }) {
               <Route path="/assignment" element={<Assignment />} />
               <Route path="/assignment/add" element={<AssignmentAdd />} />
               <Route path="/assignmentResult" element={<AssignmentResult />} />
-              <Route path="/assignmentResult/view/:id" element={<AssignmentResultView />} />
+              <Route
+                path="/assignmentResult/view/:id"
+                element={<AssignmentResultView />}
+              />
+              <Route path="/assignment/edit/:id" element={<AssignmentEdit />} />
               <Route path="/assignment/view/:id" element={<AssignmentView />} />
 
               {/* Subject  */}
@@ -755,10 +776,7 @@ function Admin({ handleLogout }) {
                 path="/othermessaging/view/:id"
                 element={<OtherMessagesView />}
               />
-              <Route
-                path="/timetable"
-                element={<TimeTable />}
-              />
+              <Route path="/timetable" element={<TimeTable />} />
             </Routes>
           </div>
           <Footer />

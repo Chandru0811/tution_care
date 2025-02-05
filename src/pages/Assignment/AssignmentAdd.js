@@ -29,7 +29,9 @@ function AssignmentAdd() {
     course: Yup.string().required("*Course is required"),
     userId: Yup.string().required("*Teacher is required"),
     day: Yup.string().required("*Days is required"),
-    batchTime: Yup.string().required("*Batch Time is required"),
+    batchTime: Yup.array()
+      .of(Yup.string().required("*Batch Time is required"))
+      .min(1, "*At least one Batch Time is required"),
     classListing: Yup.string().required("*Class Listing is required"),
     folderCategoryListing: Yup.string().required("*FolderCategory is required"),
     date: Yup.string().required("*Date is required"),
@@ -87,7 +89,7 @@ function AssignmentAdd() {
       studentIds: [],
       files: [] || null,
     },
-    // validationSchema: validationSchema,
+    validationSchema: validationSchema,
     onSubmit: async (values) => {
       setLoadIndicator(true);
       try {
@@ -125,7 +127,7 @@ function AssignmentAdd() {
           formData.append("isGroupUpload", false);
           formData.append("studentIds", values.studentIds.join(",")); // Convert array to comma-separated string
         }
-        
+
         // Append files
         if (values.files && values.files.length > 0) {
           values.files.forEach((file, index) =>
@@ -479,8 +481,6 @@ function AssignmentAdd() {
                 )}
               </div>
 
-        
-
               {/* Radio buttons for selecting folder category */}
               <div className="col-md-6 col-12 mb-4">
                 <label className="form-label">
@@ -527,26 +527,30 @@ function AssignmentAdd() {
                   <></>
                 ) : (
                   <div className="">
-                  <label className="form-label">Student Name</label>
-                  <MultiSelect
-                    options={studentData || []}
-                    value={selectedStudents}
-                    onChange={(selected) => {
-                      setSelectedStudents(selected);
-                      formik.setFieldValue(
-                        "studentIds",
-                        selected.map((option) => option.value) // Ensures studentIds is an array
-                      );
-                    }}
-                    labelledBy="Select Student"
-                    className={`form-multi-select ${
-                      formik.touched.studentIds && formik.errors.studentIds ? "is-invalid" : ""
-                    }`}
-                  />
-                  {formik.touched.studentIds && formik.errors.studentIds && (
-                    <div className="invalid-feedback">{formik.errors.studentIds}</div>
-                  )}
-                </div>
+                    <label className="form-label">Student Name</label>
+                    <MultiSelect
+                      options={studentData || []}
+                      value={selectedStudents}
+                      onChange={(selected) => {
+                        setSelectedStudents(selected);
+                        formik.setFieldValue(
+                          "studentIds",
+                          selected.map((option) => option.value) // Ensures studentIds is an array
+                        );
+                      }}
+                      labelledBy="Select Student"
+                      className={`form-multi-select ${
+                        formik.touched.studentIds && formik.errors.studentIds
+                          ? "is-invalid"
+                          : ""
+                      }`}
+                    />
+                    {formik.touched.studentIds && formik.errors.studentIds && (
+                      <div className="invalid-feedback">
+                        {formik.errors.studentIds}
+                      </div>
+                    )}
+                  </div>
                 )}
               </div>
               <div className="col-md-6 col-12 mb-4">
