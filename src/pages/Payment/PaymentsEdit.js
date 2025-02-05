@@ -514,6 +514,7 @@ function PaymentsEdit() {
                         ? "is-invalid"
                         : ""
                     }`}
+                    readOnly
                   />
                   {formik.touched.paidAmount && formik.errors.paidAmount && (
                     <div className="invalid-feedback">
