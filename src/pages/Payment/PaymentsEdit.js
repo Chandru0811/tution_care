@@ -13,24 +13,11 @@ function PaymentsEdit() {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const centerId = localStorage.getItem("tmscenterId");
   const [studentData, setStudentData] = useState(null);
-  const [invoiceData, setInvoiceData] = useState([
-    {
-      invoiceNumber: "INV001",
-      paidAmount: 100,
-    },
-    {
-      invoiceNumber: "INV002",
-      paidAmount: 100,
-    },
-    {
-      invoiceNumber: "INV003",
-      paidAmount: 100,
-    },
-  ]);
+  const [invoiceData, setInvoiceData] = useState([]);
   const invoiceOptions = invoiceData.map((invoice) => ({
     label: invoice.invoiceNumber,
     value: invoice.invoiceNumber,
-    paidAmount: invoice.paidAmount,
+    totalAmount: invoice.totalAmount,
   }));
   const [selectedInvoice, setSelectedInvoice] = useState([]);
 
@@ -178,11 +165,15 @@ function PaymentsEdit() {
   const handleStudentChange = async (event) => {
     const studentId = event.target.value;
     formik.setFieldValue("studentId", studentId);
+    formik.setFieldValue("invoiceIds", []);
+    formik.setFieldValue("paidAmount", "");
+    setSelectedInvoice([]);
+    setInvoiceData([]);
     try {
-      const student = await api.get(
-        `/getinvoice?centerId=${centerId}&studentId=${studentId}`
+      const response = await api.get(
+        `/paymentInvoiceList?centerId=${centerId}&studentId=${studentId}`
       );
-      // setInvoiceData(student);
+      setInvoiceData(response.data);
     } catch (error) {
       toast.error(error);
     }
@@ -190,7 +181,7 @@ function PaymentsEdit() {
   const handleInvoiceChange = (selected) => {
     setSelectedInvoice(selected);
     const totalPaidAmount = selected.reduce(
-      (sum, invoice) => sum + (invoice.paidAmount || 0),
+      (sum, invoice) => sum + (invoice.totalAmount || 0),
       0
     );
     formik.setFieldValue(

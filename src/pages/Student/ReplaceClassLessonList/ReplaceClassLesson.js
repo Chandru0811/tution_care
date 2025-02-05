@@ -8,18 +8,17 @@ import fetchAllCentersWithIds from "../../List/CenterList";
 import fetchAllCoursesWithIdsC from "../../List/CourseListByCenter";
 
 const ReplaceClassLesson = () => {
+  const centerId = localStorage.getItem("tmscenterId");
   const [filters, setFilters] = useState({
-    centerId: "",
+    centerId: centerId,
     studentName: "",
     studentUniqueId: "",
     courseId: "",
   });
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [centerData, setCenterData] = useState([]);
   const [courseData, setCourseData] = useState([]);
   const navigate = useNavigate();
-  const centerId = localStorage.getItem("tmscenterId");
 
   const columns = useMemo(
     () => [
@@ -132,20 +131,7 @@ const ReplaceClassLesson = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filters]);
 
-  const getCenter = async () => {
-    try {
-      const centerData = await fetchAllCentersWithIds();
-      setCenterData(centerData);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
-
-  useEffect(() => {
-    getCenter();
-  }, []);
-
-  const fetchListData = async (centerId) => {
+  const fetchListData = async () => {
     try {
       const courseDatas = await fetchAllCoursesWithIdsC(centerId);
       setCourseData(courseDatas);
@@ -155,9 +141,7 @@ const ReplaceClassLesson = () => {
   };
 
   useEffect(() => {
-    if (filters.centerId) {
-      fetchListData(filters.centerId);
-    }
+    fetchListData();
   }, [filters]);
 
   // const handleStatusChange = async (id, newStatus) => {
@@ -236,7 +220,7 @@ const ReplaceClassLesson = () => {
 
   const clearFilter = () => {
     setFilters({
-      centerId: "",
+      centerId: centerId,
       studentName: "",
       studentUniqueId: "",
       courseId: "",
