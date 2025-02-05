@@ -114,7 +114,6 @@ function Sidebar() {
             access: storedScreens.leadListingIndex,
           },
         ],
-        show : data.leadManagement
       },
       {
         title: "Emaployee Info",
@@ -184,7 +183,6 @@ function Sidebar() {
             access: storedScreens.freeLancerIndex,
           },
         ],
-        show : data.staffManagement
       },
       {
         title: "Student Management",
