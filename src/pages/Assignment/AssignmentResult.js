@@ -10,31 +10,16 @@ import {
   IconButton,
 } from "@mui/material";
 import { MoreVert as MoreVertIcon } from "@mui/icons-material";
-import fetchAllClassesWithIdsC from "../List/ClassListByCourse";
-import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
-import fetchAllTeacherListByCenter from "../List/TeacherListByCenter";
 import { toast } from "react-toastify";
 import GlobalDelete from "../../components/common/GlobalDelete";
 
 const AssignmentResult = () => {
   const centerId = localStorage.getItem("tmscenterId");
-  const [filters, setFilters] = useState({
-    centerId: centerId,
-    courseId: "",
-    classId: "",
-    userId: "",
-    day: "",
-    date: "",
-  });
   const [data, setData] = useState([]);
-  const [courseData, setCourseData] = useState([]);
-  const [classData, setClassData] = useState([]);
-  const [teacherData, setTeacherData] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
-  const [isClearFilterClicked, setIsClearFilterClicked] = useState(false);
 
   const columns = useMemo(
     () => [
@@ -170,69 +155,24 @@ const AssignmentResult = () => {
     },
   });
 
-  const fetchListData = async () => {
-    try {
-      const courseDatas = await fetchAllCoursesWithIdsC(centerId);
-      const teacherDatas = await fetchAllTeacherListByCenter(centerId);
-      setTeacherData(teacherDatas);
-      setCourseData(courseDatas);
-    } catch (error) {
-      toast.error(error.message);
-    }
-  };
-
-  const handleCourseChange = async (event) => {
-    const courseId = event.target.value;
-    setFilters((prevFilters) => ({ ...prevFilters, courseId }));
-    if (!courseId) return; // Avoid making API call when courseId is empty
-    try {
-      const classes = await fetchAllClassesWithIdsC(courseId); // Fetch class list based on courseId
-      setClassData(classes);
-    } catch (error) {
-      toast.error(error.message);
-    }
-  };
-
   const getAssignmentData = async () => {
     try {
       setLoading(true);
-      const queryParams = new URLSearchParams(filters); // Ensure queryParams is properly defined
-      const response = await api.get(`/getAssignmentFoldersWithCustomInfo?${queryParams.toString()}`);
+      const response = await api.get(
+        `/getAssignmentFoldersWithCustomInfo?centerId=${centerId}`
+      );
       setData(response.data);
     } catch (error) {
-      toast.error("Error Fetching Data : ", error);
+      toast.error("Error Fetching Data : " + error.message);
     } finally {
       setLoading(false);
-      setIsClearFilterClicked(false);
     }
   };
-  
-
-  const handleFilterChange = (e) => {
-    const { name, value } = e.target;
-    setFilters((prevFilters) => ({ ...prevFilters, [name]: value }));
-  };
-
-  const clearFilter = () => {
-    setFilters({
-      centerId: centerId,
-      courseId: "",
-      classId: "",
-      userId: "",
-      date: "",
-      day: "",
-    });
-    setIsClearFilterClicked(true); // Set flag to trigger data fetch without filters
-  };
 
   useEffect(() => {
-    fetchListData();
+    getAssignmentData();
   }, []);
 
-  useEffect(() => {
-      getAssignmentData();
-  }, [filters]);
-  
   const handleMenuClose = () => setMenuAnchor(null);
 
   return (
@@ -270,102 +210,6 @@ const AssignmentResult = () => {
                 Assignment Results
               </span>
             </span>
-          </div>
-        </div>
-        <div className="mb-3">
-          <div className="individual_fliters d-lg-flex">
-            <div className="form-group mb-0 ms-2 mb-1">
-              <select
-                className="form-select form-select-sm center_list"
-                name="courseId"
-                style={{ width: "100%" }}
-                onChange={handleCourseChange}
-                value={filters.courseId}
-              >
-                <option>Select the Course</option>
-                {courseData &&
-                  courseData.map((course) => (
-                    <option key={course.id} value={course.id}>
-                      {course.courseNames}
-                    </option>
-                  ))}
-              </select>
-            </div>
-            <div className="form-group mb-0 ms-2 mb-1">
-              <select
-                className="form-select form-select-sm center_list"
-                name="classId"
-                style={{ width: "100%" }}
-                onChange={handleFilterChange}
-                value={filters.classId}
-              >
-                <option>Select the Class</option>
-                {classData &&
-                  classData.map((classes) => (
-                    <option key={classes.id} value={classes.id}>
-                      {classes.classNames}
-                    </option>
-                  ))}
-              </select>
-            </div>
-            <div className="form-group mb-0 ms-2 mb-1">
-              <input
-                type="date"
-                name="date"
-                value={filters.date}
-                onChange={handleFilterChange}
-                className="form-control form-control-sm center_list"
-                style={{ width: "160px" }}
-              />
-            </div>
-            <div className="form-group mb-0 ms-2 mb-1">
-              <select
-                className="form-select form-select-sm center_list"
-                name="userId"
-                style={{ width: "100%" }}
-                onChange={handleFilterChange}
-                value={filters.userId}
-              >
-                <option>Select the Teacher</option>
-                {teacherData &&
-                  teacherData.map((teacher) => (
-                    <option key={teacher.id} value={teacher.id}>
-                      {teacher.teacherNames}
-                    </option>
-                  ))}
-              </select>
-            </div>
-          </div>
-          <div className="d-flex justify-content-between">
-            <div className="individual_fliters d-lg-flex mt-2">
-              <div className="form-group mb-0 ms-2 mb-1">
-                <select
-                  className="form-select form-select-sm center_list"
-                  name="day"
-                  style={{ width: "100%" }}
-                  onChange={handleFilterChange}
-                  value={filters.day}
-                >
-                  <option>Select a Day</option>
-                  <option value="SUNDAY">Sunday</option>
-                  <option value="MONDAY">Monday</option>
-                  <option value="TUESDAY">Tuesday</option>
-                  <option value="WEDNESDAY">Wednesday</option>
-                  <option value="THURDAY">Thursday</option>
-                  <option value="FRIDAY">Friday</option>
-                  <option value="SATURDAY">Saturday</option>
-                </select>
-              </div>
-              <div className="form-group mb-0 ms-2 mb-1 ">
-                <button
-                  type="button"
-                  className="btn btn-sm btn-border"
-                  onClick={clearFilter}
-                >
-                  Clear
-                </button>
-              </div>
-            </div>
           </div>
         </div>
         {loading ? (
@@ -407,7 +251,8 @@ const AssignmentResult = () => {
                   },
                 }}
                 muiTableBodyRowProps={({ row }) => ({
-                  onClick: () => navigate(`/assignmentResult/view/${row.original.id}`),
+                  onClick: () =>
+                    navigate(`/assignmentResult/view/${row.original.id}`),
                   style: { cursor: "pointer" },
                 })}
               />

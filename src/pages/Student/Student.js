@@ -85,6 +85,11 @@ const Student = () => {
         enableHiding: false,
       },
       {
+        accessorKey: "studentEmail",
+        header: "Email",
+        enableHiding: false,
+      },
+      {
         accessorKey: "parentPrimaryName",
         header: "Parent Name",
         enableHiding: false,
