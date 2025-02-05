@@ -125,28 +125,30 @@ const SuperAdminCenter = ({ handleCenterChanged }) => {
 
           const handleStatusChange = async (event) => {
             const newStatus = event.target.value;
-          
+            setLoading(true);
             try {
               // First API call: Update status
               const response = await api.put(
-                `/statusApproval/${row.original.id}?newStatus=${encodeURIComponent(newStatus)}`
+                `/statusApproval/${
+                  row.original.id
+                }?newStatus=${encodeURIComponent(newStatus)}`
               );
-          
+
               if (response.status === 200) {
                 toast.success("Status updated successfully");
                 setSelectedStatus(newStatus);
                 fetchData();
-          
+
                 // Additional API call if the new status is "Approve"
                 if (newStatus === "Approve") {
                   try {
                     const newCenterId = row.original.id; // Assuming `id` is the selected newCenterId
                     const oldCenterId = 1; // Replace this with actual oldCenterId if it's dynamic
-          
+
                     const permissionResponse = await api.put(
                       `/api/setApiPermissions?oldCenterId=${oldCenterId}&newCenterId=${newCenterId}`
                     );
-          
+
                     if (permissionResponse.status === 200) {
                       toast.success("Permissions updated successfully");
                     } else {
@@ -159,10 +161,11 @@ const SuperAdminCenter = ({ handleCenterChanged }) => {
               }
             } catch (error) {
               toast.error("Failed to update status");
+            } finally {
+              setLoading(false);
             }
           };
 
-          
           const selectedOption = statusOptions.find(
             (opt) => opt.value === selectedStatus
           );

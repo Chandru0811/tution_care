@@ -7,27 +7,10 @@ import AttactmentOther from "../../assets/images/Attactmentothers.jpg";
 import AttactmentWord from "../../assets/images/AttactmentWord.jpg";
 import AttactmentPpt from "../../assets/images/AttachmentPpt.png";
 import { IoMdDownload } from "react-icons/io";
-import { Button, Modal } from "react-bootstrap";
 
 function AssignmentView() {
   const { id } = useParams();
   const [data, setData] = useState({});
-  console.log("Data", data);
-  const [showModal, setShowModal] = useState(false);
-  const [remark, setRemark] = useState("");
-
-  const handleModalClose = () => setShowModal(false);
-  const handleModalShow = () => setShowModal(true);
-  const handleRemarkSubmit = () => {
-    console.log("Remark Submitted:", remark);
-
-    // Here, add your logic to save the remark.
-    // Example API call to save remark
-    // await api.post('/saveRemark', { remark });
-
-    handleModalClose(); // Close the modal after submitting the remark
-    setRemark(""); // Clear the textarea field
-  };
 
   const renderAttachment = (attachment) => {
     if (!attachment || !attachment.fileUrl) {
@@ -177,13 +160,6 @@ function AssignmentView() {
               <span class="me-2 text-muted">Assignment View</span>
             </div>
             <div className="my-2 pe-3 d-flex align-items-center">
-              <button
-                type="button"
-                className="btn btn-primary btn-sm me-3"
-                onClick={handleModalShow}
-              >
-                Remark
-              </button>
               <Link to="/assignment">
                 <button type="button " className="btn btn-sm btn-border   ">
                   Back
@@ -339,50 +315,6 @@ function AssignmentView() {
                 </div>
               </div>
 
-              <div className="col-md-12 col-12 mb-3">
-                <div className="row mb-2">
-                  <div className="col-12">
-                    <p className="fw-medium">Student Assignments:</p>
-                  </div>
-                  {data.attachments && data.attachments.length > 0 ? (
-                    <div className="col-12">
-                      <div className="row">
-                        {data.attachments.map((attachment, index) => (
-                          <div key={index} className="col-md-6 col-12 mb-2">
-                            {renderAttachment(attachment)}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  ) : (
-                    <p className="text-muted">No attachments available</p>
-                  )}
-                </div>
-              </div>
-
-              {/* Modal */}
-              <Modal show={showModal} onHide={handleModalClose}>
-                <Modal.Header closeButton>
-                  <Modal.Title>Add Remark</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                  <textarea
-                    className="form-control"
-                    rows="5"
-                    placeholder="Enter your remark"
-                    value={remark}
-                    onChange={(e) => setRemark(e.target.value)}
-                  ></textarea>
-                </Modal.Body>
-                <Modal.Footer>
-                  <Button variant="secondary" onClick={handleModalClose}>
-                    Close
-                  </Button>
-                  <Button variant="primary" onClick={handleRemarkSubmit}>
-                    Submit Remark
-                  </Button>
-                </Modal.Footer>
-              </Modal>
             </div>
           </div>
         </div>

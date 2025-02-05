@@ -69,8 +69,7 @@ function Sidebar() {
     const storedScreens = JSON.parse(
       localStorage.getItem("tmsscreens") || "{}"
     );
-
-    // Define your menu items based on screen access values
+    if (!data) return;
     const updatedMenuItems = [
       {
         title: "Company Management",
@@ -103,18 +102,22 @@ function Sidebar() {
           { title: "Class", path: "/class", access: storedScreens.classIndex },
         ],
       },
-      {
-        title: "Lead Management",
-        icon: "GiExitDoor",
-        isOpen: false,
-        subMenus: [
-          {
-            title: "Lead Listing",
-            path: "lead/lead",
-            access: storedScreens.leadListingIndex,
-          },
-        ],
-      },
+      ...(data.leadManagement
+        ? [
+            {
+              title: "Lead Management",
+              icon: "GiExitDoor",
+              isOpen: false,
+              subMenus: [
+                {
+                  title: "Lead Listing",
+                  path: "lead/lead",
+                  access: storedScreens.leadListingIndex,
+                },
+              ],
+            },
+          ]
+        : []),
       {
         title: "Emaployee Info",
         icon: "RiUserAddLine",
@@ -127,63 +130,67 @@ function Sidebar() {
           },
         ],
       },
-      { 
-        title: "Staffing",
-        icon: "HiOutlineUserGroup",
-        isOpen: false,
-        subMenus: [
-          {
-            title: "Staff",
-            path: "/staff",
-            access: storedScreens.staffIndex,
-          },
-          {
-            title: "Attendance",
-            path: "/staffing/attendance",
-            access: storedScreens.staffAttendanceIndex,
-          },
-          {
-            title: "Check Attendance",
-            path: "/staffing/check",
-            access: storedScreens.staffAttendanceCreate,
-          },
-          {
-            title: "Leave",
-            path: "/leaveadmin",
-            access: storedScreens.leaveAdminIndex,
-          },
-          {
-            title: "Leave Request",
-            path: "/leave",
-            access: storedScreens.leaveIndex,
-          },
-          {
-            title: "Holiday",
-            path: "/holiday",
-            access: storedScreens.holidayIndex,
-          },
-          {
-            title: "Deduction",
-            path: "/deduction",
-            access: storedScreens.deductionIndex,
-          },
-          {
-            title: "Payroll",
-            path: "/payrolladmin",
-            access: storedScreens.payrollIndex,
-          },
-          {
-            title: "Payslip",
-            path: "/employeepayslip",
-            access: storedScreens.payslipIndex,
-          },
-          {
-            title: "Freelancer Invoice",
-            path: "/freelancerPayslip",
-            access: storedScreens.freeLancerIndex,
-          },
-        ],
-      },
+      ...(data.staffManagement
+        ? [
+            {
+              title: "Staffing",
+              icon: "HiOutlineUserGroup",
+              isOpen: false,
+              subMenus: [
+                {
+                  title: "Staff",
+                  path: "/staff",
+                  access: storedScreens.staffIndex,
+                },
+                {
+                  title: "Attendance",
+                  path: "/staffing/attendance",
+                  access: storedScreens.staffAttendanceIndex,
+                },
+                {
+                  title: "Check Attendance",
+                  path: "/staffing/check",
+                  access: storedScreens.staffAttendanceCreate,
+                },
+                {
+                  title: "Leave",
+                  path: "/leaveadmin",
+                  access: storedScreens.leaveAdminIndex,
+                },
+                {
+                  title: "Leave Request",
+                  path: "/leave",
+                  access: storedScreens.leaveIndex,
+                },
+                {
+                  title: "Holiday",
+                  path: "/holiday",
+                  access: storedScreens.holidayIndex,
+                },
+                {
+                  title: "Deduction",
+                  path: "/deduction",
+                  access: storedScreens.deductionIndex,
+                },
+                {
+                  title: "Payroll",
+                  path: "/payrolladmin",
+                  access: storedScreens.payrollIndex,
+                },
+                {
+                  title: "Payslip",
+                  path: "/employeepayslip",
+                  access: storedScreens.payslipIndex,
+                },
+                {
+                  title: "Freelancer Invoice",
+                  path: "/freelancerPayslip",
+                  access: storedScreens.freeLancerIndex,
+                },
+              ],
+            },
+          ]
+        : []),
       {
         title: "Student Management",
         icon: "TbUserSearch",
@@ -223,41 +230,49 @@ function Sidebar() {
           },
         ],
       },
-      {
-        title: "Document Management",
-        icon: "TbFolderCog",
-        isOpen: false,
-        subMenus: [
-          {
-            title: "Document Folder",
-            path: "/document",
-            access: storedScreens.documentListingIndex,
-          },
-          {
-            title: "Document Files",
-            path: "/documentfile",
-            access: storedScreens.documentFileIndex,
-          },
-          // Add more submenus as needed
-        ],
-      },
-      {
-        title: "Assignment Management",
-        icon: "MdOutlineAssignment",
-        isOpen: false,
-        subMenus: [
-          {
-            title: "Assignment Folder",
-            path: "/assignment",
-            access: storedScreens.documentListingIndex,
-          },
-          {
-            title: "Assignment Result",
-            path: "/assignmentResult",
-            access: storedScreens.documentFileIndex,
-          },
-        ],
-      },
+      ...(data.documentManagement
+        ? [
+            {
+              title: "Document Management",
+              icon: "TbFolderCog",
+              isOpen: false,
+              subMenus: [
+                {
+                  title: "Document Folder",
+                  path: "/document",
+                  access: storedScreens.documentListingIndex,
+                },
+                {
+                  title: "Document Files",
+                  path: "/documentfile",
+                  access: storedScreens.documentFileIndex,
+                },
+                // Add more submenus as needed
+              ],
+            },
+          ]
+        : []),
+      ...(data.assessmentManagement
+        ? [
+            {
+              title: "Assignment Management",
+              icon: "MdOutlineAssignment",
+              isOpen: false,
+              subMenus: [
+                {
+                  title: "Assignment Folder",
+                  path: "/assignment",
+                  access: storedScreens.documentListingIndex,
+                },
+                {
+                  title: "Assignment Result",
+                  path: "/assignmentResult",
+                  access: storedScreens.documentFileIndex,
+                },
+              ],
+            },
+          ]
+        : []),
       {
         title: "Invoice and Payment",
         icon: "LiaFileInvoiceDollarSolid",
@@ -275,45 +290,53 @@ function Sidebar() {
           },
         ],
       },
-      {
-        title: "Referal Management",
-        icon: "VscReferences",
-        isOpen: false,
-        subMenus: [
-          {
-            title: "Set Referal Fees",
-            path: "/referalFees",
-            access: storedScreens.invoiceIndex,
-          },
-          // {
-          //   title: "Referal History",
-          //   path: "/referalHistory",
-          //   access: storedScreens.paymentIndex,
-          // },
-        ],
-      },
-      {
-        title: "Report Management",
-        icon: "BsFileEarmarkRichtext ",
-        isOpen: false,
-        subMenus: [
-          {
-            title: "Attendance Report",
-            path: "/report/attendance",
-            access: storedScreens.attendanceReportIndex,
-          },
-          {
-            title: "Revenue Report",
-            path: "/report/revenue",
-            access: storedScreens.assessmentReportIndex,
-          },
-          {
-            title: "Enrollment Report",
-            path: "/report/enrolment",
-            access: storedScreens.enrollmentReportIndex,
-          },
-        ],
-      },
+      ...(data.referalManagement
+        ? [
+            {
+              title: "Referal Management",
+              icon: "VscReferences",
+              isOpen: false,
+              subMenus: [
+                {
+                  title: "Set Referal Fees",
+                  path: "/referalFees",
+                  access: storedScreens.invoiceIndex,
+                },
+                // {
+                //   title: "Referal History",
+                //   path: "/referalHistory",
+                //   access: storedScreens.paymentIndex,
+                // },
+              ],
+            },
+          ]
+        : []),
+      ...(data.reportManagement
+        ? [
+            {
+              title: "Report Management",
+              icon: "BsFileEarmarkRichtext ",
+              isOpen: false,
+              subMenus: [
+                {
+                  title: "Attendance Report",
+                  path: "/report/attendance",
+                  access: storedScreens.attendanceReportIndex,
+                },
+                {
+                  title: "Revenue Report",
+                  path: "/report/revenue",
+                  access: storedScreens.assessmentReportIndex,
+                },
+                {
+                  title: "Enrollment Report",
+                  path: "/report/enrolment",
+                  access: storedScreens.enrollmentReportIndex,
+                },
+              ],
+            },
+          ]
+        : []),
       {
         title: "Settings",
         icon: "GrUserSettings",
@@ -383,34 +406,38 @@ function Sidebar() {
           },
         ],
       },
-      {
-        title: "Messaging",
-        icon: "TbMessageCode",
-        isOpen: false,
-        subMenus: [
-          {
-            title: "My Messages",
-            path: "/messaging",
-            access: storedScreens.smsMessageIndex,
-            // access:true
-          },
-          {
-            title: "Other Messages",
-            path: "/othermessaging",
-            access: storedScreens.smsMessageIndex,
-            // access:true
-          },
-          {
-            title: "School Announcement",
-            path: "/sendNotification",
-            access: storedScreens.sendNotificationIndex,
-            // access:true
-          },
-        ],
-      },
+      ...(data.messages
+        ? [
+            {
+              title: "Messaging",
+              icon: "TbMessageCode",
+              isOpen: false,
+              subMenus: [
+                {
+                  title: "My Messages",
+                  path: "/messaging",
+                  access: storedScreens.smsMessageIndex,
+                  // access:true
+                },
+                {
+                  title: "Other Messages",
+                  path: "/othermessaging",
+                  access: storedScreens.smsMessageIndex,
+                  // access:true
+                },
+                {
+                  title: "School Announcement",
+                  path: "/sendNotification",
+                  access: storedScreens.sendNotificationIndex,
+                  // access:true
+                },
+              ],
+            },
+          ]
+        : []),
     ];
     setMenuItems(updatedMenuItems);
-  }, []);
+  }, [data]);
 
   useEffect(() => {
     if (location.pathname === "/") {
