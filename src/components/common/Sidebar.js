@@ -115,7 +115,6 @@ function Sidebar() {
             access: storedScreens.leadListingIndex,
           },
         ],
-        show: data.leadManagement,
       },
       {
         title: "Emaployee Info",
