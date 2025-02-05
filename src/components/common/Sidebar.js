@@ -65,7 +65,7 @@ function Sidebar() {
   }, []);
 
   useEffect(() => {
-    if (Object.keys(data).length === 0) return;
+    // if (Object.keys(data).length === 0) return;
     
     const storedScreens = JSON.parse(
       localStorage.getItem("tmsscreens") || "{}"
