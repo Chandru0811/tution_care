@@ -125,7 +125,7 @@ function AssignmentResultView() {
 
   const getData = async () => {
     try {
-      const response = await api.get(`/getAssignmentFolderById/${id}`);
+      const response = await api.get(`/getQuestionsAndAnswersByFolderId/${id}`);
       console.log("first", response.data);
       setData(response.data);
     } catch (error) {
@@ -155,8 +155,8 @@ function AssignmentResultView() {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          <Link to="/assignment" className="custom-breadcrumb">
-            Assignment
+          <Link to="/assignmentResult" className="custom-breadcrumb">
+            Assignment Result
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
@@ -184,7 +184,7 @@ function AssignmentResultView() {
               >
                 Remark
               </button>
-              <Link to="/assignment">
+              <Link to="/assignmentResult">
                 <button type="button " className="btn btn-sm btn-border   ">
                   Back
                 </button>
