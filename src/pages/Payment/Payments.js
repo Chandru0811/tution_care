@@ -381,7 +381,7 @@ const Payments = () => {
               </MenuItem>
               <MenuItem>
                 <GlobalDelete
-                  path={`/deleteGenerateInvoice/${selectedId}`}
+                  path={`/deletePayment/${selectedId}`}
                   onDeleteSuccess={getInvoiceData}
                   onOpen={handleMenuClose}
                 />
