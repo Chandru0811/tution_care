@@ -22,7 +22,7 @@ function PaymentsAdd() {
 
   const validationSchema = Yup.object({
     studentId: Yup.string().required("Student Name is required"),
-    invoiceNo: Yup.array()
+    invoiceIds: Yup.array()
       .of(Yup.string())
       .min(1, "Invoice is required")
       .required("Invoice is required"),
@@ -84,7 +84,7 @@ function PaymentsAdd() {
       mobileNumber: "",
       file: null,
       remark: "",
-      invoiceNo: [],
+      invoiceIds: [],
     },
     validationSchema: validationSchema,
     enableReinitialize: true,
@@ -93,7 +93,7 @@ function PaymentsAdd() {
       const formData = new FormData();
       formData.append("centerId", centerId);
       formData.append("studentId", values.studentId);
-      formData.append("invoiceNo", values.invoiceNo);
+      formData.append("invoiceIds", values.invoiceIds);
       formData.append("paymentDate", values.paymentDate);
       formData.append("paymentMethod", values.paymentMethod);
       formData.append("paymentReference", values.paymentReference);
@@ -162,7 +162,7 @@ function PaymentsAdd() {
   const handleStudentChange = async (event) => {
     const studentId = event.target.value;
     formik.setFieldValue("studentId", studentId);
-    formik.setFieldValue("invoiceNo", []);
+    formik.setFieldValue("invoiceIds", []);
     formik.setFieldValue("paidAmount", "");
     setSelectedInvoice([]);
     setInvoiceData([]);
@@ -182,7 +182,7 @@ function PaymentsAdd() {
       0
     );
     formik.setFieldValue(
-      "invoiceNo",
+      "invoiceIds",
       selected.map((option) => option.value)
     );
     formik.setFieldValue("paidAmount", totalPaidAmount);
@@ -301,14 +301,14 @@ function PaymentsAdd() {
                   onChange={(selected) => handleInvoiceChange(selected)}
                   labelledBy="Select Student"
                   className={`form-multi-select ${
-                    formik.touched.invoiceNo && formik.errors.invoiceNo
+                    formik.touched.invoiceIds && formik.errors.invoiceIds
                       ? "is-invalid"
                       : ""
                   }`}
                 />
-                {formik.touched.invoiceNo && formik.errors.invoiceNo && (
+                {formik.touched.invoiceIds && formik.errors.invoiceIds && (
                   <div className="invalid-feedback">
-                    {formik.errors.invoiceNo}
+                    {formik.errors.invoiceIds}
                   </div>
                 )}
               </div>

@@ -183,20 +183,6 @@ const Assignment = () => {
     }
   };
 
-  // const getAssignmentData = async () => {
-  //   try {
-  //     setLoading(true);
-  //     const queryParams = new URLSearchParams(filters); // Ensure queryParams is properly defined
-  //     const response = await api.get(`/getAssignmentFoldersWithCustomInfo?${queryParams.toString()}`);
-  //     setData(response.data);
-  //   } catch (error) {
-  //     toast.error("Error Fetching Data : ", error);
-  //   } finally {
-  //     setLoading(false);
-  //     setIsClearFilterClicked(false);
-  //   }
-  // };
-
   const getAssignmentData = async () => {
     try {
       setLoading(true);
@@ -214,7 +200,7 @@ const Assignment = () => {
       const queryParams = new URLSearchParams(filteredParams);
 
       const response = await api.get(
-        `/getAssignmentFoldersWithCustomInfo?${queryParams.toString()}`
+        `/getAssignmentQuestionFilesWithCustomInfo?${queryParams.toString()}`
       );
       setData(response.data);
     } catch (error) {
