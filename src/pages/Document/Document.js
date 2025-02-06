@@ -182,56 +182,6 @@ const Document = () => {
       toast.error(error.message);
     }
   };
-
-  // const fetchData = async () => {
-  //   try {
-  //     const centerData = await fetchAllCentersWithIds();
-  //     if (centerIDLocal !== null && centerIDLocal !== "undefined") {
-  //       setFilters((prevFilters) => ({
-  //         ...prevFilters,
-  //         centerId: centerIDLocal,
-  //       }));
-  //       fetchListData(centerIDLocal);
-  //     } else if (centerData !== null && centerData.length > 0) {
-  //       setFilters((prevFilters) => ({
-  //         ...prevFilters,
-  //         centerId: centerData[0].id,
-  //       }));
-  //       fetchListData(centerData[0].id);
-  //     }
-      
-  //     setCenterData(centerData);
-  //   } catch (error) {
-  //     toast.error(error);
-  //   }
-  // };
-
-//   const handleCenterChange = async (event) => {
-//   const centerId = event.target.value;
-
-//   // Update the filters state
-//   setFilters((prevFilters) => ({ ...prevFilters, centerId }));
-
-//   if (centerId) {
-//     try {
-//       // Fetch the associated data
-//       const courseDatas = await fetchAllCoursesWithIdsC(centerId);
-//       const teacherDatas = await fetchAllTeacherListByCenter(centerId);
-
-//       // Update the respective state variables
-//       setCourseData(courseDatas);
-//       setTeacherData(teacherDatas);
-//     } catch (error) {
-//       toast.error("Error fetching data: " + error.message);
-//     }
-//   } else {
-//     // Clear dependent data if no center is selected
-//     setCourseData([]);
-//     setTeacherData([]);
-//   }
-// };
-
-
   const handleCourseChange = async (event) => {
     const courseId = event.target.value;
     setFilters((prevFilters) => ({ ...prevFilters, courseId })); // Update filter state
@@ -345,22 +295,7 @@ const Document = () => {
         </div>
         <div className="mb-3">
           <div className="individual_fliters d-lg-flex">
-            {/* <div className="form-group mb-0 ms-2 mb-1">
-              <select
-                className="form-select form-select-sm center_list"
-                name="centerId"
-                style={{ width: "100%" }}
-                onChange={handleCenterChange}
-                value={filters.centerId}
-              >
-                <option>Select the Centre</option>
-                {centerData?.map((center) => (
-                  <option key={center.id} value={center.id} selected>
-                    {center.centerNames}
-                  </option>
-                ))}
-              </select>
-            </div> */}
+           
             <div className="form-group mb-0 ms-2 mb-1">
               <select
                 className="form-select form-select-sm center_list"

@@ -5,7 +5,6 @@ import { saveAs } from "file-saver";
 import api from "../../config/URL";
 import Delete from "../../components/common/Delete";
 import { IoMdDownload } from "react-icons/io";
-import AddContact from "../.././assets/images/AddContact.png";
 import { toast } from "react-toastify";
 
 function DocumentView() {
@@ -16,8 +15,6 @@ function DocumentView() {
 
   const [data, setData] = useState([]);
   const [folderName, setFolderName] = useState("");
-  const [images] = useState([AddContact]);
-  const [loadIndicator, setLoadIndicator] = useState(false);
   const [approveStatus, setApproveStatus] = useState(initialApproveStatus);
 
   const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
@@ -58,7 +55,6 @@ function DocumentView() {
   };
 
   const downloadFiles = async () => {
-    setLoadIndicator(true);
     const zip = new JSZip();
 
     for (const img of data) {
@@ -70,7 +66,6 @@ function DocumentView() {
 
     const content = await zip.generateAsync({ type: "blob" });
     saveAs(content, folderName);
-    setLoadIndicator(false);
   };
 
   const approveUser = async () => {

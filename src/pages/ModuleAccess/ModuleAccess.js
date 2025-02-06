@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Link, useNavigate } from "react-router-dom";
@@ -7,8 +7,6 @@ const validationSchema = Yup.object().shape({});
 
 function ModuleAccess() {
   const [loading, setLoadIndicator] = useState(false);
-  const navigate = useNavigate();
-
   const formik = useFormik({
     initialValues: {
       courseIndex: true,

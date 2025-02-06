@@ -1,12 +1,8 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../../config/URL";
-import fetchAllCentersWithIds from "../List/CenterList";
-import fetchAllSubjectsWithIds from "../List/SubjectList";
 import { toast } from "react-toastify";
 import { Modal } from "react-bootstrap";
-import ArrangeAssesmentAdd from "./ArrangeAssesmentAdd";
-import ArrangeAssesmentEdit from "./ArrangeAssesmentEdit";
 import GlobalDelete from "../../components/common/GlobalDelete";
 import { MaterialReactTable } from "material-react-table";
 import { MoreVert as MoreVertIcon } from "@mui/icons-material";
@@ -34,7 +30,6 @@ const Lead = () => {
 
   const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   const centerId = localStorage.getItem("tmscenterId");
-  const [centerData, setCenterData] = useState(null);
   const [isSmallScreen, setIsSmallScreen] = useState(false);
   const [isClearFilterClicked, setIsClearFilterClicked] = useState(false);
 
@@ -49,41 +44,12 @@ const Lead = () => {
     // fetchCenterData();
     setShowDialog(true);
   };
-  const handleClose = () => {
-    // fetchCenterData();
-    setShowDialog(false);
-  };
+
   const handleEditShowDialog = () => {
     // fetchCenterData();
     setShowEditDialog(true);
   };
-  const handleEditCloseDialog = () => {
-    setShowEditDialog(false);
-    // formik.resetForm();
-  };
 
-  // const fetchCenterData = async () => {
-  //   try {
-  //     const centerData = await fetchAllCentersWithIds();
-  //     const subjectDatas = await fetchAllSubjectsWithIds();
-
-  //     if (centerLocalId !== null && centerLocalId !== "undefined") {
-  //       setFilters((prevFilters) => ({
-  //         ...prevFilters,
-  //         centerId: centerLocalId,
-  //       }));
-  //     } else if (centerData !== null && centerData.length > 0) {
-  //       setFilters((prevFilters) => ({
-  //         ...prevFilters,
-  //         centerId: centerData[0].id,
-  //       }));
-  //     }
-  //     setCenterData(centerData);
-  //     setSubjectData(subjectDatas);
-  //   } catch (error) {
-  //     toast.error(error);
-  //   }
-  // };
 
   const handleStatusChange = async (row, status) => {
     setSelectedRow(row);
@@ -190,27 +156,6 @@ const Lead = () => {
       setIsClearFilterClicked(false);
     }
   };
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     await fetchCenterData(); // Fetch center data and subjects
-
-  //     // Check if local storage has center ID
-  //     if (centerLocalId && centerLocalId !== "undefined") {
-  //       setFilters((prevFilters) => ({
-  //         ...prevFilters,
-  //         centerId: centerLocalId,
-  //       }));
-  //     } else if (centerData && centerData.length > 0) {
-  //       // Use the first center's ID as the default if no center is in local storage
-  //       setFilters((prevFilters) => ({
-  //         ...prevFilters,
-  //         centerId: centerData[0].id,
-  //       }));
-  //     }
-  //   };
-  //   fetchData();
-  // }, []);
 
   useEffect(() => {
     getData();
@@ -948,56 +893,7 @@ const Lead = () => {
           </div>
           <div className="d-flex justify-content-between mb-3 px-2">
             <div className="individual_fliters d-lg-flex ">
-              {/* <div className="form-group mb-0 ms-2 mb-1">
-                <select
-                  className="form-select form-select-sm mb-2 mb-md-0 me-md-3"
-                  name="centerId"
-                  value={filters.centerId}
-                  onChange={(e) =>
-                    setFilters((pre) => ({ ...pre, centerId: e.target.value }))
-                  }
-                >
-                  <option value="" disabled selected>
-                    Select Centre
-                  </option>
-                  {centerData &&
-                    centerData.map((center) => (
-                      <option key={center.id} value={center.id} >
-                        {center.centerNames}
-                      </option>
-                    ))}
-                </select>
-              </div>
-              <div className="form-group mb-0 ms-2 mb-1">
-                <select
-                  className="form-select form-select-sm mb-2 mb-md-0"
-                  name="subjectId"
-                  value={filters.subjectId}
-                  onChange={(e) =>
-                    setFilters((pre) => ({ ...pre, subjectId: e.target.value }))
-                  }
-                >
-                  <option value="" disabled selected>
-                    Select Subject
-                  </option>
-                  {subjectData &&
-                    subjectData.map((subject) => (
-                      <option key={subject.id} value={subject.id}>
-                        {subject.subjects}
-                      </option>
-                    ))}
-                </select>
-              </div>
-
-              <div className="form-group mb-0 ms-2 mb-1 ">
-                <button
-                  type="button"
-                  className="btn btn-sm border-secondary ms-3"
-                  onClick={ResetFilter}
-                >
-                  Clear
-                </button>
-              </div> */}
+            
             </div>
             {storedScreens?.centerListingCreate && (
               <Link to="/lead/lead/add">
@@ -1125,33 +1021,7 @@ const Lead = () => {
           </div>
         </Modal.Body>
       </Modal>
-      {/* <ArrangeAssesmentAdd
-        leadId={selectedRow.id}
-        onSuccess={getData}
-        centerId={selectedRow.centerId}
-        studentNames={selectedRow.studentName}
-        setAll={ResetFilter}
-        showDialog={showDialog}
-        handleShow={handleShow}
-        handleClose={handleClose}
-        centerDatas={centerData}
-      />
-      <ArrangeAssesmentEdit
-        leadId={selectedRow.id}
-        arrangeAssesmentId={
-          selectedRow?.assessmentArrange?.length > 0
-            ? selectedRow?.assessmentArrange[0]?.id
-            : 0
-        }
-        onSuccess={getData}
-        centerId={selectedRow.centerId}
-        studentNames={selectedRow.studentName}
-        setAll={ResetFilter}
-        showDialog={showEditDialog}
-        handleShow={handleEditShowDialog}
-        handleClose={handleEditCloseDialog}
-        centerDatas={centerData}
-      /> */}
+     
     </div>
   );
 };

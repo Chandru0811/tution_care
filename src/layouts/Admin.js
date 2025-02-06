@@ -14,7 +14,6 @@ import Student from "../pages/Student/Student";
 import Teacher from "../pages/Teacher/Teacher";
 import TeacherAdd from "../pages/Teacher/TeacherAdd";
 import TeacherEdit from "../pages/Teacher/TeacherEdit";
-import TeacherView from "../pages/Teacher/TeacherView";
 import TeacherLeave from "../pages/Teacher/TeacherLeave";
 import TeacherPayslip from "../pages/Teacher/TeacherPayslip";
 import Attendance from "../pages/Report/Attendance";
@@ -56,7 +55,6 @@ import StaffAdd from "../pages/Staff/StaffAdd";
 import StaffEdit from "../pages/Staff/StaffEdit";
 import StaffLeave from "../pages/Staff/StaffLeave";
 import StaffPayslip from "../pages/Staff/StaffPayslip";
-import StaffView from "../pages/Staff/StaffView";
 import StudentNewView from "../pages/Student/StudentNewView";
 import InvoiceAdd from "../pages/Invoice/InvoiceAdd";
 import InvoiceEdit from "../pages/Invoice/InvoiceEdit";
@@ -267,8 +265,8 @@ function Admin({ handleLogout }) {
               <Route path="/datatable2" element={<Datatable2 />} />
               <Route path="/batchtable" element={<Test />} />
               <Route path="/newTable1" element={<NewTable1 />} />
-              <Route path="/teacher/view/:id" element={<TeacherNewView />} />
-              <Route path="/staff/view/:id" element={<StaffNewView />} />
+             
+             
               <Route
                 path="/changepassword"
                 element={<ChangePassword onLogout={handleLogout} />}
@@ -279,7 +277,6 @@ function Admin({ handleLogout }) {
               <Route path="/lead/lead" element={<Lead />} />
               <Route path="/lead/lead/add" element={<EnrollmentAdd />} />
               <Route path="/lead/lead/edit/:id" element={<EnrollmentEdit />} />
-              {/* <Route path="/lead/lead/view/:id" element={<LeadView />} /> */}
               <Route path="/lead/lead/view/:id" element={<LeadNewView />} />
               <Route
                 path="/lead/lead/assessment/:leadId"
@@ -370,7 +367,7 @@ function Admin({ handleLogout }) {
               <Route path="/teacher" element={<Teacher />} />
               <Route path="/teacher/add" element={<TeacherAdd />} />
               <Route path="/teacher/edit/:staff_id" element={<TeacherEdit />} />
-              <Route path="/teacher/view/:id" element={<TeacherView />} />
+              <Route path="/teacher/view/:id" element={<TeacherNewView />} />
               <Route path="/teacher/leave" element={<TeacherLeave />} />
               <Route
                 path="/teacher/leave/view"
@@ -460,7 +457,7 @@ function Admin({ handleLogout }) {
               <Route path="/staff" element={<Staff />} />
               <Route path="/staff/add" element={<StaffAdd />} />
               <Route path="/staff/edit/:staff_id" element={<StaffEdit />} />
-              <Route path="/staff/view/:id" element={<StaffView />} />
+              <Route path="/staff/view/:id" element={<StaffNewView />} />
               <Route path="/staff/leave" element={<StaffLeave />} />
               <Route path="/staff/leave/view" element={<StaffLeaveView />} />
               <Route path="/staff/payslip" element={<StaffPayslip />} />

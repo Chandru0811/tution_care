@@ -6,7 +6,6 @@ import LeadStudentAdd from "./AddLead/LeadStudentAdd";
 import LeadChildAdd from "./AddLead/LeadChildAdd";
 import LeadParentAdd from "./AddLead/LeadParentAdd";
 import LeadAccountAdd from "./AddLead/LeadAccountAdd";
-import { Link } from "react-router-dom";
 
 const steps = ["", "", "", ""];
 

@@ -1,15 +1,12 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 import { useFormik } from "formik";
-// import * as Yup from "yup";
-import Modal from "react-bootstrap/Modal";
 import api from "../../config/URL";
 import fetchAllCentersWithIds from "../List/CenterList";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import {
   Dialog,
-  DialogActions,
   DialogTitle,
   DialogContent,
 } from "@mui/material";
@@ -18,22 +15,8 @@ import {
 function ArrangeAssesmentEdit({ leadId, arrangeAssesmentId, onSuccess, centerId ,setAll,studentNames,showDialog,handleShow,handleClose}) {
   
   const [loadIndicator, setLoadIndicator] = useState(false);
-  const [centerData, setCenterData] = useState(null);
   const navigate = useNavigate();
-  // console.log("Arrange Assesment Id:", arrangeAssesmentId);
-  // console.log("Centre ID :", centerId);
-  // console.log("Student Name :", studentNames);
 
- 
-
-  const fetchCenterData = async () => {
-    try {
-      const centerData = await fetchAllCentersWithIds();
-      setCenterData(centerData);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
   const handleFetch = async() => {
     try {
       const response = await api.get(`/getAssessmentById/${arrangeAssesmentId}`);
@@ -45,7 +28,6 @@ function ArrangeAssesmentEdit({ leadId, arrangeAssesmentId, onSuccess, centerId 
   };
 
   useEffect(()=>{
-    fetchCenterData()
     if(arrangeAssesmentId){
       handleFetch();
     }
@@ -138,31 +120,7 @@ function ArrangeAssesmentEdit({ leadId, arrangeAssesmentId, onSuccess, centerId 
           }
         }}>
             <div className="row">
-              <div className="col-md-6 col-12 mb-2">
-                <label htmlFor="centerId" className="form-label">
-                  Centre Name
-                </label>
-                {/* <input
-                  type="hidden"
-                  name="centerId"
-                  value={formik.values.centerId}
-                  {...formik.getFieldProps("centerId")}
-                /> */}
-                <select
-                  className="form-control"
-                  value={formik.values.centerId}
-                  name="centerId"
-                  {...formik.getFieldProps("centerId")}
-                  disabled
-                >
-                  {centerData &&
-                    centerData.map((center) => (
-                      <option key={center.id} value={center.id}>
-                        {center.centerNames}
-                      </option>
-                    ))}
-                </select>
-              </div>
+      
               <div className="col-md-6 col-12 mb-2">
                 <label htmlFor="studentName" className="form-label">
                   Student Name

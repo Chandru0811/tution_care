@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import LevelAdd from "./LevelAdd";
 import LevelEdit from "./LevelEdit";
 import api from "../../config/URL";
@@ -19,7 +19,6 @@ const Level = () => {
     level: "",
     code: "",
   });
-  const navigate = useNavigate();
   const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);

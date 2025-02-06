@@ -5,10 +5,7 @@ import {
   ThemeProvider,
   createTheme,
   Menu,
-  MenuItem,
-  IconButton,
 } from "@mui/material";
-import { MoreVert as MoreVertIcon } from "@mui/icons-material";
 import api from "../../config/URL";
 
 const FreelancerPayslip = () => {
@@ -18,7 +15,6 @@ const FreelancerPayslip = () => {
   const userId = localStorage.getItem('userId');
   const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   const [menuAnchor, setMenuAnchor] = useState(null);
-  const [selectedId, setSelectedId] = useState(null);
 
   const columns = useMemo(
     () => [

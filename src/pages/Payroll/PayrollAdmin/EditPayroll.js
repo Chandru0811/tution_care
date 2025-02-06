@@ -2,16 +2,13 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import * as Yup from "yup";
 import { useFormik } from "formik";
-import { format, setDate } from "date-fns"; // Import format function from date-fns
-import fetchAllCentersWithIds from "../../List/CenterList";
+import { format } from "date-fns";
 import { toast } from "react-toastify";
 import api from "../../../config/URL";
 import fetchAllEmployeeListByCenter from "../../List/EmployeeList";
-import { data } from "jquery";
 
 function EditPayroll() {
   const { id } = useParams();
-  const [centerData, setCenterData] = useState(null);
   const [payrollData, setPayrollData] = useState(null);
   console.log("Payroll Data:", payrollData);
 
@@ -21,7 +18,6 @@ function EditPayroll() {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const userName = localStorage.getItem("tmsuserName");
   const centerId = localStorage.getItem("tmscenterId");
-  const [bonus, setBonus] = useState(0);
   const [netPay, setNetPay] = useState(0);
   console.log("NET PAY:", netPay);
   const navigate = useNavigate();
@@ -160,26 +156,13 @@ function EditPayroll() {
     },
   });
 
-  const handleCenterChange = async (event) => {
-    // setUserNameData(null);
-    // const centerId = event.target.value;
-    formik.setFieldValue("centerId", centerId);
-    formik.setFieldValue("deductionAmount", "");
-    formik.setFieldValue("grossPay", "");
-    try {
-      await fetchUserName(centerId);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
-
   useEffect(() => {
     const currentMonth = format(new Date(), "yyyy-MM");
     formik.setFieldValue("payrollMonth", currentMonth);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const fetchUserName = async (centerId) => {
+  const fetchUserName = async () => {
     try {
       const userNames = await fetchAllEmployeeListByCenter(centerId);
       setUserNameData(userNames);
@@ -221,7 +204,8 @@ function EditPayroll() {
     };
 
     fetchUserData();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    fetchUserName();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.userId, formik.values.payrollMonth]);
 
   useEffect(() => {
@@ -239,7 +223,7 @@ function EditPayroll() {
       }
     };
     calculateNetPay();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     formik.values.grossPay,
     formik.values.bonus,
@@ -301,7 +285,7 @@ function EditPayroll() {
     };
 
     fetchUserPaymentData();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     formik.values.freelancerCount,
     formik.values.payrollType,
@@ -326,9 +310,6 @@ function EditPayroll() {
       }
     };
     getData();
-    handleCenterChange();
-    // fetchData();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

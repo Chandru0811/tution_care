@@ -16,7 +16,6 @@ import { TiTick } from "react-icons/ti";
 function LeadNewView() {
   const { id } = useParams();
   const [data, setData] = useState({});
-  const [centerData, setCenterData] = useState(null);
   const [studentData, setStudentData] = useState(null);
   const [subjectData, setSubjectData] = useState(null);
   const [doassesmentData, setDoassesmentData] = useState([]);
@@ -28,10 +27,8 @@ function LeadNewView() {
 
   const fetchData = async () => {
     try {
-      const centerData = await fetchAllCentersWithIds();
       const studentData = await fetchAllStudentsWithIds();
       const subjectData = await fetchAllSubjectsWithIds();
-      setCenterData(centerData);
       setStudentData(studentData);
       setSubjectData(subjectData);
     } catch (error) {
@@ -220,17 +217,7 @@ function LeadNewView() {
                   <b>Name Of School</b>
                   <span>{data.nameOfSchool || "--"}</span>
                 </li>
-                <li className="stdList">
-                  <b>Centre</b>
-                  <span>
-                    {centerData &&
-                      centerData.map((center) =>
-                        parseInt(data.centerId) === center.id
-                          ? center.centerNames || "--"
-                          : ""
-                      )}
-                  </span>
-                </li>
+              
               </ul>
             </div>
           </div>
@@ -442,17 +429,7 @@ function LeadNewView() {
                   {data?.assessmentArrange?.map((arrange, index) => (
                     <ul style={{ listStyle: "none", paddingLeft: "0" }}>
                       <li className="stdList pt-0">
-                        <p className="m-0">
-                          <b>Centre</b>
-                          <span>
-                            {centerData &&
-                              centerData.map((center) =>
-                                parseInt(data.centerId) === center.id
-                                  ? center.centerNames || "--"
-                                  : ""
-                              )}
-                          </span>
-                        </p>
+                       
                         <p className="m-0">
                           <b>Student Name</b>
                           <span> {data.studentName || "--"}</span>

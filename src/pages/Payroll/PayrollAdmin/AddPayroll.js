@@ -19,7 +19,6 @@ function AddPayroll() {
   console.log("empRole", empRole);
   const navigate = useNavigate();
   const validationSchema = Yup.object().shape({
-    centerId: Yup.string().required("*Centre name is required"),
     userId: Yup.string().required("*Employee name is required"),
     payrollMonth: Yup.string().test(
       "Payroll Month-required",

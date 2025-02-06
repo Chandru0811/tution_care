@@ -1,15 +1,10 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 import { useFormik } from "formik";
-// import * as Yup from "yup";
-import Modal from "react-bootstrap/Modal";
 import api from "../../config/URL";
-import fetchAllCentersWithIds from "../List/CenterList";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
 import {
-  Dialog,
-  DialogActions,        
+  Dialog,        
   DialogTitle,
   DialogContent,
 } from "@mui/material";
@@ -27,25 +22,11 @@ function ArrangeAssesmentAdd({
   handleClose,
 }) {
   const [loadIndicator, setLoadIndicator] = useState(false);
-  const [centerData, setCenterData] = useState(null);
-  const navigate = useNavigate();
-  // console.log("Lead Id:", leadId);
-  // console.log("Centre ID :", centerId);
-  // console.log("Student Name :", studentNames);
 
-  const fetchCenterData = async () => {
-    try {
-      const centerData = await fetchAllCentersWithIds();
-      setCenterData(centerData);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
   useEffect(() => {
     if (showDialog && centerId) {
         formik.setValues({...formik.values,centerId:centerId,studentName:studentNames})
       }
-      fetchCenterData();
   }, []);
   const getCurrentDate = () => {
     const date = new Date();
@@ -151,31 +132,6 @@ function ArrangeAssesmentAdd({
             }}
           >
             <div className="row">
-              <div className="col-md-6 col-12 mb-2">
-                <label htmlFor="centerId" className="form-label">
-                  Centre Name
-                </label>
-                {/* <input
-                  type="hidden"
-                  name="centerId"
-                  value={formik.values.centerId}
-                  {...formik.getFieldProps("centerId")}
-                /> */}
-                <select
-                  className="form-control"
-                  value={formik.values.centerId}
-                  name="centerId"
-                  {...formik.getFieldProps("centerId")}
-                  disabled
-                >
-                  {centerData &&
-                    centerData.map((center) => (
-                      <option key={center.id} value={center.id}>
-                        {center.centerNames}
-                      </option>
-                    ))}
-                </select>
-              </div>
               <div className="col-md-6 col-12 mb-2">
                 <label htmlFor="studentName" className="form-label">
                   Student Name

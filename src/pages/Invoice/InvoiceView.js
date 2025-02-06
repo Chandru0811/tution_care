@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import QR from "../../assets/images/view.png";
-import Logo from "../../assets/images/Logo.png";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import api from "../../config/URL";
 import fetchAllCoursesWithIds from "../List/CourseList";
@@ -13,7 +12,6 @@ import SendAndPublish from "./SendAndPublish";
 
 function InvoiceView() {
   const { id } = useParams();
-  const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
   const navigate = useNavigate();
   console.log("data", data);
@@ -21,7 +19,6 @@ function InvoiceView() {
   const [studentData, setStudentData] = useState(null);
   const [centerData, setcenterData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
-  const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   const [taxData, setTaxData] = useState([]);
   console.log("Tax Type:", taxData);
 
@@ -276,9 +273,7 @@ function InvoiceView() {
       } catch (error) {
         console.error("Error fetching data:", error);
         toast.error("Error fetching data");
-      } finally {
-        setLoading(false);
-      }
+      } 
     };
 
     getData();

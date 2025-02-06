@@ -2,13 +2,11 @@ import React, {
   forwardRef,
   useEffect,
   useImperativeHandle,
-  useState,
 } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import api from "../../../../config/URL";
 import { toast } from "react-toastify";
-import { data } from "jquery";
 
 const validationSchema = Yup.object().shape({
   mothersFullName: Yup.string().required("*Mother Name is required"),

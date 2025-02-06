@@ -15,7 +15,7 @@ function MyMessagesView() {
   const [messages, setMessages] = useState([]);
   const [data, setData] = useState(null);
   const location = useLocation();
-  const { senderId, receiverId, senderName, receiverName, message } =
+  const { senderId, receiverId } =
     location.state || {};
   const [fileCount, setFileCount] = useState(0);
   const userId = localStorage.getItem("tmsuserId");

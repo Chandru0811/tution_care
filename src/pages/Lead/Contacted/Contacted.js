@@ -1,39 +1,18 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
 import api from "../../../config/URL";
-import Delete from "../../../components/common/Delete";
-import { IoIosAddCircle } from "react-icons/io";
 import { MaterialReactTable } from "material-react-table";
 import {
   ThemeProvider,
   createTheme,
   Menu,
-  MenuItem,
-  IconButton,
 } from "@mui/material";
-import { MoreVert as MoreVertIcon } from "@mui/icons-material";
-import GlobalDelete from "../../../components/common/GlobalDelete";
 
 const Level = () => {
-  const navigate = useNavigate();
-  const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [contactedName, setContactedName] = useState("");
-  const [messageData, setMessageData] = useState("");
-  const [email, setEmail] = useState("");
 
   const [menuAnchor, setMenuAnchor] = useState(null);
-  const [selectedId, setSelectedId] = useState(null);
-  // console.log("data",datas)
-  // const clearFilters = () => {
-  //   setContactedName("");
-  //   setMessageData("");
-  //   setEmail("");
-
-  //   $(tableRef.current).DataTable().search("").draw();
-  // };
 
   const getData = async () => {
     try {

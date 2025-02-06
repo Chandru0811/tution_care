@@ -3,7 +3,6 @@ import "../../styles/custom.css";
 import Logo from "../../assets/images/Logo.png";
 import { Link, useParams } from "react-router-dom";
 import jsPDF from "jspdf";
-import { format } from "date-fns"; // Import format function from date-fns
 import api from "../../config/URL";
 import { FaDownload } from "react-icons/fa6";
 import { toast } from "react-toastify";
@@ -12,10 +11,8 @@ import { toast } from "react-toastify";
 
 function FreelancerPayslipView() {
   const { id } = useParams();
-  const [selectedMonth, setSelectedMonth] = useState("");
   const [data, setData] = useState({});
   console.log("Payslip Data", data);
-  const userId = localStorage.getItem("tmsuserId");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

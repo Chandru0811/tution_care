@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import CurriculumAdd from "./CurriculumAdd";
 import CurriculumEdit from "./CurriculumEdit";
-import Delete from "../../components/common/Delete";
 import api from "../../config/URL";
 import {
   Link,
@@ -11,7 +10,6 @@ import {
 } from "react-router-dom";
 import fetchAllCoursesWithIds from "../List/CourseList";
 import { toast } from "react-toastify";
-import { MdViewColumn } from "react-icons/md";
 
 import { MaterialReactTable } from "material-react-table";
 import {
@@ -26,24 +24,23 @@ import GlobalDelete from "../../components/common/GlobalDelete";
 
 const Curriculum = () => {
   const { id } = useParams();
-  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const courseId = searchParams.get("courseId");
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [courseData, setCourseData] = useState(null);
+  // const [courseData, setCourseData] = useState(null);
   const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
 
-  const fetchData = async () => {
-    try {
-      const courseData = await fetchAllCoursesWithIds();
-      setCourseData(courseData);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
+  // const fetchData = async () => {
+  //   try {
+  //     const courseData = await fetchAllCoursesWithIds();
+  //     setCourseData(courseData);
+  //   } catch (error) {
+  //     toast.error(error);
+  //   }
+  // };
 
   const getData = async () => {
     try {
@@ -61,7 +58,7 @@ const Curriculum = () => {
   };
   useEffect(() => {
     getData();
-    fetchData();
+    // fetchData();
   }, [id]);
 
   // ===New Table

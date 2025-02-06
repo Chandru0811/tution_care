@@ -1,12 +1,9 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { useFormik } from "formik";
-import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
 import * as Yup from "yup";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
-import { MdOutlineModeEdit } from "react-icons/md";
 import {
   Dialog,
   DialogActions,

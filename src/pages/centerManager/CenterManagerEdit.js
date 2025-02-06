@@ -5,12 +5,12 @@ import * as Yup from "yup";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
 import fetchAllCentersWithIds from "../List/CenterList";
-import fetchAllCoursesWithIds from "../List/CourseList";
+// import fetchAllCoursesWithIds from "../List/CourseList";
 
 function CenterManagerEdit() {
   const navigate = useNavigate();
   const [centerData, setCenterData] = useState(null);
-  const [courseData, setCourseData] = useState(null);
+  // const [courseData, setCourseData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const userName  = localStorage.getItem('userName');
 
@@ -18,9 +18,9 @@ function CenterManagerEdit() {
   const fetchData = async () => {
     try {
       const centerData = await fetchAllCentersWithIds();
-      const courseData = await fetchAllCoursesWithIds();
+      // const courseData = await fetchAllCoursesWithIds();
       setCenterData(centerData);
-      setCourseData(courseData);
+      // setCourseData(courseData);
     } catch (error) {
       toast.error(error);
     }

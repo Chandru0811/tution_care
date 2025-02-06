@@ -6,7 +6,6 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
-import fetchAllSubjectsWithIds from "../List/SubjectList";
 
 function LevelAdd({ onSuccess }) {
   const [show, setShow] = useState(false);

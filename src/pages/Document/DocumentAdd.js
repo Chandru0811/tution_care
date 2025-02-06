@@ -47,7 +47,7 @@ function DocumentAdd() {
       studentSelect: "",
       createdBy: userName,
     },
-    // validationSchema: validationSchema,
+    validationSchema: validationSchema,
     onSubmit: async (values) => {
       setLoadIndicator(true);
       try {

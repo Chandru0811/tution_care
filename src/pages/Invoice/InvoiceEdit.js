@@ -53,7 +53,6 @@ export default function InvoiceEdit() {
   const [rows, setRows] = useState([{}]);
   const { id } = useParams();
   const navigate = useNavigate();
-  const [centerData, setCenterData] = useState(null);
   const [courseData, setCourseData] = useState(null);
   const [studentData, setStudentData] = useState(null);
   const [packageData, setPackageData] = useState(null);
@@ -189,9 +188,6 @@ export default function InvoiceEdit() {
   const fetchData = async (id) => {
     try {
       const centerId = id; // Set the default center ID
-      const centerData = await fetchAllCentersWithStudentList();
-      setCenterData(centerData);
-
       const studentData = await fetchAllStudentListByCenter(centerId);
       setStudentData(studentData);
 
@@ -245,11 +241,6 @@ export default function InvoiceEdit() {
   };
 
   const handleCenterChange = (event) => {
-    // setCourseData(null);
-    // setPackageData(null);
-    // setStudentData(null);
-    // const centerId = event.target.value;
-    formik.setFieldValue("centerId", centerId);
     fetchCourses(centerId);
     fetchPackage(centerId);
     fetchStudent(centerId);

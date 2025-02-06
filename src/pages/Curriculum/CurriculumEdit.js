@@ -1,8 +1,6 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 import { useFormik } from "formik";
-import Button from "react-bootstrap/Button";
-import { FaEdit } from "react-icons/fa";
 import * as Yup from "yup";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
