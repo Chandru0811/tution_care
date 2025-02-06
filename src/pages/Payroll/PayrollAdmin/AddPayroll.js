@@ -6,11 +6,9 @@ import { format } from "date-fns";
 import { toast } from "react-toastify";
 import api from "../../../config/URL";
 import fetchAllEmployeeListByCenter from "../../List/EmployeeList";
-
 function AddPayroll() {
   const [userNamesData, setUserNameData] = useState(null);
   const [empRole, setEmpRole] = useState(null);
-  const [userSalaryInfo, setUserSalaryInfo] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const userName = localStorage.getItem("tmsuserName");
   const [netPay, setNetPay] = useState(0);
@@ -155,8 +153,8 @@ function AddPayroll() {
         const response = await api.post(
           empRole === "freelancer"
             ? "/createFreelancerPayroll"
-            : "/createUserPayrollWithCenterId",
-          payload,
+            : "/createUserPayroll",
+          payload,   
           {
             headers: {
               "Content-Type": "application/json",
@@ -182,26 +180,7 @@ function AddPayroll() {
     },
   });
 
-  const handleCenterChange = async (event) => {
-    setUserNameData(null);
-    // const centerId = event.target.value;
-    formik.setFieldValue("centerId", centerId);
-    formik.setFieldValue("deductionAmount", "");
-    formik.setFieldValue("grossPay", "");
-    try {
-      await fetchUserName(centerId);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
-
-  useEffect(() => {
-    const currentMonth = format(new Date(), "yyyy-MM");
-    formik.setFieldValue("payrollMonth", currentMonth);
-    handleCenterChange();
-  }, []);
-
-  const fetchUserName = async (centerId) => {
+  const fetchUserName = async () => {
     try {
       const userNames = await fetchAllEmployeeListByCenter(centerId);
       setUserNameData(userNames);
@@ -209,6 +188,11 @@ function AddPayroll() {
       toast.error(error);
     }
   };
+  useEffect(() => {
+    const currentMonth = format(new Date(), "yyyy-MM");
+    formik.setFieldValue("payrollMonth", currentMonth);
+    fetchUserName()
+  }, []);
 
   const fetchUserSalaryInfo = async (userId, payrollMonth) => {
     // alert(userId, payrollMonth);
@@ -226,7 +210,6 @@ function AddPayroll() {
             },
           }
         );
-        setUserSalaryInfo(response.data);
         formik.setFieldValue("deductionAmount", response.data.deductionAmount);
         formik.setFieldValue("grossPay", response.data.basicPay);
         formik.setFieldValue("cpfContribution", response.data.cpfContribution);
