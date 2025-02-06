@@ -15,7 +15,7 @@ function PaymentsAdd() {
   const [invoiceData, setInvoiceData] = useState([]);
   const invoiceOptions = invoiceData.map((invoice) => ({
     label: invoice.invoiceNumber,
-    value: invoice.invoiceNumber,
+    value: invoice.id,
     totalAmount: invoice.totalAmount,
   }));
   const [selectedInvoice, setSelectedInvoice] = useState([]);
