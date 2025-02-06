@@ -108,8 +108,7 @@ function AssignmentView() {
 
   const getData = async () => {
     try {
-      const response = await api.get(`/getAssignmentFolderById/${id}`);
-      console.log("first", response.data);
+      const response = await api.get(`/getQuestionsAndAnswersByFolderId/${id}`);
       setData(response.data);
     } catch (error) {
       console.error("Error fetching data ", error);
@@ -118,7 +117,6 @@ function AssignmentView() {
 
   useEffect(() => {
     getData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   return (

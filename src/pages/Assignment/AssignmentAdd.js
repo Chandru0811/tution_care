@@ -8,7 +8,6 @@ import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
 import fetchAllClassesWithIdsC from "../List/ClassListByCourse";
 import fetchAllTeacherListByCenter from "../List/TeacherListByCenter";
 import fetchAllStudentListByCenter from "../List/StudentListByCenter";
-import fetchAllCentersWithIds from "../List/CenterList";
 import { MultiSelect } from "react-multi-select-component";
 
 function AssignmentAdd() {
@@ -26,6 +25,7 @@ function AssignmentAdd() {
   const [selectedBatchTimes, setSelectedBatchTimes] = useState([]);
 
   const validationSchema = Yup.object({
+    assignmentName: Yup.string().required("*Assignment Name is required"),
     course: Yup.string().required("*Course is required"),
     userId: Yup.string().required("*Teacher is required"),
     day: Yup.string().required("*Days is required"),
@@ -75,6 +75,7 @@ function AssignmentAdd() {
   const formik = useFormik({
     initialValues: {
       center: centerId,
+      assignmentName:"",
       course: "",
       userId: "",
       classListing: "",
@@ -87,6 +88,7 @@ function AssignmentAdd() {
       studentSelect: "",
       createdBy: userName,
       studentIds: [],
+      assignmentReason:"",
       files: [] || null,
     },
     validationSchema: validationSchema,
@@ -110,6 +112,8 @@ function AssignmentAdd() {
         const formData = new FormData();
         formData.append("centerId", centerId);
         formData.append("userId", values.userId);
+        formData.append("assignmentName", values.assignmentName);
+        formData.append("assignmentReason", values.assignmentReason);
         formData.append("day", values.day);
         formData.append("classListing", selectedClassName);
         formData.append("course", selectedCourseName);
@@ -369,6 +373,27 @@ function AssignmentAdd() {
 
           <div className="container">
             <div className="row py-4">
+              <div className="col-md-6 col-12 mb-4">
+                <label className="form-label">
+                  Assignment Name<span className="text-danger">*</span>
+                </label>
+                <div className="input-group mb-3">
+                  <input
+                    name="text"
+                    type="assignmentName"
+                    className={`form-control  ${
+                      formik.touched.assignmentName && formik.errors.assignmentName
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                    {...formik.getFieldProps("assignmentName")}
+                  />
+                  {formik.touched.assignmentName && formik.errors.assignmentName && (
+                    <div className="invalid-feedback">{formik.errors.assignmentName}</div>
+                  )}
+                </div>
+              </div>
+
               <div class="col-md-6 col-12 mb-4">
                 <lable class="">
                   Course<span class="text-danger">*</span>
@@ -481,6 +506,44 @@ function AssignmentAdd() {
                 )}
               </div>
 
+              <div className="col-md-6 col-12 mb-4">
+                <label className="">
+                  Batch Time<span className="text-danger">*</span>
+                </label>
+                <MultiSelect
+                  options={
+                    batchData
+                      ? batchData.map((time) => ({
+                          label: normalizeTime(time),
+                          value:
+                            time.includes("AM") || time.includes("PM")
+                              ? convertTo24Hour(time)
+                              : time,
+                        }))
+                      : []
+                  }
+                  value={selectedBatchTimes}
+                  onChange={(selected) => {
+                    setSelectedBatchTimes(selected);
+                    formik.setFieldValue(
+                      "batchTime",
+                      selected.map((option) => option.value)
+                    );
+                  }}
+                  labelledBy="Select Batch Time"
+                  className={`form-multi-select ${
+                    formik.touched.batchTime && formik.errors.batchTime
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                />
+                {formik.touched.batchTime && formik.errors.batchTime && (
+                  <div className="invalid-feedback">
+                    {formik.errors.batchTime}
+                  </div>
+                )}
+              </div>
+
               {/* Radio buttons for selecting folder category */}
               <div className="col-md-6 col-12 mb-4">
                 <label className="form-label">
@@ -553,43 +616,7 @@ function AssignmentAdd() {
                   </div>
                 )}
               </div>
-              <div className="col-md-6 col-12 mb-4">
-                <label className="">
-                  Batch Time<span className="text-danger">*</span>
-                </label>
-                <MultiSelect
-                  options={
-                    batchData
-                      ? batchData.map((time) => ({
-                          label: normalizeTime(time),
-                          value:
-                            time.includes("AM") || time.includes("PM")
-                              ? convertTo24Hour(time)
-                              : time,
-                        }))
-                      : []
-                  }
-                  value={selectedBatchTimes}
-                  onChange={(selected) => {
-                    setSelectedBatchTimes(selected);
-                    formik.setFieldValue(
-                      "batchTime",
-                      selected.map((option) => option.value)
-                    );
-                  }}
-                  labelledBy="Select Batch Time"
-                  className={`form-multi-select ${
-                    formik.touched.batchTime && formik.errors.batchTime
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                />
-                {formik.touched.batchTime && formik.errors.batchTime && (
-                  <div className="invalid-feedback">
-                    {formik.errors.batchTime}
-                  </div>
-                )}
-              </div>
+             
               <div className="col-md-6 col-12 mb-4">
                 <label className="form-label">
                   Date<span className="text-danger">*</span>
@@ -630,36 +657,9 @@ function AssignmentAdd() {
                 )}
               </div>
 
-              {/* <div className="col-md-6 col-12 mb-2">
-                <div className="row">
-                  <label>
-                    Files<span className="text-danger">*</span>
-                  </label>
-                  <div className="input-group">
-                    <input
-                      className="form-control"
-                      type="file"
-                      multiple
-                      accept="image/jpeg, image/png, application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                      onChange={(event) => {
-                        const files = Array.from(event.target.files);
-                        formik.setFieldValue("files", files); // Update Formik field
-                      }}
-                    />
-                  </div>
-                  {formik.touched.files && formik.errors.files && (
-                    <small className="text-danger">{formik.errors.files}</small>
-                  )}
-                  <label className="text-muted">
-                    Note: Only JPG, PNG, PDF, DOC, or DOCX files are allowed.
-                    Each file must be less than 5MB. Total size must be under
-                    1GB, and file names must not exceed 50 characters.
-                  </label>
-                </div>
-              </div> */}
               <div className="col-md-6 col-12 mb-2">
                 <div className="row">
-                  <label>
+                  <label className="form-label">
                     Files<span className="text-danger">*</span>
                   </label>
                   <div className="input-group">
@@ -728,6 +728,25 @@ function AssignmentAdd() {
                     1GB, and file names must not exceed 50 characters.
                   </label>
                 </div>
+              </div>
+
+              <div className="col-md-6 col-12 mb-4">
+                <label className="form-label">Assignment Reason</label>
+                <textarea
+                  name="assignmentReason"
+                  className={`form-control  ${
+                    formik.touched.assignmentReason && formik.errors.assignmentReason
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  rows={5}
+                  {...formik.getFieldProps("assignmentReason")}
+                />
+                {formik.touched.assignmentReason && formik.errors.assignmentReason && (
+                  <div className="invalid-feedback">
+                    {formik.errors.assignmentReason}
+                  </div>
+                )}
               </div>
             </div>
           </div>

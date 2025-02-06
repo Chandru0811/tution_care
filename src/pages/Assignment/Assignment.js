@@ -66,16 +66,13 @@ const Assignment = () => {
           </IconButton>
         ),
       },
-      { accessorKey: "folderName", enableHiding: false, header: "Folder Name" },
+      { accessorKey: "assignmentName", enableHiding: false, header: "Assignment Name" },
+      // { accessorKey: "folderName", enableHiding: false, header: "Folder Name" },
+      { accessorKey: "user", enableHiding: false, header: "Teacher" },
       {
-        accessorKey: "studentName",
+        accessorKey: "folderCategory",
         enableHiding: false,
-        header: "Student Name",
-      },
-      {
-        accessorKey: "user",
-        enableHiding: false,
-        header: "User Name",
+        header: "Folder Category",
       },
       {
         accessorKey: "course",
@@ -89,7 +86,6 @@ const Assignment = () => {
         enableHiding: false,
         size: 50,
       },
-      { accessorKey: "batchTime", enableHiding: false, header: "Batch" },
       {
         accessorKey: "date",
         enableHiding: false,
@@ -100,13 +96,7 @@ const Assignment = () => {
         accessorKey: "day",
         enableHiding: false,
         header: "Days",
-      },
-      { accessorKey: "user", enableHiding: false, header: "Teacher" },
-      {
-        accessorKey: "folderCategory",
-        enableHiding: false,
-        header: "Folder Category",
-      },
+      },      
       { accessorKey: "createdBy", header: "Created By" },
       {
         accessorKey: "createdAt",
@@ -428,20 +418,10 @@ const Assignment = () => {
                 enableFullScreenToggle={false}
                 initialState={{
                   columnVisibility: {
-                    gst: false,
-                    address: false,
-                    bankAccountName: false,
-                    bankAccountNumber: false,
-                    bankBranch: false,
-                    bankName: false,
                     createdBy: false,
                     createdAt: false,
                     updatedBy: false,
                     updatedAt: false,
-                    invoiceNotes: false,
-                    openingDate: false,
-                    taxRegistrationNumber: false,
-                    zipCode: false,
                   },
                 }}
                 muiTableBodyRowProps={({ row }) => ({

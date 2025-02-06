@@ -22,7 +22,7 @@ function PaymentsAdd() {
 
   const validationSchema = Yup.object({
     studentId: Yup.string().required("Student Name is required"),
-    invoiceIds: Yup.array()
+    invoiceNo: Yup.array()
       .of(Yup.string())
       .min(1, "Invoice is required")
       .required("Invoice is required"),
@@ -74,7 +74,6 @@ function PaymentsAdd() {
     initialValues: {
       centerId: centerId,
       studentId: "",
-      receiptNo: "",
       paymentDate: "",
       paymentMethod: "",
       paymentReference: "",
@@ -85,7 +84,7 @@ function PaymentsAdd() {
       mobileNumber: "",
       file: null,
       remark: "",
-      invoiceIds: [],
+      invoiceNo: [],
     },
     validationSchema: validationSchema,
     enableReinitialize: true,
@@ -94,9 +93,7 @@ function PaymentsAdd() {
       const formData = new FormData();
       formData.append("centerId", centerId);
       formData.append("studentId", values.studentId);
-      formData.append("invoiceIds", values.invoiceIds);
-      formData.append("userId", values.studentId);
-      formData.append("receiptNo", values.receiptNo);
+      formData.append("invoiceNo", values.invoiceNo);
       formData.append("paymentDate", values.paymentDate);
       formData.append("paymentMethod", values.paymentMethod);
       formData.append("paymentReference", values.paymentReference);
@@ -165,7 +162,7 @@ function PaymentsAdd() {
   const handleStudentChange = async (event) => {
     const studentId = event.target.value;
     formik.setFieldValue("studentId", studentId);
-    formik.setFieldValue("invoiceIds", []);
+    formik.setFieldValue("invoiceNo", []);
     formik.setFieldValue("paidAmount", "");
     setSelectedInvoice([]);
     setInvoiceData([]);
@@ -185,7 +182,7 @@ function PaymentsAdd() {
       0
     );
     formik.setFieldValue(
-      "invoiceIds",
+      "invoiceNo",
       selected.map((option) => option.value)
     );
     formik.setFieldValue("paidAmount", totalPaidAmount);
@@ -304,14 +301,14 @@ function PaymentsAdd() {
                   onChange={(selected) => handleInvoiceChange(selected)}
                   labelledBy="Select Student"
                   className={`form-multi-select ${
-                    formik.touched.invoiceIds && formik.errors.invoiceIds
+                    formik.touched.invoiceNo && formik.errors.invoiceNo
                       ? "is-invalid"
                       : ""
                   }`}
                 />
-                {formik.touched.invoiceIds && formik.errors.invoiceIds && (
+                {formik.touched.invoiceNo && formik.errors.invoiceNo && (
                   <div className="invalid-feedback">
-                    {formik.errors.invoiceIds}
+                    {formik.errors.invoiceNo}
                   </div>
                 )}
               </div>
@@ -518,10 +515,10 @@ function PaymentsAdd() {
                 <label className="form-label">Remark</label>
                 <div class="input-group mb-3">
                   <textarea
-                    name="reamrks"
+                    name="remark"
                     class="form-control"
-                    {...formik.getFieldProps("reamrks")}
-                    id="reamrks"
+                    {...formik.getFieldProps("remark")}
+                    id="remark"
                     rows="5"
                   ></textarea>
                 </div>
