@@ -6,7 +6,6 @@ import {
   DialogContent,
   DialogTitle,
 } from "@mui/material";
-import Button from "@mui/material/Button";
 import * as Yup from "yup";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
@@ -25,7 +24,6 @@ const validationSchema = Yup.object({
 
 const ClassReplacement = ({ classId, onDeleteSuccess, onOpen }) => {
   const [open, setOpen] = useState(false);
-  const [loadIndicator, setLoadIndicator] = useState(false);
   const [classData, setClassData] = useState({});
   const [teacherData, setTeacherData] = useState([]);
   const [classRoomData, setClassRoomData] = useState([]);
@@ -59,40 +57,11 @@ const ClassReplacement = ({ classId, onDeleteSuccess, onOpen }) => {
     onSubmit: async (values) => {
       const { className } = values;
       console.log("values", values);
-      // setLoadIndicator(true);
-      // try {
-      //   const response = await api.put(
-      //     `/${id}`,
-      //     values,
-      //     {
-      //       headers: {
-      //         "Content-Type": "application/json",
-      //       },
-      //     }
-      //   );
-      //   if (response.status === 200) {
-      //     onSuccess();
-      //     handleClose();
-      //     toast.success(response.data.message);
-      //   } else {
-      //     toast.error(response.data.message);
-      //   }
-      // } catch (error) {
-      //   toast.error(error);
-      // } finally {
-      //   setLoadIndicator(false);
-      // }
+     
     },
     enableReinitialize: true,
   });
   const handleRowSelect = (data = classData) => {
-    // if (data.availableSlots === 0) {
-    //   toast.warning("Class is Full");
-    //   return;
-    // }
-    // console.log("Selected Row Data:", data);
-    // setFormData((prev) => ({ ...prev, coursesData: data }));
-
     if (data.startDate && data.endDate) {
       const days = calculateDays(data.startDate, data.endDate, data.day);
       setAvailableDays(days);
@@ -151,7 +120,7 @@ const ClassReplacement = ({ classId, onDeleteSuccess, onOpen }) => {
     };
     const fetchListData = async () => {
       try {
-        const response = await fetchAllTeacherListByCenter(classData.centerId);
+        // const response = await fetchAllTeacherListByCenter(classData.centerId);
         const classRoom = await fetchAllClassRoomWithCenterIds(
           classData.centerId
         );

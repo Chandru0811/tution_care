@@ -5,7 +5,6 @@ import * as yup from "yup";
 import { useFormik } from "formik";
 import { toast } from "react-toastify";
 import api from "../../../config/URL";
-import { MdOutlineAttachMoney } from "react-icons/md";
 
 function AddRegister({ id, onSuccess, show, handelClose }) {
   const [loadIndicator, setLoadIndicator] = useState(false);

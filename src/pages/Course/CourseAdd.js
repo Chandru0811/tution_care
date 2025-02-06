@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../../styles/custom.css";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -8,7 +8,6 @@ import api from "../../config/URL";
 import fetchAllCentersWithIds from "../List/CenterList";
 import fetchAllSubjectsWithIds from "../List/SubjectList";
 import fetchAllLevelBySubjectsWithIds from "../List/LevelListBySubject";
-import { MultiSelect } from "react-multi-select-component";
 
 const validationSchema = Yup.object({
   // centerId: Yup.array().min(1, "*At least one Centre must be selected"),
@@ -47,17 +46,13 @@ const validationSchema = Yup.object({
 
 function CourseAdd({ onSuccess }) {
   const navigate = useNavigate();
-  const [centerData, setCenterData] = useState([]);
-  const [selectedCenters, setSelectedCenters] = useState([]);
+  const [centerData, setCenterData] = useState([]);;
   const colorInputRef = useRef(null);
   console.log("Center Data", centerData);
   const [levelData, setLevelData] = useState(null);
   const [subjectData, setSubjectData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
-  const centerOptions = centerData?.map((center) => ({
-    label: center.centerNames,
-    value: center.id,
-  }));
+
   const role = localStorage.getItem("tmsrole");
   const centerId = localStorage.getItem("tmscenterId");
 
@@ -242,37 +237,7 @@ function CourseAdd({ onSuccess }) {
           </div>
           <div className="container-fluid courseAdd px-4">
             <div className="row">
-              {/* <div className="col-md-6 col-12 mb-4">
-                <label className="form-label">
-                  Centre<span className="text-danger">*</span>
-                </label>
-                <MultiSelect
-                  options={centerOptions}
-                  value={selectedCenters}
-                  onChange={(selected) => {
-                    setSelectedCenters(selected);
-                    formik.setFieldValue(
-                      "centerId",
-                      selected.map((option) => option.value)
-                    );
-                  }}
-                  labelledBy="Select Centers"
-                  className={`form-multi-select ${
-                    formik.touched.centerId && formik.errors.centerId
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  style={{
-                    height: "37.6px !important", // Set the desired height
-                    minHeight: "37.6px", // Ensure the height doesn't shrink
-                  }}
-                />
-                {formik.touched.centerId && formik.errors.centerId && (
-                  <div className="invalid-feedback">
-                    {formik.errors.centerId}
-                  </div>
-                )}
-              </div> */}
+            
             </div>
 
             <div className="row">

@@ -9,9 +9,7 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import { MoreVert as MoreVertIcon } from "@mui/icons-material";
 import { MaterialReactTable } from "material-react-table";
-import { toast } from "react-toastify";
 import GlobalDelete from "../../../components/common/GlobalDelete";
-import fetchAllCentersWithIds from "../../List/CenterList";
 import api from "../../../config/URL";
 
 const Payroll = () => {
@@ -25,7 +23,6 @@ const Payroll = () => {
   const [datas, setDatas] = useState([]);
   const [allData, setAllData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [centerData, setCenterData] = useState(null);
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
   const centerId = localStorage.getItem("tmscenterId");
@@ -172,15 +169,6 @@ const Payroll = () => {
     []
   );
 
-  const getCenterData = async () => {
-    try {
-      const centerData = await fetchAllCentersWithIds();
-      setCenterData(centerData);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
-
   const fetchData = async () => {
     try {
       const response = await api.get(
@@ -196,8 +184,7 @@ const Payroll = () => {
 
   useEffect(() => {
     fetchData();
-    getCenterData();
-  }, []);
+  },);
 
   const theme = createTheme({
     components: {

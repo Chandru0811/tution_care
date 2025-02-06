@@ -6,7 +6,6 @@ import api from "../../config/URL";
 import { toast } from "react-toastify";
 import fetchAllCentersWithIds from "../List/CenterList";
 import fetchAllCoursesWithIds from "../List/CourseList";
-import CenterManager from "./CenterManager";
 
 function CenterManagerEdit() {
   const navigate = useNavigate();

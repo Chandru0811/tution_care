@@ -11,7 +11,6 @@ import {
   IconButton,
 } from "@mui/material";
 import { MoreVert as MoreVertIcon } from "@mui/icons-material";
-import fetchAllCentersWithIds from "../List/CenterList";
 import GlobalDelete from "../../components/common/GlobalDelete";
 import TeacherReplacement from "./TeacherReplacement";
 import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
@@ -23,13 +22,11 @@ const Class = () => {
  
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
-  const centerIDLocal = localStorage.getItem("tmsselectedCenterId");
   const centerId = localStorage.getItem("tmscenterId");
   const [courseData, setCourseData] = useState([]);
   const [teacherData, setTeacherData] = useState([]);
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
-  const [isClearFilterClicked, setIsClearFilterClicked] = useState(false);
   const [filters, setFilters] = useState({
     centerId: centerId,
     courseId: "",
@@ -160,37 +157,6 @@ const Class = () => {
     },
   });
 
-  // const getClassData = async () => {
-  //   try {
-  //     setLoading(true);
-  //     // Dynamically construct query parameters based on filters
-  //     const queryParams = new URLSearchParams();
-  //     if (!isClearFilterClicked) {
-  //       if (filters.centerId) {
-  //         queryParams.append("centerId", filters.centerId);
-  //       } else if (centerIDLocal && centerIDLocal !== "undefined") {
-  //         queryParams.append("centerId", centerIDLocal);
-  //       }
-  //     }
-
-  //     // Loop through other filters and add key-value pairs if they have a value
-  //     for (let key in filters) {
-  //       if (filters[key] && key !== "centerId") {
-  //         queryParams.append(key, filters[key]);
-  //       }
-  //     }
-
-  //     const response = await api.get(
-  //       `/getClassWithCustomInfo?${queryParams.toString()}`
-  //     );
-  //     setDatas(response.data);
-  //   } catch (error) {
-  //     toast.error("Error Fetching Data : ", error);
-  //   } finally {
-  //     setLoading(false);
-  //     setIsClearFilterClicked(false);
-  //   }
-  // };
 
   const getClassData = async () => {
     try {
@@ -218,7 +184,6 @@ const Class = () => {
       classType: "",
     });
     getClassData();
-    setIsClearFilterClicked(true);
   };
 
   useEffect(() => {
@@ -284,22 +249,7 @@ const Class = () => {
         </div>
         <div className="mb-3">
           <div className="individual_fliters d-lg-flex ">
-            {/* <div className="form-group mb-0 ms-2 mb-1">
-              <select
-                className="form-select form-select-sm center_list"
-                name="centerId"
-                style={{ width: "100%" }}
-                onChange={handleFilterChange}
-                value={filters.centerId}
-              >
-                <option >Select the centre</option>
-                {centerData?.map((center) => (
-                  <option key={center.id} value={center.id} selected>
-                    {center.centerNames}
-                  </option>
-                ))}
-              </select>
-            </div> */}
+           
             <div className="form-group mb-0 ms-2 mb-1">
               <select
                 className="form-select form-select-sm center_list"

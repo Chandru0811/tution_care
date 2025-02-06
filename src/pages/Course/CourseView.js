@@ -25,13 +25,6 @@ function CourseView() {
       toast.error(error);
     }
   };
-  const getCenterNames = (centerIds) =>
-    centerIds
-      ?.map(
-        (centerId) =>
-          centerData?.find((c) => c.id === centerId)?.centerNames || ""
-      )
-      .join(", ");
 
   useEffect(() => {
     const getData = async () => {

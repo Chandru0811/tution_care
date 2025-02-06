@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import {
   ThemeProvider,
   createTheme,
@@ -9,7 +9,6 @@ import {
 } from "@mui/material";
 import { MaterialReactTable } from "material-react-table";
 import { MoreVert as MoreVertIcon } from "@mui/icons-material";
-import { toast } from "react-toastify";
 import api from "../../../config/URL";
 import GlobalDelete from "../../../components/common/GlobalDelete";
 import CourseDepositAdd from "./CourseDepositAdd";
@@ -19,7 +18,6 @@ const CourseDeposit = () => {
   const { id } = useParams();
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [taxData, setTaxData] = useState([]);
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
 
@@ -98,14 +96,14 @@ const CourseDeposit = () => {
     []
   );
 
-  const fetchTaxData = async () => {
-    try {
-      const response = await api.get("getAllTaxSetting");
-      setTaxData(response.data);
-    } catch (error) {
-      toast.error("Error fetching tax data:", error);
-    }
-  };
+  // const fetchTaxData = async () => {
+  //   try {
+  //     const response = await api.get("getAllTaxSetting");
+  //     setTaxData(response.data);
+  //   } catch (error) {
+  //     toast.error("Error fetching tax data:", error);
+  //   }
+  // };
 
   const getData = async () => {
     try {
@@ -122,7 +120,7 @@ const CourseDeposit = () => {
 
   useEffect(() => {
     getData();
-    fetchTaxData();
+    // fetchTaxData();
   }, []);
 
   const handleMenuClose = () => setMenuAnchor(null);

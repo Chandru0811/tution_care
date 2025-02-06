@@ -10,10 +10,8 @@ import { toast } from "react-toastify";
 import ScheduleTeacherDetails from "./ScheduleTeacherDetails";
 import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
 import fetchAllTeacherListByCenter from "../List/TeacherListByCenter";
-import fetchAllCentersWithIds from "../List/CenterList";
 import { FaChalkboardUser } from "react-icons/fa6";
 import { BsBuildings } from "react-icons/bs";
-import { filter } from "jszip";
 
 function Calendar() {
   const [data, setData] = useState([]);
