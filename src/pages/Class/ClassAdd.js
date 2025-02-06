@@ -4,13 +4,11 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
-import fetchAllCentersWithIds from "../List/CenterList";
 import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
 import fetchAllClassRoomWithCenterIds from "../List/ClassRoomList";
 
 function ClassAdd() {
   const navigate = useNavigate();
-  const [centerData, setCenterData] = useState(null);
   const [courseData, setCourseData] = useState(null);
   const [classRoomData, setClassRoomData] = useState(null);
   const [teacherData, setTeacherData] = useState(null);
@@ -62,20 +60,11 @@ function ClassAdd() {
       remark: "",
       createdBy: role,
     },
-    // validationSchema: validationSchema,
+    validationSchema: validationSchema,
     onSubmit: async (values) => {
       setLoadIndicator(true);
       values.createdBy = role;
-      // const selectedValue = formik.values.centerId;
-      // let selectedOptionName = "";
-
-      // centerData.forEach((center) => {
-      //   if (parseInt(selectedValue) === center.id) {
-      //     selectedOptionName = center.centerNames || "--";
-      //   }
-      // });
-
-      // values.centerName = selectedOptionName;
+     
       try {
         const response = await api.post("/createClassSchedules", values, {
           headers: {

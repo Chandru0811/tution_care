@@ -35,12 +35,6 @@ function ClassEdit() {
       .notRequired(),
   });
 
-  const getEndDate = () => {
-    const today = new Date();
-    today.setMonth(today.getMonth() + 1);
-    return today.toISOString().split("T")[0];
-  };
-
   const [batchData, setBatchData] = useState(null);
 
   const formik = useFormik({
@@ -131,18 +125,6 @@ function ClassEdit() {
     } catch (error) {
       toast.error(error.message);
     }
-  };
-
-  const handleCenterChange = (event) => {
-    const center = event.target.value;
-    formik.setFieldValue("centerId", center);
-    formik.setFieldValue("classId", "");
-    formik.setFieldValue("userId", ""); // Reset teacher/userId
-    setCourseData(null);
-    setClassRoomData(null);
-    setTeacherData(null);
-    fetchCourses(center);
-    fetchClassRoom(center);
   };
 
   useEffect(() => {

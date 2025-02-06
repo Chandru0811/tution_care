@@ -7,7 +7,6 @@ import { FaEye, FaEdit } from "react-icons/fa";
 import Delete from "../../components/common/Delete";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
-// import { SCREENS } from "../../config/ScreenFilter";
 
 const CenterManager = () => {
   const tableRef = useRef(null);

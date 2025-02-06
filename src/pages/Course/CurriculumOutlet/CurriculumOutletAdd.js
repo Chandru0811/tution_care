@@ -6,41 +6,25 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
-import fetchAllSubjectsWithIds from "../../List/SubjectList";
 import { Link, useParams } from "react-router-dom";
 
 function CurriculumOutletAdd({ onSuccess }) {
   const { id } = useParams();
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
-  const [subjectData, setSubjectData] = useState(null);
   const userName = localStorage.getItem("tmsuserName");
   const [isModified, setIsModified] = useState(false);
 
   const handleClose = () => {
     setShow(false);
     formik.resetForm();
-    setSubjectData(null);
   };
 
   const handleShow = () => {
-    fetchData();
     setShow(true);
     setIsModified(false);
   };
 
-  useEffect(() => {
-    fetchData();
-  }, [show]);
-
-  const fetchData = async () => {
-    try {
-      const subject = await fetchAllSubjectsWithIds();
-      setSubjectData(subject);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
 
   const validationSchema = Yup.object({
     effectiveDate: Yup.string().required("*Effective Date is required"),

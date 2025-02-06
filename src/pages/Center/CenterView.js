@@ -2,22 +2,12 @@ import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
-import fetchAllCentreManager from "../List/CentreMangerList";
 
 function CenterView() {
   const { id } = useParams();
   const [data, setData] = useState([]);
-  const [centerManagerData, setCenterManagerData] = useState(null);
   const [taxTypeData, setTaxTypeData] = useState(null);
 
-  const fetchData = async () => {
-    try {
-      const centerManagerData = await fetchAllCentreManager();
-      setCenterManagerData(centerManagerData);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
 
   const fetchTaxData = async () => {
     try {
@@ -38,7 +28,6 @@ function CenterView() {
       }
     };
     getData();
-    fetchData();
     fetchTaxData();
   }, [id]);
   const formatValue = (value) => {

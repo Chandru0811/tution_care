@@ -7,12 +7,10 @@ import DialogTitle from "@mui/material/DialogTitle";
 import * as Yup from "yup";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
-import fetchAllSubjectsWithIds from "../../List/SubjectList";
 
 function CurriculumOutletEdit({ id, onSuccess, courseId, handleMenuClose }) {
   const [open, setOpen] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
-  const [subjectData, setSubjectData] = useState(null);
   const userName = localStorage.getItem("tmsuserName");
   const [isModified, setIsModified] = useState(false);
 
@@ -22,22 +20,10 @@ function CurriculumOutletEdit({ id, onSuccess, courseId, handleMenuClose }) {
   };
 
   const handleOpen = () => {
-    fetchData();
     setOpen(true);
   };
 
-  useEffect(() => {
-    fetchData();
-  }, []);
 
-  const fetchData = async () => {
-    try {
-      const subject = await fetchAllSubjectsWithIds();
-      setSubjectData(subject);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
 
   const validationSchema = Yup.object({
     effectiveDate: Yup.string().required("*Effective Date is required"),

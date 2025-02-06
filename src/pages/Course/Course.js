@@ -11,10 +11,6 @@ import {
 import GlobalDelete from "../../components/common/GlobalDelete";
 import { MaterialReactTable } from "material-react-table";
 import { MoreVert as MoreVertIcon } from "@mui/icons-material";
-import fetchAllCentersWithIds from "../List/CenterList";
-import fetchAllLevelsWithIds from "../List/LevelList";
-import fetchAllSubjectsWithIds from "../List/SubjectList";
-import { toast } from "react-toastify";
 
 const Course = () => {
   const centerId = localStorage.getItem("tmscenterId");
@@ -30,7 +26,6 @@ const Course = () => {
   const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
-  const [isClearFilterClicked, setIsClearFilterClicked] = useState(false);
   const columns = useMemo(
     () => [
       {
@@ -258,7 +253,6 @@ const Course = () => {
       courseName: "",
       courseCode: "",
     });
-    setIsClearFilterClicked(true);
   };
 
   const handleMenuClose = () => setMenuAnchor(null);

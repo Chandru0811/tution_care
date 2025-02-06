@@ -7,9 +7,7 @@ import Modal from "react-bootstrap/Modal";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
 import { Link, useParams } from "react-router-dom";
-import fetchAllPackageList from "../../List/PackageList";
 import fetchAllPackageListByCenter from "../../List/PackageListByCenter";
-import { forEach } from "jszip";
 
 const validationSchema = Yup.object({
   effectiveDate: Yup.string().required("*Effective Date is required"),

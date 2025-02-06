@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import api from "../../../config/URL";
 import { FaEye } from "react-icons/fa";
 import { Modal, Button } from "react-bootstrap";

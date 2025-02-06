@@ -6,7 +6,6 @@ import {
   DialogContent,
   DialogTitle,
 } from "@mui/material";
-import Button from "@mui/material/Button";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
 import api from "../../../config/URL";

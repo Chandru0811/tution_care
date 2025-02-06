@@ -6,10 +6,8 @@ import * as Yup from "yup";
 import { toast } from "react-toastify";
 import api from "../../config/URL";
 import fetchAllCentersWithIds from "../List/CenterList";
-import fetchAllLevelsWithIds from "../List/LevelList";
 import fetchAllSubjectsWithIds from "../List/SubjectList";
 import fetchAllLevelBySubjectsWithIds from "../List/LevelListBySubject";
-import { MultiSelect } from "react-multi-select-component";
 
 const validationSchema = Yup.object({
   courseName: Yup.string().required("*Course Name is required"),
@@ -49,7 +47,6 @@ function CourseEdit() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const [centerData, setCenterData] = useState([]);
   const [selectedCenters, setSelectedCenters] = useState([]);
   const [levelData, setLevelData] = useState(null);
   const [subjectData, setSubjectData] = useState(null);
@@ -155,14 +152,6 @@ function CourseEdit() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const fetchData = async () => {
-    try {
-      const centerData = await fetchAllCentersWithIds();
-      setCenterData(centerData);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
 
   const fetchSubject = async () => {
     try {
@@ -190,7 +179,6 @@ function CourseEdit() {
   };
 
   useEffect(() => {
-    fetchData();
     fetchSubject();
   }, []);
 
@@ -263,33 +251,7 @@ function CourseEdit() {
           </div>
           <div className="container-fluid courseAdd px-4">
             <div className="row">
-              {/* <div className="col-md-6 col-12 mb-4">
-                <label className="form-label">
-                  Centre<span className="text-danger">*</span>
-                </label>
-                <MultiSelect
-                  options={centerOptions}
-                  value={selectedCenters}
-                  onChange={(selected) => {
-                    setSelectedCenters(selected);
-                    formik.setFieldValue(
-                      "centerId",
-                      selected.map((option) => option.value)
-                    );
-                  }}
-                  labelledBy="Select Centers"
-                  className={`form-multi-select ${
-                    formik.touched.centerId && formik.errors.centerId
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                />
-                {formik.touched.centerId && formik.errors.centerId && (
-                  <div className="invalid-feedback">
-                    {formik.errors.centerId}
-                  </div>
-                )}
-              </div> */}
+            
             </div>
             <div className="row">
               <div className="col-md-6 col-12 mb-2">

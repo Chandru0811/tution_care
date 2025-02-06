@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import api from "../../../config/URL";
 import fetchAllSubjectsWithIds from "../../List/SubjectList";
 import { toast } from "react-toastify";
@@ -9,19 +8,9 @@ import { Modal, Button } from "react-bootstrap";
 export default function CurriculumOutletView({ id }) {
   const [show, setShow] = useState(false);
   const [data, setData] = useState([]);
-  const [subjectData, setSubjectData] = useState(null);
 
-  const fetchData = async () => {
-    try {
-      const subjectData = await fetchAllSubjectsWithIds();
-      setSubjectData(subjectData);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
 
   const handleShow = () => {
-    fetchData();
     setShow(true);
   };
 
@@ -39,7 +28,6 @@ export default function CurriculumOutletView({ id }) {
       }
     };
     getData();
-    fetchData();
   }, [id]);
 
   return (

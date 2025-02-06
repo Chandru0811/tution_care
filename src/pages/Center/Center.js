@@ -10,13 +10,7 @@ import {
   IconButton,
 } from "@mui/material";
 import { MoreVert as MoreVertIcon } from "@mui/icons-material";
-import { toast } from "react-toastify";
-import fetchAllCentreManager from "../List/CentreMangerList";
 import GlobalDelete from "../../components/common/GlobalDelete";
-import AddRegister from "./Add/AddRegister";
-import AddBreak from "./Add/AddBreak";
-import AddClass from "./Add/AddClass";
-import AddPackage from "./Add/AddPackage";
 
 const Center = ({ handleCenterChanged }) => {
   const [filters, setFilters] = useState({
@@ -25,7 +19,7 @@ const Center = ({ handleCenterChanged }) => {
     email: "",
     centerManagerId: "",
   });
-  const [centerManagerData, setCenterManagerData] = useState([]);
+  // const [centerManagerData, setCenterManagerData] = useState([]);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -64,7 +58,11 @@ const Center = ({ handleCenterChanged }) => {
           </IconButton>
         ),
       },
-      { accessorKey: "centerName", enableHiding: false, header: "Company Name" },
+      {
+        accessorKey: "centerName",
+        enableHiding: false,
+        header: "Company Name",
+      },
       {
         accessorKey: "centerManager",
         enableHiding: false,
@@ -109,32 +107,6 @@ const Center = ({ handleCenterChanged }) => {
     []
   );
 
-  const fetchCenterManagerData = async () => {
-    try {
-      const centerManagerData = await fetchAllCentreManager();
-      setCenterManagerData(centerManagerData);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
-
-  useEffect(() => {
-    fetchCenterManagerData();
-  }, []);
-
-  // const fetchData = async () => {
-  //   try {
-  //     setLoading(true);
-  //     const queryParams = new URLSearchParams(filters).toString();
-  //     const response = await api.get(`/getCenterWithCustomInfo?${queryParams}`);
-  //     setData(response.data);
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
   const fetchData = async () => {
     try {
       setLoading(true);
@@ -145,7 +117,9 @@ const Center = ({ handleCenterChanged }) => {
       );
 
       const queryParams = new URLSearchParams(nonEmptyFilters).toString();
-      const response = await api.get(`/getCenterWithCustomInfo?centerName=${tmscenterName}`);
+      const response = await api.get(
+        `/getCenterWithCustomInfo?centerName=${tmscenterName}`
+      );
 
       setData(response.data);
     } catch (error) {
@@ -154,7 +128,6 @@ const Center = ({ handleCenterChanged }) => {
       setLoading(false);
     }
   };
-
 
   useEffect(() => {
     fetchData();
@@ -250,80 +223,6 @@ const Center = ({ handleCenterChanged }) => {
             <strong style={{ color: "#287f71" }}>Company</strong>
           </span>
         </div>
-        {/* <div className="mb-3 d-flex justify-content-between">
-          <div className="individual_fliters d-lg-flex ">
-            <div className="form-group mb-0 ms-2 mb-1">
-              <input
-                type="text"
-                name="centerName"
-                value={filters.centerName}
-                onChange={handleFilterChange}
-                className="form-control form-control-sm center_list"
-                style={{ width: "160px" }}
-                placeholder="Company Name"
-                autoComplete="off"
-              />
-            </div>
-            <div className="form-group mb-0 ms-2 mb-1">
-              <input
-                type="text"
-                name="centerCode"
-                value={filters.centerCode}
-                onChange={handleFilterChange}
-                className="form-control form-control-sm center_list"
-                style={{ width: "160px" }}
-                placeholder="Code"
-                autoComplete="off"
-              />
-            </div>
-            <div className="form-group mb-0 ms-2 mb-1">
-              <input
-                type="text"
-                name="email"
-                value={filters.email}
-                onChange={handleFilterChange}
-                className="form-control form-control-sm center_list"
-                style={{ width: "160px" }}
-                placeholder="Email"
-                autoComplete="off"
-              />
-            </div>
-            <div className="form-group mb-0 ms-2 mb-1">
-              <select
-                name="centerManagerId"
-                value={filters.centerManagerId}
-                onChange={handleFilterChange}
-                className="form-select form-select-sm center_list"
-                style={{ width: "100%" }}
-              >
-                <option value="">Select Company Manager</option>
-                {centerManagerData.map((manager) => (
-                  <option key={manager.id} value={manager.id}>
-                    {manager.userNames}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="form-group mb-2 ms-2">
-              <button
-                type="button"
-                onClick={clearFilter}
-                className="btn btn-sm btn-border"
-              >
-                Clear
-              </button>
-            </div>
-          </div>
-          <Link to="/companyRegister/add">
-            <button
-              type="button"
-              className="btn btn-button btn-sm me-2"
-              style={{ fontWeight: "600px !important" }}
-            >
-              &nbsp; Add &nbsp;&nbsp; <i className="bx bx-plus"></i>
-            </button>
-          </Link>
-        </div> */}
         {loading ? (
           <div className="loader-container">
             <div className="loading">
@@ -363,7 +262,8 @@ const Center = ({ handleCenterChanged }) => {
                   },
                 }}
                 muiTableBodyRowProps={({ row }) => ({
-                  onClick: () => navigate(`/companyRegister/view/${row.original.id}`),
+                  onClick: () =>
+                    navigate(`/companyRegister/view/${row.original.id}`),
                   style: { cursor: "pointer" },
                 })}
               />
@@ -376,20 +276,10 @@ const Center = ({ handleCenterChanged }) => {
               onClose={handleMenuClose}
               disableScrollLock
             >
-
-              {/* <MenuItem >
-                <AddRegister id={selectedId} onSuccess={fetchData} handleMenuClose={handleMenuClose}/>
-              </MenuItem>
-              <MenuItem >
-                <AddClass id={selectedId} onSuccess={fetchData} handleMenuClose={handleMenuClose}/>
-              </MenuItem>
-              <MenuItem >
-                <AddPackage id={selectedId} onSuccess={fetchData} handleMenuClose={handleMenuClose}/>
-              </MenuItem>
-              <MenuItem >
-                <AddBreak id={selectedId} onSuccess={fetchData} handleMenuClose={handleMenuClose}/>
-              </MenuItem> */}
-              <MenuItem onClick={() => navigate(`/companyRegister/edit/${selectedId}`)} className="text-start mb-0 menuitem-style">
+              <MenuItem
+                onClick={() => navigate(`/companyRegister/edit/${selectedId}`)}
+                className="text-start mb-0 menuitem-style"
+              >
                 Edit
               </MenuItem>
               <MenuItem>

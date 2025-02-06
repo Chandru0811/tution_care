@@ -5,16 +5,8 @@ import { MaterialReactTable } from "material-react-table";
 import { ThemeProvider, createTheme } from "@mui/material";
 import { CiViewColumn } from "react-icons/ci";
 import AddRegister from "./Add/AddRegister";
-import AddBreak from "./Add/AddBreak";
-import AddClass from "./Add/AddClass";
-import AddPackage from "./Add/AddPackage";
-import { MdOutlineModeEdit } from "react-icons/md";
-import { Delete } from "@mui/icons-material";
 import fetchAllCentreManager from "../List/CentreMangerList";
 import { toast } from "react-toastify";
-import { IoIosAddCircle } from "react-icons/io";
-import { Alert } from "bootstrap";
-import { BsThreeDotsVertical } from "react-icons/bs";
 
 const NewTable1 = () => {
   const [filters, setFilters] = useState({
@@ -28,23 +20,13 @@ const NewTable1 = () => {
 
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectedValue, setSelectedValue] = useState("");
+  // const [selectedValue, setSelectedValue] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [selectedId, setSelectedId] = useState(null); // Store the selected ID
 
-  const navigate = useNavigate();
-
-  const handleSelectChange = (value, id) => {
-    setSelectedValue(value);
-    if (value === "basic") {
-      setShowModal(true);
-      setSelectedId(id);
-    }
-  };
 
   const handelClose = () => {
     setShowModal(false);
-    setSelectedValue("");
   };
 
   const columns = useMemo(
