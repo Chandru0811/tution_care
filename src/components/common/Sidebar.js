@@ -26,7 +26,7 @@ const iconMapping = {
   "Company Management": <PiBuildings />,
   "Course Management": <PiBookOpenText />,
   "Lead Management": <GiExitDoor />,
-  "Emaployee Info": <RiUserAddLine />,
+  "Employee Info": <RiUserAddLine />,
   Staffing: <HiOutlineUserGroup />,
   "Student Management": <TbUserSearch />,
   "Student Movement": <TbStatusChange />,
