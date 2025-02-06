@@ -119,7 +119,7 @@ function Sidebar() {
           ]
         : []),
       {
-        title: "Emaployee Info",
+        title: "Employee Info",
         icon: "RiUserAddLine",
         isOpen: false,
         subMenus: [
