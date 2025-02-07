@@ -469,13 +469,11 @@ function RolesAdd() {
       formik.setFieldValue(key, true);
     });
   };
-
   const handleUncheckAll = () => {
     Object.keys(formik.values).map((key) => {
       formik.setFieldValue(key, false);
     });
   };
-
   const handleCheckAllCreate = () => {
     formik.setValues({
       ...formik.values,

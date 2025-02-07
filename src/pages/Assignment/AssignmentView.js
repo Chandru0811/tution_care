@@ -1,16 +1,23 @@
-import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import React, { useEffect, useMemo, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import api from "../../config/URL";
 import AttactmentPdf from "../../assets/images/Attactmentpdf.jpg";
 import AttactmentExcel from "../../assets/images/AttactmentExcel.jpg";
 import AttactmentOther from "../../assets/images/Attactmentothers.jpg";
 import AttactmentWord from "../../assets/images/AttactmentWord.jpg";
 import AttactmentPpt from "../../assets/images/AttachmentPpt.png";
+import { MaterialReactTable } from "material-react-table";
 import { IoMdDownload } from "react-icons/io";
+import { ThemeProvider, createTheme } from "@mui/material";
+import { toast } from "react-toastify";
 
 function AssignmentView() {
   const { id } = useParams();
   const [data, setData] = useState({});
+  const centerId = localStorage.getItem("tmscenterId");
+  const [selectedId, setSelectedId] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   const renderAttachment = (attachment) => {
     if (!attachment || !attachment.fileUrl) {
@@ -107,13 +114,119 @@ function AssignmentView() {
   };
 
   const getData = async () => {
+    setLoading(true);
     try {
       const response = await api.get(`/getAssignmentQuestionWithAnswer/${id}`);
       setData(response.data);
     } catch (error) {
       console.error("Error fetching data ", error);
+    } finally {
+      setLoading(false);
     }
   };
+
+  const columns = useMemo(
+    () => [
+      {
+        accessorFn: (row, index) => index + 1,
+        header: "S.NO",
+        enableSorting: true,
+        enableHiding: false,
+        size: 40,
+        cell: ({ cell }) => (
+          <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
+        ),
+      },
+      {
+        accessorKey: "isUploaded", // Boolean value (true/false)
+        enableHiding: false,
+        header: "Status",
+        cell: ({ cell }) => {
+          const isUploaded = cell.getValue(); // Directly get boolean value
+          return (
+            <span className={`badge ${isUploaded ? "badges-Green" : "badges-red"} fw-light`}>
+              {isUploaded ? "Completed" : "Incomplete"}
+            </span>
+          );
+        },
+      },
+          
+      {
+        accessorKey: "studentName",
+        header: "Student Name",
+        enableHiding: false,
+      },
+      {
+        accessorKey: "studentUniqueId",
+        header: "Student ID",
+        enableHiding: false,
+      },
+      {
+        accessorKey: "createdBy",
+        header: "Created By",
+        enableHiding: false,
+      },
+      {
+        accessorKey: "createdAt",
+        header: "Created At",
+        Cell: ({ cell }) => cell.getValue()?.substring(0, 10),
+      },
+      {
+        accessorKey: "updatedAt",
+        header: "Updated At",
+        Cell: ({ cell }) => cell.getValue()?.substring(0, 10) || "",
+      },
+      {
+        accessorKey: "updatedBy",
+        header: "Updated By",
+        Cell: ({ cell }) => cell.getValue() || "",
+      },
+    ],
+    []
+  );
+
+  const theme = createTheme({
+    components: {
+      MuiTableCell: {
+        styleOverrides: {
+          head: {
+            color: "#535454 !important",
+            backgroundColor: "#e6edf7 !important",
+            fontWeight: "400 !important",
+            fontSize: "13px !important",
+            textAlign: "center !important",
+          },
+        },
+      },
+      MuiSwitch: {
+        styleOverrides: {
+          root: {
+            "&.Mui-disabled .MuiSwitch-track": {
+              backgroundColor: "#f5e1d0",
+              opacity: 1,
+            },
+            "&.Mui-disabled .MuiSwitch-thumb": {
+              color: "#eb862a",
+            },
+          },
+          track: {
+            backgroundColor: "#e0e0e0",
+          },
+          thumb: {
+            color: "#eb862a",
+          },
+          switchBase: {
+            "&.Mui-checked": {
+              color: "#eb862a",
+            },
+            "&.Mui-checked + .MuiSwitch-track": {
+              backgroundColor: "#eb862a",
+            },
+          },
+        },
+      },
+    },
+  });
 
   useEffect(() => {
     getData();
@@ -167,7 +280,6 @@ function AssignmentView() {
             </div>
           </div>
           <div className="container-fluid">
-            {/* <h1 className="headColor">View Announcement</h1> */}
             <div className="row mt-2 pb-3">
               <div className="col-md-6 col-12">
                 <div className="row mb-2">
@@ -182,7 +294,6 @@ function AssignmentView() {
                   </div>
                 </div>
               </div>
-
               <div className="col-md-6 col-12">
                 <div className="row mb-2">
                   <div className="col-6">
@@ -196,7 +307,6 @@ function AssignmentView() {
                   </div>
                 </div>
               </div>
-
               <div className="col-md-6 col-12 mb-3">
                 <div className="row">
                   <div className="col-6">
@@ -207,7 +317,6 @@ function AssignmentView() {
                   </div>
                 </div>
               </div>
-
               <div className="col-md-6 col-12 mb-3">
                 <div className="row">
                   <div className="col-6">
@@ -218,7 +327,6 @@ function AssignmentView() {
                   </div>
                 </div>
               </div>
-
               <div className="col-md-6 col-12 mb-3">
                 <div className="row">
                   <div className="col-6">
@@ -244,7 +352,6 @@ function AssignmentView() {
                   </div>
                 </div>
               </div>
-
               <div className="col-md-6 col-12">
                 <div className="row mb-2">
                   <div className="col-6">
@@ -257,7 +364,6 @@ function AssignmentView() {
                   </div>
                 </div>
               </div>
-
               <div className="col-md-6 col-12">
                 <div className="row mb-2">
                   <div className="col-6">
@@ -268,7 +374,6 @@ function AssignmentView() {
                   </div>
                 </div>
               </div>
-
               <div className="col-md-6 col-12">
                 <div className="row mb-2">
                   <div className="col-6">
@@ -281,7 +386,6 @@ function AssignmentView() {
                   </div>
                 </div>
               </div>
-
               <div className="col-md-6 col-12">
                 <div className="row mb-2">
                   <div className="col-6">
@@ -295,41 +399,38 @@ function AssignmentView() {
                 </div>
               </div>
 
-              <div className="col-md-6 col-12">
-                <div className="row mb-2">
-                  <div className="col-6">
-                    <p className="fw-medium"> Student Name</p>
-                  </div>
-                  <div className="col-6 text-start">
-                    <p className="text-muted text-sm">
-                      :{" "}
-                      {data.studentNames && data.studentNames.length > 0
-                        ? data.studentNames.join(", ")
-                        : "--"}
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="col-md-12 col-12">
-                <div className="row">
-                  <div className="col-12">
-                    <p className="fw-medium m-0">Teacher Assignment :</p>
-                  </div>
-                  {data.questions && data.questions.length > 0 ? (
-                    <div className="col-12">
-                      <div className="row">
-                        {data.questions.map((fileUrl, index) => (
-                          <div key={index} className="col-md-6 col-12 m-0">
-                            {renderAttachment({ fileUrl })}
-                          </div>
-                        ))}
-                      </div>
+              <div className="col-md-12 col-12 p-1">
+                {loading ? (
+                  <div className="loader-container">
+                    <div className="loading">
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                      <span></span>
                     </div>
-                  ) : (
-                    <p className="text-muted">No Questions available</p>
-                  )}
-                </div>
+                  </div>
+                ) : (
+                  <>
+                    <ThemeProvider theme={theme}>
+                      <MaterialReactTable
+                        columns={columns}
+                        data={data?.assignmentAnswerFiles || []} // Ensure it's always an array
+                        enableColumnActions={false}
+                        enableColumnFilters={false}
+                        enableDensityToggle={false}
+                        enableFullScreenToggle={false}
+                        muiTableBodyRowProps={({ row }) => ({
+                          onClick: () =>
+                            navigate(
+                              `/assignmentResult/view/${id}?studentId=${row.original.studentId}`
+                            ),
+                          style: { cursor: "pointer" },
+                        })}
+                      />
+                    </ThemeProvider>
+                  </>
+                )}
               </div>
             </div>
           </div>

@@ -12,7 +12,6 @@ import Student from "../pages/Student/Student";
 import Teacher from "../pages/Teacher/Teacher";
 import TeacherAdd from "../pages/Teacher/TeacherAdd";
 import TeacherEdit from "../pages/Teacher/TeacherEdit";
-import TeacherLeave from "../pages/Teacher/TeacherLeave";
 import Attendance from "../pages/Report/Attendance";
 import Enrolment from "../pages/Report/Enrolment";
 import Package from "../pages/Report/Package";
@@ -335,7 +334,6 @@ function Admin({ handleLogout }) {
               <Route path="/teacher/add" element={<TeacherAdd />} />
               <Route path="/teacher/edit/:staff_id" element={<TeacherEdit />} />
               <Route path="/teacher/view/:id" element={<TeacherNewView />} />
-              <Route path="/teacher/leave" element={<TeacherLeave />} />
               {/* StaffingCheck */}
               <Route path="/staffing/check" element={<CheckIndex />} />
               {/* StaffingAttendance */}

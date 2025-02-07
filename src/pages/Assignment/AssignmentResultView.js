@@ -10,11 +10,9 @@ import { IoMdDownload } from "react-icons/io";
 import { Button, Modal } from "react-bootstrap";
 
 function AssignmentResultView() {
-  const { id } = useParams(); 
+  const { id } = useParams();
   const [searchParams] = useSearchParams();
   const studentId = searchParams.get("studentId");
-  console.log("questionId", id);
-  console.log("studentId", studentId);
   const [data, setData] = useState({});
   console.log("Data", data);
   const [showModal, setShowModal] = useState(false);
@@ -22,26 +20,24 @@ function AssignmentResultView() {
 
   const handleModalClose = () => setShowModal(false);
   const handleModalShow = () => setShowModal(true);
-  const handleRemarkSubmit = () => {
-    console.log("Remark Submitted:", remark);
 
-    // Here, add your logic to save the remark.
-    // Example API call to save remark
-    // await api.post('/saveRemark', { remark });
-
-    handleModalClose(); // Close the modal after submitting the remark
-    setRemark(""); // Clear the textarea field
+  const handleRemarkSubmit = async () => {
+    try {
+      await api.post("/submitRemark", { id, studentId, remark });
+      console.log("Remark Submitted:", remark);
+      setRemark("");
+      handleModalClose();
+    } catch (error) {
+      console.error("Failed to submit remark:", error);
+    }
   };
 
   const renderAttachment = (attachment) => {
-    if (!attachment) {
-      return <span>No attachment available</span>;
-    }
-    // console.log("firstAttachment", attachment)
-    const url = attachment;
+    if (!attachment) return <span>No attachment available</span>;
+
+    const url = typeof attachment === "string" ? attachment : attachment.url;
     const extension = url.split(".").pop().toLowerCase();
-    let fileName = url.split("/").pop();
-    fileName = fileName.replace(/\+/g, " ");
+    let fileName = url.split("/").pop().replace(/\+/g, " ");
 
     const downloadFile = () => {
       const a = document.createElement("a");
@@ -52,9 +48,7 @@ function AssignmentResultView() {
       document.body.removeChild(a);
     };
 
-    // const deletedId = data.smsPushNotificationAttachments[0]?.id;
-
-    const renderCard = (src, label, attachmentId, isVideo = false) => (
+    const renderCard = (src, label, isVideo = false) => (
       <div className="position-relative d-flex align-items-center mb-3">
         <div className="card" style={{ width: "18rem", marginTop: "20px" }}>
           {isVideo ? (
@@ -81,23 +75,14 @@ function AssignmentResultView() {
                 <p>{fileName}</p>
               </div>
               <div className="col-md-4 col-12 text-end">
-                <p>
-                  <IoMdDownload
-                    onClick={downloadFile}
-                    style={{ cursor: "pointer" }}
-                  />
-                </p>
+                <IoMdDownload
+                  onClick={downloadFile}
+                  style={{ cursor: "pointer" }}
+                />
               </div>
             </div>
           </div>
         </div>
-        {/* <div
-          className="delete-icon-container"
-          style={{ marginLeft: "10px", marginBottom: "8rem" }}
-        >
-          <Delete path={`/deleteSmsPushNotifications/${deletedId}`} id={attachmentId} onSuccess={getData} />
-          <Delete id={attachmentId} onSuccess={getData} />
-        </div> */}
       </div>
     );
 
@@ -106,31 +91,32 @@ function AssignmentResultView() {
       case "jpeg":
       case "png":
       case "gif":
-        return renderCard(url, "Image", attachment.id);
+        return renderCard(url, "Image");
       case "pdf":
-        return renderCard(AttactmentPdf, "PDF", attachment.id);
+        return renderCard(AttactmentPdf, "PDF");
       case "xls":
       case "xlsx":
       case "csv":
-        return renderCard(AttactmentExcel, "Excel", attachment.id);
+        return renderCard(AttactmentExcel, "Excel");
       case "mp4":
       case "ogg":
-        return renderCard(url, "Video", attachment.id, true);
+        return renderCard(url, "Video", true);
       case "doc":
       case "docx":
-        return renderCard(AttactmentWord, "Word", attachment.id);
+        return renderCard(AttactmentWord, "Word");
       case "ppt":
       case "pptx":
-        return renderCard(AttactmentPpt, "PPT", attachment.id);
+        return renderCard(AttactmentPpt, "PPT");
       default:
-        return renderCard(AttactmentOther, "Other", attachment.id);
+        return renderCard(AttactmentOther, "Other");
     }
   };
 
   const getData = async () => {
     try {
-      const response = await api.get(`/getAssignmentQuestionWithAnswer/${id}`);
-      console.log("first", response.data);
+      const response = await api.get(
+        `/getQ&AByQIdAndSId/${id}?studentId=${studentId}`
+      );
       setData(response.data);
     } catch (error) {
       console.error("Error fetching data ", error);
@@ -138,9 +124,10 @@ function AssignmentResultView() {
   };
 
   useEffect(() => {
-    getData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id]);
+    if (id && studentId) {
+      getData();
+    }
+  }, [id, studentId]);
 
   return (
     <div className="container-fluid ">
@@ -212,7 +199,6 @@ function AssignmentResultView() {
                   </div>
                 </div>
               </div>
-
               <div className="col-md-6 col-12 mb-3">
                 <div className="row">
                   <div className="col-6">
@@ -223,7 +209,6 @@ function AssignmentResultView() {
                   </div>
                 </div>
               </div>
-
               <div className="col-md-6 col-12 mb-3">
                 <div className="row">
                   <div className="col-6">
@@ -234,7 +219,6 @@ function AssignmentResultView() {
                   </div>
                 </div>
               </div>
-
               <div className="col-md-6 col-12 mb-3">
                 <div className="row">
                   <div className="col-6">
@@ -245,23 +229,22 @@ function AssignmentResultView() {
                   </div>
                 </div>
               </div>
-
               <div className="col-md-6 col-12">
                 <div className="row mb-2">
                   <div className="col-6">
                     <p className="fw-medium">Batch Time</p>
                   </div>
                   <div className="col-6 text-start">
-                    <p className="text-muted text-sm">
-                      :
-                      {data?.batchTimes?.map((time, index) => (
+                    {data.batchTimes && data.batchTimes.length > 0 ? (
+                      data.batchTimes.map((time, index) => (
                         <div key={index}>{time}</div>
-                      ))}
-                    </p>
+                      ))
+                    ) : (
+                      <p className="text-muted">: --</p>
+                    )}
                   </div>
                 </div>
               </div>
-
               <div className="col-md-6 col-12">
                 <div className="row mb-2">
                   <div className="col-6">
@@ -284,7 +267,6 @@ function AssignmentResultView() {
                   </div>
                 </div>
               </div>
-
               <div className="col-md-6 col-12">
                 <div className="row mb-2">
                   <div className="col-6">
@@ -297,7 +279,6 @@ function AssignmentResultView() {
                   </div>
                 </div>
               </div>
-
               <div className="col-md-12 col-12 mb-3">
                 <div className="row mb-2">
                   <div className="col-12">
@@ -318,7 +299,6 @@ function AssignmentResultView() {
                   )}
                 </div>
               </div>
-
               <div className="col-md-12 col-12 mb-3">
                 <div className="row mb-2">
                   <div className="col-12">
@@ -349,7 +329,6 @@ function AssignmentResultView() {
                   )}
                 </div>
               </div>
-
               {/* Modal */}
               <Modal show={showModal} onHide={handleModalClose}>
                 <Modal.Header closeButton>
