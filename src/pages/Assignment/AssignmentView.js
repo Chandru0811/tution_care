@@ -108,7 +108,7 @@ function AssignmentView() {
 
   const getData = async () => {
     try {
-      const response = await api.get(`/getQuestionsAndAnswersByFolderId/${id}`);
+      const response = await api.get(`/getAssignmentQuestionWithAnswer/${id}`);
       setData(response.data);
     } catch (error) {
       console.error("Error fetching data ", error);
@@ -172,16 +172,17 @@ function AssignmentView() {
               <div className="col-md-6 col-12">
                 <div className="row mb-2">
                   <div className="col-6">
-                    <p className="fw-medium">Centre </p>
+                    <p className="fw-medium">Assignment Name</p>
                   </div>
                   <div className="col-6 text-start">
                     <p className="text-muted text-sm">
                       {" "}
-                      : {data.center || "--"}
+                      : {data.assignmentName || "--"}
                     </p>
                   </div>
                 </div>
               </div>
+
               <div className="col-md-6 col-12">
                 <div className="row mb-2">
                   <div className="col-6">
@@ -190,7 +191,7 @@ function AssignmentView() {
                   <div className="col-6 text-start">
                     <p className="text-muted text-sm">
                       {" "}
-                      : {data.course || "--"}
+                      : {data.courseName || "--"}
                     </p>
                   </div>
                 </div>
@@ -202,7 +203,7 @@ function AssignmentView() {
                     <p className="fw-medium">Class Listing</p>
                   </div>
                   <div className="col-6 text-start">
-                    <p className="text-muted">: {data.classListing || "--"}</p>
+                    <p className="text-muted">: {data.className || "--"}</p>
                   </div>
                 </div>
               </div>
@@ -213,7 +214,7 @@ function AssignmentView() {
                     <p className="fw-medium">Teacher</p>
                   </div>
                   <div className="col-6 text-start">
-                    <p className="text-muted">: {data.user || "--"}</p>
+                    <p className="text-muted">: {data.userName || "--"}</p>
                   </div>
                 </div>
               </div>
@@ -228,7 +229,6 @@ function AssignmentView() {
                   </div>
                 </div>
               </div>
-
               <div className="col-md-6 col-12">
                 <div className="row mb-2">
                   <div className="col-6">
@@ -236,7 +236,10 @@ function AssignmentView() {
                   </div>
                   <div className="col-6 text-start">
                     <p className="text-muted text-sm">
-                      : {data.batchTime || "--"}
+                      :{" "}
+                      {data.batchTimes && data.batchTimes.length > 0
+                        ? data.batchTimes.join(", ")
+                        : "--"}
                     </p>
                   </div>
                 </div>
@@ -250,19 +253,6 @@ function AssignmentView() {
                   <div className="col-6 text-start">
                     <p className="text-muted text-sm">
                       : {data.folderCategory || "--"}
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="col-md-6 col-12">
-                <div className="row mb-2">
-                  <div className="col-6">
-                    <p className="fw-medium"> Student Name</p>
-                  </div>
-                  <div className="col-6 text-start">
-                    <p className="text-muted text-sm">
-                      : {data.studentName || "--"}
                     </p>
                   </div>
                 </div>
@@ -292,27 +282,55 @@ function AssignmentView() {
                 </div>
               </div>
 
-              <div className="col-md-12 col-12 mb-3">
+              <div className="col-md-6 col-12">
                 <div className="row mb-2">
-                  <div className="col-12">
-                    <p className="fw-medium">Teacher Assignment :</p>
+                  <div className="col-6">
+                    <p className="fw-medium">Assignment Reason</p>
                   </div>
-                  {data.attachments && data.attachments.length > 0 ? (
+                  <div className="col-6 text-start">
+                    <p className="text-muted text-sm">
+                      : {data.assignmentReason || "--"}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="col-md-6 col-12">
+                <div className="row mb-2">
+                  <div className="col-6">
+                    <p className="fw-medium"> Student Name</p>
+                  </div>
+                  <div className="col-6 text-start">
+                    <p className="text-muted text-sm">
+                      :{" "}
+                      {data.studentNames && data.studentNames.length > 0
+                        ? data.studentNames.join(", ")
+                        : "--"}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="col-md-12 col-12">
+                <div className="row">
+                  <div className="col-12">
+                    <p className="fw-medium m-0">Teacher Assignment :</p>
+                  </div>
+                  {data.questions && data.questions.length > 0 ? (
                     <div className="col-12">
                       <div className="row">
-                        {data.attachments.map((attachment, index) => (
-                          <div key={index} className="col-md-6 col-12 mb-2">
-                            {renderAttachment(attachment)}
+                        {data.questions.map((fileUrl, index) => (
+                          <div key={index} className="col-md-6 col-12 m-0">
+                            {renderAttachment({ fileUrl })}
                           </div>
                         ))}
                       </div>
                     </div>
                   ) : (
-                    <p className="text-muted">No attachments available</p>
+                    <p className="text-muted">No Questions available</p>
                   )}
                 </div>
               </div>
-
             </div>
           </div>
         </div>

@@ -68,20 +68,20 @@ const Assignment = () => {
       },
       { accessorKey: "assignmentName", enableHiding: false, header: "Assignment Name" },
       // { accessorKey: "folderName", enableHiding: false, header: "Folder Name" },
-      { accessorKey: "user", enableHiding: false, header: "Teacher" },
+      { accessorKey: "userName", enableHiding: false, header: "Teacher" },
       {
         accessorKey: "folderCategory",
         enableHiding: false,
         header: "Folder Category",
       },
       {
-        accessorKey: "course",
+        accessorKey: "courseName",
         header: "Course",
         enableHiding: false,
         size: 40,
       },
       {
-        accessorKey: "classListing",
+        accessorKey: "className",
         header: "Class",
         enableHiding: false,
         size: 50,
@@ -432,7 +432,7 @@ const Assignment = () => {
               </MenuItem>
               <MenuItem>
                 <GlobalDelete
-                  path={`/deleteAssignmentFolder/${selectedId}`}
+                  path={`/deleteAssignmentQuestionFile/${selectedId}`}
                   onDeleteSuccess={getAssignmentData}
                   onOpen={handleMenuClose}
                 />

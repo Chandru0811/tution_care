@@ -51,30 +51,30 @@ const AssignmentResult = () => {
           </IconButton>
         ),
       },
-      { accessorKey: "folderName", enableHiding: false, header: "Folder Name" },
+      { accessorKey: "assignmentName", enableHiding: false, header: "Assignment Name" },
+      {
+        accessorKey: "userName",
+        enableHiding: false,
+        header: "Teacher",
+      },
       {
         accessorKey: "studentName",
         enableHiding: false,
         header: "Student Name",
       },
       {
-        accessorKey: "user",
-        enableHiding: false,
-        header: "User Name",
-      },
-      {
-        accessorKey: "course",
+        accessorKey: "courseName",
         header: "Course",
         enableHiding: false,
         size: 40,
       },
       {
-        accessorKey: "classListing",
+        accessorKey: "className",
         header: "Class",
         enableHiding: false,
         size: 50,
       },
-      { accessorKey: "batchTime", enableHiding: false, header: "Batch" },
+      // { accessorKey: "batchTime", enableHiding: false, header: "Batch" },
       {
         accessorKey: "date",
         enableHiding: false,
@@ -86,7 +86,6 @@ const AssignmentResult = () => {
         enableHiding: false,
         header: "Days",
       },
-      { accessorKey: "user", enableHiding: false, header: "Teacher" },
       {
         accessorKey: "folderCategory",
         enableHiding: false,
@@ -159,7 +158,7 @@ const AssignmentResult = () => {
     try {
       setLoading(true);
       const response = await api.get(
-        `/getAssignmentFoldersWithCustomInfo?centerId=${centerId}`
+        `/getAllQuestionsWithAnswersByUserId?centerId=${centerId}`
       );
       setData(response.data);
     } catch (error) {
@@ -252,7 +251,7 @@ const AssignmentResult = () => {
                 }}
                 muiTableBodyRowProps={({ row }) => ({
                   onClick: () =>
-                    navigate(`/assignmentResult/view/${row.original.id}`),
+                    navigate(`/assignmentResult/view/${row.original.questionId}`),
                   style: { cursor: "pointer" },
                 })}
               />

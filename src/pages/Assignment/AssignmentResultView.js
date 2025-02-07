@@ -125,7 +125,7 @@ function AssignmentResultView() {
 
   const getData = async () => {
     try {
-      const response = await api.get(`/getQuestionsAndAnswersByFolderId/${id}`);
+      const response = await api.get(`/getAssignmentQuestionWithAnswer/${id}`);
       console.log("first", response.data);
       setData(response.data);
     } catch (error) {

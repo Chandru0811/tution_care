@@ -120,8 +120,8 @@ function AssignmentEdit() {
         }
 
         // Send the request
-        const response = await api.post(
-          "/createAssignmentWithSingleOrGroup",
+        const response = await api.put(
+          "/updateAssignment",
           formData,
           {
             headers: {
