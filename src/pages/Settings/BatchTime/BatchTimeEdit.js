@@ -18,7 +18,6 @@ function BatchTimeEdit({ id, onSuccess, handleMenuClose }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const userName = localStorage.getItem("tmsuserName");
-  const [isModified, setIsModified] = useState(false);
   const [fields, setFields] = useState([]); // No default field
 
   const validationSchema = Yup.object({
@@ -73,7 +72,6 @@ function BatchTimeEdit({ id, onSuccess, handleMenuClose }) {
 
   const handleShow = () => {
     setShow(true);
-    setIsModified(false);
     getData();
   };
 

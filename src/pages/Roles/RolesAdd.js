@@ -144,12 +144,6 @@ function RolesAdd() {
       payrollUpdate: true,
       payrollDelete: true,
 
-      payrollIndex: true,
-      payrollRead: true,
-      payrollCreate: true,
-      payrollUpdate: true,
-      payrollDelete: true,
-
       payslipIndex: true,
       payslipRead: true,
 

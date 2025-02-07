@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-// import fetchAllTeacherListByCenter from "../../List/TeacherListByCenter";
-import fetchAllCentersWithIds from "../../List/CenterList";
 import { toast } from "react-toastify";
 import api from "../../../config/URL";
 
@@ -34,7 +32,6 @@ const validationSchema = Yup.object({
 });
 
 function LeaveAdd() {
-  const [centerData, setCenterData] = useState(null);
   const [datas, setDatas] = useState([]);
   console.log("Datas:", datas);
   const userId = localStorage.getItem("tmsuserId");
@@ -66,19 +63,9 @@ function LeaveAdd() {
 
     onSubmit: async (data) => {
       setLoadIndicator(true);
-      let selectedCenterName = "";
-
-      if (centerData) {
-        centerData.forEach((center) => {
-          if (parseInt(centerId) === center.id) {
-            selectedCenterName = center.centerNames || "--";
-          }
-        });
-      }
       try {
         const formDatas = new FormData();
         formDatas.append("userId", userId);
-        formDatas.append("centerName", selectedCenterName);
         formDatas.append("employeeName", datas && datas.employeeName);
         formDatas.append("leaveTypeId", data.leaveTypeId);
         formDatas.append("noOfDays", data.noOfDays);
@@ -126,15 +113,6 @@ function LeaveAdd() {
     return daysDifference;
   };
 
-  const fetchData = async () => {
-    try {
-      const centers = await fetchAllCentersWithIds();
-      setCenterData(centers);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
-
   const fetchLeaveType = async () => {
     try {
       const response = await api.get(`getAllLeaveSetting`);
@@ -145,7 +123,6 @@ function LeaveAdd() {
   };
 
   useEffect(() => {
-    fetchData();
     fetchLeaveType();
   }, []);
 

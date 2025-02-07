@@ -13,7 +13,6 @@ import {
 } from "@mui/material";
 
 function ReferalFeesEdit({ id, onSuccess, onOpen }) {
-  const [centerData, setCenterData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [isModified, setIsModified] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -22,7 +21,6 @@ function ReferalFeesEdit({ id, onSuccess, onOpen }) {
   const centerId = localStorage.getItem("tmscenterId");
 
   const validationSchema = yup.object().shape({
-    // centerId: yup.string().required("*Centre is required"),
     effectiveDate: yup.string().required("*Effective Date is required"),
     referralFee: yup
       .number()
@@ -91,19 +89,6 @@ function ReferalFeesEdit({ id, onSuccess, onOpen }) {
     document.body.style.overflow = "";
   };
 
-  const fetchData = async () => {
-    try {
-      const centerData = await fetchAllCentersWithIds();
-      setCenterData(centerData);
-    } catch (error) {
-      toast.error("Error fetching center data.");
-    }
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
   const getData = async () => {
     try {
       const response = await api.get(`/getAllReferralFeesById/${id}`);
@@ -154,35 +139,6 @@ function ReferalFeesEdit({ id, onSuccess, onOpen }) {
           <DialogContent>
             <div className="container">
               <div className="row py-4">
-                {/* <div class="col-md-6 col-12 mb-4">
-                  <lable className="form-label">
-                    Centre<span class="text-danger">*</span>
-                  </lable>
-                  <select
-                    {...formik.getFieldProps("centerId")}
-                    name="centerId"
-                    className={`form-select   ${
-                      formik.touched.centerId && formik.errors.centerId
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    aria-label="Default select example"
-                    class="form-select "
-                  >
-                    <option selected></option>
-                    {centerData &&
-                      centerData.map((centerId) => (
-                        <option key={centerId.id} value={centerId.id}>
-                          {centerId.centerNames}
-                        </option>
-                      ))}
-                  </select>
-                  {formik.touched.centerId && formik.errors.centerId && (
-                    <div className="invalid-feedback">
-                      {formik.errors.centerId}
-                    </div>
-                  )}
-                </div> */}
                 <div className="col-md-6 col-12 mb-2">
                   <label className="form-label">
                     Effective Date<span className="text-danger">*</span>

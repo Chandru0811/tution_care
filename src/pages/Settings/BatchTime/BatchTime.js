@@ -1,8 +1,7 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import api from "../../../config/URL";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import BatchTimeEdit from "./BatchTimeEdit";
-import { IoIosAddCircle } from "react-icons/io";
 import { MoreVert as MoreVertIcon } from "@mui/icons-material";
 import {
   createTheme,
@@ -12,15 +11,12 @@ import {
   ThemeProvider,
 } from "@mui/material";
 import { MaterialReactTable } from "material-react-table";
-import GlobalDelete from "../../../components/common/GlobalDelete";
 
 const BatchTime = () => {
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
   const [selectedId, setSelectedId] = useState(null);
   const [menuAnchor, setMenuAnchor] = useState(null);
-  //  const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
 
   const getData = async () => {
     try {

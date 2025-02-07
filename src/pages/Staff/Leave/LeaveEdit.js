@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-// import fetchAllTeacherListByCenter from "../../List/TeacherListByCenter";
-import fetchAllCentersWithIds from "../../List/CenterList";
 import { toast } from "react-toastify";
 import api from "../../../config/URL";
 import pdfLogo from "../../../assets/images/Attactmentpdf.jpg";
@@ -35,7 +33,6 @@ const validationSchema = Yup.object({
 
 function LeaveEdit() {
   const { id } = useParams();
-  const [centerData, setCenterData] = useState(null);
   const [datas, setDatas] = useState([]);
   const [leavedatas, setLeaveDatas] = useState([]);
   console.log("Datas:", datas);
@@ -46,10 +43,6 @@ function LeaveEdit() {
   const [daysDifference, setDaysDifference] = useState(0);
   const [leaveTypeData, setLeaveTypeData] = useState([]);
   const userName = localStorage.getItem("tmsuserName");
-
-  const [selectedDate, setSelectedDate] = useState(
-    new Date().toISOString().split("T")[0]
-  );
 
   const formik = useFormik({
     initialValues: {
@@ -72,19 +65,9 @@ function LeaveEdit() {
 
     onSubmit: async (data) => {
       setLoadIndicator(true);
-      let selectedCenterName = "";
-
-      if (centerData) {
-        centerData.forEach((center) => {
-          if (parseInt(centerId) === center.id) {
-            selectedCenterName = center.centerNames || "--";
-          }
-        });
-      }
       try {
         const formDatas = new FormData();
         formDatas.append("userId", userId);
-        formDatas.append("centerName", selectedCenterName);
         formDatas.append("employeeName", datas && datas.employeeName);
         formDatas.append("leaveTypeId", data.leaveTypeId);
         formDatas.append("noOfDays", data.noOfDays);
@@ -132,15 +115,6 @@ function LeaveEdit() {
     return daysDifference;
   };
 
-  const fetchData = async () => {
-    try {
-      const centers = await fetchAllCentersWithIds();
-      setCenterData(centers);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
-
   const fetchLeaveType = async () => {
     try {
       const response = await api.get(`getAllLeaveSetting`);
@@ -151,7 +125,6 @@ function LeaveEdit() {
   };
 
   useEffect(() => {
-    fetchData();
     fetchLeaveType();
   }, []);
 

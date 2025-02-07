@@ -1,10 +1,7 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import Delete from "../../../components/common/Delete";
+import React, { useEffect, useMemo, useState } from "react";
 import AbsentReasonAdd from "./AbsentReasonAdd";
 import AbsentReasonEdit from "./AbsentReasonEdit";
-import { Link, useNavigate } from "react-router-dom";
-import { IoIosAddCircle } from "react-icons/io";
-import { MdOutlineModeEdit } from "react-icons/md";
+import { Link } from "react-router-dom";
 import api from "../../../config/URL";
 import { MoreVert as MoreVertIcon } from "@mui/icons-material";
 import {
@@ -22,8 +19,6 @@ const AbsentReason = () => {
   const [datas, setDatas] = useState([]);
   const [selectedId, setSelectedId] = useState(null);
   const [menuAnchor, setMenuAnchor] = useState(null);
-
-  const navigate = useNavigate();
 
   const getData = async () => {
     try {

@@ -11,17 +11,15 @@ import {
 import { MoreVert as MoreVertIcon } from "@mui/icons-material";
 import { toast } from "react-toastify";
 import api from "../../../config/URL";
-import fetchAllCentersWithIds from "../../List/CenterList";
 import GlobalDelete from "../../../components/common/GlobalDelete";
 
 const Holiday = () => {
   const navigate = useNavigate();
   const [data, setData] = useState([]);
   console.log("Leave Data:", data);
-  const userId = localStorage.getItem("tmsuserId");
-  const role = localStorage.getItem("tmsuserName");
+  // const userId = localStorage.getItem("tmsuserId");
+  // const role = localStorage.getItem("tmsuserName");
   const [loading, setLoading] = useState(true);
-  const [centerData, setCenterData] = useState(null);
   const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
@@ -94,15 +92,6 @@ const Holiday = () => {
     []
   );
 
-  const fetchData = async () => {
-    try {
-      const centerData = await fetchAllCentersWithIds();
-      setCenterData(centerData);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
-
   const getData = async () => {
     try {
       // if (role !== "SMS_ADMIN") {
@@ -125,7 +114,6 @@ const Holiday = () => {
   };
   useEffect(() => {
     getData();
-    fetchData();
   }, []);
 
   const theme = createTheme({

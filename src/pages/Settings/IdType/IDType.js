@@ -1,10 +1,8 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import api from "../../../config/URL";
-import Delete from "../../../components/common/Delete";
 import IDTypeEdit from "./IDTypeEdit";
 import IDTypeAdd from "./IDTypeAdd";
-import { Link, useNavigate } from "react-router-dom";
-import { IoIosAddCircle } from "react-icons/io";
+import { Link } from "react-router-dom";
 import { MoreVert as MoreVertIcon } from "@mui/icons-material";
 import {
   createTheme,
@@ -17,11 +15,8 @@ import { MaterialReactTable } from "material-react-table";
 import GlobalDelete from "../../../components/common/GlobalDelete";
 
 const IDType = () => {
-  const tableRef = useRef(null);
-  const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
     const [selectedId, setSelectedId] = useState(null);
     const [menuAnchor, setMenuAnchor] = useState(null);
 

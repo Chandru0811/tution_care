@@ -15,7 +15,6 @@ import DeductionAdd from "./DeductionAdd";
 import DeductionEdit from "./DeductionEdit";
 
 const Deduction = () => {
-  const navigate = useNavigate();
   const [datas, setDatas] = useState([]);
   console.log(datas);
   const [loading, setLoading] = useState(true);

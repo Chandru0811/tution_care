@@ -18,17 +18,12 @@ import TeacherLeave from "../pages/Teacher/TeacherLeave";
 import TeacherPayslip from "../pages/Teacher/TeacherPayslip";
 import Attendance from "../pages/Report/Attendance";
 import Enrolment from "../pages/Report/Enrolment";
-import Fee from "../pages/Report/Fee";
 import Package from "../pages/Report/Package";
-import Sales from "../pages/Report/Sales";
-import StudentReport from "../pages/Report/StudentReport";
 import Center from "../pages/Center/Center";
 import CenterAdd from "../pages/Center/CenterAdd";
 import CenterView from "../pages/Center/CenterView";
-
 import CenterManager from "../pages/centerManager/CenterManager";
 import CenterManagerAdd from "../pages/centerManager/CenterManagerAdd";
-
 import Staff from "../pages/Staff/Staff";
 import Invoice from "../pages/Invoice/Invoice";
 import Document from "../pages/Document/Document";
@@ -73,8 +68,6 @@ import AttendancesEdit from "../pages/Attendance/AttendancesEdit";
 import RolesAdd from "../pages/Roles/RolesAdd";
 import TeacherLeaveView from "../pages/Teacher/TeacherLeaveView";
 import DocumentReport from "../pages/Report/DocumentReport";
-import AssessmentReport from "../pages/Report/AssessmentReport";
-import ReplaceClass from "../pages/Report/ReplaceClass";
 import WithdrawAdd from "../pages/Student/WithdrawAdd";
 import EnrollmentAdd from "../pages/Lead/Enrollment/EnrollmentAdd";
 import Video from "../pages/Video";
@@ -82,14 +75,8 @@ import DisplayMedia from "../pages/DisplayMedia";
 import { ToastContainer } from "react-toastify";
 import Reschedule from "../pages/Reschedule/Reschedule";
 import RescheduleStudent from "../pages/Reschedule/RescheduleStudent";
-import ScheduleTeacher from "../pages/ScheduleTeacher/ScheduleTeacher";
 import AttendancesCourse from "../pages/Attendance/AttendancesCourse";
 import DocumentFiles from "../pages/Document/DocumentFiles";
-import ScheduleTime from "../pages/ScheduleTeacher/ScheduleTime";
-import Test from "../pages/Test";
-import ScheduleTeacherAdd from "../pages/ScheduleTeacher/ScheduleTeacherAdd";
-import ScheduleTeacherEdit from "../pages/ScheduleTeacher/ScheduleTeacherEdit";
-import ScheduleTeacherView from "../pages/ScheduleTeacher/ScheduleTeacherView";
 import Curriculum from "../pages/Curriculum/Curriculum";
 import EnrollmentEdit from "../pages/Lead/Enrollment/EnrollmentEdit";
 import StudentRegisterCourse from "../pages/Student/StudentRegisterCourse";
@@ -130,7 +117,6 @@ import CMSProductsItemEdit from "../pages/CMS/CMSProductsItemEdit";
 import CmsNewsUpdate from "../pages/CMS/CmsNewsUpdate";
 import CmsCalender from "../pages/CMS/CmsCalender";
 import { CmsTeacher } from "../pages/CMS/CMSTeacher/CmsTeacher";
-
 import CmsEnglish from "../pages/CMS/CMSEnglishCourse/CmsEnglish";
 import CmsHome from "../pages/CMS/CmsHome/CmsHome";
 import CMSContact from "../pages/CMS/CMSContact/CMSContact";
@@ -258,15 +244,12 @@ function Admin({ handleLogout }) {
           <ScrollToTop />
           <div className="home-content" style={{ minHeight: "95vh" }}>
             <Routes>
-              {/* <Route path="/" element={<Dashboard />} /> */}
               <Route path="*" element={<NewDashboard />} />
               <Route path="/" element={<NewDashboard />} />
               <Route path="/datatable" element={<DataTable />} />
               <Route path="/datatable2" element={<Datatable2 />} />
-              <Route path="/batchtable" element={<Test />} />
               <Route path="/newTable1" element={<NewTable1 />} />
-             
-             
+
               <Route
                 path="/changepassword"
                 element={<ChangePassword onLogout={handleLogout} />}
@@ -440,18 +423,9 @@ function Admin({ handleLogout }) {
               {/* Report */}
               <Route path="/report/attendance" element={<Attendance />} />
               <Route path="/report/enrolment" element={<Enrolment />} />
-              <Route path="/report/fee" element={<Fee />} />
               <Route path="/report/package" element={<Package />} />
-              <Route path="/report/sales" element={<Sales />} />
-              <Route path="/report/studentreport" element={<StudentReport />} />
               <Route path="/report/document" element={<DocumentReport />} />
               <Route path="/report/revenue" element={<RevenueReport />} />
-              <Route path="/report/replace_class" element={<ReplaceClass />} />
-              {/* <Route
-                path="/report/document/view"
-                element={<DocumentReportView />}
-              /> */}
-              <Route path="/report/assessment" element={<AssessmentReport />} />
 
               {/* staff  */}
               <Route path="/staff" element={<Staff />} />
@@ -608,25 +582,6 @@ function Admin({ handleLogout }) {
               <Route
                 path="/reschedule/studentlist"
                 element={<RescheduleStudent />}
-              />
-
-              {/* Schedule Teacher */}
-              <Route path="/scheduleteacher" element={<ScheduleTeacher />} />
-              <Route
-                path="/scheduleteacher/add"
-                element={<ScheduleTeacherAdd />}
-              />
-              <Route
-                path="/scheduleteacher/edit/:id"
-                element={<ScheduleTeacherEdit />}
-              />
-              <Route
-                path="/scheduleteacher/view/:id"
-                element={<ScheduleTeacherView />}
-              />
-              <Route
-                path="/scheduleteacher/scheduletime/:id"
-                element={<ScheduleTime />}
               />
 
               {/* {/ Role /} */}

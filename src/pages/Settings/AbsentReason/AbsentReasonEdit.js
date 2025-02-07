@@ -1,8 +1,6 @@
 import React, { useState } from "react";
-import Button from "react-bootstrap/Button";
 import * as yup from "yup";
 import { useFormik } from "formik";
-import { MdOutlineModeEdit } from "react-icons/md";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
 import {
@@ -18,7 +16,6 @@ function AbsentReasonEdit({ id, onSuccess, handleMenuClose }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const userName = localStorage.getItem("tmsuserName");
-  const [isModified, setIsModified] = useState(false);
 
   const getData = async () => {
     try {
@@ -36,7 +33,6 @@ function AbsentReasonEdit({ id, onSuccess, handleMenuClose }) {
 
   const handleShow = () => {
     setShow(true);
-    setIsModified(false);
     getData();
   };
 
@@ -76,15 +72,7 @@ function AbsentReasonEdit({ id, onSuccess, handleMenuClose }) {
     enableReinitialize: true,
     validateOnChange: true,
     validateOnBlur: true,
-    validate: (values) => {
-      if (
-        Object.values(values).some((value) => (value && typeof value === 'string' ? value.trim() !== "" : value))
-      ) {
-        setIsModified(true);
-      } else {
-        setIsModified(false);
-      }
-    },
+   
   });
 
   return (

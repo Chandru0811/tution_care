@@ -1,15 +1,8 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { FaEye } from "react-icons/fa";
+import React, { useEffect, useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 import api from "../../../config/URL";
-import Delete from "../../../components/common/Delete";
-// import SalaryTypeAdd from "../../Teacher/AddTeacher/SalaryTypeAdd";
 import SalaryTypeEdit from "./SalaryTypeEdit";
 import SalaryTypeAdd from "./SalaryTypeAdd";
-// import LeaveAdd from "./LeaveAdd";
-// import LeaveEdit from "./LeaveEdit";
-import { MdViewColumn } from "react-icons/md";
-import { IoIosAddCircle } from "react-icons/io";
 import { MoreVert as MoreVertIcon } from "@mui/icons-material";
 import {
   createTheme,
@@ -22,11 +15,8 @@ import { MaterialReactTable } from "material-react-table";
 import GlobalDelete from "../../../components/common/GlobalDelete";
 
 const Salary = () => {
-  // const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [extraData, setExtraData] = useState(false);
-  const navigate = useNavigate();
     const [selectedId, setSelectedId] = useState(null);
     const [menuAnchor, setMenuAnchor] = useState(null);
 

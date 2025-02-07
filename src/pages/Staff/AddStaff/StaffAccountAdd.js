@@ -9,13 +9,9 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
 import api from "../../../config/URL";
-import fetchAllCentersWithIds from "../../List/CenterList";
-import { data } from "jquery";
-import { MultiSelect } from "react-multi-select-component";
 
 const validationSchema = Yup.object().shape({
   startDate: Yup.string().required("*Start Date is required"),
-  // colorCode: Yup.string().required("*Color Code is required"),
   teacherId: Yup.string().required("*Staff Id is required"),
   teacherType: Yup.string().required("*Staff Type is required"),
   // shgTypeId: Yup.string().required("*Shg Type is required"),
@@ -29,34 +25,16 @@ const validationSchema = Yup.object().shape({
   workingDays: Yup.array()
     .of(Yup.string().required("*Working Days is required"))
     .min(1, "*Working Days is required"),
-  // centerIds: Yup.array().min(1, "*At least one Centre must be selected"),
 });
 
 const StaffAccountAdd = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
-    const [centerData, setCenterData] = useState([]);
     const [shgData, setShgData] = useState([]);
     const colorInputRef = useRef(null);
-    const [selectedCenters, setSelectedCenters] = useState([]);
-    const centerOptions = centerData.map((center) => ({
-      label: center.centerNames,
-      value: center.id,
-    }));
+
     const userName = localStorage.getItem("userName");
     const centerId = localStorage.getItem("tmscenterId");
 
-    // const fetchData = async () => {
-    //   try {
-    //     const centers = await fetchAllCentersWithIds();
-    //     setCenterData(centers);
-    //   } catch (error) {
-    //     toast.error(error);
-    //   }
-    // };
-
-    // useEffect(() => {
-    //   fetchData();
-    // }, []);
 
     useEffect(() => {
       const getData = async () => {
@@ -164,14 +142,6 @@ const StaffAccountAdd = forwardRef(
         colorInputRef.current.click();
       }
     };
-    // useEffect(() => {
-    //   if (formik.values.centerIds && formik.values.centerIds.length) {
-    //     const initializedCenters = centerOptions.filter((option) =>
-    //       formik.values.centerIds.includes(option.value)
-    //     );
-    //     setSelectedCenters(initializedCenters);
-    //   }
-    // }, [formik.values.centerIds.length, centerOptions]);
 
     return (
       <form
@@ -205,34 +175,6 @@ const StaffAccountAdd = forwardRef(
               )}
             </div>
 
-            {/* <div className="col-md-6 col-12 mb-4">
-              <label className="form-label">
-                Centre<span className="text-danger">*</span>
-              </label>
-              <MultiSelect
-                options={centerOptions}
-                value={selectedCenters}
-                onChange={(selected) => {
-                  setSelectedCenters(selected);
-                  formik.setFieldValue(
-                    "centerIds",
-                    selected.map((option) => option.value)
-                  );
-                }}
-                labelledBy="Select Centers"
-                menuPlacement="top"
-                className={`form-multi-select ${
-                  formik.touched.centerIds && formik.errors.centerIds
-                    ? "is-invalid"
-                    : ""
-                }`}
-              />
-              {formik.touched.centerIds && formik.errors.centerIds && (
-                <div className="invalid-feedback">
-                  {formik.errors.centerIds}
-                </div>
-              )}
-            </div> */}
             <div class="col-md-6 col-12 mb-2 mt-3">
               <label>
                 Staff ID<span class="text-danger">*</span>

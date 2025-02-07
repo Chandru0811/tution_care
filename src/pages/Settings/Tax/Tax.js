@@ -1,6 +1,6 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo,  useState } from "react";
 import { MoreVert as MoreVertIcon } from "@mui/icons-material";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import api from "../../../config/URL";
 import TaxAdd from "./TaxAdd";
 import TaxEdit from "./TaxEdit";
@@ -14,18 +14,12 @@ import {
 import { MaterialReactTable } from "material-react-table";
 import GlobalDelete from "../../../components/common/GlobalDelete";
 
-// import { SCREENS } from "../../config/ScreenFilter";
-
 const Tax = () => {
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [extraData, setExtraData] = useState(false);
-  const navigate = useNavigate();
   const [selectedId, setSelectedId] = useState(null);
   const [menuAnchor, setMenuAnchor] = useState(null);
 
-  // const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
-  // console.log("Screens : ", SCREENS);
 
   const getData = async () => {
     try {

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import api from "../../../config/URL";
@@ -15,7 +15,6 @@ import CloseIcon from "@mui/icons-material/Close";
 import fetchUserListWithoutFreelancerByCenterId from "../../List/UserListWithoutFreelancer";
 
 const validationSchema = Yup.object({
-  // centerId: Yup.string().required("*Center Name is required"),
   userId: Yup.string().required("*Employee Name is required"),
   deductionName: Yup.string().required("*Select the Deduction Name"),
   deductionMonth: Yup.string().required("*Select the Deduction Month"),

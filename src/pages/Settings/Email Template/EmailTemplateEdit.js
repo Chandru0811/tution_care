@@ -1,12 +1,10 @@
 import React, { useState } from "react";
-import Button from "react-bootstrap/Button";
 import * as yup from "yup";
 import { useFormik } from "formik";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css"; // Import the styling for React-Quill
 import { toast } from "react-toastify";
 import api from "../../../config/URL";
-import { MdOutlineModeEdit } from "react-icons/md";
 import {
   Dialog,
   DialogTitle,

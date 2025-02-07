@@ -5,8 +5,6 @@ import * as Yup from "yup";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
 import fetchAllCentersWithIds from "../List/CenterList";
-import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
-import fetchAllClassesWithIdsC from "../List/ClassListByCourse";
 import { MultiSelect } from "react-multi-select-component";
 import fetchAllCoursesWithCenterIds from "../List/CourseListByCenterIdS";
 import fetchAllClassByCourseIds from "../List/ClassListByCourseIdS";

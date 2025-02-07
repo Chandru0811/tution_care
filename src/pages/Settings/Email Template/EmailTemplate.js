@@ -1,10 +1,7 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import Delete from "../../../components/common/Delete";
+import React, { useEffect, useMemo, useState } from "react";
 import EmailTemplateEdit from "./EmailTemplateEdit";
-import EmailTemplateAdd from "./EmailTemplateAdd";
 import api from "../../../config/URL";
-import { Link, useNavigate } from "react-router-dom";
-import { IoIosAddCircle } from "react-icons/io";
+import { Link } from "react-router-dom";
 import { MoreVert as MoreVertIcon } from "@mui/icons-material";
 import {
   createTheme,
@@ -14,12 +11,11 @@ import {
   ThemeProvider,
 } from "@mui/material";
 import { MaterialReactTable } from "material-react-table";
-import GlobalDelete from "../../../components/common/GlobalDelete";
+
 
 const EmailTemplate = () => {
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
   const [selectedId, setSelectedId] = useState(null);
   const [menuAnchor, setMenuAnchor] = useState(null);
 
@@ -73,28 +69,7 @@ const EmailTemplate = () => {
         header: "Subject",
         size: 20,
       },
-      // {
-      //   accessorKey: "description",
-      //   enableHiding: false,
-      //   header: "Description",
-      //   size: 20,
-      //   Cell: ({ cell }) => {
-      //     const content = cell.getValue(); // Assuming cell.getValue() fetches the raw description HTML.
-      //     return (
-      //       <div
-      //         dangerouslySetInnerHTML={{
-      //           __html: content || "<p>No Description Available</p>",
-      //         }}
-      //         style={{
-      //           maxHeight: "100px", // Add styling to limit the height, if necessary.
-      //           overflow: "hidden", // Ensure overflow handling.
-      //           textOverflow: "ellipsis",
-      //         }}
-      //       />
-      //     );
-      //   },
-      // },
-
+    
       { accessorKey: "createdBy", header: "Created By" },
       {
         accessorKey: "createdAt",
@@ -198,16 +173,7 @@ const EmailTemplate = () => {
           </div>
         </div>
         <div className="d-flex justify-content-end align-items-center">
-          {/* <span>
-            <EmailTemplateAdd onSuccess={refreshData} />
-          </span> */}
-          {/* } */}
-          {/* <p>        <button className="btn btn-light border-secondary mx-2" onClick={handleDataShow}>
-
-          {extraData?"Hide":'Show'}
-          <MdViewColumn className="fs-4 text-secondary"/>
-
-        </button> </p> */}
+        
         </div>
         {loading ? (
           <div className="loader-container">

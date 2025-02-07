@@ -1,13 +1,8 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
-
-import { Link, useNavigate } from "react-router-dom";
-import { FaEye } from "react-icons/fa";
+import React, { useEffect, useMemo,  useState } from "react";
+import { Link } from "react-router-dom";
 import api from "../../../config/URL";
 import RaceAdd from "./RaceAdd";
 import RaceEdit from "./RaceEdit";
-import Delete from "../../../components/common/Delete";
-import { MdViewColumn } from "react-icons/md";
-import { IoIosAddCircle } from "react-icons/io";
 import { MoreVert as MoreVertIcon } from "@mui/icons-material";
 import {
   createTheme,
@@ -20,10 +15,8 @@ import { MaterialReactTable } from "material-react-table";
 import GlobalDelete from "../../../components/common/GlobalDelete";
 
 const Race = () => {
-  const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate(); // Replace useHistory with useNavigate
   const [selectedId, setSelectedId] = useState(null);
   const [menuAnchor, setMenuAnchor] = useState(null);
 

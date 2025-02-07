@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import api from "../../config/URL";
 import { MaterialReactTable } from "material-react-table";
 import {
@@ -20,7 +20,7 @@ const ReferalFees = () => {
   const [loading, setLoading] = useState(true);
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
-  const [isClearFilterClicked, setIsClearFilterClicked] = useState(false);
+  // const [isClearFilterClicked, setIsClearFilterClicked] = useState(false);
   const centerId = localStorage.getItem("tmscenterId");
   const [filters, setFilters] = useState({
     centerName: "",
@@ -118,7 +118,7 @@ const ReferalFees = () => {
       toast.error(`Error Fetching Data: ${error.message}`);
     } finally {
       setLoading(false);
-      setIsClearFilterClicked(false);
+      // setIsClearFilterClicked(false);
     }
   };
 
@@ -169,15 +169,15 @@ const ReferalFees = () => {
     },
   });
 
-  const clearFilter = () => {
-    localStorage.removeItem("tmsselectedCenterId"); // Clear center ID from local storage
-    setFilters({
-      centerId: centerId, // Reset filters
-      centerName: "",
-    });
-    // setCenterId(""); // Clear local state for center ID
-    setIsClearFilterClicked(true); // Trigger fetch with no filters
-  };
+  // const clearFilter = () => {
+  //   localStorage.removeItem("tmsselectedCenterId"); // Clear center ID from local storage
+  //   setFilters({
+  //     centerId: centerId, // Reset filters
+  //     centerName: "",
+  //   });
+  //   // setCenterId(""); // Clear local state for center ID
+  //   // setIsClearFilterClicked(true); 
+  // };
 
   const handleMenuClose = () => {
     setMenuAnchor(null);

@@ -28,9 +28,6 @@ function SendNotificationEdit() {
   const [selectedClasses, setSelectedClasses] = useState([]);
   const userName = localStorage.getItem("tmsuserName");
 
-  const MAX_FILE_SIZE = 1024 * 1024 * 1024; // 1 GB
-  const MAX_FILE_NAME_LENGTH = 50;
-
   const validationSchema = Yup.object({
     recipient: Yup.string().required("*Recipient Name is required"),
     messageTitle: Yup.string().required("*Title is required"),
@@ -38,24 +35,7 @@ function SendNotificationEdit() {
     courseIds: Yup.array().min(1, "At least one course must be selected"),
     classIds: Yup.array().min(1, "At least one class must be selected"),
     days: Yup.string().required("*Day is required"),
-    // attachments: Yup.array()
-    //   .of(
-    //     Yup.mixed()
-    //       .test(
-    //         "fileNameLength",
-    //         `*Filename must be ${MAX_FILE_NAME_LENGTH} characters`,
-    //         (file) =>
-    //           !file || (file.name && file.name.length <= MAX_FILE_NAME_LENGTH)
-    //       )
-    //       .test("fileSize", "*Each file must be <= 1GB", (file) =>
-    //         file ? file.size <= MAX_FILE_SIZE : true
-    //       )
-    //       .test("fileType", "*Allowed formats: JPG, PNG, MP4", (file) => {
-    //         const validTypes = ["image/jpeg", "image/png", "video/mp4"];
-    //         return file ? validTypes.includes(file.type) : true;
-    //       })
-    //   )
-    //   .notRequired(), // Attachments are optional
+
   });
 
   const centerOptions = centerData.map((center) => ({

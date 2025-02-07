@@ -6,6 +6,8 @@ import api from "../../config/URL";
 import { toast } from "react-toastify";
 import fetchAllStudentListByCenter from "../List/StudentListByCenter";
 import { MultiSelect } from "react-multi-select-component";
+import { MdOutlineDownloadForOffline } from "react-icons/md";
+import pdfLogo from "../../assets/images/Attactmentpdf.jpg";
 
 function PaymentsEdit() {
   const { id } = useParams();
@@ -13,10 +15,11 @@ function PaymentsEdit() {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const centerId = localStorage.getItem("tmscenterId");
   const [studentData, setStudentData] = useState(null);
+  const [datas, setData] = useState(null);
   const [invoiceData, setInvoiceData] = useState([]);
   const invoiceOptions = invoiceData.map((invoice) => ({
     label: invoice.invoiceNumber,
-    value: invoice.invoiceNumber,
+    value: invoice.id,
     totalAmount: invoice.totalAmount,
   }));
   const [selectedInvoice, setSelectedInvoice] = useState([]);
@@ -194,6 +197,7 @@ function PaymentsEdit() {
     const getData = async () => {
       try {
         const response = await api.get(`/getPaymentById/${id}`);
+        setData(response.data);
         formik.setValues(response.data);
       } catch (error) {
         toast.error(error);
@@ -426,12 +430,60 @@ function PaymentsEdit() {
                       type="file"
                       name="file"
                       accept=".pdf,.doc,.docx,.png,.jpg,.jpeg"
-                      className="form-control"
+                      className="form-control mb-2"
                       onChange={(event) => {
                         formik.setFieldValue("file", event.target.files[0]);
                       }}
                       onBlur={formik.handleBlur}
                     />
+                    {datas?.file && (
+                      <div
+                        class="card border-0 shadow"
+                        style={{ width: "70%" }}
+                      >
+                        <div
+                          onClick={(e) => e.stopPropagation()}
+                          style={{ cursor: "not-allowed" }}
+                        >
+                          <img
+                            class="card-img-top img-fluid"
+                            style={{
+                              height: "10rem",
+                              pointerEvents: "none",
+                              cursor: "not-allowed",
+                            }}
+                            src={pdfLogo}
+                            alt="Resume preview"
+                          />
+                        </div>
+                        <div
+                          class="card-body d-flex justify-content-between align-items-center"
+                          style={{ flexWrap: "wrap" }}
+                        >
+                          <p
+                            class="card-title fw-semibold mb-0 text-wrap"
+                            style={{
+                              flex: 1,
+                              whiteSpace: "nowrap",
+                              overflow: "hidden",
+                              textOverflow: "ellipsis",
+                            }}
+                            title={datas?.file?.split("/").pop()}
+                          >
+                            {datas?.file?.split("/").pop()}
+                          </p>
+                          <a
+                            href={datas?.file}
+                            download
+                            class="btn text-dark ms-2"
+                            title="Download Resume"
+                            style={{ flexShrink: 0 }}
+                          >
+                            <MdOutlineDownloadForOffline size={25} />
+                          </a>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </>
               )}

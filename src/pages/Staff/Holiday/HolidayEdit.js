@@ -2,13 +2,11 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-// import fetchAllCentersWithIds from "../../List/CenterList";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
 
 function HolidayEdit() {
   const validationSchema = Yup.object({
-    // centerId: Yup.string().required("*Centre Name is required"),
     holidayName: Yup.string().required("*Holiday Name is required"),
     startDate: Yup.string().required("*Start Date is required"),
     endDate: Yup.string()
@@ -25,7 +23,6 @@ function HolidayEdit() {
       "*Holiday Description is required"
     ),
   });
-  // const [centerData, setCenterData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const userName = localStorage.getItem("tmsuserName");
   const centerId = localStorage.getItem("tmscenterId");
@@ -75,15 +72,6 @@ function HolidayEdit() {
     },
   });
 
-  // const fetchData = async () => {
-  //   try {
-  //     const centerData = await fetchAllCentersWithIds();
-  //     setCenterData(centerData);
-  //   } catch (error) {
-  //     toast.error(error);
-  //   }
-  // };
-
   useEffect(() => {
     const getData = async () => {
       try {
@@ -100,7 +88,6 @@ function HolidayEdit() {
     };
 
     getData();
-    // fetchData();
   }, []);
 
   return (
@@ -172,35 +159,7 @@ function HolidayEdit() {
           </div>
           <div className="container-fluid px-4">
             <div className="row">
-              {/* <div className="col-lg-6 col-md-6 col-12">
-                <div className="text-start mt-2 mb-3">
-                  <label className="form-label m-0">
-                    Centre Name<span className="text-danger">*</span>
-                  </label>
-                  <select
-                    {...formik.getFieldProps("centerId")}
-                    name="centerId"
-                    className={`form-select ${
-                      formik.touched.centerId && formik.errors.centerId
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                  >
-                    <option selected disabled></option>
-                    {centerData &&
-                      centerData.map((center) => (
-                        <option key={center.id} value={center.id}>
-                          {center.centerNames}
-                        </option>
-                      ))}
-                  </select>
-                  {formik.touched.centerId && formik.errors.centerId && (
-                    <div className="invalid-feedback">
-                      {formik.errors.centerId}
-                    </div>
-                  )}
-                </div>
-              </div> */}
+             
               <div className="col-lg-6 col-md-6 col-12">
                 <div className="text-start mt-2 mb-3">
                   <lable className="form-lable">

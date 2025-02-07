@@ -182,12 +182,12 @@ function PaymentsView() {
               <div className="col-md-6 col-12">
                 <div className="row mb-2">
                   <div className="col-6">
-                    <p className="fw-medium">InvoiceIds</p>
+                    <p className="fw-medium">Invoice No</p>
                   </div>
                   <div className="col-6 text-start">
                     <p className="text-muted text-sm">
                       {" "}
-                      : {data.invoiceIds || "--"}
+                      : {data.invoiceNo || "--"}
                     </p>
                   </div>
                 </div>

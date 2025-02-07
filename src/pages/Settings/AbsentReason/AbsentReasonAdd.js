@@ -9,7 +9,6 @@ import api from "../../../config/URL";
 function AbsentReasonAdd({ onSuccess }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
-  const [isModified, setIsModified] = useState(false);
   const userName = localStorage.getItem("tmsuserName");
 
   const handleClose = () => {
@@ -19,7 +18,6 @@ function AbsentReasonAdd({ onSuccess }) {
 
   const handleShow = () => {
     setShow(true);
-    setIsModified(false);
   };
 
   const validationSchema = yup.object().shape({
@@ -58,13 +56,6 @@ function AbsentReasonAdd({ onSuccess }) {
     enableReinitialize: true,
     validateOnChange: true,
     validateOnBlur: true,
-    validate: (values) => {
-      if (Object.values(values).some((value) => (value && typeof value === 'string' ? value.trim() !== "" : value))) {
-        setIsModified(true);
-      } else {
-        setIsModified(false);
-      }
-    },
   });
 
   return (

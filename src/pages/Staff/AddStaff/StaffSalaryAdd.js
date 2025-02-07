@@ -8,7 +8,6 @@ import { useFormik } from "formik";
 import { toast } from "react-toastify";
 import api from "../../../config/URL";
 import * as Yup from "yup";
-import fetchAllNationalityeWithIds from "../../List/NationalityAndCountryList";
 import fetchAllSalaryTypeWithIds from "../../List/SalaryTypeList";
 
 const validationSchema = Yup.object().shape({

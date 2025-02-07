@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 import { useFormik } from "formik";
-import { FaEdit } from "react-icons/fa";
 import * as Yup from "yup";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
-import { MdOutlineModeEdit } from "react-icons/md";
 import {
   Dialog,
   DialogActions,
@@ -13,7 +11,6 @@ import {
   IconButton,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import Button from "react-bootstrap/Button"; // Still using Bootstrap's Button for styling
 
 function IDTypeEdit({ id, onSuccess, handleMenuClose }) {
   const [show, setShow] = useState(false);

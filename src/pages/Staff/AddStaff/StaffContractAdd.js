@@ -9,7 +9,6 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import api from "../../../config/URL";
 import * as Yup from "yup";
-import fetchAllCentersWithIds from "../../List/CenterList";
 
 const validationSchema = Yup.object().shape({
   employee: Yup.string().required("*Employee is required"),
@@ -55,14 +54,12 @@ const validationSchema = Yup.object().shape({
 const StaffContractAdd = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     console.log("ContractformData", formData);
-    const [centerData, setCenterData] = useState(null);
     const userName = localStorage.getItem("tmsuserName");
     const centerId = localStorage.getItem("tmscenterId");
 
     const navigate = useNavigate();
     const formik = useFormik({
       initialValues: {
-        employer: formData.employer || "",
         employee: formData.teacherName || "",
         uen: formData.uen || "",
         addressOfEmployment: formData.addressOfEmployment || "",
@@ -140,14 +137,6 @@ const StaffContractAdd = forwardRef(
     useImperativeHandle(ref, () => ({
       staffContractAdd: formik.handleSubmit,
     }));
-    const fetchData = async () => {
-      try {
-        const centerData = await fetchAllCentersWithIds();
-        setCenterData(centerData);
-      } catch (error) {
-        toast.error(error);
-      }
-    };
 
     const getData = async () => {
       try {
@@ -162,7 +151,6 @@ const StaffContractAdd = forwardRef(
     useEffect(() => {
       window.scrollTo({ top: 0, left: 0, behavior: "instant" });
       getData();
-      fetchData();
     }, []);
 
     const calculateContractPeriod = (startDate, endDate) => {

@@ -1,8 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../../../config/URL";
-import CountryAdd from "./CountryAdd";
-import CountryEdit from "./CountryEdit";
 import { MoreVert as MoreVertIcon } from "@mui/icons-material";
 import {
   createTheme,
@@ -46,23 +44,23 @@ const Country = () => {
           <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
         ),
       },
-      // {
-      //   accessorKey: "id",
-      //   header: "",
-      //   enableHiding: false,
-      //   enableSorting: false,
-      //   size: 20,
-      //   Cell: ({ cell }) => (
-      //     <IconButton
-      //       onClick={(e) => {
-      //         setMenuAnchor(e.currentTarget);
-      //         setSelectedId(cell.getValue());
-      //       }}
-      //     >
-      //       <MoreVertIcon />
-      //     </IconButton>
-      //   ),
-      // },
+      {
+        accessorKey: "id",
+        header: "",
+        enableHiding: false,
+        enableSorting: false,
+        size: 20,
+        Cell: ({ cell }) => (
+          <IconButton
+            onClick={(e) => {
+              setMenuAnchor(e.currentTarget);
+              setSelectedId(cell.getValue());
+            }}
+          >
+            <MoreVertIcon />
+          </IconButton>
+        ),
+      },
       {
         accessorKey: "country",
         enableHiding: false,
