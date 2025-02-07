@@ -1,11 +1,9 @@
 import { Step, StepLabel, Stepper } from "@mui/material";
-import React, { useEffect, useRef, useState } from "react";
-// import Tick from "../../assets/images/Tick.png";
+import React, { useRef, useState } from "react";
 import StaffPersonalAdd from "./AddStaff/StaffPersonalAdd";
 import StaffAccountAdd from "./AddStaff/StaffAccountAdd";
 import StaffContactAdd from "./AddStaff/StaffContactAdd";
 import StaffRequiredAdd from "./AddStaff/StaffRequiredAdd";
-import StaffLoginAdd from "./AddStaff/StaffLoginAdd";
 import StaffSalaryAdd from "./AddStaff/StaffSalaryAdd";
 import StaffLeaveAdd from "./AddStaff/StaffLeaveAdd";
 import StaffContractAdd from "./AddStaff/StaffContractAdd";

@@ -912,7 +912,7 @@ function RolesAdd() {
                 <select
                   className="form-select form-select-sm iconInput"
                   name="roleName"
-                  value={selectedRole}
+                  // value={selectedRole}
                   onChange={handleRoleChange}
                 >
                   <option disabled>Select Role</option>
@@ -922,7 +922,8 @@ function RolesAdd() {
                         {role.name
                           .toLowerCase()
                           .replace(/_/g, " ") // Replace underscores with spaces
-                          .replace(/\b\w/g, (char) => char.toUpperCase())}{" "}
+                          .replace(/\b\w/g, (char) => char.toUpperCase())
+                          }
                         {/* Format for display */}
                       </option>
                     ))}

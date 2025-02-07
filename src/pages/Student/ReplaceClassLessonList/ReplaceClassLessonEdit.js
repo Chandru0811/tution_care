@@ -2,7 +2,6 @@ import React, { useEffect, useMemo, useState } from "react";
 import {
   Link,
   useLocation,
-  useNavigate,
   useParams,
   useSearchParams,
 } from "react-router-dom";
@@ -30,7 +29,6 @@ function ReplaceClassLessonEdit() {
   const [packageData, setPackageData] = useState(null);
   const [availableDays, setAvailableDays] = useState([]);
   const [loadIndicator, setLoadIndicator] = useState(false);
-  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const centerId = searchParams.get("centerId");
   const [batchData, setBatchData] = useState(null);

@@ -5,7 +5,6 @@ import * as Yup from "yup";
 import { toast } from "react-toastify";
 import api from "../../config/URL";
 import fetchAllCoursesWithIds from "../List/CourseList";
-import fetchAllCentersWithIds from "../List/CenterList";
 
 function StudentTransferOut() {
   const { id } = useParams();
@@ -32,9 +31,7 @@ function StudentTransferOut() {
   const fetchData = async () => {
     try {
       const course = await fetchAllCoursesWithIds();
-      const center = await fetchAllCentersWithIds();
       setCourseData(course);
-      setCenterData(center);
     } catch (error) {
       toast.error(error);
     }

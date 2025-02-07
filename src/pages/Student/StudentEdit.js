@@ -11,7 +11,6 @@ import { OverlayTrigger } from "react-bootstrap";
 import EditStudentDetails from "./EditStudent/EditStudentDetails";
 import EditParentGuardian from "./EditStudent/EditParentGuardian";
 import EditEmergencyContact from "./EditStudent/EditEmergencyContact";
-import EditCourseDetail from "./EditStudent/EditCourceDetails";
 import EditStudentRelation from "./EditStudent/EditStudentRelation";
 import EditTermsAndCondition from "./EditStudent/EditTermsAndCondition";
 

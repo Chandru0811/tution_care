@@ -5,7 +5,6 @@ import api from "../../../config/URL";
 import { toast } from "react-toastify";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import { FaEdit } from "react-icons/fa";
 import { useParams } from "react-router-dom";
 
 const validationSchema = Yup.object().shape({
@@ -42,7 +41,6 @@ const AddParentDetailModel = forwardRef(
     const { id } = useParams();
     const [loadIndicator, setLoadIndicator] = useState(false);
     const [show, setShow] = useState(false);
-    const [data, setData] = useState({});
     const userName = localStorage.getItem("tmsuserName");
 
     const handleClose = () => {
@@ -54,12 +52,6 @@ const AddParentDetailModel = forwardRef(
       setShow(true);
       console.log("Id:", id);
     };
-
-    const [rows, setRows] = useState(
-      formData && formData.parentInformation
-        ? formData.parentInformation.length
-        : 1
-    );
 
     const formik = useFormik({
       initialValues: {
@@ -137,18 +129,18 @@ const AddParentDetailModel = forwardRef(
       }
     }, [formik.submitCount, formik.errors]);
 
-    const getData = async () => {
-      try {
-        const response = await api.get(`/getAllStudentById/${formData.id}`);
-        setData(response.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
+    // const getData = async () => {
+    //   try {
+    //     const response = await api.get(`/getAllStudentById/${formData.id}`);
+    //     setData(response.data);
+    //   } catch (error) {
+    //     console.error("Error fetching data:", error);
+    //   }
+    // };
 
-    useEffect(() => {
-      getData();
-    }, []);
+    // useEffect(() => {
+    //   getData();
+    // }, []);
 
     return (
       <div className="container-fluid">

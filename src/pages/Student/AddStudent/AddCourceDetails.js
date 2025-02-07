@@ -3,7 +3,6 @@ import React, {
   useEffect,
   useImperativeHandle,
   useMemo,
-  useRef,
   useState,
 } from "react";
 import { useFormik } from "formik";
@@ -11,7 +10,6 @@ import * as Yup from "yup";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
 import fetchAllCoursesWithIdsC from "../../List/CourseListByCenter";
-import fetchAllPackageListByCenter from "../../List/PackageListByCenter";
 import { createTheme, ThemeProvider } from "@mui/material";
 import { MaterialReactTable } from "material-react-table";
 
@@ -26,8 +24,6 @@ const AddcourseDetail = forwardRef(
     const [courseData, setCourseData] = useState(null);
     const [packageData, setPackageData] = useState(null);
     const [availableDays, setAvailableDays] = useState([]);
-    const userName = localStorage.getItem("tmsuserName");
-    const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
     const [datas, setDatas] = useState([]);
     const [loading, setLoading] = useState(true);
     const [batchData, setBatchData] = useState(null);
@@ -226,11 +222,9 @@ const AddcourseDetail = forwardRef(
           className: selectedRowData.className,
           course: selectedRowData.course,
           courseId: selectedRowData.courseId,
-          // batchs: selectedRowData.batchs,
           batch: selectedRowData.batch,
           days: selectedRowData.days,
           classRoom: selectedRowData.classRoom,
-          // startDate: selectedRowData.startDate,
           packageId: data.packageId,
           startDate: data.lessonName,
           endDate: selectedRowData.endDate,

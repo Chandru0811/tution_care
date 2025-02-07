@@ -48,20 +48,16 @@ import ClassView from "../pages/Class/ClassView";
 import CenterEdit from "../pages/Center/CenterEdit";
 import StaffAdd from "../pages/Staff/StaffAdd";
 import StaffEdit from "../pages/Staff/StaffEdit";
-import StaffLeave from "../pages/Staff/StaffLeave";
-import StaffPayslip from "../pages/Staff/StaffPayslip";
 import StudentNewView from "../pages/Student/StudentNewView";
 import InvoiceAdd from "../pages/Invoice/InvoiceAdd";
 import InvoiceEdit from "../pages/Invoice/InvoiceEdit";
 import InvoiceView from "../pages/Invoice/InvoiceView";
 import LeadAssessment from "../pages/Lead/LeadAssessment";
-import StudentDeposit from "../pages/Student/StudentDeposit";
 import StudentAdd from "../pages/Student/StudentAdd";
 import StudentEdit from "../pages/Student/StudentEdit";
 import StudentTransferOut from "../pages/Student/StudentTransferOut";
 import StudentChangeClass from "../pages/Student/StudentChangeClass";
 import StudentEndClass from "../pages/Student/StudentEndClass";
-import StaffLeaveView from "../pages/Staff/StaffLeaveView";
 import Attendances from "../pages/Attendance/Attendances";
 import AttendancesAdd from "../pages/Attendance/AttendancesAdd";
 import AttendancesEdit from "../pages/Attendance/AttendancesEdit";
@@ -288,10 +284,6 @@ function Admin({ handleLogout }) {
                 path="/student/view/endClass/:id"
                 element={<StudentEndClass />}
               />
-              <Route
-                path="/student/view/deposit"
-                element={<StudentDeposit />}
-              />
               <Route path="/student/withdraw" element={<WithdrawAdd />} />
               <Route
                 path="/student/register/course/:id"
@@ -432,9 +424,6 @@ function Admin({ handleLogout }) {
               <Route path="/staff/add" element={<StaffAdd />} />
               <Route path="/staff/edit/:staff_id" element={<StaffEdit />} />
               <Route path="/staff/view/:id" element={<StaffNewView />} />
-              <Route path="/staff/leave" element={<StaffLeave />} />
-              <Route path="/staff/leave/view" element={<StaffLeaveView />} />
-              <Route path="/staff/payslip" element={<StaffPayslip />} />
 
               {/* Course  */}
               <Route path="/course" element={<Course />} />

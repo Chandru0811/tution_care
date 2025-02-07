@@ -1,11 +1,10 @@
 import { Box, Step, StepLabel, Stepper, Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Tick from "../../assets/images/Tick.png";
 import StaffPersonalEdit from "./EditStaff/StaffPersonalEdit";
 import StaffAccountEdit from "./EditStaff/StaffAccountEdit";
 import StaffContactEdit from "./EditStaff/StaffContactEdit";
 import StaffRequiredEdit from "./EditStaff/StaffRequiredEdit";
-import StaffLoginEdit from "./EditStaff/StaffLoginEdit";
 import StaffSalaryEdit from "./EditStaff/StaffSalaryEdit";
 import StaffLeaveEdit from "./EditStaff/StaffLeaveEdit";
 import StaffContractEdit from "./EditStaff/StaffContractEdit";

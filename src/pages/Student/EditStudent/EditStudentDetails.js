@@ -8,13 +8,11 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
-import fetchAllCentersWithIds from "../../List/CenterList";
 import fetchAllRaceWithIds from "../../List/RaceList";
 import fetchAllNationalityeWithIds from "../../List/NationalityAndCountryList";
 import fetchAllStudentsWithIds from "../../List/StudentList";
 
 const validationSchema = Yup.object().shape({
-  centerId: Yup.string().required("*Centre is required"),
   studentName: Yup.string().required("*Student Name is required"),
   dateOfBirth: Yup.date()
     .required("*Date of Birth is required")
@@ -52,7 +50,6 @@ const EditStudentDetails = forwardRef(
     const [nationalityData, setNationalityData] = useState(null);
     const userName = localStorage.getItem("tmsuserName");
     const centerId = localStorage.getItem("tmscenterId");
-    const center = localStorage.getItem("tmscenterName");
 
     const fetchData = async () => {
       try {

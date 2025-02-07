@@ -11,7 +11,6 @@ import {
   IconButton,
 } from "@mui/material";
 import GlobalDelete from "../../components/common/GlobalDelete";
-import fetchAllCentersWithIds from "../List/CenterList";
 import { toast } from "react-toastify";
 
 const Student = () => {
@@ -22,7 +21,6 @@ const Student = () => {
     email: "",
     mobileNumber: "",
   });
-  const [centerData, setCenterData] = useState([]);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -223,25 +221,6 @@ const Student = () => {
     }
   };
 
-  const fetchCenterData = async () => {
-    try {
-      const centerData = await fetchAllCentersWithIds();
-      if (centerIDLocal !== null && centerIDLocal !== "undefined") {
-        setFilters((prevFilters) => ({
-          ...prevFilters,
-          centerId: centerIDLocal,
-        }));
-      } else if (centerData !== null && centerData.length > 0) {
-        setFilters((prevFilters) => ({
-          ...prevFilters,
-          centerId: centerData[0].id,
-        }));
-      }
-      setCenterData(centerData);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
 
   const theme = createTheme({
     components: {
@@ -291,13 +270,6 @@ const Student = () => {
     const { name, value } = e.target;
     setFilters((prevFilters) => ({ ...prevFilters, [name]: value }));
   };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      await fetchCenterData(); // Fetch center data
-    };
-    fetchData();
-  }, []);
 
   useEffect(() => {
     fetchStudentData();
@@ -356,29 +328,7 @@ const Student = () => {
         </div>
         <div className="mb-3 d-flex justify-content-between">
           <div className="individual_fliters d-lg-flex ">
-            {/* <div className="form-group mb-0 ms-2 mb-1">
-              <select
-                className="form-select form-select-sm center_list"
-                name="centerId"
-                style={{ width: "100%" }}
-                value={filters.centerId}
-                onChange={(e) => {
-                  const { value } = e.target;
-                  setFilters((prevFilters) => ({
-                    ...prevFilters,
-                    centerId: value,
-                  }));
-                  setCenterId(value);
-                }}
-              >
-                <option value="">All Center</option>
-                {centerData?.map((center) => (
-                  <option key={center.id} value={center.id}>
-                    {center.centerNames}
-                  </option>
-                ))}
-              </select>
-            </div> */}
+          
             <div className="form-group mb-0 ms-2 mb-1">
               <input
                 type="text"

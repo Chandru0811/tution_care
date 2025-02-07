@@ -13,7 +13,6 @@ import fetchAllNationalityeWithIds from "../../List/NationalityAndCountryList";
 import fetchAllStudentsWithIds from "../../List/StudentList";
 
 const validationSchema = Yup.object().shape({
-  // centerId: Yup.string().required("*Centre is required"),
   studentName: Yup.string().required("*Student Name is required"),
   dateOfBirth: Yup.date()
     .required("*Date of Birth is required")

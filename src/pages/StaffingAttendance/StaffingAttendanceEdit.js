@@ -2,14 +2,11 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import fetchAllCentersWithIds from "../List/CenterList";
 import { toast } from "react-toastify";
-// import fetchAllTeacherListByCenter from "../List/TeacherListByCenter";
 import fetchAllEmployeeListByCenter from "../List/EmployeeList";
 import api from "../../config/URL";
 
 const validationSchema = Yup.object({
-  // centerId: Yup.string().required("*Centre name is required"),
   userId: Yup.string().required("*Employee name is required"),
   // date: Yup.date()
   //   .transform((value, originalValue) =>
@@ -47,7 +44,6 @@ const validationSchema = Yup.object({
 });
 
 function StaffingAttendanceEdit() {
-  const [centerData, setCenterData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [userNamesData, setUserNameData] = useState(null);
   const navigate = useNavigate();
@@ -73,14 +69,7 @@ function StaffingAttendanceEdit() {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       setLoadIndicator(true);
-      // let selectedCenterName = "";
       let selectedEmployeeName = "";
-
-      // centerData.forEach((center) => {
-      //   if (parseInt(values.centerId) === center.id) {
-      //     selectedCenterName = center.centerNames || "--";
-      //   }
-      // });
 
       userNamesData.forEach((employee) => {
         if (parseInt(values.userId) === employee.id) {
@@ -89,9 +78,8 @@ function StaffingAttendanceEdit() {
       });
 
       let payload = {
-        centerId:centerId,
+        centerId: centerId,
         updatedBy: userName,
-        // centerName: selectedCenterName,
         userId: values.userId,
         employeeName: selectedEmployeeName,
         date: values.date,
@@ -155,7 +143,7 @@ function StaffingAttendanceEdit() {
       }
 
       try {
-        setLoadIndicator(true)
+        setLoadIndicator(true);
         const response = await api.put(`/updateUserAttendance/${id}`, payload, {
           headers: {
             "Content-Type": "application/json",
@@ -184,27 +172,18 @@ function StaffingAttendanceEdit() {
     }
   };
 
-  const handleAttendanceChange = async (event) => {
-    const attendance = event.target.value;
-    formik.setFieldValue("attendanceStatus", attendance);
-    if (attendance === "Absent") {
-      // Clear the fields if attendance is "Absent"
-      formik.setFieldValue("modeOfWorking");
-      formik.setFieldValue("checkIn", "");
-      formik.setFieldValue("checkOut", "");
-      formik.setFieldValue("checkInmode", "");
-      formik.setFieldValue("checkOutmode", "");
-      formik.setFieldValue("otStartTime", "");
-      formik.setFieldValue("otEndTime", "");
-    }
-  };
-
-  // const fetchData = async () => {
-  //   try {
-  //     const centers = await fetchAllCentersWithIds();
-  //     setCenterData(centers);
-  //   } catch (error) {
-  //     toast.error(error);
+  // const handleAttendanceChange = async (event) => {
+  //   const attendance = event.target.value;
+  //   formik.setFieldValue("attendanceStatus", attendance);
+  //   if (attendance === "Absent") {
+  //     // Clear the fields if attendance is "Absent"
+  //     formik.setFieldValue("modeOfWorking");
+  //     formik.setFieldValue("checkIn", "");
+  //     formik.setFieldValue("checkOut", "");
+  //     formik.setFieldValue("checkInmode", "");
+  //     formik.setFieldValue("checkOutmode", "");
+  //     formik.setFieldValue("otStartTime", "");
+  //     formik.setFieldValue("otEndTime", "");
   //   }
   // };
 
@@ -309,34 +288,6 @@ function StaffingAttendanceEdit() {
             </div>
             <div className="container-fluid px-4 pb-3">
               <div className="row">
-                {/* <div className="col-md-6 col-12 mb-3 ">
-                  <lable className="">Centre Name</lable>
-                  <span className="text-danger">*</span>
-                  <select
-                    {...formik.getFieldProps("centerId")}
-                    className={`form-select ${
-                      formik.touched.centerId && formik.errors.centerId
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    aria-label="Default select example"
-                    onChange={handleCenterChange}
-                  >
-                    <option selected disabled></option>
-                    {centerData &&
-                      centerData.map((center) => (
-                        <option key={center.id} value={center.id}>
-                          {center.centerNames}
-                        </option>
-                      ))}
-                  </select>
-                  {formik.touched.centerId && formik.errors.centerId && (
-                    <div className="invalid-feedback">
-                      {formik.errors.centerId}
-                    </div>
-                  )}
-                </div> */}
-
                 <div className="col-md-6 col-12 mb-3 ">
                   <lable className="">Employee Name</lable>
                   <span className="text-danger">*</span>

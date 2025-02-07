@@ -40,7 +40,7 @@ const EditEmergencyContact = forwardRef(
     const initialRows = formData.emergencyContactInformation
       ? formData.emergencyContactInformation.map(() => ({}))
       : [{}];
-    const [rows, setRows] = useState(initialRows);
+    // const [rows, setRows] = useState(initialRows);
     const [leadDataTrue, setleadDataTrue] = useState(true);
     console.log("leadDataTrue", leadDataTrue);
 
@@ -140,56 +140,56 @@ const EditEmergencyContact = forwardRef(
       },
     });
 
-    const getLeadData = async () => {
-      if (formData.LeadId && leadDataTrue) {
-        try {
-          const response = await api.get(
-            `/getAllLeadInfoById/${formData.LeadId}`
-          );
-          const leadData = response.data;
-          console.log("Lead Data ", leadData);
-          if (!formData.emergencyContactInformation) {
-            formik.setValues({
-              emergencyContactName: leadData.nameOfEmergency || "",
-              emergencyContactNo: leadData.emergencyContact || "",
-              emergencyRelation: leadData.nameOfEmergency || "",
-              emergencyContactInformation: [
-                {
-                  name: leadData.nameOfAuthorised || "",
-                  authorizedRelation: leadData.relationToChils || "",
-                  contactNo: leadData.contactOfAuthorised || "",
-                  postalCode: leadData.postalCode || "",
-                  emergencyContactAddress: leadData.address || "",
-                  files: null || "",
-                },
-              ],
-            });
-            // Set rows based on emergencyContactInformation
-            setRows([
-              {
-                /* Each object can be empty since it's used to map rows */
-              },
-            ]);
-          }
-        } catch (error) {
-          console.error("Error fetching lead data:", error);
-          toast.error("Error fetching lead data");
-        }
-      } else {
-        // If LeadId is not present, ensure rows match emergencyContactInformation
-        setRows(
-          formData.emergencyContactInformation
-            ? formData.emergencyContactInformation.map(() => ({}))
-            : [{}]
-        );
-        formik.setValues((prevValues) => ({
-          ...prevValues,
-          emergencyContactInformation:
-            formData.emergencyContactInformation ||
-            prevValues.emergencyContactInformation,
-        }));
-      }
-    };
+    // const getLeadData = async () => {
+    //   if (formData.LeadId && leadDataTrue) {
+    //     try {
+    //       const response = await api.get(
+    //         `/getAllLeadInfoById/${formData.LeadId}`
+    //       );
+    //       const leadData = response.data;
+    //       console.log("Lead Data ", leadData);
+    //       if (!formData.emergencyContactInformation) {
+    //         formik.setValues({
+    //           emergencyContactName: leadData.nameOfEmergency || "",
+    //           emergencyContactNo: leadData.emergencyContact || "",
+    //           emergencyRelation: leadData.nameOfEmergency || "",
+    //           emergencyContactInformation: [
+    //             {
+    //               name: leadData.nameOfAuthorised || "",
+    //               authorizedRelation: leadData.relationToChils || "",
+    //               contactNo: leadData.contactOfAuthorised || "",
+    //               postalCode: leadData.postalCode || "",
+    //               emergencyContactAddress: leadData.address || "",
+    //               files: null || "",
+    //             },
+    //           ],
+    //         });
+    //         // Set rows based on emergencyContactInformation
+    //         setRows([
+    //           {
+    //             /* Each object can be empty since it's used to map rows */
+    //           },
+    //         ]);
+    //       }
+    //     } catch (error) {
+    //       console.error("Error fetching lead data:", error);
+    //       toast.error("Error fetching lead data");
+    //     }
+    //   } else {
+    //     // If LeadId is not present, ensure rows match emergencyContactInformation
+    //     setRows(
+    //       formData.emergencyContactInformation
+    //         ? formData.emergencyContactInformation.map(() => ({}))
+    //         : [{}]
+    //     );
+    //     formik.setValues((prevValues) => ({
+    //       ...prevValues,
+    //       emergencyContactInformation:
+    //         formData.emergencyContactInformation ||
+    //         prevValues.emergencyContactInformation,
+    //     }));
+    //   }
+    // };
 
     const getStudentData = async () => {
       try {
@@ -628,7 +628,7 @@ const EditEmergencyContact = forwardRef(
                   background: "#eb862a",
                 }}
                 onClick={() => {
-                  setRows((prev) => [...prev, {}]);
+                  // setRows((prev) => [...prev, {}]);
                   formik.setFieldValue("emergencyContactInformation", [
                     ...formik.values.emergencyContactInformation,
                     {

@@ -4,7 +4,6 @@ import { useFormik } from "formik";
 import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import api from "../../config/URL";
-import fetchAllClassesWithIds from "../List/ClassList";
 import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
 import fetchAllClassesWithIdsC from "../List/ClassListByCourse";
 

@@ -13,7 +13,6 @@ import "datatables.net-dt/css/jquery.dataTables.css";
 import "datatables.net";
 import * as Yup from "yup";
 import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
-import fetchAllPackageListByCenter from "../List/PackageListByCenter";
 import { ThemeProvider, createTheme } from "@mui/material";
 import { MaterialReactTable } from "material-react-table";
 

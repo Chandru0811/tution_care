@@ -34,7 +34,7 @@ const validationSchema = Yup.object().shape({
 
 const AddEmergencyContact = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
-    const userName = localStorage.getItem("tmsuserName");
+    // const userName = localStorage.getItem("tmsuserName");
     const [profileImage, setProfileImage] = useState([]);
     // Initialize rows based on emergencyContactInformation length
     const initialRows = formData.emergencyContactInformation

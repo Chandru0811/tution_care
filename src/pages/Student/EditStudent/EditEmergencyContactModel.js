@@ -6,7 +6,6 @@ import { toast } from "react-toastify";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { FaEdit } from "react-icons/fa";
-import { useParams } from "react-router-dom";
 
 const validationSchema = Yup.object().shape({
   contactNo: Yup.string()

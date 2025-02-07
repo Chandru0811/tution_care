@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useSearchParams } from "react-router-dom";
 import api from "../../config/URL";
 import AttactmentPdf from "../../assets/images/Attactmentpdf.jpg";
 import AttactmentExcel from "../../assets/images/AttactmentExcel.jpg";
@@ -10,7 +10,11 @@ import { IoMdDownload } from "react-icons/io";
 import { Button, Modal } from "react-bootstrap";
 
 function AssignmentResultView() {
-  const { id } = useParams();
+  const { id } = useParams(); 
+  const [searchParams] = useSearchParams();
+  const studentId = searchParams.get("studentId");
+  console.log("questionId", id);
+  console.log("studentId", studentId);
   const [data, setData] = useState({});
   console.log("Data", data);
   const [showModal, setShowModal] = useState(false);
@@ -30,11 +34,11 @@ function AssignmentResultView() {
   };
 
   const renderAttachment = (attachment) => {
-    if (!attachment || !attachment.fileUrl) {
+    if (!attachment) {
       return <span>No attachment available</span>;
     }
     // console.log("firstAttachment", attachment)
-    const url = attachment.fileUrl;
+    const url = attachment;
     const extension = url.split(".").pop().toLowerCase();
     let fileName = url.split("/").pop();
     fileName = fileName.replace(/\+/g, " ");
@@ -198,25 +202,12 @@ function AssignmentResultView() {
               <div className="col-md-6 col-12">
                 <div className="row mb-2">
                   <div className="col-6">
-                    <p className="fw-medium">Centre </p>
-                  </div>
-                  <div className="col-6 text-start">
-                    <p className="text-muted text-sm">
-                      {" "}
-                      : {data.center || "--"}
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div className="col-md-6 col-12">
-                <div className="row mb-2">
-                  <div className="col-6">
                     <p className="fw-medium">Course </p>
                   </div>
                   <div className="col-6 text-start">
                     <p className="text-muted text-sm">
                       {" "}
-                      : {data.course || "--"}
+                      : {data.courseName || "--"}
                     </p>
                   </div>
                 </div>
@@ -228,7 +219,7 @@ function AssignmentResultView() {
                     <p className="fw-medium">Class Listing</p>
                   </div>
                   <div className="col-6 text-start">
-                    <p className="text-muted">: {data.classListing || "--"}</p>
+                    <p className="text-muted">: {data.className || "--"}</p>
                   </div>
                 </div>
               </div>
@@ -239,7 +230,7 @@ function AssignmentResultView() {
                     <p className="fw-medium">Teacher</p>
                   </div>
                   <div className="col-6 text-start">
-                    <p className="text-muted">: {data.user || "--"}</p>
+                    <p className="text-muted">: {data.userName || "--"}</p>
                   </div>
                 </div>
               </div>
@@ -262,7 +253,10 @@ function AssignmentResultView() {
                   </div>
                   <div className="col-6 text-start">
                     <p className="text-muted text-sm">
-                      : {data.batchTime || "--"}
+                      :
+                      {data?.batchTimes?.map((time, index) => (
+                        <div key={index}>{time}</div>
+                      ))}
                     </p>
                   </div>
                 </div>
@@ -280,20 +274,6 @@ function AssignmentResultView() {
                   </div>
                 </div>
               </div>
-
-              <div className="col-md-6 col-12">
-                <div className="row mb-2">
-                  <div className="col-6">
-                    <p className="fw-medium"> Student Name</p>
-                  </div>
-                  <div className="col-6 text-start">
-                    <p className="text-muted text-sm">
-                      : {data.studentName || "--"}
-                    </p>
-                  </div>
-                </div>
-              </div>
-
               <div className="col-md-6 col-12">
                 <div className="row mb-2">
                   <div className="col-6">
@@ -323,11 +303,11 @@ function AssignmentResultView() {
                   <div className="col-12">
                     <p className="fw-medium">Teacher Assignment :</p>
                   </div>
-                  {data.attachments && data.attachments.length > 0 ? (
+                  {data.questions && data.questions.length > 0 ? (
                     <div className="col-12">
                       <div className="row">
-                        {data.attachments.map((attachment, index) => (
-                          <div key={index} className="col-md-6 col-12 mb-2">
+                        {data.questions.map((attachment, index) => (
+                          <div key={index} className="col-md-4 col-12 mb-2">
                             {renderAttachment(attachment)}
                           </div>
                         ))}
@@ -343,6 +323,16 @@ function AssignmentResultView() {
                 <div className="row mb-2">
                   <div className="col-12">
                     <p className="fw-medium">Student Assignments:</p>
+
+                    {data?.assignmentAnswerFilesGrouped &&
+                      Object.values(data.assignmentAnswerFilesGrouped).map(
+                        (studentArray) =>
+                          studentArray.map((student) => (
+                            <p key={student.id}>
+                              {student.studentName} ({student.studentId})
+                            </p>
+                          ))
+                      )}
                   </div>
                   {data.attachments && data.attachments.length > 0 ? (
                     <div className="col-12">

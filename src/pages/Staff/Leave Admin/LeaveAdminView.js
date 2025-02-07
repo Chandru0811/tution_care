@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
-import fetchAllCentersWithIds from "../../List/CenterList";
 import pdfLogo from "../../../assets/images/Attactmentpdf.jpg";
 import { MdOutlineDownloadForOffline } from "react-icons/md";
 
@@ -10,19 +9,6 @@ function LeaveAdminView() {
   const [data, setData] = useState([]);
   console.log("Leave Datas:", data);
   const { id } = useParams();
-  const [centerData, setCenterData] = useState(null);
-  // const [teacherData, setTeacherData] = useState(null);
-
-  const fetchData = async () => {
-    try {
-      const centerData = await fetchAllCentersWithIds();
-      // const teacherData = await fetchAllTeachersWithIds();
-      setCenterData(centerData);
-      // setTeacherData(teacherData);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
 
   useEffect(() => {
     const getData = async () => {
@@ -34,7 +20,6 @@ function LeaveAdminView() {
       }
     };
     getData();
-    fetchData();
   }, []);
 
   return (

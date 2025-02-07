@@ -8,7 +8,6 @@ import pdfLogo from "../../../assets/images/Attactmentpdf.jpg";
 import { MdOutlineDownloadForOffline } from "react-icons/md";
 
 const validationSchema = Yup.object({
-  // centerName: Yup.string().required("*Select a Centre Name"),
   userId: Yup.string().required("*Employee Name is required"),
   leaveType: Yup.string().required("*Select a Leave Type"),
   fromDate: Yup.string().required("*From Date is required"),
@@ -21,7 +20,7 @@ const validationSchema = Yup.object({
 function LeaveAdminEdit() {
   const [data, setData] = useState([]);
 
-  const [leaveDatas, setLeaveDatas] = useState([]);
+  // const [leaveDatas, setLeaveDatas] = useState([]);
   const { id } = useParams();
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [daysDifference, setDaysDifference] = useState(0);
@@ -103,7 +102,7 @@ function LeaveAdminEdit() {
       try {
         const response = await api.get(`/getUserLeaveRequestById/${id}`);
         console.log(response.data);
-        setLeaveDatas(response.data);
+        // setLeaveDatas(response.data);
         setData(response.data);
 
         formik.setValues(response.data);

@@ -38,77 +38,6 @@ const AddEmergencyContact = forwardRef(
           formData.studentEmergencyContactAddress || "",
       },
       validationSchema: validationSchema,
-      // onSubmit: async (data) => {
-      //   setFormData((prv) => ({ ...prv, ...data }));
-      //   console.log("Api Data:", data);
-      //   try {
-      //     // const formData = new FormData();
-      //     // formData.append("profileImage", data.profileImage);
-
-      //     const response = await api.put(
-      //       `/updateStudentEmergencyContact/${data.emergencyContactId}`,
-      //       data,
-      //       {
-      //         headers: {
-      //           "Content-Type": "application/json",
-      //         },
-      //       }
-      //     );
-      //     if (response.status === 200) {
-      //       toast.success(response.data.message);
-      //       setFormData((prv) => ({ ...prv, ...data }));
-      //       navigate('/student');
-      //     } else {
-      //       toast.error(response.data.message);
-      //     }
-      //   } catch (error) {
-      //     toast.error(error);
-      //   }
-      // },
-      // onSubmit: async (data) => {
-      //   setFormData((prv) => ({ ...prv, ...data }));
-      //   console.log("Api Data:", data);
-      //   try {
-      //     if (formData.emergencyContactId !== null) {
-      //       console.log("Emergency Contact ID:", data.emergencyContactId);
-      //       const response = await api.put(
-      //         `/updateStudentEmergencyContact/${data.emergencyContactId}`,
-      //         data,
-      //         {
-      //           headers: {
-      //             "Content-Type": "application/json",
-      //           },
-      //         }
-      //       );
-      //       if (response.status === 200) {
-      //         toast.success(response.data.message);
-      //         setFormData((prv) => ({ ...prv, ...data }));
-      //         navigate("/student");
-      //       } else {
-      //         toast.error(response.data.message);
-      //       }
-      //     } else {
-      //       const response = await api.post(
-      //         `/createStudentEmergencyContacts/${formData.id}`,
-      //         data,
-      //         {
-      //           headers: {
-      //             "Content-Type": "application/json",
-      //           },
-      //         }
-      //       );
-      //       if (response.status === 201) {
-      //         toast.success(response.data.message);
-      //         setFormData((prv) => ({ ...prv, ...data }));
-      //         navigate("/student");
-      //       } else {
-      //         toast.error(response.data.message);
-      //       }
-      //     }
-      //   } catch (error) {
-      //     toast.error(error);
-      //   }
-      // },
       onSubmit: async (data) => {
         setLoadIndicators(true);
         console.log("Api Data:", data);
@@ -195,15 +124,6 @@ const AddEmergencyContact = forwardRef(
       getData();
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-
-    // const handleNextStep = () => {
-    //   formik.validateForm().then((errors) => {
-    //     formik.handleSubmit();
-    //     if (Object.keys(errors).length === 0) {
-    //       handleNext();
-    //     }
-    //   });
-    // };
 
     useImperativeHandle(ref, () => ({
       EmergencyContact: formik.handleSubmit,

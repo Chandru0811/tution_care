@@ -18,7 +18,6 @@ const LeaveAdmin = () => {
   const [data, setData] = useState([]);
   console.log("Leave Data:", data);
   const [loading, setLoading] = useState(true);
-  const [leaveTypeData, setLeaveTypeData] = useState([]);
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
   const centerId = localStorage.getItem("tmscenterId");
@@ -111,7 +110,6 @@ const LeaveAdmin = () => {
   const fetchLeaveType = async () => {
     try {
       const response = await api.get(`getAllLeaveSetting`);
-      setLeaveTypeData(response.data);
     } catch (error) {
       toast.error(error.message);
     }

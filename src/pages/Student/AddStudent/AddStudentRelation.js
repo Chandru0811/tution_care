@@ -8,38 +8,23 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
 import api from "../../../config/URL";
-import fetchAllCentersWithIds from "../../List/CenterList";
 import fetchAllStudentListByCenter from "../../List/StudentListByCenter";
 
 const validationSchema = Yup.object().shape({});
 
 const Addrelation = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
-    const [centerData, setCenterData] = useState(null);
     const [studentData, setStudentData] = useState(null);
     const userName = localStorage.getItem("tmsuserName");
+    const centerId = localStorage.getItem("tmscenterId");
 
-    const fetchData = async () => {
-      try {
-        const centerData = await fetchAllCentersWithIds();
-        setCenterData(centerData);
-      } catch (error) {
-        toast.error(error);
-      }
-    };
-    const fetchStudent = async (centerId) => {
+    const fetchStudent = async () => {
       try {
         const student = await fetchAllStudentListByCenter(centerId);
         setStudentData(student);
       } catch (error) {
         toast.error(error);
       }
-    };
-    const handleCenterChange = (event) => {
-      const newStudentRelationCenter = event.target.value;
-      setStudentData([]);
-      formik.setFieldValue("studentRelationCenter", newStudentRelationCenter);
-      fetchStudent(newStudentRelationCenter);
     };
 
     const formik = useFormik({
@@ -106,14 +91,8 @@ const Addrelation = forwardRef(
     }, []);
 
     useEffect(() => {
-      fetchData();
+        fetchStudent();
     }, []);
-
-    useEffect(() => {
-      if (formik.values.studentRelationCenter) {
-        fetchStudent(formik.values.studentRelationCenter);
-      }
-    }, [formik.values.studentRelationCenter]);
 
     useImperativeHandle(ref, () => ({
       StudentRelation: formik.handleSubmit,

@@ -2,9 +2,8 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { MaterialReactTable } from "material-react-table";
 import api from "../../../config/URL";
-import { ThemeProvider, createTheme, IconButton } from "@mui/material";
+import { ThemeProvider, createTheme } from "@mui/material";
 import { toast } from "react-toastify";
-import fetchAllCentersWithIds from "../../List/CenterList";
 import fetchAllCoursesWithIdsC from "../../List/CourseListByCenter";
 
 const ReplaceClassLesson = () => {

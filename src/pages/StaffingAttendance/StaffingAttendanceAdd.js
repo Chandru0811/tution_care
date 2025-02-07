@@ -2,14 +2,12 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import fetchAllCentersWithIds from "../List/CenterList";
 import { toast } from "react-toastify";
 import api from "../../config/URL";
 import fetchAllEmployeeListByCenter from "../List/EmployeeList";
 import { format } from "date-fns";
 
 const validationSchema = Yup.object({
-  // centerId: Yup.string().required("*Centre name is required"),
   userId: Yup.string().required("*Employee name is required"),
   date: Yup.date()
     .transform((value, originalValue) =>
@@ -47,15 +45,12 @@ const validationSchema = Yup.object({
 });
 
 function StaffingAttendanceAdd() {
-  // const [centerData, setCenterData] = useState(null);
   const [userNamesData, setUserNameData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const currentDate = format(new Date(), "yyyy-MM-dd");
   const navigate = useNavigate();
   const userName = localStorage.getItem("tmsuserName");
   const centerId = localStorage.getItem("tmscenterId");
-  // const timestamp = 1723141800000;
-  // const date = new Date(timestamp).toISOString().substring(0, 10);
 
   const formik = useFormik({
     initialValues: {
@@ -76,15 +71,7 @@ function StaffingAttendanceAdd() {
     onSubmit: async (values) => {
       setLoadIndicator(true);
       console.log("Attendance Emp:", values);
-      // let selectedCenterName = "";
       let selectedEmployeeName = "";
-
-      // centerData.forEach((center) => {
-      //   if (parseInt(values.centerId) === center.id) {
-      //     selectedCenterName = center.centerNames || "--";
-      //   }
-      // });
-
       userNamesData.forEach((employee) => {
         if (parseInt(values.userId) === employee.id) {
           selectedEmployeeName = employee.userNames || "--";
@@ -94,7 +81,6 @@ function StaffingAttendanceAdd() {
       let payload = {
         centerId: centerId,
         createdBy: userName,
-        // centerName: selectedCenterName,
         userId: values.userId,
         employeeName: selectedEmployeeName,
         date: values.date,
@@ -192,15 +178,6 @@ function StaffingAttendanceAdd() {
     }
   };
 
-  // const fetchData = async () => {
-  //   try {
-  //     const centers = await fetchAllCentersWithIds();
-  //     setCenterData(centers);
-  //   } catch (error) {
-  //     toast.error(error);
-  //   }
-  // };
-
   useEffect(() => {
     handleCenterChange();
   }, []);
@@ -284,34 +261,7 @@ function StaffingAttendanceAdd() {
             </div>
             <div className="container-fluid px-4 pb-3">
               <div className="row">
-                {/* <div className="col-md-6 col-12 mb-3 ">
-                  <lable className="">Centre Name</lable>
-                  <span className="text-danger">*</span>
-                  <select
-                    {...formik.getFieldProps("centerId")}
-                    className={`form-select ${
-                      formik.touched.centerId && formik.errors.centerId
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    aria-label="Default select example"
-                    onChange={handleCenterChange}
-                  >
-                    <option selected disabled></option>
-                    {centerData &&
-                      centerData.map((center) => (
-                        <option key={center.id} value={center.id}>
-                          {center.centerNames}
-                        </option>
-                      ))}
-                  </select>
-                  {formik.touched.centerId && formik.errors.centerId && (
-                    <div className="invalid-feedback">
-                      {formik.errors.centerId}
-                    </div>
-                  )}
-                </div> */}
-
+               
                 <div className="col-md-6 col-12 mb-3 ">
                   <lable className="">Employee Name</lable>
                   <span className="text-danger">*</span>

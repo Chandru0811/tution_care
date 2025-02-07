@@ -51,7 +51,11 @@ const AssignmentResult = () => {
           </IconButton>
         ),
       },
-      { accessorKey: "assignmentName", enableHiding: false, header: "Assignment Name" },
+      {
+        accessorKey: "assignmentName",
+        enableHiding: false,
+        header: "Assignment Name",
+      },
       {
         accessorKey: "userName",
         enableHiding: false,
@@ -251,7 +255,9 @@ const AssignmentResult = () => {
                 }}
                 muiTableBodyRowProps={({ row }) => ({
                   onClick: () =>
-                    navigate(`/assignmentResult/view/${row.original.questionId}`),
+                    navigate(
+                      `/assignmentResult/view/${row.original.questionId}?studentId=${row.original.studentId}`
+                    ),
                   style: { cursor: "pointer" },
                 })}
               />

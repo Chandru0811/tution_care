@@ -12,26 +12,16 @@ import {
 import { MoreVert as MoreVertIcon } from "@mui/icons-material";
 import { toast } from "react-toastify";
 import GlobalDelete from "../../components/common/GlobalDelete";
-import fetchAllCentersWithIds from "../../pages/List/CenterList";
 
 const StaffingAttendance = () => {
   const navigate = useNavigate();
   const [data, setData] = useState([]);
   console.log("Leave Data:", data);
   const [loading, setLoading] = useState(true);
-  const [centerData, setCenterData] = useState(null);
   const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
 
-  const fetchData = async () => {
-    try {
-      const centerData = await fetchAllCentersWithIds();
-      setCenterData(centerData);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
 
   const columns = useMemo(
     () => [
@@ -187,7 +177,6 @@ const StaffingAttendance = () => {
   };
   useEffect(() => {
     getData();
-    fetchData();
   }, []);
 
   const theme = createTheme({

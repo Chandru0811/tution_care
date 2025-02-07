@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import api from "../../../config/URL";
-// import fetchAllCentersWithIds from "../List/CenterList";
 import { toast } from "react-toastify";
-import fetchAllCentersWithIds from "../../List/CenterList";
-// import fetchAllCoursesWithIds from "../List/CourseList";
 import pdfLogo from "../../../assets/images/Attactmentpdf.jpg";
 import { MdOutlineDownloadForOffline } from "react-icons/md";
 
@@ -12,9 +9,6 @@ function ReplaceClassLessonView() {
   const { id } = useParams();
   const [data, setData] = useState([]);
   const [status, setStatus] = useState("");
-
-  const [centerData, setCenterData] = useState(null);
-  const [courseData, setCourseData] = useState(null);
 
   const getData = async () => {
     try {
@@ -60,19 +54,8 @@ function ReplaceClassLessonView() {
     }
   };
 
-  const fetchData = async () => {
-    try {
-      const centerData = await fetchAllCentersWithIds();
-
-      setCenterData(centerData);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
-
   useEffect(() => {
     getData();
-    fetchData();
   }, [id]);
 
   return (
@@ -195,24 +178,6 @@ function ReplaceClassLessonView() {
         </div>
         <div className="container-fluid px-4">
           <div className="row pb-3">
-            <div className="col-md-6 col-12">
-              <div className="row  mb-2">
-                <div className="col-3  ">
-                  <p className="fw-medium">Center Name</p>
-                </div>
-                <div className="col-9">
-                  <p className="text-muted text-sm">
-                    :{" "}
-                    {centerData &&
-                      centerData.map((center) =>
-                        parseInt(data.centerId) === center.id
-                          ? center.centerNames || "--"
-                          : ""
-                      )}
-                  </p>
-                </div>
-              </div>
-            </div>
             <div className="col-md-6 col-12">
               <div className="row  mb-2">
                 <div className="col-3  ">
