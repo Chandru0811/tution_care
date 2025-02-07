@@ -37,28 +37,7 @@ const ContactEdit = forwardRef(
         updatedBy: userName,
       },
       validationSchema: validationSchema,
-      // onSubmit: async (data) => {
-      //   try {
-      //     const response = await api.put(
-      //       `/updateUserContactInfo/${data.contactId}`,
-      //       data,
-      //       {
-      //         headers: {
-      //           "Content-Type": "application/json",
-      //         },
-      //       }
-      //     );
-      //     if (response.status === 200) {
-      //       toast.success(response.data.message);
-      //       setFormData((prv) => ({ ...prv, ...data }));
-      //       handleNext();
-      //     } else {
-      //       toast.error(response.data.message);
-      //     }
-      //   } catch (error) {
-      //     toast.error(error);
-      //   }
-      // },
+    
       onSubmit: async (values) => {
         setLoadIndicators(true);
         values.updatedBy = userName;
@@ -114,20 +93,6 @@ const ContactEdit = forwardRef(
         }
       },
     });
-
-    // useEffect(() => {
-    //   const getData = async () => {
-    //     const response = await api.get(`/getAllUsersById/${formData.staff_id}`);
-    //     console.log(response.data.userContactInfo[0])
-    //     formik.setValues({
-    //       ...response.data.userContactInfo[0],
-    //       contactId: response.data.userContactInfo[0].id,
-    //     });
-    //   };
-    //   getData();
-    //   // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, []);
-
     useEffect(() => {
       const getData = async () => {
         try {
@@ -180,24 +145,7 @@ const ContactEdit = forwardRef(
           <div className="container-fluid">
             <p className="headColor my-4">Contact Information</p>
             <div class="row">
-              {/* <div class="col-md-6 col-12 mb-2 mt-3">
-                <label>
-                  Email Id<span class="text-danger">*</span>
-                </label>
-                <input
-                  type="email"
-                  className="form-control"
-                  name="email"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.email}
-                  readOnly={datas?.email}   />             
-                {formik.touched.email && formik.errors.email && (
-                  <div className="error text-danger ">
-                    <small>{formik.errors.email}</small>
-                  </div>
-                )}
-              </div> */}
+           
               <div class="col-md-6 col-12 mb-2 mt-3">
                 <label>
                   Contact Number<span class="text-danger">*</span>

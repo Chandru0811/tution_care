@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { IoIosMail, IoIosSettings } from "react-icons/io";
+import { IoIosSettings } from "react-icons/io";
 import { Link, useParams } from "react-router-dom";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
@@ -12,7 +12,6 @@ import fetchAllSalaryTypeWithIds from "../List/SalaryTypeList";
 function TeacherNewView() {
   const { id } = useParams();
   const [data, setData] = useState({});
-  const [centerData, setCenterData] = useState(null);
   const [packageData, setPackageData] = useState(null);
   const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   const table1Ref = useRef();
@@ -27,16 +26,7 @@ function TeacherNewView() {
       toast.error(error.message || "Error fetching salary types");
     }
   };
-  const fetchData = async () => {
-    try {
-      const centerData = await fetchAllCentersWithIds();
-      //   const packageData = await fetchAllPackageList();
-      setCenterData(centerData);
-      setPackageData(packageData);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
+
 
   useEffect(() => {
     const getData = async () => {
@@ -49,7 +39,6 @@ function TeacherNewView() {
       }
     };
     getData();
-    fetchData();
     fetchSalaryTypeData();
   }, [id]);
 
@@ -70,48 +59,7 @@ function TeacherNewView() {
     const name = salaryTypeData?.find((datas) => datas.id === id);
     return name?.salaryType;
   };
-  const handleGeneratePDF = async () => {
-    const pdf = new jsPDF({
-      orientation: "p", // 'p' for portrait, 'l' for landscape
-      unit: "px",
-      format: "a3", // page format
-    });
 
-    // Helper function to capture table as image and add to PDF
-    const addTableToPDF = async (tableRef, pageNumber) => {
-      const table = tableRef.current;
-
-      try {
-        table.style.visibility = "visible";
-        table.style.display = "block";
-        // Generate canvas from table
-        const canvas = await html2canvas(table, { scale: 2 });
-
-        // Convert canvas to PNG image data
-        const imgData = canvas.toDataURL();
-
-        // Calculate PDF dimensions based on canvas
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-
-        // Add image to PDF
-        if (pageNumber > 1) {
-          pdf.addPage();
-        }
-        pdf.addImage(imgData, "PNG", 10, 10, pdfWidth - 20, pdfHeight);
-        table.style.visibility = "hidden";
-        table.style.display = "none";
-      } catch (error) {
-        console.error("Error generating PDF:", error);
-      }
-    };
-
-    // Add each table to PDF
-    await addTableToPDF(table1Ref, 1);
-
-    // Save PDF
-    pdf.save("student-details.pdf");
-  };
   return (
     <div>
       <ol
@@ -685,26 +633,6 @@ function TeacherNewView() {
                 &nbsp;&nbsp;Contract Information
               </p>
               <ul style={{ listStyle: "none", paddingLeft: "0" }}>
-                <li className="stdList">
-                  <b>Details of Employer</b>
-                  <span>
-                    {" "}
-                    {centerData &&
-                      centerData.map((centerId) => {
-                        if (
-                          data &&
-                          data.userContractCreationModels &&
-                          data.userContractCreationModels.length > 0 &&
-                          parseInt(
-                            data.userContractCreationModels[0].employer
-                          ) === centerId.id
-                        ) {
-                          return centerId.centerNames || "--";
-                        }
-                        return null;
-                      })}
-                  </span>
-                </li>
                 <li className="stdList">
                   <b>UEN</b>
                   <span>

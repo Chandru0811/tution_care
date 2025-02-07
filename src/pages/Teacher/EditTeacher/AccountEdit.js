@@ -9,12 +9,9 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
 import api from "../../../config/URL";
-import fetchAllCentersWithIds from "../../List/CenterList";
-import { MultiSelect } from "react-multi-select-component";
 
 const validationSchema = Yup.object().shape({
   startDate: Yup.string().required("*Start Date is required"),
-  // teacherId: Yup.string().required("*Teacher Id is required"),
   teacherType: Yup.string().required("*Teacher Type is require"),
   approvelContentRequired: Yup.string().required(
     "*Approval Required is required"
@@ -27,25 +24,11 @@ const validationSchema = Yup.object().shape({
 
 const AccountEdit = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
-    // const [centerData, setCenterData] = useState([]);
     const colorInputRef = useRef(null);
     const [shgData, setShgData] = useState([]);
-    // const [selectedCenters, setSelectedCenters] = useState([]);
-    // const centerOptions = centerData.map((center) => ({
-    //   label: center.centerNames,
-    //   value: center.id,
-    // }));
+
     const userName = localStorage.getItem("tmsuserName");
     const centerId = localStorage.getItem("tmscenterId");
-
-    // const fetchData = async () => {
-    //   try {
-    //     const centers = await fetchAllCentersWithIds();
-    //     setCenterData(centers);
-    //   } catch (error) {
-    //     toast.error(error);
-    //   }
-    // };
 
     const formik = useFormik({
       initialValues: {
@@ -184,15 +167,7 @@ const AccountEdit = forwardRef(
               approvelContentRequired:
                 data.approvelContentRequired === true ? "Yes" : "No",
             });
-            const centers = response.data.userAccountInfo[0].centers;
-            const selectedCenterIds = centers.map((center) => center.id);
-            // formik.setFieldValue("centerIds", selectedCenterIds);
-            // setSelectedCenters(
-            //   centers.map((center) => ({
-            //     label: center.centerName,
-            //     value: center.id,
-            //   }))
-            // );
+
           } else {
             formik.setValues({
               accountId: null,
@@ -262,53 +237,7 @@ const AccountEdit = forwardRef(
               )}
             </div>
 
-            {/* <div className="col-md-6 col-12 my-2">
-              <label className="form-label m-0">
-                Centre<span className="text-danger">*</span>
-              </label>
-              {centerOptions.length > 0 && (
-                <MultiSelect
-                  options={centerOptions}
-                  value={selectedCenters}
-                  onChange={(selected) => {
-                    setSelectedCenters(selected);
-                    formik.setFieldValue(
-                      "centerIds",
-                      selected.map((option) => option.value)
-                    );
-                  }}
-                  labelledBy="Select Centers"
-                  className={`form-multi-select ${
-                    formik.touched.centerIds && formik.errors.centerIds
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                />
-              )}
-              {formik.touched.centerIds && formik.errors.centerIds && (
-                <div className="invalid-feedback">
-                  {formik.errors.centerIds}
-                </div>
-              )}
-            </div> */}
-            {/* <div class="col-md-6 col-12 mb-2 mt-3">
-              <label>
-                Teacher ID<span class="text-danger">*</span>
-              </label>
-              <input
-                type="text"
-                className="form-control"
-                name="teacherId"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.teacherId}
-              />
-              {formik.touched.teacherId && formik.errors.teacherId && (
-                <div className="error text-danger ">
-                  <small>{formik.errors.teacherId}</small>
-                </div>
-              )}
-            </div> */}
+        
             <div class="col-md-6 col-12 mb-2 mt-3">
               <label>
                 Teacher Type<span class="text-danger">*</span>
@@ -366,27 +295,7 @@ const AccountEdit = forwardRef(
               />
             </div>
 
-            {/* <div class="col-md-6 col-12 mb-2 mt-3">
-            <lable class="">
-              Status<span class="text-danger">*</span>
-            </lable>
-            <select
-              class="form-select "
-              name="status"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.status}
-            >
-              <option value=""></option>
-              <option value="Active">Active</option>
-              <option value="Inactive">In Acitve</option>
-            </select>
-            {formik.touched.status && formik.errors.status && (
-              <div className="error text-danger ">
-                <small>{formik.errors.status}</small>
-              </div>
-            )}
-          </div> */}
+          
             <div class="col-md-6 col-12 mb-2 mt-3">
               <label>End Date</label>
               <input

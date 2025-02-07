@@ -25,28 +25,6 @@ const LoginEdit = forwardRef(
         updatedBy: userName,
       },
       validationSchema: validationSchema,
-      // onSubmit: async (data) => {
-      //   try {
-      //     const response = await api.put(
-      //       `/updateUserLoginInfo/${data.loginId}`,
-      //       data,
-      //       {
-      //         headers: {
-      //           "Content-Type": "application/json",
-      //         },
-      //       }
-      //     );
-      //     if (response.status === 200) {
-      //       toast.success(response.data.message);
-      //       setFormData((prv) => ({ ...prv, ...data }));
-      //       handleNext();
-      //     } else {
-      //       toast.error(response.data.message);
-      //     }
-      //   } catch (error) {
-      //     toast.error(error);
-      //   }
-      // },
 
       onSubmit: async (values) => {
         setLoadIndicators(true);

@@ -6,8 +6,6 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 import Sidebar from "../components/common/Sidebar";
 import Header from "../components/common/Header";
 import Footer from "../components/common/Footer";
-import DataTable from "../pages/Datatable";
-import Datatable2 from "../pages/Datatable2";
 import Course from "../pages/Course/Course";
 import Lead from "../pages/Lead/Lead";
 import Student from "../pages/Student/Student";
@@ -15,7 +13,6 @@ import Teacher from "../pages/Teacher/Teacher";
 import TeacherAdd from "../pages/Teacher/TeacherAdd";
 import TeacherEdit from "../pages/Teacher/TeacherEdit";
 import TeacherLeave from "../pages/Teacher/TeacherLeave";
-import TeacherPayslip from "../pages/Teacher/TeacherPayslip";
 import Attendance from "../pages/Report/Attendance";
 import Enrolment from "../pages/Report/Enrolment";
 import Package from "../pages/Report/Package";
@@ -62,12 +59,10 @@ import Attendances from "../pages/Attendance/Attendances";
 import AttendancesAdd from "../pages/Attendance/AttendancesAdd";
 import AttendancesEdit from "../pages/Attendance/AttendancesEdit";
 import RolesAdd from "../pages/Roles/RolesAdd";
-import TeacherLeaveView from "../pages/Teacher/TeacherLeaveView";
 import DocumentReport from "../pages/Report/DocumentReport";
 import WithdrawAdd from "../pages/Student/WithdrawAdd";
 import EnrollmentAdd from "../pages/Lead/Enrollment/EnrollmentAdd";
 import Video from "../pages/Video";
-import DisplayMedia from "../pages/DisplayMedia";
 import { ToastContainer } from "react-toastify";
 import Reschedule from "../pages/Reschedule/Reschedule";
 import RescheduleStudent from "../pages/Reschedule/RescheduleStudent";
@@ -242,8 +237,6 @@ function Admin({ handleLogout }) {
             <Routes>
               <Route path="*" element={<NewDashboard />} />
               <Route path="/" element={<NewDashboard />} />
-              <Route path="/datatable" element={<DataTable />} />
-              <Route path="/datatable2" element={<Datatable2 />} />
               <Route path="/newTable1" element={<NewTable1 />} />
 
               <Route
@@ -263,7 +256,6 @@ function Admin({ handleLogout }) {
               />
               <Route path="/lead/enrollment" element={<EnrollmentAdd />} />
               <Route path="/video" element={<Video />} />
-              <Route path="/displaymedia" element={<DisplayMedia />} />
               <Route path="lead/contacted" element={<Contacted />} />
 
               {/* {/ Student /} */}
@@ -344,12 +336,6 @@ function Admin({ handleLogout }) {
               <Route path="/teacher/edit/:staff_id" element={<TeacherEdit />} />
               <Route path="/teacher/view/:id" element={<TeacherNewView />} />
               <Route path="/teacher/leave" element={<TeacherLeave />} />
-              <Route
-                path="/teacher/leave/view"
-                element={<TeacherLeaveView />}
-              />
-              <Route path="/teacher/payslip" element={<TeacherPayslip />} />
-
               {/* StaffingCheck */}
               <Route path="/staffing/check" element={<CheckIndex />} />
               {/* StaffingAttendance */}

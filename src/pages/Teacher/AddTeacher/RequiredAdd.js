@@ -16,7 +16,6 @@ const RequiredAdd = forwardRef(
     const userName = localStorage.getItem("tmsuserName");
     const centerId = localStorage.getItem("tmscenterId");
     const [datas, setDatas] = useState();
-    const role = formData.role;
     console.log("Role:", formData.role);
 
     const formik = useFormik({
@@ -60,16 +59,6 @@ const RequiredAdd = forwardRef(
         }
       },
     });
-
-    // const handleNextStep = () => {
-    //   // e.preventDefault()
-    //   formik.validateForm().then((errors) => {
-    //     formik.handleSubmit();
-    //     if (Object.keys(errors).length === 0) {
-    //       handleNext();
-    //     }
-    //   });
-    // };
 
     useEffect(() => {
       const getData = async () => {
@@ -118,105 +107,6 @@ const RequiredAdd = forwardRef(
       >
         <div className="container-fluid" style={{ minHeight: "60vh" }}>
           <p className="headColor my-4">Required Information</p>
-          {/* <div class="row">
-            <div class="col-md-6 col-12 mb-2">
-              <label>Resume / CV</label>
-              <input
-                type="file"
-                class="form-control mt-3"
-                accept=".pdf"
-                name="resume"
-                onChange={(event) => {
-                  formik.setFieldValue("resume", event.currentTarget.files[0]);
-                }}
-                onBlur={formik.handleBlur}
-              />
-              <p class="mt-4">Note : File must be PDF,Max Size 2 MB</p>
-              {datas?.resume && (
-                <div class="card border-0 shadow" style={{ width: "18rem" }}>
-                  <div
-                    onClick={(e) => e.stopPropagation()}
-                    style={{ cursor: "not-allowed" }}
-                  >
-                    <img
-                      class="card-img-top img-fluid"
-                      style={{
-                        height: "10rem",
-                        pointerEvents: "none",
-                        cursor: "not-allowed",
-                      }}
-                      src={pdfLogo}
-                      alt="Resume preview"
-                      onClick={(e) => e.stopPropagation()}
-                    />
-                  </div>
-                  <div class="card-body d-flex justify-content-between align-items-center">
-                    <p class="card-title fw-semibold text-wrap">
-                      {datas?.resume?.split("/").pop()}
-                    </p>
-                    <a
-                      href={datas?.resume}
-                      download
-                      class="btn text-dark"
-                      title="Download Resume"
-                    >
-                      <MdOutlineDownloadForOffline size={25} />
-                    </a>
-                  </div>
-                </div>
-              )}
-            </div>
-            <div class="col-md-6 col-12 mb-2">
-              <label>Education Certificate</label>
-              <input
-                type="file"
-                class="form-control mt-3"
-                accept=".pdf"
-                name="educationCertificate"
-                onChange={(event) => {
-                  formik.setFieldValue(
-                    "educationCertificate",
-                    event.currentTarget.files[0]
-                  );
-                }}
-                onBlur={formik.handleBlur}
-              />
-              <p class="mt-4">Note : File must be PDF,Max Size 2 MB</p>
-              {datas?.educationCertificate && (
-                <div class="card border-0 shadow" style={{ width: "18rem" }}>
-                  <div
-                    onClick={(e) => e.stopPropagation()}
-                    style={{ cursor: "not-allowed" }}
-                  >
-                    <img
-                      class="card-img-top img-fluid"
-                      style={{
-                        height: "10rem",
-                        pointerEvents: "none",
-                        cursor: "not-allowed",
-                      }}
-                      src={pdfLogo}
-                      alt="Education Certificate preview"
-                      onClick={(e) => e.stopPropagation()}
-                    />
-                  </div>
-                  <div class="card-body d-flex justify-content-between align-items-center">
-                    <p class="card-title fw-semibold text-wrap">
-                      {datas?.educationCertificate?.split("/").pop()}
-                    </p>
-                    <a
-                      href={datas?.educationCertificate}
-                      download
-                      class="btn text-dark"
-                      title="Download Certificate"
-                    >
-                      <MdOutlineDownloadForOffline size={25} />
-                    </a>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div> */}
            <div class="row">
             <div class="col-md-6 col-12 mb-2">
               <label>Resume / CV</label>

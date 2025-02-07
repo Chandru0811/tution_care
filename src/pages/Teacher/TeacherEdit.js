@@ -35,7 +35,6 @@ export default function TeacherEdit() {
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
   const [loadIndicator, setLoadIndicator] = useState(false);
-  const location = useLocation();
   const [searchParams] = useSearchParams();
   // Extract the "role" search parameter
   const roleFromURL = searchParams.get("role");

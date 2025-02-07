@@ -2,27 +2,20 @@ import React, {
   forwardRef,
   useEffect,
   useImperativeHandle,
-  useState,
 } from "react";
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import api from "../../../config/URL";
 import * as Yup from "yup";
-import fetchAllCentersWithIds from "../../List/CenterList";
 
 const ContractAdd = forwardRef(
   ({ formData, setLoadIndicators, setFormData }, ref) => {
-    // console.log("formDataContractAdd", formData);
-    // const [centerData, setCenterData] = useState(null);
     const userName = localStorage.getItem("tmsuserName");
     const centerId = localStorage.getItem("tmscenterId");
     const empRole = formData.role;
     console.log("formData.role",formData.role)
     const validationSchema = Yup.object().shape({
-      // const validationSchema = (empRole) => {
-      //   return Yup.object().shape({
-      // employer: Yup.string().required("*Employer is required"),
       employee: Yup.string().required("*Employee is required"),
       uen: Yup.string().required("*UEN is required"),
       addressOfEmployment: Yup.string().required("*Address is required"),
@@ -161,34 +154,7 @@ const ContractAdd = forwardRef(
       }
     }, [formik.submitCount, formik.errors]);
 
-    // const fetchData = async () => {
-    //   try {
-    //     const centerData = await fetchAllCentersWithIds();
-    //     setCenterData(centerData);
-    //   } catch (error) {
-    //     toast.error(error);
-    //   }
-    // };
-
-    // const errors = {};
-    // const { userContractStartDate, userContractEndDate } = values;
-
-    // if (userContractStartDate && userContractEndDate) {
-    //   const startDate = new Date(userContractStartDate);
-    //   const endDate = new Date(userContractEndDate);
-
-    //   if (endDate < startDate) {
-    //     errors.userContractEndDate = 'Contract end date cannot be before start date';
-    //   } else {
-    //     const diffTime = Math.abs(endDate - startDate);
-    //     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    //     formik.setFieldValue('contactPeriod', diffDays.toString());
-    //   }
-    // }
-
-    // const filteredCenters = centerData?.filter((center) =>
-    //   formData.centerId?.includes(center.id)
-    // );
+   
     const getData = async () => {
       try {
         const response = await api.get(`/getAllCenterById/${centerId}`);
@@ -254,34 +220,7 @@ const ContractAdd = forwardRef(
           <div className="container-fluid mt-5" style={{ minHeight: "95vh" }}>
             <span className="mt-3 fw-bold">Details of EMPLOYER</span>
             <div class="row mt-4">
-              {/* <div class="col-md-6 col-12 mb-2 mt-3">
-                <label>Employer</label>
-                <span className="text-danger">*</span>
-                <select
-                  type="text"
-                  className="form-select"
-                  name="employer"
-                  onChange={(e) => {
-                    const selectedId = e.target.value;
-                    formik.setFieldValue("employer", selectedId);
-                    getData(selectedId);
-                  }}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.employer}
-                >
-                  <option selected></option>
-                  {filteredCenters?.map((center) => (
-                    <option key={center.id} value={center.id}>
-                      {center.centerNames}
-                    </option>
-                  ))}
-                </select>
-                {formik.touched.employer && formik.errors.employer && (
-                  <div className="error text-danger ">
-                    <small>{formik.errors.employer}</small>
-                  </div>
-                )}
-              </div> */}
+            
               <div class="col-md-6 col-12 mb-2 mt-3">
                 <label>UEN</label>
                 <span className="text-danger">*</span>

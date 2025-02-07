@@ -46,29 +46,6 @@ const SalaryEdit = forwardRef(
         updatedBy: userName,
       },
       validationSchema: validationSchema,
-      // onSubmit: async (data) => {
-      //   try {
-      //     const response = await api.put(
-      //       `/updateUserSalaryCreation/${data.salaryId}`,
-      //       data,
-      //       {
-      //           "Content-Type": "application/json",
-      //         headers: {
-      //         },
-      //       }
-      //     );
-      //     if (response.status === 200) {
-      //       toast.success(response.data.message);
-      //       setFormData((prv) => ({ ...prv, ...data }));
-      //       handleNext();
-      //     } else {
-      //       toast.error(response.data.message);
-      //     }
-      //   } catch (error) {
-      //     toast.error(error);
-      //   }
-      // },
-
       onSubmit: async (values) => {
         setLoadIndicators(true);
         values.updatedBy = userName;
@@ -117,24 +94,6 @@ const SalaryEdit = forwardRef(
         }
       },
     });
-
-    // useEffect(() => {
-    //   const getData = async () => {
-    //     const response = await api.get(`/getAllUsersById/${formData.staff_id}`);
-    //     console.log(response.data.userSalaryCreationModels[0]);
-    //     formik.setValues({
-    //       ...response.data.userSalaryCreationModels[0],
-    //       effectiveDate:
-    //         response.data.userSalaryCreationModels[0].effectiveDate.substring(
-    //           0,
-    //           10
-    //         ),
-    //       salaryId: response.data.userSalaryCreationModels[0].id,
-    //     });
-    //   };
-    //   getData();
-    //   // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, []);
 
     useEffect(() => {
       const getData = async () => {
