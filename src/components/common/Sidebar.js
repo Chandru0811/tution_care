@@ -260,7 +260,7 @@ function Sidebar() {
               isOpen: false,
               subMenus: [
                 {
-                  title: "Assignment Folder",
+                  title: "Assignment Questionnaire",
                   path: "/assignment",
                   access: storedScreens.documentListingIndex,
                 },
