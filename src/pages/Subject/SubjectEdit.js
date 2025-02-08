@@ -1,11 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import { MdOutlineModeEdit } from "react-icons/md";
 import * as yup from "yup";
 import { useFormik } from "formik";
 import { toast } from "react-toastify";
@@ -16,7 +14,8 @@ function SubjectEdit({ id, onSuccess, handleMenuClose }) {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const role = localStorage.getItem("tmsrole");
   const [isModified, setIsModified] = useState(false);
-
+  console.log(isModified);
+  
   const handleClose = () => {
     setShow(false);
     handleMenuClose();

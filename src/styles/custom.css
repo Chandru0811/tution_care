@@ -1375,3 +1375,19 @@ thead th {
     padding: 20px;
   }
 }
+
+.red-mark{
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: #ff1b1b;
+  padding: 3px;
+}
+
+.green-mark{
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: #2cf200;
+  padding: 3px;
+}

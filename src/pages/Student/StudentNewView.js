@@ -16,7 +16,7 @@ import fetchAllCentersWithIds from "../List/CenterList";
 import fetchAllPackageList from "../List/PackageList";
 import { jsPDF } from "jspdf";
 import html2canvas from "html2canvas";
-import Logo from "../../assets/images/Logo.png";
+import Logo from "../../assets/images/TMS_LOGO.png";
 import PasswordModal from "./StudentNewView/PasswordModal";
 import TransferOutModal from "../StudentMovement/TransferOut/TransferOutModal";
 import NoImage from "../../assets/images/no-photo.png";
@@ -27,11 +27,9 @@ function StudentNewView() {
   const [subActiveTab, setSubActiveTab] = useState("tabA");
   const { id } = useParams();
   const [data, setData] = useState({});
-  const [centerData, setCenterData] = useState(null);
   const [packageData, setPackageData] = useState(null);
   const [password, setPassword] = useState(null);
   const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
-  const centerId = data.centerId;
   const table1Ref = useRef();
   const table2Ref = useRef();
   const [showModal, setShowModal] = useState(false);
@@ -39,6 +37,8 @@ function StudentNewView() {
   const [profileImage, setProfileImage] = useState(null);
   const [responseMessage, setResponseMessage] = useState("");
   const [loadIndicator, setLoadIndicator] = useState(false);
+  const centerName = localStorage.getItem("tmscenterName");
+  const centerId = localStorage.getItem("tmscenterId");
 
   const handleOpenModal = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
@@ -84,9 +84,7 @@ function StudentNewView() {
 
   const fetchData = async () => {
     try {
-      const centerData = await fetchAllCentersWithIds();
       const packageData = await fetchAllPackageList();
-      setCenterData(centerData);
       setPackageData(packageData);
     } catch (error) {
       toast.error(error);
@@ -323,15 +321,8 @@ function StudentNewView() {
                   <span>{data.studentUniqueId || "--"}</span>
                 </li>
                 <li className="stdList">
-                  <b>Centre</b>
-                  <span>
-                    {centerData &&
-                      centerData.map((center) =>
-                        parseInt(data.centerId) === center.id
-                          ? center.centerNames || "--"
-                          : ""
-                      )}
-                  </span>
+                  <b>Student Email</b>
+                  <span>{data.studentEmail || "--"}</span>
                 </li>
                 <li className="stdList">
                   <b>Gender</b>
@@ -642,48 +633,6 @@ function StudentNewView() {
                 </ul>
               </div>
             </div>
-            {/* <div className="card mb-3">
-                <div className="withBorder">
-                  <p className="fw-medium ms-3 my-2">
-                    <BiSolidMessageRounded size={20} />
-                    &nbsp;&nbsp;Remark
-                  </p>
-                  <p className="text-end me-2">
-                    <AddTaskNoteModal />
-                  </p>
-                </div>
-                <div style={{ padding: "10px" }}>
-                  <ul style={{ listStyle: "none", paddingLeft: "0" }}>
-                    <li
-                      className="stdList"
-                      style={{ borderTop: "1px solid #ddd" }}
-                    >
-                      {data.remark || "--"}
-                    </li>
-                  </ul>
-                </div>
-              </div> */}
-            {/* <div className="card" style={{ padding: "10px" }}>
-                <ul style={{ listStyle: "none", paddingLeft: "0" }}>
-                  <li className="stdList" style={{ borderTop: "1px solid #ddd" }}>
-                    <b>Upload Assessment Form</b>
-                    <input
-                      type="file"
-                      className="form-control form-control-sm mt-1"
-                    />
-                  </li>
-                  <li className="stdList">
-                    <b>Upload Enrollment Form</b>
-                    <input
-                      type="file"
-                      className="form-control form-control-sm mt-1"
-                    />
-                  </li>
-                  <button className="btn btn-danger btn-sm mt-2" type="button">
-                    Save
-                  </button>
-                </ul>
-              </div> */}
             <div className="card" style={{ padding: "10px" }}>
               <p className="fw-medium ms-3 my-2">Other Details</p>
               <ul style={{ listStyle: "none", paddingLeft: "0" }}>
@@ -773,19 +722,6 @@ function StudentNewView() {
               >
                 Course/Lessons
               </button>
-            </li>
-            <li className="nav-item">
-              {/* <button
-                  className={`nav-link ${activeTab === "tab2" ? "active" : ""}`}
-                  onClick={() => handleMainTabClick("tab2")}
-                  style={{
-                    borderTop:
-                      activeTab === "tab2" ? "3px solid #fa994af5" : "none",
-                    borderRadius: "0px",
-                  }}
-                >
-                  Account Summary
-                </button> */}
             </li>
             <li className="nav-item">
               <button
@@ -949,12 +885,7 @@ function StudentNewView() {
             <div className=" fw-medium">Centre Name&nbsp;</div>
             <div className="text-muted">
               :{" "}
-              {centerData &&
-                centerData.map((center) =>
-                  parseInt(data.centerId) === center.id
-                    ? center.centerNames || "--"
-                    : ""
-                )}
+              {centerName}
             </div>
           </div>
           <div className="d-flex col-md-4">
@@ -1268,9 +1199,6 @@ function StudentNewView() {
                       S.No
                     </th>
                     <th scope="col" className="fw-medium">
-                      Centre
-                    </th>
-                    <th scope="col" className="fw-medium">
                       Student Name
                     </th>
                     <th scope="col" className="fw-medium">
@@ -1284,22 +1212,6 @@ function StudentNewView() {
                       <tr key={std.id}>
                         <td>{index + 1}</td>
                         <td>
-                          {centerData &&
-                            centerData.map((center) =>
-                              parseInt(std.studentRelationCenter) === center.id
-                                ? center.centerNames || "--"
-                                : ""
-                            )}
-                        </td>
-                        <td>
-                          {/* {(studentData &&
-                                studentData.find(
-                                  (student) =>
-                                    student.id ===
-                                      std.studentRelationStudentName &&
-                                    student.centerId === centerId
-                                )?.studentNames) || */}
-                          {/* "--"} */}
                           {std.studentRelationStudentName || "--"}
                         </td>
                         <td>{std.studentRelation || "--"}</td>
@@ -1328,19 +1240,6 @@ function StudentNewView() {
               data.studentCourseDetailModels.map((std) => (
                 <div className="container p-3">
                   <div className="row pb-3">
-                    <div className="col-md-6 col-12">
-                      <div className="row mt-3  mb-2">
-                        <div className="col-6 ">
-                          <p className="fw-medium">Centre Name</p>
-                        </div>
-                        <div className="col-6">
-                          <p className="text-muted text-sm">
-                            <b className="mx-2">:</b>
-                            {std.centerName || "--"}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
                     <div className="col-md-6 col-12">
                       <div className="row  mb-2 mt-3">
                         <div className="col-6  ">
@@ -1495,7 +1394,6 @@ function StudentNewView() {
                         style={{ width: "50%" }}
                         alt="Parent Signature"
                       />
-                      dfdfd
                     </div>
                   );
                 })}

@@ -73,7 +73,6 @@ const StudentViewCourse = ({ data }) => {
           }
         },
       },
-      { accessorKey: "centerName", enableHiding: false, header: "Center Name" },
       {
         accessorKey: "course",
         enableHiding: false,

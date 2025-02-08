@@ -14,7 +14,6 @@ import api from "../../../config/URL";
 
 const Payroll = () => {
   const [filters, setFilters] = useState({
-    centerName: "",
     employeeName: "",
     roll: "",
   });
@@ -97,7 +96,6 @@ const Payroll = () => {
             <span>Freelancer</span>
           ) : null,
       },
-      // { accessorKey: "centerName", enableHiding: false, header: "Center Name" },
       {
         accessorKey: "employeeName",
         enableHiding: false,
@@ -108,35 +106,6 @@ const Payroll = () => {
         enableHiding: false,
         header: "Net Pay",
       },
-      // {
-      //   accessorKey: "userRole",
-      //   enableHiding: false,
-      //   header: "Role",
-      //   Cell: ({ row }) =>
-      //     row.original.userRole === "SMS_TEACHER" ? (
-      //       <span
-      //         className="badge text-light fw-light"
-      //         style={{ backgroundColor: "#287f71" }}
-      //       >
-      //         SMS TEACHER
-      //       </span>
-      //     ) : row.original.userRole === "SMS_FREELANCER" ? (
-      //       <span
-      //         className="badge text-light fw-light"
-      //         style={{ backgroundColor: "#eb862a" }}
-      //       >
-      //         SMS FREELANCER
-      //       </span>
-      //     ) : row.original.userRole === "SMS_STAFF" ? (
-      //       <span
-      //         className="badge text-light fw-light"
-      //         style={{ backgroundColor: "#ed1a1a" }}
-      //       >
-      //         SMS STAFF
-      //       </span>
-      //     ) : null,
-      // },
-  
       { accessorKey: "bonus", header: "Bonus" },
       { accessorKey: "cpfContributions", header: "Cpf Contributions" },
       { accessorKey: "deductionAmount", header: "Deduction Amount" },
@@ -184,7 +153,7 @@ const Payroll = () => {
 
   useEffect(() => {
     fetchData();
-  },);
+  },[]);
 
   const theme = createTheme({
     components: {
@@ -263,7 +232,6 @@ const Payroll = () => {
 
   const clearFilter = () => {
     setFilters({
-      centerName: "",
       employeeName: "",
       roll: "",
     });
@@ -335,17 +303,6 @@ const Payroll = () => {
         </div>
         <div className="d-flex justify-content-between mb-3 px-2">
           <div className="individual_fliters d-lg-flex ">
-            <div className="form-group mb-0 ms-2 mb-1">
-              <input
-                type="text"
-                className="form-control form-control-sm center_list"
-                style={{ width: "160px" }}
-                placeholder="Centre Name"
-                name="centerName"
-                value={filters.centerName}
-                onChange={handleFilterChange}
-              />
-            </div>
             <div className="form-group mb-0 ms-2 mb-1">
               <input
                 type="text"
