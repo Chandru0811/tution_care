@@ -484,7 +484,7 @@ function ClassAdd() {
                   onBlur={formik.handleBlur}
                   value={formik.values.userId}
                 >
-                  <option></option>
+                  <option selected></option>
                   {teacherData &&
                     teacherData.map((userId) => (
                       <option key={userId.teacherId} value={userId.teacherId}>

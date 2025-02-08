@@ -4,13 +4,9 @@ import CurriculumEdit from "./CurriculumEdit";
 import api from "../../config/URL";
 import {
   Link,
-  useNavigate,
   useParams,
   useSearchParams,
 } from "react-router-dom";
-import fetchAllCoursesWithIds from "../List/CourseList";
-import { toast } from "react-toastify";
-
 import { MaterialReactTable } from "material-react-table";
 import {
   ThemeProvider,
@@ -28,40 +24,9 @@ const Curriculum = () => {
   const courseId = searchParams.get("courseId");
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
-  // const [courseData, setCourseData] = useState(null);
   const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
-
-  // const fetchData = async () => {
-  //   try {
-  //     const courseData = await fetchAllCoursesWithIds();
-  //     setCourseData(courseData);
-  //   } catch (error) {
-  //     toast.error(error);
-  //   }
-  // };
-
-  const getData = async () => {
-    try {
-      const response = await api.get(
-        `/getCourseCurriculumCodeCurriculumOutLetId/${id}`
-      );
-      if (response.status === 200) {
-        setDatas(response.data);
-      }
-    } catch (error) {
-      console.error("Error fetching data ", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-  useEffect(() => {
-    getData();
-    // fetchData();
-  }, [id]);
-
-  // ===New Table
 
   const columns = useMemo(
     () => [
@@ -196,6 +161,21 @@ const Curriculum = () => {
       },
     },
   });
+  const getData = async () => {
+    try {
+      const response = await api.get(
+        `/getCourseCurriculumCodeCurriculumOutLetId/${id}`
+      );
+        setDatas(response.data);
+    } catch (error) {
+      console.error("Error fetching data ", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+    getData();
+  }, []);
 
   const handleMenuClose = () => setMenuAnchor(null);
   return (

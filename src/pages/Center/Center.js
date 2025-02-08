@@ -282,7 +282,7 @@ const Center = ({ handleCenterChanged }) => {
               >
                 Edit
               </MenuItem>
-              <MenuItem>
+              {/* <MenuItem>
                 <GlobalDelete
                   path={`/deleteCenter/${selectedId}`}
                   onDeleteSuccess={fetchData}
@@ -290,7 +290,7 @@ const Center = ({ handleCenterChanged }) => {
                   // deleteCenterData={true}
                   handleCenterChanged={handleCenterChanged}
                 />
-              </MenuItem>
+              </MenuItem> */}
             </Menu>
           </>
         )}

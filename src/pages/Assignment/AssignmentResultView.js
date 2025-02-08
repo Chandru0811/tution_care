@@ -8,6 +8,7 @@ import AttactmentWord from "../../assets/images/AttactmentWord.jpg";
 import AttactmentPpt from "../../assets/images/AttachmentPpt.png";
 import { IoMdDownload } from "react-icons/io";
 import { Button, Modal } from "react-bootstrap";
+import { data } from "jquery";
 
 function AssignmentResultView() {
   const { id } = useParams();
@@ -189,12 +190,38 @@ function AssignmentResultView() {
               <div className="col-md-6 col-12">
                 <div className="row mb-2">
                   <div className="col-6">
+                    <p className="fw-medium">Assignment Name </p>
+                  </div>
+                  <div className="col-6 text-start">
+                    <p className="text-muted text-sm">
+                      {" "}
+                      : {data[0]?.assignmentName || "--"}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="col-md-6 col-12">
+                <div className="row mb-2">
+                  <div className="col-6">
+                    <p className="fw-medium">Assignment Reason </p>
+                  </div>
+                  <div className="col-6 text-start">
+                    <p className="text-muted text-sm">
+                      {" "}
+                      : {data[0]?.assignmentReason || "--"}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="col-md-6 col-12">
+                <div className="row mb-2">
+                  <div className="col-6">
                     <p className="fw-medium">Course </p>
                   </div>
                   <div className="col-6 text-start">
                     <p className="text-muted text-sm">
                       {" "}
-                      : {data.courseName || "--"}
+                      : {data[0]?.courseName || "--"}
                     </p>
                   </div>
                 </div>
@@ -205,7 +232,7 @@ function AssignmentResultView() {
                     <p className="fw-medium">Class Listing</p>
                   </div>
                   <div className="col-6 text-start">
-                    <p className="text-muted">: {data.className || "--"}</p>
+                    <p className="text-muted">: {data[0]?.className || "--"}</p>
                   </div>
                 </div>
               </div>
@@ -215,7 +242,7 @@ function AssignmentResultView() {
                     <p className="fw-medium">Teacher</p>
                   </div>
                   <div className="col-6 text-start">
-                    <p className="text-muted">: {data.userName || "--"}</p>
+                    <p className="text-muted">: {data[0]?.userName || "--"}</p>
                   </div>
                 </div>
               </div>
@@ -225,7 +252,7 @@ function AssignmentResultView() {
                     <p className="fw-medium">Days</p>
                   </div>
                   <div className="col-6 text-start">
-                    <p className="text-muted">: {data.day || "--"}</p>
+                    <p className="text-muted">: {data[0]?.day || "--"}</p>
                   </div>
                 </div>
               </div>
@@ -235,8 +262,8 @@ function AssignmentResultView() {
                     <p className="fw-medium">Batch Time</p>
                   </div>
                   <div className="col-6 text-start">
-                    {data.batchTimes && data.batchTimes.length > 0 ? (
-                      data.batchTimes.map((time, index) => (
+                    {data[0]?.batchTimes && data[0]?.batchTimes?.length > 0 ? (
+                      data[0]?.batchTimes.map((time, index) => (
                         <div key={index}>{time}</div>
                       ))
                     ) : (
@@ -252,7 +279,7 @@ function AssignmentResultView() {
                   </div>
                   <div className="col-6 text-start">
                     <p className="text-muted text-sm">
-                      : {data.folderCategory || "--"}
+                      : {data[0]?.folderCategory || "--"}
                     </p>
                   </div>
                 </div>
@@ -263,7 +290,9 @@ function AssignmentResultView() {
                     <p className="fw-medium">Date</p>
                   </div>
                   <div className="col-6 text-start">
-                    <p className="text-muted text-sm">: {data.date || "--"}</p>
+                    <p className="text-muted text-sm">
+                      : {data[0]?.date || "--"}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -274,7 +303,7 @@ function AssignmentResultView() {
                   </div>
                   <div className="col-6 text-start">
                     <p className="text-muted text-sm">
-                      : {data.expiredDate || "--"}
+                      : {data[0]?.expiredDate || "--"}
                     </p>
                   </div>
                 </div>
@@ -282,12 +311,12 @@ function AssignmentResultView() {
               <div className="col-md-12 col-12 mb-3">
                 <div className="row mb-2">
                   <div className="col-12">
-                    <p className="fw-medium">Teacher Assignment :</p>
+                    <p className="fw-medium">Teacher Questions :</p>
                   </div>
-                  {data.questions && data.questions.length > 0 ? (
+                  {data[0]?.questions && data[0]?.questions.length > 0 ? (
                     <div className="col-12">
                       <div className="row">
-                        {data.questions.map((attachment, index) => (
+                        {data[0]?.questions.map((attachment, index) => (
                           <div key={index} className="col-md-4 col-12 mb-2">
                             {renderAttachment(attachment)}
                           </div>
@@ -302,23 +331,17 @@ function AssignmentResultView() {
               <div className="col-md-12 col-12 mb-3">
                 <div className="row mb-2">
                   <div className="col-12">
-                    <p className="fw-medium">Student Assignments:</p>
+                    <p className="fw-medium">Student Answers:</p>
 
-                    {data?.assignmentAnswerFilesGrouped &&
-                      Object.values(data.assignmentAnswerFilesGrouped).map(
-                        (studentArray) =>
-                          studentArray.map((student) => (
-                            <p key={student.id}>
-                              {student.studentName} ({student.studentId})
-                            </p>
-                          ))
-                      )}
+                    <p>
+                      {data[0]?.studentName}({data[0]?.studentUniqueId})
+                    </p>
                   </div>
-                  {data.attachments && data.attachments.length > 0 ? (
+                  {data[0]?.answers && data[0]?.answers?.length > 0 ? (
                     <div className="col-12">
                       <div className="row">
-                        {data.attachments.map((attachment, index) => (
-                          <div key={index} className="col-md-6 col-12 mb-2">
+                        {data[0]?.answers.map((attachment, index) => (
+                          <div key={index} className="col-md-4 col-12 mb-2">
                             {renderAttachment(attachment)}
                           </div>
                         ))}

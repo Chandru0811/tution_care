@@ -917,11 +917,13 @@ function RolesAdd() {
                   {roleName &&
                     roleName.map((role) => (
                       <option key={role.id} value={role.id}>
-                        {role.name
-                          .toLowerCase()
-                          .replace(/_/g, " ") // Replace underscores with spaces
-                          .replace(/\b\w/g, (char) => char.toUpperCase())
-                          }
+                        {
+                          role.name
+                            .replace(/^TUITION_/, "") // Remove "TUITION_" from the start
+                            .toLowerCase()
+                            .replace(/_/g, " ") // Replace underscores with spaces
+                            .replace(/\b\w/g, (char) => char.toUpperCase()) // Capitalize first letter of each word
+                        }
                         {/* Format for display */}
                       </option>
                     ))}

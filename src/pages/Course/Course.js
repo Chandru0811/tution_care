@@ -56,17 +56,13 @@ const Course = () => {
           </IconButton>
         ),
       },
-      // {
-      //   accessorFn: (row) => row.centerName?.[0] || "",
-      //   enableHiding: false,
-      //   header: "Center Name",
-      // },
-      { accessorKey: "levelName", enableHiding: false, header: "Level" },
       {
         accessorKey: "courseName",
         enableHiding: false,
         header: "Course Name",
       },
+      { accessorKey: "levelName", enableHiding: false, header: "Level" },
+     
       {
         accessorKey: "courseCode",
         enableHiding: false,

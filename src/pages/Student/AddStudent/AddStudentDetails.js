@@ -20,6 +20,9 @@ const validationSchema = Yup.object().shape({
       new Date(new Date().setFullYear(new Date().getFullYear() - 1)),
       "*Date of Birth must be at least 1 year ago"
     ),
+  studentEmail: Yup.string()
+    .email("*Invalid Student Email")
+    .required("*Student Email is required"),
   age: Yup.string().required("*Age is required"),
   gender: Yup.string().required("*Gender is required"),
   schoolType: Yup.string().required("*School Type is required"),

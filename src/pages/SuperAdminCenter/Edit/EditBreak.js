@@ -47,7 +47,12 @@ function EditBreak({ id, onSuccess }) {
     onSubmit: async (values) => {
       setLoadIndicator(true);
       try {
-        const response = await api.put(`/updateCenterBreaks/${id}`, values, {
+        const payload = {
+          breakName: values.breakName,
+          fromDate: values.fromDate,
+          toDate: values.toDate,
+        };
+        const response = await api.put(`/updateCenterBreaks/${id}`, payload, {
           headers: {
             "Content-Type": "application/json",
           },
@@ -111,11 +116,14 @@ function EditBreak({ id, onSuccess }) {
 
   return (
     <>
-      <button type="button"
+      <button
+        type="button"
         style={{
           whiteSpace: "nowrap",
         }}
-        className="btn btn-normal text-start" onClick={handleShow}>
+        className="btn btn-normal text-start"
+        onClick={handleShow}
+      >
         <BiEditAlt />
       </button>
 

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import ReactApexChart from "react-apexcharts";
-import fetchAllCentersWithIds from "../List/CenterList";
 import { toast } from "react-toastify";
 import api from "../../config/URL";
 import { Link } from "react-router-dom";
@@ -17,10 +16,7 @@ function Datatable2() {
     return `${isoYear}-W${String(weekNumber).padStart(2, "0")}`;
   };
   const [selectedType, setSelectedType] = useState(getCurrentWeek());
-  const [centerData, setCenterData] = useState(null);
-  const [selectedCenterId, setSelectedCenterId] = useState(null);
   const [selectedDay, setSelectedDay] = useState("ALL");
-  const centerLocalId = localStorage.getItem("tmsselectedCenterId");
   const centerId = localStorage.getItem("tmscenterId");
 
   const [chartData, setChartData] = useState({
@@ -29,42 +25,8 @@ function Datatable2() {
   });
   console.log("chartData", chartData);
 
-  // const fetchData = async () => {
-  //   try {
-  //     const centerData = await fetchAllCentersWithIds();
-  //     setCenterData(centerData);
-  //     setSelectedCenterId(centerData[0]?.id || null);
-  //   } catch (error) {
-  //     toast.error(error);
-  //   }
-  // };
-
-  const fetchData = async () => {
-    try {
-      const centerData = await fetchAllCentersWithIds();
-      setCenterData(centerData);
-      if (centerData && centerData.length > 0 && !selectedCenterId) {
-        if (centerLocalId !== null && centerLocalId !== "undefined") {
-          setSelectedCenterId(centerLocalId);
-        } else if (centerData !== null && centerData.length > 0) {
-          setSelectedCenterId(centerData[0].id);
-        }
-      }
-    } catch (error) {
-      toast.error(error);
-    }
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
   const handleDayChange = (e) => {
     setSelectedDay(e.target.value);
-  };
-
-  const handleCenterChange = (e) => {
-    setSelectedCenterId(e.target.value);
   };
 
   const fetchEnrollmentData = async (centerId, week, day) => {
@@ -205,23 +167,8 @@ function Datatable2() {
             </div>
           </div>
           <div className="container">
-            <div className="row my-5">
-              {/* <div className="col-md-4 col-12">
-                <label className="form-label">Centre</label>
-                <select
-                  className="form-select"
-                  value={selectedCenterId || ""}
-                  onChange={handleCenterChange}
-                  aria-label="Default select example"
-                >
-                  {centerData &&
-                    centerData.map((center) => (
-                      <option key={center.id} value={center.id}>
-                        {center.centerNames}
-                      </option>
-                    ))}
-                </select>
-              </div> */}
+            <div className="row mb-5">
+             
               <div className="col-md-4 col-12">
                 <label className="form-label">Week</label>
                 <input

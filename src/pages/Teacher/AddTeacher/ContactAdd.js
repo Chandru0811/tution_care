@@ -7,14 +7,11 @@ import api from "../../../config/URL";
 const validationSchema = Yup.object().shape({
   // email: Yup.string().email("*Invalid Email").required("*Email is required"),
   contactNumber: Yup.string()
-    .matches(
-      /^(?:\+?65)?\s?(?:\d{4}\s?\d{4}|\d{3}\s?\d{3}\s?\d{4})$/,
-      "*Invalid Phone Number"
-    )
+    .matches(/^\d{8}$/, "*Mobile Number must be exactly 8 digits")
     .required("*Contact Number is required"),
   address: Yup.string().required("*Address is required"),
   postalCode: Yup.string()
-    .matches(/^[0-9]+$/, "*Postal Code Must be numbers")
+  .matches(/^\d{6}$/, "*Zip Code must be exactly 6 digits")
     .required("*Postal Code is required"),
 });
 const ContactAdd = forwardRef(
@@ -103,6 +100,8 @@ const ContactAdd = forwardRef(
                   type="text"
                   className="form-control"
                   name="contactNumber"
+                  maxLength="8"
+                  onKeyPress={(e) => !/[0-9]/.test(e.key) && e.preventDefault()}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   value={formik.values.contactNumber}
@@ -141,6 +140,8 @@ const ContactAdd = forwardRef(
                   type="text"
                   className="form-control"
                   name="postalCode"
+                  maxLength="6"
+                  onKeyPress={(e) => !/[0-9]/.test(e.key) && e.preventDefault()}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   value={formik.values.postalCode}

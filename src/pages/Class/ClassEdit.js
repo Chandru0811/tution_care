@@ -4,14 +4,12 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
-import fetchAllCentersWithIds from "../List/CenterList";
 import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
 import fetchAllClassRoomWithCenterIds from "../List/ClassRoomList";
 
 function ClassEdit() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [centerData, setCenterData] = useState(null);
   const [courseData, setCourseData] = useState(null);
   const [classRoomData, setClassRoomData] = useState(null);
   const [teacherData, setTeacherData] = useState(null);
@@ -39,7 +37,7 @@ function ClassEdit() {
 
   const formik = useFormik({
     initialValues: {
-      courseId: centerId,
+      courseId: "",
       className: "",
       classType: "",
       durationInHrs: "01",
@@ -58,16 +56,7 @@ function ClassEdit() {
     onSubmit: async (values) => {
       setLoadIndicator(true);
       values.updatedBy = role;
-      const selectedValue = formik.values.centerId;
-      let selectedOptionName = "";
-
-      centerData.forEach((center) => {
-        if (parseInt(selectedValue) === center.id) {
-          selectedOptionName = center.centerNames || "--";
-        }
-      });
-
-      values.centerName = selectedOptionName;
+      values.centerId = centerId;
 
       console.log(values);
 
@@ -100,16 +89,7 @@ function ClassEdit() {
     },
   });
 
-  const fetchData = async () => {
-    try {
-      const centerData = await fetchAllCentersWithIds();
-      setCenterData(centerData);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
-
-  const fetchCourses = async (centerId) => {
+  const fetchCourses = async () => {
     try {
       const courseData = await fetchAllCoursesWithIdsC(centerId);
       setCourseData(courseData);
@@ -118,7 +98,7 @@ function ClassEdit() {
     }
   };
 
-  const fetchClassRoom = async (centerId) => {
+  const fetchClassRoom = async () => {
     try {
       const classId = await fetchAllClassRoomWithCenterIds(centerId);
       setClassRoomData(classId);
@@ -128,23 +108,18 @@ function ClassEdit() {
   };
 
   useEffect(() => {
-    fetchData();
-  }, []);
-
-  useEffect(() => {
     const getData = async () => {
       try {
         const response = await api.get(`/getAllCourseClassListingsById/${id}`);
         formik.setValues(response.data);
-        fetchCourses(response.data.centerId);
-        fetchClassRoom(response.data.centerId);
       } catch (error) {
         toast.error("Error Fetch Data ", error);
       }
     };
 
     getData();
-    fetchData();
+    fetchCourses();
+    fetchClassRoom();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -214,7 +189,7 @@ function ClassEdit() {
     )}`;
   };
 
-  const fetchBatchandTeacherData = async (day ,centerId) => {
+  const fetchBatchandTeacherData = async (day, centerId) => {
     try {
       const response = await api.get(
         `getTeacherWithBatchListByDay?day=${day}&centerId=${centerId}`
@@ -587,8 +562,7 @@ function ClassEdit() {
                   </div>
                 )}
               </div>
-         
-           
+
               <div class="col-md-6 col-12 mb-4">
                 <label>
                   Start Time<span class="text-danger">*</span>
@@ -652,7 +626,7 @@ function ClassEdit() {
                   </div>
                 )}
               </div>
-          
+
               <div className="col-md-6 col-12 mb-4">
                 <label>Remark</label>
                 <textarea

@@ -80,6 +80,7 @@ function DeductionEdit({ id, onSuccess, handleMenuClose }) {
         if (response.status === 200) {
           onSuccess();
           toast.success(response.data.message);
+          handleClose();
           navigate("/deduction");
         } else {
           toast.error(response.data.message);
@@ -88,7 +89,6 @@ function DeductionEdit({ id, onSuccess, handleMenuClose }) {
         toast.error(error.message);
       } finally {
         setLoadIndicator(false);
-        handleClose();
       }
     },
   });
@@ -124,7 +124,7 @@ function DeductionEdit({ id, onSuccess, handleMenuClose }) {
         maxWidth="md"
       >
         <DialogTitle className="headColor">
-          Roles Edit{" "}
+          Deduction Edit{" "}
           <IconButton
             aria-label="close"
             onClick={handleClose}

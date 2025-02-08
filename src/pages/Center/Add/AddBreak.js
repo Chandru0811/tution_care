@@ -88,8 +88,8 @@ function AddBreak({ id, onSuccess, handleMenuClose }) {
         style={{
           whiteSpace: "nowrap",
         }}
-        className="btn btn-normal text-start" onClick={handleShow}>
-        <FiPlusCircle size={20} style={{ color: "#287f71" }} />
+        className="btn btn-normal text-start headColor" onClick={handleShow}>
+        <FiPlusCircle size={20} style={{ color: "#287f71" }} /> Add
       </button>
 
       <Modal
@@ -196,7 +196,7 @@ function AddBreak({ id, onSuccess, handleMenuClose }) {
                   aria-hidden="true"
                 ></span>
               )}
-              Update
+              Save
             </Button>
           </Modal.Footer>
         </form>
