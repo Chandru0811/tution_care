@@ -1,119 +1,17 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import api from "../../config/URL";
-import AttactmentPdf from "../../assets/images/Attactmentpdf.jpg";
-import AttactmentExcel from "../../assets/images/AttactmentExcel.jpg";
-import AttactmentOther from "../../assets/images/Attactmentothers.jpg";
-import AttactmentWord from "../../assets/images/AttactmentWord.jpg";
-import AttactmentPpt from "../../assets/images/AttachmentPpt.png";
 import { MaterialReactTable } from "material-react-table";
-import { IoMdDownload } from "react-icons/io";
 import { ThemeProvider, createTheme } from "@mui/material";
-import { toast } from "react-toastify";
+import { GoDotFill } from "react-icons/go";
 
 function AssignmentView() {
   const { id } = useParams();
   const [data, setData] = useState({});
-  const centerId = localStorage.getItem("tmscenterId");
-  const [selectedId, setSelectedId] = useState(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  const renderAttachment = (attachment) => {
-    if (!attachment || !attachment.fileUrl) {
-      return <span>No attachment available</span>;
-    }
-    // console.log("firstAttachment", attachment)
-    const url = attachment.fileUrl;
-    const extension = url.split(".").pop().toLowerCase();
-    let fileName = url.split("/").pop();
-    fileName = fileName.replace(/\+/g, " ");
-
-    const downloadFile = () => {
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = fileName;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-    };
-
-    // const deletedId = data.smsPushNotificationAttachments[0]?.id;
-
-    const renderCard = (src, label, attachmentId, isVideo = false) => (
-      <div className="position-relative d-flex align-items-center mb-3">
-        <div className="card" style={{ width: "18rem", marginTop: "20px" }}>
-          {isVideo ? (
-            <video
-              width="100%"
-              height="auto"
-              controls
-              style={{ maxHeight: "150px" }}
-            >
-              <source src={src} type="video/mp4" />
-              <source src={src} type="video/ogg" />
-              Your browser does not support the video tag.
-            </video>
-          ) : (
-            <img
-              src={src}
-              alt={label}
-              style={{ width: "100%", maxHeight: "150px", objectFit: "cover" }}
-            />
-          )}
-          <div className="card-body">
-            <div className="row">
-              <div className="col-md-8 col-12 text-end">
-                <p>{fileName}</p>
-              </div>
-              <div className="col-md-4 col-12 text-end">
-                <p>
-                  <IoMdDownload
-                    onClick={downloadFile}
-                    style={{ cursor: "pointer" }}
-                  />
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-        {/* <div
-          className="delete-icon-container"
-          style={{ marginLeft: "10px", marginBottom: "8rem" }}
-        >
-          <Delete path={`/deleteSmsPushNotifications/${deletedId}`} id={attachmentId} onSuccess={getData} />
-          <Delete id={attachmentId} onSuccess={getData} />
-        </div> */}
-      </div>
-    );
-
-    switch (extension) {
-      case "jpg":
-      case "jpeg":
-      case "png":
-      case "gif":
-        return renderCard(url, "Image", attachment.id);
-      case "pdf":
-        return renderCard(AttactmentPdf, "PDF", attachment.id);
-      case "xls":
-      case "xlsx":
-      case "csv":
-        return renderCard(AttactmentExcel, "Excel", attachment.id);
-      case "mp4":
-      case "ogg":
-        return renderCard(url, "Video", attachment.id, true);
-      case "doc":
-      case "docx":
-        return renderCard(AttactmentWord, "Word", attachment.id);
-      case "ppt":
-      case "pptx":
-        return renderCard(AttactmentPpt, "PPT", attachment.id);
-      default:
-        return renderCard(AttactmentOther, "Other", attachment.id);
-    }
-  };
-
-  const getData = async () => {
+  const getData = useCallback(async () => {
     setLoading(true);
     try {
       const response = await api.get(`/getAssignmentQuestionWithAnswer/${id}`);
@@ -123,7 +21,7 @@ function AssignmentView() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [id]);
 
   const columns = useMemo(
     () => [
@@ -132,25 +30,30 @@ function AssignmentView() {
         header: "S.NO",
         enableSorting: true,
         enableHiding: false,
-        size: 40,
+        size: 20,
         cell: ({ cell }) => (
           <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
         ),
       },
       {
-        accessorKey: "isUploaded", // Boolean value (true/false)
+        accessorKey: "answers",
         enableHiding: false,
         header: "Status",
-        cell: ({ cell }) => {
-          const isUploaded = cell.getValue(); // Directly get boolean value
-          return (
-            <span className={`badge ${isUploaded ? "badges-Green" : "badges-red"} fw-light`}>
-              {isUploaded ? "Completed" : "Incomplete"}
-            </span>
+        size: 20,
+        Cell: ({ row }) => {
+          const answers = Array.isArray(row.original.answers)
+            ? row.original.answers
+            : []; // Ensure it's always an array
+
+          console.log("Row ID:", row.original.id, "Answers:", answers); // Debugging log
+
+          return answers.length > 0 ? (
+            <GoDotFill className="text-success fs-6" />
+          ) : (
+            <GoDotFill className="text-danger fs-6" />
           );
         },
       },
-          
       {
         accessorKey: "studentName",
         header: "Student Name",
@@ -160,6 +63,12 @@ function AssignmentView() {
         accessorKey: "studentUniqueId",
         header: "Student ID",
         enableHiding: false,
+      },
+      {
+        accessorKey: "uploadDate",
+        header: "Upload Date",
+        enableHiding: false,
+        Cell: ({ cell }) => cell.getValue()?.substring(0, 10) || "",
       },
       {
         accessorKey: "createdBy",
@@ -228,9 +137,11 @@ function AssignmentView() {
     },
   });
 
+  
   useEffect(() => {
     getData();
-  }, [id]);
+  }, [getData]);
+  
 
   return (
     <div className="container-fluid ">
@@ -367,6 +278,18 @@ function AssignmentView() {
               <div className="col-md-6 col-12">
                 <div className="row mb-2">
                   <div className="col-6">
+                    <p className="fw-medium">Assignment Reason</p>
+                  </div>
+                  <div className="col-6 text-start">
+                    <p className="text-muted text-sm">
+                      : {data.assignmentReason || "--"}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="col-md-6 col-12">
+                <div className="row mb-2">
+                  <div className="col-6">
                     <p className="fw-medium">Date</p>
                   </div>
                   <div className="col-6 text-start">
@@ -382,18 +305,6 @@ function AssignmentView() {
                   <div className="col-6 text-start">
                     <p className="text-muted text-sm">
                       : {data.expiredDate || "--"}
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div className="col-md-6 col-12">
-                <div className="row mb-2">
-                  <div className="col-6">
-                    <p className="fw-medium">Assignment Reason</p>
-                  </div>
-                  <div className="col-6 text-start">
-                    <p className="text-muted text-sm">
-                      : {data.assignmentReason || "--"}
                     </p>
                   </div>
                 </div>
@@ -420,6 +331,14 @@ function AssignmentView() {
                         enableColumnFilters={false}
                         enableDensityToggle={false}
                         enableFullScreenToggle={false}
+                        initialState={{
+                          columnVisibility: {
+                            createdBy: false,
+                            createdAt: false,
+                            updatedBy: false,
+                            updatedAt: false,
+                          },
+                        }}
                         muiTableBodyRowProps={({ row }) => ({
                           onClick: () =>
                             navigate(

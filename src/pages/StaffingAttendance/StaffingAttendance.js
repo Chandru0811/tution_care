@@ -79,7 +79,6 @@ const StaffingAttendance = () => {
             <span>Freelancer</span>
           ) : null,
       },
-      { accessorKey: "centerName", enableHiding: false, header: "Centre Name" },
       {
         accessorKey: "employeeName",
         enableHiding: false,

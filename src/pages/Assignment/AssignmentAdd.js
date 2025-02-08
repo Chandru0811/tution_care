@@ -33,7 +33,7 @@ function AssignmentAdd() {
       .of(Yup.string().required("*Batch Time is required"))
       .min(1, "*At least one Batch Time is required"),
     classListing: Yup.string().required("*Class Listing is required"),
-    folderCategoryListing: Yup.string().required("*FolderCategory is required"),
+    folderCategory: Yup.string().required("*FolderCategory is required"),
     date: Yup.string().required("*Date is required"),
     files: Yup.array()
       .min(1, "*At least one file must be uploaded")
@@ -82,7 +82,7 @@ function AssignmentAdd() {
       date: "",
       day: "",
       expiredDate: "",
-      folderCategoryListing: "group",
+      folderCategory: "group",
       batchTime: "",
       groupSelect: "",
       studentSelect: "",
@@ -342,11 +342,11 @@ function AssignmentAdd() {
             className="d-flex justify-content-between align-items-center p-1 mb-4 px-4"
             style={{ background: "#f5f7f9" }}
           >
-            <div class="d-flex align-items-center">
-              <div class="d-flex">
-                <div class="dot active"></div>
+            <div className="d-flex align-items-center">
+              <div className="d-flex">
+                <div className="dot active"></div>
               </div>
-              <span class="me-2 text-muted">Add Assignment</span>
+              <span className="me-2 text-muted">Add Assignment</span>
             </div>
             <div className="my-2 pe-3 d-flex align-items-center">
               <Link to="/assignment">
@@ -393,11 +393,10 @@ function AssignmentAdd() {
                   )}
                 </div>
               </div>
-
-              <div class="col-md-6 col-12 mb-4">
-                <lable class="">
-                  Course<span class="text-danger">*</span>
-                </lable>
+              <div className="col-md-6 col-12 mb-4">
+                <label className="form-label">
+                  Course<span className="text-danger">*</span>
+                </label>
                 <select
                   {...formik.getFieldProps("course")}
                   name="course"
@@ -421,11 +420,10 @@ function AssignmentAdd() {
                   <div className="invalid-feedback">{formik.errors.course}</div>
                 )}
               </div>
-
-              <div class="col-md-6 col-12 mb-4 d-flex flex-column justify-content-end">
-                <lable class="">
-                  Class Listing<span class="text-danger">*</span>
-                </lable>
+              <div className="col-md-6 col-12 mb-4">
+                <label className="form-label">
+                  Class Listing<span className="text-danger">*</span>
+                </label>
                 <select
                   {...formik.getFieldProps("classListing")}
                   name="classListing"
@@ -450,11 +448,10 @@ function AssignmentAdd() {
                   </div>
                 )}
               </div>
-
-              <div class="col-md-6 col-12 mb-4">
-                <lable class="">
-                  Teacher<span class="text-danger">*</span>
-                </lable>
+              <div className="col-md-6 col-12 mb-4">
+                <label className="form-label">
+                  Teacher<span className="text-danger">*</span>
+                </label>
                 <select
                   {...formik.getFieldProps("userId")}
                   name="userId"
@@ -477,9 +474,8 @@ function AssignmentAdd() {
                   <div className="invalid-feedback">{formik.errors.userId}</div>
                 )}
               </div>
-
               <div className="col-md-6 col-12 mb-4">
-                <label className="">
+                <label className="form-label">
                   Days<span className="text-danger">*</span>
                 </label>
                 <select
@@ -507,7 +503,7 @@ function AssignmentAdd() {
               </div>
 
               <div className="col-md-6 col-12 mb-4">
-                <label className="">
+                <label className="form-label">
                   Batch Time<span className="text-danger">*</span>
                 </label>
                 <MultiSelect
@@ -555,7 +551,7 @@ function AssignmentAdd() {
                       className="form-check-input "
                       type="radio"
                       id="group"
-                      name="folderCategoryListing"
+                      name="folderCategory"
                       value="group"
                       checked={folderCategory === "group"}
                       onChange={() => setFolderCategory("group")}
@@ -569,7 +565,7 @@ function AssignmentAdd() {
                       className="form-check-input "
                       type="radio"
                       id="individual"
-                      name="folderCategoryListing"
+                      name="folderCategory"
                       value="individual"
                       checked={folderCategory === "individual"}
                       onChange={() => setFolderCategory("individual")}
@@ -578,14 +574,14 @@ function AssignmentAdd() {
                     <label htmlFor="individual">Individual</label>
                   </div>
                 </div>
-                {formik.touched.folderCategoryListing &&
-                  formik.errors.folderCategoryListing && (
+                {formik.touched.folderCategory &&
+                  formik.errors.folderCategory && (
                     <div className="invalid-feedback">
-                      {formik.errors.folderCategoryListing}
+                      {formik.errors.folderCategory}
                     </div>
                   )}
               </div>
-              <div class="col-md-6 col-12 mb-3">
+              <div className="col-md-6 col-12 mb-3">
                 {folderCategory === "group" ? (
                   <></>
                 ) : (

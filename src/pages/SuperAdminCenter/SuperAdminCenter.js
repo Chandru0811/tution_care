@@ -16,9 +16,8 @@ import GlobalDelete from "../../components/common/GlobalDelete";
 const SuperAdminCenter = ({ handleCenterChanged }) => {
   const [filters, setFilters] = useState({
     centerName: "",
-    centerCode: "",
+    name: "",
     email: "",
-    centerManagerId: "",
   });
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -103,26 +102,6 @@ const SuperAdminCenter = ({ handleCenterChanged }) => {
             setSelectedStatus(row.original.centerStatus);
           }, [row.original.centerStatus]);
 
-          // const handleStatusChange = async (event) => {
-          //   const newStatus = event.target.value;
-
-          //   try {
-          //     const response = await api.put(
-          //       `/statusApproval/${
-          //         row.original.id
-          //       }?newStatus=${encodeURIComponent(newStatus)}`
-          //     );
-
-          //     if (response.status === 200) {
-          //       toast.success("Status updated successfully");
-          //       setSelectedStatus(newStatus);
-          //       fetchData();
-          //     }
-          //   } catch (error) {
-          //     toast.error("Failed to update status");
-          //   }
-          // };
-
           const handleStatusChange = async (event) => {
             const newStatus = event.target.value;
             setLoading(true);
@@ -138,26 +117,6 @@ const SuperAdminCenter = ({ handleCenterChanged }) => {
                 toast.success("Status updated successfully");
                 setSelectedStatus(newStatus);
                 fetchData();
-
-                // Additional API call if the new status is "Approve"
-                if (newStatus === "Approve") {
-                  try {
-                    const newCenterId = row.original.id; // Assuming `id` is the selected newCenterId
-                    const oldCenterId = 1; // Replace this with actual oldCenterId if it's dynamic
-
-                    const permissionResponse = await api.put(
-                      `/api/setApiPermissions?oldCenterId=${oldCenterId}&newCenterId=${newCenterId}`
-                    );
-
-                    if (permissionResponse.status === 200) {
-                      toast.success("Permissions updated successfully");
-                    } else {
-                      toast.error("Failed to update permissions");
-                    }
-                  } catch (error) {
-                    toast.error("Error updating permissions");
-                  }
-                }
               }
             } catch (error) {
               toast.error("Failed to update status");
@@ -285,9 +244,8 @@ const SuperAdminCenter = ({ handleCenterChanged }) => {
   const clearFilter = () => {
     setFilters({
       centerName: "",
-      centerCode: "",
+      name: "",
       email: "",
-      centerManagerId: "",
     });
   };
 
@@ -340,12 +298,12 @@ const SuperAdminCenter = ({ handleCenterChanged }) => {
             <div className="form-group mb-0 ms-2 mb-1">
               <input
                 type="text"
-                name="centerCode"
-                value={filters.centerCode}
+                name="name"
+                value={filters.name}
                 onChange={handleFilterChange}
                 className="form-control form-control-sm center_list"
                 style={{ width: "160px" }}
-                placeholder="Code"
+                placeholder="Name"
                 autoComplete="off"
               />
             </div>

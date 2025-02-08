@@ -94,24 +94,6 @@ function StaffingAttendanceView() {
             <div className="col-md-6 col-12">
               <div className="row    mb-2">
                 <div className="col-6 ">
-                  <p className="fw-medium">Centre Name </p>
-                </div>
-                <div className="col-6">
-                  <p className="text-muted text-sm">
-                    :{" "}
-                    {centerData &&
-                      centerData.map((centerId) =>
-                        parseInt(data.centerId) === centerId.id
-                          ? centerId.centerNames || "--"
-                          : ""
-                      )}
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="col-md-6 col-12">
-              <div className="row    mb-2">
-                <div className="col-6 ">
                   <p className="fw-medium">Employee Name </p>
                 </div>
                 <div className="col-6">

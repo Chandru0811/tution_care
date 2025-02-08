@@ -8,72 +8,55 @@ import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
 import fetchAllClassesWithIdsC from "../List/ClassListByCourse";
 import fetchAllTeacherListByCenter from "../List/TeacherListByCenter";
 import fetchAllStudentListByCenter from "../List/StudentListByCenter";
-import fetchAllCentersWithIds from "../List/CenterList";
 import { MultiSelect } from "react-multi-select-component";
-
-const validationSchema = Yup.object({
-  // center: Yup.string().required("*Centre is required"),
-  course: Yup.string().required("*Course is required"),
-  userId: Yup.string().required("*Teacher is required"),
-  day: Yup.string().required("*Days is required"),
-  batchTime: Yup.array()
-    .of(Yup.string().required("*Batch Time is required"))
-    .min(1, "*At least one Batch Time is required"),
-  classListing: Yup.string().required("*Class Listing is required"),
-  folderCategoryListing: Yup.string().required("*FolderCategory is required"),
-  date: Yup.string().required("*Date is required"),
-  studentId: Yup.array()
-    .of(Yup.string())
-    .when("folderCategoryListing", {
-      is: "individual",
-      then: Yup.array()
-        .min(1, "*Select at least one student")
-        .required("*Student selection is required"),
-      otherwise: Yup.array().notRequired(),
-    }),
-  files: Yup.mixed().required("*Assignment file is required"),
-});
+import { CgTrash } from "react-icons/cg";
 
 function AssignmentEdit() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [folderCategory, setFolderCategory] = useState("group");
-  const [centerData, setCenterData] = useState(null);
   const [classData, setClassData] = useState(null);
   const [courseData, setCourseData] = useState(null);
-  const [studentData, setStudentData] = useState([]);
-  const [selectedStudents, setSelectedStudents] = useState([]);
-  const studentDataOptions = Array.isArray(studentData)
-    ? studentData.map((std) => ({
-        label: std.studentNames,
-        value: std.id,
-      }))
-    : []; // Fallback to an empty array if studentData is invalid
+  const [studentData, setStudentData] = useState(false);
   const [userData, setUserData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
-  const userName = localStorage.getItem("tmsuserName");
   const centerId = localStorage.getItem("tmscenterId");
   const [batchData, setBatchData] = useState(null);
+  const [selectedStudents, setSelectedStudents] = useState([]);
   const [selectedBatchTimes, setSelectedBatchTimes] = useState([]);
+
+  const validationSchema = Yup.object({
+    assignmentName: Yup.string().required("*Assignment Name is required"),
+    courseId: Yup.string().required("*Course is required"),
+    userId: Yup.string().required("*Teacher is required"),
+    day: Yup.string().required("*Days is required"),
+    batchTime: Yup.array()
+      .of(Yup.string().required("*Batch Time is required"))
+      .min(1, "*At least one Batch Time is required"),
+    classId: Yup.string().required("*Class Listing is required"),
+    folderCategory: Yup.string().required("*FolderCategory is required"),
+    date: Yup.string().required("*Date is required"),
+  });
 
   const formik = useFormik({
     initialValues: {
       center: centerId,
-      course: "",
+      assignmentName: "",
+      courseId: "",
       userId: "",
-      classListing: "",
+      classId: "",
       date: "",
       day: "",
       expiredDate: "",
-      folderCategoryListing: "group",
+      folderCategory: "group",
       batchTime: "",
       groupSelect: "",
       studentSelect: "",
-      createdBy: userName,
       studentIds: [],
+      assignmentReason: "",
       files: [] || null,
     },
-    // validationSchema: validationSchema,
+    validationSchema: validationSchema,
     onSubmit: async (values) => {
       setLoadIndicator(true);
       try {
@@ -81,35 +64,37 @@ function AssignmentEdit() {
         let selectedCourseName = "";
 
         classData.forEach((cls) => {
-          if (parseInt(values.classListing) === cls.id) {
+          if (parseInt(values.classId) === cls.id) {
             selectedClassName = cls.classNames || "--";
           }
         });
 
-        courseData.forEach((course) => {
-          if (parseInt(values.course) === course.id) {
-            selectedCourseName = course.courseNames || "--";
+        courseData.forEach((courseId) => {
+          if (parseInt(values.courseId) === courseId.id) {
+            selectedCourseName = courseId.courseNames || "--";
           }
         });
         const formData = new FormData();
+        formData.append("questionId", id);
         formData.append("centerId", centerId);
-        formData.append("userId", 12);
+        formData.append("userId", values.userId);
+        formData.append("assignmentName", values.assignmentName);
+        formData.append("assignmentReason", values.assignmentReason);
         formData.append("day", values.day);
         formData.append("classListing", selectedClassName);
         formData.append("course", selectedCourseName);
-        formData.append("courseId", values.course);
-        formData.append("classId", values.classListing);
+        formData.append("courseId", values.courseId);
+        formData.append("classId", values.classId);
         formData.append("folderCategory", folderCategory);
         formData.append("batchTime", values.batchTime);
         formData.append("date", values.date);
         formData.append("expiredDate", values.expiredDate);
-        formData.append("createdBy", userName);
 
         if (folderCategory === "group") {
           formData.append("isGroupUpload", true);
         } else {
           formData.append("isGroupUpload", false);
-          formData.append("studentIds", JSON.stringify(values.studentIds));
+          formData.append("studentIds", values.studentIds.join(",")); // Convert array to comma-separated string
         }
 
         // Append files
@@ -120,18 +105,14 @@ function AssignmentEdit() {
         }
 
         // Send the request
-        const response = await api.put(
-          "/updateAssignment",
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        );
+        const response = await api.put(`/updateAssignment`, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
 
         // Handle the response
-        if (response.status === 201) {
+        if (response.status === 201 || response.status === 200) {
           toast.success(response.data.message);
           navigate("/assignment");
         } else {
@@ -169,21 +150,7 @@ function AssignmentEdit() {
     }
   }, [formik.submitCount, formik.errors]);
 
-  const fetchData = async () => {
-    try {
-      const centerData = await fetchAllCentersWithIds();
-
-      setCenterData(centerData);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const fetchCourses = async (centerId) => {
+  const fetchCourses = async () => {
     try {
       const courses = await fetchAllCoursesWithIdsC(centerId);
       setCourseData(courses);
@@ -192,7 +159,7 @@ function AssignmentEdit() {
     }
   };
 
-  const fetchTeacher = async (centerId) => {
+  const fetchTeacher = async () => {
     try {
       const teacher = await fetchAllTeacherListByCenter(centerId);
       setUserData(teacher);
@@ -201,29 +168,34 @@ function AssignmentEdit() {
     }
   };
 
-  const fetchStudent = async (centerId) => {
+  const fetchStudent = async () => {
     try {
-      const teacher = await fetchAllStudentListByCenter(centerId);
-      setStudentData(teacher);
+      const studentList = await fetchAllStudentListByCenter(centerId); // API call to fetch students
+      if (Array.isArray(studentList)) {
+        // Ensure the response is an array
+        const mappedStudents = studentList.map((student) => ({
+          label: student.studentNames, // Display value in MultiSelect
+          value: student.id, // Underlying value
+        }));
+        setStudentData(mappedStudents);
+      } else {
+        throw new Error("Invalid student data format");
+      }
     } catch (error) {
-      toast.error(error);
+      toast.error("Failed to fetch student data: " + error.message);
+      setStudentData([]); // Clear data if error occurs
     }
   };
 
   const fetchClasses = async (courseId) => {
     try {
+      console.log("Fetching classes for courseId:", courseId);
       const classes = await fetchAllClassesWithIdsC(courseId);
+      console.log("Fetched Classes:", classes);
       setClassData(classes);
     } catch (error) {
       toast.error(error);
     }
-  };
-
-  const handleCenterChange = () => {
-    formik.setFieldValue("center", centerId);
-    fetchCourses(centerId);
-    fetchTeacher(centerId);
-    fetchStudent(centerId); // Fetch courses for the selected center
   };
 
   const fetchBatchandTeacherData = async (day) => {
@@ -239,28 +211,8 @@ function AssignmentEdit() {
     if (formik.values.day) {
       fetchBatchandTeacherData(formik.values.day);
     }
-    handleCenterChange();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.day]);
-
-  useEffect(() => {
-    handleCenterChange();
-  }, []);
-
-  const getData = async () => {
-    try {
-      const response = await api.get(`/getAssignmentFolderById/${id}`);
-      console.log("first", response.data);
-      formik.setValues(response.data);
-    } catch (error) {
-      console.error("Error fetching data ", error);
-    }
-  };
-
-  useEffect(() => {
-    getData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id]);
 
   const formatTo12Hour = (time) => {
     const [hours, minutes] = time.split(":");
@@ -302,11 +254,68 @@ function AssignmentEdit() {
   };
 
   const handleCourseChange = (event) => {
-    setClassData(null);
-    const course = event.target.value;
-    formik.setFieldValue("course", course);
-    fetchClasses(course); // Fetch class for the selected center
+    const courseId = event.target.value;
+    console.log("Selected Course ID:", courseId);
+
+    // Reset classId and classData when course changes
+    setClassData([]);
+    formik.setFieldValue("classId", "");
+    formik.setFieldValue("courseId", courseId);
+
+    fetchClasses(courseId);
   };
+
+  const getData = async () => {
+    try {
+      const response = await api.get(`/getAssignmentQuestionWithAnswer/${id}`);
+      const data = response.data;
+      console.log("Data:", data.classId);
+      // Ensure correct mappings
+      formik.setValues({
+        assignmentName: data.assignmentName || "",
+        assignmentReason: data.assignmentReason || "",
+        userId: data.userId || "",
+        center: data.centerId || "",
+        classId: data.classId || "",
+        courseId: data.courseId || "",
+        folderCategory: data.folderCategory || "group",
+        day: data.day || "",
+        date: data.date || "",
+        expiredDate: data.expiredDate || "",
+        batchTime: data.batchTimes?.[0] || "", // Assign first batch time if available
+        studentIds: data.studentIds || [], // Ensure array format
+        questions: data.questions || [],
+        files: [], // Reset files
+      });
+
+      setFolderCategory(data.folderCategory || "group");
+      await fetchClasses(data.courseId);
+      setTimeout(() => {
+        console.log("Setting classId after fetching classes:", data.classId);
+        formik.setFieldValue("classId", data.classId);
+      }, 500);
+      // Set student multi-select values
+      if (Array.isArray(data.studentIds) && Array.isArray(data.studentNames)) {
+        const selectedStudents = data.studentIds.map((id, index) => ({
+          value: id,
+          label: data.studentNames[index] || "Unknown",
+        }));
+        setSelectedStudents(selectedStudents);
+      }
+    } catch (error) {
+      console.error("Error fetching data ", error);
+    }
+  };
+
+  useEffect(() => {
+    getData();
+  }, [id]);
+
+  useEffect(() => {
+    fetchCourses(centerId);
+    fetchTeacher(centerId);
+    fetchStudent(centerId);
+  }, []);
 
   return (
     <div className="container">
@@ -325,7 +334,7 @@ function AssignmentEdit() {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          <Link to="/document" className="custom-breadcrumb">
+          <Link to="/assignment" className="custom-breadcrumb">
             Assignment
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
@@ -347,11 +356,11 @@ function AssignmentEdit() {
             className="d-flex justify-content-between align-items-center p-1 mb-4 px-4"
             style={{ background: "#f5f7f9" }}
           >
-            <div class="d-flex align-items-center">
-              <div class="d-flex">
-                <div class="dot active"></div>
+            <div className="d-flex align-items-center">
+              <div className="d-flex">
+                <div className="dot active"></div>
               </div>
-              <span class="me-2 text-muted">Edit Assignment</span>
+              <span className="me-2 text-muted">Edit Assignment</span>
             </div>
             <div className="my-2 pe-3 d-flex align-items-center">
               <Link to="/assignment">
@@ -371,54 +380,50 @@ function AssignmentEdit() {
                     aria-hidden="true"
                   ></span>
                 )}
-                <span className="fw-medium">Update</span>
+                <span className="fw-medium">Upadte</span>
               </button>
             </div>
           </div>
 
           <div className="container">
             <div className="row py-4">
-              {/* <div class="col-md-6 col-12 mb-4">
-                   <lable class="">
-                     Centre<span class="text-danger">*</span>
-                   </lable>
-                   <select
-                     {...formik.getFieldProps("center")}
-                     name="center"
-                     className={`form-select  ${
-                       formik.touched.center && formik.errors.center
-                         ? "is-invalid"
-                         : ""
-                     }`}
-                     aria-label="Default select example"
-                     onChange={handleCenterChange}
-                   >
-                     <option disabled></option>
-                     {centerData &&
-                       centerData.map((center) => (
-                         <option key={center.id} value={center.id}>
-                           {center.centerNames}
-                         </option>
-                       ))}
-                   </select>
-                   {formik.touched.center && formik.errors.center && (
-                     <div className="invalid-feedback">{formik.errors.center}</div>
-                   )}
-                 </div> */}
+              <div className="col-md-6 col-12 mb-4">
+                <label className="form-label">
+                  Assignment Name<span className="text-danger">*</span>
+                </label>
+                <div className="input-group mb-3">
+                  <input
+                    name="text"
+                    type="assignmentName"
+                    className={`form-control  ${
+                      formik.touched.assignmentName &&
+                      formik.errors.assignmentName
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                    {...formik.getFieldProps("assignmentName")}
+                  />
+                  {formik.touched.assignmentName &&
+                    formik.errors.assignmentName && (
+                      <div className="invalid-feedback">
+                        {formik.errors.assignmentName}
+                      </div>
+                    )}
+                </div>
+              </div>
 
-              <div class="col-md-6 col-12 mb-4">
-                <lable class="">
-                  Course<span class="text-danger">*</span>
-                </lable>
+              <div className="col-md-6 col-12 mb-4">
+                <label className="form-label">
+                  Course<span className="text-danger">*</span>
+                </label>
                 <select
-                  {...formik.getFieldProps("course")}
-                  name="course"
-                  className={`form-select    ${
-                    formik.touched.course && formik.errors.course
+                  {...formik.getFieldProps("courseId")}
+                  name="courseId"
+                  className={`form-select ${
+                    formik.touched.courseId && formik.errors.courseId
                       ? "is-invalid"
                       : ""
                   }`}
-                  aria-label="Default select example"
                   onChange={handleCourseChange}
                 >
                   <option disabled></option>
@@ -429,44 +434,45 @@ function AssignmentEdit() {
                       </option>
                     ))}
                 </select>
-                {formik.touched.course && formik.errors.course && (
-                  <div className="invalid-feedback">{formik.errors.course}</div>
-                )}
-              </div>
-
-              <div class="col-md-6 col-12 mb-4 d-flex flex-column justify-content-end">
-                <lable class="">
-                  Class Listing<span class="text-danger">*</span>
-                </lable>
-                <select
-                  {...formik.getFieldProps("classListing")}
-                  name="classListing"
-                  className={`form-select    ${
-                    formik.touched.classListing && formik.errors.classListing
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  aria-label="Default select example"
-                >
-                  <option disabled></option>
-                  {classData &&
-                    classData.map((classes) => (
-                      <option key={classes.id} value={classes.id}>
-                        {classes.classNames}
-                      </option>
-                    ))}
-                </select>
-                {formik.touched.classListing && formik.errors.classListing && (
+                {formik.touched.courseId && formik.errors.courseId && (
                   <div className="invalid-feedback">
-                    {formik.errors.classListing}
+                    {formik.errors.courseId}
                   </div>
                 )}
               </div>
 
-              <div class="col-md-6 col-12 mb-4">
-                <lable class="">
-                  Teacher<span class="text-danger">*</span>
-                </lable>
+              <div className="col-md-6 col-12 mb-4 d-flex flex-column justify-content-end">
+                <label className="form-label">
+                  Class Listing<span className="text-danger">*</span>
+                </label>
+                <select
+                  {...formik.getFieldProps("classId")}
+                  name="classId"
+                  className={`form-select ${
+                    formik.touched.classId && formik.errors.classId
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                >
+                  <option disabled></option>
+                  {classData &&
+                    classData.map((cls) => (
+                      <option key={cls.id} value={cls.id}>
+                        {cls.classNames}
+                      </option>
+                    ))}
+                </select>
+                {formik.touched.classId && formik.errors.classId && (
+                  <div className="invalid-feedback">
+                    {formik.errors.classId}
+                  </div>
+                )}
+              </div>
+
+              <div className="col-md-6 col-12 mb-4">
+                <label className="form-label">
+                  Teacher<span className="text-danger">*</span>
+                </label>
                 <select
                   {...formik.getFieldProps("userId")}
                   name="userId"
@@ -475,7 +481,6 @@ function AssignmentEdit() {
                       ? "is-invalid"
                       : ""
                   }`}
-                  aria-label="Default select example"
                 >
                   <option disabled></option>
                   {userData &&
@@ -491,7 +496,7 @@ function AssignmentEdit() {
               </div>
 
               <div className="col-md-6 col-12 mb-4">
-                <label className="">
+                <label className="form-label">
                   Days<span className="text-danger">*</span>
                 </label>
                 <select
@@ -518,80 +523,8 @@ function AssignmentEdit() {
                 )}
               </div>
 
-              {/* Radio buttons for selecting folder category */}
               <div className="col-md-6 col-12 mb-4">
                 <label className="form-label">
-                  Folder Category<span className="text-danger">*</span>
-                </label>
-                <div className="d-flex">
-                  <div>
-                    <input
-                      className="form-check-input "
-                      type="radio"
-                      id="group"
-                      name="folderCategoryListing"
-                      value="group"
-                      checked={folderCategory === "group"}
-                      onChange={() => setFolderCategory("group")}
-                    />{" "}
-                    &nbsp;
-                    <label htmlFor="group">Group</label>
-                  </div>
-                  &nbsp;&nbsp;&nbsp;
-                  <div>
-                    <input
-                      className="form-check-input "
-                      type="radio"
-                      id="individual"
-                      name="folderCategoryListing"
-                      value="individual"
-                      checked={folderCategory === "individual"}
-                      onChange={() => setFolderCategory("individual")}
-                    />
-                    &nbsp;
-                    <label htmlFor="individual">Individual</label>
-                  </div>
-                </div>
-                {formik.touched.folderCategoryListing &&
-                  formik.errors.folderCategoryListing && (
-                    <div className="invalid-feedback">
-                      {formik.errors.folderCategoryListing}
-                    </div>
-                  )}
-              </div>
-              <div class="col-md-6 col-12 mb-3">
-                {folderCategory === "group" ? (
-                  <></>
-                ) : (
-                  <div className="">
-                    <label className="form-label">Student Name</label>
-                    <MultiSelect
-                      options={studentData || []}
-                      value={selectedStudents}
-                      onChange={(selected) => {
-                        setSelectedStudents(selected);
-                        formik.setFieldValue(
-                          "studentIds",
-                          selected.map((option) => option.value) // Ensures studentIds is an array
-                        );
-                      }}
-                      labelledBy="Select Student"
-                      className={`form-multi-select ${
-                        formik.touched.studentIds && formik.errors.studentIds
-                          ? "is-invalid"
-                          : ""
-                      }`}
-                    />
-                    {formik.touched.studentIds && formik.errors.studentIds && (
-                      <div className="invalid-feedback">
-                        {formik.errors.studentIds}
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-              <div className="col-md-6 col-12 mb-4">
-                <label className="">
                   Batch Time<span className="text-danger">*</span>
                 </label>
                 <MultiSelect
@@ -627,6 +560,88 @@ function AssignmentEdit() {
                   </div>
                 )}
               </div>
+
+              {/* Radio buttons for selecting folder category */}
+              <div className="col-md-6 col-12 mb-4">
+                <label className="form-label">
+                  Folder Category<span className="text-danger">*</span>
+                </label>
+                <div className="d-flex">
+                  <div>
+                    <input
+                      className="form-check-input"
+                      type="radio"
+                      id="group"
+                      name="folderCategory"
+                      value="group"
+                      checked={folderCategory === "group"}
+                      onChange={() => {
+                        setFolderCategory("group");
+                        formik.setFieldValue("folderCategory", "group");
+                      }}
+                    />{" "}
+                    &nbsp;
+                    <label htmlFor="group">Group</label>
+                  </div>
+                  &nbsp;&nbsp;&nbsp;
+                  <div>
+                    <input
+                      className="form-check-input"
+                      type="radio"
+                      id="individual"
+                      name="folderCategory"
+                      value="individual"
+                      checked={folderCategory === "individual"}
+                      onChange={() => {
+                        setFolderCategory("individual");
+                        formik.setFieldValue("folderCategory", "individual");
+                      }}
+                    />
+                    &nbsp;
+                    <label htmlFor="individual">Individual</label>
+                  </div>
+                </div>
+
+                {formik.touched.folderCategory &&
+                  formik.errors.folderCategory && (
+                    <div className="invalid-feedback">
+                      {formik.errors.folderCategory}
+                    </div>
+                  )}
+              </div>
+
+              <div className="col-md-6 col-12 mb-3">
+                {folderCategory === "group" ? (
+                  <></>
+                ) : (
+                  <div className="">
+                    <label className="form-label">Student Name</label>
+                    <MultiSelect
+                      options={studentData || []}
+                      value={selectedStudents}
+                      onChange={(selected) => {
+                        setSelectedStudents(selected);
+                        formik.setFieldValue(
+                          "studentIds",
+                          selected.map((option) => option.value) // Convert selected options to an array of student IDs
+                        );
+                      }}
+                      labelledBy="Select Student"
+                      className={`form-multi-select ${
+                        formik.touched.studentIds && formik.errors.studentIds
+                          ? "is-invalid"
+                          : ""
+                      }`}
+                    />
+                    {formik.touched.studentIds && formik.errors.studentIds && (
+                      <div className="invalid-feedback">
+                        {formik.errors.studentIds}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+
               <div className="col-md-6 col-12 mb-4">
                 <label className="form-label">
                   Date<span className="text-danger">*</span>
@@ -666,39 +681,9 @@ function AssignmentEdit() {
                   </div>
                 )}
               </div>
-
-              {/* <div className="col-md-6 col-12 mb-2">
-                   <div className="row">
-                     <label>
-                       Files<span className="text-danger">*</span>
-                     </label>
-                     <div className="input-group">
-                       <input
-                         className="form-control"
-                         type="file"
-                         multiple
-                         accept="image/jpeg, image/png, application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                         onChange={(event) => {
-                           const files = Array.from(event.target.files);
-                           formik.setFieldValue("files", files); // Update Formik field
-                         }}
-                       />
-                     </div>
-                     {formik.touched.files && formik.errors.files && (
-                       <small className="text-danger">{formik.errors.files}</small>
-                     )}
-                     <label className="text-muted">
-                       Note: Only JPG, PNG, PDF, DOC, or DOCX files are allowed.
-                       Each file must be less than 5MB. Total size must be under
-                       1GB, and file names must not exceed 50 characters.
-                     </label>
-                   </div>
-                 </div> */}
               <div className="col-md-6 col-12 mb-2">
                 <div className="row">
-                  <label>
-                    Files<span className="text-danger">*</span>
-                  </label>
+                  <label className="form-label">Files</label>
                   <div className="input-group">
                     <input
                       className="form-control"
@@ -756,15 +741,81 @@ function AssignmentEdit() {
                       }}
                     />
                   </div>
+
+                  {/* Display validation errors */}
                   {formik.errors.files && (
                     <small className="text-danger">{formik.errors.files}</small>
                   )}
+
+                  {/* Note about file upload rules */}
                   <label className="text-muted">
                     Note: Only JPG, PNG, PDF, DOC, or DOCX files are allowed.
                     Each file must be less than 5MB. Total size must be under
                     1GB, and file names must not exceed 50 characters.
                   </label>
+
+                  {/* Show already uploaded files with download option */}
+                  {formik.values.questions &&
+                    formik.values.questions.length > 0 && (
+                      <div className="mt-3">
+                        <h6>Uploaded Files:</h6>
+                        <ul className="list-group">
+                          {formik.values.questions.map((fileUrl, index) => (
+                            <ol
+                              key={index}
+                              className="list-group-item d-flex justify-content-between align-items-center"
+                            >
+                              <a
+                                href={fileUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-primary"
+                              >
+                                {decodeURIComponent(fileUrl.split("/").pop())}
+                              </a>
+                              {/* <button
+                                type="button"
+                                className="btn btn-sm btn-danger"
+                                onClick={() => {
+                                  const updatedFiles = [
+                                    ...formik.values.questions,
+                                  ];
+                                  updatedFiles.splice(index, 1);
+                                  formik.setFieldValue(
+                                    "questions",
+                                    updatedFiles
+                                  );
+                                }}
+                              >
+                                <CgTrash/>
+                              </button> */}
+                            </ol>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
                 </div>
+              </div>
+
+              <div className="col-md-6 col-12 mb-4">
+                <label className="form-label">Assignment Reason</label>
+                <textarea
+                  name="assignmentReason"
+                  className={`form-control  ${
+                    formik.touched.assignmentReason &&
+                    formik.errors.assignmentReason
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  rows={5}
+                  {...formik.getFieldProps("assignmentReason")}
+                />
+                {formik.touched.assignmentReason &&
+                  formik.errors.assignmentReason && (
+                    <div className="invalid-feedback">
+                      {formik.errors.assignmentReason}
+                    </div>
+                  )}
               </div>
             </div>
           </div>
