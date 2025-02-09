@@ -47,7 +47,7 @@ function ClassAdd() {
       courseName: "",
       classType: "",
       classCode: "",
-      userId: 17,
+      userId: "",
       teacherName: "",
       classId: "",
       durationInHrs: "",
@@ -126,13 +126,10 @@ function ClassAdd() {
     if (formik.values.day) {
       fetchBatchandTeacherData(formik.values.day);
     }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.day]);
   useEffect(() => {
     fetchCourses();
     fetchClassRoom();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.day]);
 
   useEffect(() => {

@@ -12,15 +12,12 @@ import { toast } from "react-toastify";
 const validationSchema = Yup.object().shape({
   // email: Yup.string().email("*Invalid Email").required("*Email is required"),
   contactNumber: Yup.string()
-    .matches(
-      /^(?:\+?65)?\s?(?:\d{4}\s?\d{4}|\d{3}\s?\d{3}\s?\d{4})$/,
-      "*Invalid Phone Number"
-    )
-    .required("*Contact Number is required"),
+  .matches(/^\d{8}$/, "*Contact Number must be exactly 8 digits")
+  .required("*Mobile Number is required"),
   address: Yup.string().required("*Address is required"),
   postalCode: Yup.string()
-    .matches(/^[0-9]+$/, "*Postal Code Must be numbers")
-    .required("*Postal Code is required"),
+  .matches(/^\d{6}$/, "*Postal Code must be exactly 6 digits")
+  .required("*Zip Code is required"),
 });
 const ContactEdit = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
@@ -157,6 +154,8 @@ const ContactEdit = forwardRef(
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   value={formik.values.contactNumber}
+                  maxLength="8"
+                  onKeyPress={(e) => !/[0-9]/.test(e.key) && e.preventDefault()}
                 />
                 {formik.touched.contactNumber &&
                   formik.errors.contactNumber && (
@@ -195,6 +194,8 @@ const ContactEdit = forwardRef(
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   value={formik.values.postalCode}
+                  maxLength="6"
+                  onKeyPress={(e) => !/[0-9]/.test(e.key) && e.preventDefault()}
                 />
                 {formik.touched.postalCode && formik.errors.postalCode && (
                   <div className="error text-danger ">

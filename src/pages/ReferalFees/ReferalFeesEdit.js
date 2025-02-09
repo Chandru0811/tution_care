@@ -1,9 +1,8 @@
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import Button from "react-bootstrap/Button";
 import * as yup from "yup";
 import { useFormik } from "formik";
 import { toast } from "react-toastify";
-import fetchAllCentersWithIds from "../List/CenterList";
 import api from "../../config/URL";
 import {
   Dialog,
@@ -17,7 +16,7 @@ function ReferalFeesEdit({ id, onSuccess, onOpen }) {
   const [isModified, setIsModified] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   // const userName = localStorage.getItem("tmsuserName");
-  const userName = localStorage.getItem("tmsuserName");
+  const userName = localStorage.getItem("tmsrole");
   const centerId = localStorage.getItem("tmscenterId");
 
   const validationSchema = yup.object().shape({

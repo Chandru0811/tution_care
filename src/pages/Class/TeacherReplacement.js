@@ -20,11 +20,10 @@ const Replacement = ({ classId, onOpen }) => {
   const [open, setOpen] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [classData, setClassData] = useState({});
-  const [centerID, setCenterId] = useState({});
-  console.log("CenterID:",centerID);
   console.log("ClassID:",classId);
   const [teacherData, setTeacherData] = useState([]);
   const [availableDays, setAvailableDays] = useState([]);
+  const centerID = localStorage.getItem("tmscenterId"); 
 
   const handleClose = () => {
     setOpen(false);
@@ -141,7 +140,6 @@ const Replacement = ({ classId, onOpen }) => {
       if (response.status === 200) {
         setClassData(response.data);
         handleRowSelect(response.data);
-        setCenterId(response.data.centerId);
         formik.setFieldValue("className", classData.className);
         formik.setFieldValue("classId", classData.id);
       }

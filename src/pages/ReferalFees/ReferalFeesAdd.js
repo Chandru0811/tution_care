@@ -1,17 +1,16 @@
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import * as yup from "yup";
 import { useFormik } from "formik";
 import { toast } from "react-toastify";
-import fetchAllCentersWithIds from "../List/CenterList";
 import api from "../../config/URL";
 
 function ReferalFeesAdd({ onSuccess }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [isModified, setIsModified] = useState(false);
-  const createdBy = localStorage.getItem("tmsuserName");
+  const createdBy = localStorage.getItem("tmsrole");
 
   const handleClose = () => {
     setShow(false);
@@ -44,6 +43,7 @@ function ReferalFeesAdd({ onSuccess }) {
     validationSchema,
     onSubmit: async (values) => {
       setLoadIndicator(true);
+      values.createdBy = createdBy;
 
       try {
         const response = await api.post("/createReferralFees", values, {
