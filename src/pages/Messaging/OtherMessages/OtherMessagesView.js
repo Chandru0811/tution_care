@@ -9,7 +9,7 @@ function OtherMessagesView() {
   const messagesContainerRef = useRef(null);
   const [messages, setMessages] = useState([]);
   const [data, setData] = useState(null);
-  const userId = localStorage.getItem("tmsuserId");
+  const userId = localStorage.getItem("userId");
   const location = useLocation();
 
   // Extracting query parameters
@@ -43,14 +43,14 @@ function OtherMessagesView() {
     }
   };
   const renderAttachment = (attachment, index) => {
-    if (!attachment) {
+    if (!attachment || !attachment.attachment) {
       return <span>No attachment available</span>;
     }
 
     const fileUrl = attachment.attachment;
-    const url = attachment.fileUrl;
+    const url = attachment.fileUrl || "";
     const extension = fileUrl.split(".").pop().toLowerCase();
-    let fileName = url.split("/").pop();
+    let fileName = url.split("/").pop() || "unknown";
     fileName = fileName.replace(/\+/g, " ");
 
     if (["jpg", "jpeg", "png", "gif", "bmp"].includes(extension)) {
@@ -153,11 +153,11 @@ function OtherMessagesView() {
           className="d-flex px-4 justify-content-between align-items-center p-1"
           style={{ background: "#f5f7f9" }}
         >
-          <div class="d-flex align-items-center">
-            <div class="d-flex">
-              <div class="dot active"></div>
+          <div className="d-flex align-items-center">
+            <div className="d-flex">
+              <div className="dot active"></div>
             </div>
-            <span class="me-2 text-muted">View OtherMessages</span>
+            <span className="me-2 text-muted">View OtherMessages</span>
           </div>
           <div className="d-flex justify-content-end align-item-end p-2">
             <Link to="/othermessaging">
@@ -167,44 +167,39 @@ function OtherMessagesView() {
             </Link>
           </div>
         </div>
-      <div className="container-fluid">
-        <div className="row message-list">
-          <div className="col-12">
-            {/* Message List */}
-            <div
-              className="messages mb-5"
-              ref={messagesContainerRef}
-              style={{
-                maxHeight: "450px",
-                overflowY: "auto",
-                overflowX: "hidden",
-              }}
-            >
-              {messages.map((msg, index) => (
-                <div key={index}>
-                  <div className={`message ${msg.isSender ? "right" : ""}`}>
-                    <div className="message-bubble my-2 w-75">
-                      {msg.content}
+        <div className="container-fluid">
+          <div className="row message-list">
+            <div className="col-12">
+              {/* Message List */}
+              <div
+                className="messages mb-5"
+                ref={messagesContainerRef}
+                style={{
+                  maxHeight: "450px",
+                  overflowY: "auto",
+                  overflowX: "hidden",
+                }}
+              >
+                {messages.map((msg, index) => (
+                  <div key={index}>
+                    <div className={`message ${msg.isSender ? "right" : ""}`}>
+                      <div className="message-bubble my-2 w-75">
+                        {msg.content}
+                      </div>
+                      {msg.attachments && msg.attachments.length > 0 ? (
+                        msg.attachments.map((attachment, attIndex) =>
+                          renderAttachment(attachment, attIndex)
+                        )
+                      ) : (
+                        <></>
+                      )}
                     </div>
-                    {msg.attachments.length > 0 ? (
-                      msg.attachments.map((attachment, attIndex) => (
-                        <div
-                          key={attIndex}
-                          className="message-bubble w-75 mt-2"
-                        >
-                          {renderAttachment(attachment, attIndex)}
-                        </div>
-                      ))
-                    ) : (
-                      <></>
-                    )}
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
         </div>
-      </div>
       </div>
     </section>
   );

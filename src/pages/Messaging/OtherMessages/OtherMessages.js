@@ -1,15 +1,21 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../../../config/URL";
+import { MoreVert as MoreVertIcon } from "@mui/icons-material";
 import {
   createTheme,
+  IconButton,
+  Menu,
+  MenuItem,
   ThemeProvider,
 } from "@mui/material";
 import { MaterialReactTable } from "material-react-table";
+import GlobalDelete from "../../../components/common/GlobalDelete";
 
 const OtherMessages = () => {
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [menuAnchor, setMenuAnchor] = useState(null);
   const [selectedMessage, setSelectedMessage] = useState(null);
   console.log("selectedMessage", selectedMessage);
   const navigate = useNavigate();
@@ -112,6 +118,7 @@ const OtherMessages = () => {
     },
   });
 
+  const handleMenuClose = () => setMenuAnchor(null);
 
   // const handleViewClick = () => {
   //   navigate(
