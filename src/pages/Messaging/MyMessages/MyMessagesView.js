@@ -7,6 +7,7 @@ import { Link, useLocation, useParams } from "react-router-dom";
 import { useFormik } from "formik";
 // import { LuDownload } from "react-icons/lu";
 import { IoChevronBackOutline } from "react-icons/io5";
+import { MdDelete } from "react-icons/md";
 import document from "../../../assets/images/Blue and Peach Gradient Facebook Profile Picture.png";
 
 function MyMessagesView() {
@@ -15,13 +16,19 @@ function MyMessagesView() {
   const [messages, setMessages] = useState([]);
   const [data, setData] = useState(null);
   const location = useLocation();
-  const { senderId, receiverId } =
-    location.state || {};
+  const {
+    senderId,
+    receiverId,
+    senderName,
+    senderRole,
+    receiverName,
+    message,
+  } = location.state || {};
   const [fileCount, setFileCount] = useState(0);
-  const userId = localStorage.getItem("tmsuserId");
-  const userName = localStorage.getItem("tmsuserName");
+  const userId = localStorage.getItem("userId");
+  const LoginUserName = localStorage.getItem("LoginUserName");
+  const LoginUserRole = localStorage.getItem("userName");
   const { id } = useParams();
-  console.log("Data From My Message:", data);
 
   const formik = useFormik({
     initialValues: {
@@ -32,13 +39,20 @@ function MyMessagesView() {
       if (values.message || values.files.length > 0) {
         const formData = new FormData();
 
-        formData.append("senderName", data[0].receiverName);
+        formData.append("senderName", LoginUserName);
         formData.append("senderId", userId);
-        formData.append("senderRole", userName);
+        formData.append("senderRole", LoginUserRole);
         formData.append("messageTo", "PARENT");
-        formData.append("recipientId", 2);
-        formData.append("recipientName", data[0].receiverName);
-        formData.append("recipientRole", data[0].receiverRole);
+
+        if (senderId === userId) {
+          formData.append("recipientId", data.receiverId);
+          formData.append("recipientName", data.receiverName);
+          formData.append("recipientRole", data.receiverRole);
+        } else {
+          formData.append("recipientId", senderId);
+          formData.append("recipientName", senderName);
+          formData.append("recipientRole", senderRole);
+        }
         formData.append("message", values.message);
 
         if (values.files.length > 0) {
@@ -67,6 +81,84 @@ function MyMessagesView() {
     },
   });
 
+  // const getData = async () => {
+  //   try {
+  //     const response = await api.get(
+  //       `getSingleChatConversation?transcriptOne=${senderId}&transcriptTwo=${receiverId}`
+  //     );
+  //     setData(response.data);
+  //     const messages = response.data;
+  //     console.log("messages", messages);
+
+  //     const combinedMessages = messages.map((msg) => ({
+  //       content: msg.message,
+  //       isSender: msg.senderId === userId,
+  //       attachments: msg.attachments,
+  //       time: new Date(msg.createdAt).toLocaleTimeString([], {
+  //         hour: "2-digit",
+  //         minute: "2-digit",
+  //       }),
+  //       // time: msg.createdAt
+  //     }));
+
+  //     setMessages(combinedMessages);
+  //     console.log("Messages:", combinedMessages);
+  //   } catch (error) {
+  //     toast.error(`Error Fetching Data: ${error.message}`);
+  //   }
+  // };
+
+  // Process Messages Function
+  
+  const processMessages = (messages, currentUserId, currentRole) => {
+    return messages.map((msg) => {
+      if (msg.senderId === msg.receiverId) {
+        return { ...msg, messageType: "Self-Message" };
+      } else if (msg.senderId === currentUserId && msg.senderRole === currentRole) {
+        return { ...msg, messageType: "Sent" };
+      } else if (msg.receiverId === currentUserId && msg.receiverRole === currentRole) {
+        return { ...msg, messageType: "Received" };
+      } else {
+        return { ...msg, messageType: "Other" };
+      }
+    });
+  };
+
+  const getData = async () => {
+    try {
+      const response = await api.get(`getSingleChatConversation?transcriptOne=${senderId}&transcriptTwo=${receiverId}`);
+      setData(response.data);
+      const messages = processMessages(response.data, userId, LoginUserRole); // Process Messages
+      const combinedMessages = messages.map((msg) => ({
+        content: msg.message,
+        isSender: msg.messageType === "Sent",
+        messageType: msg.messageType, // Add message type
+        attachments: msg.attachments,
+        time: new Date(msg.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+      }));
+      setMessages(combinedMessages);
+    } catch (error) {
+      toast.error(`Error Fetching Data: ${error.message}`);
+    }
+  };
+  
+  const handleDeleteMessage = async (messageId) => {
+    try {
+      const response = await api.delete(`/deleteMessage/${id}`);
+      if (response.status === 200) {
+        toast.success("Message deleted successfully!");
+        getData();
+        setMessages((prevMessages) =>
+          prevMessages.filter((msg) => msg.messageId !== messageId)
+        );
+      } else {
+        toast.error("Failed to delete the message.");
+      }
+    } catch (error) {
+      toast.error(`Error: ${error.message}`);
+    }
+  };
+
   const handleFileChange = (event) => {
     const files = Array.from(event.target.files);
     setFileCount(files.length);
@@ -75,33 +167,6 @@ function MyMessagesView() {
 
   const handleAttachmentClick = () => {
     fileInputRef.current.click();
-  };
-
-  const getData = async () => {
-    try {
-      const response = await api.get(
-        `getSingleChatConversation?transcriptOne=${receiverId}&transcriptTwo=${senderId}`
-      );
-      setData(response.data);
-      const messages = response.data;
-      console.log("messages", messages);
-
-      const combinedMessages = messages.map((msg) => ({
-        content: msg.message,
-        isSender: msg.senderId == userId,
-        attachments: msg.attachments,
-        time: new Date(msg.createdAt).toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
-        }),
-        // time: msg.createdAt
-      }));
-
-      setMessages(combinedMessages);
-      console.log("Messages:", combinedMessages);
-    } catch (error) {
-      toast.error(`Error Fetching Data: ${error.message}`);
-    }
   };
 
   const renderAttachment = (attachment, index) => {
@@ -209,9 +274,9 @@ function MyMessagesView() {
                   overflowX: "hidden",
                 }}
               >
-                {messages.map((msg, index) => (
+                {/* {messages.map((msg, index) => (
                   <div key={index}>
-                    <div className={`message ${msg.isSender ? "right" : ""}`}>
+                    <div className={`message ${msg.isSender ? "right" : "left"}`}>
                       <div className="message-bubble my-2 w-75">
                         {msg.content}
                       </div>
@@ -234,6 +299,33 @@ function MyMessagesView() {
                         {msg.time}
                       </div>
                     </div>
+                  </div>
+                ))} */}
+                 {messages.map((msg, index) => (
+                  <div key={index} className={`message ${msg.isSender ? "right" : "left"}`}>
+                    <div className={`message-bubble my-2 w-75 ${msg.isSender ? "align-self-end" : "align-self-start"}`}>
+                      {msg.content}
+                    </div>
+                    {msg.attachments?.length > 0 &&
+                      msg.attachments.map((attachment, attIndex) => (
+                        <div
+                          key={attIndex}
+                          className={`message-bubble w-75 mt-2 ${msg.isSender ? "align-self-end" : "align-self-start"}`}
+                        >
+                          {renderAttachment(attachment, attIndex)}
+                        </div>
+                      ))}
+                    <div
+                      className={`message-bubble my-2 w-75 ${msg.isSender ? "align-self-end" : "align-self-start"}`}
+                      style={{ fontSize: "11px", background: "transparent" }}
+                    >
+                      {msg.time}
+                    </div>
+                    {msg.isSender && (
+                      <div className="text-end message-bubble">
+                        <MdDelete style={{ cursor: "pointer" }} onClick={() => handleDeleteMessage(msg.messageId)} />
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>

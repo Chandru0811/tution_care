@@ -10,23 +10,14 @@ import {
   IconButton,
 } from "@mui/material";
 import { MoreVert as MoreVertIcon } from "@mui/icons-material";
-import GlobalDelete from "../../components/common/GlobalDelete";
 
-const Center = ({ handleCenterChanged }) => {
-  const [filters, setFilters] = useState({
-    centerName: "",
-    centerCode: "",
-    email: "",
-    centerManagerId: "",
-  });
-  // const [centerManagerData, setCenterManagerData] = useState([]);
+const Center = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
   const tmscenterName = localStorage.getItem("tmscenterName");
-  // const tmsemail = localStorage.getItem("tmsemail");
 
   const columns = useMemo(
     () => [
@@ -110,13 +101,6 @@ const Center = ({ handleCenterChanged }) => {
   const fetchData = async () => {
     try {
       setLoading(true);
-
-      // Filter out empty or null values from the filters
-      const nonEmptyFilters = Object.fromEntries(
-        Object.entries(filters).filter(([key, value]) => value !== "")
-      );
-
-      const queryParams = new URLSearchParams(nonEmptyFilters).toString();
       const response = await api.get(
         `/getCenterWithCustomInfo?centerName=${tmscenterName}`
       );
@@ -131,7 +115,7 @@ const Center = ({ handleCenterChanged }) => {
 
   useEffect(() => {
     fetchData();
-  }, [filters]);
+  }, []);
 
   const theme = createTheme({
     components: {
@@ -176,20 +160,6 @@ const Center = ({ handleCenterChanged }) => {
       },
     },
   });
-
-  const handleFilterChange = (e) => {
-    const { name, value } = e.target;
-    setFilters((prevFilters) => ({ ...prevFilters, [name]: value }));
-  };
-
-  const clearFilter = () => {
-    setFilters({
-      centerName: "",
-      centerCode: "",
-      email: "",
-      centerManagerId: "",
-    });
-  };
 
   const handleMenuClose = () => setMenuAnchor(null);
 
@@ -282,15 +252,6 @@ const Center = ({ handleCenterChanged }) => {
               >
                 Edit
               </MenuItem>
-              {/* <MenuItem>
-                <GlobalDelete
-                  path={`/deleteCenter/${selectedId}`}
-                  onDeleteSuccess={fetchData}
-                  onOpen={handleMenuClose}
-                  // deleteCenterData={true}
-                  handleCenterChanged={handleCenterChanged}
-                />
-              </MenuItem> */}
             </Menu>
           </>
         )}

@@ -12,8 +12,8 @@ function MyMessagesAdd({ onSuccess }) {
   const [data, setData] = useState(false);
   const [studentData, setStudentData] = useState([]);
   const [loadIndicator, setLoadIndicator] = useState(false);
-  const userName = localStorage.getItem("tmsuserName");
-  const userId = localStorage.getItem("tmsuserId");
+  const userName = localStorage.getItem("userName");
+  const userId = localStorage.getItem("userId");
 
   const validationSchema = yup.object().shape({
     student: yup.string().required("*Student is required"),
