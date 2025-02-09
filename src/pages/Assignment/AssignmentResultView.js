@@ -8,7 +8,9 @@ import AttactmentWord from "../../assets/images/AttactmentWord.jpg";
 import AttactmentPpt from "../../assets/images/AttachmentPpt.png";
 import { IoMdDownload } from "react-icons/io";
 import { Button, Modal } from "react-bootstrap";
-import { data } from "jquery";
+import { toast } from "react-toastify";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 
 function AssignmentResultView() {
   const { id } = useParams();
@@ -17,21 +19,42 @@ function AssignmentResultView() {
   const [data, setData] = useState({});
   console.log("Data", data);
   const [showModal, setShowModal] = useState(false);
-  const [remark, setRemark] = useState("");
 
   const handleModalClose = () => setShowModal(false);
   const handleModalShow = () => setShowModal(true);
 
-  const handleRemarkSubmit = async () => {
-    try {
-      await api.post("/submitRemark", { id, studentId, remark });
-      console.log("Remark Submitted:", remark);
-      setRemark("");
-      handleModalClose();
-    } catch (error) {
-      console.error("Failed to submit remark:", error);
-    }
-  };
+  const formik = useFormik({
+    initialValues: {
+      remark: "",
+    },
+    validationSchema: Yup.object({
+      remark: Yup.string().required("Remark is required"),
+    }),
+    onSubmit: async (values) => {
+      try {
+        const formData = new FormData();
+        formData.append("questionId", data[0]?.questionId || "");
+        formData.append("answerId", data[0]?.answerId || "");
+        formData.append("studentId", data[0]?.studentId || "");
+        formData.append("remark", values.remark || "");
+
+        const response = await api.put("/updateRemark", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+
+        if (response.status === 200) {
+          toast.success(response.data.message);
+          getData();
+        }
+
+        handleModalClose();
+      } catch (error) {
+        console.error("Failed to submit remark:", error);
+      }
+    },
+  });
 
   const renderAttachment = (attachment) => {
     if (!attachment) return <span>No attachment available</span>;
@@ -171,7 +194,7 @@ function AssignmentResultView() {
             <div className="my-2 pe-3 d-flex align-items-center">
               <button
                 type="button"
-                className="btn btn-primary btn-sm me-3"
+                className="btn btn-button btn-sm me-3"
                 onClick={handleModalShow}
               >
                 Remark
@@ -358,19 +381,31 @@ function AssignmentResultView() {
                   <Modal.Title>Add Remark</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                  <textarea
-                    className="form-control"
-                    rows="5"
-                    placeholder="Enter your remark"
-                    value={remark}
-                    onChange={(e) => setRemark(e.target.value)}
-                  ></textarea>
+                  <form onSubmit={formik.handleSubmit}>
+                    <textarea
+                      className="form-control"
+                      rows="5"
+                      placeholder="Enter your remark"
+                      value={formik.values.remark}
+                      onChange={formik.handleChange}
+                      name="remark"
+                    ></textarea>
+                    {formik.touched.remark && formik.errors.remark && (
+                      <div className="text-danger">{formik.errors.remark}</div>
+                    )}
+                  </form>
                 </Modal.Body>
                 <Modal.Footer>
-                  <Button variant="secondary" onClick={handleModalClose}>
+                  <Button
+                    className="btn btn-sm btn-border bg-light text-dark"
+                    onClick={handleModalClose}
+                  >
                     Close
                   </Button>
-                  <Button variant="primary" onClick={handleRemarkSubmit}>
+                  <Button
+                    className="btn btn-button btn-sm"
+                    onClick={formik.handleSubmit}
+                  >
                     Submit Remark
                   </Button>
                 </Modal.Footer>

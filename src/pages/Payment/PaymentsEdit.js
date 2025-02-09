@@ -17,12 +17,13 @@ function PaymentsEdit() {
   const [studentData, setStudentData] = useState(null);
   const [datas, setData] = useState(null);
   const [invoiceData, setInvoiceData] = useState([]);
+  const [selectedInvoice, setSelectedInvoice] = useState([]);
+  const [isDataFetched, setIsDataFetched] = useState(false);
   const invoiceOptions = invoiceData.map((invoice) => ({
     label: invoice.invoiceNumber,
     value: invoice.id,
     totalAmount: invoice.totalAmount,
   }));
-  const [selectedInvoice, setSelectedInvoice] = useState([]);
 
   const validationSchema = Yup.object({
     studentId: Yup.string().required("Student Name is required"),
@@ -172,15 +173,8 @@ function PaymentsEdit() {
     formik.setFieldValue("paidAmount", "");
     setSelectedInvoice([]);
     setInvoiceData([]);
-    try {
-      const response = await api.get(
-        `/paymentInvoiceList?centerId=${centerId}&studentId=${studentId}`
-      );
-      setInvoiceData(response.data);
-    } catch (error) {
-      toast.error(error);
-    }
   };
+
   const handleInvoiceChange = (selected) => {
     setSelectedInvoice(selected);
     const totalPaidAmount = selected.reduce(
@@ -193,19 +187,43 @@ function PaymentsEdit() {
     );
     formik.setFieldValue("paidAmount", totalPaidAmount);
   };
+
   useEffect(() => {
-    const getData = async () => {
+    const fetchInvoices = async () => {
       try {
-        const response = await api.get(`/getPaymentById/${id}`);
-        setData(response.data);
-        formik.setValues(response.data);
+        const response = await api.get(
+          `/paymentInvoiceList?centerId=${centerId}&studentId=${datas.studentId}`
+        );
+        setInvoiceData(response.data);
       } catch (error) {
-        toast.error(error);
+        toast.error(error.message || "Error fetching invoices");
       }
     };
+    if (isDataFetched && datas?.studentId) {
+      fetchInvoices();
+    }
+  }, [isDataFetched, datas?.studentId]);
+
+  const getData = async () => {
+    try {
+      const response = await api.get(`/getPaymentById/${id}`);
+      setData(response.data);
+      formik.setValues(response.data);
+      if (response.data?.invoiceIds) {
+        const selectedInvoices = invoiceOptions.filter((option) =>
+          response.data.invoiceIds.includes(option.value)
+        );
+        setSelectedInvoice(selectedInvoices);
+      }
+      setIsDataFetched(true);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
+  useEffect(() => {
     getData();
     fetchStudent();
-  }, []);
+  }, [id, centerId]);
 
   const handlePaymethodChange = (event) => {
     const paymentMethod = event.target.value;

@@ -21,7 +21,7 @@ const StaffingAttendance = () => {
   const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
-
+  const centerId = localStorage.getItem("tmscenterId")
 
   const columns = useMemo(
     () => [
@@ -167,7 +167,7 @@ const StaffingAttendance = () => {
 
   const getData = async () => {
     try {
-      const response = await api.get("/getAllUserAttendances");
+      const response = await api.get(`/getAttendanceWithCustomInfo?centerId=${centerId}`);
       setData(response.data);
       setLoading(false);
     } catch (error) {
