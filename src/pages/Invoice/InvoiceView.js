@@ -13,14 +13,15 @@ import SendAndPublish from "./SendAndPublish";
 function InvoiceView() {
   const { id } = useParams();
   const [data, setData] = useState([]);
+  const [centerValues, setCenterValues] = useState([]);
   const navigate = useNavigate();
-  console.log("data", data);
+  console.log("centerValues::", centerValues);
   const [courseData, setCourseData] = useState(null);
   const [studentData, setStudentData] = useState(null);
   const [centerData, setcenterData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [taxData, setTaxData] = useState([]);
-  console.log("Tax Type:", taxData);
+  const centerId = localStorage.getItem("tmscenterId");
 
   const fetchData = async () => {
     setLoadIndicator(true);
@@ -36,6 +37,15 @@ function InvoiceView() {
       toast.error(error.message || "Error fetching data");
     } finally {
       setLoadIndicator(false);
+    }
+  };
+
+  const fetchCenterValues = async () => {
+    try {
+      const response = await api.get(`getAllCenterById/${centerId}`);
+      setCenterValues(response.data);
+    } catch (error) {
+      toast.error("Error fetching tax data:", error);
     }
   };
 
@@ -77,14 +87,12 @@ function InvoiceView() {
 
       doc.setFont("helvetica", "normal");
       doc.text(
-        `Tel No: ${centerData?.find((center) => parseInt(data.centerId) === center.id)?.phone || "--"
-        }`,
+        `Tel No: ${centerValues.mobile || "--"}`,
         130,
         35
       );
       doc.text(
-        `Email: ${centerData?.find((center) => parseInt(data.centerId) === center.id)?.email || "--"
-        }`,
+        `Email: ${centerValues.email || "--"}`,
         130,
         45
       );
@@ -210,7 +218,7 @@ function InvoiceView() {
       // Invoice Notes text in normal (light) style
       doc.setFont("helvetica", "normal");
       const invoiceNote = doc.splitTextToSize(
-        invoiceNotes || "--",
+        centerValues.invoiceNotes || "--",
         170 // Width of the text area where you want to wrap the text
       );
 
@@ -279,6 +287,7 @@ function InvoiceView() {
     getData();
     fetchData();
     fetchTaxData();
+    fetchCenterValues();
   }, [id]);
 
   return (
@@ -378,18 +387,8 @@ function InvoiceView() {
                         : ""
                     )}
                 </h5>
-                <span>Tel No :  {centerData &&
-                  centerData.map((center) =>
-                    parseInt(data.centerId) === center.id
-                      ? center.phone || "--"
-                      : ""
-                  )}</span>
-                <span>Email &nbsp;:  {centerData &&
-                  centerData.map((center) =>
-                    parseInt(data.centerId) === center.id
-                      ? center.email || "--"
-                      : ""
-                  )}</span>
+                <span>Tel No :  {centerValues.mobile || "--"}</span>
+                <span>Email &nbsp;:  {centerValues.email || "--"}</span>
               </div>
               <div className="card-header my-5">
                 <h5>Official Receipt</h5>
@@ -522,44 +521,16 @@ function InvoiceView() {
               <div>
                 <h5>Notes:</h5>
                 <div className="container">
-                  <p>{invoiceNotes || "--"}</p>
+                  <p>{centerValues.invoiceNotes || "--"}</p>
                 </div>
               </div>
             </div>
             <div className="col-lg-4 col-md-8 col-12">
               <div className="d-flex justify-content-center flex-column align-items-center">
-                <img src={qrCodeUrl} alt="Teacher" width="100" height="100" />
-                {/* {data.qrCode ? (
-                <img
-                  src={
-                    centerData
-                      ? centerData.reduce((src, center) => {
-                          return parseInt(data.centerId) === center.id
-                            ? center.qrCode || "--"
-                            : src;
-                        }, "")
-                      : BlockImg
-                  }
-                  onError={(e) => {
-                    e.target.src = BlockImg;
-                  }}
-                  style={{ borderRadius: 70 }}
-                  width="100"
-                  height="100"
-                  alt="Teacher"
-                />
-              ) : (
-                <img
-                  src={BlockImg}
-                  alt="Teacher"
-                  style={{ borderRadius: 70 }}
-                  width="100"
-                  height="100"
-                />
-              )} */}
+                <img src={centerValues.qrCode || qrCodeUrl} alt="Teacher" width="100" height="100" />
                 <p className="text-center">
-                  Tution Care Pvt.Ltd <br />
-                  UEN : {uenNumber || " "}
+                  {centerValues.centerName} Pvt.Ltd <br />
+                  UEN : {centerValues.uenNumber || "--"}
                 </p>
               </div>
             </div>

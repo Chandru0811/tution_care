@@ -288,7 +288,13 @@ function AssignmentResultView() {
                     <p className="fw-medium">Batch Time</p>
                   </div>
                   <div className="col-6 text-start">
-                  <p className="text-muted">: {data[0]?.batch || "--"}</p>
+                    {data[0]?.batchTimes && data[0]?.batchTimes?.length > 0 ? (
+                      data[0]?.batchTimes.map((time, index) => (
+                        <div key={index}>{time}</div>
+                      ))
+                    ) : (
+                      <p className="text-muted">: --</p>
+                    )}
                   </div>
                 </div>
               </div>

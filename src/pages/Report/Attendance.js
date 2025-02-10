@@ -146,7 +146,7 @@ const Attendance = () => {
       >
         <div className="card">
           <div
-            className="d-flex px-4 justify-content-between align-items-center p-1 mb-4"
+            className="d-flex px-4 justify-content-between align-items-center p-1"
             style={{ background: "#f5f7f9" }}
           >
             <div class="d-flex align-items-center">

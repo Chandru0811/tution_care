@@ -180,14 +180,11 @@ function PaymentsEdit() {
   };
 
   const getData = async () => {
-    let responses;
     try {
-
       const responses = await api.get(`/getPaymentById/${id}`);
       setData(responses.data);
 
       formik.setValues(responses.data);
-
       if (responses.data?.studentId) {
         try {
           const response = await api.get(

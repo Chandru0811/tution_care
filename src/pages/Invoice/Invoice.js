@@ -19,7 +19,7 @@ import fetchAllPackageListByCenter from "../List/PackageListByCenter";
 const Invoice = () => {
   const centerId = localStorage.getItem("tmscenterId");
   const [filters, setFilters] = useState({
-    centerId:centerId,
+    centerId: centerId,
     courseId: "",
     studentId: "",
     packageId: "",
@@ -65,23 +65,25 @@ const Invoice = () => {
         ),
       },
       {
-        accessorKey: "status",
+        accessorKey: "invoiceStatus",
         enableHiding: false,
         header: "Status",
+        size: 20,
         Cell: ({ row }) =>
-          row.original.status === "APPROVED" ? (
-            <span className="badge badges-Green fw-light">Approved</span>
-          ) : row.original.status === "REJECTED" ? (
+          row.original.invoiceStatus === "PAID" ? (
+            <span className="badge badges-Green fw-light">Paid</span>
+          ) : row.original.invoiceStatus === "REJECTED" ? (
             <span className="badge badges-danger fw-light">Rejected</span>
           ) : (
             <span className="badge badges-orange fw-light">Pending</span>
           ),
       },
-      // {
-      //   accessorKey: "centerName",
-      //   enableHiding: false,
-      //   header: "Centre",
-      // },
+      {
+        accessorKey: "invoiceNumber",
+        header: "Invoice Number",
+        enableHiding: false,
+        size: 50,
+      },
       {
         accessorKey: "course",
         enableHiding: false,
@@ -95,12 +97,7 @@ const Invoice = () => {
       { accessorKey: "student", header: "Student" },
       { accessorKey: "parent", enableHiding: false, header: "Parent Name" },
       { accessorKey: "package", header: "Package" },
-      {
-        accessorKey: "invoiceNumber",
-        header: "Invoice Number",
-        enableHiding: false,
-        size: 50,
-      },
+
       {
         accessorKey: "invoiceDate",
         header: "Invoice Date",
@@ -400,12 +397,15 @@ const Invoice = () => {
               open={Boolean(menuAnchor)}
               onClose={handleMenuClose}
             >
-              <MenuItem
-                onClick={() => navigate(`/invoice/edit/${selectedId}`)}
-                className="text-start mb-0 menuitem-style"
-              >
-                Edit
-              </MenuItem>
+              {data.find((invoice) => invoice.id === selectedId)
+                ?.invoiceStatus !== "PAID" && (
+                <MenuItem
+                  onClick={() => navigate(`/invoice/edit/${selectedId}`)}
+                  className="text-start mb-0 menuitem-style"
+                >
+                  Edit
+                </MenuItem>
+              )}
               <MenuItem>
                 <GlobalDelete
                   path={`/deleteGenerateInvoice/${selectedId}`}

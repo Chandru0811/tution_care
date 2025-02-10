@@ -66,9 +66,9 @@ function AssignmentView() {
       },
       {
         accessorKey: "uploadDate",
-        header: "Upload Date",
+        header: "Submited Date",
         enableHiding: false,
-        Cell: ({ cell }) => cell.getValue()?.substring(0, 10) || "",
+        Cell: ({ cell }) => cell.getValue()?.substring(0, 10) || "-",
       },
       {
         accessorKey: "createdBy",
