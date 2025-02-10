@@ -301,11 +301,11 @@ function Attendances() {
                   backgroundColor: "#f5f7f9",
                 }}
               >
-                <div style={{ width: "20%" }} className="py-2">
+                {/* <div style={{ width: "20%" }} className="py-2">
                   <p style={{ marginBottom: "0px", fontWeight: "700" }}>
                     Centre
                   </p>
-                </div>
+                </div> */}
                 <div style={{ width: "20%" }} className="py-2">
                   <p style={{ marginBottom: "0px", fontWeight: "700" }}>
                     Course
@@ -358,7 +358,7 @@ function Attendances() {
                             id="acordeanHead"
                             style={{ backgroundColor: "transparent" }}
                           >
-                            <div style={{ width: "20%" }} className="pb-2 pt-4">
+                            {/* <div style={{ width: "20%" }} className="pb-2 pt-4">
                               <p
                                 style={{
                                   marginBottom: "0px",
@@ -367,7 +367,7 @@ function Attendances() {
                               >
                                 {attendanceItem.center}
                               </p>
-                            </div>
+                            </div> */}
                             <div style={{ width: "20%" }} className="pb-2 pt-4">
                               <p
                                 style={{

@@ -9,7 +9,6 @@ import fetchAllClassesWithIdsC from "../List/ClassListByCourse";
 import fetchAllTeacherListByCenter from "../List/TeacherListByCenter";
 import fetchAllStudentListByCenter from "../List/StudentListByCenter";
 import { MultiSelect } from "react-multi-select-component";
-import { CgTrash } from "react-icons/cg";
 
 function AssignmentEdit() {
   const { id } = useParams();
@@ -30,7 +29,7 @@ function AssignmentEdit() {
     courseId: Yup.string().required("*Course is required"),
     userId: Yup.string().required("*Teacher is required"),
     day: Yup.string().required("*Days is required"),
-    batchTime: Yup.array()
+    batchTimes: Yup.array()
       .of(Yup.string().required("*Batch Time is required"))
       .min(1, "*At least one Batch Time is required"),
     classId: Yup.string().required("*Class Listing is required"),
@@ -49,7 +48,7 @@ function AssignmentEdit() {
       day: "",
       expiredDate: "",
       folderCategory: "group",
-      batchTime: "",
+      batchTimes: [],
       groupSelect: "",
       studentSelect: "",
       studentIds: [],
@@ -75,7 +74,6 @@ function AssignmentEdit() {
           }
         });
         const formData = new FormData();
-        formData.append("questionId", id);
         formData.append("centerId", centerId);
         formData.append("userId", values.userId);
         formData.append("assignmentName", values.assignmentName);
@@ -86,7 +84,7 @@ function AssignmentEdit() {
         formData.append("courseId", values.courseId);
         formData.append("classId", values.classId);
         formData.append("folderCategory", folderCategory);
-        formData.append("batchTime", values.batchTime);
+        formData.append("batchTimes", values.batchTimes);
         formData.append("date", values.date);
         formData.append("expiredDate", values.expiredDate);
 
@@ -105,7 +103,7 @@ function AssignmentEdit() {
         }
 
         // Send the request
-        const response = await api.put(`/updateAssignment`, formData, {
+        const response = await api.put(`/updateAssignment/${id}`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
@@ -282,7 +280,7 @@ function AssignmentEdit() {
         day: data.day || "",
         date: data.date || "",
         expiredDate: data.expiredDate || "",
-        batchTime: data.batchTimes?.[0] || "", // Assign first batch time if available
+        batchTimes: data.batchTimes || "", // Assign first batch time if available
         studentIds: data.studentIds || [], // Ensure array format
         questions: data.questions || [],
         files: [], // Reset files
@@ -294,6 +292,15 @@ function AssignmentEdit() {
         console.log("Setting classId after fetching classes:", data.classId);
         formik.setFieldValue("classId", data.classId);
       }, 500);
+      // Map batchTimes for MultiSelect
+      if (data.batchTimes && Array.isArray(data.batchTimes)) {
+        setSelectedBatchTimes(
+          data.batchTimes.map((time) => ({
+            label: normalizeTime(time),
+            value: convertTo24Hour(time),
+          }))
+        );
+      }
       // Set student multi-select values
       if (Array.isArray(data.studentIds) && Array.isArray(data.studentNames)) {
         const selectedStudents = data.studentIds.map((id, index) => ({
@@ -380,7 +387,7 @@ function AssignmentEdit() {
                     aria-hidden="true"
                   ></span>
                 )}
-                <span className="fw-medium">Upadte</span>
+                <span className="fw-medium">Update</span>
               </button>
             </div>
           </div>
@@ -523,7 +530,7 @@ function AssignmentEdit() {
                 )}
               </div>
 
-              <div className="col-md-6 col-12 mb-4">
+              {/* <div className="col-md-6 col-12 mb-4">
                 <label className="form-label">
                   Batch Time<span className="text-danger">*</span>
                 </label>
@@ -543,20 +550,57 @@ function AssignmentEdit() {
                   onChange={(selected) => {
                     setSelectedBatchTimes(selected);
                     formik.setFieldValue(
-                      "batchTime",
+                      "batchTimes",
                       selected.map((option) => option.value)
                     );
                   }}
                   labelledBy="Select Batch Time"
                   className={`form-multi-select ${
-                    formik.touched.batchTime && formik.errors.batchTime
+                    formik.touched.batchTimes && formik.errors.batchTimes
                       ? "is-invalid"
                       : ""
                   }`}
                 />
-                {formik.touched.batchTime && formik.errors.batchTime && (
+                {formik.touched.batchTimes && formik.errors.batchTimes && (
                   <div className="invalid-feedback">
-                    {formik.errors.batchTime}
+                    {formik.errors.batchTimes}
+                  </div>
+                )}
+              </div> */}
+              <div className="col-md-6 col-12 mb-4">
+                <label className="form-label">
+                  Batch Time<span className="text-danger">*</span>
+                </label>
+                <MultiSelect
+                  options={
+                    batchData
+                      ? batchData.map((time) => ({
+                          label: normalizeTime(time), // Convert batch time to 12-hour format for display
+                          value:
+                            time.includes("AM") || time.includes("PM")
+                              ? convertTo24Hour(time) // Convert selected time to 24-hour format
+                              : time,
+                        }))
+                      : []
+                  }
+                  value={selectedBatchTimes} // Ensure correct selected values are displayed
+                  onChange={(selected) => {
+                    setSelectedBatchTimes(selected);
+                    formik.setFieldValue(
+                      "batchTimes",
+                      selected.map((option) => option.value)
+                    );
+                  }}
+                  labelledBy="Select Batch Time"
+                  className={`form-multi-select ${
+                    formik.touched.batchTimes && formik.errors.batchTimes
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                />
+                {formik.touched.batchTimes && formik.errors.batchTimes && (
+                  <div className="invalid-feedback">
+                    {formik.errors.batchTimes}
                   </div>
                 )}
               </div>

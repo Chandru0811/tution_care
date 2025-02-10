@@ -199,21 +199,7 @@ const RevenueReport = () => {
             </div>
           </div>
           <div className="container-fluid">
-            <div className="row my-5">
-              {/* <div className="col-md-4 col-12">
-                <label className="form-label">Centre</label>
-                <select
-                  className="form-select"
-                  value={selectedCenterId}
-                  onChange={handleCenterChange}
-                >
-                  {centerData?.map((data) => (
-                    <option key={data.id} value={data.id}>
-                      {data.centerNames}
-                    </option>
-                  ))}
-                </select>
-              </div> */}
+            <div className="row">
               <div className="col-md-4 col-12">
                 <label className="form-label">Select Type</label>
                 <select
@@ -249,29 +235,8 @@ const RevenueReport = () => {
                 )}
               </div>
             </div>
-
-            <div className="card p-4 mb-5">
+            <div className="card p-4 my-3">
               <div className="row mt-5">
-                {/* <div className="col-md-6">
-              <div className="p-1">
-                <label className="form-label">Course</label>
-                <select className="form-select" value={selectedCourseId} onChange={handleCourseChange}>
-                  <option value="All">ALL</option>
-                  {courseData?.map((data) => (
-                    <option key={data.id} value={data.id}>{data.courseNames}</option>
-                  ))}
-                </select>
-              </div>
-              <div className="p-1">
-                <label className="form-label">Subject</label>
-                <select className="form-select" value={selectedSubjectId} onChange={handleSubjectChange}>
-                  <option value="All">ALL</option>
-                  {subjectData?.map((data) => (
-                    <option key={data.id} value={data.id}>{data.subjects}</option>
-                  ))}
-                </select>
-              </div>
-            </div> */}
                 <div
                   className="col-md-6 d-flex align-items-center justify-content-center"
                   style={{ height: "450px" }}
