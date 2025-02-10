@@ -19,6 +19,7 @@ function BatchTimeEdit({ id, onSuccess, handleMenuClose }) {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const userName = localStorage.getItem("tmsuserName");
   const [fields, setFields] = useState([]); // No default field
+  const centerId = localStorage.getItem("tmscenterId");
 
   const validationSchema = Yup.object({
     batchTimes: Yup.array()
@@ -31,6 +32,7 @@ function BatchTimeEdit({ id, onSuccess, handleMenuClose }) {
       batchDay: "",
       batchTimes: [],
       updatedBy: userName,
+      centerId: centerId,
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {

@@ -11,6 +11,7 @@ function TaxAdd({ onSuccess }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [isModified, setIsModified] = useState(false);
+  const centerId = localStorage.getItem("tmscenterId");
 
   const handleClose = () => {
     setShow(false);
@@ -35,6 +36,7 @@ function TaxAdd({ onSuccess }) {
 
   const formik = useFormik({
     initialValues: {
+      centerId: centerId,
       taxType: "",
       rate: "",
       effectiveDate: "",
@@ -45,9 +47,10 @@ function TaxAdd({ onSuccess }) {
     onSubmit: async (values) => {
       setLoadIndicator(true);
       // console.log(values);
+      values.centerId =centerId;
       try {
         values.createdBy = userName;
-        const response = await api.post("/createTaxSetting", values, {
+        const response = await api.post(`/createTaxSettingByCenter/${centerId}`, values, {
           headers: {
             "Content-Type": "application/json",
           },

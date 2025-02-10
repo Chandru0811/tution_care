@@ -12,6 +12,7 @@ function RaceAdd({ onSuccess }) {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const userName = localStorage.getItem("tmsuserName");
   const [isModified, setIsModified] = useState(false);
+  const centerId = localStorage.getItem("tmscenterId");
 
   const handleClose = () => {
     setShow(false);
@@ -29,13 +30,14 @@ function RaceAdd({ onSuccess }) {
     initialValues: {
       race: "",
       createdBy: userName,
+      centerId: centerId,
     },
     validationSchema: validationSchema, // Assign the validation schema
     onSubmit: async (values) => {
       setLoadIndicator(true);
       // console.log(values);
       try {
-        const response = await api.post("/createRaceSetting", values, {
+        const response = await api.post("/createRaceSettingWithCenterId", values, {
           headers: {
             "Content-Type": "application/json",
           },

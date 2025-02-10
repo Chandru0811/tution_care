@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo,  useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { MoreVert as MoreVertIcon } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import api from "../../../config/URL";
@@ -19,11 +19,11 @@ const Tax = () => {
   const [loading, setLoading] = useState(true);
   const [selectedId, setSelectedId] = useState(null);
   const [menuAnchor, setMenuAnchor] = useState(null);
-
+  const centerId = localStorage.getItem("tmscenterId");
 
   const getData = async () => {
     try {
-      const response = await api.get("/getAllTaxSetting");
+      const response = await api.get(`/getAllTaxSettingByCenter/${centerId}`);
       setDatas(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);

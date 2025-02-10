@@ -73,6 +73,7 @@ const formats = [
 function EmailTemplateAdd({ onSuccess }) {
   const [show, setShow] = useState(false);
   const userName = localStorage.getItem("tmsuserName");
+  const centerId = localStorage.getItem("tmscenterId");
 
   const handleClose = () => {
     formik.resetForm();
@@ -89,6 +90,7 @@ function EmailTemplateAdd({ onSuccess }) {
 
   const formik = useFormik({
     initialValues: {
+      centerId: centerId,
       subject: "",
       description: "",
       createdBy: userName,
@@ -100,7 +102,7 @@ function EmailTemplateAdd({ onSuccess }) {
         // const formData = new FormData();
         // formData.append("subject", values.subject);
         // formData.append("description", values.description);
-        const response = await api.post(`/createEmailTemplate`, values);
+        const response = await api.post(`/createEmailTemplateWithCenterId`, values);
         if (response.status === 200) {
           toast.success(response.data.message);
           setShow(false);

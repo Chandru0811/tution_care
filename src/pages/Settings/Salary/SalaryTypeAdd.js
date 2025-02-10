@@ -11,6 +11,7 @@ function SalaryTypeAdd({ onSuccess }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [isModified, setIsModified] = useState(false);
+  const centerId = localStorage.getItem("tmscenterId");
 
   const handleClose = () => {
     setShow(false);
@@ -29,6 +30,7 @@ function SalaryTypeAdd({ onSuccess }) {
   const formik = useFormik({
     initialValues: {
       salaryType: "",
+      centerId: centerId,
       createdBy: userName,
     },
     validationSchema: validationSchema, // Assign the validation schema
@@ -36,7 +38,7 @@ function SalaryTypeAdd({ onSuccess }) {
       setLoadIndicator(true);
       // console.log(values);
       try {
-        const response = await api.post("/createSalarySetting", values, {
+        const response = await api.post("/createSalarySettingWithCenterId", values, {
           headers: {
             "Content-Type": "application/json",
           },

@@ -18,10 +18,11 @@ const EmailTemplate = () => {
   const [loading, setLoading] = useState(true);
   const [selectedId, setSelectedId] = useState(null);
   const [menuAnchor, setMenuAnchor] = useState(null);
+  const centerId = localStorage.getItem("tmscenterId");
 
   const getData = async () => {
     try {
-      const response = await api.get("/getAllEmailTemplates");
+      const response = await api.get(`/getEmailTemplateWithCenterId/${centerId}`);
       setDatas(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);

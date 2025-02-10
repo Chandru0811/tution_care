@@ -10,6 +10,7 @@ function AbsentReasonAdd({ onSuccess }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const userName = localStorage.getItem("tmsuserName");
+  const centerId = localStorage.getItem("tmscenterId");
 
   const handleClose = () => {
     formik.resetForm();
@@ -26,6 +27,7 @@ function AbsentReasonAdd({ onSuccess }) {
 
   const formik = useFormik({
     initialValues: {
+      centerId: centerId,
       absentReason: "",
       remarks: "",
       createdBy: userName,
@@ -35,7 +37,7 @@ function AbsentReasonAdd({ onSuccess }) {
       setLoadIndicator(true);
       // console.log(values);
       try {
-        const response = await api.post("/createAbsentReason", values, {
+        const response = await api.post("/createAbsentReasonWithCenterId", values, {
           headers: {
             "Content-Type": "application/json",
           },

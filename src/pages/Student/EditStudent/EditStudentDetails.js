@@ -26,10 +26,9 @@ const validationSchema = Yup.object().shape({
   studentChineseName: Yup.string().required(
     "*Student Chinese Name is required"
   ),
-  // profileImage: Yup.string().required("*Select a Profile Image!"),
-  // preAssessmentResult: Yup.string().required(
-  //   "*Pre-Assessment Result is required!"
-  // ),
+  studentEmail: Yup.string()
+    .email("*Invalid Student Email")
+    .required("*Student Email is required"),
   remark: Yup.string()
     .max(200, "*The maximum length is 200 characters")
     .notRequired(),
@@ -85,6 +84,7 @@ const EditStudentDetails = forwardRef(
       initialValues: {
         centerId: centerId || "",
         studentName: formData.studentName || "",
+        studentEmail: formData.studentEmail || "",
         studentChineseName: formData.studentChineseName || "",
         profileImage: null || "",
         age: formData.age || "",
@@ -227,7 +227,27 @@ const EditStudentDetails = forwardRef(
                           </div>
                         )}
                     </div>
-
+                    <div className="text-start mt-4">
+                      <label htmlFor="" className="mb-1 fw-medium">
+                        <small>Student Email</small>
+                        <span className="text-danger">*</span>
+                      </label>
+                      <br />
+                      <input
+                        name="studentEmail"
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        value={formik.values.studentEmail}
+                        className="form-control "
+                        type="text"
+                      />
+                      {formik.touched.studentEmail &&
+                        formik.errors.studentEmail && (
+                          <div className="text-danger">
+                            <small>{formik.errors.studentEmail}</small>
+                          </div>
+                        )}
+                    </div>
                     <div className="text-start mt-4">
                       <label htmlFor="" className="mb-1 fw-medium">
                         <small>Date Of Birth</small>

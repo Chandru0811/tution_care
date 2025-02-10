@@ -50,7 +50,7 @@ function Viewpayroll() {
 
       <div className="card">
         <div
-          className="d-flex px-4 justify-content-between align-items-center p-1 mb-4"
+          className="d-flex px-4 justify-content-between align-items-center p-1"
           style={{ background: "#f5f7f9" }}
         >
           <div class="d-flex align-items-center">
@@ -70,7 +70,7 @@ function Viewpayroll() {
         <div className="container-fluid">
           {data.userRole === "SMS_FREELANCER" ? (
             <>
-              <div className="row mt-5">
+              <div className="row">
                 <div className="col-md-6 col-12">
                   <div className="row mb-2">
                     <div className="col-6  ">

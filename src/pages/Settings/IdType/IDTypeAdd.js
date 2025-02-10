@@ -12,6 +12,7 @@ function IDTypeAdd({ onSuccess }) {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const userName = localStorage.getItem("tmsuserName");
   const [isModified, setIsModified] = useState(false);
+  const centerId = localStorage.getItem("tmscenterId");
 
   const handleClose = () => {
     setShow(false);
@@ -28,6 +29,7 @@ function IDTypeAdd({ onSuccess }) {
   const formik = useFormik({
     initialValues: {
       idType: "",
+      centerId: centerId,
       createdBy: userName,
     },
     validationSchema: validationSchema, // Assign the validation schema
@@ -35,7 +37,7 @@ function IDTypeAdd({ onSuccess }) {
       setLoadIndicator(true);
       // console.log(values);
       try {
-        const response = await api.post("/createIdTypeSetting", values, {
+        const response = await api.post("/createNewSettingWithCenterId", values, {
           headers: {
             "Content-Type": "application/json",
           },

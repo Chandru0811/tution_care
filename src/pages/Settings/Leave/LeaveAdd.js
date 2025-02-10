@@ -12,6 +12,7 @@ function LeaveAdd({ onSuccess }) {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const userName = localStorage.getItem('userName');
   const [isModified, setIsModified] = useState(false);
+  const centerId = localStorage.getItem("tmscenterId");
 
 
   const handleClose = () => {
@@ -30,6 +31,7 @@ function LeaveAdd({ onSuccess }) {
     initialValues: {
       leaveType: "",
       createdBy: userName,
+      centerId: centerId,
 
     },
     validationSchema: validationSchema, // Assign the validation schema
@@ -37,7 +39,7 @@ function LeaveAdd({ onSuccess }) {
       setLoadIndicator(true);
       // console.log(values);
       try {
-        const response = await api.post("/createLeaveSetting", values, {
+        const response = await api.post("/createLeaveSettingWithCenterId", values, {
           headers: {
             "Content-Type": "application/json",
           },

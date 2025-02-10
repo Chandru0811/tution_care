@@ -30,6 +30,7 @@ function DeductionAdd({ onSuccess }) {
     formik.resetForm();
   };
   const handleShow = () => {
+    formik.resetForm();
     setShowModal(true);
   };
 
@@ -47,15 +48,15 @@ function DeductionAdd({ onSuccess }) {
       setLoadIndicator(true);
       values.createdBy = userName;
 
-      // let selectedEmployeeName =
-      //   userNamesData.find(
-      //     (employee) => parseInt(values.userId) === employee.id
-      //   )?.userNames || "--";
+      let selectedEmployeeName =
+        userNamesData.find(
+          (employee) => parseInt(values.userId) === employee.id
+        )?.userNames || "--";
 
       let payload = {
         centerId :centerId,
-        userId: 17,
-        // employeeName: selectedEmployeeName,
+        userId: values.userId,
+        employeeName: selectedEmployeeName,
         deductionName: values.deductionName,
         deductionMonth: values.deductionMonth,
         deductionAmount: values.deductionAmount,

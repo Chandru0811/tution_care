@@ -11,6 +11,7 @@ function CountryAdd({ onSuccess }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [isModified, setIsModified] = useState(false);
+  const centerId = localStorage.getItem("tmscenterId");
 
   const handleClose = () => {
     setShow(false);
@@ -36,13 +37,14 @@ function CountryAdd({ onSuccess }) {
       nationality: "",
       citizenship: "",
       createdBy: userName,
+      centerId: centerId,
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       setLoadIndicator(true);
       // console.log(values);
       try {
-        const response = await api.post("/createCountrySetting", values, {
+        const response = await api.post("/createCountrySettingWithCenterId", values, {
           headers: {
             "Content-Type": "application/json",
           },

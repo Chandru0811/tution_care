@@ -11,6 +11,7 @@ function ShgAdd({ onSuccess }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [isModified, setIsModified] = useState(false);
+  const centerId = localStorage.getItem("tmscenterId");
 
   const handleClose = () => {
     setShow(false);
@@ -46,6 +47,7 @@ function ShgAdd({ onSuccess }) {
   const formik = useFormik({
     initialValues: {
       shgType: "",
+      centerId: centerId,
       shgAmount: "",
       createdBy: userName,
     },
@@ -54,7 +56,7 @@ function ShgAdd({ onSuccess }) {
       setLoadIndicator(true);
       // console.log(values);
       try {
-        const response = await api.post("/createSHGSetting", values, {
+        const response = await api.post("/createSHGSettingWithId", values, {
           headers: {
             "Content-Type": "application/json",
           },

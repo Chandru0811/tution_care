@@ -6,7 +6,6 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 import Footer from "../components/common/Footer";
 import ScrollToTop from "../pages/ScrollToTop";
 import NewDashboard from "../pages/NewDashboard";
-import { ToastContainer } from "react-bootstrap";
 import SuperAdminSidebar from "../components/common/SuperAdminSidebar";
 import SuperAdminCenter from "../pages/SuperAdminCenter/SuperAdminCenter";
 import SuperAdminCenterAdd from "../pages/SuperAdminCenter/SuperAdminCenterAdd";
@@ -14,6 +13,7 @@ import SuperAdminCenterEdit from "../pages/SuperAdminCenter/SuperAdminCenterEdit
 import SuperAdminCenterView from "../pages/SuperAdminCenter/SuperAdminCenterView";
 import ModuleAccess from "../pages/ModuleAccess/ModuleAccess";
 import SuperAdminHeader from "../components/common/SuperAdminHeader";
+import { ToastContainer } from "react-toastify";
 
 function SuperAdmin({ handleLogout }) {
   useEffect(() => {
@@ -30,7 +30,7 @@ function SuperAdmin({ handleLogout }) {
   return (
     <div>
       <BrowserRouter basename="/tuitions">
-        <ToastContainer position="top-center" />
+      <ToastContainer position="top-center" />
         <SuperAdminSidebar />
         <section className="home-section">
           <SuperAdminHeader onLogout={handleLogout} />

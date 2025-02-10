@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import api from "../../../config/URL";
@@ -31,7 +30,6 @@ function DeductionEdit({ id, onSuccess, handleMenuClose }) {
   const [show, setShow] = useState(false);
   const userName = localStorage.getItem("tmsuserName");
   const centerId = localStorage.getItem("tmscenterId");
-  const navigate = useNavigate();
 
   const getData = async () => {
     try {
@@ -50,8 +48,10 @@ function DeductionEdit({ id, onSuccess, handleMenuClose }) {
   const handleClose = () => {
     handleMenuClose();
     setShow(false);
+    formik.resetForm();
   };
   const handleShow = () => {
+    formik.resetForm();
     setShow(true);
     setIsModified(false);
     getData();
@@ -71,6 +71,11 @@ function DeductionEdit({ id, onSuccess, handleMenuClose }) {
       setLoadIndicator(true);
       values.updatedBy = userName;
       values.centerId = centerId;
+      let selectedEmployeeName =
+      userNamesData.find(
+        (employee) => parseInt(values.userId) === employee.id
+      )?.userNames || "--";
+      values.employeeName = selectedEmployeeName
       try {
         const response = await api.put(`/updateUserDeduction/${id}`, values, {
           headers: {
@@ -81,7 +86,6 @@ function DeductionEdit({ id, onSuccess, handleMenuClose }) {
           onSuccess();
           toast.success(response.data.message);
           handleClose();
-          navigate("/deduction");
         } else {
           toast.error(response.data.message);
         }

@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Button } from "react-bootstrap";
 import { Dialog, DialogActions, DialogTitle, Slide } from "@mui/material";
-import { toast } from "react-toastify";
 import api from "../../config/URL";
+import { toast } from "react-toastify";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="down" ref={ref} {...props} />;
@@ -39,8 +39,9 @@ function GlobalDelete({
     try {
       const response = await api.delete(path);
       if (response.status === 200 || response.status === 201 || response.status === 204) {
-        onDeleteSuccess();
         toast.success(response.data.message);
+        console.log("response.data.message",response.data.message)
+        onDeleteSuccess();
       }
     } catch (error) {
       if (error?.response?.status === 409) {

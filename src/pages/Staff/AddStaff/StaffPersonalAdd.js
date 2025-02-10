@@ -47,11 +47,14 @@ const StaffPersonalAdd = forwardRef(
     const [idTypeData, setIdTypeData] = useState(null);
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-    const [roleData, setRoleData] = useState(null);
     const userName = localStorage.getItem("tmsuserName");
-    const [nationalityData, setNationalityData] = useState(null);
     const centerId = localStorage.getItem("tmscenterId");
+    const [nationalityData, setNationalityData] = useState(null);
+    const userId = formData.user_id;
+    const [roleData, setRoleData] = useState(null);
 
+    console.log("userId", userId);
+    console.log("formData", formData);
     const formik = useFormik({
       initialValues: {
         role: formData.role || "",
@@ -70,21 +73,22 @@ const StaffPersonalAdd = forwardRef(
         citizenship: formData.citizenship || "",
         nationalityId: formData.nationalityId || "",
         status: formData.status || "",
-        centerId: formData.centerId || "",
       },
       validationSchema: validationSchema,
       onSubmit: async (values) => {
         setLoadIndicators(true);
-        values.centerId = centerId;
         try {
+          values.centerId = centerId;
+          let response;
+
           const formData = new FormData();
           let nationalityName;
           if (values.nationalityId)
             nationalityName = nationalityData.find(
               (prv) => prv.id === parseInt(values.nationalityId)
             );
-          formData.append("centerId", values.centerId);
           formData.append("role", values.role);
+          formData.append("centerId", centerId);
           formData.append("teacherName", values.teacherName);
           formData.append("dateOfBirth", values.dateOfBirth);
           formData.append("idTypeId", values.idTypeId);
@@ -103,18 +107,22 @@ const StaffPersonalAdd = forwardRef(
           formData.append("status", values.status);
           formData.append("createdBy", userName);
 
-          const response = await api.post(
-            "/createUserWithProfileImage",
-            formData,
-            {
+          if (userId === null || userId === undefined) {
+            response = await api.post("/createUserWithProfileImage", formData, {
               headers: {
                 "Content-Type": "multipart/form-data",
               },
-            }
-          );
+            });
+          } else {
+            response = await api.put(`/updateUser/${userId}`, values, {
+              headers: {
+                "Content-Type": "application/json",
+              },
+            });
+          }
 
-          if (response.status === 201) {
-            const user_id = response.data.user_id;
+          if (response.status === 201 || response.status === 200) {
+            const user_id = response.data.user_id || userId;
             toast.success(response.data.message);
             setFormData((prv) => ({ ...prv, ...values, user_id }));
             handleNext();
@@ -168,6 +176,14 @@ const StaffPersonalAdd = forwardRef(
         toast.error(error);
       }
     };
+    const rolesData = async () => {
+      try {
+        const response = await api.get(`/getUserRolesByCenterId/${centerId}`);
+        setRoleData(response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
 
     const fetchCitizenShipData = async () => {
       try {
@@ -175,14 +191,6 @@ const StaffPersonalAdd = forwardRef(
         setNationalityData(nationalityData);
       } catch (error) {
         toast.error(error);
-      }
-    };
-    const rolesData = async () => {
-      try {
-        const response = await api.get(`/getUserRolesByCenterId/${centerId}`);
-        setRoleData(response.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
       }
     };
 
@@ -206,15 +214,15 @@ const StaffPersonalAdd = forwardRef(
         }}
       >
         <div className="pb-4">
-          <p class="headColor">Personal Information</p>
-          <div class="container-fluid row d-flex my-4">
-            <div class="col-md-6 col-12 mb-3">
-              <div class="form-group  col-sm ">
+          <p className="headColor">Personal Information</p>
+          <div className="container-fluid row d-flex my-4">
+            <div className="col-md-6 col-12 mb-3">
+              <div className="form-group  col-sm ">
                 <label>Staff Name</label>
                 <span className="text-danger">*</span>
                 <input
                   type="text"
-                  class="form-control "
+                  className="form-control "
                   name="teacherName"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -227,13 +235,13 @@ const StaffPersonalAdd = forwardRef(
                 )}
               </div>
             </div>
-            <div class="col-md-6 col-12 mb-3">
-              <div class="form-group col-sm">
+            <div className="col-md-6 col-12 mb-3">
+              <div className="form-group col-sm">
                 <label>Date of Birth</label>
                 <span className="text-danger">*</span>
                 <input
                   type="date"
-                  class="form-control"
+                  className="form-control"
                   name="dateOfBirth"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -246,8 +254,8 @@ const StaffPersonalAdd = forwardRef(
                 )}
               </div>
             </div>
-            <div class="col-md-6 col-12 mb-3">
-              <div class="form-group col-sm">
+            <div className="col-md-6 col-12 mb-3">
+              <div className="form-group col-sm">
                 <label>ID Type</label>
                 <span className="text-danger">*</span>
                 <select
@@ -273,13 +281,13 @@ const StaffPersonalAdd = forwardRef(
                 )}
               </div>
             </div>
-            <div class="col-md-6 col-12 mb-3">
-              <div class="form-group col-sm ">
+            <div className="col-md-6 col-12 mb-3">
+              <div className="form-group col-sm ">
                 <label>ID No</label>
                 <span className="text-danger">*</span>
                 <input
                   type="text"
-                  class="form-control "
+                  className="form-control "
                   name="idNo"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -292,8 +300,8 @@ const StaffPersonalAdd = forwardRef(
                 )}
               </div>
             </div>
-            <div class="col-md-6 col-12 mb-3">
-              <div class="form-group col-sm">
+            <div className="col-md-6 col-12 mb-3">
+              <div className="form-group col-sm">
                 <label>Country</label>
                 <span className="text-danger">*</span>
                 <select
@@ -319,8 +327,8 @@ const StaffPersonalAdd = forwardRef(
               </div>
             </div>
 
-            <div class="col-md-6 col-12 mb-3">
-              <div class="form-group col-sm">
+            <div className="col-md-6 col-12 mb-3">
+              <div className="form-group col-sm">
                 <label>Nationality</label>
                 <span className="text-danger">*</span>
                 <select
@@ -346,8 +354,8 @@ const StaffPersonalAdd = forwardRef(
                   )}
               </div>
             </div>
-            <div class="col-md-6 col-12 mb-3">
-              <div class="form-group col-sm">
+            <div className="col-md-6 col-12 mb-3">
+              <div className="form-group col-sm">
                 <label>Citizenship</label>
                 <span className="text-danger">*</span>
                 <select
@@ -378,136 +386,145 @@ const StaffPersonalAdd = forwardRef(
                 )}
               </div>
             </div>
-            <div class="col-md-6 col-12 mb-3">
-              <div class="form-group  col-sm ">
-                <label>Photo</label>
-                <span className="text-danger">*</span>
-                <input
-                  type="file"
-                  name="file"
-                  accept="image/*"
-                  className="form-control"
-                  onChange={(event) => {
-                    formik.setFieldValue("file", event.target.files[0]);
-                  }}
-                  onBlur={formik.handleBlur}
-                />
-                {formik.touched.file && formik.errors.file && (
-                  <div className="error text-danger">
-                    <small>{formik.errors.file}</small>
+            {userId === undefined && (
+              <>
+                <div className="col-md-6 col-12 mb-3">
+                  <div className="form-group  col-sm ">
+                    <label>Photo</label>
+                    <span className="text-danger">*</span>
+                    <input
+                      type="file"
+                      name="file"
+                      accept="image/*"
+                      className="form-control"
+                      onChange={(event) => {
+                        formik.setFieldValue("file", event.target.files[0]);
+                      }}
+                      onBlur={formik.handleBlur}
+                    />
+                    {formik.touched.file && formik.errors.file && (
+                      <div className="error text-danger">
+                        <small>{formik.errors.file}</small>
+                      </div>
+                    )}
                   </div>
-                )}
-              </div>
-            </div>
-            <div class="col-md-6 col-12 mb-3">
-              <label>
-                Email ID<span class="text-danger">*</span>
-              </label>
-              <input
-                type="email"
-                className="form-control"
-                name="email"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.email}
-              />
-              {formik.touched.email && formik.errors.email && (
-                <div className="error text-danger ">
-                  <small>{formik.errors.email}</small>
                 </div>
-              )}
-            </div>
-            <div class="col-md-6 col-12 mb-3">
-              <div className="mb-3">
-                <label>
-                  Password<span class="text-danger">*</span>
-                </label>
-                <div className={`input-group mb-3`}>
+                <div className="col-md-6 col-12 mb-3">
+                  <label>
+                    Email ID<span className="text-danger">*</span>
+                  </label>
                   <input
-                    type={showPassword ? "text" : "password"}
-                    placeholder="Enter password"
-                    className={`form-control ${
-                      formik.touched.password && formik.errors.password
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    style={{
-                      borderRadius: "3px",
-                      borderRight: "none",
-                      borderTopRightRadius: "0px",
-                      borderBottomRightRadius: "0px",
-                    }}
-                    name="password"
-                    {...formik.getFieldProps("password")}
+                    type="email"
+                    className="form-control"
+                    name="email"
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    value={formik.values.email}
                   />
-                  <span
-                    className={`input-group-text iconInputBackground`}
-                    id="basic-addon1"
-                    onClick={togglePasswordVisibility}
-                    style={{ cursor: "pointer", borderRadius: "3px" }}
-                  >
-                    {showPassword ? <IoEyeOffOutline /> : <IoEyeOutline />}
-                  </span>
-                  {formik.touched.password && formik.errors.password && (
-                    <div className="invalid-feedback">
-                      {formik.errors.password}
+                  {formik.touched.email && formik.errors.email && (
+                    <div className="error text-danger ">
+                      <small>{formik.errors.email}</small>
                     </div>
                   )}
                 </div>
-              </div>
-            </div>
-            <div class="col-md-6 col-12 mb-3">
-              <label>
-                Confirm Password<span class="text-danger">*</span>
-              </label>
-              <div className={`input-group mb-3`}>
-                <input
-                  type={showConfirmPassword ? "text" : "password"}
-                  placeholder="Enter confirm password"
-                  className={`form-control ${
-                    formik.touched.confirmPassword &&
-                    formik.errors.confirmPassword
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  style={{
-                    borderRadius: "3px",
-                    borderRight: "none",
-                    borderTopRightRadius: "0px",
-                    borderBottomRightRadius: "0px",
-                  }}
-                  name="confirmPassword"
-                  {...formik.getFieldProps("confirmPassword")}
-                />
-                <span
-                  className={`input-group-text iconInputBackground`}
-                  id="basic-addon1"
-                  onClick={toggleConfirmPasswordVisibility}
-                  style={{ cursor: "pointer", borderRadius: "3px" }}
-                >
-                  {showConfirmPassword ? <IoEyeOffOutline /> : <IoEyeOutline />}
-                </span>
-                {formik.touched.confirmPassword &&
-                  formik.errors.confirmPassword && (
-                    <div className="invalid-feedback">
-                      {formik.errors.confirmPassword}
+                <div className="col-md-6 col-12 mb-3">
+                  <div className="mb-3">
+                    <label>
+                      Password<span className="text-danger">*</span>
+                    </label>
+                    <div className={`input-group mb-3`}>
+                      <input
+                        type={showPassword ? "text" : "password"}
+                        placeholder="Enter password"
+                        className={`form-control ${
+                          formik.touched.password && formik.errors.password
+                            ? "is-invalid"
+                            : ""
+                        }`}
+                        style={{
+                          borderRadius: "3px",
+                          borderRight: "none",
+                          borderTopRightRadius: "0px",
+                          borderBottomRightRadius: "0px",
+                        }}
+                        name="password"
+                        {...formik.getFieldProps("password")}
+                      />
+                      <span
+                        className={`input-group-text iconInputBackground`}
+                        id="basic-addon1"
+                        onClick={togglePasswordVisibility}
+                        style={{ cursor: "pointer", borderRadius: "3px" }}
+                      >
+                        {showPassword ? <IoEyeOffOutline /> : <IoEyeOutline />}
+                      </span>
+                      {formik.touched.password && formik.errors.password && (
+                        <div className="invalid-feedback">
+                          {formik.errors.password}
+                        </div>
+                      )}
                     </div>
-                  )}
-              </div>
-            </div>
-            <div class="col-md-6 col-12 mb-3">
-              <div class="form-group col-sm">
+                  </div>
+                </div>
+                <div className="col-md-6 col-12 mb-3">
+                  <label>
+                    Confirm Password<span className="text-danger">*</span>
+                  </label>
+                  <div className={`input-group mb-3`}>
+                    <input
+                      type={showConfirmPassword ? "text" : "password"}
+                      placeholder="Enter confirm password"
+                      className={`form-control ${
+                        formik.touched.confirmPassword &&
+                        formik.errors.confirmPassword
+                          ? "is-invalid"
+                          : ""
+                      }`}
+                      style={{
+                        borderRadius: "3px",
+                        borderRight: "none",
+                        borderTopRightRadius: "0px",
+                        borderBottomRightRadius: "0px",
+                      }}
+                      name="confirmPassword"
+                      {...formik.getFieldProps("confirmPassword")}
+                    />
+                    <span
+                      className={`input-group-text iconInputBackground`}
+                      id="basic-addon1"
+                      onClick={toggleConfirmPasswordVisibility}
+                      style={{ cursor: "pointer", borderRadius: "3px" }}
+                    >
+                      {showConfirmPassword ? (
+                        <IoEyeOffOutline />
+                      ) : (
+                        <IoEyeOutline />
+                      )}
+                    </span>
+                    {formik.touched.confirmPassword &&
+                      formik.errors.confirmPassword && (
+                        <div className="invalid-feedback">
+                          {formik.errors.confirmPassword}
+                        </div>
+                      )}
+                  </div>
+                </div>
+              </>
+            )}
+
+            <div className="col-md-6 col-12 mb-3">
+              <div className="form-group col-sm">
                 <label>Role</label>
                 <span className="text-danger">*</span>
                 <select
                   type="text"
-                  class="form-select"
+                  className="form-select"
                   name="role"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   value={formik.values.role}
                 >
-                   <option selected></option>
+                  <option selected></option>
                   {roleData &&
                     roleData.map((role) => (
                       <option key={role.id} value={role.roleName}>
@@ -522,13 +539,13 @@ const StaffPersonalAdd = forwardRef(
                 )}
               </div>
             </div>
-            <div class="col-md-6 col-12 mb-3">
-              <div class="form-group col-sm">
+            <div className="col-md-6 col-12 mb-3">
+              <div className="form-group col-sm">
                 <label>Status</label>
                 <span className="text-danger">*</span>
                 <select
                   type="text"
-                  class="form-select"
+                  className="form-select"
                   name="status"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -545,8 +562,8 @@ const StaffPersonalAdd = forwardRef(
                 )}
               </div>
             </div>
-            <div class="col-md-6 col-12 mb-3">
-              <div class="form-group  col-sm ms-2">
+            <div className="col-md-6 col-12 mb-3">
+              <div className="form-group  col-sm ms-2">
                 <label className="mb-3">Gender</label>
                 <div className="d-flex align-items-center justify-content-start">
                   <div className="me-4">
@@ -565,7 +582,7 @@ const StaffPersonalAdd = forwardRef(
                     </label>
                   </div>
                   <input
-                    class="form-check-input mx-2"
+                    className="form-check-input mx-2"
                     type="radio"
                     name="gender"
                     value="Male"
@@ -579,11 +596,11 @@ const StaffPersonalAdd = forwardRef(
                 </div>
               </div>
             </div>
-            <div class="col-md-12 col-12 mb-3">
-              <div class="form-group  col-sm ">
+            <div className="col-md-12 col-12 mb-3">
+              <div className="form-group  col-sm ">
                 <label
                   for="exampleFormControlTextarea1 "
-                  class="form-label d-flex "
+                  className="form-label d-flex "
                 >
                   Short Introduction
                 </label>

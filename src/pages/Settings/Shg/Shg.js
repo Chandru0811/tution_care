@@ -19,10 +19,11 @@ const Shg = () => {
   const [loading, setLoading] = useState(true);
   const [selectedId, setSelectedId] = useState(null);
   const [menuAnchor, setMenuAnchor] = useState(null);
+  const centerId = localStorage.getItem("tmscenterId");
 
   const getData = async () => {
     try {
-      const response = await api.get("/getAllSHGSetting");
+      const response = await api.get(`/getSHGSettingWithCenterId/${centerId}`);
       setDatas(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);

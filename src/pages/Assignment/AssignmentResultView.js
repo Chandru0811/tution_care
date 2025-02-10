@@ -21,7 +21,10 @@ function AssignmentResultView() {
   const [showModal, setShowModal] = useState(false);
 
   const handleModalClose = () => setShowModal(false);
-  const handleModalShow = () => setShowModal(true);
+  const handleModalShow = () => {
+    formik.resetForm();
+    setShowModal(true);
+  };
 
   const formik = useFormik({
     initialValues: {
@@ -285,13 +288,7 @@ function AssignmentResultView() {
                     <p className="fw-medium">Batch Time</p>
                   </div>
                   <div className="col-6 text-start">
-                    {data[0]?.batchTimes && data[0]?.batchTimes?.length > 0 ? (
-                      data[0]?.batchTimes.map((time, index) => (
-                        <div key={index}>{time}</div>
-                      ))
-                    ) : (
-                      <p className="text-muted">: --</p>
-                    )}
+                  <p className="text-muted">: {data[0]?.batch || "--"}</p>
                   </div>
                 </div>
               </div>

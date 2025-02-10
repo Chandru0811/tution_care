@@ -192,10 +192,10 @@ function PaymentsView() {
                   </div>
                 </div>
               </div>
-              <div className="col-md-6 col-12">
+              {/* <div className="col-md-6 col-12">
                 <div className="row mb-2">
                   <div className="col-6">
-                    <p className="fw-medium">ReceiptNo </p>
+                    <p className="fw-medium">Receipt No </p>
                   </div>
                   <div className="col-6 text-start">
                     <p className="text-muted text-sm">
@@ -204,12 +204,12 @@ function PaymentsView() {
                     </p>
                   </div>
                 </div>
-              </div>
+              </div> */}
 
               <div className="col-md-6 col-12 mb-3">
                 <div className="row">
                   <div className="col-6">
-                    <p className="fw-medium">PaymentDate</p>
+                    <p className="fw-medium">Payment Date</p>
                   </div>
                   <div className="col-6 text-start">
                     <p className="text-muted">: {data.paymentDate || "--"}</p>
@@ -220,7 +220,7 @@ function PaymentsView() {
               <div className="col-md-6 col-12 mb-3">
                 <div className="row">
                   <div className="col-6">
-                    <p className="fw-medium">PaymentMethod</p>
+                    <p className="fw-medium">Payment Method</p>
                   </div>
                   <div className="col-6 text-start">
                     <p className="text-muted">: {data.paymentMethod || "--"}</p>
@@ -231,7 +231,7 @@ function PaymentsView() {
               <div className="col-md-6 col-12 mb-3">
                 <div className="row">
                   <div className="col-6">
-                    <p className="fw-medium">PaymentReference</p>
+                    <p className="fw-medium">Payment Reference</p>
                   </div>
                   <div className="col-6 text-start">
                     <p className="text-muted">
@@ -244,7 +244,7 @@ function PaymentsView() {
               <div className="col-md-6 col-12">
                 <div className="row mb-2">
                   <div className="col-6">
-                    <p className="fw-medium">PaidAmounte</p>
+                    <p className="fw-medium">Paid Amount</p>
                   </div>
                   <div className="col-6 text-start">
                     <p className="text-muted text-sm">
@@ -253,56 +253,66 @@ function PaymentsView() {
                   </div>
                 </div>
               </div>
-
-              <div className="col-md-6 col-12">
-                <div className="row mb-2">
-                  <div className="col-6">
-                    <p className="fw-medium">Bank</p>
-                  </div>
-                  <div className="col-6 text-start">
-                    <p className="text-muted text-sm">: {data.bank || "--"}</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="col-md-6 col-12">
-                <div className="row mb-2">
-                  <div className="col-6">
-                    <p className="fw-medium">AccountNo</p>
-                  </div>
-                  <div className="col-6 text-start">
-                    <p className="text-muted text-sm">
-                      : {data.accountNo || "--"}
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="col-md-6 col-12">
-                <div className="row mb-2">
-                  <div className="col-6">
-                    <p className="fw-medium">TransactionNo</p>
-                  </div>
-                  <div className="col-6 text-start">
-                    <p className="text-muted text-sm">
-                      : {data.transactionNo || "--"}
-                    </p>
+              {data.paymentMethod === "Cheque" ||
+                (data.paymentMethod === "Internet Banking" && (
+                  <>
+                    <div className="col-md-6 col-12">
+                      <div className="row mb-2">
+                        <div className="col-6">
+                          <p className="fw-medium">Bank</p>
+                        </div>
+                        <div className="col-6 text-start">
+                          <p className="text-muted text-sm">
+                            : {data.bank || "--"}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                ))}
+              {data.paymentMethod === "Cheque" && (
+                <div className="col-md-6 col-12">
+                  <div className="row mb-2">
+                    <div className="col-6">
+                      <p className="fw-medium">Account No</p>
+                    </div>
+                    <div className="col-6 text-start">
+                      <p className="text-muted text-sm">
+                        : {data.accountNo || "--"}
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
+              {data.paymentMethod === "Internet Banking" && (
+                <>
+                  <div className="col-md-6 col-12">
+                    <div className="row mb-2">
+                      <div className="col-6">
+                        <p className="fw-medium">Transaction No</p>
+                      </div>
+                      <div className="col-6 text-start">
+                        <p className="text-muted text-sm">
+                          : {data.transactionNo || "--"}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
 
-              <div className="col-md-6 col-12">
-                <div className="row mb-2">
-                  <div className="col-6">
-                    <p className="fw-medium">MobileNumber</p>
+                  <div className="col-md-6 col-12">
+                    <div className="row mb-2">
+                      <div className="col-6">
+                        <p className="fw-medium">Mobile Number</p>
+                      </div>
+                      <div className="col-6 text-start">
+                        <p className="text-muted text-sm">
+                          : {data.mobileNumber || "--"}
+                        </p>
+                      </div>
+                    </div>
                   </div>
-                  <div className="col-6 text-start">
-                    <p className="text-muted text-sm">
-                      : {data.mobileNumber || "--"}
-                    </p>
-                  </div>
-                </div>
-              </div>
+                </>
+              )}
               <div className="col-md-6 col-12">
                 <div className="row mb-2">
                   <div className="col-6">
@@ -315,21 +325,27 @@ function PaymentsView() {
                   </div>
                 </div>
               </div>
-
-              <div className="col-md-12 col-12 mb-3">
-                <div className="row mb-2">
-                  <div className="col-12">
-                    <p className="fw-medium">File :</p>
-                  </div>
-                  {data.file ? (
-                    <div className="col-12">
-                      <div className="row">{renderAttachment(data.file)}</div>
+              {data.paymentMethod === "Cheque" ||
+                (data.paymentMethod === "Internet Banking" && (
+                  <>
+                    <div className="col-md-12 col-12 mb-3">
+                      <div className="row mb-2">
+                        <div className="col-12">
+                          <p className="fw-medium">File :</p>
+                        </div>
+                        {data.file ? (
+                          <div className="col-12">
+                            <div className="row">
+                              {renderAttachment(data.file)}
+                            </div>
+                          </div>
+                        ) : (
+                          <p className="text-muted">No attachments available</p>
+                        )}
+                      </div>
                     </div>
-                  ) : (
-                    <p className="text-muted">No attachments available</p>
-                  )}
-                </div>
-              </div>
+                  </>
+                ))}
             </div>
           </div>
         </div>

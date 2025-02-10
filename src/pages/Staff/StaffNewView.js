@@ -315,19 +315,6 @@ function StaffNewView() {
                         : "--"}
                     </span>
                   </li>
-
-                  <li className="stdList">
-                    <b>Centre Name</b>
-                    <span>
-                      {data.userAccountInfo &&
-                      data.userAccountInfo.length > 0 &&
-                      data.userAccountInfo[0].centers
-                        ? data.userAccountInfo[0].centers
-                            .map((item) => item.centerName)
-                            .join(", ")
-                        : "--"}
-                    </span>
-                  </li>
                 </ul>
               </div>
             </div>

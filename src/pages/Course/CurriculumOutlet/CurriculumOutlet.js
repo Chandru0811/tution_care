@@ -200,7 +200,7 @@ function CurriculumOutlet() {
             <span class="me-2 text-muted">
               This database shows the list of{" "}
               <span className="bold" style={{ color: "#287f71" }}>
-                Curriculum Olutlet
+              Curriculum Outlet
               </span>
             </span>
           </div>
