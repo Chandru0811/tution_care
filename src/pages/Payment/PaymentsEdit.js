@@ -181,7 +181,7 @@ function PaymentsEdit() {
 
   const getData = async () => {
     try {
-      const responses = await api.get(`/getPaymentById/${id}`);
+      const responses = await api.get(`/getCustomPaymentById/${id}`);
       setData(responses.data);
 
       formik.setValues(responses.data);
@@ -606,10 +606,10 @@ function PaymentsEdit() {
                 <label className="form-label">Remark</label>
                 <div class="input-group mb-3">
                   <textarea
-                    name="reamrks"
+                    name="remark"
                     class="form-control"
-                    {...formik.getFieldProps("reamrks")}
-                    id="reamrks"
+                    {...formik.getFieldProps("remark")}
+                    id="remark"
                     rows="5"
                   ></textarea>
                 </div>

@@ -20,15 +20,37 @@ function AssignmentResultView() {
   console.log("Data", data);
   const [showModal, setShowModal] = useState(false);
 
-  const handleModalClose = () => setShowModal(false);
-  const handleModalShow = () => {
+  const getData = async () => {
+    try {
+      const response = await api.get(
+        `/getQ&AByQIdAndSId/${id}?studentId=${studentId}`
+      );
+      setData(response.data);
+    } catch (error) {
+      console.error("Error fetching data ", error);
+    }
+  };
+
+  useEffect(() => {
+    if (id && studentId) {
+      getData();
+    }
+  }, [id, studentId]);
+
+  const handleModalClose = () => {
+    setShowModal(false);
     formik.resetForm();
+  };
+  const handleModalShow = () => {
+    getData();
+    formik.setFieldValue("remark", data[0]?.remark || "");
     setShowModal(true);
+    console.log("remark", data[0]?.remark);
   };
 
   const formik = useFormik({
     initialValues: {
-      remark: "",
+      remark: data[0]?.remark,
     },
     validationSchema: Yup.object({
       remark: Yup.string().required("Remark is required"),
@@ -138,23 +160,6 @@ function AssignmentResultView() {
         return renderCard(AttactmentOther, "Other");
     }
   };
-
-  const getData = async () => {
-    try {
-      const response = await api.get(
-        `/getQ&AByQIdAndSId/${id}?studentId=${studentId}`
-      );
-      setData(response.data);
-    } catch (error) {
-      console.error("Error fetching data ", error);
-    }
-  };
-
-  useEffect(() => {
-    if (id && studentId) {
-      getData();
-    }
-  }, [id, studentId]);
 
   return (
     <div className="container-fluid ">
@@ -337,7 +342,7 @@ function AssignmentResultView() {
                     <div className="col-12">
                       <div className="row">
                         {data[0]?.questions.map((attachment, index) => (
-                          <div key={index} className="col-md-4 col-12 mb-2">
+                          <div key={index} className="col-md-3 col-12 mb-2">
                             {renderAttachment(attachment)}
                           </div>
                         ))}

@@ -10,14 +10,25 @@ import AddParentDetailModel from "./AddParentDetailModel";
 import { GoDotFill } from "react-icons/go";
 import { CiEdit } from "react-icons/ci";
 import { MdDeleteOutline } from "react-icons/md";
+import { Button, Modal } from "react-bootstrap";
+import { toast } from "react-toastify";
 
 const EditParentGuardian = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const [data, setData] = useState({});
     const [primaryContact, setPrimaryContact] = useState(false);
-    // const userName = localStorage.getItem("tmsuserName");
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [deleteId, setDeleteId] = useState(null);
 
-    // console.log("Api Datas:",data);
+    const handleShowDeleteModal = (id) => {
+      setDeleteId(id);
+      setShowDeleteModal(true);
+    };
+
+    const handleCloseDeleteModal = () => {
+      setShowDeleteModal(false);
+      setDeleteId(null);
+    };
 
     const getData = async () => {
       setLoadIndicators(true);
@@ -41,14 +52,21 @@ const EditParentGuardian = forwardRef(
       getData();
     }, []);
 
-    const handleDeleteRow = async (id) => {
+    const handleDeleteRow = async () => {
       try {
-        const response = await api.delete(`/deleteStudentParentsDetails/${id}`);
+        const response = await api.delete(
+          `/deleteStudentParentsDetails/${deleteId}`
+        );
         if (response.status === 200 || response.status === 201) {
-          getData(); // Refresh the data after successful deletion
+          toast.success("Parent information deleted successfully!");
+          getData();
+        } else {
+          toast.error("Failed to delete the parent information.");
         }
       } catch (error) {
-        console.error("Error deleting the parent information:", error);
+        toast.error("Error deleting the parent information.");
+      } finally {
+        handleCloseDeleteModal();
       }
     };
 
@@ -150,7 +168,9 @@ const EditParentGuardian = forwardRef(
                                 <button
                                   className="btn"
                                   type="button"
-                                  onClick={() => handleDeleteRow(parent.id)}
+                                  onClick={() =>
+                                    handleShowDeleteModal(parent.id)
+                                  }
                                 >
                                   <MdDeleteOutline
                                     id={parent.id}
@@ -183,6 +203,22 @@ const EditParentGuardian = forwardRef(
             </div>
           </div>
         </div>
+        <Modal show={showDeleteModal} onHide={handleCloseDeleteModal} centered>
+          <Modal.Header closeButton>
+            <Modal.Title>Confirm Deletion</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+          Are you sure you want to delete this record?
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleCloseDeleteModal}>
+              Cancel
+            </Button>
+            <Button variant="danger" onClick={handleDeleteRow}>
+              Delete
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </div>
     );
   }

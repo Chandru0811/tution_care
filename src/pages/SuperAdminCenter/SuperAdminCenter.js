@@ -89,7 +89,7 @@ const SuperAdminCenter = ({ handleCenterChanged }) => {
             },
             {
               label: "Reject",
-              value: "Reject",
+              value: "Rejected",
               bgColor: "#dc3545",
             },
           ];
