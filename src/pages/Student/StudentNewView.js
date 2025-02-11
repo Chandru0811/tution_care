@@ -21,6 +21,7 @@ import PasswordModal from "./StudentNewView/PasswordModal";
 import TransferOutModal from "../StudentMovement/TransferOut/TransferOutModal";
 import NoImage from "../../assets/images/no-photo.png";
 import { Modal, Button } from "react-bootstrap";
+import fetchAllPackageListByCenter from "../List/PackageListByCenter";
 
 function StudentNewView() {
   const [activeTab, setActiveTab] = useState("tab1");
@@ -84,7 +85,7 @@ function StudentNewView() {
 
   const fetchData = async () => {
     try {
-      const packageData = await fetchAllPackageList();
+      const packageData = await fetchAllPackageListByCenter(centerId);
       setPackageData(packageData);
     } catch (error) {
       toast.error(error);
@@ -334,13 +335,11 @@ function StudentNewView() {
                 </li>
                 <li className="stdList">
                   <b>School Name</b>
-                  <span>{data.schoolName || "--"}
-                  </span>
+                  <span>{data.schoolName || "--"}</span>
                 </li>
                 <li className="stdList">
                   <b>School Type</b>
-                  <span>{data.schoolType || "--"}
-                  </span>
+                  <span>{data.schoolType || "--"}</span>
                 </li>
                 <li className="stdList">
                   <b>D.O.B</b>
@@ -883,10 +882,7 @@ function StudentNewView() {
         <div className="row mt-3">
           <div className="d-flex col-md-4">
             <div className=" fw-medium">Centre Name&nbsp;</div>
-            <div className="text-muted">
-              :{" "}
-              {centerName}
-            </div>
+            <div className="text-muted">: {centerName}</div>
           </div>
           <div className="d-flex col-md-4">
             <div className="fw-medium">Student Chinese Name&nbsp;</div>
@@ -1211,9 +1207,7 @@ function StudentNewView() {
                     data.studentRelationModels.map((std, index) => (
                       <tr key={std.id}>
                         <td>{index + 1}</td>
-                        <td>
-                          {std.studentRelationStudentName || "--"}
-                        </td>
+                        <td>{std.studentRelationStudentName || "--"}</td>
                         <td>{std.studentRelation || "--"}</td>
                       </tr>
                     ))}
@@ -1254,7 +1248,7 @@ function StudentNewView() {
                       </div>
                     </div>
                     <div className="col-md-6 col-12">
-                      <div className="row  mb-2">
+                      <div className="row  mb-2 mt-3">
                         <div className="col-6  ">
                           <p className="fw-medium">Class</p>
                         </div>
@@ -1364,7 +1358,7 @@ function StudentNewView() {
                             {/* {std.packageName || "--"} */}
                             {packageData &&
                               packageData.map((packages) =>
-                                parseInt(std.packageName) === packages.id
+                                parseInt(packages.id) === packages.id
                                   ? packages.packageNames || "--"
                                   : ""
                               )}
