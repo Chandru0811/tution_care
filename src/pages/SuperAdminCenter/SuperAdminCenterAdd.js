@@ -4,7 +4,8 @@ import { Link, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
-import { Modal, Button } from "react-bootstrap";
+import { Modal } from "react-bootstrap";
+import { Pending } from "@mui/icons-material";
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required("*Name is required"),
@@ -37,6 +38,7 @@ function SuperAdminCenterAdd({ handleCenterChanged }) {
     initialValues: {
       name: "",
       centerName: "",
+      centerStatus: "Pending",
       email: "",
       mobile: "",
       address: "",

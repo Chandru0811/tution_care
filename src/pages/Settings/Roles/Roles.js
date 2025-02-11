@@ -23,7 +23,7 @@ const Roles = () => {
 
   const getData = async () => {
     try {
-      const response = await api.get(`/getUserRolesByCenterId/${centerId}`);
+      const response = await api.get(`/getAllUserRolesByCenterId/${centerId}`);
       setDatas(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);

@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { Collapse, Nav, OverlayTrigger, Tooltip } from "react-bootstrap";
 import Logo from "../../assets/images/ECSLOGO.png";
-import api from "../../config/URL";
 import { PiBuildings } from "react-icons/pi";
 import { IoIosAdd, IoIosRemove } from "react-icons/io";
 import { PiBookOpenText } from "react-icons/pi";
@@ -43,27 +42,13 @@ const iconMapping = {
 function SuperAdminSidebar() {
   const [activeMenu, setActiveMenu] = useState(null);
   const [menuItems, setMenuItems] = useState([]);
-  const [data, setData] = useState({});
-  const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
+  // const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   const location = useLocation();
   const hasRenderedOnce = useRef(false);
 
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const response = await api.get(`/getAllHeaderSavePublish`);
-        setData(response.data);
-      } catch (error) {
-        console.error("Error Fetching Data: " + error.message);
-      }
-    };
-    getData();
-  }, []);
 
   useEffect(() => {
-    const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
 
-    // Define your menu items based on screen access values
     const updatedMenuItems = [
       {
         title: "Organization",

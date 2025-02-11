@@ -14,7 +14,7 @@ function PaymentsView() {
 
   const getData = async () => {
     try {
-      const response = await api.get(`/getPaymentById/${id}`);
+      const response = await api.get(`/getCustomPaymentById/${id}`);
       setData(response.data);
     } catch (error) {
       console.error("Error fetching data ", error);
@@ -174,7 +174,20 @@ function PaymentsView() {
                   <div className="col-6 text-start">
                     <p className="text-muted text-sm">
                       {" "}
-                      : {data.studentId || "--"}
+                      : {data.studentName || "--"}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="col-md-6 col-12">
+                <div className="row mb-2">
+                  <div className="col-6">
+                    <p className="fw-medium">Student ID</p>
+                  </div>
+                  <div className="col-6 text-start">
+                    <p className="text-muted text-sm">
+                      {" "}
+                      : {data.uniqueId || "--"}
                     </p>
                   </div>
                 </div>
@@ -253,23 +266,21 @@ function PaymentsView() {
                   </div>
                 </div>
               </div>
-              {data.paymentMethod === "Cheque" ||
-                (data.paymentMethod === "Internet Banking" && (
-                  <>
-                    <div className="col-md-6 col-12">
-                      <div className="row mb-2">
-                        <div className="col-6">
-                          <p className="fw-medium">Bank</p>
-                        </div>
-                        <div className="col-6 text-start">
-                          <p className="text-muted text-sm">
-                            : {data.bank || "--"}
-                          </p>
-                        </div>
-                      </div>
+              {(data.paymentMethod === "Cheque" ||
+                data.paymentMethod === "Internet Banking") && (
+                <div className="col-md-6 col-12">
+                  <div className="row mb-2">
+                    <div className="col-6">
+                      <p className="fw-medium">Bank</p>
                     </div>
-                  </>
-                ))}
+                    <div className="col-6 text-start">
+                      <p className="text-muted text-sm">
+                        : {data.bank || "--"}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
               {data.paymentMethod === "Cheque" && (
                 <div className="col-md-6 col-12">
                   <div className="row mb-2">
@@ -325,27 +336,27 @@ function PaymentsView() {
                   </div>
                 </div>
               </div>
-              {data.paymentMethod === "Cheque" ||
-                (data.paymentMethod === "Internet Banking" && (
-                  <>
-                    <div className="col-md-12 col-12 mb-3">
-                      <div className="row mb-2">
-                        <div className="col-12">
-                          <p className="fw-medium">File :</p>
-                        </div>
-                        {data.file ? (
-                          <div className="col-12">
-                            <div className="row">
-                              {renderAttachment(data.file)}
-                            </div>
-                          </div>
-                        ) : (
-                          <p className="text-muted">No attachments available</p>
-                        )}
+              {(data.paymentMethod === "Cheque" ||
+                data.paymentMethod === "Internet Banking") && (
+                <>
+                  <div className="col-md-12 col-12 mb-3">
+                    <div className="row mb-2">
+                      <div className="col-12">
+                        <p className="fw-medium">File :</p>
                       </div>
+                      {data.file ? (
+                        <div className="col-12">
+                          <div className="row">
+                            {renderAttachment(data.file)}
+                          </div>
+                        </div>
+                      ) : (
+                        <p className="text-muted">No attachments available</p>
+                      )}
                     </div>
-                  </>
-                ))}
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>
