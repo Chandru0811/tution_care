@@ -194,16 +194,14 @@ const Student = () => {
       // Dynamically construct query parameters based on filters
       const queryParams = new URLSearchParams();
       if (!isClearFilterClicked) {
-        if (filters.centerId) {
-          queryParams.append("centerId", filters.centerId);
-        } else if (centerId && centerId !== "undefined") {
+        if (centerId) {
           queryParams.append("centerId", centerId);
         }
       }
 
       // Loop through other filters and add key-value pairs if they have a value
       for (let key in filters) {
-        if (filters[key] && key !== "centerId") {
+        if (filters[key]) {
           queryParams.append(key, filters[key]);
         }
       }
@@ -220,7 +218,6 @@ const Student = () => {
       setIsClearFilterClicked(false);
     }
   };
-
 
   const theme = createTheme({
     components: {
@@ -277,7 +274,7 @@ const Student = () => {
 
   const clearFilter = () => {
     setFilters({
-      centerId: "",
+      centerId: centerId,
       studentName: "",
       parentName: "",
       email: "",
@@ -328,7 +325,6 @@ const Student = () => {
         </div>
         <div className="mb-3 d-flex justify-content-between">
           <div className="individual_fliters d-lg-flex ">
-          
             <div className="form-group mb-0 ms-2 mb-1">
               <input
                 type="text"

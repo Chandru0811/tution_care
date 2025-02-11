@@ -91,7 +91,7 @@ const Addrelation = forwardRef(
     }, []);
 
     useEffect(() => {
-        fetchStudent();
+      fetchStudent();
     }, []);
 
     useImperativeHandle(ref, () => ({
@@ -119,7 +119,15 @@ const Addrelation = forwardRef(
                         <small>Student Name</small>
                       </label>
                       <br />
-                      <select
+                      <input
+                        className="form-control"
+                        type="text"
+                        name="studentRelationStudentName"
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        value={formik.values.studentRelationStudentName}
+                      />
+                      {/* <select
                         {...formik.getFieldProps("studentRelationStudentName")}
                         className={`form-select ${
                           formik.touched.studentRelationStudentName &&
@@ -148,7 +156,7 @@ const Addrelation = forwardRef(
                                 {student.studentNames}{" "}
                               </option>
                             ))}
-                      </select>
+                      </select> */}
                       {formik.touched.studentRelationStudentName &&
                         formik.errors.studentRelationStudentName && (
                           <div className="text-danger">

@@ -99,6 +99,8 @@ function CenterEdit({ handleCenterChanged }) {
       invoiceNotes: "",
       target: "",
       file: null,
+      profile: null,
+      logo: null,
       updatedBy: userName,
     },
     validationSchema: validationSchema,
@@ -125,6 +127,8 @@ function CenterEdit({ handleCenterChanged }) {
       formData.append("bankAccountName", values.bankAccountName);
       formData.append("invoiceNotes", values.invoiceNotes);
       formData.append("file", values.file);
+      formData.append("profile", values.profile);
+      formData.append("logo", values.logo);
       formData.append("updatedBy", userName);
       formData.append("target", values.target);
       try {
@@ -386,8 +390,10 @@ function CenterEdit({ handleCenterChanged }) {
                     {...formik.getFieldProps("zipCode")}
                     type="text"
                     maxLength="6"
-                     inputMode="numeric"
-                    onKeyPress={(e) => !/[0-9]/.test(e.key) && e.preventDefault()}
+                    inputMode="numeric"
+                    onKeyPress={(e) =>
+                      !/[0-9]/.test(e.key) && e.preventDefault()
+                    }
                     // pattern="\d{6}"
                     className={`form-control ${
                       formik.touched.zipCode && formik.errors.zipCode
@@ -412,7 +418,9 @@ function CenterEdit({ handleCenterChanged }) {
                     {...formik.getFieldProps("mobile")}
                     type="text"
                     maxLength="8"
-                    onKeyPress={(e) => !/[0-9]/.test(e.key) && e.preventDefault()}
+                    onKeyPress={(e) =>
+                      !/[0-9]/.test(e.key) && e.preventDefault()
+                    }
                     className={`form-control ${
                       formik.touched.mobile && formik.errors.mobile
                         ? "is-invalid"
@@ -679,6 +687,64 @@ function CenterEdit({ handleCenterChanged }) {
                 </div>
                 <img
                   src={data.qrCode}
+                  className="img-fluid ms-2 w-50 rounded mt-2"
+                  alt="Profile"
+                />
+              </div>
+              <div className="col-md-6 col-12">
+                <div className="text-start mt-2">
+                  <label htmlFor="" className="mb-1 fw-medium">
+                    <small>Company Logo</small>
+                    <span className="text-danger">*</span>
+                  </label>
+                  <br />
+                  <input
+                    type="file"
+                    accept=".png"
+                    name="logo"
+                    className="form-control"
+                    onChange={(event) => {
+                      formik.setFieldValue("logo", event.target.files[0]);
+                    }}
+                    onBlur={formik.handleBlur}
+                  />
+                  {formik.touched.logo && formik.errors.logo && (
+                    <div className="error text-danger">
+                      <small>{formik.errors.logo}</small>
+                    </div>
+                  )}
+                </div>
+                <img
+                  src={data.companyLogo}
+                  className="img-fluid ms-2 w-50 rounded mt-2"
+                  alt="Profile"
+                />
+              </div>
+              <div className="col-md-6 col-12">
+                <div className="text-start mt-2">
+                  <label htmlFor="" className="mb-1 fw-medium">
+                    <small>Profile Image</small>
+                    <span className="text-danger">*</span>
+                  </label>
+                  <br />
+                  <input
+                    type="file"
+                    accept=".png"
+                    name="profile"
+                    className="form-control"
+                    onChange={(event) => {
+                      formik.setFieldValue("profile", event.target.files[0]);
+                    }}
+                    onBlur={formik.handleBlur}
+                  />
+                  {formik.touched.profile && formik.errors.profile && (
+                    <div className="error text-danger">
+                      <small>{formik.errors.profile}</small>
+                    </div>
+                  )}
+                </div>
+                <img
+                  src={data.profileImage}
                   className="img-fluid ms-2 w-50 rounded mt-2"
                   alt="Profile"
                 />
