@@ -115,10 +115,10 @@ function AssignmentResultView() {
             <img
               src={src}
               alt={label}
-              style={{ width: "100%", maxHeight: "150px", objectFit: "cover" }}
+              style={{ width: "100%", maxHeight: "120px", objectFit: "cover" }}
             />
           )}
-          <div className="card-body">
+          <div className="card-body p-1">
             <div className="row">
               <div className="col-md-8 col-12 text-end">
                 <p>{fileName}</p>
@@ -366,7 +366,7 @@ function AssignmentResultView() {
                     <div className="col-12">
                       <div className="row">
                         {data[0]?.answers.map((attachment, index) => (
-                          <div key={index} className="col-md-4 col-12 mb-2">
+                          <div key={index} className="col-md-3 col-12 mb-2">
                             {renderAttachment(attachment)}
                           </div>
                         ))}
