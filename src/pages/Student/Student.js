@@ -26,7 +26,6 @@ const Student = () => {
   const navigate = useNavigate();
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
-  const centerIDLocal = localStorage.getItem("tmsselectedCenterId");
   const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   const [isClearFilterClicked, setIsClearFilterClicked] = useState(false);
   const centerId = localStorage.getItem("tmscenterId");
