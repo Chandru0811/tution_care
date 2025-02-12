@@ -22,7 +22,7 @@ import { MdOutlineAssignment } from "react-icons/md";
 
 const iconMapping = {
   "Organization": <PiBuildings />,
-  "Centre Management": <PiBuildings />,
+  "Configuration": <PiBuildings />,
   "Course Management": <PiBookOpenText />,
   "Lead Management": <GiExitDoor />,
   Staffing: <HiOutlineUserGroup />,
@@ -62,18 +62,18 @@ function SuperAdminSidebar() {
           },
         ],
       },
-      // {
-      //   title: "Settings",
-      //   icon: "PiBuildings",
-      //   isOpen: false,
-      //   subMenus: [
-      //     {
-      //       title: "Module Access",
-      //       path: "/moduleaccess",
-      //       access: true,
-      //     },
-      //   ],
-      // },
+      {
+        title: "Configuration",
+        icon: "PiBuildings",
+        isOpen: false,
+        subMenus: [
+          {
+            title: "Configure",
+            path: "/configuration",
+            access: true,
+          },
+        ],
+      },
     ];
     setMenuItems(updatedMenuItems);
   }, []);

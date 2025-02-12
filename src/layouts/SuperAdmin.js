@@ -14,6 +14,10 @@ import SuperAdminCenterView from "../pages/SuperAdminCenter/SuperAdminCenterView
 import ModuleAccess from "../pages/ModuleAccess/ModuleAccess";
 import SuperAdminHeader from "../components/common/SuperAdminHeader";
 import { ToastContainer } from "react-toastify";
+import Configuration from "../pages/Configuration/Configuration";
+import ConfigurationAdd from "../pages/Configuration/ConfigurationAdd";
+import ConfigurationEdit from "../pages/Configuration/ConfigurationEdit";
+import ConfigurationView from "../pages/Configuration/ConfigurationView";
 
 function SuperAdmin({ handleLogout }) {
   useEffect(() => {
@@ -30,7 +34,7 @@ function SuperAdmin({ handleLogout }) {
   return (
     <div>
       <BrowserRouter basename="/tuitions">
-      <ToastContainer position="top-center" />
+        <ToastContainer position="top-center" />
         <SuperAdminSidebar />
         <section className="home-section">
           <SuperAdminHeader onLogout={handleLogout} />
@@ -46,6 +50,12 @@ function SuperAdmin({ handleLogout }) {
               <Route path="/companyregistration/add" element={<SuperAdminCenterAdd />} />
               <Route path="/companyregistration/edit/:id" element={<SuperAdminCenterEdit />} />
               <Route path="/companyregistration/view/:id" element={<SuperAdminCenterView />} />
+
+              {/* Configuration */}
+              <Route path="/configuration" element={<Configuration />} />
+              <Route path="/configuration/add" element={<ConfigurationAdd />} />
+              <Route path="/configuration/edit/:id" element={<ConfigurationEdit />} />
+              <Route path="/configuration/view/:id" element={<ConfigurationView />} />
 
               {/* Setting */}
               <Route path="/moduleaccess" element={<ModuleAccess />} />
