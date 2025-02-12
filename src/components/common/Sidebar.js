@@ -358,6 +358,11 @@ function Sidebar() {
             access: storedScreens.taxSettingIndex,
           },
           {
+            title: "Primary Language",
+            path: "/language",
+            access: true,
+          },
+          {
             title: "Race",
             path: "/race",
             access: storedScreens.raceSettingIndex,

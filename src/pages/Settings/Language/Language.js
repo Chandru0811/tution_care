@@ -11,19 +11,19 @@ import {
 } from "@mui/material";
 import { MaterialReactTable } from "material-react-table";
 import GlobalDelete from "../../../components/common/GlobalDelete";
-import RolesAdd from "./RolesAdd";
-import RolesEdit from "./RolesEdit";
+import LanguageAdd from "./LanguageAdd";
+import LanguageEdit from "./LanguageEdit";
 
-const Roles = () => {
-  const centerId = localStorage.getItem("tmscenterId");
+const Language = () => {
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedId, setSelectedId] = useState(null);
   const [menuAnchor, setMenuAnchor] = useState(null);
+  const centerId = localStorage.getItem("tmscenterId");
 
   const getData = async () => {
     try {
-      const response = await api.get(`/getAllUserRolesByCenterId/${centerId}`);
+      const response = await api.get(`/getAllLanguageWithCenterId/${centerId}`);
       setDatas(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -64,9 +64,9 @@ const Roles = () => {
         ),
       },
       {
-        accessorKey: "name",
+        accessorKey: "languageName",
         enableHiding: false,
-        header: "Role Name",
+        header: "Language Name",
         size: 20,
       },
       { accessorKey: "createdBy", header: "Created By" },
@@ -152,7 +152,7 @@ const Roles = () => {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          &nbsp;Roles
+          &nbsp;Language
         </li>
       </ol>
       <div className="card">
@@ -167,14 +167,14 @@ const Roles = () => {
             <span class="me-2 text-muted">
               This database shows the list of{" "}
               <span className="bold" style={{ color: "#287f71" }}>
-                Roles
+                Language
               </span>
             </span>
           </div>
         </div>
         <div className="d-flex justify-content-end align-items-center">
           <span>
-            <RolesAdd onSuccess={getData} />
+            <LanguageAdd onSuccess={getData} />
           </span>
         </div>
         {loading ? (
@@ -215,7 +215,7 @@ const Roles = () => {
               onClose={handleMenuClose}
             >
               <MenuItem>
-                <RolesEdit
+                <LanguageEdit
                   onSuccess={getData}
                   id={selectedId}
                   handleMenuClose={handleMenuClose}
@@ -223,7 +223,7 @@ const Roles = () => {
               </MenuItem>
               <MenuItem>
                 <GlobalDelete
-                  path={`/deleteUserRole/${selectedId}`}
+                  path={`/deleteLanguage/${selectedId}`}
                   onDeleteSuccess={getData}
                   onOpen={handleMenuClose}
                 />
@@ -236,4 +236,4 @@ const Roles = () => {
   );
 };
 
-export default Roles;
+export default Language;

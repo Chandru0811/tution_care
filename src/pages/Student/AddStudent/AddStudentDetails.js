@@ -178,6 +178,14 @@ const AddStudentDetails = forwardRef(
 
           if (response.status === 201) {
             const student_id = response.data.student_id;
+            const credentialsData = new FormData();
+            credentialsData.append("studentId", student_id);
+
+            await api.post("/sendStudentCredentials", credentialsData, {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            });
             toast.success(response.data.message);
             setFormData((prv) => ({ ...prv, ...values, student_id }));
             handleNext();
