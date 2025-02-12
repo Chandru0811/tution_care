@@ -13,16 +13,15 @@ import * as Yup from "yup";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
 
-function RolesEdit({ id, onSuccess, handleMenuClose }) {
+function LanguageEdit({ id, onSuccess, handleMenuClose }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const userName = localStorage.getItem("tmsuserName");
   const [isModified, setIsModified] = useState(false);
-  const centerId = localStorage.getItem("tmscenterId");
 
   const getData = async () => {
     try {
-      const response = await api.get(`/getUserRolesById/${id}`);
+      const response = await api.get(`/getLanguageById/${id}`);
       formik.setValues(response.data);
     } catch (error) {
       console.error("Error fetching data ", error);
@@ -39,21 +38,21 @@ function RolesEdit({ id, onSuccess, handleMenuClose }) {
     getData();
   };
 
-  const validationSchema = Yup.object({});
+  const validationSchema = Yup.object({
+    languageName: Yup.string().required("*Language Name is required"),
+  });
 
   const formik = useFormik({
     initialValues: {
-      name: "",
-      centerId: centerId,
+      languageName: "",
       updatedBy: userName,
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       setLoadIndicator(true);
-      values.centerId = centerId;
       try {
-        values.updatedBy = userName;
-        const response = await api.put(`/updateUserRole/${id}`, values, {
+        values.updatedBy = userName
+        const response = await api.post(`/updateLanguage/${id}`, values, {
           headers: {
             "Content-Type": "application/json",
           },
@@ -66,11 +65,7 @@ function RolesEdit({ id, onSuccess, handleMenuClose }) {
           toast.error(response.data.message);
         }
       } catch (error) {
-        if(error.status === 403){
-          toast.warning(error.message)
-        }else{
-          toast.error(error.message);
-        }
+        toast.error("An error occurred.");
       } finally {
         handleClose();
         setLoadIndicator(false);
@@ -79,6 +74,15 @@ function RolesEdit({ id, onSuccess, handleMenuClose }) {
     enableReinitialize: true,
     validateOnChange: true,
     validateOnBlur: true,
+    validate: (values) => {
+      if (
+        Object.values(values).some((value) => (value && typeof value === 'string' ? value.trim() !== "" : value))
+      ) {
+        setIsModified(true);
+      } else {
+        setIsModified(false);
+      }
+    },
   });
 
   return (
@@ -101,7 +105,7 @@ function RolesEdit({ id, onSuccess, handleMenuClose }) {
         maxWidth="sm"
       >
         <DialogTitle className="headColor">
-          Roles Edit{" "}
+          Language Edit{" "}
           <IconButton
             aria-label="close"
             onClick={handleClose}
@@ -123,20 +127,19 @@ function RolesEdit({ id, onSuccess, handleMenuClose }) {
               <div className="row">
                 <div className="col-12 mb-2">
                   <label className="form-label">
-                    Name<span className="text-danger">*</span>
+                    Language Name<span className="text-danger">*</span>
                   </label>
                   <input
                     onKeyDown={(e) => e.stopPropagation()}
                     type="text"
-                    className={`form-control  ${
-                      formik.touched.name && formik.errors.name
+                    className={`form-control  ${formik.touched.languageName && formik.errors.languageName
                         ? "is-invalid"
                         : ""
-                    }`}
-                    {...formik.getFieldProps("name")}
+                      }`}
+                    {...formik.getFieldProps("languageName")}
                   />
-                  {formik.touched.name && formik.errors.name && (
-                    <div className="invalid-feedback">{formik.errors.name}</div>
+                  {formik.touched.languageName && formik.errors.languageName && (
+                    <div className="invalid-feedback">{formik.errors.languageName}</div>
                   )}
                 </div>
               </div>
@@ -171,4 +174,4 @@ function RolesEdit({ id, onSuccess, handleMenuClose }) {
   );
 }
 
-export default RolesEdit;
+export default LanguageEdit;

@@ -206,6 +206,7 @@ import PaymentsEdit from "../pages/Payment/PaymentsEdit";
 import Roles from "../pages/Settings/Roles/Roles";
 import AssignmentEdit from "../pages/Assignment/AssignmentEdit";
 import PaymentsView from "../pages/Payment/PaymentsView";
+import Language from "../pages/Settings/Language/Language";
 
 function Admin({ handleLogout }) {
   const [centerChange, setCenterChange] = useState(0);
@@ -628,6 +629,8 @@ function Admin({ handleLogout }) {
               <Route path="/tax/add" element={<TaxAdd />} />
               <Route path="/tax/edit/:id" element={<TaxEdit />} />
               <Route path="/tax/view/:id" element={<TaxView />} />
+
+              <Route path="/language" element={<Language />} />
 
               {/* Shg */}
               <Route path="/shg" element={<Shg />} />
