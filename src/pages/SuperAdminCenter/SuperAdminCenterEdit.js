@@ -4,7 +4,6 @@ import { useFormik } from "formik";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
-import fetchAllCentreManager from "../List/CentreMangerList";
 import { Modal } from "react-bootstrap";
 
 const validationSchema = Yup.object().shape({
@@ -32,9 +31,19 @@ function SuperAdminCenterEdit({ handleCenterChanged }) {
   const navigate = useNavigate();
   const userName = localStorage.getItem("tmsuserName");
   const [showModal, setShowModal] = useState(false);
+  const [appData, setAppData] = useState(null);
 
   const handleClose = () => setShowModal(false);
   const handleShow = () => setShowModal(true);
+
+  const fetchAppData = async () => {
+    try {
+      const response = await api.get("getAllCenter");
+      setAppData(response.data);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
 
   const formik = useFormik({
     initialValues: {
@@ -133,6 +142,10 @@ function SuperAdminCenterEdit({ handleCenterChanged }) {
 
     getData();
   }, [id]);
+
+    useEffect(() => {
+      fetchAppData();
+    }, []);
 
   const handleAllow = () => {
     setShowModal(false);
@@ -302,6 +315,34 @@ function SuperAdminCenterEdit({ handleCenterChanged }) {
                   {formik.touched.email && formik.errors.email && (
                     <div className="invalid-feedback">
                       {formik.errors.email}
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className="col-md-6 col-12">
+                <div className="mb-3">
+                  <label className="form-label">
+                    App Type<span class="text-danger">*</span>
+                  </label>
+                  <select
+                    {...formik.getFieldProps("appType")}
+                    className={`form-select ${
+                      formik.touched.appType && formik.errors.appType
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                  >
+                    <option selected></option>
+                    {appData &&
+                      appData.map((appType) => (
+                        <option key={appType.id} value={appType.id}>
+                          {appType.centerName}
+                        </option>
+                      ))}
+                  </select>
+                  {formik.touched.appType && formik.errors.appType && (
+                    <div className="invalid-feedback">
+                      {formik.errors.appType}
                     </div>
                   )}
                 </div>
