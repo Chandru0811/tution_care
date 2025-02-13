@@ -22,25 +22,6 @@ import { GiExitDoor } from "react-icons/gi";
 import { MdOutlineAssignment } from "react-icons/md";
 import { RiUserAddLine } from "react-icons/ri";
 
-const iconMapping = {
-  "Company Management": <PiBuildings />,
-  "Course Management": <PiBookOpenText />,
-  "Lead Management": <GiExitDoor />,
-  "Employee Info": <RiUserAddLine />,
-  Staffing: <HiOutlineUserGroup />,
-  "Student Management": <TbUserSearch />,
-  "Student Movement": <TbStatusChange />,
-  Schedule: <TbCalendarTime />,
-  "Document Management": <TbFolderCog />,
-  "Assignment Management": <MdOutlineAssignment />,
-  "Invoice and Payment": <LiaFileInvoiceDollarSolid />,
-  "Referal Management": <VscReferences />,
-  "Report Management": <BsFileEarmarkRichtext />,
-  "Content Management": <LiaUserEditSolid />,
-  Messaging: <TbMessageCode />,
-  Settings: <GrUserSettings />,
-};
-
 function Sidebar() {
   const [activeMenu, setActiveMenu] = useState(null);
   const [menuItems, setMenuItems] = useState([]);
@@ -48,9 +29,45 @@ function Sidebar() {
   console.log("Data::", data.leadManagement);
 
   const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
+  const storedConfigure = JSON.parse(
+    localStorage.getItem("tuitionConfigurationData") || "{}"
+  );
   const location = useLocation();
   const hasRenderedOnce = useRef(false);
   const centerId = localStorage.getItem("tmscenterId");
+  // const storedConfigure = localStorage.getItem("tuitionConfigurationData");
+  const Key = {
+    lead: storedConfigure?.lead || "Lead Management",
+    student: storedConfigure?.student || "Student Management",
+    centreName: storedConfigure?.centreName || "Company Management",
+    employee: storedConfigure?.employee || "Employee Info",
+    report: storedConfigure?.report || "Report Management",
+    invoice: storedConfigure?.invoice || "Invoice and Payment",
+    Rferal: storedConfigure?.Rferal || "Referal Management",
+    message: storedConfigure?.message || "Messaging",
+    assignManagement:
+      storedConfigure?.assignManagement || "Assignment Management",
+    documentManagement:
+      storedConfigure?.documentManagement || "Document Management",
+  };
+  const iconMapping = {
+    [Key.centreName]: <PiBuildings />,
+    "Course Management": <PiBookOpenText />,
+    [Key.lead]: <GiExitDoor />,
+    [Key.employee]: <RiUserAddLine />,
+    Staffing: <HiOutlineUserGroup />,
+    [Key.student]: <TbUserSearch />,
+    "Student Movement": <TbStatusChange />,
+    Schedule: <TbCalendarTime />,
+    [Key.documentManagement]: <TbFolderCog />,
+    [Key.assignManagement]: <MdOutlineAssignment />,
+    [Key.invoice]: <LiaFileInvoiceDollarSolid />,
+    [Key.Rferal]: <VscReferences />,
+    [Key.report]: <BsFileEarmarkRichtext />,
+    "Content Management": <LiaUserEditSolid />,
+    [Key.message]: <TbMessageCode />,
+    Settings: <GrUserSettings />,
+  };
 
   const getAccess = async () => {
     try {
@@ -69,15 +86,19 @@ function Sidebar() {
     const storedScreens = JSON.parse(
       localStorage.getItem("tmsscreens") || "{}"
     );
+    const storedConfigure = JSON.parse(
+      localStorage.getItem("tuitionConfigurationData") || "{}"
+    );
+    console.log("first", storedConfigure.class);
     if (!data) return;
     const updatedMenuItems = [
       {
-        title: "Company Management",
+        title: storedConfigure?.centreName || "Company Management",
         icon: "PiBuildings",
         isOpen: false,
         subMenus: [
           {
-            title: "Company Listing",
+            title: storedConfigure?.centreName || "Company Listing",
             path: "/companyRegister",
             access: storedScreens.centerListingIndex,
           },
@@ -89,23 +110,31 @@ function Sidebar() {
         isOpen: false,
         subMenus: [
           {
-            title: "Subject",
+            title: storedConfigure?.subject || "Subject",
             path: "/subject",
             access: storedScreens.subjectIndex,
           },
-          { title: "Level", path: "/level", access: storedScreens.levelIndex },
           {
-            title: "Course",
+            title: storedConfigure?.level || "Level",
+            path: "/level",
+            access: storedScreens.levelIndex,
+          },
+          {
+            title: storedConfigure?.course || "Course",
             path: "/course",
             access: storedScreens.courseIndex,
           },
-          { title: "Class", path: "/class", access: storedScreens.classIndex },
+          {
+            title: storedConfigure?.class || "Class",
+            path: "/class",
+            access: storedScreens.classIndex,
+          },
         ],
       },
       ...(data.leadManagement
         ? [
             {
-              title: "Lead Management",
+              title: storedConfigure?.lead || "Lead Management",
               icon: "GiExitDoor",
               isOpen: false,
               subMenus: [
@@ -119,12 +148,12 @@ function Sidebar() {
           ]
         : []),
       {
-        title: "Employee Info",
+        title: storedConfigure?.employee || "Employee Info",
         icon: "RiUserAddLine",
         isOpen: false,
         subMenus: [
           {
-            title: "Teacher",
+            title: storedConfigure?.employee || "Teacher",
             path: "/teacher",
             access: storedScreens.teacherIndex,
           },
@@ -192,7 +221,7 @@ function Sidebar() {
           ]
         : []),
       {
-        title: "Student Management",
+        title: storedConfigure?.student || "Student Management",
         icon: "TbUserSearch",
         isOpen: false,
         subMenus: [
@@ -202,7 +231,7 @@ function Sidebar() {
             access: storedScreens.studentListingIndex,
           },
           {
-            title: "Attendance",
+            title: storedConfigure?.attendance || "Attendance",
             path: "/attendance",
             access: storedScreens.attendanceIndex,
           },
@@ -214,7 +243,7 @@ function Sidebar() {
         ],
       },
       {
-        title: "Schedule",
+        title: storedConfigure?.schedule || "Schedule",
         icon: "TbCalendarTime",
         isOpen: false,
         subMenus: [
@@ -233,7 +262,8 @@ function Sidebar() {
       ...(data.documentManagement
         ? [
             {
-              title: "Document Management",
+              title:
+                storedConfigure?.documentManagement || "Document Management",
               icon: "TbFolderCog",
               isOpen: false,
               subMenus: [
@@ -255,7 +285,8 @@ function Sidebar() {
       ...(data.assessmentManagement
         ? [
             {
-              title: "Assignment Management",
+              title:
+                storedConfigure?.assignManagement || "Assignment Management",
               icon: "MdOutlineAssignment",
               isOpen: false,
               subMenus: [
@@ -274,12 +305,12 @@ function Sidebar() {
           ]
         : []),
       {
-        title: "Invoice and Payment",
+        title: storedConfigure?.invoice || "Invoice and Payment",
         icon: "LiaFileInvoiceDollarSolid",
         isOpen: false,
         subMenus: [
           {
-            title: "Invoice",
+            title: storedConfigure?.invoice || "Invoice",
             path: "/invoice",
             access: storedScreens.invoiceIndex,
           },
@@ -293,12 +324,13 @@ function Sidebar() {
       ...(data.referalManagement
         ? [
             {
-              title: "Referal Management",
+              title: storedConfigure?.Rferal || "Referal Management",
               icon: "VscReferences",
               isOpen: false,
               subMenus: [
                 {
-                  title: "Set Referal Fees",
+                  title:
+                    `Set ${storedConfigure?.Rferal} Fees` || "Set Referal Fees",
                   path: "/referalFees",
                   access: storedScreens.invoiceIndex,
                 },
@@ -314,7 +346,7 @@ function Sidebar() {
       ...(data.reportManagement
         ? [
             {
-              title: "Report Management",
+              title: storedConfigure?.report || "Report Management",
               icon: "BsFileEarmarkRichtext ",
               isOpen: false,
               subMenus: [
@@ -338,7 +370,7 @@ function Sidebar() {
           ]
         : []),
       {
-        title: "Settings",
+        title: storedConfigure?.settings || "Settings",
         icon: "GrUserSettings",
         isOpen: false,
         subMenus: [
@@ -414,7 +446,7 @@ function Sidebar() {
       ...(data.messages
         ? [
             {
-              title: "Messaging",
+              title: storedConfigure?.message || "Messaging",
               icon: "TbMessageCode",
               isOpen: false,
               subMenus: [
