@@ -12,6 +12,12 @@ import {
 import { MoreVert as MoreVertIcon } from "@mui/icons-material";
 
 const Center = () => {
+  const [filters, setFilters] = useState({
+    centerName: "",
+    name: "",
+    email: "",
+    mobileNo: "",
+  });
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -98,11 +104,33 @@ const Center = () => {
     []
   );
 
+  // const fetchData = async () => {
+  //   try {
+  //     setLoading(true);
+  //     const response = await api.get(
+  //       `/getCenterWithCustomInfo?centerName=${tmscenterName}`
+  //     );
+
+  //     setData(response.data);
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
   const fetchData = async () => {
     try {
       setLoading(true);
+      const queryParams = new URLSearchParams();
+      for (let key in filters) {
+        if (filters[key]) {
+          queryParams.append(key, filters[key]);
+        }
+      }
+
       const response = await api.get(
-        `/getCenterWithCustomInfo?centerName=${tmscenterName}`
+        `/getAllCenterSimplify?${queryParams.toString()}`
       );
 
       setData(response.data);
@@ -112,10 +140,9 @@ const Center = () => {
       setLoading(false);
     }
   };
-
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [filters]);
 
   const theme = createTheme({
     components: {
@@ -160,6 +187,19 @@ const Center = () => {
       },
     },
   });
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+    setFilters((prevFilters) => ({ ...prevFilters, [name]: value }));
+  };
+
+  const clearFilter = () => {
+    setFilters({
+      centerName: "",
+      name: "",
+      email: "",
+      mobileNo: "",
+    });
+  };
 
   const handleMenuClose = () => setMenuAnchor(null);
 
@@ -192,6 +232,67 @@ const Center = () => {
             This database shows the list of{" "}
             <strong style={{ color: "#287f71" }}>Company</strong>
           </span>
+        </div>
+        <div className="mb-3 d-flex justify-content-between">
+          <div className="individual_fliters d-lg-flex ">
+            <div className="form-group mb-0 ms-2 mb-1">
+              <input
+                type="text"
+                name="centerName"
+                value={filters.centerName}
+                onChange={handleFilterChange}
+                className="form-control form-control-sm center_list"
+                style={{ width: "180px" }}
+                placeholder="Center Name"
+                autoComplete="off"
+              />
+            </div>
+            <div className="form-group mb-0 ms-2 mb-1">
+              <input
+                type="text"
+                name="name"
+                value={filters.name}
+                onChange={handleFilterChange}
+                className="form-control form-control-sm center_list"
+                style={{ width: "190px" }}
+                placeholder="Name"
+                autoComplete="off"
+              />
+            </div>
+            <div className="form-group mb-0 ms-2 mb-1">
+              <input
+                type="text"
+                name="email"
+                value={filters.email}
+                onChange={handleFilterChange}
+                className="form-control form-control-sm center_list"
+                style={{ width: "160px" }}
+                placeholder="Email"
+                autoComplete="off"
+              />
+            </div>
+            <div className="form-group mb-0 ms-2 mb-1">
+              <input
+                type="text"
+                name="mobileNo"
+                value={filters.mobileNo}
+                onChange={handleFilterChange}
+                className="form-control form-control-sm center_list"
+                style={{ width: "160px" }}
+                placeholder="Mobile"
+                autoComplete="off"
+              />
+            </div>
+            <div className="form-group mb-2 ms-2">
+              <button
+                type="button"
+                onClick={clearFilter}
+                className="btn btn-sm btn-border"
+              >
+                Clear
+              </button>
+            </div>
+          </div>
         </div>
         {loading ? (
           <div className="loader-container">
