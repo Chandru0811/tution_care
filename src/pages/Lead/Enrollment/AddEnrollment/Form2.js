@@ -15,7 +15,7 @@ const validationSchema = Yup.object().shape({
 });
 
 const Form2 = forwardRef(
-  ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
+  ({ formData, setLoadIndicators, setFormData, handleNext,navigate }, ref) => {
     console.log("formData", formData);
     const userName = localStorage.getItem("tmsuserName");
     const centerId = localStorage.getItem("tmscenterId");
@@ -60,7 +60,12 @@ const Form2 = forwardRef(
           if (response.status === 200) {
             toast.success(response.data.message);
             setFormData((prv) => ({ ...prv, ...data }));
-            handleNext();
+            if(navigate){
+              navigate('/lead/lead')
+             }else{
+              handleNext();
+             }
+            // handleNext();
           } else {
             toast.error(response.data.message);
           }

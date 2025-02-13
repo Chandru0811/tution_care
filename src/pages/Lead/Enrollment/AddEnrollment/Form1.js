@@ -35,11 +35,12 @@ const validationSchema = Yup.object().shape({
 });
 
 const Form1 = forwardRef(
-  ({ formData, setFormData, handleNext, setLoadIndicators }, ref) => {
+  ({ formData, setFormData, handleNext, setLoadIndicators,navigate }, ref) => {
     const [subjectData, setSubjectData] = useState(null);
     const [raceData, setRaceData] = useState(null);
     const [centerData, setCenterData] = useState(null);
     console.log("Form data is ", formData);
+    console.log("navigate", navigate);
     const userName = localStorage.getItem("tmsuserName");
     const centerId = localStorage.getItem("tmscenterId");
 
@@ -103,8 +104,12 @@ const Form1 = forwardRef(
             //   ...data,
             //   lead_id,
             // });
-
+           if(navigate){
+            navigate('/lead/lead')
+           }else{
             handleNext();
+           }
+          //  handleNext();
           } else {
             toast.error(response.data.message);
           }

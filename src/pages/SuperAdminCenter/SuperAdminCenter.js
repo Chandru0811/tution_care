@@ -18,6 +18,7 @@ const SuperAdminCenter = ({ handleCenterChanged }) => {
     centerName: "",
     name: "",
     email: "",
+    mobileNo: "",
   });
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -28,7 +29,17 @@ const SuperAdminCenter = ({ handleCenterChanged }) => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await api.get(`/getAllCenter`);
+      const queryParams = new URLSearchParams();
+      for (let key in filters) {
+        if (filters[key]) {
+          queryParams.append(key, filters[key]);
+        }
+      }
+
+      const response = await api.get(
+        `/getAllCenterSimplify?${queryParams.toString()}`
+      );
+
       setData(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -36,7 +47,6 @@ const SuperAdminCenter = ({ handleCenterChanged }) => {
       setLoading(false);
     }
   };
-
   useEffect(() => {
     fetchData();
   }, [filters]);
@@ -246,6 +256,7 @@ const SuperAdminCenter = ({ handleCenterChanged }) => {
       centerName: "",
       name: "",
       email: "",
+      mobileNo: "",
     });
   };
 
@@ -290,8 +301,8 @@ const SuperAdminCenter = ({ handleCenterChanged }) => {
                 value={filters.centerName}
                 onChange={handleFilterChange}
                 className="form-control form-control-sm center_list"
-                style={{ width: "160px" }}
-                placeholder="Company Name"
+                style={{ width: "180px" }}
+                placeholder="Center Name"
                 autoComplete="off"
               />
             </div>
@@ -302,7 +313,7 @@ const SuperAdminCenter = ({ handleCenterChanged }) => {
                 value={filters.name}
                 onChange={handleFilterChange}
                 className="form-control form-control-sm center_list"
-                style={{ width: "160px" }}
+                style={{ width: "190px" }}
                 placeholder="Name"
                 autoComplete="off"
               />
@@ -319,6 +330,18 @@ const SuperAdminCenter = ({ handleCenterChanged }) => {
                 autoComplete="off"
               />
             </div>
+            <div className="form-group mb-0 ms-2 mb-1">
+              <input
+                type="text"
+                name="mobileNo"
+                value={filters.mobileNo}
+                onChange={handleFilterChange}
+                className="form-control form-control-sm center_list"
+                style={{ width: "160px" }}
+                placeholder="Mobile"
+                autoComplete="off"
+              />
+            </div>
             <div className="form-group mb-2 ms-2">
               <button
                 type="button"
@@ -329,15 +352,6 @@ const SuperAdminCenter = ({ handleCenterChanged }) => {
               </button>
             </div>
           </div>
-          <Link to="/companyregistration/add">
-            <button
-              type="button"
-              className="btn btn-button btn-sm me-2"
-              style={{ fontWeight: "600px !important" }}
-            >
-              &nbsp; Add &nbsp;&nbsp; <i className="bx bx-plus"></i>
-            </button>
-          </Link>
         </div>
         {loading ? (
           <div className="loader-container">
