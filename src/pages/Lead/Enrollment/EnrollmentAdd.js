@@ -8,23 +8,45 @@ import Form3 from "./AddEnrollment/Form3";
 import Form4 from "./AddEnrollment/Form4";
 import Form5 from "./AddEnrollment/Form5";
 import Form6 from "./AddEnrollment/Form6";
-import Tooltip from "react-bootstrap/Tooltip";
-import { OverlayTrigger } from "react-bootstrap";
-import { Link } from "react-router-dom";
-
-const steps = [
-  { tooltip: "Student Information" },
-  { tooltip: "Child Ability" },
-  { tooltip: "Parent Information" },
-  { tooltip: "Address" },
-  { tooltip: "Account Information" },
-  { tooltip: "Permission for Medias Posting" },
-];
+import { Link, useNavigate } from "react-router-dom";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
 
 export default function EnrollmentAdd() {
   const [activeStep, setActiveStep] = useState(0);
   const [formData, setFormData] = useState({ lead_id: null });
   const [loadIndicator, setLoadIndicator] = useState(false);
+  const ConfigurationData = localStorage.getItem("tuitionConfigurationData");
+  const navigate = useNavigate();
+  console.log("activeStep", activeStep);
+
+  let filteredSteps = [];
+  let filteredForms = [];
+
+  if (ConfigurationData) {
+    const parsedData = JSON.parse(ConfigurationData);
+    console.log("Lead Form Data:", parsedData.leadForm[0]);
+
+    const leadFormConfig = parsedData.leadForm[0]; 
+
+    const allSteps = [
+      { key: "studentInfo", tooltip: "Student Information", component: Form1 },
+      { key: "childAbility", tooltip: "Child Ability", component: Form2 },
+      { key: "parentInfo", tooltip: "Parent Information", component: Form3 },
+      { key: "address", tooltip: "Address", component: Form4 },
+      { key: "accountInfo", tooltip: "Account Information", component: Form5 },
+      {
+        key: "mediaPosting",
+        tooltip: "Permission for Media Posting",
+        component: Form6,
+      },
+    ];
+
+    filteredSteps = Object.values(leadFormConfig).some(Boolean)
+      ? allSteps.filter((step) => leadFormConfig[step.key])
+      : allSteps;
+
+    filteredForms = filteredSteps.map((step) => step.component);
+  }
 
   const childRef = React.useRef();
 
@@ -37,52 +59,14 @@ export default function EnrollmentAdd() {
   };
 
   const handleButtonClick = () => {
-    if (loadIndicator) return; // Prevent double clicks
+    if (loadIndicator) return;
 
-    // Set loading to true to disable the button while processing
-    // setLoadIndicator(true);
-
-    switch (activeStep.toString()) {
-      case "0":
-        if (childRef.current) {
-          childRef.current.form1();
-        }
-        break;
-      case "1":
-        if (childRef.current) {
-          childRef.current.form2();
-        }
-        break;
-      case "2":
-        if (childRef.current) {
-          childRef.current.form3();
-        }
-        break;
-      case "3":
-        if (childRef.current) {
-          childRef.current.form4();
-        }
-        break;
-      case "4":
-        if (childRef.current) {
-          childRef.current.form5();
-        }
-        break;
-      case "5":
-        if (childRef.current) {
-          childRef.current.form6();
-        }
-        break;
-
-      default:
-        break;
+    if (childRef.current) {
+      const formMethod = `form${activeStep + 1}`;
+      if (typeof childRef.current[formMethod] === "function") {
+        childRef.current[formMethod]();
+      }
     }
-
-    // Reset loading state after processing (you can adjust this logic to fit your needs)
-    // setTimeout(() => {
-    //   setLoadIndicator(false); // Allow button to be clicked again after a delay
-    //   handleNext(); // Proceed to the next step
-    // }, 1000); // Adjust this delay as needed
   };
 
   return (
@@ -98,11 +82,13 @@ export default function EnrollmentAdd() {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          &nbsp;Lead Management
-          <span className="breadcrumb-separator"> &gt; </span>
+          {" "}
+          &nbsp;Lead Management{" "}
+          <span className="breadcrumb-separator"> &gt; </span>{" "}
         </li>
         <li>
           <Link to="/lead/lead" className="custom-breadcrumb">
+            {" "}
             &nbsp;Lead
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
@@ -111,8 +97,10 @@ export default function EnrollmentAdd() {
           Lead Add
         </li>
       </ol>
+
+      {/* Stepper */}
       <Stepper className="my-5" activeStep={activeStep} alternativeLabel>
-        {steps.map((step, index) => (
+        {filteredSteps.map((step, index) => (
           <Step key={index}>
             <OverlayTrigger
               placement="top"
@@ -125,68 +113,24 @@ export default function EnrollmentAdd() {
           </Step>
         ))}
       </Stepper>
+
       <div className="container-fluid card shadow border-0 mb-4">
         <React.Fragment>
-          {activeStep === 0 && (
-            <Form1
-              formData={formData}
-              ref={childRef}
-              setFormData={setFormData}
-              handleNext={handleNext}
-              setLoadIndicators={setLoadIndicator}
-            />
-          )}
-          {activeStep === 1 && (
-            <Form2
-              formData={formData}
-              ref={childRef}
-              setFormData={setFormData}
-              handleNext={handleNext}
-              setLoadIndicators={setLoadIndicator}
-            />
-          )}
-          {activeStep === 2 && (
-            <Form3
-              formData={formData}
-              ref={childRef}
-              setFormData={setFormData}
-              handleNext={handleNext}
-              setLoadIndicators={setLoadIndicator}
-            />
-          )}
-          {activeStep === 3 && (
-            <Form4
-              formData={formData}
-              ref={childRef}
-              setFormData={setFormData}
-              handleNext={handleNext}
-              setLoadIndicators={setLoadIndicator}
-            />
-          )}
-          {activeStep === 4 && (
-            <Form5
-              formData={formData}
-              ref={childRef}
-              setFormData={setFormData}
-              handleNext={handleNext}
-              setLoadIndicators={setLoadIndicator}
-            />
-          )}
-          {activeStep === 5 && (
-            <Form6
-              formData={formData}
-              ref={childRef}
-              setFormData={setFormData}
-              handleNext={handleNext}
-              setLoadIndicators={setLoadIndicator}
-            />
-          )}
+          {filteredForms[activeStep] &&
+            React.createElement(filteredForms[activeStep], {
+              formData,
+              ref: childRef,
+              setFormData,
+              handleNext,
+              setLoadIndicators: setLoadIndicator,
+              ...(activeStep === filteredSteps.length - 1 && { navigate }), 
+            })}
+
           <div className="container-fluid p-1 d-flex align-items-center justify-content-center">
             {activeStep > 0 && (
               <button
                 className="btn btn-border btn-sm mt-5 mb-3"
                 style={{ padding: "7px" }}
-                disabled={activeStep === 0}
                 onClick={handleBack}
               >
                 Back
@@ -208,7 +152,9 @@ export default function EnrollmentAdd() {
                   aria-hidden="true"
                 ></span>
               )}
-              {activeStep === steps.length - 1 ? "Submit" : "Save And Next"}
+              {activeStep === filteredSteps.length - 1
+                ? "Submit"
+                : "Save And Next"}
             </button>
           </div>
         </React.Fragment>

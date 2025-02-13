@@ -27,10 +27,11 @@ const validationSchema = Yup.object().shape({
 });
 
 const Form5 = forwardRef(
-  ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
+  ({ formData, setLoadIndicators, setFormData, handleNext,navigate }, ref) => {
     const [centerData, setCenterData] = useState(null);
     const [studentData, setStudentData] = useState(null);
     const userName = localStorage.getItem("tmsuserName");
+    console.log("navigate", navigate);
     const formik = useFormik({
       initialValues: {
         // centerId: formData.centerId || "",
@@ -44,7 +45,7 @@ const Form5 = forwardRef(
         preferredTimeSlot: formData.preferredTimeSlot || "",
         creadedBy: userName,
       },
-      validationSchema: validationSchema,
+      // validationSchema: validationSchema,
       onSubmit: async (data) => {
         setLoadIndicators(true);
         data.creadedBy = userName;
@@ -63,6 +64,11 @@ const Form5 = forwardRef(
             toast.success(response.data.message);
             setFormData((prv) => ({ ...prv, ...data }));
             handleNext();
+            // if(navigate){
+            //   navigate("/lead/lead")
+            //  }else{
+            
+            //  }
           } else {
             toast.error(response.data.message);
           }
