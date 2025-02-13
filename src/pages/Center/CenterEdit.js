@@ -663,6 +663,27 @@ function CenterEdit({ handleCenterChanged }) {
                 </div>
               </div>
               <div className="col-md-6 col-12">
+                <div className="mb-3">
+                  <label for="exampleFormControlInput1" className="form-label">
+                    Target<span className="text-danger">*</span>
+                  </label>
+                  <input
+                    {...formik.getFieldProps("target")}
+                    type="text"
+                    className={`form-control   ${
+                      formik.touched.target && formik.errors.target
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                  />
+                  {formik.touched.target && formik.errors.target && (
+                    <div className="invalid-feedback">
+                      {formik.errors.target}
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className="col-md-4 col-12">
                 <div className="text-start mt-2">
                   <label htmlFor="" className="mb-1 fw-medium">
                     <small>QR Code</small>
@@ -688,10 +709,10 @@ function CenterEdit({ handleCenterChanged }) {
                 <img
                   src={data.qrCode}
                   className="img-fluid ms-2 w-50 rounded mt-2"
-                  alt="Profile"
+                  alt="QR"
                 />
               </div>
-              <div className="col-md-6 col-12">
+              <div className="col-md-4 col-12">
                 <div className="text-start mt-2">
                   <label htmlFor="" className="mb-1 fw-medium">
                     <small>Company Logo</small>
@@ -700,7 +721,7 @@ function CenterEdit({ handleCenterChanged }) {
                   <br />
                   <input
                     type="file"
-                    accept=".png"
+                    accept="image/*"
                     name="logo"
                     className="form-control"
                     onChange={(event) => {
@@ -715,12 +736,12 @@ function CenterEdit({ handleCenterChanged }) {
                   )}
                 </div>
                 <img
-                  src={data.companyLogo}
+                  src={data.logo}
                   className="img-fluid ms-2 w-50 rounded mt-2"
-                  alt="Profile"
+                  alt="Logo"
                 />
               </div>
-              <div className="col-md-6 col-12">
+              <div className="col-md-4 col-12">
                 <div className="text-start mt-2">
                   <label htmlFor="" className="mb-1 fw-medium">
                     <small>Profile Image</small>
@@ -729,7 +750,7 @@ function CenterEdit({ handleCenterChanged }) {
                   <br />
                   <input
                     type="file"
-                    accept=".png"
+                   accept="image/*"
                     name="profile"
                     className="form-control"
                     onChange={(event) => {
@@ -744,31 +765,10 @@ function CenterEdit({ handleCenterChanged }) {
                   )}
                 </div>
                 <img
-                  src={data.profileImage}
+                  src={data.profile}
                   className="img-fluid ms-2 w-50 rounded mt-2"
                   alt="Profile"
                 />
-              </div>
-              <div className="col-md-6 col-12">
-                <div className="mb-3">
-                  <label for="exampleFormControlInput1" className="form-label">
-                    Target<span className="text-danger">*</span>
-                  </label>
-                  <input
-                    {...formik.getFieldProps("target")}
-                    type="text"
-                    className={`form-control   ${
-                      formik.touched.target && formik.errors.target
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                  />
-                  {formik.touched.target && formik.errors.target && (
-                    <div className="invalid-feedback">
-                      {formik.errors.target}
-                    </div>
-                  )}
-                </div>
               </div>
               <div className="col-12">
                 <label for="exampleFormControlInput1" className="form-label">

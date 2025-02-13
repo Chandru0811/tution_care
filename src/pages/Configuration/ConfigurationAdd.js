@@ -100,7 +100,7 @@ function ConfigurationAdd() {
         validationSchema: validationSchema,
         onSubmit: async (values) => {
             console.log("values", values)
-            localStorage.setItem("tuitionConfigurationData", JSON.stringify(values));
+            // localStorage.setItem("tuitionConfigurationData", JSON.stringify(values));
             // setLoadIndicator(true);
             // try {
             //     const response = await api.post("/tuitionRegister", values, {

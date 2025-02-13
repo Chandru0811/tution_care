@@ -35,7 +35,6 @@ function Sidebar() {
   const location = useLocation();
   const hasRenderedOnce = useRef(false);
   const centerId = localStorage.getItem("tmscenterId");
-  // const storedConfigure = localStorage.getItem("tuitionConfigurationData");
   const Key = {
     lead: storedConfigure?.lead || "Lead Management",
     student: storedConfigure?.student || "Student Management",

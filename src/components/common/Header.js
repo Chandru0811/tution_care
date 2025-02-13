@@ -1,22 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import fetchAllCentersWithIds from "../../pages/List/CenterList";
 import { toast } from "react-toastify";
 import ChangePassword from "./ChangePassword";
 import { BiLogOut } from "react-icons/bi";
 import { CiCalendarDate } from "react-icons/ci";
 import { GrUserSettings } from "react-icons/gr";
+import api from "../../config/URL";
 
-function Header({ onLogout, centerChange }) {
+function Header({ onLogout }) {
   const navigate = useNavigate();
   const userName = localStorage.getItem("tmsuserName");
-  const centerName = localStorage.getItem("tmscenterName");
   const centerId = localStorage.getItem("tmscenterId");
   const userEmail = localStorage.getItem("tmsemail");
   const role = localStorage.getItem("tmsrole")?.replace(/_/g, " ");
-  const selectedCenterId = localStorage.getItem("tmsselectedCenterId");
-  const [centerData, setCenterData] = useState(null);
-  const [selectedCenter, setSelectedCenter] = useState("");
+  const [data, setData] = useState([]);
 
   const handleLogOutClick = () => {
     document.body.classList.remove("offcanvas-backdrop", "modal-open");
@@ -26,32 +23,18 @@ function Header({ onLogout, centerChange }) {
     navigate("/login");
   };
 
-  const handleCenterChange = (e) => {
-    const centerId = e.target.value; // Get the selected value
-    setSelectedCenter(centerId); // Update the component state
-    localStorage.setItem("tmsselectedCenterId", centerId); // Store in localStorage
-    console.log("Selected Center:", centerId); // Log for debugging
+  const getData = async () => {
+    try {
+      const response = await api.get(`/getAllCenterById/${centerId}`);
+      setData(response.data);
+    } catch (error) {
+      toast.error("Error Fetching Data");
+    }
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const centerData = await fetchAllCentersWithIds();
-        setCenterData(centerData);
-        if (selectedCenterId !== null && selectedCenterId !== "undefined") {
-          setSelectedCenter(selectedCenterId);
-          localStorage.setItem("tmsselectedCenterId", selectedCenterId);
-        } else if (centerData && centerData.length > 0) {
-          setSelectedCenter(centerData[0].id);
-          localStorage.setItem("tmsselectedCenterId", centerData[0].id); // Set in localStorage
-        }
-      } catch (error) {
-        toast.error(error.message);
-      }
-    };
-
-    fetchData();
-  }, [centerChange]);
+    getData();
+  }, []);
 
   return (
     <nav>
@@ -74,40 +57,16 @@ function Header({ onLogout, centerChange }) {
           </Link>
           <div className="position-relative me-3">
             <span className="badge bg-primary rounded-pill">
-              {centerName || "Tuition Care"}
+              {data.centerName || "ECS School"}
             </span>
+            {/* <img
+              src={data.logo}
+              width={50} // Increased for better visibility
+              height={50}
+              className="img-fluid ms-2 rounded mt-2"
+              alt="Center Logo"
+            /> */}
           </div>
-
-          {/* <div className="position-relative">
-            <select
-              value={selectedCenter}
-              name="studentRelationCenter"
-              className="form-select shadow-none"
-              onChange={handleCenterChange}
-              style={{
-                border: "none",
-                outline: "none",
-                fontSize: "14px", // Readable size
-                width: "auto", // Automatically adjust width based on content
-                minWidth: "150px", // Ensure the dropdown is not too small
-                maxWidth: "100%", // Allow full width on smaller screens
-                padding: "0 10px", // Add some padding for a neat look
-              }}
-            >
-              <option value="" selected disabled>
-                Select a Centre
-              </option>
-              {centerData &&
-                centerData.map((studentRelationCenter) => (
-                  <option
-                    key={studentRelationCenter.id}
-                    value={studentRelationCenter.id}
-                  >
-                    {studentRelationCenter.centerNames}
-                  </option>
-                ))}
-            </select>
-          </div> */}
           <button
             className="btn border border-1 rounded-circle"
             type="button"
@@ -137,7 +96,9 @@ function Header({ onLogout, centerChange }) {
         <div className="offcanvas-body d-flex flex-column">
           <div className="flex-grow-1">
             <div className="text-center">
-              <h3 className="cname_canvas" style={{ fontSize: "30px" }} >{centerName || "Tuition Care"}</h3>
+              <h3 className="cname_canvas" style={{ fontSize: "30px" }}>
+                {data.centerName || "ECS School"}
+              </h3>
             </div>
             <div className="text-center mt-3">
               <i
@@ -158,7 +119,10 @@ function Header({ onLogout, centerChange }) {
               <p>{userEmail}</p>
               <p>{role}</p>
             </div>
-            <div className="text-center cursor-pointer" data-bs-dismiss="offcanvas">
+            <div
+              className="text-center cursor-pointer"
+              data-bs-dismiss="offcanvas"
+            >
               <Link
                 to={`/companyRegister/edit/${centerId}`}
                 style={{ textDecoration: "none", color: "inherit" }}
@@ -169,7 +133,6 @@ function Header({ onLogout, centerChange }) {
                 <span>Edit Company</span>
               </Link>
             </div>
-
           </div>
 
           <div className="mt-auto gap-2">
@@ -194,7 +157,7 @@ function Header({ onLogout, centerChange }) {
           </div>
         </div>
       </div>
-    </nav >
+    </nav>
   );
 }
 
