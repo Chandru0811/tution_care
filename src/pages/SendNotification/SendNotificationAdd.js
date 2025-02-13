@@ -4,7 +4,6 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
-import fetchAllCentersWithIds from "../List/CenterList";
 import { MultiSelect } from "react-multi-select-component";
 import fetchAllCoursesWithCenterIds from "../List/CourseListByCenterIdS";
 import fetchAllClassByCourseIds from "../List/ClassListByCourseIdS";
@@ -12,7 +11,6 @@ import fetchAllClassByCourseIds from "../List/ClassListByCourseIdS";
 const validationSchema = Yup.object({
   recipient: Yup.string().required("*Recipient Name is required"),
   messageTitle: Yup.string().required("*Title is required"),
-  centerIds: Yup.array().min(1, "At least one center must be selected"),
   courseIds: Yup.array().min(1, "At least one course must be selected"),
   classIds: Yup.array().min(1, "At least one class must be selected"),
   days: Yup.string().required("*Day is required"),
@@ -30,19 +28,14 @@ const validationSchema = Yup.object({
 
 function SendNotificationAdd() {
   const navigate = useNavigate();
-  const [centerData, setCenterData] = useState([]);
+  const centerId = localStorage.getItem("tmscenterId");
   const [courseData, setCourseData] = useState([]);
   const [classData, setClassData] = useState([]);
   const [loadIndicator, setLoadIndicator] = useState(false);
-  const [selectedCenters, setSelectedCenters] = useState([]);
   const [selectedCourses, setSelectedCourses] = useState([]);
   const [selectedClasses, setSelectedClasses] = useState([]);
   const userName = localStorage.getItem("tmsuserName");
 
-  const centerOptions = centerData.map((center) => ({
-    label: center.centerNames,
-    value: center.id,
-  }));
   const courseOptions = courseData.map((course) => ({
     label: course.courseName,
     value: course.courseId,
@@ -52,23 +45,18 @@ function SendNotificationAdd() {
     value: classes.classId,
   }));
 
+  /** Fetch Courses Based on Single Center ID */
   useEffect(() => {
-    fetchAllCentersWithIds()
-      .then(setCenterData)
-      .catch((error) => toast.error(error.message));
-  }, []);
-
-  useEffect(() => {
-    if (selectedCenters.length > 0) {
-      const centerIds = selectedCenters.map((option) => option.value);
-      fetchAllCoursesWithCenterIds(centerIds)
+    if (centerId) {
+      fetchAllCoursesWithCenterIds(centerId)
         .then(setCourseData)
         .catch((error) => toast.error(error.message));
     } else {
       setCourseData([]);
     }
-  }, [selectedCenters]);
+  }, [centerId]);
 
+  /** Fetch Classes Based on Selected Course IDs */
   useEffect(() => {
     if (selectedCourses.length > 0) {
       const courseIds = selectedCourses.map((option) => option.value);
@@ -84,7 +72,7 @@ function SendNotificationAdd() {
     initialValues: {
       recipient: "",
       messageTitle: "",
-      centerIds: [],
+      centerIds: centerId,
       courseIds: [],
       classIds: [],
       days: "",
@@ -98,7 +86,7 @@ function SendNotificationAdd() {
       const formData = new FormData();
       formData.append("recipient", values.recipient);
       formData.append("messageTitle", values.messageTitle);
-      formData.append("centerIds", values.centerIds);
+      formData.append("centerIds", centerId);
       formData.append("courseIds", values.courseIds);
       formData.append("classIds", values.classIds);
       formData.append("days", values.days);
@@ -254,34 +242,6 @@ function SendNotificationAdd() {
                 )}
               </div>
 
-              <div className="col-md-6 col-12 mb-4">
-                <label className="form-label">
-                  Centre<span className="text-danger">*</span>
-                </label>
-                <MultiSelect
-                  options={centerOptions}
-                  value={selectedCenters}
-                  onChange={(selected) => {
-                    setSelectedCenters(selected);
-                    formik.setFieldValue(
-                      "centerIds",
-                      selected.map((option) => option.value)
-                    );
-                  }}
-                  labelledBy="Select Centers"
-                  className={`form-multi-select ${
-                    formik.touched.centerIds && formik.errors.centerIds
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                />
-                {formik.touched.centerIds && formik.errors.centerIds && (
-                  <div className="invalid-feedback">
-                    {formik.errors.centerIds}
-                  </div>
-                )}
-              </div>
-
               <div className="col-md-6 col-12 mb-2">
                 <label className="form-label">
                   Course<span className="text-danger">*</span>
@@ -366,27 +326,6 @@ function SendNotificationAdd() {
                   <div className="invalid-feedback">{formik.errors.days}</div>
                 )}
               </div>
-
-              {/* <div class="col-md-6 col-12 mb-4">
-              <label className="form-label">Attachement</label>
-              <span className="text-danger">*</span>
-              <input
-                type="file"
-                multiple
-                name="attachments"
-                className={`form-control  ${formik.touched.attachments && formik.errors.attachments
-                  ? "is-invalid"
-                  : ""
-                  }`}
-                onChange={(event) => {
-                  formik.setFieldValue("attachments", event.target.files[0]);
-                }}
-                onBlur={formik.handleBlur}
-              />
-              {formik.touched.attachments && formik.errors.attachments && (
-                <div className="invalid-feedback">{formik.errors.attachments}</div>
-              )}
-            </div> */}
 
               <div className="col-md-6 col-12 mb-4">
                 <label className="form-label">Attachments</label>

@@ -1,11 +1,8 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { FaEye } from "react-icons/fa";
 import api from "../../../config/URL";
-import { MoreVert as MoreVertIcon } from "@mui/icons-material";
 import {
   createTheme,
-  IconButton,
   Menu,
   MenuItem,
   ThemeProvider,
@@ -19,11 +16,11 @@ const MyMessages = () => {
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
   const navigate = useNavigate();
-  const id = localStorage.getItem("userId");
-  const userName = localStorage.getItem("userName");
+  const id = localStorage.getItem("tmsuserId");
+  const userName = localStorage.getItem("tmsrole");
 
   const getData = async () => {
-    if (userName === "SMS_BRANCH_ADMIN") {
+    if (userName === "TUITION_ADMIN") {
       try {
         const response = await api.get(`/getAllMessagesByAdminId/${id}`);
         setDatas(response.data);
@@ -58,24 +55,6 @@ const MyMessages = () => {
           <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
         ),
       },
-      // {
-      //   accessorKey: "id",
-      //   header: "",
-      //   enableHiding: false,
-      //   enableSorting: false,
-      //   size: 20,
-      //   Cell: ({ cell }) => (
-      //     <IconButton
-      //       onClick={(e) => {
-      //         e.stopPropagation();
-      //         setMenuAnchor(e.currentTarget);
-      //         setSelectedId(cell.getValue());
-      //       }}
-      //     >
-      //       <MoreVertIcon />
-      //     </IconButton>
-      //   ),
-      // },
       {
         accessorKey: "senderName",
         header: "Student Name",

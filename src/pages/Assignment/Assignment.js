@@ -35,6 +35,7 @@ const Assignment = () => {
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
   const [isClearFilterClicked, setIsClearFilterClicked] = useState(false);
+  const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
 
   const columns = useMemo(
     () => [
@@ -369,7 +370,7 @@ const Assignment = () => {
                 </button>
               </div>
             </div>
-            {/* {storedScreens?.centerListingCreate && ( */}
+            {storedScreens?.questionCreate && (
             <Link to="/assignment/add">
               <button
                 type="button"
@@ -379,7 +380,7 @@ const Assignment = () => {
                 &nbsp; Add &nbsp;&nbsp; <i className="bx bx-plus"></i>
               </button>
             </Link>
-            {/* )} */}
+           )}
           </div>
         </div>
         {loading ? (

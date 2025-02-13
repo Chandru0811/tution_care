@@ -5,10 +5,10 @@ import * as Yup from "yup";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
 import { Modal } from "react-bootstrap";
-import { Pending } from "@mui/icons-material";
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required("*Name is required"),
+  appType: Yup.string().required("*App Type is required"),
   centerName: Yup.string().required("*Company Name is required"),
   address: Yup.string().required("*Address is required"),
   mobile: Yup.string()
@@ -27,6 +27,7 @@ const validationSchema = Yup.object().shape({
 
 function SuperAdminCenterAdd({ handleCenterChanged }) {
   const navigate = useNavigate();
+  const [appData, setAppData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const userName = localStorage.getItem("tmsuserName");
   const [showModal, setShowModal] = useState(false);
@@ -53,25 +54,6 @@ function SuperAdminCenterAdd({ handleCenterChanged }) {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      // const isAnyModuleSelected = Object.entries(values)
-      //   .filter(([key]) =>
-      //     [
-      //       "leadManagement",
-      //       "staffManagement",
-      //       "documentManagement",
-      //       "referalManagement",
-      //       "assessmentManagement",
-      //       "reportManagement",
-      //       "messages",
-      //     ].includes(key)
-      //   )
-      //   .some(([_, value]) => value === true);
-
-      // if (!isAnyModuleSelected) {
-      //   setShowModal(true);
-      //   return;
-      // }
-
       setLoadIndicator(true);
       try {
         const response = await api.post("/tuitionRegister", values, {
@@ -96,6 +78,15 @@ function SuperAdminCenterAdd({ handleCenterChanged }) {
     validateOnBlur: true, // Enable validation on blur
   });
 
+  const fetchAppData = async () => {
+    try {
+      const response = await api.get("getAllCenter");
+      setAppData(response.data);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
+
   // Function to scroll to the first error field
   const scrollToError = (errors) => {
     const errorField = Object.keys(errors)[0]; // Get the first error field
@@ -117,6 +108,10 @@ function SuperAdminCenterAdd({ handleCenterChanged }) {
     setShowModal(false);
     toast.success("Access Modules Saved");
   };
+
+  useEffect(() => {
+    fetchAppData();
+  }, []);
 
   return (
     <div className="container-fluid">
@@ -257,6 +252,7 @@ function SuperAdminCenterAdd({ handleCenterChanged }) {
                   )}
                 </div>
               </div>
+
               <div className="col-md-6 col-12">
                 <div className="mb-3">
                   <label for="exampleFormControlInput1" className="form-label">
@@ -278,7 +274,35 @@ function SuperAdminCenterAdd({ handleCenterChanged }) {
                   )}
                 </div>
               </div>
-              <div className="col-md-12 col-12">
+              <div className="col-md-6 col-12">
+                <div className="mb-3">
+                  <label className="form-label">
+                    App Type<span class="text-danger">*</span>
+                  </label>
+                  <select
+                    {...formik.getFieldProps("appType")}
+                    className={`form-select ${
+                      formik.touched.appType && formik.errors.appType
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                  >
+                    <option selected></option>
+                    {appData &&
+                      appData.map((appType) => (
+                        <option key={appType.id} value={appType.id}>
+                          {appType.centerName}
+                        </option>
+                      ))}
+                  </select>
+                  {formik.touched.appType && formik.errors.appType && (
+                    <div className="invalid-feedback">
+                      {formik.errors.appType}
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className="col-md-6 col-12">
                 <div className="mb-3">
                   <label for="exampleFormControlInput1" className="form-label">
                     Address<span className="text-danger">*</span>

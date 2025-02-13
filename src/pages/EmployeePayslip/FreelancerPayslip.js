@@ -12,7 +12,7 @@ const FreelancerPayslip = () => {
   const navigate = useNavigate();
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
-  const userId = localStorage.getItem('userId');
+  const userId = localStorage.getItem('tmsuserId');
   const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   const [menuAnchor, setMenuAnchor] = useState(null);
 
@@ -161,7 +161,7 @@ const FreelancerPayslip = () => {
             </span>
           </div>
         </div>
-        <div className="mb-3 d-flex justify-content-between">
+        {/* <div className="mb-3 d-flex justify-content-between">
           {storedScreens?.payrollCreate && (
             <Link to="/payrolladmin/add">
               <button
@@ -173,7 +173,7 @@ const FreelancerPayslip = () => {
               </button>
             </Link>
           )}
-        </div>
+        </div> */}
         {loading ? (
           <div className="loader-container">
             <div className="loading">

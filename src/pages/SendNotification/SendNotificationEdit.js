@@ -4,7 +4,6 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
-import fetchAllCentersWithIds from "../List/CenterList";
 import fetchAllCoursesWithCenterIds from "../List/CourseListByCenterIdS";
 import fetchAllClassByCourseIds from "../List/ClassListByCourseIdS";
 import { MultiSelect } from "react-multi-select-component";
@@ -19,29 +18,22 @@ function SendNotificationEdit() {
   const { id } = useParams();
   const [data, setData] = useState({});
   const navigate = useNavigate();
-  const [centerData, setCenterData] = useState([]);
   const [courseData, setCourseData] = useState([]);
   const [classData, setClassData] = useState([]);
   const [loadIndicator, setLoadIndicator] = useState(false);
-  const [selectedCenters, setSelectedCenters] = useState([]);
   const [selectedCourses, setSelectedCourses] = useState([]);
   const [selectedClasses, setSelectedClasses] = useState([]);
   const userName = localStorage.getItem("tmsuserName");
+  const centerId = localStorage.getItem("tmscenterId");
 
   const validationSchema = Yup.object({
     recipient: Yup.string().required("*Recipient Name is required"),
     messageTitle: Yup.string().required("*Title is required"),
-    centerIds: Yup.array().min(1, "At least one center must be selected"),
     courseIds: Yup.array().min(1, "At least one course must be selected"),
     classIds: Yup.array().min(1, "At least one class must be selected"),
     days: Yup.string().required("*Day is required"),
 
   });
-
-  const centerOptions = centerData.map((center) => ({
-    label: center.centerNames,
-    value: center.id,
-  }));
   const courseOptions = courseData.map((course) => ({
     label: course.courseName,
     value: course.courseId,
@@ -50,24 +42,12 @@ function SendNotificationEdit() {
     label: classes.className,
     value: classes.classId,
   }));
-  console.log("centerdta", centerData);
 
   useEffect(() => {
-    fetchAllCentersWithIds()
-      .then(setCenterData)
-      .catch((error) => toast.error(error.message));
-  }, []);
-
-  useEffect(() => {
-    if (selectedCenters.length > 0) {
-      const centerIds = selectedCenters.map((option) => option.value);
-      fetchAllCoursesWithCenterIds(centerIds)
+      fetchAllCoursesWithCenterIds(centerId)
         .then(setCourseData)
         .catch((error) => toast.error(error.message));
-    } else {
-      setCourseData([]);
-    }
-  }, [selectedCenters]);
+  }, []);
 
   useEffect(() => {
     if (selectedCourses.length > 0) {
@@ -178,7 +158,7 @@ function SendNotificationEdit() {
     initialValues: {
       recipient: "",
       messageTitle: "",
-      centerIds: [],
+      centerIds: centerId,
       courseIds: [],
       classIds: [],
       days: "",
@@ -192,7 +172,7 @@ function SendNotificationEdit() {
       const formData = new FormData();
       formData.append("recipient", values.recipient);
       formData.append("messageTitle", values.messageTitle);
-      formData.append("centerIds", values.centerIds);
+      formData.append("centerIds", centerId);
       formData.append("courseIds", values.courseIds);
       formData.append("classIds", values.classIds);
       formData.append("days", values.days);
@@ -261,8 +241,6 @@ function SendNotificationEdit() {
           attachments: announcementData.attachments || "",
         });
 
-        // Set the selected options for MultiSelect components
-        setSelectedCenters(transformedCenterIds);
         setSelectedCourses(transformedCourseIds);
         setSelectedClasses(transformedClassIds);
         setData(announcementData);
@@ -394,36 +372,6 @@ function SendNotificationEdit() {
                 )}
               </div>
 
-              <div className="col-md-6 col-12 mb-4">
-                <label className="form-label">
-                  Centre<span className="text-danger">*</span>
-                </label>
-                {centerOptions.length > 0 && (
-                  <MultiSelect
-                    options={centerOptions}
-                    value={selectedCenters}
-                    onChange={(selected) => {
-                      setSelectedCenters(selected);
-                      formik.setFieldValue(
-                        "centerIds",
-                        selected.map((option) => option.value)
-                      );
-                    }}
-                    labelledBy="Select Centers"
-                    className={`form-multi-select ${
-                      formik.touched.centerIds && formik.errors.centerIds
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                  />
-                )}
-                {formik.touched.centerIds && formik.errors.centerIds && (
-                  <div className="invalid-feedback">
-                    {formik.errors.centerIds}
-                  </div>
-                )}
-              </div>
-
               <div className="col-md-6 col-12 mb-2">
                 <label className="form-label">
                   Course<span className="text-danger">*</span>
@@ -509,28 +457,6 @@ function SendNotificationEdit() {
                 )}
               </div>
 
-              {/* <div className="col-md-6 col-12 mb-4">
-                <label className="form-label">Attachments</label>
-                <input
-                  type="file"
-                  className={`form-control ${
-                    formik.touched.attachments && formik.errors.attachments
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  multiple
-                  onChange={(event) => {
-                    const files = Array.from(event.currentTarget.files);
-                    formik.setFieldValue("attachments", files);
-                  }}
-                  onBlur={formik.handleBlur}
-                />
-                {formik.touched.attachments && formik.errors.attachments && (
-                  <div className="invalid-feedback">
-                    {formik.errors.attachments}
-                  </div>
-                )}
-              </div> */}
               <div className="col-md-6 col-12 mb-4">
                 <label className="form-label">Attachments</label>
                 <input
