@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 import fetchAllRaceWithIds from "../../List/RaceList";
 import fetchAllNationalityeWithIds from "../../List/NationalityAndCountryList";
 import fetchAllStudentsWithIds from "../../List/StudentList";
+import fetchAllLanguageWithIdsC from "../../List/LanguageList";
 
 const validationSchema = Yup.object().shape({
   studentName: Yup.string().required("*Student Name is required"),
@@ -58,6 +59,7 @@ const AddStudentDetails = forwardRef(
     const [studentData, setStudentData] = useState(null);
     const [imagePreviewUrl, setImagePreviewUrl] = useState(null);
     const [raceData, setRaceData] = useState(null);
+    const [languageData, setLanguageData] = useState(null);
     const [nationalityData, setNationalityData] = useState(null);
     const userName = localStorage.getItem("tmsuserName");
     const centerId = localStorage.getItem("tmscenterId");
@@ -78,6 +80,9 @@ const AddStudentDetails = forwardRef(
 
         const raceData = await fetchAllRaceWithIds();
         setRaceData(raceData);
+
+        const languageData = await fetchAllLanguageWithIdsC();
+        setLanguageData(languageData);
 
         const nationality = await fetchAllNationalityeWithIds();
         setNationalityData(nationality);
@@ -677,8 +682,15 @@ const AddStudentDetails = forwardRef(
                         className="form-select"
                       >
                         <option selected></option>
-                        <option value="CHINESE">Chinese</option>
-                        <option value="ENGLISH">English</option>
+                        {languageData &&
+                          languageData.map((languageId) => (
+                            <option
+                              key={languageId.id}
+                              value={languageId.language}
+                            >
+                              {languageId.languageName}
+                            </option>
+                          ))}
                       </select>
                       {formik.touched.primaryLanguage &&
                         formik.errors.primaryLanguage && (

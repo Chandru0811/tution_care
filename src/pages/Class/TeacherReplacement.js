@@ -20,10 +20,10 @@ const Replacement = ({ classId, onOpen }) => {
   const [open, setOpen] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [classData, setClassData] = useState({});
-  console.log("ClassID:",classId);
+  console.log("ClassID:", classId);
   const [teacherData, setTeacherData] = useState([]);
   const [availableDays, setAvailableDays] = useState([]);
-  const centerID = localStorage.getItem("tmscenterId"); 
+  const centerID = localStorage.getItem("tmscenterId");
 
   const handleClose = () => {
     setOpen(false);
@@ -115,7 +115,7 @@ const Replacement = ({ classId, onOpen }) => {
 
   const fetchAvailableTeachersWithExclusion = async (selectedDate) => {
     try {
-      const startDate = selectedDate || formik.values.startDate; 
+      const startDate = selectedDate || formik.values.startDate;
       if (centerID && classId && startDate) {
         const response = await api.get(
           `getAvailableTeachersWithExclusion/${centerID}?classId=${classId}&startDate=${startDate}`
@@ -123,7 +123,7 @@ const Replacement = ({ classId, onOpen }) => {
         setTeacherData(response.data);
         console.log("Fetched Teachers:", response.data);
       } else {
-        toast.error("Missing necessary parameters."); 
+        toast.error("Missing necessary parameters.");
       }
     } catch (error) {
       toast.error("Error fetching teacher data.");
@@ -131,7 +131,6 @@ const Replacement = ({ classId, onOpen }) => {
     }
   };
 
-  
   const getCourseClassLData = async () => {
     try {
       const response = await api.get(
@@ -155,7 +154,7 @@ const Replacement = ({ classId, onOpen }) => {
 
   return (
     <div>
-      <span
+      <p
         onClick={handleOpen}
         className="text-start mb-0 menuitem-style"
         style={{
@@ -164,7 +163,7 @@ const Replacement = ({ classId, onOpen }) => {
         }}
       >
         Teacher Replacement
-      </span>
+      </p>
       <Dialog open={open} onClose={handleClose} fullWidth maxWidth="md">
         <DialogTitle>Teacher Replacement</DialogTitle>
         <form onSubmit={formik.handleSubmit}>

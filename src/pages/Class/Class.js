@@ -19,7 +19,7 @@ import fetchAllTeacherListByCenter from "../List/TeacherListByCenter";
 const Class = () => {
   const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   const navigate = useNavigate();
- 
+
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
   const centerId = localStorage.getItem("tmscenterId");
@@ -68,7 +68,7 @@ const Class = () => {
       // { accessorKey: "centerName", header: "Center Name", enableHiding: false },
       { accessorKey: "courseName", header: "Course Name", enableHiding: false },
       { accessorKey: "classCode", header: "Class Code", enableHiding: false },
- 
+
       { accessorKey: "classType", header: "Class Type", enableHiding: false },
       {
         accessorKey: "teacherName",
@@ -157,11 +157,12 @@ const Class = () => {
     },
   });
 
-
   const getClassData = async () => {
     try {
       setLoading(true);
-      const response = await api.get(`/getAllCourseClassListingsWithCenterId/${centerId}`);
+      const response = await api.get(
+        `/getAllCourseClassListingsWithCenterId/${centerId}`
+      );
       setDatas(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -249,7 +250,6 @@ const Class = () => {
         </div>
         <div className="mb-3">
           <div className="individual_fliters d-lg-flex ">
-           
             <div className="form-group mb-0 ms-2 mb-1">
               <select
                 className="form-select form-select-sm center_list"
@@ -387,11 +387,17 @@ const Class = () => {
               open={Boolean(menuAnchor)}
               onClose={handleMenuClose}
             >
-              <MenuItem >
-                <TeacherReplacement classId={selectedId} onDeleteSuccess={getClassData}
-                  onOpen={handleMenuClose}/>
+              <MenuItem>
+                <TeacherReplacement
+                  classId={selectedId}
+                  onDeleteSuccess={getClassData}
+                  onOpen={handleMenuClose}
+                />
               </MenuItem>
-              <MenuItem onClick={() => navigate(`/class/edit/${selectedId}`)} className="text-start mb-0 menuitem-style">
+              <MenuItem
+                onClick={() => navigate(`/class/edit/${selectedId}`)}
+                className="text-start mb-0 menuitem-style"
+              >
                 Edit
               </MenuItem>
               <MenuItem>
