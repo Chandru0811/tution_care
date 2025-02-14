@@ -18,6 +18,7 @@ import GlobalDelete from "../../components/common/GlobalDelete";
 
 const Assignment = () => {
   const centerId = localStorage.getItem("tmscenterId");
+  const userId = localStorage.getItem("tmsuserId");
   const [filters, setFilters] = useState({
     centerId: centerId,
     courseId: "",
@@ -67,7 +68,11 @@ const Assignment = () => {
           </IconButton>
         ),
       },
-      { accessorKey: "assignmentName", enableHiding: false, header: "Assignment Name" },
+      {
+        accessorKey: "assignmentName",
+        enableHiding: false,
+        header: "Assignment Name",
+      },
       // { accessorKey: "folderName", enableHiding: false, header: "Folder Name" },
       { accessorKey: "userName", enableHiding: false, header: "Teacher" },
       {
@@ -97,7 +102,7 @@ const Assignment = () => {
         accessorKey: "day",
         enableHiding: false,
         header: "Days",
-      },      
+      },
       { accessorKey: "createdBy", header: "Created By" },
       {
         accessorKey: "createdAt",
@@ -196,6 +201,9 @@ const Assignment = () => {
       // Ensure centerId is always included
       if (!filteredParams.centerId) {
         filteredParams.centerId = centerId;
+      }
+      if (userId) {
+        filteredParams.userId = userId;
       }
 
       const queryParams = new URLSearchParams(filteredParams);
@@ -322,23 +330,25 @@ const Assignment = () => {
                 style={{ width: "160px" }}
               />
             </div>
-            <div className="form-group mb-0 ms-2 mb-1">
-              <select
-                className="form-select form-select-sm center_list"
-                name="userId"
-                style={{ width: "100%" }}
-                onChange={handleFilterChange}
-                value={filters.userId}
-              >
-                <option>Select the Teacher</option>
-                {teacherData &&
-                  teacherData.map((teacher) => (
-                    <option key={teacher.id} value={teacher.id}>
-                      {teacher.teacherNames}
-                    </option>
-                  ))}
-              </select>
-            </div>
+            {!userId && (
+              <div className="form-group mb-0 ms-2 mb-1">
+                <select
+                  className="form-select form-select-sm center_list"
+                  name="userId"
+                  style={{ width: "100%" }}
+                  onChange={handleFilterChange}
+                  value={filters.userId}
+                >
+                  <option>Select the Teacher</option>
+                  {teacherData &&
+                    teacherData.map((teacher) => (
+                      <option key={teacher.id} value={teacher.id}>
+                        {teacher.teacherNames}
+                      </option>
+                    ))}
+                </select>
+              </div>
+            )}
           </div>
           <div className="d-flex justify-content-between">
             <div className="individual_fliters d-lg-flex mt-2">
@@ -371,16 +381,16 @@ const Assignment = () => {
               </div>
             </div>
             {storedScreens?.questionCreate && (
-            <Link to="/assignment/add">
-              <button
-                type="button"
-                className="btn btn-button btn-sm me-2"
-                style={{ fontWeight: "600px !important" }}
-              >
-                &nbsp; Add &nbsp;&nbsp; <i className="bx bx-plus"></i>
-              </button>
-            </Link>
-           )}
+              <Link to="/assignment/add">
+                <button
+                  type="button"
+                  className="btn btn-button btn-sm me-2"
+                  style={{ fontWeight: "600px !important" }}
+                >
+                  &nbsp; Add &nbsp;&nbsp; <i className="bx bx-plus"></i>
+                </button>
+              </Link>
+            )}
           </div>
         </div>
         {loading ? (

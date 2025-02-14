@@ -42,11 +42,23 @@ export default function NewLogin({ onLogin }) {
             );
           } else {
             toast.success(response.data.message);
+            const userInfo = response.data.userInfo;
+
+            if (Array.isArray(userInfo) && userInfo.length > 0) {
+              const user = userInfo[0];
+
+              localStorage.setItem("tmsuserId", user.userId);
+              localStorage.setItem("tmsteacherName", user.teacherName);
+              localStorage.setItem("tmsteacherImage", user.teacherImage);
+              localStorage.setItem("tmsidNo", user.idNo);
+              localStorage.setItem("tmsroleType", user.roleType);
+              localStorage.setItem("tmscenterId", user.centerId);
+              localStorage.setItem("tmscenterName", user.centerName);
+            }
             localStorage.setItem("tmscenterId", response.data.centerId);
             localStorage.setItem("tmsroleId", response.data.roleId);
             localStorage.setItem("tmsrole", response.data.role);
             localStorage.setItem("tmstoken", response.data.accessToken);
-            localStorage.setItem("tmsuserId", response.data.userId);
             localStorage.setItem("tmscenterName", response.data.centerName);
             localStorage.setItem("tmsemail", values.email);
             onLogin(response.data.roleId);
@@ -79,7 +91,12 @@ export default function NewLogin({ onLogin }) {
       <div className="container-fluid p-0">
         <div className="row m-0" style={{ minHeight: "100vh" }}>
           <div className="col-md-6 col-12 left-section">
-            <img src={Logo} alt="Logo" className="ecs-logo" style={{borderRadius:"50%"}} />
+            <img
+              src={Logo}
+              alt="Logo"
+              className="ecs-logo"
+              style={{ borderRadius: "50%" }}
+            />
             <h1 className="ecs-text">ECS Schools</h1>
           </div>
 

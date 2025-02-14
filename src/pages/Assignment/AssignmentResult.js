@@ -15,6 +15,7 @@ import GlobalDelete from "../../components/common/GlobalDelete";
 
 const AssignmentResult = () => {
   const centerId = localStorage.getItem("tmscenterId");
+  const userId = localStorage.getItem("tmsuserId");
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -162,7 +163,7 @@ const AssignmentResult = () => {
     try {
       setLoading(true);
       const response = await api.get(
-        `/getAllQuestionsWithAnswersByUserId?centerId=${centerId}`
+        `/getAllQuestionsWithAnswersByUserId?userId=${userId}`
       );
       setData(response.data);
     } catch (error) {
