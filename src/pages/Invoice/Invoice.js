@@ -68,16 +68,62 @@ const Invoice = () => {
         accessorKey: "invoiceStatus",
         enableHiding: false,
         header: "Status",
-        size: 20,
-        Cell: ({ row }) =>
-          row.original.invoiceStatus === "PAID" ? (
-            <span className="badge badges-Green fw-light">Paid</span>
-          ) : row.original.invoiceStatus === "REJECTED" ? (
-            <span className="badge badges-danger fw-light">Rejected</span>
-          ) : (
-            <span className="badge badges-orange fw-light">Pending</span>
-          ),
-      },
+        Cell: ({ row }) => {
+          const statusOptions = [
+            { label: "Paid", value: "PAID", bgColor: "#28a745" },
+            { label: "Pending", value: "PENDING", bgColor: "#ffc107" },
+            { label: "Cancelled", value: "CANCELLED", bgColor: "#dc3545" },
+          ];
+      
+          const selectedStatus = row.original.invoiceStatus || "PENDING";
+      
+          const handleStatusChange = async (event) => {
+            const newStatus = event.target.value;
+      
+            try {
+              const response = await api.put(`/updateInvoiceStatus/${row.original.id}`, {
+                invoiceStatus: newStatus,
+              });
+      
+              if (response.status === 200) {
+                toast.success("Status updated successfully");
+                getInvoiceData(); // Refresh table data
+              }
+            } catch (error) {
+              toast.error("Failed to update status");
+            }
+          };
+      
+          const selectedOption = statusOptions.find((opt) => opt.value === selectedStatus);
+      
+          return (
+            <select
+              className="form-control w-50 badge"
+              value={selectedStatus}
+              onChange={handleStatusChange}
+              onClick={(e) => e.stopPropagation()}
+              style={{
+                height: "20px",
+                textAlign: "center",
+                borderRadius: "5px",
+                backgroundColor: selectedOption?.bgColor,
+                cursor: "pointer",
+              }}
+            >
+              {statusOptions
+                .map((status) => (
+                  <option
+                    key={status.value}
+                    value={status.value}
+                    style={{ backgroundColor: "white", color: "black", fontSize: "10px" }}
+                  >
+                    {status.label}
+                  </option>
+                ))}
+            </select>
+          );
+        },
+      },      
       {
         accessorKey: "invoiceNumber",
         header: "Invoice Number",

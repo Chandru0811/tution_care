@@ -15,6 +15,7 @@ import AddBreak from "./Add/AddBreak";
 import AddClass from "./Add/AddClass";
 import AddPackage from "./Add/AddPackage";
 import { Menu, MenuItem } from "@mui/material";
+import User from "../../assets/clientimage/User.jpg";
 
 const validationSchema = Yup.object().shape({
   centerName: Yup.string().required("*Centre Name is required"),
@@ -736,11 +737,12 @@ function CenterEdit({ handleCenterChanged }) {
                   )}
                 </div>
                 <img
-                  src={data.logo}
+                  src={data.logo ? data.logo : User}
                   className="img-fluid ms-2 w-50 rounded mt-2"
-                  alt="Logo"
+                  alt="Company Logo"
                 />
               </div>
+
               <div className="col-md-4 col-12">
                 <div className="text-start mt-2">
                   <label htmlFor="" className="mb-1 fw-medium">
@@ -750,7 +752,7 @@ function CenterEdit({ handleCenterChanged }) {
                   <br />
                   <input
                     type="file"
-                   accept="image/*"
+                    accept="image/*"
                     name="profile"
                     className="form-control"
                     onChange={(event) => {
@@ -765,10 +767,15 @@ function CenterEdit({ handleCenterChanged }) {
                   )}
                 </div>
                 <img
-                  src={data.profile}
+                  src={data.profile ? data.profile : User}
                   className="img-fluid ms-2 w-50 rounded mt-2"
                   alt="Profile"
                 />
+                {/* <img
+                  src={data.profile}
+                  className="img-fluid ms-2 w-50 rounded mt-2"
+                  alt="Profile"
+                /> */}
               </div>
               <div className="col-12">
                 <label for="exampleFormControlInput1" className="form-label">
@@ -814,16 +821,16 @@ function CenterEdit({ handleCenterChanged }) {
                 <table className="table table-border-solid">
                   <thead>
                     <tr>
-                      <th scope="col" className="fw-medium">
+                      <th scope="col" className="fw-medium text-center">
                         S.No
                       </th>
-                      <th scope="col" className="fw-medium">
+                      <th scope="col" className="fw-medium text-center">
                         Effective Date
                       </th>
-                      <th scope="col" className="fw-medium">
+                      <th scope="col" className="fw-medium text-center">
                         Amount Including (GST)
                       </th>
-                      <th scope="col" className="fw-medium">
+                      <th scope="col" className="fw-medium text-center">
                         Tax Type
                       </th>
                       <th scope="col" className="fw-medium text-center">
@@ -838,12 +845,12 @@ function CenterEdit({ handleCenterChanged }) {
                     {data.centerRegistrations &&
                       data.centerRegistrations.map((registration, index) => (
                         <tr key={index} className="mt-1">
-                          <td>{index + 1}</td>
-                          <td>
+                          <td className="text-center">{index + 1}</td>
+                          <td className="text-center">
                             {registration.effectiveDate?.substring(0, 10)}
                           </td>
-                          <td>{registration.amount}</td>
-                          <td>
+                          <td className="text-center">{registration.amount}</td>
+                          <td className="text-center">
                             {taxTypeData &&
                               taxTypeData.map((tax) =>
                                 parseInt(registration.taxId) === tax.id
@@ -851,7 +858,7 @@ function CenterEdit({ handleCenterChanged }) {
                                   : ""
                               )}
                           </td>
-                          <td className="text-center">
+                          <td className="text-center p-0">
                             <EditRegisteration
                               id={registration.id}
                               onSuccess={refreshData}
@@ -891,16 +898,16 @@ function CenterEdit({ handleCenterChanged }) {
                 <table class="table table-border-solid">
                   <thead>
                     <tr>
-                      <th scope="col" className="fw-medium">
+                      <th scope="col" className="fw-medium text-center">
                         S.No
                       </th>
-                      <th scope="col" className="fw-medium">
+                      <th scope="col" className="fw-medium text-center">
                         Break Name
                       </th>
-                      <th scope="col" className="fw-medium">
+                      <th scope="col" className="fw-medium text-center">
                         From Date
                       </th>
-                      <th scope="col" className="fw-medium">
+                      <th scope="col" className="fw-medium text-center">
                         To date
                       </th>
                       <th scope="col" className="fw-medium text-center">
@@ -912,11 +919,17 @@ function CenterEdit({ handleCenterChanged }) {
                     {data.centerBreaks &&
                       data.centerBreaks.map((centerBreak, index) => (
                         <tr key={index}>
-                          <td>{index + 1}</td>
-                          <td>{centerBreak.breakName}</td>
-                          <td>{centerBreak.fromDate.substring(0, 10)}</td>
-                          <td>{centerBreak.toDate.substring(0, 10)}</td>
+                          <td className="text-center">{index + 1}</td>
                           <td className="text-center">
+                            {centerBreak.breakName}
+                          </td>
+                          <td className="text-center">
+                            {centerBreak.fromDate.substring(0, 10)}
+                          </td>
+                          <td className="text-center">
+                            {centerBreak.toDate.substring(0, 10)}
+                          </td>
+                          <td className="text-center p-0">
                             <EditBreak
                               id={centerBreak.id}
                               onSuccess={refreshData}
@@ -957,45 +970,45 @@ function CenterEdit({ handleCenterChanged }) {
                   <table class="table table-border-solid">
                     <thead>
                       <tr>
-                        <th scope="col" className="fw-medium">
+                        <th scope="col" className="fw-medium text-center">
                           S.No
                         </th>
                         <th
                           scope="col"
-                          className="fw-medium"
+                          className="fw-medium text-center"
                           style={{ whiteSpace: "nowrap" }}
                         >
                           Classroom Name
                         </th>
                         <th
                           scope="col"
-                          className="fw-medium"
+                          className="fw-medium text-center"
                           style={{ whiteSpace: "nowrap" }}
                         >
                           Classroom Code
                         </th>
                         <th
                           scope="col"
-                          className="fw-medium"
+                          className="fw-medium text-center"
                           style={{ whiteSpace: "nowrap" }}
                         >
                           Classroom Type
                         </th>
                         <th
                           scope="col"
-                          className="fw-medium"
+                          className="fw-medium text-center"
                           style={{ whiteSpace: "nowrap" }}
                         >
                           Capacity
                         </th>
                         <th
                           scope="col"
-                          className="fw-medium"
+                          className="fw-medium text-center"
                           style={{ whiteSpace: "nowrap" }}
                         >
                           Description
                         </th>
-                        <th scope="col" className="fw-medium ps-4">
+                        <th scope="col" className="fw-medium text-center ps-4">
                           Action
                         </th>
                       </tr>
@@ -1004,15 +1017,23 @@ function CenterEdit({ handleCenterChanged }) {
                       {data.centerClassRooms &&
                         data.centerClassRooms.map((centerClassRoom, index) => (
                           <tr key={index}>
-                            <td>{index + 1}</td>
-                            <td>{centerClassRoom.classRoomName}</td>
-                            <td>{centerClassRoom.classRoomCode}</td>
-                            <td>{centerClassRoom.classRoomType}</td>
-                            <td>{centerClassRoom.capacity}</td>
+                            <td className="text-center">{index + 1}</td>
+                            <td className="text-center">
+                              {centerClassRoom.classRoomName}
+                            </td>
+                            <td className="text-center">
+                              {centerClassRoom.classRoomCode}
+                            </td>
+                            <td className="text-center">
+                              {centerClassRoom.classRoomType}
+                            </td>
+                            <td className="text-center">
+                              {centerClassRoom.capacity}
+                            </td>
                             <td className="text-break">
                               {centerClassRoom.description}
                             </td>
-                            <td>
+                            <td className="text-center p-0">
                               <EditClass
                                 id={centerClassRoom.id}
                                 onSuccess={refreshData}
@@ -1053,13 +1074,13 @@ function CenterEdit({ handleCenterChanged }) {
                 <table class="table table-border-solid">
                   <thead>
                     <tr>
-                      <th scope="col" className="fw-medium">
+                      <th scope="col" className="fw-medium text-center">
                         S.No
                       </th>
-                      <th scope="col" className="fw-medium">
+                      <th scope="col" className="fw-medium text-center">
                         Package
                       </th>
-                      <th scope="col" className="fw-medium">
+                      <th scope="col" className="fw-medium text-center">
                         Number Of Lesson
                       </th>
                       <th scope="col" className="fw-medium text-center">
@@ -1071,10 +1092,14 @@ function CenterEdit({ handleCenterChanged }) {
                     {data.centerPackages &&
                       data.centerPackages.map((centerPackage, index) => (
                         <tr key={index}>
-                          <td>{index + 1}</td>
-                          <td>{centerPackage.packageName || "--"}</td>
-                          <td>{centerPackage.noOfLesson || "--"}</td>
+                          <td className="text-center">{index + 1}</td>
                           <td className="text-center">
+                            {centerPackage.packageName || "--"}
+                          </td>
+                          <td className="text-center">
+                            {centerPackage.noOfLesson || "--"}
+                          </td>
+                          <td className="text-center p-0">
                             <EditPackage
                               id={centerPackage.id}
                               onSuccess={refreshData}

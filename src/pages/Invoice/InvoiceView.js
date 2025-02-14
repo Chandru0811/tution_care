@@ -60,20 +60,20 @@ function InvoiceView() {
 
   const qrCodeUrl = centerData
     ? centerData.reduce((src, center) => {
-      return parseInt(data.centerId) === center.id
-        ? center.qrCode || "--"
-        : src;
-    }, "")
+        return parseInt(data.centerId) === center.id
+          ? center.qrCode || "--"
+          : src;
+      }, "")
     : "";
   console.log("QR Code:", qrCodeUrl);
 
   const uenNumber = centerData
     ? centerData.find((center) => parseInt(data.centerId) === center.id)
-      ?.uenNumber || "--"
+        ?.uenNumber || "--"
     : "";
   const invoiceNotes = centerData
     ? centerData.find((center) => parseInt(data.centerId) === center.id)
-      ?.invoiceNotes || "--"
+        ?.invoiceNotes || "--"
     : "";
 
   const generatePDF = async (qrCodeUrl) => {
@@ -86,16 +86,8 @@ function InvoiceView() {
       doc.text(`${data.center}`, 130, 25);
 
       doc.setFont("helvetica", "normal");
-      doc.text(
-        `Tel No: ${centerValues.mobile || "--"}`,
-        130,
-        35
-      );
-      doc.text(
-        `Email: ${centerValues.email || "--"}`,
-        130,
-        45
-      );
+      doc.text(`Tel No: ${centerValues.mobile || "--"}`, 130, 35);
+      doc.text(`Email: ${centerValues.email || "--"}`, 130, 45);
 
       doc.line(16, 70, 50, 70); // x, y, width, height
 
@@ -105,7 +97,8 @@ function InvoiceView() {
       doc.text(`Student Id : ${data.studentUniqueId || " "}`, 14, 100);
       doc.text(`Course Name : ${data.courseName || " "}`, 120, 80);
       doc.text(
-        `Invoice Date : ${data.invoiceDate ? data.invoiceDate.substring(0, 10) : "--"
+        `Invoice Date : ${
+          data.invoiceDate ? data.invoiceDate.substring(0, 10) : "--"
         }`,
         120,
         90
@@ -236,33 +229,34 @@ function InvoiceView() {
   const handleGeneratePDF = async () => {
     const qrCodeUrl = centerData
       ? centerData.reduce((src, center) => {
-        return parseInt(data.centerId) === center.id ? center.qrCode : src;
-      })
+          return parseInt(data.centerId) === center.id ? center.qrCode : src;
+        })
       : "";
 
     generatePDF(qrCodeUrl);
   };
 
-  const VoidInvoice = async () => {
-    try {
-      const response = await api.put(`/convertToVoidInvoiceByInvoiceId/${id}`, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      // toast.success(response.data.message);
-      if (response.status === 200) {
-        toast.success(response.data.message);
-        navigate("/invoice");
-      } else {
-        toast.error(response.data.message);
-      }
-    } catch (error) {
-      toast.error(error.message || "Can't be Cancelled");
-    }
-  };
+  // const VoidInvoice = async () => {
+  //   try {
+  //     const response = await api.put(`/convertToVoidInvoiceByInvoiceId/${id}`, {
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //     });
+  //     // toast.success(response.data.message);
+  //     if (response.status === 200) {
+  //       toast.success(response.data.message);
+  //       navigate("/invoice");
+  //     } else {
+  //       toast.error(response.data.message);
+  //     }
+  //   } catch (error) {
+  //     toast.error(error.message || "Can't be Cancelled");
+  //   }
+  // };
 
   // Utility function to load image
+  
   const loadImage = (url) => {
     return new Promise((resolve, reject) => {
       const img = new Image();
@@ -281,7 +275,7 @@ function InvoiceView() {
       } catch (error) {
         console.error("Error fetching data:", error);
         toast.error("Error fetching data");
-      } 
+      }
     };
 
     getData();
@@ -336,14 +330,27 @@ function InvoiceView() {
           </div>
         </div>
         <div className=" row">
-          <div className="col-12 d-flex justify-content-end my-2">
-            <button
-              type="button"
-              className="btn btn-border btn-sm me-1"
-              onClick={VoidInvoice}
-            >
-              Void Invoice
-            </button>
+          <div className="col-6 d-flex justify-content-start my-2">
+            {/* <Link to={`/payments/add?invoiceId=${id}&studentId=${data.studentId}`}>
+              <button
+                type="button"
+                className="btn btn-border btn-sm ms-2 btn-button"
+              >
+                Make Payment
+              </button>
+            </Link> */}
+          </div>
+          <div className="col-6 d-flex justify-content-end my-2">
+            {/* {data.invoiceStatus !== "PAID" && (
+              <button
+                type="button"
+                className="btn btn-border btn-sm me-1"
+                onClick={VoidInvoice}
+              >
+                Void Invoice
+              </button>
+            )} */}
+
             <SendAndPublish
               data={data}
               id={id}
@@ -387,8 +394,8 @@ function InvoiceView() {
                         : ""
                     )}
                 </h5>
-                <span>Tel No :  {centerValues.mobile || "--"}</span>
-                <span>Email &nbsp;:  {centerValues.email || "--"}</span>
+                <span>Tel No : {centerValues.mobile || "--"}</span>
+                <span>Email &nbsp;: {centerValues.email || "--"}</span>
               </div>
               <div className="card-header my-5">
                 <h5>Official Receipt</h5>
@@ -527,7 +534,12 @@ function InvoiceView() {
             </div>
             <div className="col-lg-4 col-md-8 col-12">
               <div className="d-flex justify-content-center flex-column align-items-center">
-                <img src={centerValues.qrCode || qrCodeUrl} alt="Teacher" width="100" height="100" />
+                <img
+                  src={centerValues.qrCode || qrCodeUrl}
+                  alt="Teacher"
+                  width="100"
+                  height="100"
+                />
                 <p className="text-center">
                   {centerValues.centerName} Pvt.Ltd <br />
                   UEN : {centerValues.uenNumber || "--"}

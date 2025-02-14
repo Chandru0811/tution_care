@@ -54,11 +54,7 @@ const CheckIndex = () => {
           error.response.data.message
         ) {
           setError(
-            error.response.data.message ===
-              "You have already check-in on this date."
-              ? "You have already checked-in on this date."
-              : "You have already checked-out on this date."
-          );
+            error.response.data.message);
         } else {
           setError("An error occurred. Please try again.");
         }
@@ -175,11 +171,7 @@ const CheckIndex = () => {
 
           {error && (
             <div className="alert alert-danger text-center" role="alert">
-              {error === "You have already checkIn on this date."
-                ? "You have already checked-in on this date."
-                : error === "You have already checked out for this date."
-                ? "You have already checked-out on this date."
-                : error}
+              {error}
             </div>
           )}
 

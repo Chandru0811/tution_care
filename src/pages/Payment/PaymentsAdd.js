@@ -1,6 +1,6 @@
 import { useFormik } from "formik";
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
@@ -8,6 +8,11 @@ import fetchAllStudentListByCenter from "../List/StudentListByCenter";
 import { MultiSelect } from "react-multi-select-component";
 
 function PaymentsAdd() {
+  // const location = useLocation();
+  // const queryParams = new URLSearchParams(location.search);
+  // const invoiceId = queryParams.get("invoiceId");
+  // const studentId = queryParams.get("studentId");
+
   const navigate = useNavigate();
   const [loadIndicator, setLoadIndicator] = useState(false);
   const centerId = localStorage.getItem("tmscenterId");
@@ -190,6 +195,23 @@ function PaymentsAdd() {
   useEffect(() => {
     fetchStudent();
   }, []);
+
+  // useEffect(() => {
+  //   const fetchInvoices = async () => {
+  //     try {
+  //       const response = await api.get(
+  //         `/paymentInvoiceList?centerId=${centerId}&studentId=${studentId}`
+  //       );
+  //       setInvoiceData(response.data);
+  //     } catch (error) {
+  //       toast.error(error.message || "Error fetching invoices");
+  //     }
+  //   };
+
+  //   if (studentId) {
+  //     fetchInvoices();
+  //   }
+  // }, [studentId]);
 
   const handlePaymethodChange = (event) => {
     const paymentMethod = event.target.value;
@@ -420,7 +442,6 @@ function PaymentsAdd() {
                       }}
                       onBlur={formik.handleBlur}
                     />
-                   
                   </div>
                 </>
               )}

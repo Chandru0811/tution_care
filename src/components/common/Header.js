@@ -6,6 +6,7 @@ import { BiLogOut } from "react-icons/bi";
 import { CiCalendarDate } from "react-icons/ci";
 import { GrUserSettings } from "react-icons/gr";
 import api from "../../config/URL";
+import Logo from "../../assets/images/TMS_LOGO.png";
 
 function Header({ onLogout }) {
   const navigate = useNavigate();
@@ -44,6 +45,30 @@ function Header({ onLogout }) {
         </div>
 
         <div className="d-flex align-items-center justify-content-evenly">
+          <div className="position-relative me-3">
+            <img
+              src={Logo}
+              alt="logo"
+              width={50}
+              height={50}
+              className="img-fluid p-2"
+            />
+            {/* <img
+              src={data.logo}
+              alt="logo"
+              style={{ width: "30px", height: "30px" }}
+            /> */}
+            <span className="text-black fw-bold rounded-pill">
+              {data.centerName || "ECS School"}
+            </span>
+            {/* <img
+              src={data.logo}
+              width={50} // Increased for better visibility
+              height={50}
+              className="img-fluid ms-2 rounded mt-2"
+              alt="Center Logo"
+            /> */}
+          </div>
           <Link to={"/calendar"}>
             <button className="btn" type="button">
               <CiCalendarDate
@@ -55,18 +80,6 @@ function Header({ onLogout }) {
               />
             </button>
           </Link>
-          <div className="position-relative me-3">
-            <span className="badge bg-primary rounded-pill">
-              {data.centerName || "ECS School"}
-            </span>
-            {/* <img
-              src={data.logo}
-              width={50} // Increased for better visibility
-              height={50}
-              className="img-fluid ms-2 rounded mt-2"
-              alt="Center Logo"
-            /> */}
-          </div>
           <button
             className="btn border border-1 rounded-circle"
             type="button"
@@ -75,6 +88,11 @@ function Header({ onLogout }) {
             aria-controls="offcanvasRight"
           >
             <i className="fa fa-user" style={{ color: "#eb862a" }}></i>
+            {/* <img
+              src={data.profile}
+              alt="profile"
+              style={{ width: "30px", height: "30px" }}
+            />{" "} */}
           </button>
         </div>
       </div>
@@ -101,6 +119,14 @@ function Header({ onLogout }) {
               </h3>
             </div>
             <div className="text-center mt-3">
+              {/* <img
+                src={data.profile}
+                width={50} // Increased for better visibility
+                height={50}
+                className="img-fluid ms-2 rounded mt-2"
+                alt="Center Logo"
+                
+              /> */}
               <i
                 className="fa-duotone fa-solid fa-user"
                 style={{
