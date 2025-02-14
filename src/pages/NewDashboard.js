@@ -260,7 +260,7 @@ function NewDashboard() {
               ))}
           </div>
           <div className="row">
-            <div className="col-md-8 mb-4">
+            <div className="col-md-12 mb-4">
               <div
                 className="card shadow-sm p-3 h-100 shadow-sm border-0"
                 style={{ borderRadius: "10px" }}
@@ -279,7 +279,7 @@ function NewDashboard() {
                 )}
               </div>
             </div>
-            <div className="col-md-4 mb-4">
+            {/* <div className="col-md-4 mb-4">
               <div
                 className="card shadow-sm p-3 h-100 shadow-sm border-0"
                 style={{
@@ -330,7 +330,7 @@ function NewDashboard() {
                     )
                   )}
               </div>
-            </div>
+            </div> */}
 
             <div className="col-md-8 col-12 mb-4">
               <div

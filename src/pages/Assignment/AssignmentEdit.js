@@ -17,12 +17,12 @@ function AssignmentEdit() {
   const [classData, setClassData] = useState(null);
   const [courseData, setCourseData] = useState(null);
   const [studentData, setStudentData] = useState(false);
-  const [userData, setUserData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const centerId = localStorage.getItem("tmscenterId");
   const [batchData, setBatchData] = useState(null);
   const [selectedStudents, setSelectedStudents] = useState([]);
   const [selectedBatchTimes, setSelectedBatchTimes] = useState([]);
+  const [teacherData, setTeacherData] = useState(null);
 
   const validationSchema = Yup.object({
     assignmentName: Yup.string().required("*Assignment Name is required"),
@@ -157,14 +157,14 @@ function AssignmentEdit() {
     }
   };
 
-  const fetchTeacher = async () => {
-    try {
-      const teacher = await fetchAllTeacherListByCenter(centerId);
-      setUserData(teacher);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
+  // const fetchTeacher = async () => {
+  //   try {
+  //     const teacher = await fetchAllTeacherListByCenter(centerId);
+  //     setUserData(teacher);
+  //   } catch (error) {
+  //     toast.error(error);
+  //   }
+  // };
 
   const fetchStudent = async () => {
     try {
@@ -196,9 +196,28 @@ function AssignmentEdit() {
     }
   };
 
+  // const fetchBatchandTeacherData = async (day) => {
+  //   try {
+  //     const response = await api.get(`getTeacherWithBatchListByDay?day=${day}`);
+  //     setBatchData(response.data.batchList);
+  //   } catch (error) {
+  //     toast.error(error.message);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   if (formik.values.day) {
+  //     fetchBatchandTeacherData(formik.values.day);
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [formik.values.day]);
+
   const fetchBatchandTeacherData = async (day) => {
     try {
-      const response = await api.get(`getTeacherWithBatchListByDay?day=${day}`);
+      const response = await api.get(
+        `getTeacherWithBatchListByDay?day=${day}&centerId=${centerId}`
+      );
+      setTeacherData(response.data.teacherList);
       setBatchData(response.data.batchList);
     } catch (error) {
       toast.error(error.message);
@@ -209,7 +228,6 @@ function AssignmentEdit() {
     if (formik.values.day) {
       fetchBatchandTeacherData(formik.values.day);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.day]);
 
   const formatTo12Hour = (time) => {
@@ -320,7 +338,6 @@ function AssignmentEdit() {
 
   useEffect(() => {
     fetchCourses(centerId);
-    fetchTeacher(centerId);
     fetchStudent(centerId);
   }, []);
 
@@ -475,33 +492,6 @@ function AssignmentEdit() {
                   </div>
                 )}
               </div>
-
-              <div className="col-md-6 col-12 mb-4">
-                <label className="form-label">
-                  Teacher<span className="text-danger">*</span>
-                </label>
-                <select
-                  {...formik.getFieldProps("userId")}
-                  name="userId"
-                  className={`form-select  ${
-                    formik.touched.userId && formik.errors.userId
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                >
-                  <option disabled></option>
-                  {userData &&
-                    userData.map((userId) => (
-                      <option key={userId.id} value={userId.id}>
-                        {userId.teacherNames}
-                      </option>
-                    ))}
-                </select>
-                {formik.touched.userId && formik.errors.userId && (
-                  <div className="invalid-feedback">{formik.errors.userId}</div>
-                )}
-              </div>
-
               <div className="col-md-6 col-12 mb-4">
                 <label className="form-label">
                   Days<span className="text-danger">*</span>
@@ -529,44 +519,31 @@ function AssignmentEdit() {
                   <div className="invalid-feedback">{formik.errors.day}</div>
                 )}
               </div>
-
-              {/* <div className="col-md-6 col-12 mb-4">
+              <div className="col-md-6 col-12 mb-4">
                 <label className="form-label">
-                  Batch Time<span className="text-danger">*</span>
+                  Teacher<span className="text-danger">*</span>
                 </label>
-                <MultiSelect
-                  options={
-                    batchData
-                      ? batchData.map((time) => ({
-                          label: normalizeTime(time),
-                          value:
-                            time.includes("AM") || time.includes("PM")
-                              ? convertTo24Hour(time)
-                              : time,
-                        }))
-                      : []
-                  }
-                  value={selectedBatchTimes}
-                  onChange={(selected) => {
-                    setSelectedBatchTimes(selected);
-                    formik.setFieldValue(
-                      "batchTimes",
-                      selected.map((option) => option.value)
-                    );
-                  }}
-                  labelledBy="Select Batch Time"
-                  className={`form-multi-select ${
-                    formik.touched.batchTimes && formik.errors.batchTimes
+                <select
+                  {...formik.getFieldProps("userId")}
+                  name="userId"
+                  className={`form-select  ${
+                    formik.touched.userId && formik.errors.userId
                       ? "is-invalid"
                       : ""
                   }`}
-                />
-                {formik.touched.batchTimes && formik.errors.batchTimes && (
-                  <div className="invalid-feedback">
-                    {formik.errors.batchTimes}
-                  </div>
+                >
+                  <option disabled></option>
+                  {teacherData &&
+                    teacherData.map((userId) => (
+                      <option key={userId.id} value={userId.id}>
+                        {userId.teacherName}
+                      </option>
+                    ))}
+                </select>
+                {formik.touched.userId && formik.errors.userId && (
+                  <div className="invalid-feedback">{formik.errors.userId}</div>
                 )}
-              </div> */}
+              </div>
               <div className="col-md-6 col-12 mb-4">
                 <label className="form-label">
                   Batch Time<span className="text-danger">*</span>

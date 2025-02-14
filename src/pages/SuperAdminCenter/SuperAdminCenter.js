@@ -352,6 +352,15 @@ const SuperAdminCenter = ({ handleCenterChanged }) => {
               </button>
             </div>
           </div>
+          <Link to="/companyregistration/add">
+            <button
+              type="button"
+              className="btn btn-button btn-sm me-2"
+              style={{ fontWeight: "600" }}
+            >
+              &nbsp; Add &nbsp;&nbsp; <i className="bx bx-plus"></i>
+            </button>
+          </Link>
         </div>
         {loading ? (
           <div className="loader-container">

@@ -67,7 +67,7 @@ function RolesEdit({ id, onSuccess, handleMenuClose }) {
         }
       } catch (error) {
         if(error.status === 403){
-          toast.warning(error.message)
+          toast.warning("The role is protected and cannot be updated")
         }else{
           toast.error(error.message);
         }

@@ -274,7 +274,7 @@ const AddTermsAndCondition = forwardRef(
                     />
                     <small>
                       By submitting this form, I confirm that I have read and
-                      agree to Tution Care's&nbsp;
+                      agree to &nbsp;
                       <span style={{ color: "#ff7500" }}>
                         Terms & Conditions.
                       </span>
