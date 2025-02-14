@@ -19,33 +19,37 @@ export default function EnrollmentAdd() {
   const navigate = useNavigate();
   console.log("activeStep", activeStep);
 
-  let filteredSteps = [];
-  let filteredForms = [];
+  const allSteps = [
+    { key: "studentInfo", tooltip: "Student Information", component: Form1 },
+    { key: "childAbility", tooltip: "Child Ability", component: Form2 },
+    { key: "parentInfo", tooltip: "Parent Information", component: Form3 },
+    { key: "address", tooltip: "Address", component: Form4 },
+    { key: "accountInfo", tooltip: "Account Information", component: Form5 },
+    {
+      key: "mediaPosting",
+      tooltip: "Permission for Media Posting",
+      component: Form6,
+    },
+  ];
+
+  let filteredSteps = allSteps;
+  let filteredForms = allSteps.map((step) => step.component);
 
   if (ConfigurationData) {
-    const parsedData = JSON.parse(ConfigurationData);
-    console.log("Lead Form Data:", parsedData.leadForm[0]);
+    try {
+      const parsedData = JSON.parse(ConfigurationData);
+      console.log("Lead Form Data:", parsedData.leadForm[0]);
 
-    const leadFormConfig = parsedData.leadForm[0]; 
+      const leadFormConfig = parsedData.leadForm[0];
 
-    const allSteps = [
-      { key: "studentInfo", tooltip: "Student Information", component: Form1 },
-      { key: "childAbility", tooltip: "Child Ability", component: Form2 },
-      { key: "parentInfo", tooltip: "Parent Information", component: Form3 },
-      { key: "address", tooltip: "Address", component: Form4 },
-      { key: "accountInfo", tooltip: "Account Information", component: Form5 },
-      {
-        key: "mediaPosting",
-        tooltip: "Permission for Media Posting",
-        component: Form6,
-      },
-    ];
+      filteredSteps = Object.values(leadFormConfig).some(Boolean)
+        ? allSteps.filter((step) => leadFormConfig[step.key])
+        : allSteps;
 
-    filteredSteps = Object.values(leadFormConfig).some(Boolean)
-      ? allSteps.filter((step) => leadFormConfig[step.key])
-      : allSteps;
-
-    filteredForms = filteredSteps.map((step) => step.component);
+      filteredForms = filteredSteps.map((step) => step.component);
+    } catch (error) {
+      console.error("Error parsing ConfigurationData:", error);
+    }
   }
 
   const childRef = React.useRef();
@@ -123,7 +127,7 @@ export default function EnrollmentAdd() {
               setFormData,
               handleNext,
               setLoadIndicators: setLoadIndicator,
-              ...(activeStep === filteredSteps.length - 1 && { navigate }), 
+              ...(activeStep === filteredSteps.length - 1 && { navigate }),
             })}
 
           <div className="container-fluid p-1 d-flex align-items-center justify-content-center">

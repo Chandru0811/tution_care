@@ -80,6 +80,10 @@ function App() {
     localStorage.removeItem("tmsemail");
     localStorage.removeItem("tmscenterName");
     localStorage.removeItem("tmsrole");
+    localStorage.removeItem("tmsteacherName");
+    localStorage.removeItem("tmsteacherImage");
+    localStorage.removeItem("tmsidNo");
+    localStorage.removeItem("tmsroleType");
   };
 
   return (

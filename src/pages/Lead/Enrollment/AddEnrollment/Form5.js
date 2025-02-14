@@ -63,12 +63,12 @@ const Form5 = forwardRef(
           if (response.status === 200) {
             toast.success(response.data.message);
             setFormData((prv) => ({ ...prv, ...data }));
-            handleNext();
-            // if(navigate){
-            //   navigate("/lead/lead")
-            //  }else{
             
-            //  }
+            if(navigate){
+              navigate('/lead/lead')
+             }else{
+              handleNext();
+             }
           } else {
             toast.error(response.data.message);
           }

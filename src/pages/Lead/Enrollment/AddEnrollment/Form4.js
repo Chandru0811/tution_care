@@ -29,7 +29,7 @@ const validationSchema = Yup.object().shape({
 });
 
 const Form4 = forwardRef(
-  ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
+  ({ formData, setLoadIndicators, setFormData, handleNext,navigate }, ref) => {
     const userName = localStorage.getItem("tmsuserName");
     const formik = useFormik({
       initialValues: {
@@ -62,7 +62,11 @@ const Form4 = forwardRef(
           if (response.status === 200) {
             toast.success(response.data.message);
             setFormData((prv) => ({ ...prv, ...data }));
-            handleNext();
+            if(navigate){
+              navigate('/lead/lead')
+             }else{
+              handleNext();
+             }
           } else {
             toast.error(response.data.message);
           }

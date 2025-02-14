@@ -924,10 +924,10 @@ function RolesAdd() {
                       <option key={role.id} value={role.id}>
                         {
                           role.name
-                            .replace(/^TUITION_/, "") // Remove "TUITION_" from the start
-                            .toLowerCase()
-                            .replace(/_/g, " ") // Replace underscores with spaces
-                            .replace(/\b\w/g, (char) => char.toUpperCase()) // Capitalize first letter of each word
+                            // .replace(/^TUITION_/, "") // Remove "TUITION_" from the start
+                            // .toLowerCase()
+                            // .replace(/_/g, " ") // Replace underscores with spaces
+                            // .replace(/\b\w/g, (char) => char.toUpperCase()) // Capitalize first letter of each word
                         }
                         {/* Format for display */}
                       </option>
@@ -1850,6 +1850,73 @@ function RolesAdd() {
                                 `staffAttendanceDelete`
                               )}
                             />
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <p
+                              style={{
+                                marginLeft: "30px",
+                                marginBottom: "0px",
+                              }}
+                            >
+                              Check Attendance
+                            </p>
+                          </td>
+                          <td>
+                            <input
+                              className="form-check-input"
+                              type="checkbox"
+                              name="checkAttendanceIndex"
+                              checked={formik.values.checkAttendanceIndex}
+                              onChange={handleCheckboxChange(
+                                `checkAttendanceIndex`
+                              )}
+                            />
+                          </td>
+                          <td>
+                            {/* <input
+                              className="form-check-input"
+                              type="checkbox"
+                              name="staffAttendanceRead"
+                              checked={formik.values.staffAttendanceRead}
+                              onChange={handleCheckboxChange(
+                                `staffAttendanceRead`
+                              )}
+                            /> */}
+                          </td>
+                          <td>
+                            {/* <input
+                              className="form-check-input"
+                              type="checkbox"
+                              name="staffAttendanceCreate"
+                              checked={formik.values.staffAttendanceCreate}
+                              onChange={handleCheckboxChange(
+                                `staffAttendanceCreate`
+                              )}
+                            /> */}
+                          </td>
+                          <td>
+                            {/* <input
+                              className="form-check-input"
+                              type="checkbox"
+                              name="staffAttendanceUpdate"
+                              checked={formik.values.staffAttendanceUpdate}
+                              onChange={handleCheckboxChange(
+                                `staffAttendanceUpdate`
+                              )}
+                            /> */}
+                          </td>
+                          <td>
+                            {/* <input
+                              className="form-check-input"
+                              type="checkbox"
+                              name="staffAttendanceDelete"
+                              checked={formik.values.staffAttendanceDelete}
+                              onChange={handleCheckboxChange(
+                                `staffAttendanceDelete`
+                              )}
+                            /> */}
                           </td>
                         </tr>
 
@@ -3530,28 +3597,28 @@ function RolesAdd() {
                             <input
                               className="form-check-input"
                               type="checkbox"
-                              name="smsMessageIndex"
-                              checked={formik.values.smsMessageIndex}
-                              onChange={handleCheckboxChange(`smsMessageIndex`)}
+                              name="otherMessageIndex"
+                              checked={formik.values.otherMessageIndex}
+                              onChange={handleCheckboxChange(`otherMessageIndex`)}
                             />
                           </td>
                           <td>
                             <input
                               className="form-check-input"
                               type="checkbox"
-                              name="smsMessageRead"
-                              checked={formik.values.smsMessageRead}
-                              onChange={handleCheckboxChange(`smsMessageRead`)}
+                              name="otherMessageRead"
+                              checked={formik.values.otherMessageRead}
+                              onChange={handleCheckboxChange(`otherMessageRead`)}
                             />
                           </td>
                           <td>
                             <input
                               className="form-check-input"
                               type="checkbox"
-                              name="smsMessageCreate"
-                              checked={formik.values.smsMessageCreate}
+                              name="otherMessageCreate"
+                              checked={formik.values.otherMessageCreate}
                               onChange={handleCheckboxChange(
-                                `smsMessageCreate`
+                                `otherMessageCreate`
                               )}
                             />
                           </td>
