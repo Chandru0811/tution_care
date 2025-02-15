@@ -421,7 +421,7 @@ function EditPayroll() {
                   </div>
                 )}
               </div>
-              {payrollData?.userRole === "SMS_FREELANCER" ? (
+              {payrollData?.userRole === "TUITION_FREELANCER" ? (
                 <>
                   <div className="col-md-6 col-12">
                     <div className="text-start mt-2 mb-3">

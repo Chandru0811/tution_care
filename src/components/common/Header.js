@@ -53,23 +53,12 @@ function Header({ onLogout }) {
               height={50}
               className="img-fluid p-2"
             />
-            {/* <img
-              src={data.logo}
-              alt="logo"
-              style={{ width: "30px", height: "30px" }}
-            /> */}
-            <span className="text-black fw-bold rounded-pill">
+            <span className="text-black fw-bold rounded-pill center-name">
               {data.centerName || "ECS School"}
             </span>
-            {/* <img
-              src={data.logo}
-              width={50} // Increased for better visibility
-              height={50}
-              className="img-fluid ms-2 rounded mt-2"
-              alt="Center Logo"
-            /> */}
           </div>
-          <Link to={"/calendar"}>
+          {/* Calendar button visible only on larger screens */}
+          <Link to={"/calendar"} className="d-none d-md-block">
             <button className="btn" type="button">
               <CiCalendarDate
                 style={{
@@ -88,11 +77,6 @@ function Header({ onLogout }) {
             aria-controls="offcanvasRight"
           >
             <i className="fa fa-user" style={{ color: "#eb862a" }}></i>
-            {/* <img
-              src={data.profile}
-              alt="profile"
-              style={{ width: "30px", height: "30px" }}
-            />{" "} */}
           </button>
         </div>
       </div>
@@ -119,14 +103,6 @@ function Header({ onLogout }) {
               </h3>
             </div>
             <div className="text-center mt-3">
-              {/* <img
-                src={data.profile}
-                width={50} // Increased for better visibility
-                height={50}
-                className="img-fluid ms-2 rounded mt-2"
-                alt="Center Logo"
-                
-              /> */}
               <i
                 className="fa-duotone fa-solid fa-user"
                 style={{
@@ -159,6 +135,20 @@ function Header({ onLogout }) {
                 <span>Edit Company</span>
               </Link>
             </div>
+            {/* Calendar button visible only on smaller screens */}
+            <div className="text-center mt-3 d-md-none">
+              <Link to={"/calendar"}>
+                <button className="btn" type="button">
+                  <CiCalendarDate
+                    style={{
+                      color: "#287f71",
+                      fontSize: "30px",
+                      fontWeight: "bolder",
+                    }}
+                  />
+                </button>
+              </Link>
+            </div>
           </div>
 
           <div className="mt-auto gap-2">
@@ -172,11 +162,6 @@ function Header({ onLogout }) {
                 </button>
               </div>
               <div className="col-md-6 col-12" data-bs-dismiss="offcanvas">
-                {/* <Link to="/changepassword" >
-                  <button className="btn btn-danger mt-3 w-100"  data-bs-dismiss="offcanvas">
-                    Change password
-                  </button>
-                </Link> */}
                 <ChangePassword />
               </div>
             </div>

@@ -67,8 +67,8 @@ function Viewpayroll() {
             </Link>
           </div>
         </div>
-        <div className="container-fluid">
-          {data.userRole === "SMS_FREELANCER" ? (
+        <div className="container-fluid my-5">
+          {data.userRole === "TUITION_FREELANCER" ? (
             <>
               <div className="row">
                 <div className="col-md-6 col-12">
