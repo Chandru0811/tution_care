@@ -13,7 +13,7 @@ function ChangePassword({ onLogout }) {
   const [confirmPassword, setConfirmPassword] = useState(false);
   // const [oldPassword, setOldPassword] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const email = localStorage.getItem("tmsemail")
+  const email = localStorage.getItem("tmsemail");
   const [loadIndicator, setLoadIndicator] = useState(false);
 
   const togglePasswordVisibility = (type) => {
@@ -26,10 +26,9 @@ function ChangePassword({ onLogout }) {
     // email: Yup.string()
     //   .email("*Enter a valid email address")
     //   .required("*Email is required"),
-    newPassword: Yup
-    .string()
-    .matches(/^\S*$/, "*Password must not contain spaces.")
-    .required("*Enter the valid Password"),
+    newPassword: Yup.string()
+      .matches(/^\S*$/, "*Password must not contain spaces.")
+      .required("*Enter the valid Password"),
     confirmPassword: Yup.string()
       .required("*Confirm Password is required")
       .oneOf([Yup.ref("newPassword")], "Passwords must match"),
@@ -45,7 +44,7 @@ function ChangePassword({ onLogout }) {
     onSubmit: async (values) => {
       console.log("Submitting values:", values);
       const formData = new FormData();
-      formData.append("email",email);
+      formData.append("email", email);
       formData.append("newPassword", values.newPassword);
       formData.append("confirmPassword", values.confirmPassword);
 
@@ -67,8 +66,8 @@ function ChangePassword({ onLogout }) {
       } catch (error) {
         // toast.warning("Error changing password");
         toast.error(error.data.message);
-      }finally{
-        setLoadIndicator(false)
+      } finally {
+        setLoadIndicator(false);
       }
     },
   });
@@ -81,7 +80,7 @@ function ChangePassword({ onLogout }) {
           setShowModal(true);
           formik.resetForm();
         }}
-        className="my-3 btn btn-button"
+        className="my-3 btn btn-button w-100 w-md-auto"
       >
         <LuKeyRound /> Change Password
       </Button>
@@ -92,7 +91,7 @@ function ChangePassword({ onLogout }) {
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={formik.handleSubmit}>
-           {/*  <Form.Group className="mb-3">
+            {/*  <Form.Group className="mb-3">
               <Form.Label>Email</Form.Label>
               <Form.Control
                 type="email"
@@ -174,19 +173,19 @@ function ChangePassword({ onLogout }) {
               </div>
             </Form.Group>
             <div className="d-flex justify-content-end">
-            <Button
-              type="submit"
-              className="btn btn-button btn-sm"
-              disabled={loadIndicator}
-            >
-              {loadIndicator && (
-                <span
-                  className="spinner-border spinner-border-sm me-2"
-                  aria-hidden="true"
-                ></span>
-              )}
-              Submit
-            </Button>
+              <Button
+                type="submit"
+                className="btn btn-button btn-sm"
+                disabled={loadIndicator}
+              >
+                {loadIndicator && (
+                  <span
+                    className="spinner-border spinner-border-sm me-2"
+                    aria-hidden="true"
+                  ></span>
+                )}
+                Submit
+              </Button>
             </div>
           </Form>
         </Modal.Body>

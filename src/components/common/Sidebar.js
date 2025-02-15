@@ -38,6 +38,7 @@ function Sidebar() {
   const Key = {
     lead: storedConfigure?.lead || "Lead Management",
     student: storedConfigure?.student || "Student Management",
+    course: storedConfigure?.course || "Course Management",
     centreName: storedConfigure?.centreName || "Company Management",
     employee: storedConfigure?.employee || "Employee Info",
     report: storedConfigure?.report || "Report Management",
@@ -51,7 +52,7 @@ function Sidebar() {
   };
   const iconMapping = {
     [Key.centreName]: <PiBuildings />,
-    "Course Management": <PiBookOpenText />,
+    [Key.course]: <PiBookOpenText />,
     [Key.lead]: <GiExitDoor />,
     [Key.employee]: <RiUserAddLine />,
     Staffing: <HiOutlineUserGroup />,
@@ -104,7 +105,7 @@ function Sidebar() {
         ],
       },
       {
-        title: "Course Management",
+        title: storedConfigure?.course || "Course Management",
         icon: "PiBookOpenText",
         isOpen: false,
         subMenus: [
@@ -292,12 +293,12 @@ function Sidebar() {
                 {
                   title: "Assignment Questionnaire",
                   path: "/assignment",
-                  access: storedScreens.documentListingIndex,
+                  access: storedScreens.questionIndex,
                 },
                 {
                   title: "Assignment Result",
                   path: "/assignmentResult",
-                  access: storedScreens.documentFileIndex,
+                  access: storedScreens.answerIndex,
                 },
               ],
             },
@@ -328,8 +329,7 @@ function Sidebar() {
               isOpen: false,
               subMenus: [
                 {
-                  title:
-                    `Set ${storedConfigure?.Rferal} Fees` || "Set Referal Fees",
+                  title: storedConfigure?.Rferal || "Set Referal Fees",
                   path: "/referalFees",
                   access: storedScreens.invoiceIndex,
                 },
