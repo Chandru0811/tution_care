@@ -78,15 +78,6 @@ function SuperAdminCenterAdd({ handleCenterChanged }) {
     validateOnBlur: true, // Enable validation on blur
   });
 
-  const fetchAppData = async () => {
-    try {
-      const response = await api.get("getAllCenter");
-      setAppData(response.data);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
-
   // Function to scroll to the first error field
   const scrollToError = (errors) => {
     const errorField = Object.keys(errors)[0]; // Get the first error field
@@ -108,9 +99,17 @@ function SuperAdminCenterAdd({ handleCenterChanged }) {
     setShowModal(false);
     toast.success("Access Modules Saved");
   };
+  const fetchData = async () => {
+    try {
+      const response = await api.get(`/getAllConfiguration`);
+      setAppData(response.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } 
+  };
 
   useEffect(() => {
-    fetchAppData();
+    fetchData();
   }, []);
 
   return (
@@ -291,7 +290,7 @@ function SuperAdminCenterAdd({ handleCenterChanged }) {
                     {appData &&
                       appData.map((appType) => (
                         <option key={appType.id} value={appType.id}>
-                          {appType.centerName}
+                          {appType.appName}
                         </option>
                       ))}
                   </select>
