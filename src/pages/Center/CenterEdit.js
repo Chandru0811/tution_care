@@ -65,6 +65,11 @@ function CenterEdit({ handleCenterChanged }) {
   const [teacherData, setTeacherData] = useState(null);
   const navigate = useNavigate();
   const [taxTypeData, setTaxTypeData] = useState(null);
+
+  const [imagePreviewUrl, setImagePreviewUrl] = useState(null);
+  const [imagePreviewUrl1, setImagePreviewUrl1] = useState(null);
+  const [imagePreviewUrl2, setImagePreviewUrl2] = useState(null);
+
   const userName = localStorage.getItem("tmsuserName");
   const centerId = localStorage.getItem("tmscenterId");
   const [menuAnchor, setMenuAnchor] = useState(null);
@@ -697,7 +702,14 @@ function CenterEdit({ handleCenterChanged }) {
                     name="file"
                     className="form-control"
                     onChange={(event) => {
-                      formik.setFieldValue("file", event.target.files[0]);
+                      const file = event.target.files[0];
+                      formik.setFieldValue("file", file);
+                      if (file) {
+                        const previewUrl = URL.createObjectURL(file);
+                        setImagePreviewUrl(previewUrl);
+                      } else {
+                        setImagePreviewUrl(null);
+                      }
                     }}
                     onBlur={formik.handleBlur}
                   />
@@ -707,11 +719,20 @@ function CenterEdit({ handleCenterChanged }) {
                     </div>
                   )}
                 </div>
-                <img
+                {imagePreviewUrl && (
+                  <div className="mt-3">
+                    <img
+                      src={imagePreviewUrl || User}
+                      alt="Qr Code"
+                      className="w-25"
+                    />
+                  </div>
+                )}
+                {/* <img
                   src={data.qrCode}
                   className="img-fluid ms-2 w-50 rounded mt-2"
                   alt="QR"
-                />
+                /> */}
               </div>
               <div className="col-md-4 col-12">
                 <div className="text-start mt-2">
@@ -722,11 +743,18 @@ function CenterEdit({ handleCenterChanged }) {
                   <br />
                   <input
                     type="file"
-                    accept="image/*"
+                    accept=".png*"
                     name="logo"
                     className="form-control"
                     onChange={(event) => {
-                      formik.setFieldValue("logo", event.target.files[0]);
+                      const logo = event.target.files[0];
+                      formik.setFieldValue("logo", logo);
+                      if (logo) {
+                        const previewUrl1 = URL.createObjectURL(logo);
+                        setImagePreviewUrl1(previewUrl1);
+                      } else {
+                        setImagePreviewUrl1(null);
+                      }
                     }}
                     onBlur={formik.handleBlur}
                   />
@@ -736,11 +764,15 @@ function CenterEdit({ handleCenterChanged }) {
                     </div>
                   )}
                 </div>
-                <img
-                  src={data.logo ? data.logo : User}
-                  className="img-fluid ms-2 w-50 rounded mt-2"
-                  alt="Company Logo"
-                />
+                {imagePreviewUrl1 && (
+                  <div className="mt-3">
+                    <img
+                      src={imagePreviewUrl1 || User}
+                      alt="Company Logo"
+                      className="w-25"
+                    />
+                  </div>
+                )}
               </div>
 
               <div className="col-md-4 col-12">
@@ -752,11 +784,18 @@ function CenterEdit({ handleCenterChanged }) {
                   <br />
                   <input
                     type="file"
-                    accept="image/*"
+                    accept=".png"
                     name="profile"
                     className="form-control"
                     onChange={(event) => {
-                      formik.setFieldValue("profile", event.target.files[0]);
+                      const profile = event.target.files[0];
+                      formik.setFieldValue("profile", profile);
+                      if (profile) {
+                        const previewUrl2 = URL.createObjectURL(profile);
+                        setImagePreviewUrl2(previewUrl2);
+                      } else {
+                        setImagePreviewUrl2(null);
+                      }
                     }}
                     onBlur={formik.handleBlur}
                   />
@@ -766,11 +805,15 @@ function CenterEdit({ handleCenterChanged }) {
                     </div>
                   )}
                 </div>
-                <img
-                  src={data.profile ? data.profile : User}
-                  className="img-fluid ms-2 w-50 rounded mt-2"
-                  alt="Profile"
-                />
+                {imagePreviewUrl2 && (
+                  <div className="mt-3">
+                    <img
+                      src={imagePreviewUrl2 || User}
+                      alt="Profile Image"
+                      className="w-25"
+                    />
+                  </div>
+                )}
                 {/* <img
                   src={data.profile}
                   className="img-fluid ms-2 w-50 rounded mt-2"

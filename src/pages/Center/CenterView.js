@@ -8,7 +8,6 @@ function CenterView() {
   const [data, setData] = useState([]);
   const [taxTypeData, setTaxTypeData] = useState(null);
 
-
   const fetchTaxData = async () => {
     try {
       const response = await api.get("getAllTaxSetting");
@@ -283,27 +282,41 @@ function CenterView() {
                 </div>
               </div>
             </div>
-            <div className="col-md-6 col-12">
-              <div className="row  mb-2">
-                <div className="col-6  ">
-                  <p className="">QR Code </p>
-                </div>
-                <div className="col-6">
-                  <p className="my-2 d-flex">
-                    :{" "}
-                    {data.qrCode ? (
-                      <img
-                        src={data.qrCode}
-                        className="img-fluid ms-2 w-100 rounded"
-                        alt="Profile Image"
-                      />
-                    ) : (
-                      <></>
-                    )}
-                  </p>
-                </div>
+            <div className="row">
+              <div className="col-md-4 col-12 d-flex align-items-center">
+                <p className="mb-0 me-2">QR Code:</p>
+                {data.qrCode && (
+                  <img
+                    src={data.qrCode}
+                    className="img-fluid w-50 rounded"
+                    alt="QR Code"
+                  />
+                )}
+              </div>
+
+              <div className="col-md-4 col-12 d-flex align-items-center">
+                <p className="mb-0 me-2">Company Logo:</p>
+                {data.logo && (
+                  <img
+                    src={data.logo}
+                    className="img-fluid w-50 rounded"
+                    alt="Company Logo"
+                  />
+                )}
+              </div>
+
+              <div className="col-md-4 col-12 d-flex align-items-center">
+                <p className="mb-0 me-2">Profile Image:</p>
+                {data.profile && (
+                  <img
+                    src={data.profile}
+                    className="img-fluid w-50 rounded"
+                    alt="Profile Image"
+                  />
+                )}
               </div>
             </div>
+
             {/* Center Registrations */}
             <div className="col-md-12 col-12 mt-4">
               <h5 className="headColor mb-3">Company Registrations</h5>
