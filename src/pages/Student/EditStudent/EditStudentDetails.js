@@ -20,25 +20,25 @@ const validationSchema = Yup.object().shape({
     .max(new Date(), "*Date of Birth cannot be in the future"),
   age: Yup.string().required("*Age is required"),
   gender: Yup.string().required("*Gender is required"),
-  schoolType: Yup.string().required("*School Type is required"),
-  schoolName: Yup.string().required("*School Name is required"),
-  allowMagazine: Yup.string().required("*Select a filed"),
-  allowSocialMedia: Yup.string().required("*Select a filed"),
-  studentChineseName: Yup.string().required(
-    "*Student Chinese Name is required"
-  ),
+  // schoolType: Yup.string().required("*School Type is required"),
+  // schoolName: Yup.string().required("*School Name is required"),
+  // allowMagazine: Yup.string().required("*Select a filed"),
+  // allowSocialMedia: Yup.string().required("*Select a filed"),
+  // studentChineseName: Yup.string().required(
+  //   "*Student Chinese Name is required"
+  // ),
   studentEmail: Yup.string()
     .email("*Invalid Student Email")
     .required("*Student Email is required"),
   remark: Yup.string()
     .max(200, "*The maximum length is 200 characters")
     .notRequired(),
-  medicalCondition: Yup.string().required(
-    "*Medical Condition Result is required"
-  ),
+  // medicalCondition: Yup.string().required(
+  //   "*Medical Condition Result is required"
+  // ),
   // nationality: Yup.string().required("*Select a Nationality!"),
   primaryLanguage: Yup.string().required("*Primary Language is required"),
-  race: Yup.string().required("*Select a Race"),
+  // race: Yup.string().required("*Select a Race"),
   // referByStudent: Yup.string().required("*Refer By Student is required!"),
   // referByParent: Yup.string().required("*Refer By Parent is required!"),
 });
@@ -310,7 +310,7 @@ const EditStudentDetails = forwardRef(
                         </div>
                       )}
                     </div>
-                    <div className="text-start mt-4">
+                    {/* <div className="text-start mt-4">
                       <label htmlFor="" className="fw-medium">
                         <small>School Type</small>
                         <span className="text-danger">*</span>
@@ -356,8 +356,8 @@ const EditStudentDetails = forwardRef(
                             <small>{formik.errors.schoolType}</small>
                           </div>
                         )}
-                    </div>
-                    <div className="text-start mt-4">
+                    </div> */}
+                    {/* <div className="text-start mt-4">
                       <label htmlFor="" className=" fw-medium">
                         <small>Pre-Assessment Result</small>
                       </label>
@@ -377,7 +377,7 @@ const EditStudentDetails = forwardRef(
                             <small>{formik.errors.preAssessmentResult}</small>
                           </div>
                         )}
-                    </div>
+                    </div> */}
                     <div className="text-start mt-4">
                       <label htmlFor="" className="mb-1 fw-medium">
                         <small>Nationality</small>
@@ -408,10 +408,9 @@ const EditStudentDetails = forwardRef(
                           </div>
                         )}
                     </div>
-                    <div className="text-start mt-4">
+                    {/* <div className="text-start mt-4">
                       <label htmlFor="" className=" fw-medium">
                         <small>Refered By Parents</small>
-                        {/* <span className="text-danger">*</span> */}
                       </label>
                       <br />
                       <input
@@ -428,14 +427,14 @@ const EditStudentDetails = forwardRef(
                             <small>{formik.errors.referByParent}</small>
                           </div>
                         )}
-                    </div>
+                    </div> */}
                   </div>
                   <div className="col-lg-6 col-md-6 col-12 px-5">
                     <div className="text-start mt-4">
                       <label className=" fw-medium">
                         <small>
                           Student Chinese Name (put N/A if not applicable)
-                          <span className="text-danger">*</span>
+                          {/* <span className="text-danger">*</span> */}
                         </small>
                         &nbsp;
                       </label>
@@ -458,7 +457,6 @@ const EditStudentDetails = forwardRef(
                     <div className="text-start mt-4">
                       <label htmlFor="" className=" fw-medium">
                         <small>Medical Condition</small>
-                        <span className="text-danger">*</span>
                       </label>
                       <br />
                       <input
@@ -497,7 +495,7 @@ const EditStudentDetails = forwardRef(
                         </div>
                       )}
                     </div>
-                    <div className="text-start mt-4">
+                    {/* <div className="text-start mt-4">
                       <label htmlFor="" className="mb-1 fw-medium">
                         <small>School Name</small>
                         <span className="text-danger">*</span>
@@ -517,8 +515,8 @@ const EditStudentDetails = forwardRef(
                             <small>{formik.errors.schoolName}</small>
                           </div>
                         )}
-                    </div>
-                    <div className="text-start mt-3">
+                    </div> */}
+                    {/* <div className="text-start mt-3">
                       <label className="mb-1 fw-medium">
                         <small>Race</small>
                         <span className="text-danger">*</span>
@@ -543,7 +541,7 @@ const EditStudentDetails = forwardRef(
                           <small>{formik.errors.race}</small>
                         </div>
                       )}
-                    </div>
+                    </div> */}
                     <div className="text-start mt-4">
                       <label htmlFor="" className=" fw-medium">
                         <small>Primary Language Spoken</small>
@@ -575,10 +573,9 @@ const EditStudentDetails = forwardRef(
                           </div>
                         )}
                     </div>
-                    <div className="text-start mt-4">
+                    {/* <div className="text-start mt-4">
                       <label htmlFor="" className=" fw-medium">
                         <small>Refer By Student</small>
-                        {/* <span className="text-danger">*</span> */}
                       </label>
                       <br />
                       <input
@@ -590,7 +587,7 @@ const EditStudentDetails = forwardRef(
                         value={formik.values.referByStudent}
                         readOnly
                       />
-                    </div>
+                    </div> */}
                   </div>
                 </div>
                 <div className="text-start mt-4">
@@ -612,109 +609,9 @@ const EditStudentDetails = forwardRef(
                   />
                 </div>
 
-                <div className="mb-5">
-                  <div className="row mt-5">
-                    <h6 className="text-start" style={{ color: "#ff7500" }}>
-                      Videography/Photography
-                    </h6>
-                    <div className="col-lg-6 col-sm-12 mt-3 ps-4">
-                      <label>
-                        <small>
-                          <b>
-                            Allow display in Facility Bulletin / Magazine /
-                            Advert
-                          </b>
-                        </small>
-                        <span className="text-danger">*</span>
-                        <div className="text-start mt-2">
-                          <input
-                            className="form-check-input mx-2"
-                            type="radio"
-                            name="allowMagazine"
-                            value="true" // String value for radio buttons
-                            checked={formik.values.allowMagazine === true} // Compare with boolean
-                            onChange={(e) =>
-                              formik.setFieldValue(
-                                "allowMagazine",
-                                e.target.value === "true"
-                              )
-                            } // Convert string back to boolean
-                            onBlur={formik.handleBlur}
-                          />
-                          &nbsp; Yes &nbsp;&nbsp;&nbsp;
-                          <input
-                            className="form-check-input mx-2"
-                            type="radio"
-                            name="allowMagazine"
-                            value="false" // String value for radio buttons
-                            checked={formik.values.allowMagazine === false} // Compare with boolean
-                            onChange={(e) =>
-                              formik.setFieldValue(
-                                "allowMagazine",
-                                e.target.value === "true"
-                              )
-                            } // Convert string back to boolean
-                            onBlur={formik.handleBlur}
-                          />
-                          &nbsp; No
-                          {formik.touched.allowMagazine &&
-                            formik.errors.allowMagazine && (
-                              <div className="error text-danger">
-                                <small>{formik.errors.allowMagazine}</small>
-                              </div>
-                            )}
-                        </div>
-                      </label>
-                    </div>
-
-                    <div className="col-lg-6 col-sm-12 mt-3">
-                      <label>
-                        <small>
-                          <b>Allow display on Social Media</b>
-                        </small>
-                        <span className="text-danger">*</span>
-                        <div className="text-start mt-2">
-                          <input
-                            className="form-check-input mx-2"
-                            type="radio"
-                            name="allowSocialMedia"
-                            value="true"
-                            checked={formik.values.allowSocialMedia === true}
-                            onChange={(e) =>
-                              formik.setFieldValue(
-                                "allowSocialMedia",
-                                e.target.value === "true"
-                              )
-                            }
-                            onBlur={formik.handleBlur}
-                          />
-                          &nbsp; Yes &nbsp;&nbsp;&nbsp;
-                          <input
-                            className="form-check-input mx-2"
-                            type="radio"
-                            name="allowSocialMedia"
-                            value="false"
-                            checked={formik.values.allowSocialMedia === false}
-                            onChange={(e) =>
-                              formik.setFieldValue(
-                                "allowSocialMedia",
-                                e.target.value === "true"
-                              )
-                            }
-                            onBlur={formik.handleBlur}
-                          />
-                          &nbsp; No
-                          {formik.touched.allowSocialMedia &&
-                            formik.errors.allowSocialMedia && (
-                              <div className="error text-danger">
-                                <small>{formik.errors.allowSocialMedia}</small>
-                              </div>
-                            )}
-                        </div>
-                      </label>
-                    </div>
-                  </div>
-                </div>
+                {/* <div className="mb-5">
+                  
+                </div> */}
               </div>
             </div>
           </div>

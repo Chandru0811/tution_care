@@ -317,49 +317,6 @@ const AddParentGuardian = forwardRef(
       }
     };
 
-    // const handleFileChange = (event, index) => {
-    //   const file = event.target.files[0];
-    //   if (!file) {
-    //     formik.setFieldValue(`parentInformation[${index}].file`, null);
-    //     return;
-    //   }
-
-    //   const validTypes = [
-    //     "image/jpeg",
-    //     "image/jpg",
-    //     "image/png",
-    //     "image/gif",
-    //     "image/bmp",
-    //   ];
-    //   if (!validTypes.includes(file.type)) {
-    //     formik.setFieldError(
-    //       `parentInformation[${index}].file`,
-    //       "Invalid file type. Please upload a PNG, JPG, GIF, or BMP file."
-    //     );
-    //     return;
-    //   }
-
-    //   if (file.size > 1 * 1024 * 1024) {
-    //     formik.setFieldError(
-    //       `parentInformation[${index}].file`,
-    //       "File size exceeds 1MB. Please upload a smaller file."
-    //     );
-    //     return;
-    //   }
-
-    //   // Valid file - clear errors and set values
-    //   formik.setFieldError(`parentInformation[${index}].file`, null);
-    //   formik.setFieldValue(`parentInformation[${index}].file`, file);
-
-    //   const reader = new FileReader();
-    //   reader.onload = (e) => {
-    //     const updatedProfileImage = [...profileImage];
-    //     updatedProfileImage[index] = e.target.result;
-    //     setProfileImage(updatedProfileImage);
-    //   };
-    //   reader.readAsDataURL(file);
-    // };
-
     useEffect(() => {
       if (formData.LeadId && leadDataTrue) {
         getLeadData();
@@ -423,31 +380,6 @@ const AddParentGuardian = forwardRef(
                     className="form-check-input ms-3"
                     name={`parentInformation[${index}].primaryContact`}
                     checked={selectedPrimaryContactIndex === index}
-                    // onChange={(e) => {
-                    //   const isChecked = e.target.checked;
-                    //   const newIndex = isChecked ? index : null;
-
-                    //   // Update the selected row's primaryContact field
-                    //   formik.setFieldValue(
-                    //     `parentInformation[${index}].primaryContact`,
-                    //     isChecked ? true : false
-                    //   );
-
-                    //   // Deselect the previously selected row if a new one is checked
-                    //   if (
-                    //     isChecked &&
-                    //     selectedPrimaryContactIndex !== null &&
-                    //     selectedPrimaryContactIndex !== index
-                    //   ) {
-                    //     formik.setFieldValue(
-                    //       `parentInformation[${selectedPrimaryContactIndex}].primaryContact`,
-                    //       false
-                    //     );
-                    //   }
-
-                    //   // Update the selectedPrimaryContactIndex
-                    //   setSelectedPrimaryContactIndex(newIndex);
-                    // }}
                     onChange={(e) => {
                       const isChecked = e.target.checked;
 

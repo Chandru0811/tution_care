@@ -30,9 +30,9 @@ const validationSchema = Yup.object().shape({
   // schoolName: Yup.string().required("*School Name is required"),
   // allowMagazine: Yup.string().required("*Select a filed!"),
   // allowSocialMedia: Yup.string().required("*Select a filed"),
-  studentChineseName: Yup.string().required(
-    "*Student Chinese Name is required"
-  ),
+  // studentChineseName: Yup.string().required(
+  //   "*Student Chinese Name is required"
+  // ),
   file: Yup.mixed()
     .required("*File is required")
     .test(
@@ -162,7 +162,7 @@ const AddStudentDetails = forwardRef(
           formDatas.append("allowSocialMedia", values.allowSocialMedia);
           formDatas.append("centerId", centerId);
           formDatas.append("center", center);
-          formDatas.append("primaryLanguage", "ENGLISH");
+          formDatas.append("primaryLanguage", values.primaryLanguage);
           formDatas.append("groupName", values.groupName);
           formDatas.append("file", values.file);
           formDatas.append("createdBy", userName);
@@ -517,7 +517,7 @@ const AddStudentDetails = forwardRef(
                       <label className="mb-1 fw-medium">
                         <small>
                           Student Chinese Name (put N/A if not applicable)
-                          <span className="text-danger">*</span>
+                          {/* <span className="text-danger">*</span> */}
                         </small>
                         &nbsp;
                       </label>
@@ -743,86 +743,6 @@ const AddStudentDetails = forwardRef(
                 </div>
 
                 {/* <div className="mb-5">
-                  <div className="row mt-5">
-                    <h6 className="text-start" style={{ color: "#ff7500" }}>
-                      Videography/Photography
-                    </h6>
-                    <div className="col-lg-6 col-sm-12 mt-3 ps-4">
-                      <label>
-                        <small>
-                          <b>
-                            Allow display in Facility Bulletin / Magazine /
-                            Advert
-                          </b>
-                        </small>
-                        <span className="text-danger">*</span>
-                        <div className="text-start mt-2">
-                          <input
-                            className="form-check-input mx-2"
-                            type="radio"
-                            name="allowMagazine"
-                            value="yes"
-                            checked={formik.values.allowMagazine === "yes"}
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                          />
-                          &nbsp; Yes &nbsp;&nbsp;&nbsp;
-                          <input
-                            className="form-check-input mx-2"
-                            type="radio"
-                            name="allowMagazine"
-                            value="No"
-                            checked={formik.values.allowMagazine === "No"}
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                          />
-                          &nbsp; No
-                          {formik.touched.allowMagazine &&
-                            formik.errors.allowMagazine && (
-                              <div className="error text-danger">
-                                <small>{formik.errors.allowMagazine}</small>
-                              </div>
-                            )}
-                        </div>
-                      </label>
-                    </div>
-                    <div className="col-lg-6 col-sm-12 mt-3">
-                      <label>
-                        <small>
-                          <b>Allow display on Social Media</b>
-                        </small>
-                        <span className="text-danger">*</span>
-                        <div className="text-start mt-2">
-                          <input
-                            className="form-check-input mx-2"
-                            type="radio"
-                            name="allowSocialMedia"
-                            value="yes"
-                            checked={formik.values.allowSocialMedia === "yes"}
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                          />
-                          &nbsp; Yes &nbsp;&nbsp;&nbsp;
-                          <input
-                            className="form-check-input mx-2"
-                            type="radio"
-                            name="allowSocialMedia"
-                            value="No"
-                            checked={formik.values.allowSocialMedia === "No"}
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                          />
-                          &nbsp; No
-                          {formik.touched.allowSocialMedia &&
-                            formik.errors.allowSocialMedia && (
-                              <div className="error text-danger">
-                                <small>{formik.errors.allowSocialMedia}</small>
-                              </div>
-                            )}
-                        </div>
-                      </label>
-                    </div>
-                  </div>
                 </div> */}
               </div>
             </div>

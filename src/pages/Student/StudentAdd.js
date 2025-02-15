@@ -18,7 +18,7 @@ const steps = [
   { tooltip: "Parents/Guardian" },
   { tooltip: "Emergency Contact" },
   { tooltip: "Course Details" },
-  { tooltip: "Student Relation" },
+  // { tooltip: "Student Relation" },
   { tooltip: "Terms and Conditions" },
 ];
 export default function StudentAdd() {
@@ -64,12 +64,12 @@ export default function StudentAdd() {
           childRef.current.CourseDetail();
         }
         break;
+      // case "4":
+      //   if (childRef.current) {
+      //     childRef.current.StudentRelation();
+      //   }
+      //   break;
       case "4":
-        if (childRef.current) {
-          childRef.current.StudentRelation();
-        }
-        break;
-      case "5":
         if (childRef.current) {
           childRef.current.TermsAndCondition();
         }

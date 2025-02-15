@@ -11,7 +11,7 @@ import { OverlayTrigger } from "react-bootstrap";
 import EditStudentDetails from "./EditStudent/EditStudentDetails";
 import EditParentGuardian from "./EditStudent/EditParentGuardian";
 import EditEmergencyContact from "./EditStudent/EditEmergencyContact";
-import EditStudentRelation from "./EditStudent/EditStudentRelation";
+// import EditStudentRelation from "./EditStudent/EditStudentRelation";
 import EditTermsAndCondition from "./EditStudent/EditTermsAndCondition";
 
 const steps = [
@@ -19,7 +19,7 @@ const steps = [
   { tooltip: "Parents/Guardian" },
   { tooltip: "Emergency Contact" },
   // { tooltip: "Course Details" },
-  { tooltip: "Student Relation" },
+  // { tooltip: "Student Relation" },
   { tooltip: "Terms and Conditions" },
 ];
 
@@ -65,12 +65,12 @@ export default function StudentAdd() {
       //     childRef.current.coursedetail();
       //   }
       //   break;
+      // case "3":
+      //   if (childRef.current) {
+      //     childRef.current.Studentrelation();
+      //   }
+      //   break;
       case "3":
-        if (childRef.current) {
-          childRef.current.Studentrelation();
-        }
-        break;
-      case "4":
         if (childRef.current) {
           childRef.current.termsAndCondition();
         }
@@ -83,20 +83,6 @@ export default function StudentAdd() {
 
   return (
     <div className="container-fluid minHeight">
-      {/* <Stepper className="my-5" activeStep={activeStep} alternativeLabel>
-        {steps.map((label,index) => (
-          <Step key={label} onClick={() => setActiveStep(index)}>
-            
-            <OverlayTrigger
-                placement="top"
-                overlay={<Tooltip id={`tooltip-${index}`}>{label.tooltip}</Tooltip>}
-              >
-                <StepLabel>{label}</StepLabel>
-              </OverlayTrigger>
-          </Step>
-        ))}
-      </Stepper> */}
-
       <ol
         className="breadcrumb my-3 px-2"
         style={{ listStyle: "none", padding: 0, margin: 0 }}
@@ -175,7 +161,7 @@ export default function StudentAdd() {
               setLoadIndicators={setLoadIndicator}
             />
           )} */}
-          {activeStep === 3 && (
+          {/* {activeStep === 3 && (
             <EditStudentRelation
               formData={formData}
               ref={childRef}
@@ -183,8 +169,8 @@ export default function StudentAdd() {
               handleNext={handleNext}
               setLoadIndicators={setLoadIndicator}
             />
-          )}
-          {activeStep === 4 && (
+          )} */}
+          {activeStep === 3 && (
             <EditTermsAndCondition
               formData={formData}
               ref={childRef}
