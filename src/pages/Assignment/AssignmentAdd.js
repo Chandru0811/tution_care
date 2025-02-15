@@ -6,9 +6,9 @@ import api from "../../config/URL";
 import { toast } from "react-toastify";
 import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
 import fetchAllClassesWithIdsC from "../List/ClassListByCourse";
-import fetchAllTeacherListByCenter from "../List/TeacherListByCenter";
 import fetchAllStudentListByCenter from "../List/StudentListByCenter";
 import { MultiSelect } from "react-multi-select-component";
+import { MdOutlineCancel } from "react-icons/md";
 
 function AssignmentAdd() {
   const navigate = useNavigate();
@@ -16,7 +16,6 @@ function AssignmentAdd() {
   const [classData, setClassData] = useState(null);
   const [courseData, setCourseData] = useState(null);
   const [studentData, setStudentData] = useState(false);
-  // const [userData, setUserData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const userName = localStorage.getItem("tmsuserName");
   const centerId = localStorage.getItem("tmscenterId");
@@ -24,6 +23,7 @@ function AssignmentAdd() {
   const [selectedStudents, setSelectedStudents] = useState([]);
   const [selectedBatchTimes, setSelectedBatchTimes] = useState([]);
   const [teacherData, setTeacherData] = useState(null);
+  const [uploadedFiles, setUploadedFiles] = useState([]);
 
   const validationSchema = Yup.object({
     assignmentName: Yup.string().required("*Assignment Name is required"),
@@ -76,7 +76,7 @@ function AssignmentAdd() {
   const formik = useFormik({
     initialValues: {
       center: centerId,
-      assignmentName:"",
+      assignmentName: "",
       course: "",
       userId: "",
       classListing: "",
@@ -89,7 +89,7 @@ function AssignmentAdd() {
       studentSelect: "",
       createdBy: userName,
       studentIds: [],
-      assignmentReason:"",
+      assignmentReason: "",
       files: [] || null,
     },
     validationSchema: validationSchema,
@@ -199,15 +199,6 @@ function AssignmentAdd() {
     }
   };
 
-  // const fetchTeacher = async () => {
-  //   try {
-  //     const teacher = await fetchAllTeacherListByCenter(centerId);
-  //     setUserData(teacher);
-  //   } catch (error) {
-  //     toast.error(error);
-  //   }
-  // };
-
   const fetchStudent = async () => {
     try {
       const studentList = await fetchAllStudentListByCenter(centerId); // API call to fetch students
@@ -235,22 +226,6 @@ function AssignmentAdd() {
       toast.error(error);
     }
   };
-
-  // const fetchBatchandTeacherData = async (day) => {
-  //   try {
-  //     const response = await api.get(`getTeacherWithBatchListByDay?day=${day}`);
-  //     setBatchData(response.data.batchList);
-  //   } catch (error) {
-  //     toast.error(error.message);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   if (formik.values.day) {
-  //     fetchBatchandTeacherData(formik.values.day);
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [formik.values.day]);
 
   const formatTo12Hour = (time) => {
     const [hours, minutes] = time.split(":");
@@ -298,7 +273,58 @@ function AssignmentAdd() {
     fetchClasses(course); // Fetch class for the selected center
   };
 
-  
+  const handleFileChange = (event) => {
+    const newFiles = Array.from(event.target.files);
+    let errors = [];
+
+    // Validate files
+    newFiles.forEach((file) => {
+      if (
+        ![
+          "image/jpeg",
+          "image/png",
+          "application/pdf",
+          "application/msword",
+          "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        ].includes(file.type)
+      ) {
+        errors.push(`${file.name} is not an allowed file type.`);
+      }
+
+      if (file.size > 5 * 1024 * 1024) {
+        errors.push(`${file.name} exceeds the 5MB size limit.`);
+      }
+
+      if (file.name.length > 50) {
+        errors.push(`${file.name} has a name longer than 50 characters.`);
+      }
+    });
+
+    // Check total size
+    const totalSize = [...uploadedFiles, ...newFiles].reduce(
+      (total, file) => total + file.size,
+      0
+    );
+    if (totalSize > 1024 * 1024 * 1024) {
+      errors.push("Total file size exceeds 1GB.");
+    }
+
+    if (errors.length > 0) {
+      formik.setFieldError("files", errors.join(" "));
+    } else {
+      const updatedFiles = [...uploadedFiles, ...newFiles];
+      setUploadedFiles(updatedFiles);
+      formik.setFieldValue("files", updatedFiles);
+      formik.setFieldError("files", null);
+    }
+  };
+
+  const handleFileRemove = (index) => {
+    const filteredFiles = uploadedFiles.filter((_, i) => i !== index);
+    setUploadedFiles(filteredFiles);
+    formik.setFieldValue("files", filteredFiles);
+  };
+
   const fetchBatchandTeacherData = async (day) => {
     try {
       const response = await api.get(
@@ -402,15 +428,19 @@ function AssignmentAdd() {
                     name="text"
                     type="assignmentName"
                     className={`form-control  ${
-                      formik.touched.assignmentName && formik.errors.assignmentName
+                      formik.touched.assignmentName &&
+                      formik.errors.assignmentName
                         ? "is-invalid"
                         : ""
                     }`}
                     {...formik.getFieldProps("assignmentName")}
                   />
-                  {formik.touched.assignmentName && formik.errors.assignmentName && (
-                    <div className="invalid-feedback">{formik.errors.assignmentName}</div>
-                  )}
+                  {formik.touched.assignmentName &&
+                    formik.errors.assignmentName && (
+                      <div className="invalid-feedback">
+                        {formik.errors.assignmentName}
+                      </div>
+                    )}
                 </div>
               </div>
               <div className="col-md-6 col-12 mb-4">
@@ -512,7 +542,7 @@ function AssignmentAdd() {
                   <option disabled></option>
                   {teacherData &&
                     teacherData.map((userId) => (
-                      <option key={userId.id} value={userId.id}>
+                      <option key={userId.id} value={userId.teacherId}>
                         {userId.teacherName}
                       </option>
                     ))}
@@ -631,7 +661,7 @@ function AssignmentAdd() {
                   </div>
                 )}
               </div>
-             
+
               <div className="col-md-6 col-12 mb-4">
                 <label className="form-label">
                   Date<span className="text-danger">*</span>
@@ -673,7 +703,7 @@ function AssignmentAdd() {
               </div>
 
               <div className="col-md-6 col-12 mb-2">
-                <div className="row">
+                {/* <div className="row">
                   <label className="form-label">
                     Files<span className="text-danger">*</span>
                   </label>
@@ -742,7 +772,50 @@ function AssignmentAdd() {
                     Each file must be less than 5MB. Total size must be under
                     1GB, and file names must not exceed 50 characters.
                   </label>
+                </div> */}
+                <div className="row">
+                  <label className="form-label">
+                    Files <span className="text-danger">*</span>
+                  </label>
+                  <input
+                    className="form-control"
+                    type="file"
+                    multiple
+                    accept="image/jpeg, image/png, application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                    onChange={handleFileChange}
+                  />
+                  {formik.errors.files && (
+                    <small className="text-danger">{formik.errors.files}</small>
+                  )}
                 </div>
+
+                {/* Display uploaded files */}
+                {uploadedFiles.length > 0 && (
+                  <div className="mt-3">
+                    <h6>Uploaded Files:</h6>
+                    <ul className="list-group">
+                      {uploadedFiles.map((file, index) => (
+                        <li
+                          key={index}
+                          className="list-group-item d-flex justify-content-between align-items-center"
+                        >
+                          <span>{file.name}</span>
+                            <MdOutlineCancel 
+                            onClick={() => handleFileRemove(index)}
+                            className="text-danger"
+                            
+                            />
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                <p className="text-muted mt-2">
+                  <strong>Note:</strong> Only JPG, PNG, PDF, DOC, or DOCX files
+                  are allowed. Each file must be less than 5MB. Total size must
+                  be under 1GB, and file names must not exceed 50 characters.
+                </p>
               </div>
 
               <div className="col-md-6 col-12 mb-4">
@@ -750,18 +823,20 @@ function AssignmentAdd() {
                 <textarea
                   name="assignmentReason"
                   className={`form-control  ${
-                    formik.touched.assignmentReason && formik.errors.assignmentReason
+                    formik.touched.assignmentReason &&
+                    formik.errors.assignmentReason
                       ? "is-invalid"
                       : ""
                   }`}
                   rows={5}
                   {...formik.getFieldProps("assignmentReason")}
                 />
-                {formik.touched.assignmentReason && formik.errors.assignmentReason && (
-                  <div className="invalid-feedback">
-                    {formik.errors.assignmentReason}
-                  </div>
-                )}
+                {formik.touched.assignmentReason &&
+                  formik.errors.assignmentReason && (
+                    <div className="invalid-feedback">
+                      {formik.errors.assignmentReason}
+                    </div>
+                  )}
               </div>
             </div>
           </div>

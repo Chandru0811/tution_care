@@ -26,10 +26,10 @@ const validationSchema = Yup.object().shape({
     .required("*Student Email is required"),
   age: Yup.string().required("*Age is required"),
   gender: Yup.string().required("*Gender is required"),
-  schoolType: Yup.string().required("*School Type is required"),
-  schoolName: Yup.string().required("*School Name is required"),
-  allowMagazine: Yup.string().required("*Select a filed!"),
-  allowSocialMedia: Yup.string().required("*Select a filed"),
+  // schoolType: Yup.string().required("*School Type is required"),
+  // schoolName: Yup.string().required("*School Name is required"),
+  // allowMagazine: Yup.string().required("*Select a filed!"),
+  // allowSocialMedia: Yup.string().required("*Select a filed"),
   studentChineseName: Yup.string().required(
     "*Student Chinese Name is required"
   ),
@@ -43,15 +43,15 @@ const validationSchema = Yup.object().shape({
   // preAssessmentResult: Yup.string().required(
   //   "*Pre-Assessment Result is required!"
   // ),
-  medicalCondition: Yup.string().required(
-    "*Medical Condition Result is required"
-  ),
+  // medicalCondition: Yup.string().required(
+  //   "*Medical Condition Result is required"
+  // ),
   remark: Yup.string()
     .max(200, "*The maximum length is 200 characters")
     .notRequired(),
   // nationality: Yup.string().required("*Select a Nationality!"),
   primaryLanguage: Yup.string().required("*Primary Language is required"),
-  race: Yup.string().required("*Select a Race"),
+  // race: Yup.string().required("*Select a Race"),
 });
 
 const AddStudentDetails = forwardRef(
@@ -162,7 +162,7 @@ const AddStudentDetails = forwardRef(
           formDatas.append("allowSocialMedia", values.allowSocialMedia);
           formDatas.append("centerId", centerId);
           formDatas.append("center", center);
-          formDatas.append("primaryLanguage", values.primaryLanguage);
+          formDatas.append("primaryLanguage", "ENGLISH");
           formDatas.append("groupName", values.groupName);
           formDatas.append("file", values.file);
           formDatas.append("createdBy", userName);
@@ -399,7 +399,7 @@ const AddStudentDetails = forwardRef(
                         </div>
                       )}
                     </div>
-                    <div className="text-start mt-4">
+                    {/* <div className="text-start mt-4">
                       <label htmlFor="" className="fw-medium">
                         <small>School Type</small>
                         <span className="text-danger">*</span>
@@ -445,8 +445,8 @@ const AddStudentDetails = forwardRef(
                             <small>{formik.errors.schoolType}</small>
                           </div>
                         )}
-                    </div>
-                    <div className="text-start mt-4">
+                    </div> */}
+                    {/* <div className="text-start mt-4">
                       <label htmlFor="" className="mb-1 fw-medium">
                         <small>Pre-Assessment Result</small>
                       </label>
@@ -460,13 +460,11 @@ const AddStudentDetails = forwardRef(
                         value={formik.values.preAssessmentResult}
                         readOnly
                       />
-                    </div>
+                    </div> */}
                     <div className="text-start mt-4">
                       <label htmlFor="" className="mb-1 fw-medium">
                         <small>Nationality</small>
-                        {/* <span className="text-danger">*</span> */}
                       </label>
-                      <br />
                       <select
                         name="nationality"
                         onChange={formik.handleChange}
@@ -492,10 +490,9 @@ const AddStudentDetails = forwardRef(
                           </div>
                         )}
                     </div>
-                    <div className="text-start mt-4">
+                    {/* <div className="text-start mt-4">
                       <label htmlFor="" className=" fw-medium">
                         <small>Refered By Parent</small>
-                        {/* <span className="text-danger">*</span> */}
                       </label>
                       <br />
                       <input
@@ -513,7 +510,7 @@ const AddStudentDetails = forwardRef(
                             <small>{formik.errors.referByParent}</small>
                           </div>
                         )}
-                    </div>
+                    </div> */}
                   </div>
                   <div className="col-lg-6 col-md-6 col-12 px-5">
                     <div className="text-start mt-4">
@@ -602,7 +599,6 @@ const AddStudentDetails = forwardRef(
                     <div className="text-start mt-4">
                       <label className="mb-1 fw-medium">
                         <small>Medical Condition</small>
-                        <span className="text-danger">*</span>
                       </label>
                       <br />
                       <input
@@ -620,7 +616,7 @@ const AddStudentDetails = forwardRef(
                           </div>
                         )}
                     </div>
-                    <div className="text-start mt-4">
+                    {/* <div className="text-start mt-4">
                       <label htmlFor="" className="mb-1 fw-medium">
                         <small>School Name</small>
                         <span className="text-danger">*</span>
@@ -640,8 +636,8 @@ const AddStudentDetails = forwardRef(
                             <small>{formik.errors.schoolName}</small>
                           </div>
                         )}
-                    </div>
-                    <div className="text-start mt-3">
+                    </div> */}
+                    {/* <div className="text-start mt-3">
                       <label className="mb-1 fw-medium">
                         <small>Race</small>
                         <span className="text-danger">*</span>
@@ -667,7 +663,7 @@ const AddStudentDetails = forwardRef(
                           <small>{formik.errors.race}</small>
                         </div>
                       )}
-                    </div>
+                    </div> */}
                     <div className="text-start mt-4">
                       <label htmlFor="" className="mb-1 fw-medium">
                         <small>Primary Language Spoken</small>
@@ -699,10 +695,9 @@ const AddStudentDetails = forwardRef(
                           </div>
                         )}
                     </div>
-                    <div className="text-start mt-4">
+                    {/* <div className="text-start mt-4">
                       <label htmlFor="" className="mb-1 fw-medium">
                         <small>Refer By Student</small>
-                        {/* <span className="text-danger">*</span> */}
                       </label>
                       <br />
                       <input
@@ -714,28 +709,13 @@ const AddStudentDetails = forwardRef(
                         value={formik.values.referByStudent}
                         readOnly
                       />
-                      {/* <select
-                        name="referByStudent"
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        value={formik.values.referByStudent}
-                        className="form-select"
-                      >
-                        <option selected></option>
-                        {studentData &&
-                          studentData.map((student) => (
-                            <option key={student.id} value={student.id}>
-                              {student.studentNames}
-                            </option>
-                          ))}
-                      </select> */}
                       {formik.touched.referByStudent &&
                         formik.errors.referByStudent && (
                           <div className="error text-danger ">
                             <small>{formik.errors.referByStudent}</small>
                           </div>
                         )}
-                    </div>
+                    </div> */}
                   </div>
                 </div>
                 <div className="text-start mt-4">
@@ -762,7 +742,7 @@ const AddStudentDetails = forwardRef(
                   )}
                 </div>
 
-                <div className="mb-5">
+                {/* <div className="mb-5">
                   <div className="row mt-5">
                     <h6 className="text-start" style={{ color: "#ff7500" }}>
                       Videography/Photography
@@ -843,7 +823,7 @@ const AddStudentDetails = forwardRef(
                       </label>
                     </div>
                   </div>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>

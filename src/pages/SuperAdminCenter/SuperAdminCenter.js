@@ -29,17 +29,21 @@ const SuperAdminCenter = ({ handleCenterChanged }) => {
   const fetchData = async () => {
     try {
       setLoading(true);
+  
+      let url = "/getAllCenterSimplify";
       const queryParams = new URLSearchParams();
+  
       for (let key in filters) {
         if (filters[key]) {
           queryParams.append(key, filters[key]);
         }
       }
-
-      const response = await api.get(
-        `/getAllCenterSimplify?${queryParams.toString()}`
-      );
-
+  
+      if (queryParams.toString()) {
+        url += `?${queryParams.toString()}`;
+      }
+  
+      const response = await api.get(url);
       setData(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -47,9 +51,11 @@ const SuperAdminCenter = ({ handleCenterChanged }) => {
       setLoading(false);
     }
   };
+  
   useEffect(() => {
     fetchData();
   }, [filters]);
+  
 
   const columns = useMemo(
     () => [

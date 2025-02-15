@@ -7,7 +7,7 @@ import AddCourceDetails from "./AddStudent/AddCourceDetails";
 import AddParentGuardian from "./AddStudent/AddParentGuardian";
 import AddStudentDetails from "./AddStudent/AddStudentDetails";
 import AddEmergencyContact from "./AddStudent/AddEmergencyContact";
-import AddStudentRelation from "./AddStudent/AddStudentRelation";
+// import AddStudentRelation from "./AddStudent/AddStudentRelation";
 import AddTermsAndCondition from "./AddStudent/AddTermsAndCondition";
 import Tooltip from "react-bootstrap/Tooltip";
 import { OverlayTrigger } from "react-bootstrap";
@@ -158,7 +158,7 @@ export default function StudentAdd() {
               setLoadIndicators={setLoadIndicator}
             />
           )}
-          {activeStep === 4 && (
+          {/* {activeStep === 4 && (
             <AddStudentRelation
               formData={formData}
               ref={childRef}
@@ -166,8 +166,8 @@ export default function StudentAdd() {
               handleNext={handleNext}
               setLoadIndicators={setLoadIndicator}
             />
-          )}
-          {activeStep === 5 && (
+          )} */}
+          {activeStep === 4 && (
             <AddTermsAndCondition
               formData={formData}
               ref={childRef}

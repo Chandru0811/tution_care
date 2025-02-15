@@ -535,7 +535,7 @@ function AssignmentEdit() {
                   <option disabled></option>
                   {teacherData &&
                     teacherData.map((userId) => (
-                      <option key={userId.id} value={userId.id}>
+                      <option key={userId.id} value={userId.teacherId}>
                         {userId.teacherName}
                       </option>
                     ))}

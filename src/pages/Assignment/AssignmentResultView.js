@@ -17,8 +17,8 @@ function AssignmentResultView() {
   const [searchParams] = useSearchParams();
   const studentId = searchParams.get("studentId");
   const [data, setData] = useState({});
-  console.log("Data", data);
   const [showModal, setShowModal] = useState(false);
+  const userId = localStorage.getItem("tmsuserId");
 
   const getData = async () => {
     try {
@@ -207,8 +207,8 @@ function AssignmentResultView() {
               >
                 Remark
               </button>
-              <Link to="/assignmentResult">
-                <button type="button " className="btn btn-sm btn-border   ">
+              <Link to={userId ? "/assignmentResult" : "/assignment"}>
+                <button type="button" className="btn btn-sm btn-border">
                   Back
                 </button>
               </Link>

@@ -29,7 +29,7 @@ export default function NewLogin({ onLogin }) {
     onSubmit: async (values, { resetForm }) => {
       setLoadIndicator(true);
       try {
-        const response = await api.post(`smsLogin`, values, {
+        const response = await api.post(`tuitionLogin`, values, {
           headers: {
             "Content-Type": "application/json",
           },
