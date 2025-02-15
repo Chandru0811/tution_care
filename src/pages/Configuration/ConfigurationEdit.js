@@ -1,11 +1,9 @@
 import { useFormik } from "formik";
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import * as Yup from "yup";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
-import { Modal } from "react-bootstrap";
-import { Pending } from "@mui/icons-material";
 
 const validationSchema = Yup.object().shape({
   appName: Yup.string().required("*App Name is required"),
@@ -27,30 +25,11 @@ const validationSchema = Yup.object().shape({
   report: Yup.string().required("Report is required"),
   settings: Yup.string().required("Settings is required"),
   message: Yup.string().required("Message is required"),
-  leadForm: Yup.array().of(
-    Yup.object({
-      studentInfo: Yup.boolean().oneOf([true], "Student Info is required"),
-      childAbility: Yup.boolean().oneOf([true], "Child Ability is required"),
-      parentInfo: Yup.boolean().oneOf([true], "Parent Info is required"),
-      address: Yup.boolean().oneOf([true], "Address is required"),
-      accountInfo: Yup.boolean().oneOf([true], "Account Info is required"),
-      mediaPosting: Yup.boolean().oneOf([true], "Media Posting is required"),
-    })
-  ),
-  studentForm: Yup.array().of(
-    Yup.object({
-      studentDetails: Yup.boolean().oneOf([true], "Student Info is required"),
-      parentsGuardian: Yup.boolean().oneOf([true], "Child Ability is required"),
-      emergencyContact: Yup.boolean().oneOf([true], "Parent Info is required"),
-      courseDetails: Yup.boolean().oneOf([true], "Address is required"),
-      studentRelation: Yup.boolean().oneOf([true], "Account Info is required"),
-      termsAndCondtion: Yup.boolean().oneOf([true], "Media Posting is required"),
-    })
-  ),
 });
 
 function ConfigurationEdit() {
   const navigate = useNavigate();
+  const { id } = useParams();
   const [loadIndicator, setLoadIndicator] = useState(false);
   const userName = localStorage.getItem("tmsuserName");
 
@@ -75,60 +54,44 @@ function ConfigurationEdit() {
       report: "",
       settings: "",
       message: "",
-      leadForm: [
-        {
-          studentInfo: true,
-          childAbility: false,
-          parentInfo: false,
-          address: false,
-          accountInfo: false,
-          mediaPosting: false,
-        }
-      ],
-      studentForm: [
-        {
-          studentDetails: true,
-          parentsGuardian: false,
-          emergencyContact: false,
-          courseDetails: true,
-          studentRelation: false,
-          termsAndCondtion: false,
-        }
-      ]
+      studentInfo: true,
+      childAbility: false,
+      parentInfo: false,
+      address: false,
+      accountInfo: false,
+      mediaPosting: false,
+      studentDetails: true,
+      parentsGuardian: false,
+      emergencyContact: false,
+      courseDetails: true,
+      studentRelation: false,
+      termsAndCondtion: false,
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      console.log("values", values)
-      // setLoadIndicator(true);
-      // try {
-      //     const response = await api.post("/tuitionRegister", values, {
-      //         headers: {
-      //             "Content-Type": "Application/json",
-      //         },
-      //     });
-      //     if (response.status === 201) {
-      //         toast.success(response.data.message);
-      //         navigate("/companyregistration");
-      //         handleCenterChanged();
-      //     } else {
-      //         toast.error(response.data.message);
-      //     }
-      // } catch (error) {
-      //     toast.error(error);
-      // } finally {
-      //     setLoadIndicator(false);
-      // }
+      console.log("values", values);
+      setLoadIndicator(true);
+      try {
+        const response = await api.put(`/updateConfiguration/${id}`, values, {
+          headers: {
+            "Content-Type": "Application/json",
+          },
+        });
+        if (response.status === 200) {
+          toast.success(response.data.message);
+          navigate("/configuration");
+        } else {
+          toast.error(response.data.message);
+        }
+      } catch (error) {
+        toast.error(error);
+      } finally {
+        setLoadIndicator(false);
+      }
     },
     validateOnChange: false,
     validateOnBlur: true,
   });
-
-  useEffect(() => {
-    const storedData = localStorage.getItem("tuitionRegisterData");
-    if (storedData) {
-      formik.setValues(storedData);
-    }
-  }, []);
 
   // Function to scroll to the first error field
   const scrollToError = (errors) => {
@@ -147,6 +110,19 @@ function ConfigurationEdit() {
     }
   }, [formik.submitCount, formik.errors]);
 
+  const fetchData = async () => {
+    try {
+      const response = await api.get(`/getConfigurationById/${id}`);
+      formik.setValues(response.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [id]);
+
   return (
     <div className="container-fluid">
       <ol
@@ -164,7 +140,7 @@ function ConfigurationEdit() {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          <Link to="/center" className="custom-breadcrumb">
+          <Link to="/configuration" className="custom-breadcrumb">
             &nbsp;Configuration
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
@@ -217,15 +193,18 @@ function ConfigurationEdit() {
                   <input
                     type="text"
                     name="appName"
-                    className={`form-control  ${formik.touched.appName && formik.errors.appName
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-control  ${
+                      formik.touched.appName && formik.errors.appName
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     aria-describedby="basic-addon1"
                     {...formik.getFieldProps("appName")}
                   />
                   {formik.touched.appName && formik.errors.appName && (
-                    <div className="invalid-feedback">{formik.errors.appName}</div>
+                    <div className="invalid-feedback">
+                      {formik.errors.appName}
+                    </div>
                   )}
                 </div>
               </div>
@@ -236,10 +215,12 @@ function ConfigurationEdit() {
                     App Description<span className="text-danger">*</span>
                   </label>
                   <textarea
-                    className={`form-control  ${formik.touched.appDescription && formik.errors.appDescription
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-control  ${
+                      formik.touched.appDescription &&
+                      formik.errors.appDescription
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("appDescription")}
                     id="exampleFormControlTextarea1"
                     rows="3"
@@ -252,18 +233,17 @@ function ConfigurationEdit() {
                       }
                     }}
                   ></textarea>
-                  {formik.touched.appDescription && formik.errors.appDescription && (
-                    <div className="invalid-feedback">
-                      {formik.errors.appDescription}
-                    </div>
-                  )}
+                  {formik.touched.appDescription &&
+                    formik.errors.appDescription && (
+                      <div className="invalid-feedback">
+                        {formik.errors.appDescription}
+                      </div>
+                    )}
                 </div>
               </div>
             </div>
             <div className="row">
-              <h5>
-                Lables
-              </h5>
+              <h5>Lables</h5>
               <div className="col-md-3 col-12">
                 <div className="mb-3">
                   <label for="exampleFormControlInput1" className="form-label">
@@ -272,15 +252,18 @@ function ConfigurationEdit() {
                   <input
                     type="text"
                     name="centreName"
-                    className={`form-control  ${formik.touched.centreName && formik.errors.centreName
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-control  ${
+                      formik.touched.centreName && formik.errors.centreName
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     aria-describedby="basic-addon1"
                     {...formik.getFieldProps("centreName")}
                   />
                   {formik.touched.centreName && formik.errors.centreName && (
-                    <div className="invalid-feedback">{formik.errors.centreName}</div>
+                    <div className="invalid-feedback">
+                      {formik.errors.centreName}
+                    </div>
                   )}
                 </div>
               </div>
@@ -292,15 +275,18 @@ function ConfigurationEdit() {
                   <input
                     type="text"
                     name="subject"
-                    className={`form-control  ${formik.touched.subject && formik.errors.subject
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-control  ${
+                      formik.touched.subject && formik.errors.subject
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     aria-describedby="basic-addon1"
                     {...formik.getFieldProps("subject")}
                   />
                   {formik.touched.subject && formik.errors.subject && (
-                    <div className="invalid-feedback">{formik.errors.subject}</div>
+                    <div className="invalid-feedback">
+                      {formik.errors.subject}
+                    </div>
                   )}
                 </div>
               </div>
@@ -312,15 +298,18 @@ function ConfigurationEdit() {
                   <input
                     type="text"
                     name="level"
-                    className={`form-control  ${formik.touched.level && formik.errors.level
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-control  ${
+                      formik.touched.level && formik.errors.level
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     aria-describedby="basic-addon1"
                     {...formik.getFieldProps("level")}
                   />
                   {formik.touched.level && formik.errors.level && (
-                    <div className="invalid-feedback">{formik.errors.level}</div>
+                    <div className="invalid-feedback">
+                      {formik.errors.level}
+                    </div>
                   )}
                 </div>
               </div>
@@ -332,15 +321,18 @@ function ConfigurationEdit() {
                   <input
                     type="text"
                     name="course"
-                    className={`form-control  ${formik.touched.course && formik.errors.course
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-control  ${
+                      formik.touched.course && formik.errors.course
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     aria-describedby="basic-addon1"
                     {...formik.getFieldProps("course")}
                   />
                   {formik.touched.course && formik.errors.course && (
-                    <div className="invalid-feedback">{formik.errors.course}</div>
+                    <div className="invalid-feedback">
+                      {formik.errors.course}
+                    </div>
                   )}
                 </div>
               </div>
@@ -352,15 +344,18 @@ function ConfigurationEdit() {
                   <input
                     type="text"
                     name="class"
-                    className={`form-control  ${formik.touched.class && formik.errors.class
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-control  ${
+                      formik.touched.class && formik.errors.class
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     aria-describedby="basic-addon1"
                     {...formik.getFieldProps("class")}
                   />
                   {formik.touched.class && formik.errors.class && (
-                    <div className="invalid-feedback">{formik.errors.class}</div>
+                    <div className="invalid-feedback">
+                      {formik.errors.class}
+                    </div>
                   )}
                 </div>
               </div>
@@ -372,10 +367,11 @@ function ConfigurationEdit() {
                   <input
                     type="text"
                     name="lead"
-                    className={`form-control  ${formik.touched.lead && formik.errors.lead
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-control  ${
+                      formik.touched.lead && formik.errors.lead
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     aria-describedby="basic-addon1"
                     {...formik.getFieldProps("lead")}
                   />
@@ -392,15 +388,18 @@ function ConfigurationEdit() {
                   <input
                     type="text"
                     name="employee"
-                    className={`form-control  ${formik.touched.employee && formik.errors.employee
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-control  ${
+                      formik.touched.employee && formik.errors.employee
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     aria-describedby="basic-addon1"
                     {...formik.getFieldProps("employee")}
                   />
                   {formik.touched.employee && formik.errors.employee && (
-                    <div className="invalid-feedback">{formik.errors.employee}</div>
+                    <div className="invalid-feedback">
+                      {formik.errors.employee}
+                    </div>
                   )}
                 </div>
               </div>
@@ -412,15 +411,18 @@ function ConfigurationEdit() {
                   <input
                     type="text"
                     name="student"
-                    className={`form-control  ${formik.touched.student && formik.errors.student
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-control  ${
+                      formik.touched.student && formik.errors.student
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     aria-describedby="basic-addon1"
                     {...formik.getFieldProps("student")}
                   />
                   {formik.touched.student && formik.errors.student && (
-                    <div className="invalid-feedback">{formik.errors.student}</div>
+                    <div className="invalid-feedback">
+                      {formik.errors.student}
+                    </div>
                   )}
                 </div>
               </div>
@@ -432,15 +434,18 @@ function ConfigurationEdit() {
                   <input
                     type="text"
                     name="attendance"
-                    className={`form-control  ${formik.touched.attendance && formik.errors.attendance
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-control  ${
+                      formik.touched.attendance && formik.errors.attendance
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     aria-describedby="basic-addon1"
                     {...formik.getFieldProps("attendance")}
                   />
                   {formik.touched.attendance && formik.errors.attendance && (
-                    <div className="invalid-feedback">{formik.errors.attendance}</div>
+                    <div className="invalid-feedback">
+                      {formik.errors.attendance}
+                    </div>
                   )}
                 </div>
               </div>
@@ -452,15 +457,18 @@ function ConfigurationEdit() {
                   <input
                     type="text"
                     name="schedule"
-                    className={`form-control  ${formik.touched.schedule && formik.errors.schedule
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-control  ${
+                      formik.touched.schedule && formik.errors.schedule
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     aria-describedby="basic-addon1"
                     {...formik.getFieldProps("schedule")}
                   />
                   {formik.touched.schedule && formik.errors.schedule && (
-                    <div className="invalid-feedback">{formik.errors.schedule}</div>
+                    <div className="invalid-feedback">
+                      {formik.errors.schedule}
+                    </div>
                   )}
                 </div>
               </div>
@@ -472,16 +480,21 @@ function ConfigurationEdit() {
                   <input
                     type="text"
                     name="documentManagement"
-                    className={`form-control  ${formik.touched.documentManagement && formik.errors.documentManagement
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-control  ${
+                      formik.touched.documentManagement &&
+                      formik.errors.documentManagement
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     aria-describedby="basic-addon1"
                     {...formik.getFieldProps("documentManagement")}
                   />
-                  {formik.touched.documentManagement && formik.errors.documentManagement && (
-                    <div className="invalid-feedback">{formik.errors.documentManagement}</div>
-                  )}
+                  {formik.touched.documentManagement &&
+                    formik.errors.documentManagement && (
+                      <div className="invalid-feedback">
+                        {formik.errors.documentManagement}
+                      </div>
+                    )}
                 </div>
               </div>
               <div className="col-md-3 col-12">
@@ -492,16 +505,21 @@ function ConfigurationEdit() {
                   <input
                     type="text"
                     name="assignManagement"
-                    className={`form-control  ${formik.touched.assignManagement && formik.errors.assignManagement
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-control  ${
+                      formik.touched.assignManagement &&
+                      formik.errors.assignManagement
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     aria-describedby="basic-addon1"
                     {...formik.getFieldProps("assignManagement")}
                   />
-                  {formik.touched.assignManagement && formik.errors.assignManagement && (
-                    <div className="invalid-feedback">{formik.errors.assignManagement}</div>
-                  )}
+                  {formik.touched.assignManagement &&
+                    formik.errors.assignManagement && (
+                      <div className="invalid-feedback">
+                        {formik.errors.assignManagement}
+                      </div>
+                    )}
                 </div>
               </div>
               <div className="col-md-3 col-12">
@@ -512,15 +530,18 @@ function ConfigurationEdit() {
                   <input
                     type="text"
                     name="invoice"
-                    className={`form-control  ${formik.touched.invoice && formik.errors.invoice
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-control  ${
+                      formik.touched.invoice && formik.errors.invoice
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     aria-describedby="basic-addon1"
                     {...formik.getFieldProps("invoice")}
                   />
                   {formik.touched.invoice && formik.errors.invoice && (
-                    <div className="invalid-feedback">{formik.errors.invoice}</div>
+                    <div className="invalid-feedback">
+                      {formik.errors.invoice}
+                    </div>
                   )}
                 </div>
               </div>
@@ -532,15 +553,18 @@ function ConfigurationEdit() {
                   <input
                     type="text"
                     name="referral"
-                    className={`form-control  ${formik.touched.referral && formik.errors.referral
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-control  ${
+                      formik.touched.referral && formik.errors.referral
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     aria-describedby="basic-addon1"
                     {...formik.getFieldProps("referral")}
                   />
                   {formik.touched.referral && formik.errors.referral && (
-                    <div className="invalid-feedback">{formik.errors.referral}</div>
+                    <div className="invalid-feedback">
+                      {formik.errors.referral}
+                    </div>
                   )}
                 </div>
               </div>
@@ -552,15 +576,18 @@ function ConfigurationEdit() {
                   <input
                     type="text"
                     name="report"
-                    className={`form-control  ${formik.touched.report && formik.errors.report
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-control  ${
+                      formik.touched.report && formik.errors.report
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     aria-describedby="basic-addon1"
                     {...formik.getFieldProps("report")}
                   />
                   {formik.touched.report && formik.errors.report && (
-                    <div className="invalid-feedback">{formik.errors.report}</div>
+                    <div className="invalid-feedback">
+                      {formik.errors.report}
+                    </div>
                   )}
                 </div>
               </div>
@@ -572,15 +599,18 @@ function ConfigurationEdit() {
                   <input
                     type="text"
                     name="settings"
-                    className={`form-control  ${formik.touched.settings && formik.errors.settings
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-control  ${
+                      formik.touched.settings && formik.errors.settings
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     aria-describedby="basic-addon1"
                     {...formik.getFieldProps("settings")}
                   />
                   {formik.touched.settings && formik.errors.settings && (
-                    <div className="invalid-feedback">{formik.errors.settings}</div>
+                    <div className="invalid-feedback">
+                      {formik.errors.settings}
+                    </div>
                   )}
                 </div>
               </div>
@@ -592,40 +622,44 @@ function ConfigurationEdit() {
                   <input
                     type="text"
                     name="message"
-                    className={`form-control  ${formik.touched.message && formik.errors.message
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-control  ${
+                      formik.touched.message && formik.errors.message
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     aria-describedby="basic-addon1"
                     {...formik.getFieldProps("message")}
                   />
                   {formik.touched.message && formik.errors.message && (
-                    <div className="invalid-feedback">{formik.errors.message}</div>
+                    <div className="invalid-feedback">
+                      {formik.errors.message}
+                    </div>
                   )}
                 </div>
               </div>
               <div className="row">
-                <h5>
-                  Lead Form
-                </h5>
+                <h5>Lead Form</h5>
                 <div className="col-md-4 col-12">
                   <div className="mb-3">
                     <input
                       className="form-check-input me-2"
                       type="checkbox"
-                      checked={formik.values.leadForm[0].studentInfo}
-                      onChange={() =>
-                        formik.setFieldValue(
-                          "leadForm[0].studentInfo",
-                          !formik.values.leadForm[0].studentInfo
-                        )
-                      }
+                      checked={formik.values.studentInfo}
+                      //   onChange={() =>
+                      //     formik.setFieldValue(
+                      //       "studentInfo",
+                      //       !formik.values.studentInfo
+                      //     )
+                      //   }
+                      disabled
                     />
-                    <label className="form-check-label">Student Information</label>
-                    {formik.touched.leadForm?.[0]?.studentInfo &&
-                      formik.errors.leadForm?.[0]?.studentInfo && (
+                    <label className="form-check-label">
+                      Student Information
+                    </label>
+                    {formik.touched.studentInfo &&
+                      formik.errors.studentInfo && (
                         <div className="error text-danger">
-                          <small>{formik.errors.leadForm[0].studentInfo}</small>
+                          <small>{formik.errorsvalues.studentInfo}</small>
                         </div>
                       )}
                   </div>
@@ -635,19 +669,19 @@ function ConfigurationEdit() {
                     <input
                       className="form-check-input me-2"
                       type="checkbox"
-                      checked={formik.values.leadForm[0].childAbility}
+                      checked={formik.values.childAbility}
                       onChange={() =>
                         formik.setFieldValue(
-                          "leadForm[0].childAbility",
-                          !formik.values.leadForm[0].childAbility
+                          "childAbility",
+                          !formik.values.childAbility
                         )
                       }
                     />
                     <label className="form-check-label">Child Ability</label>
-                    {formik.touched.leadForm?.[0]?.childAbility &&
-                      formik.errors.leadForm?.[0]?.childAbility && (
+                    {formik.touched.childAbility &&
+                      formik.errors.childAbility && (
                         <div className="error text-danger">
-                          <small>{formik.errors.leadForm[0].childAbility}</small>
+                          <small>{formik.errorsvalues.childAbility}</small>
                         </div>
                       )}
                   </div>
@@ -657,21 +691,22 @@ function ConfigurationEdit() {
                     <input
                       className="form-check-input me-2"
                       type="checkbox"
-                      checked={formik.values.leadForm[0].parentInfo}
+                      checked={formik.values.parentInfo}
                       onChange={() =>
                         formik.setFieldValue(
-                          "leadForm[0].parentInfo",
-                          !formik.values.leadForm[0].parentInfo
+                          "parentInfo",
+                          !formik.values.parentInfo
                         )
                       }
                     />
-                    <label className="form-check-label">Parent Information</label>
-                    {formik.touched.leadForm?.[0]?.parentInfo &&
-                      formik.errors.leadForm?.[0]?.parentInfo && (
-                        <div className="error text-danger">
-                          <small>{formik.errors.leadForm[0].parentInfo}</small>
-                        </div>
-                      )}
+                    <label className="form-check-label">
+                      Parent Information
+                    </label>
+                    {formik.touched.parentInfo && formik.errors.parentInfo && (
+                      <div className="error text-danger">
+                        <small>{formik.errorsvalues.parentInfo}</small>
+                      </div>
+                    )}
                   </div>
                 </div>
                 <div className="col-md-4 col-12">
@@ -679,19 +714,39 @@ function ConfigurationEdit() {
                     <input
                       className="form-check-input me-2"
                       type="checkbox"
-                      checked={formik.values.leadForm[0].address}
+                      checked={formik.values.address}
                       onChange={() =>
-                        formik.setFieldValue(
-                          "leadForm[0].address",
-                          !formik.values.leadForm[0].address
-                        )
+                        formik.setFieldValue("address", !formik.values.address)
                       }
                     />
                     <label className="form-check-label">Address</label>
-                    {formik.touched.leadForm?.[0]?.address &&
-                      formik.errors.leadForm?.[0]?.address && (
+                    {formik.touched.address && formik.errors.address && (
+                      <div className="error text-danger">
+                        <small>{formik.errorsvalues.address}</small>
+                      </div>
+                    )}
+                  </div>
+                </div>
+                <div className="col-md-4 col-12">
+                  <div className="mb-3">
+                    <input
+                      className="form-check-input me-2"
+                      type="checkbox"
+                      checked={formik.values.accountInfo}
+                      onChange={() =>
+                        formik.setFieldValue(
+                          "accountInfo",
+                          !formik.values.accountInfo
+                        )
+                      }
+                    />
+                    <label className="form-check-label">
+                      Account Information
+                    </label>
+                    {formik.touched.accountInfo &&
+                      formik.errors.accountInfo && (
                         <div className="error text-danger">
-                          <small>{formik.errors.leadForm[0].address}</small>
+                          <small>{formik.errorsvalues.accountInfo}</small>
                         </div>
                       )}
                   </div>
@@ -701,68 +756,47 @@ function ConfigurationEdit() {
                     <input
                       className="form-check-input me-2"
                       type="checkbox"
-                      checked={formik.values.leadForm[0].accountInfo}
+                      checked={formik.values.mediaPosting}
                       onChange={() =>
                         formik.setFieldValue(
-                          "leadForm[0].accountInfo",
-                          !formik.values.leadForm[0].accountInfo
+                          "mediaPosting",
+                          !formik.values.mediaPosting
                         )
                       }
                     />
-                    <label className="form-check-label">Account Information</label>
-                    {formik.touched.leadForm?.[0]?.accountInfo &&
-                      formik.errors.leadForm?.[0]?.accountInfo && (
+                    <label className="form-check-label">
+                      Permission for Media Posting
+                    </label>
+                    {formik.touched.mediaPosting &&
+                      formik.errors.mediaPosting && (
                         <div className="error text-danger">
-                          <small>{formik.errors.leadForm[0].accountInfo}</small>
-                        </div>
-                      )}
-                  </div>
-                </div>
-                <div className="col-md-4 col-12">
-                  <div className="mb-3">
-                    <input
-                      className="form-check-input me-2"
-                      type="checkbox"
-                      checked={formik.values.leadForm[0].mediaPosting}
-                      onChange={() =>
-                        formik.setFieldValue(
-                          "leadForm[0].mediaPosting",
-                          !formik.values.leadForm[0].mediaPosting
-                        )
-                      }
-                    />
-                    <label className="form-check-label">Permission for Media Posting</label>
-                    {formik.touched.leadForm?.[0]?.mediaPosting &&
-                      formik.errors.leadForm?.[0]?.mediaPosting && (
-                        <div className="error text-danger">
-                          <small>{formik.errors.leadForm[0].mediaPosting}</small>
+                          <small>{formik.errorsvalues.mediaPosting}</small>
                         </div>
                       )}
                   </div>
                 </div>
               </div>
               <div className="row">
-                <h5>
-                  Student Form
-                </h5>
+                <h5>Student Form</h5>
                 <div className="col-md-4 col-12">
                   <div className="mb-3">
                     <input
                       className="form-check-input me-2"
                       type="checkbox"
-                      checked={formik.values.studentForm[0].studentDetails}
-                      onChange={() =>
-                        formik.setFieldValue(
-                          "studentForm[0].studentDetails",
-                          !formik.values.studentForm[0].studentDetails
-                        )
-                      }
+                      checked={formik.values.studentDetails}
+                      //   onChange={() =>
+                      //     formik.setFieldValue(
+                      //       "studentDetails",
+                      //       !formik.values.studentDetails
+                      //     )
+                      //   }
+                      disabled
                     />
                     <label className="form-check-label">Student Details</label>
-                    {formik.touched.studentForm?.[0]?.studentDetails &&
-                      formik.errors.studentForm?.[0]?.studentDetails && (
+                    {formik.touched.studentDetails &&
+                      formik.errors.studentDetails && (
                         <div className="error text-danger">
-                          <small>{formik.errors.studentForm[0].studentDetails}</small>
+                          <small>{formik.errorsvalues.studentDetails}</small>
                         </div>
                       )}
                   </div>
@@ -772,19 +806,21 @@ function ConfigurationEdit() {
                     <input
                       className="form-check-input me-2"
                       type="checkbox"
-                      checked={formik.values.studentForm[0].parentsGuardian}
+                      checked={formik.values.parentsGuardian}
                       onChange={() =>
                         formik.setFieldValue(
-                          "studentForm[0].parentsGuardian",
-                          !formik.values.studentForm[0].parentsGuardian
+                          "parentsGuardian",
+                          !formik.values.parentsGuardian
                         )
                       }
                     />
-                    <label className="form-check-label">Parents / Guardian</label>
-                    {formik.touched.studentForm?.[0]?.parentsGuardian &&
-                      formik.errors.studentForm?.[0]?.parentsGuardian && (
+                    <label className="form-check-label">
+                      Parents / Guardian
+                    </label>
+                    {formik.touched.parentsGuardian &&
+                      formik.errors.parentsGuardian && (
                         <div className="error text-danger">
-                          <small>{formik.errors.studentForm[0].parentsGuardian}</small>
+                          <small>{formik.errorsvalues.parentsGuardian}</small>
                         </div>
                       )}
                   </div>
@@ -794,19 +830,21 @@ function ConfigurationEdit() {
                     <input
                       className="form-check-input me-2"
                       type="checkbox"
-                      checked={formik.values.studentForm[0].emergencyContact}
+                      checked={formik.values.emergencyContact}
                       onChange={() =>
                         formik.setFieldValue(
-                          "studentForm[0].emergencyContact",
-                          !formik.values.studentForm[0].emergencyContact
+                          "emergencyContact",
+                          !formik.values.emergencyContact
                         )
                       }
                     />
-                    <label className="form-check-label">Emergency Contact</label>
-                    {formik.touched.studentForm?.[0]?.emergencyContact &&
-                      formik.errors.studentForm?.[0]?.emergencyContact && (
+                    <label className="form-check-label">
+                      Emergency Contact
+                    </label>
+                    {formik.touched.emergencyContact &&
+                      formik.errors.emergencyContact && (
                         <div className="error text-danger">
-                          <small>{formik.errors.studentForm[0].emergencyContact}</small>
+                          <small>{formik.errorsvalues.emergencyContact}</small>
                         </div>
                       )}
                   </div>
@@ -816,19 +854,14 @@ function ConfigurationEdit() {
                     <input
                       className="form-check-input me-2"
                       type="checkbox"
-                      checked={formik.values.studentForm[0].courseDetails}
-                      onChange={() =>
-                        formik.setFieldValue(
-                          "studentForm[0].courseDetails",
-                          !formik.values.studentForm[0].courseDetails
-                        )
-                      }
+                      checked={formik.values.courseDetails}
+                      disabled
                     />
                     <label className="form-check-label">Course Details</label>
-                    {formik.touched.studentForm?.[0]?.courseDetails &&
-                      formik.errors.studentForm?.[0]?.courseDetails && (
+                    {formik.touched.courseDetails &&
+                      formik.errors.courseDetails && (
                         <div className="error text-danger">
-                          <small>{formik.errors.studentForm[0].courseDetails}</small>
+                          <small>{formik.errorsvalues.courseDetails}</small>
                         </div>
                       )}
                   </div>
@@ -838,19 +871,19 @@ function ConfigurationEdit() {
                     <input
                       className="form-check-input me-2"
                       type="checkbox"
-                      checked={formik.values.studentForm[0].studentRelation}
+                      checked={formik.values.studentRelation}
                       onChange={() =>
                         formik.setFieldValue(
-                          "studentForm[0].studentRelation",
-                          !formik.values.studentForm[0].studentRelation
+                          "studentRelation",
+                          !formik.values.studentRelation
                         )
                       }
                     />
                     <label className="form-check-label">Student Relation</label>
-                    {formik.touched.studentForm?.[0]?.studentRelation &&
-                      formik.errors.studentForm?.[0]?.studentRelation && (
+                    {formik.touched.studentRelation &&
+                      formik.errors.studentRelation && (
                         <div className="error text-danger">
-                          <small>{formik.errors.studentForm[0].studentRelation}</small>
+                          <small>{formik.errorsvalues.studentRelation}</small>
                         </div>
                       )}
                   </div>
@@ -860,19 +893,21 @@ function ConfigurationEdit() {
                     <input
                       className="form-check-input me-2"
                       type="checkbox"
-                      checked={formik.values.studentForm[0].termsAndCondtion}
+                      checked={formik.values.termsAndCondtion}
                       onChange={() =>
                         formik.setFieldValue(
-                          "studentForm[0].termsAndCondtion",
-                          !formik.values.studentForm[0].termsAndCondtion
+                          "termsAndCondtion",
+                          !formik.values.termsAndCondtion
                         )
                       }
                     />
-                    <label className="form-check-label">Terms and Conditions</label>
-                    {formik.touched.studentForm?.[0]?.termsAndCondtion &&
-                      formik.errors.studentForm?.[0]?.termsAndCondtion && (
+                    <label className="form-check-label">
+                      Terms and Conditions
+                    </label>
+                    {formik.touched.termsAndCondtion &&
+                      formik.errors.termsAndCondtion && (
                         <div className="error text-danger">
-                          <small>{formik.errors.studentForm[0].termsAndCondtion}</small>
+                          <small>{formik.errorsvalues.termsAndCondtion}</small>
                         </div>
                       )}
                   </div>
