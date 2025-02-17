@@ -29,8 +29,8 @@ const AddParentGuardian = forwardRef(
         .of(
           Yup.object().shape({
             parentName: Yup.string().required("*Guardian Name is required"),
-            occupation: Yup.string().required("*Occupation is required"),
-            relation: Yup.string().required("*Relation is required"),
+            // occupation: Yup.string().required("*Occupation is required"),
+            // relation: Yup.string().required("*Relation is required"),
             address: Yup.string().required("*Address  is required"),
             postalCode: Yup.string().required("*Postal Code is required"),
             parentDateOfBirth: Yup.string().required(
@@ -441,7 +441,7 @@ const AddParentGuardian = forwardRef(
                 <div className="col-lg-6 col-md-6 col-12 mt-3">
                   <label className="fw-medium">
                     <small>
-                      Occupation<span className="text-danger">*</span>
+                      Occupation
                     </small>
                   </label>
                   <input
@@ -511,7 +511,7 @@ const AddParentGuardian = forwardRef(
                 <div className="col-lg-6 col-md-6 col-12 mt-3">
                   <label className="fw-medium">
                     <small>
-                      Relation<span className="text-danger">*</span>
+                      Relation
                     </small>
                   </label>
                   <select

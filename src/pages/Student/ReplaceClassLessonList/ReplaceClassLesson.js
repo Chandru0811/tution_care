@@ -260,22 +260,6 @@ const ReplaceClassLesson = () => {
         </div>
         <div className="mb-3 d-flex justify-content-between">
           <div className="individual_fliters d-lg-flex ">
-            {/* <div className="form-group mb-0 ms-2 mb-1">
-              <select
-                className="form-select form-select-sm center_list"
-                name="centerId"
-                style={{ width: "100%" }}
-                onChange={handleFilterChange}
-                value={filters.centerId}
-              >
-                <option value="">Select Center</option>
-                {centerData?.map((center) => (
-                  <option key={center.id} value={center.id} selected>
-                    {center.centerNames}
-                  </option>
-                ))}
-              </select>
-            </div> */}
             <div className="form-group mb-0 ms-2 mb-1">
               <select
                 className="form-select form-select-sm center_list"
