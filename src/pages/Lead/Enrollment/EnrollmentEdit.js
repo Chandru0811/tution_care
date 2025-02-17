@@ -12,8 +12,14 @@ import { Link, useParams } from "react-router-dom";
 import Tooltip from "react-bootstrap/Tooltip";
 import { OverlayTrigger } from "react-bootstrap";
 
-const steps = [{ tooltip: "Student Information" }, { tooltip: "Child Ability" },{ tooltip: "Parent Information" },{ tooltip: "Address" },{ tooltip: "Account Information" },{ tooltip: "Permission for Medias Posting" }];
-
+const steps = [
+  { tooltip: "Student Information" },
+  { tooltip: "Child Ability" },
+  { tooltip: "Parent Information" },
+  { tooltip: "Address" },
+  { tooltip: "Account Information" },
+  { tooltip: "Permission for Medias Posting" },
+];
 
 export default function EnrollmentEdit() {
   const { id } = useParams();

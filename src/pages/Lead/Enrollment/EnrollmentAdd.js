@@ -15,42 +15,25 @@ export default function EnrollmentAdd() {
   const [activeStep, setActiveStep] = useState(0);
   const [formData, setFormData] = useState({ lead_id: null });
   const [loadIndicator, setLoadIndicator] = useState(false);
-  const ConfigurationData = localStorage.getItem("tuitionConfigurationData");
+  const ConfigurationData = JSON.parse(
+    localStorage.getItem("tmsappConfigInfo")
+  );
   const navigate = useNavigate();
-  console.log("activeStep", activeStep);
 
   const allSteps = [
-    { key: "studentInfo", tooltip: "Student Information", component: Form1 },
-    { key: "childAbility", tooltip: "Child Ability", component: Form2 },
-    { key: "parentInfo", tooltip: "Parent Information", component: Form3 },
-    { key: "address", tooltip: "Address", component: Form4 },
-    { key: "accountInfo", tooltip: "Account Information", component: Form5 },
+    { key: "isStudentInfo", tooltip: "Student Information", component: Form1 },
+    { key: "isChildAbility", tooltip: "Child Ability", component: Form2 },
+    { key: "isParentInfo", tooltip: "Parent Information", component: Form3 },
+    { key: "isAddress", tooltip: "Address", component: Form4 },
+    { key: "isAccountInfo", tooltip: "Account Information", component: Form5 },
     {
-      key: "mediaPosting",
+      key: "isMediaPosting",
       tooltip: "Permission for Media Posting",
       component: Form6,
     },
   ];
 
-  let filteredSteps = allSteps;
-  let filteredForms = allSteps.map((step) => step.component);
-
-  if (ConfigurationData) {
-    try {
-      const parsedData = JSON.parse(ConfigurationData);
-      console.log("Lead Form Data:", parsedData.leadForm[0]);
-
-      const leadFormConfig = parsedData.leadForm[0];
-
-      filteredSteps = Object.values(leadFormConfig).some(Boolean)
-        ? allSteps.filter((step) => leadFormConfig[step.key])
-        : allSteps;
-
-      filteredForms = filteredSteps.map((step) => step.component);
-    } catch (error) {
-      console.error("Error parsing ConfigurationData:", error);
-    }
-  }
+  let filteredSteps = allSteps.filter((step) => ConfigurationData[step.key]);
 
   const childRef = React.useRef();
 
@@ -65,10 +48,30 @@ export default function EnrollmentAdd() {
   const handleButtonClick = () => {
     if (loadIndicator) return;
 
+    const currentForm = filteredSteps[activeStep];
+
     if (childRef.current) {
-      const formMethod = `form${activeStep + 1}`;
-      if (typeof childRef.current[formMethod] === "function") {
-        childRef.current[formMethod]();
+      switch (currentForm.key) {
+        case "isStudentInfo":
+          childRef.current.form1();
+          break;
+        case "isChildAbility":
+          childRef.current.form2();
+          break;
+        case "isParentInfo":
+          childRef.current.form3();
+          break;
+        case "isAddress":
+          childRef.current.form4();
+          break;
+        case "isAccountInfo":
+          childRef.current.form5();
+          break;
+        case "isMediaPosting":
+          childRef.current.form6();
+          break;
+        default:
+          break;
       }
     }
   };
@@ -95,14 +98,13 @@ export default function EnrollmentAdd() {
             {" "}
             &nbsp;Lead
           </Link>
-          <span className="breadcrumb-separator"> &gt; </span>
+          <span className="breadcrumb-separator"> &gt; </span>{" "}
         </li>
         <li className="breadcrumb-item active" aria-current="page">
           Lead Add
         </li>
       </ol>
 
-      {/* Stepper */}
       <Stepper className="my-5" activeStep={activeStep} alternativeLabel>
         {filteredSteps.map((step, index) => (
           <Step key={index}>
@@ -120,15 +122,78 @@ export default function EnrollmentAdd() {
 
       <div className="container-fluid card shadow border-0 mb-4">
         <React.Fragment>
-          {filteredForms[activeStep] &&
-            React.createElement(filteredForms[activeStep], {
-              formData,
-              ref: childRef,
-              setFormData,
-              handleNext,
-              setLoadIndicators: setLoadIndicator,
-              ...(activeStep === filteredSteps.length - 1 && { navigate }),
-            })}
+          {filteredSteps[activeStep].key === "isStudentInfo" && (
+            <Form1
+              formData={formData}
+              ref={childRef}
+              setFormData={setFormData}
+              handleNext={handleNext}
+              setLoadIndicators={setLoadIndicator}
+              navigate={
+                activeStep === filteredSteps.length - 1 ? navigate : undefined
+              }
+            />
+          )}
+          {filteredSteps[activeStep].key === "isChildAbility" && (
+            <Form2
+              formData={formData}
+              ref={childRef}
+              setFormData={setFormData}
+              handleNext={handleNext}
+              setLoadIndicators={setLoadIndicator}
+              navigate={
+                activeStep === filteredSteps.length - 1 ? navigate : undefined
+              }
+            />
+          )}
+          {filteredSteps[activeStep].key === "isParentInfo" && (
+            <Form3
+              formData={formData}
+              ref={childRef}
+              setFormData={setFormData}
+              handleNext={handleNext}
+              setLoadIndicators={setLoadIndicator}
+              navigate={
+                activeStep === filteredSteps.length - 1 ? navigate : undefined
+              }
+            />
+          )}
+          {filteredSteps[activeStep].key === "isAddress" && (
+            <Form4
+              formData={formData}
+              ref={childRef}
+              setFormData={setFormData}
+              handleNext={handleNext}
+              setLoadIndicators={setLoadIndicator}
+              navigate={
+                activeStep === filteredSteps.length - 1 ? navigate : undefined
+              }
+            />
+          )}
+          {filteredSteps[activeStep].key === "isAccountInfo" && (
+            <Form5
+              formData={formData}
+              ref={childRef}
+              setFormData={setFormData}
+              handleNext={handleNext}
+              setLoadIndicators={setLoadIndicator}
+              navigate={
+                activeStep === filteredSteps.length - 1 ? navigate : undefined
+              }
+            />
+          )}
+          {filteredSteps[activeStep].key === "isMediaPosting" && (
+            <Form6
+              formData={formData}
+              ref={childRef}
+              setFormData={setFormData}
+              handleNext={handleNext}
+              setLoadIndicators={setLoadIndicator}
+              navigate={
+                activeStep === filteredSteps.length - 1 ? navigate : undefined
+              }
+            />
+          )}
 
           <div className="container-fluid p-1 d-flex align-items-center justify-content-center">
             {activeStep > 0 && (
@@ -140,9 +205,7 @@ export default function EnrollmentAdd() {
                 Back
               </button>
             )}
-
             <div style={{ flex: "1 1 auto" }}></div>
-
             <button
               type="submit"
               onClick={handleButtonClick}

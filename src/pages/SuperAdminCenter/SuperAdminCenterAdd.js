@@ -8,7 +8,7 @@ import { Modal } from "react-bootstrap";
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required("*Name is required"),
-  appType: Yup.string().required("*App Type is required"),
+  configId: Yup.string().required("*App Type is required"),
   centerName: Yup.string().required("*Company Name is required"),
   address: Yup.string().required("*Address is required"),
   mobile: Yup.string()
@@ -18,6 +18,12 @@ const validationSchema = Yup.object().shape({
     )
     .required("*Mobile Number is required"),
   email: Yup.string()
+    .matches(
+      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+      "*Enter a valid email address"
+    )
+    .required("*Email is required"),
+  senderMail: Yup.string()
     .matches(
       /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
       "*Enter a valid email address"
@@ -41,6 +47,7 @@ function SuperAdminCenterAdd({ handleCenterChanged }) {
       centerName: "",
       centerStatus: "Pending",
       email: "",
+      senderMail: "",
       mobile: "",
       address: "",
       leadManagement: false,
@@ -251,6 +258,29 @@ function SuperAdminCenterAdd({ handleCenterChanged }) {
                   )}
                 </div>
               </div>
+              <div className="col-md-6 col-12">
+                <div className="mb-3">
+                  <label for="exampleFormControlInput1" className="form-label">
+                    Sender Email<span className="text-danger">*</span>
+                  </label>
+                  <input
+                    {...formik.getFieldProps("senderMail")}
+                    type="text"
+                    className={`form-control   ${
+                      formik.touched.senderMail && formik.errors.senderMail
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                    aria-label="Username"
+                    aria-describedby="basic-addon1"
+                  />
+                  {formik.touched.senderMail && formik.errors.senderMail && (
+                    <div className="invalid-feedback">
+                      {formik.errors.senderMail}
+                    </div>
+                  )}
+                </div>
+              </div>
 
               <div className="col-md-6 col-12">
                 <div className="mb-3">
@@ -279,29 +309,29 @@ function SuperAdminCenterAdd({ handleCenterChanged }) {
                     App Type<span class="text-danger">*</span>
                   </label>
                   <select
-                    {...formik.getFieldProps("appType")}
+                    {...formik.getFieldProps("configId")}
                     className={`form-select ${
-                      formik.touched.appType && formik.errors.appType
+                      formik.touched.configId && formik.errors.configId
                         ? "is-invalid"
                         : ""
                     }`}
                   >
                     <option selected></option>
                     {appData &&
-                      appData.map((appType) => (
-                        <option key={appType.id} value={appType.id}>
-                          {appType.appName}
+                      appData.map((configId) => (
+                        <option key={configId.id} value={configId.id}>
+                          {configId.appName}
                         </option>
                       ))}
                   </select>
-                  {formik.touched.appType && formik.errors.appType && (
+                  {formik.touched.configId && formik.errors.configId && (
                     <div className="invalid-feedback">
-                      {formik.errors.appType}
+                      {formik.errors.configId}
                     </div>
                   )}
                 </div>
               </div>
-              <div className="col-md-6 col-12">
+              <div className="col-12">
                 <div className="mb-3">
                   <label for="exampleFormControlInput1" className="form-label">
                     Address<span className="text-danger">*</span>

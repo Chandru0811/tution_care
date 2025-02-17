@@ -12,7 +12,7 @@ const validationSchema = Yup.object().shape({
   subject: Yup.string().required("*subject is required"),
   level: Yup.string().required("*Level is required"),
   course: Yup.string().required("*Course is required"),
-  class: Yup.string().required("*Class is required"),
+  confClass: Yup.string().required("*Class is required"),
   lead: Yup.string().required("*Lead is required"),
   employee: Yup.string().required("Employee is required"),
   student: Yup.string().required("Student is required"),
@@ -41,7 +41,7 @@ function ConfigurationEdit() {
       subject: "",
       level: "",
       course: "",
-      class: "",
+      confClass: "",
       lead: "",
       employee: "",
       student: "",
@@ -54,18 +54,18 @@ function ConfigurationEdit() {
       report: "",
       settings: "",
       message: "",
-      studentInfo: true,
-      childAbility: false,
-      parentInfo: false,
-      address: false,
-      accountInfo: false,
-      mediaPosting: false,
-      studentDetails: true,
-      parentsGuardian: false,
-      emergencyContact: false,
-      courseDetails: true,
-      studentRelation: false,
-      termsAndCondtion: false,
+      isStudentInfo: true,
+      isChildAbility: false,
+      isParentInfo: false,
+      isAddress: false,
+      isAccountInfo: false,
+      isMediaPosting: false,
+      isStudentDetails: true,
+      isParentsGuardian: false,
+      isEmergencyContact: false,
+      isCourseDetails: true,
+      isStudentRelation: false,
+      isTermsAndCondition: false,
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
@@ -343,18 +343,18 @@ function ConfigurationEdit() {
                   </label>
                   <input
                     type="text"
-                    name="class"
+                    name="confClass"
                     className={`form-control  ${
-                      formik.touched.class && formik.errors.class
+                      formik.touched.confClass && formik.errors.confClass
                         ? "is-invalid"
                         : ""
                     }`}
                     aria-describedby="basic-addon1"
-                    {...formik.getFieldProps("class")}
+                    {...formik.getFieldProps("confClass")}
                   />
-                  {formik.touched.class && formik.errors.class && (
+                  {formik.touched.confClass && formik.errors.confClass && (
                     <div className="invalid-feedback">
-                      {formik.errors.class}
+                      {formik.errors.confClass}
                     </div>
                   )}
                 </div>
@@ -644,11 +644,11 @@ function ConfigurationEdit() {
                     <input
                       className="form-check-input me-2"
                       type="checkbox"
-                      checked={formik.values.studentInfo}
+                      checked={formik.values.isStudentInfo}
                       //   onChange={() =>
                       //     formik.setFieldValue(
-                      //       "studentInfo",
-                      //       !formik.values.studentInfo
+                      //       "isStudentInfo",
+                      //       !formik.values.isStudentInfo
                       //     )
                       //   }
                       disabled
@@ -656,10 +656,10 @@ function ConfigurationEdit() {
                     <label className="form-check-label">
                       Student Information
                     </label>
-                    {formik.touched.studentInfo &&
-                      formik.errors.studentInfo && (
+                    {formik.touched.isStudentInfo &&
+                      formik.errors.isStudentInfo && (
                         <div className="error text-danger">
-                          <small>{formik.errorsvalues.studentInfo}</small>
+                          <small>{formik.errorsvalues.isStudentInfo}</small>
                         </div>
                       )}
                   </div>
@@ -669,19 +669,19 @@ function ConfigurationEdit() {
                     <input
                       className="form-check-input me-2"
                       type="checkbox"
-                      checked={formik.values.childAbility}
+                      checked={formik.values.isChildAbility}
                       onChange={() =>
                         formik.setFieldValue(
-                          "childAbility",
-                          !formik.values.childAbility
+                          "isChildAbility",
+                          !formik.values.isChildAbility
                         )
                       }
                     />
                     <label className="form-check-label">Child Ability</label>
-                    {formik.touched.childAbility &&
-                      formik.errors.childAbility && (
+                    {formik.touched.isChildAbility &&
+                      formik.errors.isChildAbility && (
                         <div className="error text-danger">
-                          <small>{formik.errorsvalues.childAbility}</small>
+                          <small>{formik.errorsvalues.isChildAbility}</small>
                         </div>
                       )}
                   </div>
@@ -691,20 +691,20 @@ function ConfigurationEdit() {
                     <input
                       className="form-check-input me-2"
                       type="checkbox"
-                      checked={formik.values.parentInfo}
+                      checked={formik.values.isParentInfo}
                       onChange={() =>
                         formik.setFieldValue(
-                          "parentInfo",
-                          !formik.values.parentInfo
+                          "isParentInfo",
+                          !formik.values.isParentInfo
                         )
                       }
                     />
                     <label className="form-check-label">
                       Parent Information
                     </label>
-                    {formik.touched.parentInfo && formik.errors.parentInfo && (
+                    {formik.touched.isParentInfo && formik.errors.isParentInfo && (
                       <div className="error text-danger">
-                        <small>{formik.errorsvalues.parentInfo}</small>
+                        <small>{formik.errorsvalues.isParentInfo}</small>
                       </div>
                     )}
                   </div>
@@ -714,15 +714,15 @@ function ConfigurationEdit() {
                     <input
                       className="form-check-input me-2"
                       type="checkbox"
-                      checked={formik.values.address}
+                      checked={formik.values.isAddress}
                       onChange={() =>
-                        formik.setFieldValue("address", !formik.values.address)
+                        formik.setFieldValue("isAddress", !formik.values.isAddress)
                       }
                     />
-                    <label className="form-check-label">Address</label>
-                    {formik.touched.address && formik.errors.address && (
+                    <label className="form-check-label">isAddress</label>
+                    {formik.touched.isAddress && formik.errors.isAddress && (
                       <div className="error text-danger">
-                        <small>{formik.errorsvalues.address}</small>
+                        <small>{formik.errorsvalues.isAddress}</small>
                       </div>
                     )}
                   </div>
@@ -732,21 +732,21 @@ function ConfigurationEdit() {
                     <input
                       className="form-check-input me-2"
                       type="checkbox"
-                      checked={formik.values.accountInfo}
+                      checked={formik.values.isAccountInfo}
                       onChange={() =>
                         formik.setFieldValue(
-                          "accountInfo",
-                          !formik.values.accountInfo
+                          "isAccountInfo",
+                          !formik.values.isAccountInfo
                         )
                       }
                     />
                     <label className="form-check-label">
                       Account Information
                     </label>
-                    {formik.touched.accountInfo &&
-                      formik.errors.accountInfo && (
+                    {formik.touched.isAccountInfo &&
+                      formik.errors.isAccountInfo && (
                         <div className="error text-danger">
-                          <small>{formik.errorsvalues.accountInfo}</small>
+                          <small>{formik.errorsvalues.isAccountInfo}</small>
                         </div>
                       )}
                   </div>
@@ -756,21 +756,21 @@ function ConfigurationEdit() {
                     <input
                       className="form-check-input me-2"
                       type="checkbox"
-                      checked={formik.values.mediaPosting}
+                      checked={formik.values.isMediaPosting}
                       onChange={() =>
                         formik.setFieldValue(
-                          "mediaPosting",
-                          !formik.values.mediaPosting
+                          "isMediaPosting",
+                          !formik.values.isMediaPosting
                         )
                       }
                     />
                     <label className="form-check-label">
                       Permission for Media Posting
                     </label>
-                    {formik.touched.mediaPosting &&
-                      formik.errors.mediaPosting && (
+                    {formik.touched.isMediaPosting &&
+                      formik.errors.isMediaPosting && (
                         <div className="error text-danger">
-                          <small>{formik.errorsvalues.mediaPosting}</small>
+                          <small>{formik.errorsvalues.isMediaPosting}</small>
                         </div>
                       )}
                   </div>
@@ -783,20 +783,20 @@ function ConfigurationEdit() {
                     <input
                       className="form-check-input me-2"
                       type="checkbox"
-                      checked={formik.values.studentDetails}
+                      checked={formik.values.isStudentDetails}
                       //   onChange={() =>
                       //     formik.setFieldValue(
-                      //       "studentDetails",
-                      //       !formik.values.studentDetails
+                      //       "isStudentDetails",
+                      //       !formik.values.isStudentDetails
                       //     )
                       //   }
                       disabled
                     />
                     <label className="form-check-label">Student Details</label>
-                    {formik.touched.studentDetails &&
-                      formik.errors.studentDetails && (
+                    {formik.touched.isStudentDetails &&
+                      formik.errors.isStudentDetails && (
                         <div className="error text-danger">
-                          <small>{formik.errorsvalues.studentDetails}</small>
+                          <small>{formik.errorsvalues.isStudentDetails}</small>
                         </div>
                       )}
                   </div>
@@ -806,21 +806,21 @@ function ConfigurationEdit() {
                     <input
                       className="form-check-input me-2"
                       type="checkbox"
-                      checked={formik.values.parentsGuardian}
+                      checked={formik.values.isParentsGuardian}
                       onChange={() =>
                         formik.setFieldValue(
-                          "parentsGuardian",
-                          !formik.values.parentsGuardian
+                          "isParentsGuardian",
+                          !formik.values.isParentsGuardian
                         )
                       }
                     />
                     <label className="form-check-label">
                       Parents / Guardian
                     </label>
-                    {formik.touched.parentsGuardian &&
-                      formik.errors.parentsGuardian && (
+                    {formik.touched.isParentsGuardian &&
+                      formik.errors.isParentsGuardian && (
                         <div className="error text-danger">
-                          <small>{formik.errorsvalues.parentsGuardian}</small>
+                          <small>{formik.errorsvalues.isParentsGuardian}</small>
                         </div>
                       )}
                   </div>
@@ -830,21 +830,21 @@ function ConfigurationEdit() {
                     <input
                       className="form-check-input me-2"
                       type="checkbox"
-                      checked={formik.values.emergencyContact}
+                      checked={formik.values.isEmergencyContact}
                       onChange={() =>
                         formik.setFieldValue(
-                          "emergencyContact",
-                          !formik.values.emergencyContact
+                          "isEmergencyContact",
+                          !formik.values.isEmergencyContact
                         )
                       }
                     />
                     <label className="form-check-label">
                       Emergency Contact
                     </label>
-                    {formik.touched.emergencyContact &&
-                      formik.errors.emergencyContact && (
+                    {formik.touched.isEmergencyContact &&
+                      formik.errors.isEmergencyContact && (
                         <div className="error text-danger">
-                          <small>{formik.errorsvalues.emergencyContact}</small>
+                          <small>{formik.errorsvalues.isEmergencyContact}</small>
                         </div>
                       )}
                   </div>
@@ -854,14 +854,14 @@ function ConfigurationEdit() {
                     <input
                       className="form-check-input me-2"
                       type="checkbox"
-                      checked={formik.values.courseDetails}
+                      checked={formik.values.isCourseDetails}
                       disabled
                     />
                     <label className="form-check-label">Course Details</label>
-                    {formik.touched.courseDetails &&
-                      formik.errors.courseDetails && (
+                    {formik.touched.isCourseDetails &&
+                      formik.errors.isCourseDetails && (
                         <div className="error text-danger">
-                          <small>{formik.errorsvalues.courseDetails}</small>
+                          <small>{formik.errorsvalues.isCourseDetails}</small>
                         </div>
                       )}
                   </div>
@@ -871,19 +871,19 @@ function ConfigurationEdit() {
                     <input
                       className="form-check-input me-2"
                       type="checkbox"
-                      checked={formik.values.studentRelation}
+                      checked={formik.values.isStudentRelation}
                       onChange={() =>
                         formik.setFieldValue(
-                          "studentRelation",
-                          !formik.values.studentRelation
+                          "isStudentRelation",
+                          !formik.values.isStudentRelation
                         )
                       }
                     />
                     <label className="form-check-label">Student Relation</label>
-                    {formik.touched.studentRelation &&
-                      formik.errors.studentRelation && (
+                    {formik.touched.isStudentRelation &&
+                      formik.errors.isStudentRelation && (
                         <div className="error text-danger">
-                          <small>{formik.errorsvalues.studentRelation}</small>
+                          <small>{formik.errorsvalues.isStudentRelation}</small>
                         </div>
                       )}
                   </div>
@@ -893,21 +893,21 @@ function ConfigurationEdit() {
                     <input
                       className="form-check-input me-2"
                       type="checkbox"
-                      checked={formik.values.termsAndCondtion}
+                      checked={formik.values.isTermsAndCondition}
                       onChange={() =>
                         formik.setFieldValue(
-                          "termsAndCondtion",
-                          !formik.values.termsAndCondtion
+                          "isTermsAndCondition",
+                          !formik.values.isTermsAndCondition
                         )
                       }
                     />
                     <label className="form-check-label">
                       Terms and Conditions
                     </label>
-                    {formik.touched.termsAndCondtion &&
-                      formik.errors.termsAndCondtion && (
+                    {formik.touched.isTermsAndCondition &&
+                      formik.errors.isTermsAndCondition && (
                         <div className="error text-danger">
-                          <small>{formik.errorsvalues.termsAndCondtion}</small>
+                          <small>{formik.errorsvalues.isTermsAndCondition}</small>
                         </div>
                       )}
                   </div>

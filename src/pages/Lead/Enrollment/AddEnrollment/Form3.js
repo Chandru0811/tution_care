@@ -55,6 +55,8 @@ const validationSchema = Yup.object().shape({
 
 const Form3 = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext,navigate }, ref) => {
+    console.log("formData",formData)
+    console.log("handleNext",handleNext)
     const userName = localStorage.getItem("tmsuserName");
     const centerId = localStorage.getItem("tmscenterId");
     const formik = useFormik({
@@ -77,13 +79,14 @@ const Form3 = forwardRef(
       },
       validationSchema: validationSchema,
       onSubmit: async (data) => {
+        console.log(data);
         setLoadIndicators(true);
         data.createdBy = userName;
         const primarycontactFather = data.primaryContact === "father";
         const primarycontactMother = data.primaryContact === "mother";
         data.primaryContactFather = primarycontactFather ? true : false;
         data.primaryContactMother = primarycontactMother ? true : false;
-        console.log(data);
+      
         try {
           const response = await api.put(
             `/updateLeadInfo/${formData.lead_id}`,
@@ -133,13 +136,14 @@ const Form3 = forwardRef(
       }
     }, [formik.submitCount, formik.errors]);
 
-    useImperativeHandle(ref, () => ({
-      form3: formik.handleSubmit,
-    }));
+
     useEffect(() => {
       window.scrollTo({ top: 0, left: 0, behavior: "instant" });
     }, []);
 
+    useImperativeHandle(ref, () => ({
+      form3: formik.handleSubmit,
+    }));
     return (
       <form
         onSubmit={formik.handleSubmit}

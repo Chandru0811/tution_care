@@ -64,7 +64,7 @@ function EmailTemplateEdit({ id, onSuccess, handleMenuClose }) {
 
   const handleOpen = async () => {
     try {
-      const response = await api.get(`/getEmailTemplateById/${id}`);
+      const response = await api.get(`/getEmailTemplateDescriptionById/${id}`);
       formik.setValues(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -87,7 +87,7 @@ function EmailTemplateEdit({ id, onSuccess, handleMenuClose }) {
       try {
         setLoadIndicator(true)
         values.updatedBy = userName
-        const response = await api.put(`/updateEmailTemplate/${id}`, values);
+        const response = await api.put(`/updateEmailTemplateDescription/${id}`, values);
         if (response.status === 200) {
           toast.success("The email template has been successfully updated");
           onSuccess();

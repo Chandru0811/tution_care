@@ -43,7 +43,6 @@ export default function NewLogin({ onLogin }) {
           } else {
             toast.success(response.data.message);
             const userInfo = response.data.userInfo;
-
             if (Array.isArray(userInfo) && userInfo.length > 0) {
               const user = userInfo[0];
 
@@ -55,6 +54,10 @@ export default function NewLogin({ onLogin }) {
               localStorage.setItem("tmscenterId", user.centerId);
               localStorage.setItem("tmscenterName", user.centerName);
             }
+            localStorage.setItem(
+              "tmsappConfigInfo",
+              JSON.stringify(response.data.appConfigInfo)
+            );
             localStorage.setItem("tmscenterId", response.data.centerId);
             localStorage.setItem("tmsroleId", response.data.roleId);
             localStorage.setItem("tmsrole", response.data.role);
