@@ -22,7 +22,7 @@ const EmailTemplate = () => {
 
   const getData = async () => {
     try {
-      const response = await api.get(`/getEmailTemplateWithCenterId/${centerId}`);
+      const response = await api.get(`/getEmailTemplateDescriptionWithCenterId/${centerId}`);
       setDatas(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
