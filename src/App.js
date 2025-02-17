@@ -84,6 +84,7 @@ function App() {
     localStorage.removeItem("tmsteacherImage");
     localStorage.removeItem("tmsidNo");
     localStorage.removeItem("tmsroleType");
+    localStorage.removeItem("tmsappConfigInfo");
   };
 
   return (

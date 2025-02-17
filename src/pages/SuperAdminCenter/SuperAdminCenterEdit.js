@@ -22,9 +22,15 @@ const validationSchema = Yup.object().shape({
       "*Enter a valid email address"
     )
     .required("*Email is required"),
+  senderMail: Yup.string()
+    .matches(
+      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+      "*Enter a valid email address"
+    )
+    .required("*Email is required"),
 });
 
-function SuperAdminCenterEdit({ handleCenterChanged }) {
+function SuperAdminCenterEdit() {
   const { id } = useParams();
   const [data, setData] = useState([]);
   const [loadIndicator, setLoadIndicator] = useState(false);
@@ -38,7 +44,7 @@ function SuperAdminCenterEdit({ handleCenterChanged }) {
 
   const fetchAppData = async () => {
     try {
-      const response = await api.get("getAllCenter");
+      const response = await api.get("getAllConfiguration");
       setAppData(response.data);
     } catch (error) {
       toast.error(error);
@@ -50,6 +56,8 @@ function SuperAdminCenterEdit({ handleCenterChanged }) {
       name: "",
       centerName: "",
       email: "",
+      senderMail: "",
+      configId: "",
       mobile: "",
       address: "",
       updatedBy: userName,
@@ -63,19 +71,14 @@ function SuperAdminCenterEdit({ handleCenterChanged }) {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      const isAnyModuleSelected = Object.entries(values)
-        .filter(([key]) =>
-          [
-            "leadManagement",
-            "staffManagement",
-            "documentManagement",
-            "referalManagement",
-            "assessmentManagement",
-            "reportManagement",
-            "messages",
-          ].includes(key)
-        )
-        .some(([_, value]) => value === true);
+      const isAnyModuleSelected =
+        values.leadManagement ||
+        values.staffManagement ||
+        values.documentManagement ||
+        values.referalManagement ||
+        values.assessmentManagement ||
+        values.reportManagement ||
+        values.messages;
 
       if (!isAnyModuleSelected) {
         setShowModal(true);
@@ -83,15 +86,31 @@ function SuperAdminCenterEdit({ handleCenterChanged }) {
       }
       setLoadIndicator(true);
       try {
-        const response = await api.put(`/updateCenter/${id}`, values, {
+        const formData = new FormData();
+        formData.append("name", values.name);
+        formData.append("centerName", values.centerName);
+        formData.append("email", values.email);
+        formData.append("senderMail", values.senderMail);
+        formData.append("configId", values.configId);
+        formData.append("mobile", values.mobile);
+        formData.append("address", values.address);
+        formData.append("updatedBy", values.updatedBy);
+        formData.append("leadManagement", values.leadManagement);
+        formData.append("staffManagement", values.staffManagement);
+        formData.append("documentManagement", values.documentManagement);
+        formData.append("referalManagement", values.referalManagement);
+        formData.append("assessmentManagement", values.assessmentManagement);
+        formData.append("reportManagement", values.reportManagement);
+        formData.append("messages", values.messages);
+
+        const response = await api.put(`/updateCenters/${id}`, formData, {
           headers: {
-            "Content-Type": "Application/json",
+            "Content-Type": "multipart/form-data",
           },
         });
         if (response.status === 200) {
           toast.success(response.data.message);
           navigate("/companyregistration");
-          handleCenterChanged();
         } else {
           toast.error(response.data.message);
         }
@@ -143,9 +162,9 @@ function SuperAdminCenterEdit({ handleCenterChanged }) {
     getData();
   }, [id]);
 
-    useEffect(() => {
-      fetchAppData();
-    }, []);
+  useEffect(() => {
+    fetchAppData();
+  }, []);
 
   const handleAllow = () => {
     setShowModal(false);
@@ -275,27 +294,7 @@ function SuperAdminCenterEdit({ handleCenterChanged }) {
                   )}
                 </div>
               </div>
-              <div className="col-md-6 col-12">
-                <div className="mb-3">
-                  <label for="exampleFormControlInput1" className="form-label">
-                    Mobile<span className="text-danger">*</span>
-                  </label>
-                  <input
-                    {...formik.getFieldProps("mobile")}
-                    type="text"
-                    className={`form-control   ${
-                      formik.touched.mobile && formik.errors.mobile
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                  />
-                  {formik.touched.mobile && formik.errors.mobile && (
-                    <div className="invalid-feedback">
-                      {formik.errors.mobile}
-                    </div>
-                  )}
-                </div>
-              </div>
+
               <div className="col-md-6 col-12">
                 <div className="mb-3">
                   <label for="exampleFormControlInput1" className="form-label">
@@ -321,33 +320,77 @@ function SuperAdminCenterEdit({ handleCenterChanged }) {
               </div>
               <div className="col-md-6 col-12">
                 <div className="mb-3">
+                  <label for="exampleFormControlInput1" className="form-label">
+                    Sender Email<span className="text-danger">*</span>
+                  </label>
+                  <input
+                    {...formik.getFieldProps("senderMail")}
+                    type="text"
+                    className={`form-control   ${
+                      formik.touched.senderMail && formik.errors.senderMail
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                    aria-label="Username"
+                    aria-describedby="basic-addon1"
+                  />
+                  {formik.touched.senderMail && formik.errors.senderMail && (
+                    <div className="invalid-feedback">
+                      {formik.errors.senderMail}
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className="col-md-6 col-12">
+                <div className="mb-3">
+                  <label for="exampleFormControlInput1" className="form-label">
+                    Mobile<span className="text-danger">*</span>
+                  </label>
+                  <input
+                    {...formik.getFieldProps("mobile")}
+                    type="text"
+                    className={`form-control   ${
+                      formik.touched.mobile && formik.errors.mobile
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                  />
+                  {formik.touched.mobile && formik.errors.mobile && (
+                    <div className="invalid-feedback">
+                      {formik.errors.mobile}
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className="col-md-6 col-12">
+                <div className="mb-3">
                   <label className="form-label">
                     App Type<span class="text-danger">*</span>
                   </label>
                   <select
-                    {...formik.getFieldProps("appType")}
+                    {...formik.getFieldProps("configId")}
                     className={`form-select ${
-                      formik.touched.appType && formik.errors.appType
+                      formik.touched.configId && formik.errors.configId
                         ? "is-invalid"
                         : ""
                     }`}
                   >
                     <option selected></option>
                     {appData &&
-                      appData.map((appType) => (
-                        <option key={appType.id} value={appType.id}>
-                          {appType.centerName}
+                      appData.map((configId) => (
+                        <option key={configId.id} value={configId.id}>
+                          {configId.appName}
                         </option>
                       ))}
                   </select>
-                  {formik.touched.appType && formik.errors.appType && (
+                  {formik.touched.configId && formik.errors.configId && (
                     <div className="invalid-feedback">
-                      {formik.errors.appType}
+                      {formik.errors.configId}
                     </div>
                   )}
                 </div>
               </div>
-              <div className="col-md-6 col-12">
+              <div className="col-12">
                 <div className="mb-3">
                   <label for="exampleFormControlInput1" className="form-label">
                     Address<span className="text-danger">*</span>

@@ -7,7 +7,7 @@ import React, {
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
-import fetchAllCentersWithIds from "../../../List/CenterList";
+// import fetchAllCentersWithIds from "../../../List/CenterList";
 import api from "../../../../config/URL";
 import fetchAllStudentListByCenter from "../../../List/StudentListByCenter";
 
@@ -28,7 +28,7 @@ const validationSchema = Yup.object().shape({
 
 const Form5 = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext,navigate }, ref) => {
-    const [centerData, setCenterData] = useState(null);
+    // const [centerData, setCenterData] = useState(null);
     const [studentData, setStudentData] = useState(null);
     const userName = localStorage.getItem("tmsuserName");
     console.log("navigate", navigate);
@@ -48,7 +48,7 @@ const Form5 = forwardRef(
       // validationSchema: validationSchema,
       onSubmit: async (data) => {
         setLoadIndicators(true);
-        data.creadedBy = userName;
+        // data.creadedBy = userName;
         console.log("Data is ", data);
         try {
           const response = await api.put(
@@ -100,20 +100,20 @@ const Form5 = forwardRef(
     }, [formik.submitCount, formik.errors]);
 
     useImperativeHandle(ref, () => ({
-      form4: formik.handleSubmit,
+      form5: formik.handleSubmit,
     }));
     useEffect(() => {
       window.scrollTo({ top: 0, left: 0, behavior: "instant" });
     }, []);
 
-    const fetchData = async () => {
-      try {
-        const centerData = await fetchAllCentersWithIds();
-        setCenterData(centerData);
-      } catch (error) {
-        toast.error(error);
-      }
-    };
+    // const fetchData = async () => {
+    //   try {
+    //     const centerData = await fetchAllCentersWithIds();
+    //     setCenterData(centerData);
+    //   } catch (error) {
+    //     toast.error(error);
+    //   }
+    // };
 
     const fetchStudent = async (centerId) => {
       try {
@@ -131,7 +131,6 @@ const Form5 = forwardRef(
     }, [formik.values.referedStudentCenterNameId]);
 
     useEffect(() => {
-      fetchData();
       window.scrollTo({ top: 0, left: 0, behavior: "instant" });
     }, []);
 
@@ -154,7 +153,7 @@ const Form5 = forwardRef(
               <div className="py-3">
                 <p className="headColor">Account Information</p>
               </div>
-
+{/* 
               <div className="col-md-6 col-12 mb-3">
                 <label>Refer Student Center</label>
                 <div className="input-group ">
@@ -183,7 +182,7 @@ const Form5 = forwardRef(
                       <small>{formik.errors.referedStudentCenterNameId}</small>
                     </div>
                   )}
-              </div>
+              </div> */}
               <div className="col-md-6 col-12 mb-3">
                 <label>Refer By(Child’s Name)</label>
                 <div className="input-group ">
