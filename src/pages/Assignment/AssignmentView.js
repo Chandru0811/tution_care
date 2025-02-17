@@ -137,11 +137,9 @@ function AssignmentView() {
     },
   });
 
-  
   useEffect(() => {
     getData();
   }, [getData]);
-  
 
   return (
     <div className="container-fluid ">
@@ -300,7 +298,7 @@ function AssignmentView() {
               <div className="col-md-6 col-12">
                 <div className="row mb-2">
                   <div className="col-6">
-                    <p className="fw-medium">Expired Date</p>
+                    <p className="fw-medium">Expiry Date</p>
                   </div>
                   <div className="col-6 text-start">
                     <p className="text-muted text-sm">

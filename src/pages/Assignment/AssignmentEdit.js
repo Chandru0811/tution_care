@@ -685,7 +685,7 @@ function AssignmentEdit() {
               </div>
 
               <div className="col-md-6 col-12 mb-4">
-                <label className="form-label">Expired Date</label>
+                <label className="form-label">Expiry Date</label>
                 <input
                   name="expiredDate"
                   type="date"

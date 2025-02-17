@@ -684,7 +684,7 @@ function AssignmentAdd() {
               </div>
 
               <div className="col-md-6 col-12 mb-4">
-                <label className="form-label">Expired Date</label>
+                <label className="form-label">Expiry Date</label>
                 <input
                   name="expiredDate"
                   type="date"
@@ -800,11 +800,10 @@ function AssignmentAdd() {
                           className="list-group-item d-flex justify-content-between align-items-center"
                         >
                           <span>{file.name}</span>
-                            <MdOutlineCancel 
+                          <MdOutlineCancel
                             onClick={() => handleFileRemove(index)}
                             className="text-danger"
-                            
-                            />
+                          />
                         </li>
                       ))}
                     </ul>

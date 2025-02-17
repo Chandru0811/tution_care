@@ -50,7 +50,7 @@ const validationSchema = Yup.object().shape({
     .max(200, "*The maximum length is 200 characters")
     .notRequired(),
   // nationality: Yup.string().required("*Select a Nationality!"),
-  primaryLanguage: Yup.string().required("*Primary Language is required"),
+  languageId: Yup.string().required("*Primary Language is required"),
   // race: Yup.string().required("*Select a Race"),
 });
 
@@ -126,7 +126,7 @@ const AddStudentDetails = forwardRef(
         preAssessmentResult: "No Assessment Performed" || "",
         race: formData.race || "",
         nationality: formData.nationality || "",
-        primaryLanguage: formData.primaryLanguage || "",
+        languageId: formData.languageId || "",
         referByParent: formData.referByParent || "",
         referByStudent: formData.referByStudent || "",
         remark: formData.remark || "",
@@ -162,7 +162,7 @@ const AddStudentDetails = forwardRef(
           formDatas.append("allowSocialMedia", values.allowSocialMedia);
           formDatas.append("centerId", centerId);
           formDatas.append("center", center);
-          formDatas.append("primaryLanguage", values.primaryLanguage);
+          formDatas.append("languageId", values.languageId);
           formDatas.append("groupName", values.groupName);
           formDatas.append("file", values.file);
           formDatas.append("createdBy", userName);
@@ -198,7 +198,11 @@ const AddStudentDetails = forwardRef(
             toast.error(response.data.message);
           }
         } catch (error) {
-          toast.error(error);
+          if (error?.response?.status === 409) {
+            toast.warning(error?.response?.data?.message);
+          } else {
+            toast.error(error?.response?.data?.message);
+          }
         } finally {
           setLoadIndicators(false);
         }
@@ -252,7 +256,7 @@ const AddStudentDetails = forwardRef(
                 leadData.gradeCategory || "No Assessment Performed",
               race: leadData.ethnicGroup || "",
               nationality: leadData.nationality || "",
-              primaryLanguage: leadData.primaryLanguage || "",
+              languageId: leadData.languageId || "",
               referByParent: leadData.referByParentName || "",
               referByStudent: leadData.referByStudentName || "",
               remark: leadData.remark || "",
@@ -671,27 +675,24 @@ const AddStudentDetails = forwardRef(
                       </label>
                       <br />
                       <select
-                        name="primaryLanguage"
+                        name="languageId"
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
-                        value={formik.values.primaryLanguage}
+                        value={formik.values.languageId}
                         className="form-select"
                       >
                         <option selected></option>
                         {languageData &&
                           languageData.map((languageId) => (
-                            <option
-                              key={languageId.id}
-                              value={languageId.language}
-                            >
+                            <option key={languageId.id} value={languageId.id}>
                               {languageId.languageName}
                             </option>
                           ))}
                       </select>
-                      {formik.touched.primaryLanguage &&
-                        formik.errors.primaryLanguage && (
+                      {formik.touched.languageId &&
+                        formik.errors.languageId && (
                           <div className="error text-danger ">
-                            <small>{formik.errors.primaryLanguage}</small>
+                            <small>{formik.errors.languageId}</small>
                           </div>
                         )}
                     </div>
