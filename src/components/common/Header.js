@@ -47,7 +47,7 @@ function Header({ onLogout }) {
         <div className="d-flex align-items-center justify-content-evenly">
           <div className="position-relative me-3">
             <img
-              src={Logo}
+              src={data.logo}
               alt="logo"
               width={50}
               height={50}
@@ -70,13 +70,23 @@ function Header({ onLogout }) {
             </button>
           </Link>
           <button
-            className="btn border border-1 rounded-circle"
+            className="btn border border-1 rounded-circle p-0"
             type="button"
             data-bs-toggle="offcanvas"
             data-bs-target="#offcanvasRight"
             aria-controls="offcanvasRight"
+            style={{ width: "40px", height: "40px" }}
           >
-            <i className="fa fa-user" style={{ color: "#eb862a" }}></i>
+            <img
+              src={data.profile}
+              className="img-fluid rounded-circle"
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+              }}
+              alt="Profile"
+            />
           </button>
         </div>
       </div>
@@ -102,18 +112,31 @@ function Header({ onLogout }) {
                 {data.centerName || "ECS School"}
               </h3>
             </div>
-            <div className="text-center mt-3">
-              <i
-                className="fa-duotone fa-solid fa-user"
+            <div
+              className="text-center mt-3 mx-auto"
+              style={{
+                width: "5rem", // Matches the icon size
+                height: "5rem",
+                borderRadius: "50%", // Ensures a circular shape
+                background: "#fce6cf", // Matches the icon's background
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                cursor: "pointer",
+                overflow: "hidden", // Ensures image stays within the circle
+              }}
+            >
+              <img
+                src={data.profile}
+                alt="Profile"
+                className="img-fluid"
                 style={{
-                  color: "#e99e5e",
-                  background: "#fce6cf",
-                  borderRadius: "100%",
-                  padding: "20px",
-                  cursor: "pointer",
-                  fontSize: "4rem",
+                  width: "100%", // Ensures it fills the container
+                  height: "100%",
+                  borderRadius: "50%", // Makes the image itself circular
+                  objectFit: "cover", // Ensures the image doesn’t stretch
                 }}
-              ></i>
+              />
             </div>
 
             <div className="list-group list-group-flush pt-4 text-center">
