@@ -11,6 +11,8 @@ import {
 } from "@mui/material";
 import { MaterialReactTable } from "material-react-table";
 import GlobalDelete from "../../../components/common/GlobalDelete";
+import CountryAdd from "./CountryAdd";
+import CountryEdit from "./CountryEdit";
 
 const Country = () => {
   const [datas, setDatas] = useState([]);
@@ -182,11 +184,11 @@ const Country = () => {
             </span>
           </div>
         </div>
-        {/* <div className="d-flex justify-content-end align-items-center">
+        <div className="d-flex justify-content-end align-items-center">
           <span>
             <CountryAdd onSuccess={getData} />
           </span>
-        </div> */}
+        </div>
         {loading ? (
           <div className="loader-container">
             <div className="loading">
@@ -228,9 +230,9 @@ const Country = () => {
             open={Boolean(menuAnchor)}
             onClose={handleMenuClose}
           >
-            {/* <MenuItem>
+            <MenuItem>
               <CountryEdit onSuccess={getData} id={selectedId} handleMenuClose={handleMenuClose}/>
-            </MenuItem> */}
+            </MenuItem>
             <MenuItem>
               <GlobalDelete
                 path={`/deleteCountrySetting/${selectedId}`}

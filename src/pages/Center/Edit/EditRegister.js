@@ -12,10 +12,11 @@ function EditRegisteration({ id, onSuccess }) {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [taxData, setTaxData] = useState([]);
   const [isModified, setIsModified] = useState(false);
+  const centerId = localStorage.getItem("tmscenterId");
 
   const fetchData = async () => {
     try {
-      const taxResponse = await api.get("getAllTaxSetting");
+      const taxResponse = await api.get(`/getAllTaxSettingByCenter/${centerId}`);
       setTaxData(taxResponse.data);
 
       const response = await api.get(`/getAllCenterRegistrationsById/${id}`);
@@ -44,7 +45,7 @@ function EditRegisteration({ id, onSuccess }) {
     setIsModified(false);
     fetchData();
     try {
-      const response = await api.get("getAllTaxSetting");
+      const response = await api.get(`/getAllTaxSettingByCenter/${centerId}`);
       setTaxData(response.data);
     } catch (error) {
       toast.error("Error fetching tax data:", error);

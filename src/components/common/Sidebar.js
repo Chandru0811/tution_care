@@ -179,7 +179,7 @@ function Sidebar() {
                 {
                   title: "Check Attendance",
                   path: "/staffing/check",
-                  access: storedScreens.staffAttendanceCreate,
+                  access: storedScreens.checkAttendanceIndex,
                 },
                 {
                   title: "Leave",

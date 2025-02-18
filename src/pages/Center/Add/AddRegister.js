@@ -12,6 +12,7 @@ function AddRegister({ id, onSuccess, handleMenuClose }) {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [taxData, setTaxData] = useState([]);
   const [isModified, setIsModified] = useState(false);
+  const centerId = localStorage.getItem("tmscenterId");
 
   const handleClose = () => {
     handleMenuClose()
@@ -21,7 +22,7 @@ function AddRegister({ id, onSuccess, handleMenuClose }) {
 
   const fetchTaxData = async () => {
     try {
-      const response = await api.get("getAllTaxSetting");
+      const response = await api.get(`/getAllTaxSettingByCenter/${centerId}`);
       setTaxData(response.data);
     } catch (error) {
       toast.error("Error fetching tax data:", error);
