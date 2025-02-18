@@ -47,7 +47,7 @@ function Header({ onLogout }) {
         <div className="d-flex align-items-center justify-content-evenly">
           <div className="position-relative me-3">
             <img
-              src={data.logo}
+              src={data.logo || Logo}
               alt="logo"
               width={50}
               height={50}
@@ -77,16 +77,23 @@ function Header({ onLogout }) {
             aria-controls="offcanvasRight"
             style={{ width: "40px", height: "40px" }}
           >
-            <img
-              src={data.profile}
-              className="img-fluid rounded-circle"
-              style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "cover",
-              }}
-              alt="Profile"
-            />
+            {data.profile ? (
+              <img
+                src={data.profile}
+                className="img-fluid rounded-circle"
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                }}
+                alt="Profile"
+              />
+            ) : (
+              <i
+                className="fa fa-user"
+                style={{ color: "#eb862a", fontSize: "2rem" }}
+              ></i>
+            )}
           </button>
         </div>
       </div>
@@ -115,28 +122,42 @@ function Header({ onLogout }) {
             <div
               className="text-center mt-3 mx-auto"
               style={{
-                width: "5rem", // Matches the icon size
+                width: "5rem",
                 height: "5rem",
-                borderRadius: "50%", // Ensures a circular shape
-                background: "#fce6cf", // Matches the icon's background
+                borderRadius: "50%",
+                background: "#fce6cf",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 cursor: "pointer",
-                overflow: "hidden", // Ensures image stays within the circle
+                overflow: "hidden",
               }}
             >
-              <img
-                src={data.profile}
-                alt="Profile"
-                className="img-fluid"
-                style={{
-                  width: "100%", // Ensures it fills the container
-                  height: "100%",
-                  borderRadius: "50%", // Makes the image itself circular
-                  objectFit: "cover", // Ensures the image doesn’t stretch
-                }}
-              />
+              {data.profile ? (
+                <img
+                  src={data.profile}
+                  alt="Profile"
+                  className="img-fluid"
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    borderRadius: "50%",
+                    objectFit: "cover",
+                  }}
+                />
+              ) : (
+                <i
+                  className="fa-duotone fa-solid fa-user"
+                  style={{
+                    color: "#e99e5e",
+                    background: "#fce6cf",
+                    borderRadius: "100%",
+                    padding: "20px",
+                    cursor: "pointer",
+                    fontSize: "4rem",
+                  }}
+                ></i>
+              )}
             </div>
 
             <div className="list-group list-group-flush pt-4 text-center">
