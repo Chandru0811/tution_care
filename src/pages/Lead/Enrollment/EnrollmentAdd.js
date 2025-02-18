@@ -32,8 +32,10 @@ export default function EnrollmentAdd() {
       component: Form6,
     },
   ];
-
-  let filteredSteps = allSteps.filter((step) => ConfigurationData[step.key]);
+  let filteredSteps = allSteps;
+  if (ConfigurationData) {
+    filteredSteps = allSteps.filter((step) => ConfigurationData[step.key]);
+  }
 
   const childRef = React.useRef();
 

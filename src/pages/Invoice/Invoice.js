@@ -66,64 +66,83 @@ const Invoice = () => {
       },
       {
         accessorKey: "invoiceStatus",
-        enableHiding: false,
         header: "Status",
+        enableHiding: false,
+        size: 50,
         Cell: ({ row }) => {
-          const statusOptions = [
-            { label: "Paid", value: "PAID", bgColor: "#28a745" },
-            { label: "Pending", value: "PENDING", bgColor: "#ffc107" },
-            { label: "Cancelled", value: "CANCELLED", bgColor: "#dc3545" },
-          ];
-      
-          const selectedStatus = row.original.invoiceStatus || "PENDING";
-      
-          const handleStatusChange = async (event) => {
-            const newStatus = event.target.value;
-      
-            try {
-              const response = await api.put(`/updateInvoiceStatus/${row.original.id}`, {
-                invoiceStatus: newStatus,
-              });
-      
-              if (response.status === 200) {
-                toast.success("Status updated successfully");
-                getInvoiceData(); // Refresh table data
-              }
-            } catch (error) {
-              toast.error("Failed to update status");
-            }
-          };
-      
-          const selectedOption = statusOptions.find((opt) => opt.value === selectedStatus);
-      
-          return (
-            <select
-              className="form-control w-50 badge"
-              value={selectedStatus}
-              onChange={handleStatusChange}
-              onClick={(e) => e.stopPropagation()}
-              style={{
-                height: "20px",
-                textAlign: "center",
-                borderRadius: "5px",
-                backgroundColor: selectedOption?.bgColor,
-                cursor: "pointer",
-              }}
-            >
-              {statusOptions
-                .map((status) => (
-                  <option
-                    key={status.value}
-                    value={status.value}
-                    style={{ backgroundColor: "white", color: "black", fontSize: "10px" }}
-                  >
-                    {status.label}
-                  </option>
-                ))}
-            </select>
-          );
+          const status = row.original.invoiceStatus;
+
+          if (status === "PAID") {
+            return <span className="badge bg-success fw-light">Paid</span>;
+          } else if (status === "CANCELLED") {
+            return <span className="badge bg-danger fw-light">Cancelled</span>;
+          } else {
+            return <span className="badge bg-warning fw-light">Pending</span>;
+          }
         },
-      },      
+      },
+
+      // {
+      //   accessorKey: "invoiceStatus",
+      //   enableHiding: false,
+      //   header: "Status",
+      // Cell: ({ row }) => {
+      //   const statusOptions = [
+      //     { label: "Paid", value: "PAID", bgColor: "#28a745" },
+      //     { label: "Pending", value: "PENDING", bgColor: "#ffc107" },
+      //     { label: "Cancelled", value: "CANCELLED", bgColor: "#dc3545" },
+      //   ];
+
+      //   const selectedStatus = row.original.invoiceStatus || "PENDING";
+
+      //   const handleStatusChange = async (event) => {
+      //     const newStatus = event.target.value;
+
+      //     try {
+      //       const response = await api.put(`/updateInvoiceStatus/${row.original.id}`, {
+      //         invoiceStatus: newStatus,
+      //       });
+
+      //       if (response.status === 200) {
+      //         toast.success("Status updated successfully");
+      //         getInvoiceData(); // Refresh table data
+      //       }
+      //     } catch (error) {
+      //       toast.error("Failed to update status");
+      //     }
+      //   };
+
+      //   const selectedOption = statusOptions.find((opt) => opt.value === selectedStatus);
+
+      //   return (
+      //     <select
+      //       className="form-control w-50 badge"
+      //       value={selectedStatus}
+      //       onChange={handleStatusChange}
+      //       onClick={(e) => e.stopPropagation()}
+      //       style={{
+      //         height: "20px",
+      //         textAlign: "center",
+      //         borderRadius: "5px",
+      //         backgroundColor: selectedOption?.bgColor,
+      //         cursor: "pointer",
+      //       }}
+      //     >
+      //       {statusOptions
+      //         .map((status) => (
+      //           <option
+      //             key={status.value}
+      //             value={status.value}
+      //             style={{ backgroundColor: "white", color: "black", fontSize: "10px" }}
+      //           >
+      //             {status.label}
+      //           </option>
+      //         ))}
+      //     </select>
+      //   );
+      // },
+      // },
+
       {
         accessorKey: "invoiceNumber",
         header: "Invoice Number",
@@ -131,18 +150,18 @@ const Invoice = () => {
         size: 50,
       },
       {
-        accessorKey: "course",
+        accessorKey: "courseName",
         enableHiding: false,
         header: "Course",
       },
       {
-        accessorKey: "studentUniqId",
+        accessorKey: "studentUniqueId",
         enableHiding: false,
         header: "Student ID",
       },
-      { accessorKey: "student", header: "Student" },
+      { accessorKey: "studentName", header: "Student" },
       { accessorKey: "parent", enableHiding: false, header: "Parent Name" },
-      { accessorKey: "package", header: "Package" },
+      { accessorKey: "packageName", header: "Package" },
 
       {
         accessorKey: "invoiceDate",
@@ -224,24 +243,15 @@ const Invoice = () => {
       setLoading(true);
       // Dynamically construct query parameters based on filters
       const queryParams = new URLSearchParams();
-      if (!isClearFilterClicked) {
-        if (filters.centerId) {
-          queryParams.append("centerId", filters.centerId);
-        } else if (centerId && centerId !== "undefined") {
-          queryParams.append("centerId", centerId);
-        }
-      }
-
-      // Loop through other filters and add key-value pairs if they have a value
       for (let key in filters) {
-        if (filters[key] && key !== "centerId") {
+        if (filters[key]) {
           queryParams.append(key, filters[key]);
         }
       }
 
       const response = await api.get(
-        // `/getInvoiceWithCustomInfo?${queryParams.toString()}`
-        `/getGenerateInvoiceByCenterId/${centerId}`
+        `/getInvoiceWithCustomInfo?${queryParams.toString()}`
+        // `/getGenerateInvoiceByCenterId/${centerId}`
       );
       setData(response.data);
     } catch (error) {

@@ -236,24 +236,24 @@ function InvoiceView() {
     generatePDF(qrCodeUrl);
   };
 
-  // const VoidInvoice = async () => {
-  //   try {
-  //     const response = await api.put(`/convertToVoidInvoiceByInvoiceId/${id}`, {
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //     });
-  //     // toast.success(response.data.message);
-  //     if (response.status === 200) {
-  //       toast.success(response.data.message);
-  //       navigate("/invoice");
-  //     } else {
-  //       toast.error(response.data.message);
-  //     }
-  //   } catch (error) {
-  //     toast.error(error.message || "Can't be Cancelled");
-  //   }
-  // };
+  const VoidInvoice = async () => {
+    try {
+      const response = await api.put(`/convertToVoidInvoiceByInvoiceId/${id}`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      // toast.success(response.data.message);
+      if (response.status === 200) {
+        toast.success(response.data.message);
+        navigate("/invoice");
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      toast.error(error.message || "Can't be Cancelled");
+    }
+  };
 
   // Utility function to load image
   
@@ -341,7 +341,7 @@ function InvoiceView() {
             </Link> */}
           </div>
           <div className="col-6 d-flex justify-content-end my-2">
-            {/* {data.invoiceStatus !== "PAID" && (
+            {data.invoiceStatus !== "PAID" && (
               <button
                 type="button"
                 className="btn btn-border btn-sm me-1"
@@ -349,7 +349,7 @@ function InvoiceView() {
               >
                 Void Invoice
               </button>
-            )} */}
+            )}
 
             <SendAndPublish
               data={data}

@@ -24,6 +24,7 @@ function RolesAdd() {
         setRoleName(response.data);
         setSelectedRole(response.data[0].name); // Set first role as default
         setSelectedRoleId(response.data[0].id); // Set first role ID as default
+        // formik.setValues(response.data)
       }
     } catch (error) {
       toast.error(error.message);
@@ -38,11 +39,13 @@ function RolesAdd() {
     const selectedRoleObj = roleName.find(
       (role) => role.id.toString() === selectedId
     );
+    console.log("selectedRoleObj",selectedRoleObj)
 
     if (selectedRoleObj) {
       setSelectedRole(selectedRoleObj.name); // Set role name (e.g., TUITION_ADMIN)
       setSelectedRoleId(selectedRoleObj.id); // Set role ID
     }
+  formik.setValues(selectedRoleObj)
   };
   const formik = useFormik({
     initialValues: {
