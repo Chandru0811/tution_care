@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 
 const validationSchema = Yup.object().shape({
   appName: Yup.string().required("*App Name is required"),
-  appDescription: Yup.string().required("*App Description is required"),
+  // appDescription: Yup.string().required("*App Description is required"),
   centreName: Yup.string().required("*Centre Name is required"),
   subject: Yup.string().required("*subject is required"),
   level: Yup.string().required("*Level is required"),
@@ -212,7 +212,7 @@ function ConfigurationEdit() {
               <div className="col-md-6 col-12">
                 <div className="mb-5">
                   <label for="exampleFormControlInput1" className="form-label">
-                    App Description<span className="text-danger">*</span>
+                    App Description
                   </label>
                   <textarea
                     className={`form-control  ${
