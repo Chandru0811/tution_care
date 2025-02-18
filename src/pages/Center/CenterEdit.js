@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/img-redundant-alt */
 import React, { useEffect, useState } from "react";
 import * as Yup from "yup";
 import { useFormik } from "formik";
@@ -15,6 +16,8 @@ import AddClass from "./Add/AddClass";
 import AddPackage from "./Add/AddPackage";
 import { Menu, MenuItem } from "@mui/material";
 import User from "../../assets/clientimage/User.jpg";
+import { MdOutlineDownloadForOffline } from "react-icons/md";
+import pdfLogo from "../../assets/images/Attactmentpdf.jpg";
 
 const validationSchema = Yup.object().shape({
   centerName: Yup.string().required("*Centre Name is required"),
@@ -63,10 +66,6 @@ function CenterEdit({ handleCenterChanged }) {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const navigate = useNavigate();
   const [taxTypeData, setTaxTypeData] = useState(null);
-
-  const [imagePreviewUrl, setImagePreviewUrl] = useState(null);
-  const [imagePreviewUrl1, setImagePreviewUrl1] = useState(null);
-  const [imagePreviewUrl2, setImagePreviewUrl2] = useState(null);
 
   const userName = localStorage.getItem("tmsuserName");
   const centerId = localStorage.getItem("tmscenterId");
@@ -170,7 +169,7 @@ function CenterEdit({ handleCenterChanged }) {
 
   const fetchTaxData = async () => {
     try {
-      const response = await api.get("getAllTaxSetting");
+      const response = await api.get(`/getAllTaxSettingByCenter/${centerId}`)
       setTaxTypeData(response.data);
     } catch (error) {
       toast.error("Error fetching tax data:", error);
@@ -249,7 +248,7 @@ function CenterEdit({ handleCenterChanged }) {
               <div class="d-flex">
                 <div class="dot active"></div>
               </div>
-              <span class="me-2 text-muted">Edit Centre</span>
+              <span class="me-2 text-muted">Edit Company</span>
             </div>
             <div className="my-2 pe-3 d-flex align-items-center">
               <Link to="/companyRegister">
@@ -319,37 +318,7 @@ function CenterEdit({ handleCenterChanged }) {
                   )}
                 </div>
               </div>
-              <div className="col-md-6 col-12">
-                <div className="mb-3">
-                  <label for="exampleFormControlInput1" className="form-label">
-                    Address<span className="text-danger">*</span>
-                  </label>
-                  <textarea
-                    className={`form-control ${
-                      formik.touched.address && formik.errors.address
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    {...formik.getFieldProps("address")}
-                    id="exampleFormControlTextarea1"
-                    rows="3"
-                    onBlur={formik.handleBlur}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") {
-                        // Allow the default behavior for Enter key
-                        console.log(
-                          "Enter key pressed: moving to the next line"
-                        );
-                      }
-                    }}
-                  ></textarea>
-                  {formik.touched.address && formik.errors.address && (
-                    <div className="invalid-feedback">
-                      {formik.errors.address}
-                    </div>
-                  )}
-                </div>
-              </div>
+
               <div className="col-md-6 col-12">
                 <div className="mb-3">
                   <label htmlFor="zipCode" className="form-label">
@@ -664,33 +633,69 @@ function CenterEdit({ handleCenterChanged }) {
                     accept=".png"
                     name="file"
                     className="form-control"
-                    onChange={(event) => {
-                      const file = event.target.files[0];
-                      formik.setFieldValue("file", file);
-                      if (file) {
-                        const previewUrl = URL.createObjectURL(file);
-                        setImagePreviewUrl(previewUrl);
-                      } else {
-                        setImagePreviewUrl(null);
-                      }
-                    }}
+                    // onChange={(event) => {
+                    //   const file = event.target.files[0];
+                    //   formik.setFieldValue("file", file);
+                    //   if (file) {
+                    //     const previewUrl = URL.createObjectURL(file);
+                    //     setImagePreviewUrl(previewUrl);
+                    //   } else {
+                    //     setImagePreviewUrl(null);
+                    //   }
+                    // }}
                     onBlur={formik.handleBlur}
                   />
+                  {data?.qrCode && (
+                    <div class="card border-0 shadow" style={{ width: "100%" }}>
+                      <div
+                        onClick={(e) => e.stopPropagation()}
+                        style={{ cursor: "not-allowed" }}
+                      >
+                        <img
+                          class="card-img-top img-fluid"
+                          style={{
+                            height: "10rem",
+                            pointerEvents: "none",
+                            cursor: "not-allowed",
+                          }}
+                          src={pdfLogo}
+                          alt="Resume preview"
+                        />
+                      </div>
+                      <div
+                        class="card-body d-flex justify-content-between align-items-center"
+                        style={{ flexWrap: "wrap" }}
+                      >
+                        <p
+                          class="card-title fw-semibold mb-0 text-wrap"
+                          style={{
+                            flex: 1,
+                            whiteSpace: "nowrap",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                          }}
+                          title={data?.qrCode?.split("/").pop()}
+                        >
+                          {data?.qrCode?.split("/").pop()}
+                        </p>
+                        <a
+                          href={data?.qrCode}
+                          download
+                          class="btn text-dark ms-2"
+                          title="Download Resume"
+                          style={{ flexShrink: 0 }}
+                        >
+                          <MdOutlineDownloadForOffline size={25} />
+                        </a>
+                      </div>
+                    </div>
+                  )}
                   {formik.touched.file && formik.errors.file && (
                     <div className="error text-danger">
                       <small>{formik.errors.file}</small>
                     </div>
                   )}
                 </div>
-                {imagePreviewUrl && (
-                  <div className="mt-3">
-                    <img
-                      src={imagePreviewUrl || User}
-                      alt="Qr Code"
-                      className="w-25"
-                    />
-                  </div>
-                )}
                 {/* <img
                   src={data.qrCode}
                   className="img-fluid ms-2 w-50 rounded mt-2"
@@ -709,33 +714,59 @@ function CenterEdit({ handleCenterChanged }) {
                     accept=".png*"
                     name="logo"
                     className="form-control"
-                    onChange={(event) => {
-                      const logo = event.target.files[0];
-                      formik.setFieldValue("logo", logo);
-                      if (logo) {
-                        const previewUrl1 = URL.createObjectURL(logo);
-                        setImagePreviewUrl1(previewUrl1);
-                      } else {
-                        setImagePreviewUrl1(null);
-                      }
-                    }}
                     onBlur={formik.handleBlur}
                   />
+                  {data?.logo && (
+                    <div class="card border-0 shadow" style={{ width: "100%" }}>
+                      <div
+                        onClick={(e) => e.stopPropagation()}
+                        style={{ cursor: "not-allowed" }}
+                      >
+                        <img
+                          class="card-img-top img-fluid"
+                          style={{
+                            height: "10rem",
+                            pointerEvents: "none",
+                            cursor: "not-allowed",
+                          }}
+                          src={pdfLogo}
+                          alt="Resume preview"
+                        />
+                      </div>
+                      <div
+                        class="card-body d-flex justify-content-between align-items-center"
+                        style={{ flexWrap: "wrap" }}
+                      >
+                        <p
+                          class="card-title fw-semibold mb-0 text-wrap"
+                          style={{
+                            flex: 1,
+                            whiteSpace: "nowrap",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                          }}
+                          title={data?.logo?.split("/").pop()}
+                        >
+                          {data?.logo?.split("/").pop()}
+                        </p>
+                        <a
+                          href={data?.logo}
+                          download
+                          class="btn text-dark ms-2"
+                          title="Download Resume"
+                          style={{ flexShrink: 0 }}
+                        >
+                          <MdOutlineDownloadForOffline size={25} />
+                        </a>
+                      </div>
+                    </div>
+                  )}
                   {formik.touched.logo && formik.errors.logo && (
                     <div className="error text-danger">
                       <small>{formik.errors.logo}</small>
                     </div>
                   )}
                 </div>
-                {imagePreviewUrl1 && (
-                  <div className="mt-3">
-                    <img
-                      src={imagePreviewUrl1 || User}
-                      alt="Company Logo"
-                      className="w-25"
-                    />
-                  </div>
-                )}
               </div>
 
               <div className="col-md-4 col-12">
@@ -750,38 +781,96 @@ function CenterEdit({ handleCenterChanged }) {
                     accept=".png"
                     name="profile"
                     className="form-control"
-                    onChange={(event) => {
-                      const profile = event.target.files[0];
-                      formik.setFieldValue("profile", profile);
-                      if (profile) {
-                        const previewUrl2 = URL.createObjectURL(profile);
-                        setImagePreviewUrl2(previewUrl2);
-                      } else {
-                        setImagePreviewUrl2(null);
-                      }
-                    }}
                     onBlur={formik.handleBlur}
                   />
+                  {data?.profile && (
+                    <div class="card border-0 shadow" style={{ width: "100%" }}>
+                      <div
+                        onClick={(e) => e.stopPropagation()}
+                        style={{ cursor: "not-allowed" }}
+                      >
+                        <img
+                          class="card-img-top img-fluid"
+                          style={{
+                            height: "10rem",
+                            pointerEvents: "none",
+                            cursor: "not-allowed",
+                          }}
+                          src={pdfLogo}
+                          alt="Resume preview"
+                        />
+                      </div>
+                      <div
+                        class="card-body d-flex justify-content-between align-items-center"
+                        style={{ flexWrap: "wrap" }}
+                      >
+                        <p
+                          class="card-title fw-semibold mb-0 text-wrap"
+                          style={{
+                            flex: 1,
+                            whiteSpace: "nowrap",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                          }}
+                          title={data?.profile?.split("/").pop()}
+                        >
+                          {data?.profile?.split("/").pop()}
+                        </p>
+                        <a
+                          href={data?.profile}
+                          download
+                          class="btn text-dark ms-2"
+                          title="Download Resume"
+                          style={{ flexShrink: 0 }}
+                        >
+                          <MdOutlineDownloadForOffline size={25} />
+                        </a>
+                      </div>
+                    </div>
+                  )}
                   {formik.touched.profile && formik.errors.profile && (
                     <div className="error text-danger">
                       <small>{formik.errors.profile}</small>
                     </div>
                   )}
                 </div>
-                {imagePreviewUrl2 && (
-                  <div className="mt-3">
-                    <img
-                      src={imagePreviewUrl2 || User}
-                      alt="Profile Image"
-                      className="w-25"
-                    />
-                  </div>
-                )}
+
                 {/* <img
                   src={data.profile}
                   className="img-fluid ms-2 w-50 rounded mt-2"
                   alt="Profile"
                 /> */}
+              </div>
+              <div className="col-12">
+                <div className="mb-3">
+                  <label for="exampleFormControlInput1" className="form-label">
+                    Address<span className="text-danger">*</span>
+                  </label>
+                  <textarea
+                    className={`form-control ${
+                      formik.touched.address && formik.errors.address
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                    {...formik.getFieldProps("address")}
+                    id="exampleFormControlTextarea1"
+                    rows="3"
+                    onBlur={formik.handleBlur}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        // Allow the default behavior for Enter key
+                        console.log(
+                          "Enter key pressed: moving to the next line"
+                        );
+                      }
+                    }}
+                  ></textarea>
+                  {formik.touched.address && formik.errors.address && (
+                    <div className="invalid-feedback">
+                      {formik.errors.address}
+                    </div>
+                  )}
+                </div>
               </div>
               <div className="col-12">
                 <label for="exampleFormControlInput1" className="form-label">
