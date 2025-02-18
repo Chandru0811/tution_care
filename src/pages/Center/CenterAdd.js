@@ -4,7 +4,6 @@ import { Link, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
-import fetchAllCentreManager from "../List/CentreMangerList";
 
 const validationSchema = Yup.object().shape({
   centerName: Yup.string().required("*Centre Name is required"),
@@ -59,19 +58,6 @@ function CenterAdd({ handleCenterChanged }) {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [managerData, setmanagerData] = useState(null);
   const userName = localStorage.getItem("tmsuserName");
-
-  useEffect(() => {
-    fetchTeacher();
-  }, []);
-
-  const fetchTeacher = async () => {
-    try {
-      const manager = await fetchAllCentreManager();
-      setmanagerData(manager);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
 
   const formik = useFormik({
     initialValues: {

@@ -54,11 +54,6 @@ const Center = () => {
         enableHiding: false,
         header: "Company Name",
       },
-      {
-        accessorKey: "centerManager",
-        enableHiding: false,
-        header: "Company Manager",
-      },
       { accessorKey: "code", header: "Code", enableHiding: false, size: 40 },
       {
         accessorKey: "uenNumber",

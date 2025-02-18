@@ -31,7 +31,31 @@ function PaymentsAdd() {
       .of(Yup.string())
       .min(1, "Invoice is required")
       .required("Invoice is required"),
-    paymentDate: Yup.string().required("Payment Date is required"),
+    paymentDate: Yup.string()
+      .required("Payment Date is required")
+      .test(
+        "paymentDate-check",
+        "Payment Date cannot be earlier than Invoice Date",
+        function (value) {
+          const { invoiceIds } = this.parent;
+          if (invoiceIds.length > 0) {
+            const earliestInvoice = invoiceData.reduce((earliest, invoice) => {
+              const invoiceDate = new Date(invoice.invoiceDate);
+              return invoiceDate < earliest ? invoiceDate : earliest;
+            }, new Date());
+
+            const paymentDate = new Date(value);
+            if (paymentDate < earliestInvoice) {
+              return this.createError({
+                message: "Payment Date cannot be earlier than Invoice Date",
+                path: "paymentDate",
+              });
+            }
+          }
+          return true;
+        }
+      ),
+
     paymentMethod: Yup.string().required("Payment Method is required"),
 
     bank: Yup.string()

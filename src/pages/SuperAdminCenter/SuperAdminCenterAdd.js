@@ -112,7 +112,7 @@ function SuperAdminCenterAdd({ handleCenterChanged }) {
       setAppData(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
-    } 
+    }
   };
 
   useEffect(() => {
@@ -401,6 +401,7 @@ function SuperAdminCenterAdd({ handleCenterChanged }) {
                           className="form-check-input"
                           type="checkbox"
                           checked={formik.values[key]}
+                          style={{ cursor: "pointer" }}
                           onChange={() =>
                             formik.setFieldValue(key, !formik.values[key])
                           }

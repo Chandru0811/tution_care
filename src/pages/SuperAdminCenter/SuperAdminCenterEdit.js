@@ -457,6 +457,7 @@ function SuperAdminCenterEdit() {
                         <input
                           className="form-check-input"
                           type="checkbox"
+                          style={{ cursor: "pointer" }}
                           checked={formik.values[key]}
                           onChange={() =>
                             formik.setFieldValue(key, !formik.values[key])
