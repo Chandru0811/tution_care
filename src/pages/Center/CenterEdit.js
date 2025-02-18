@@ -8,7 +8,6 @@ import EditClass from "./Edit/EditClass";
 import EditPackage from "./Edit/EditPackage";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
-import fetchAllCentreManager from "../List/CentreMangerList";
 import Delete from "../../components/common/Delete";
 import AddRegister from "./Add/AddRegister";
 import AddBreak from "./Add/AddBreak";
@@ -62,7 +61,6 @@ function CenterEdit({ handleCenterChanged }) {
   const { id } = useParams();
   const [data, setData] = useState([]);
   const [loadIndicator, setLoadIndicator] = useState(false);
-  const [teacherData, setTeacherData] = useState(null);
   const navigate = useNavigate();
   const [taxTypeData, setTaxTypeData] = useState(null);
 
@@ -74,17 +72,6 @@ function CenterEdit({ handleCenterChanged }) {
   const centerId = localStorage.getItem("tmscenterId");
   const [menuAnchor, setMenuAnchor] = useState(null);
 
-  useEffect(() => {
-    fetchTeacher();
-  }, []);
-  const fetchTeacher = async () => {
-    try {
-      const manager = await fetchAllCentreManager();
-      setTeacherData(manager);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
   const formik = useFormik({
     initialValues: {
       centerName: "",
@@ -205,7 +192,6 @@ function CenterEdit({ handleCenterChanged }) {
     };
 
     getData();
-    fetchTeacher();
     fetchTaxData();
   }, [id]);
 
@@ -332,29 +318,6 @@ function CenterEdit({ handleCenterChanged }) {
                     <div className="invalid-feedback">{formik.errors.code}</div>
                   )}
                 </div>
-              </div>
-              <div className="col-md-6 col-12 mb-3">
-                <label className="form-label">Company Manager</label>
-                <select
-                  {...formik.getFieldProps("userId")}
-                  name="userId"
-                  className={`form-select  ${
-                    formik.touched.userId && formik.errors.userId
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                >
-                  <option selected></option>
-                  {teacherData &&
-                    teacherData.map((manager) => (
-                      <option key={manager.id} value={manager.id}>
-                        {manager.userNames}
-                      </option>
-                    ))}
-                </select>
-                {formik.touched.userId && formik.errors.userId && (
-                  <div className="invalid-feedback">{formik.errors.userId}</div>
-                )}
               </div>
               <div className="col-md-6 col-12">
                 <div className="mb-3">

@@ -105,18 +105,6 @@ function CenterView() {
             <div className="col-md-6 col-12">
               <div className="row  mb-2">
                 <div className="col-6  ">
-                  <p className="">Company Manager</p>
-                </div>
-                <div className="col-6">
-                  <p className="text-muted text-sm">
-                    : {formatValue(data.centerManager) || "--"}
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="col-md-6 col-12">
-              <div className="row  mb-2">
-                <div className="col-6  ">
                   <p className="">Address</p>
                 </div>
                 <div className="col-6">

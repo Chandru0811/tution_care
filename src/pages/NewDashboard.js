@@ -6,11 +6,12 @@ import { toast } from "react-toastify";
 function NewDashboard() {
   const [datas, setData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const centerId = localStorage.getItem("tmscenterId");
 
   const getData = async () => {
     setLoading(true);
     try {
-      const response = await api.get("getOverAllSmsRevenueReport");
+      const response = await api.get(`getOverAllSmsRevenueReport/${centerId}`);
       if (response.status === 200) {
         setData(response.data);
       }
