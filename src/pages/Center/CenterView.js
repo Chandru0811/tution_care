@@ -7,10 +7,11 @@ function CenterView() {
   const { id } = useParams();
   const [data, setData] = useState([]);
   const [taxTypeData, setTaxTypeData] = useState(null);
+  const centerId = localStorage.getItem("tmscenterId");
 
   const fetchTaxData = async () => {
     try {
-      const response = await api.get("getAllTaxSetting");
+      const response = await api.get(`/getAllTaxSettingByCenter/${centerId}`);
       setTaxTypeData(response.data);
     } catch (error) {
       toast.error("Error fetching tax data:", error);
@@ -271,7 +272,7 @@ function CenterView() {
               </div>
             </div>
             <div className="row">
-              <div className="col-md-4 col-12 d-flex align-items-center">
+              <div className="col-md-4 col-12 ">
                 <p className="mb-0 me-2">QR Code:</p>
                 {data.qrCode && (
                   <img
@@ -282,7 +283,7 @@ function CenterView() {
                 )}
               </div>
 
-              <div className="col-md-4 col-12 d-flex align-items-center">
+              <div className="col-md-4 col-12 ">
                 <p className="mb-0 me-2">Company Logo:</p>
                 {data.logo && (
                   <img
@@ -293,9 +294,10 @@ function CenterView() {
                 )}
               </div>
 
-              <div className="col-md-4 col-12 d-flex align-items-center">
+              <div className="col-md-4 col-12 ">
                 <p className="mb-0 me-2">Profile Image:</p>
                 {data.profile && (
+                  // eslint-disable-next-line jsx-a11y/img-redundant-alt
                   <img
                     src={data.profile}
                     className="img-fluid w-50 rounded"
