@@ -39,13 +39,13 @@ function RolesAdd() {
     const selectedRoleObj = roleName.find(
       (role) => role.id.toString() === selectedId
     );
-    console.log("selectedRoleObj",selectedRoleObj)
+    console.log("selectedRoleObj", selectedRoleObj);
 
     if (selectedRoleObj) {
       setSelectedRole(selectedRoleObj.name); // Set role name (e.g., TUITION_ADMIN)
       setSelectedRoleId(selectedRoleObj.id); // Set role ID
     }
-  formik.setValues(selectedRoleObj)
+    formik.setValues(selectedRoleObj);
   };
   const formik = useFormik({
     initialValues: {
@@ -117,6 +117,7 @@ function RolesAdd() {
       teacherCreate: true,
       teacherUpdate: true,
       teacherDelete: true,
+      checkAttendanceIndex: true,
       attendanceIndex: true,
       attendanceRead: true,
       attendanceCreate: true,
@@ -808,6 +809,7 @@ function RolesAdd() {
       staffIndex: true,
       teacherIndex: true,
       attendanceIndex: true,
+      checkAttendanceIndex: true,
       staffAttendanceIndex: true,
       leaveAdminIndex: true,
       leaveIndex: true,
@@ -4114,6 +4116,207 @@ function RolesAdd() {
                               }}
                             >
                               Salary Type
+                            </p>
+                          </td>
+                          <td>
+                            <input
+                              className="form-check-input"
+                              type="checkbox"
+                              name="salarySettingIndex"
+                              checked={formik.values.salarySettingIndex}
+                              onChange={handleCheckboxChange(
+                                `salarySettingIndex`
+                              )}
+                            />
+                          </td>
+                          <td>
+                            <input
+                              className="form-check-input"
+                              type="checkbox"
+                              name="salarySettingRead"
+                              checked={formik.values.salarySettingRead}
+                              onChange={handleCheckboxChange(
+                                `salarySettingRead`
+                              )}
+                            />
+                          </td>
+                          <td>
+                            <input
+                              className="form-check-input"
+                              type="checkbox"
+                              name="salarySettingCreate"
+                              checked={formik.values.salarySettingCreate}
+                              onChange={handleCheckboxChange(
+                                `salarySettingCreate`
+                              )}
+                            />
+                          </td>
+                          <td>
+                            <input
+                              className="form-check-input"
+                              type="checkbox"
+                              name="salarySettingUpdate"
+                              checked={formik.values.salarySettingUpdate}
+                              onChange={handleCheckboxChange(
+                                `salarySettingUpdate`
+                              )}
+                            />
+                          </td>
+                          <td>
+                            <input
+                              className="form-check-input"
+                              type="checkbox"
+                              name="salarySettingDelete"
+                              checked={formik.values.salarySettingDelete}
+                              onChange={handleCheckboxChange(
+                                `salarySettingDelete`
+                              )}
+                            />
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <p
+                              style={{
+                                marginLeft: "30px",
+                                marginBottom: "0px",
+                              }}
+                            >
+                              Roles
+                            </p>
+                          </td>
+                          <td>
+                            <input
+                              className="form-check-input"
+                              type="checkbox"
+                              name="salarySettingIndex"
+                              checked={formik.values.salarySettingIndex}
+                              onChange={handleCheckboxChange(
+                                `salarySettingIndex`
+                              )}
+                            />
+                          </td>
+                          <td>
+                            <input
+                              className="form-check-input"
+                              type="checkbox"
+                              name="salarySettingRead"
+                              checked={formik.values.salarySettingRead}
+                              onChange={handleCheckboxChange(
+                                `salarySettingRead`
+                              )}
+                            />
+                          </td>
+                          <td>
+                            <input
+                              className="form-check-input"
+                              type="checkbox"
+                              name="salarySettingCreate"
+                              checked={formik.values.salarySettingCreate}
+                              onChange={handleCheckboxChange(
+                                `salarySettingCreate`
+                              )}
+                            />
+                          </td>
+                          <td>
+                            <input
+                              className="form-check-input"
+                              type="checkbox"
+                              name="salarySettingUpdate"
+                              checked={formik.values.salarySettingUpdate}
+                              onChange={handleCheckboxChange(
+                                `salarySettingUpdate`
+                              )}
+                            />
+                          </td>
+                          <td>
+                            <input
+                              className="form-check-input"
+                              type="checkbox"
+                              name="salarySettingDelete"
+                              checked={formik.values.salarySettingDelete}
+                              onChange={handleCheckboxChange(
+                                `salarySettingDelete`
+                              )}
+                            />
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <p
+                              style={{
+                                marginLeft: "30px",
+                                marginBottom: "0px",
+                              }}
+                            >
+                              Absent Reason
+                            </p>
+                          </td>
+                          <td>
+                            <input
+                              className="form-check-input"
+                              type="checkbox"
+                              name="salarySettingIndex"
+                              checked={formik.values.salarySettingIndex}
+                              onChange={handleCheckboxChange(
+                                `salarySettingIndex`
+                              )}
+                            />
+                          </td>
+                          <td>
+                            <input
+                              className="form-check-input"
+                              type="checkbox"
+                              name="salarySettingRead"
+                              checked={formik.values.salarySettingRead}
+                              onChange={handleCheckboxChange(
+                                `salarySettingRead`
+                              )}
+                            />
+                          </td>
+                          <td>
+                            <input
+                              className="form-check-input"
+                              type="checkbox"
+                              name="salarySettingCreate"
+                              checked={formik.values.salarySettingCreate}
+                              onChange={handleCheckboxChange(
+                                `salarySettingCreate`
+                              )}
+                            />
+                          </td>
+                          <td>
+                            <input
+                              className="form-check-input"
+                              type="checkbox"
+                              name="salarySettingUpdate"
+                              checked={formik.values.salarySettingUpdate}
+                              onChange={handleCheckboxChange(
+                                `salarySettingUpdate`
+                              )}
+                            />
+                          </td>
+                          <td>
+                            <input
+                              className="form-check-input"
+                              type="checkbox"
+                              name="salarySettingDelete"
+                              checked={formik.values.salarySettingDelete}
+                              onChange={handleCheckboxChange(
+                                `salarySettingDelete`
+                              )}
+                            />
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <p
+                              style={{
+                                marginLeft: "30px",
+                                marginBottom: "0px",
+                              }}
+                            >
+                              Email Template
                             </p>
                           </td>
                           <td>
