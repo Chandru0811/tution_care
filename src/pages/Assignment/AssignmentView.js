@@ -10,6 +10,9 @@ function AssignmentView() {
   const [data, setData] = useState({});
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const storedConfigure = JSON.parse(
+    localStorage.getItem("tmsappConfigInfo") || "{}"
+  );
 
   const getData = useCallback(async () => {
     setLoading(true);
@@ -154,17 +157,17 @@ function AssignmentView() {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          Assignment Management
+          {storedConfigure?.assignManagement || "Assignment Management"}
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
           <Link to="/assignment" className="custom-breadcrumb">
-            Assignment
+            {storedConfigure?.assignManagement || "Assignment"}
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          Assignment View
+          {storedConfigure?.assignManagement || "Assignment"} View
         </li>
       </ol>
       <div>

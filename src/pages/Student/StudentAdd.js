@@ -28,6 +28,9 @@ export default function StudentAdd() {
   const LeadStatus = searchParams.get("LeadStatus");
   const [formData, setFormData] = useState({ LeadId, LeadStatus });
   const [loadIndicator, setLoadIndicator] = useState(false);
+  const storedConfigure = JSON.parse(
+    localStorage.getItem("tmsappConfigInfo") || "{}"
+  );
 
   const childRef = React.useRef();
   // console.log("Form Data:", formData);
@@ -93,17 +96,17 @@ export default function StudentAdd() {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          Student Management
+          {storedConfigure?.student || "Student Management"}
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
           <Link to="/student" className="custom-breadcrumb">
-            Student Listing
+            {storedConfigure?.student || "Student Listing"}
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          Student Listing Add
+          {storedConfigure?.student || "Student Listing"} Add
         </li>
       </ol>
       <Stepper className="my-5" activeStep={activeStep} alternativeLabel>

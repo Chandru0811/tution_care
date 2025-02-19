@@ -37,7 +37,9 @@ const Assignment = () => {
   const [selectedId, setSelectedId] = useState(null);
   const [isClearFilterClicked, setIsClearFilterClicked] = useState(false);
   const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
-
+  const storedConfigure = JSON.parse(
+    localStorage.getItem("tmsappConfigInfo") || "{}"
+  );
   const columns = useMemo(
     () => [
       {
@@ -260,11 +262,11 @@ const Assignment = () => {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          &nbsp;Assignment Management
+          &nbsp;{storedConfigure?.assignManagement || "Assignment Management"}
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          &nbsp;Assignment
+          &nbsp;{storedConfigure?.assignManagement || "Assignment"}
         </li>
       </ol>
       <div className="card">

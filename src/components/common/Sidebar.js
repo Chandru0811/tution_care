@@ -33,8 +33,8 @@ function Sidebar() {
     localStorage.getItem("tmsappConfigInfo") || "{}"
   );
 
-  console.log("storedConfigure ::",storedConfigure);
-  
+  // console.log("storedConfigure ::",storedConfigure);
+
   const location = useLocation();
   const hasRenderedOnce = useRef(false);
   const centerId = localStorage.getItem("tmscenterId");
@@ -53,7 +53,6 @@ function Sidebar() {
     documentManagement:
       storedConfigure?.documentManagement || "Document Management",
     settings: storedConfigure?.settings || "Settings",
-
   };
   const iconMapping = {
     [Key.centreName]: <PiBuildings />,
@@ -231,7 +230,7 @@ function Sidebar() {
         isOpen: false,
         subMenus: [
           {
-            title: "Student Listing",
+            title: storedConfigure?.student || "Student Listing",
             path: "/student",
             access: storedScreens.studentListingIndex,
           },

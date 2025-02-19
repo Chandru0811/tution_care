@@ -16,6 +16,9 @@ function DocumentView() {
   const [data, setData] = useState([]);
   const [folderName, setFolderName] = useState("");
   const [approveStatus, setApproveStatus] = useState(initialApproveStatus);
+  const storedConfigure = JSON.parse(
+    localStorage.getItem("tmsappConfigInfo") || "{}"
+  );
 
   const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
 
@@ -99,17 +102,17 @@ function DocumentView() {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          Document Management
+          {storedConfigure?.documentManagement || "Document Management"}
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
           <Link to="/document" className="custom-breadcrumb">
-            Document
+            {storedConfigure?.documentManagement || "Document"}
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          Document View
+          {storedConfigure?.documentManagement || "Document"} View
         </li>
       </ol>
       <div className="card">

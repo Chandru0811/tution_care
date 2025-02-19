@@ -13,8 +13,13 @@ function Header({ onLogout }) {
   const userName = localStorage.getItem("tmsuserName");
   const centerId = localStorage.getItem("tmscenterId");
   const userEmail = localStorage.getItem("tmsemail");
+  // const userInfo = localStorage.getItem("tmsuserInfo");
+
+  const teacherImage = localStorage.getItem("tmsteacherImage");
+  const teacherName = localStorage.getItem("tmsteacherName");
   const role = localStorage.getItem("tmsrole")?.replace(/_/g, " ");
   const [data, setData] = useState([]);
+  const userInfo = localStorage.getItem("tmsuserInfo");
 
   const handleLogOutClick = () => {
     document.body.classList.remove("offcanvas-backdrop", "modal-open");
@@ -77,7 +82,18 @@ function Header({ onLogout }) {
             aria-controls="offcanvasRight"
             style={{ width: "40px", height: "40px" }}
           >
-            {data.profile ? (
+            {teacherImage ? (
+              <img
+                src={teacherImage}
+                className="img-fluid rounded-circle"
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                }}
+                alt="Teacher"
+              />
+            ) : data.profile ? (
               <img
                 src={data.profile}
                 className="img-fluid rounded-circle"
@@ -133,7 +149,19 @@ function Header({ onLogout }) {
                 overflow: "hidden",
               }}
             >
-              {data.profile ? (
+              {teacherImage ? (
+                <img
+                  src={teacherImage}
+                  className="img-fluid rounded-circle"
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    borderRadius: "50%",
+                    objectFit: "cover",
+                  }}
+                  alt="Teacher"
+                />
+              ) : data.profile ? (
                 <img
                   src={data.profile}
                   alt="Profile"
@@ -164,21 +192,27 @@ function Header({ onLogout }) {
               <p>{userName?.replace(/_/g, " ")}</p>
               <p>{userEmail}</p>
               <p>{role}</p>
+              {teacherName && <p>{teacherName}</p>}
             </div>
-            <div
-              className="text-center cursor-pointer"
-              data-bs-dismiss="offcanvas"
-            >
-              <Link
-                to={`/companyRegister/edit/${centerId}`}
-                style={{ textDecoration: "none", color: "inherit" }}
-                onMouseEnter={(e) => (e.target.style.color = "rgb(233,158,94)")}
-                onMouseLeave={(e) => (e.target.style.color = "inherit")}
+            {userInfo.length <= 2 ? (
+              <div
+                className="text-center cursor-pointer"
+                data-bs-dismiss="offcanvas"
               >
-                <GrUserSettings className="mx-2" />
-                <span>Edit Company</span>
-              </Link>
-            </div>
+                <Link
+                  to={`/companyRegister/edit/${centerId}`}
+                  style={{ textDecoration: "none", color: "inherit" }}
+                  onMouseEnter={(e) =>
+                    (e.target.style.color = "rgb(233,158,94)")
+                  }
+                  onMouseLeave={(e) => (e.target.style.color = "inherit")}
+                >
+                  <GrUserSettings className="mx-2" />
+                  <span>Edit Company</span>
+                </Link>
+              </div>
+            ) : null}
+
             {/* Calendar button visible only on smaller screens */}
             <div className="text-center mt-3 d-md-none">
               <Link to={"/calendar"}>

@@ -62,6 +62,9 @@ export default function InvoiceEdit() {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const userName = localStorage.getItem("tmsuserName");
   const centerId = localStorage.getItem("tmscenterId");
+  const storedConfigure = JSON.parse(
+    localStorage.getItem("tmsappConfigInfo") || "{}"
+  );
 
   const lessonOptions = [];
   for (let i = 1; i <= 50; i++) {
@@ -437,7 +440,7 @@ export default function InvoiceEdit() {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          Invoice and Payment
+          {storedConfigure?.invoice || "Invoice and Payment"}
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>

@@ -9,6 +9,9 @@ function ReplaceClassLessonView() {
   const { id } = useParams();
   const [data, setData] = useState([]);
   const [status, setStatus] = useState("");
+  const storedConfigure = JSON.parse(
+    localStorage.getItem("tmsappConfigInfo") || "{}"
+  );
 
   const getData = async () => {
     try {
@@ -71,7 +74,7 @@ function ReplaceClassLessonView() {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          Student Management
+          {storedConfigure?.student || "Student Management"}
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>

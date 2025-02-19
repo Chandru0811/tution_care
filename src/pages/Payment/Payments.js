@@ -33,6 +33,9 @@ const Payments = () => {
   const [selectedId, setSelectedId] = useState(null);
   const [isClearFilterClicked, setIsClearFilterClicked] = useState(false);
   const [courseData, setCourseData] = useState(null);
+  const storedConfigure = JSON.parse(
+    localStorage.getItem("tmsappConfigInfo") || "{}"
+  );
 
   const columns = useMemo(
     () => [
@@ -242,7 +245,7 @@ const Payments = () => {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          &nbsp;Invoice and Payment
+          &nbsp; {storedConfigure?.invoice || "Invoice and Payment"}
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
