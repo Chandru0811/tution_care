@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import "../../styles/custom.css";
-import Logo from "../../assets/images/Logo.png";
+import Logo from "../../assets/images/TMS_LOGO.png";
 import { Link } from "react-router-dom";
 import { format } from "date-fns"; // Import format function from date-fns
 import api from "../../config/URL";
@@ -12,8 +12,9 @@ import html2canvas from "html2canvas";
 function Payslip() {
   const [selectedMonth, setSelectedMonth] = useState("");
   const [data, setData] = useState({});
+  const [centerData, setCenterData] = useState({});
   const userId = localStorage.getItem("tmsuserId");
-  // console.log("kishore", data);
+  const centerId = localStorage.getItem("tmscenterId");
   const table1Ref = useRef();
   const [loading, setLoading] = useState(true);
 
@@ -86,6 +87,19 @@ function Payslip() {
 
     // setLoadIndicator(false);
   };
+
+  const getcenterData = async () => {
+    try {
+      const response = await api.get(`/getAllCenterById/${centerId}`);
+      setCenterData(response.data);
+    } catch (error) {
+      console.error("Error Fetching Data: " + error.message);
+    }
+  };
+
+  useEffect(() => {
+    getcenterData();
+  }, []);
   return (
     <section>
       <div className="container">
@@ -133,12 +147,12 @@ function Payslip() {
                 >
                   <div className="payslip-container">
                     <div className="text-center">
-                      <h2>{data.centerName || "Tution Care"}</h2>
+                      <h2>{centerData.centerName || "ECS School"}</h2>
                     </div>
                     <div className="row mt-5">
                       <div className="col-2 text-center p-0">
                         <img
-                          src={Logo}
+                          src={centerData.logo || Logo}
                           alt="Tution Care Logo"
                           className="img-fluid w-50"
                         />

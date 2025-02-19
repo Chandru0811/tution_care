@@ -64,16 +64,22 @@ const Teacher = () => {
         accessorKey: "role",
         enableHiding: false,
         header: "Role",
-        Cell: ({ row }) =>
-          row.original.role === "Teacher" ||
-          row.original.role === "teacher" ||
-          row.original.role === "TEACHER" ? (
-            <span className="badge badges-Green fw-light">Teacher</span>
-          ) : row.original.role === "freelancer" ||
-            row.original.role === "free_lancer" ||
-            row.original.role === "FREELANCER" ? (
-            <span className="badge badges-orange fw-light">Freelancer</span>
-          ) : null,
+        Cell: ({ row }) => {
+          const colors = [
+            "bg-primary",
+            "bg-success",
+            "bg-warning",
+            "bg-danger",
+            "bg-info",
+            "bg-secondary",
+          ];
+          const randomColor = colors[Math.floor(Math.random() * colors.length)];
+          return (
+            <span className={`badge ${randomColor} text-white fw-light`}>
+              {row.original.role}
+            </span>
+          );
+        },
       },
       {
         accessorKey: "userUniqueId",
@@ -117,7 +123,6 @@ const Teacher = () => {
     ],
     []
   );
-
   const fetchData = async () => {
     try {
       setLoading(true);
@@ -129,7 +134,7 @@ const Teacher = () => {
       );
       const queryParams = new URLSearchParams(filteredFilters).toString();
       const response = await api.get(
-        `/getAllTeachersAndFreelancers?centerId=${centerId}${
+        `/getUserWithCustomInfo?centerId=${centerId}${
           queryParams ? `&${queryParams}` : ""
         }`
       );
@@ -143,7 +148,6 @@ const Teacher = () => {
   useEffect(() => {
     fetchData();
   }, [filters]);
-
   const theme = createTheme({
     components: {
       MuiTableCell: {
@@ -203,22 +207,6 @@ const Teacher = () => {
     });
   };
 
-  // const filteredData = useMemo(() => {
-  //   return data.filter((item) => {
-  //     const matchesTeacherName = item.teacherName
-  //       ?.toLowerCase()
-  //       .includes(filters.teacherName.toLowerCase());
-  //     const matchesEmail = item.country
-  //       ?.toLowerCase()
-  //       .includes(filters.country.toLowerCase());
-
-  //     return (
-  //       (filters.teacherName ? matchesTeacherName : true) &&
-  //       (filters.country ? matchesEmail : true)
-  //     );
-  //   });
-  // }, [data, filters]);
-
   const handleMenuClose = () => setMenuAnchor(null);
 
   return (
@@ -233,10 +221,6 @@ const Teacher = () => {
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
-        {/* <li>
-          &nbsp;Staffing
-          <span className="breadcrumb-separator"> &gt; </span>
-        </li> */}
         <li className="breadcrumb-item active" aria-current="page">
           &nbsp;{appConfigInfo.employee}
         </li>
@@ -253,7 +237,7 @@ const Teacher = () => {
             <span class="me-2 text-muted">
               This database shows the list of{" "}
               <span className="bold" style={{ color: "#287f71" }}>
-              {appConfigInfo.employee}
+                {appConfigInfo.employee}
               </span>
             </span>
           </div>

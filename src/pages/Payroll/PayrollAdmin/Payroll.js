@@ -86,15 +86,24 @@ const Payroll = () => {
       },
       {
         accessorKey: "userRole",
-        header: "User Role",
-        Cell: ({ row }) =>
-          row.original.userRole === "TUITION_TEACHER" ? (
-            <span>Teacher</span>
-          ) : row.original.userRole === "TUITION_STAFF" ? (
-            <span>Staff</span>
-          ) : row.original.userRole === "TUITION_FREELANCER" ? (
-            <span>Freelancer</span>
-          ) : null,
+        enableHiding: false,
+        header: "Role",
+        Cell: ({ row }) => {
+          const colors = [
+            "bg-primary",
+            "bg-success",
+            "bg-warning",
+            "bg-danger",
+            "bg-info",
+            "bg-secondary",
+          ];
+          const randomColor = colors[Math.floor(Math.random() * colors.length)];
+          return (
+            <span className={`badge ${randomColor} text-white fw-light`}>
+              {row.original.userRole}
+            </span>
+          );
+        },
       },
       {
         accessorKey: "employeeName",

@@ -115,8 +115,8 @@ function LeaveAdd() {
 
   const fetchLeaveType = async () => {
     try {
-      const response = await api.get(`getAllLeaveSetting`);
-      setLeaveTypeData(response.data); // Assuming response.data is an array
+      const response = await api.get(`/getLeaveSettingWithCenterId/${centerId}`);
+      setLeaveTypeData(response.data);
     } catch (error) {
       toast.error(error.message);
     }

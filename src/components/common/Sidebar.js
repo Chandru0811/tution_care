@@ -170,11 +170,11 @@ function Sidebar() {
               icon: "HiOutlineUserGroup",
               isOpen: false,
               subMenus: [
-                {
-                  title: "Staff",
-                  path: "/staff",
-                  access: storedScreens.staffIndex,
-                },
+                // {
+                //   title: "Staff",
+                //   path: "/staff",
+                //   access: storedScreens.staffIndex,
+                // },
                 {
                   title: "Attendance",
                   path: "/staffing/attendance",
