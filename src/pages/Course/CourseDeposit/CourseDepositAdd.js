@@ -23,6 +23,7 @@ function CourseFeesAdd({ onSuccess }) {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [taxData, setTaxData] = useState([]);
   const userName = localStorage.getItem("tmsuserName");
+  const centerId = localStorage.getItem("tmscenterId");
   const [isModified, setIsModified] = useState(false);
 
   const handleClose = () => {
@@ -38,7 +39,7 @@ function CourseFeesAdd({ onSuccess }) {
   };
   const fetchTaxData = async () => {
     try {
-      const response = await api.get("getAllTaxSetting");
+      const response = await api.get(`/getAllTaxSettingByCenter/${centerId}`);
       setTaxData(response.data);
     } catch (error) {
       toast.error("Error fetching tax data:", error);

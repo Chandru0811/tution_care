@@ -26,7 +26,7 @@ const StaffSalaryEdit = forwardRef(
 
     const fetchData = async () => {
       try {
-        const salarytype = await fetchAllSalaryTypeWithIds();
+        const salarytype = await fetchAllSalaryTypeWithIds(centerId);
         setSalaryTypeData(salarytype); // Make sure to update state here
       } catch (error) {
         toast.error(error.message || "Error fetching salary types");

@@ -116,7 +116,7 @@ const StaffPersonalEdit = forwardRef(
 
     const fetchIDTypeData = async () => {
       try {
-        const idTypeData = await fetchAllIDTypeWithIds();
+        const idTypeData = await fetchAllIDTypeWithIds(centerId);
         setIdTypeData(idTypeData);
       } catch (error) {
         toast.error(error);
@@ -125,7 +125,7 @@ const StaffPersonalEdit = forwardRef(
 
     const fetchCitizenShipData = async () => {
       try {
-        const nationalityData = await fetchAllNationality();
+        const nationalityData = await fetchAllNationality(centerId);
         setNationalityData(nationalityData);
       } catch (error) {
         toast.error(error);
