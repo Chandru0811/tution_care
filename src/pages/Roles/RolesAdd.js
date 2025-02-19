@@ -436,6 +436,7 @@ function RolesAdd() {
       console.log("Api Data:", values);
       const payload = {
         ...values,
+        centerId:centerId,
         roleName: selectedRole,
         id: selectedRoleId,
         updatedBy: userName,
@@ -2004,7 +2005,9 @@ function RolesAdd() {
                               type="checkbox"
                               name="leaveRequestIndex"
                               checked={formik.values.leaveRequestIndex}
-                              onChange={handleCheckboxChange(`leaveRequestIndex`)}
+                              onChange={handleCheckboxChange(
+                                `leaveRequestIndex`
+                              )}
                             />
                           </td>
                           <td>
@@ -2022,7 +2025,9 @@ function RolesAdd() {
                               type="checkbox"
                               name="leaveRequesCreate"
                               checked={formik.values.leaveRequesCreate}
-                              onChange={handleCheckboxChange(`leaveRequesCreate`)}
+                              onChange={handleCheckboxChange(
+                                `leaveRequesCreate`
+                              )}
                             />
                           </td>
                           <td>
@@ -3088,13 +3093,13 @@ function RolesAdd() {
                             />
                           </td>
                           <td>
-                            {/* <input
-                          className="form-check-input"
-                          type="checkbox"
-                          name="invoiceRead"
-                          checked={formik.values.invoiceRead}
-                          onChange={handleCheckboxChange(`paymentIndex`)}
-                        /> */}
+                            <input
+                              className="form-check-input"
+                              type="checkbox"
+                              name="paymentRead"
+                              checked={formik.values.paymentRead}
+                              onChange={handleCheckboxChange(`paymentRead`)}
+                            />
                           </td>
                           <td>
                             <input
@@ -3106,22 +3111,22 @@ function RolesAdd() {
                             />
                           </td>
                           <td>
-                            {/* <input
-                          className="form-check-input"
-                          type="checkbox"
-                          name="invoiceUpdate"
-                          checked={formik.values.invoiceUpdate}
-                          onChange={handleCheckboxChange}
-                        /> */}
+                            <input
+                              className="form-check-input"
+                              type="checkbox"
+                              name="paymentUpdate"
+                              checked={formik.values.paymentUpdate}
+                              onChange={handleCheckboxChange(`paymentUpdate`)}
+                            />
                           </td>
                           <td>
-                            {/* <input
-                          className="form-check-input"
-                          type="checkbox"
-                          name="invoiceDelete"
-                          checked={formik.values.invoiceDelete}
-                          onChange={handleCheckboxChange}
-                        /> */}
+                            <input
+                              className="form-check-input"
+                              type="checkbox"
+                              name="paymentDelete"
+                              checked={formik.values.paymentDelete}
+                              onChange={handleCheckboxChange(`paymentDelete`)}
+                            />
                           </td>
                         </tr>
                         {/* Time Schedule attendance */}
