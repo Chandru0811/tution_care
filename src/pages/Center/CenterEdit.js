@@ -66,7 +66,9 @@ function CenterEdit({ handleCenterChanged }) {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const navigate = useNavigate();
   const [taxTypeData, setTaxTypeData] = useState(null);
-
+  const [imagePreviewUrl, setImagePreviewUrl] = useState(null);
+  const [logoPreviewUrl, setLogoPreviewUrl] = useState(null);
+  const [profilePreviewUrl, setProfilePreviewUrl] = useState(null);
   const userName = localStorage.getItem("tmsuserName");
   const centerId = localStorage.getItem("tmscenterId");
   const [menuAnchor, setMenuAnchor] = useState(null);
@@ -169,7 +171,7 @@ function CenterEdit({ handleCenterChanged }) {
 
   const fetchTaxData = async () => {
     try {
-      const response = await api.get(`/getAllTaxSettingByCenter/${centerId}`)
+      const response = await api.get(`/getAllTaxSettingByCenter/${centerId}`);
       setTaxTypeData(response.data);
     } catch (error) {
       toast.error("Error fetching tax data:", error);
@@ -630,77 +632,39 @@ function CenterEdit({ handleCenterChanged }) {
                   <br />
                   <input
                     type="file"
-                    accept=".png"
                     name="file"
                     className="form-control"
-                    // onChange={(event) => {
-                    //   const file = event.target.files[0];
-                    //   formik.setFieldValue("file", file);
-                    //   if (file) {
-                    //     const previewUrl = URL.createObjectURL(file);
-                    //     setImagePreviewUrl(previewUrl);
-                    //   } else {
-                    //     setImagePreviewUrl(null);
-                    //   }
-                    // }}
+                    onChange={(event) => {
+                      const file = event.target.files[0];
+                      formik.setFieldValue("file", file);
+                      if (file) {
+                        const previewUrl = URL.createObjectURL(file);
+                        setImagePreviewUrl(previewUrl);
+                      } else {
+                        setImagePreviewUrl(null);
+                      }
+                    }}
                     onBlur={formik.handleBlur}
+                    accept=".jpg, .jpeg, .png"
                   />
-                  {data?.qrCode && (
-                    <div class="card border-0 shadow" style={{ width: "100%" }}>
-                      <div
-                        onClick={(e) => e.stopPropagation()}
-                        style={{ cursor: "not-allowed" }}
-                      >
+                  <div className="mt-3">
+                    {imagePreviewUrl ? (
+                      <img
+                        src={imagePreviewUrl}
+                        alt="QR Code Preview"
+                        className="w-25"
+                      />
+                    ) : (
+                      data?.qrCode && (
                         <img
-                          class="card-img-top img-fluid"
-                          style={{
-                            height: "10rem",
-                            pointerEvents: "none",
-                            cursor: "not-allowed",
-                          }}
-                          src={pdfLogo}
-                          alt="Resume preview"
+                          src={data.qrCode}
+                          alt="Existing QR Code"
+                          className="w-25"
                         />
-                      </div>
-                      <div
-                        class="card-body d-flex justify-content-between align-items-center"
-                        style={{ flexWrap: "wrap" }}
-                      >
-                        <p
-                          class="card-title fw-semibold mb-0 text-wrap"
-                          style={{
-                            flex: 1,
-                            whiteSpace: "nowrap",
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                          }}
-                          title={data?.qrCode?.split("/").pop()}
-                        >
-                          {data?.qrCode?.split("/").pop()}
-                        </p>
-                        <a
-                          href={data?.qrCode}
-                          download
-                          class="btn text-dark ms-2"
-                          title="Download Resume"
-                          style={{ flexShrink: 0 }}
-                        >
-                          <MdOutlineDownloadForOffline size={25} />
-                        </a>
-                      </div>
-                    </div>
-                  )}
-                  {formik.touched.file && formik.errors.file && (
-                    <div className="error text-danger">
-                      <small>{formik.errors.file}</small>
-                    </div>
-                  )}
+                      )
+                    )}
+                  </div>
                 </div>
-                {/* <img
-                  src={data.qrCode}
-                  className="img-fluid ms-2 w-50 rounded mt-2"
-                  alt="QR"
-                /> */}
               </div>
               <div className="col-md-4 col-12">
                 <div className="text-start mt-2">
@@ -711,64 +675,40 @@ function CenterEdit({ handleCenterChanged }) {
                   <br />
                   <input
                     type="file"
-                    accept=".png*"
+                    accept=".png"
                     name="logo"
                     className="form-control"
+                    onChange={(event) => {
+                      const file = event.target.files[0];
+                      formik.setFieldValue("logo", file);
+                      if (file) {
+                        const previewUrl = URL.createObjectURL(file);
+                        setLogoPreviewUrl(previewUrl);
+                      } else {
+                        setLogoPreviewUrl(null);
+                      }
+                    }}
                     onBlur={formik.handleBlur}
                   />
-                  {data?.logo && (
-                    <div class="card border-0 shadow" style={{ width: "100%" }}>
-                      <div
-                        onClick={(e) => e.stopPropagation()}
-                        style={{ cursor: "not-allowed" }}
-                      >
+                  <div className="mt-3">
+                    {logoPreviewUrl ? (
+                      <img
+                        src={logoPreviewUrl}
+                        alt="Company Logo Preview"
+                        className="w-25"
+                      />
+                    ) : (
+                      data?.logo && (
                         <img
-                          class="card-img-top img-fluid"
-                          style={{
-                            height: "10rem",
-                            pointerEvents: "none",
-                            cursor: "not-allowed",
-                          }}
-                          src={pdfLogo}
-                          alt="Resume preview"
+                          src={data.logo}
+                          alt="Existing Company Logo"
+                          className="w-25"
                         />
-                      </div>
-                      <div
-                        class="card-body d-flex justify-content-between align-items-center"
-                        style={{ flexWrap: "wrap" }}
-                      >
-                        <p
-                          class="card-title fw-semibold mb-0 text-wrap"
-                          style={{
-                            flex: 1,
-                            whiteSpace: "nowrap",
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                          }}
-                          title={data?.logo?.split("/").pop()}
-                        >
-                          {data?.logo?.split("/").pop()}
-                        </p>
-                        <a
-                          href={data?.logo}
-                          download
-                          class="btn text-dark ms-2"
-                          title="Download Resume"
-                          style={{ flexShrink: 0 }}
-                        >
-                          <MdOutlineDownloadForOffline size={25} />
-                        </a>
-                      </div>
-                    </div>
-                  )}
-                  {formik.touched.logo && formik.errors.logo && (
-                    <div className="error text-danger">
-                      <small>{formik.errors.logo}</small>
-                    </div>
-                  )}
+                      )
+                    )}
+                  </div>
                 </div>
               </div>
-
               <div className="col-md-4 col-12">
                 <div className="text-start mt-2">
                   <label htmlFor="" className="mb-1 fw-medium">
@@ -781,66 +721,38 @@ function CenterEdit({ handleCenterChanged }) {
                     accept=".png"
                     name="profile"
                     className="form-control"
+                    onChange={(event) => {
+                      const file = event.target.files[0];
+                      formik.setFieldValue("profile", file);
+                      if (file) {
+                        const previewUrl = URL.createObjectURL(file);
+                        setProfilePreviewUrl(previewUrl);
+                      } else {
+                        setProfilePreviewUrl(null);
+                      }
+                    }}
                     onBlur={formik.handleBlur}
                   />
-                  {data?.profile && (
-                    <div class="card border-0 shadow" style={{ width: "100%" }}>
-                      <div
-                        onClick={(e) => e.stopPropagation()}
-                        style={{ cursor: "not-allowed" }}
-                      >
+                  <div className="mt-3">
+                    {profilePreviewUrl ? (
+                      <img
+                        src={profilePreviewUrl}
+                        alt="Profile Image Preview"
+                        className="w-25"
+                      />
+                    ) : (
+                      data?.profile && (
                         <img
-                          class="card-img-top img-fluid"
-                          style={{
-                            height: "10rem",
-                            pointerEvents: "none",
-                            cursor: "not-allowed",
-                          }}
-                          src={pdfLogo}
-                          alt="Resume preview"
+                          src={data.profile}
+                          alt="Existing Profile Image"
+                          className="w-25"
                         />
-                      </div>
-                      <div
-                        class="card-body d-flex justify-content-between align-items-center"
-                        style={{ flexWrap: "wrap" }}
-                      >
-                        <p
-                          class="card-title fw-semibold mb-0 text-wrap"
-                          style={{
-                            flex: 1,
-                            whiteSpace: "nowrap",
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                          }}
-                          title={data?.profile?.split("/").pop()}
-                        >
-                          {data?.profile?.split("/").pop()}
-                        </p>
-                        <a
-                          href={data?.profile}
-                          download
-                          class="btn text-dark ms-2"
-                          title="Download Resume"
-                          style={{ flexShrink: 0 }}
-                        >
-                          <MdOutlineDownloadForOffline size={25} />
-                        </a>
-                      </div>
-                    </div>
-                  )}
-                  {formik.touched.profile && formik.errors.profile && (
-                    <div className="error text-danger">
-                      <small>{formik.errors.profile}</small>
-                    </div>
-                  )}
+                      )
+                    )}
+                  </div>
                 </div>
-
-                {/* <img
-                  src={data.profile}
-                  className="img-fluid ms-2 w-50 rounded mt-2"
-                  alt="Profile"
-                /> */}
               </div>
+
               <div className="col-12">
                 <div className="mb-3">
                   <label for="exampleFormControlInput1" className="form-label">

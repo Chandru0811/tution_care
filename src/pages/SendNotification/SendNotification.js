@@ -19,10 +19,11 @@ const SendNotification = () => {
   const navigate = useNavigate();
   const [selectedId, setSelectedId] = useState(null);
   const [menuAnchor, setMenuAnchor] = useState(null);
+  const centerId = localStorage.getItem("tmscenterId");
 
   const getData = async () => {
     try {
-      const response = await api.get("/getAllSmsPushNotifications");
+      const response = await api.get(`/getSmsPushNotificationsByCenterId?centerId=${centerId}`);
       setDatas(response.data);
       console.log("message", response.data);
     } catch (error) {

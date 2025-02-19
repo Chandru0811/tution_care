@@ -30,13 +30,16 @@ function Sidebar() {
 
   const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   const storedConfigure = JSON.parse(
-    localStorage.getItem("tuitionConfigurationData") || "{}"
+    localStorage.getItem("tmsappConfigInfo") || "{}"
   );
+
+  console.log("storedConfigure ::",storedConfigure);
+  
   const location = useLocation();
   const hasRenderedOnce = useRef(false);
   const centerId = localStorage.getItem("tmscenterId");
   const Key = {
-    lead: storedConfigure?.lead || "Lead Management",
+    lead: storedConfigure.lead || "Lead Management",
     student: storedConfigure?.student || "Student Management",
     course: storedConfigure?.course || "Course Management",
     centreName: storedConfigure?.centreName || "Company Management",
@@ -49,6 +52,8 @@ function Sidebar() {
       storedConfigure?.assignManagement || "Assignment Management",
     documentManagement:
       storedConfigure?.documentManagement || "Document Management",
+    settings: storedConfigure?.settings || "Settings",
+
   };
   const iconMapping = {
     [Key.centreName]: <PiBuildings />,
@@ -66,7 +71,7 @@ function Sidebar() {
     [Key.report]: <BsFileEarmarkRichtext />,
     "Content Management": <LiaUserEditSolid />,
     [Key.message]: <TbMessageCode />,
-    Settings: <GrUserSettings />,
+    [Key.settings]: <GrUserSettings />,
   };
 
   const getAccess = async () => {
@@ -87,7 +92,7 @@ function Sidebar() {
       localStorage.getItem("tmsscreens") || "{}"
     );
     const storedConfigure = JSON.parse(
-      localStorage.getItem("tuitionConfigurationData") || "{}"
+      localStorage.getItem("tmsappConfigInfo") || "{}"
     );
     console.log("first", storedConfigure.class);
     if (!data) return;

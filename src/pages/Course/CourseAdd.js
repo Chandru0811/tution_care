@@ -5,12 +5,10 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
 import api from "../../config/URL";
-import fetchAllCentersWithIds from "../List/CenterList";
 import fetchAllSubjectsWithIds from "../List/SubjectList";
 import fetchAllLevelBySubjectsWithIds from "../List/LevelListBySubject";
 
 const validationSchema = Yup.object({
-  // centerId: Yup.array().min(1, "*At least one Centre must be selected"),
   courseName: Yup.string().required("*Course Name is required"),
   courseCode: Yup.string().required("*Course Code is required"),
   subjectId: Yup.string().required("*Select the Subject"),
@@ -46,13 +44,10 @@ const validationSchema = Yup.object({
 
 function CourseAdd({ onSuccess }) {
   const navigate = useNavigate();
-  const [centerData, setCenterData] = useState([]);;
   const colorInputRef = useRef(null);
-  console.log("Center Data", centerData);
   const [levelData, setLevelData] = useState(null);
   const [subjectData, setSubjectData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
-
   const role = localStorage.getItem("tmsrole");
   const centerId = localStorage.getItem("tmscenterId");
 
@@ -125,19 +120,11 @@ function CourseAdd({ onSuccess }) {
       scrollToError(formik.errors);
     }
   }, [formik.submitCount, formik.errors]);
-  const fetchData = async () => {
-    try {
-      const centerData = await fetchAllCentersWithIds();
-      setCenterData(centerData);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
 
   const fetchSubject = async () => {
     try {
-      const subjectData = await fetchAllSubjectsWithIds();
-      setSubjectData(subjectData);
+      const response = await api.get(`/getCourseSubjectsByCenterId/${centerId}`);
+      setSubjectData(response.data);
     } catch (error) {
       toast.error(error);
     }
@@ -160,14 +147,15 @@ function CourseAdd({ onSuccess }) {
   };
 
   useEffect(() => {
-    fetchData();
     fetchSubject();
   }, []);
+
   const handleColorPickerClick = () => {
     if (colorInputRef.current) {
       colorInputRef.current.click();
     }
   };
+
   return (
     <div className="container-fluid">
       <ol
@@ -258,7 +246,7 @@ function CourseAdd({ onSuccess }) {
                   {subjectData &&
                     subjectData.map((subject) => (
                       <option key={subject.subjectId} value={subject.id}>
-                        {subject.subjects}
+                        {subject.subject}
                       </option>
                     ))}
                 </select>

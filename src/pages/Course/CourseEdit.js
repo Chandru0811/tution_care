@@ -5,7 +5,6 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
 import api from "../../config/URL";
-import fetchAllCentersWithIds from "../List/CenterList";
 import fetchAllSubjectsWithIds from "../List/SubjectList";
 import fetchAllLevelBySubjectsWithIds from "../List/LevelListBySubject";
 
@@ -46,8 +45,6 @@ const validationSchema = Yup.object({
 function CourseEdit() {
   const { id } = useParams();
   const navigate = useNavigate();
-
-  const [selectedCenters, setSelectedCenters] = useState([]);
   const [levelData, setLevelData] = useState(null);
   const [subjectData, setSubjectData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
@@ -132,17 +129,6 @@ function CourseEdit() {
             response.data.classReplacementAllowed || false,
         });
         fetchLevels(response.data.subjectId);
-        setSelectedCenters(
-          response.data.centers.map((center) => ({
-            label: center.centerName,
-            value: center.id,
-          }))
-        );
-        const centers = response.data.centers;
-        const selectedCenterIds = centers.map((center) => center.id);
-        formik.setFieldValue("centerId", selectedCenterIds);
-        // setSelectedCenters(response.data.centers.map(center => (console.log("object",center.id))));
-        console.log("selectedCenters", selectedCenters);
       } catch (error) {
         toast.error(error);
       }
@@ -155,8 +141,8 @@ function CourseEdit() {
 
   const fetchSubject = async () => {
     try {
-      const subjectData = await fetchAllSubjectsWithIds();
-      setSubjectData(subjectData);
+      const response = await api.get(`/getCourseSubjectsByCenterId/${centerId}`);
+      setSubjectData(response.data);
     } catch (error) {
       toast.error(error);
     }
@@ -272,7 +258,7 @@ function CourseEdit() {
                   {subjectData &&
                     subjectData.map((subject) => (
                       <option key={subject.subjectId} value={subject.id}>
-                        {subject.subjects}
+                        {subject.subject}
                       </option>
                     ))}
                 </select>
