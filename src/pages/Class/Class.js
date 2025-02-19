@@ -27,6 +27,7 @@ const Class = () => {
   const [teacherData, setTeacherData] = useState([]);
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
+  const appConfigInfo = JSON.parse(localStorage.getItem("tmsappConfigInfo"));
   const [filters, setFilters] = useState({
     centerId: centerId,
     courseId: "",
@@ -227,7 +228,7 @@ const Class = () => {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          &nbsp;Class
+          &nbsp;{appConfigInfo.confClass}
         </li>
       </ol>
 
@@ -243,7 +244,7 @@ const Class = () => {
             <span class="me-2 text-muted">
               This database shows the list of{" "}
               <span className="bold" style={{ color: "#287f71" }}>
-                Class
+              {appConfigInfo.confClass}
               </span>
             </span>
           </div>

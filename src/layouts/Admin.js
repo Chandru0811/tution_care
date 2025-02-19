@@ -207,6 +207,7 @@ import Roles from "../pages/Settings/Roles/Roles";
 import AssignmentEdit from "../pages/Assignment/AssignmentEdit";
 import PaymentsView from "../pages/Payment/PaymentsView";
 import Language from "../pages/Settings/Language/Language";
+import TrialNotification from "../components/common/TrialNotification";
 
 function Admin({ handleLogout }) {
   const [centerChange, setCenterChange] = useState(0);
@@ -232,6 +233,7 @@ function Admin({ handleLogout }) {
         <Sidebar />
         <section className="home-section">
           <Header onLogout={handleLogout} centerChange={centerChange} />
+          <TrialNotification />
           <ScrollToTop />
           <div className="home-content" style={{ minHeight: "95vh" }}>
             <Routes>

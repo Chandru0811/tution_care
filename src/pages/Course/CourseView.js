@@ -12,6 +12,7 @@ function CourseView() {
   const [centerData, setCenterData] = useState(null);
   const [subjectData, setSubjectData] = useState(null);
   const [levelData, setLevelData] = useState(null);
+  const appConfigInfo = JSON.parse(localStorage.getItem("tmsappConfigInfo"));
 
   const fetchData = async () => {
     try {
@@ -52,17 +53,17 @@ function CourseView() {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          &nbsp;Course Management
+          &nbsp;{appConfigInfo.course}
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
           <Link to="/course" className="custom-breadcrumb">
-            &nbsp;Course{" "}
+            &nbsp;{appConfigInfo.course}{" "}
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          &nbsp;Course View
+          &nbsp;{appConfigInfo.course} View
         </li>
       </ol>
       <div className="card">
@@ -74,7 +75,7 @@ function CourseView() {
             <div class="d-flex">
               <div class="dot active"></div>
             </div>
-            <span class="me-2 text-muted">View Course</span>
+            <span class="me-2 text-muted">View {appConfigInfo.course}</span>
           </div>
           <div className="my-2 pe-3 d-flex align-items-center">
             <Link to="/course">

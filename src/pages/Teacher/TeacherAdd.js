@@ -33,7 +33,7 @@ export default function TeacherAdd() {
   const childRef = React.useRef();
   const [formData, setFormData] = useState({});
   console.log("perant", formData);
-
+  const appConfigInfo = JSON.parse(localStorage.getItem("tmsappConfigInfo"));
   const isStepSkipped = (step) => {
     return skipped.has(step);
   };
@@ -200,18 +200,18 @@ export default function TeacherAdd() {
             </Link>
             <span className="breadcrumb-separator"> &gt; </span>
           </li>
-          <li>
+          {/* <li>
             &nbsp;Staffing
             <span className="breadcrumb-separator"> &gt; </span>
-          </li>
+          </li> */}
           <li>
             <Link to="/teacher" className="custom-breadcrumb">
-              &nbsp;Teacher
+              &nbsp;{appConfigInfo.employee}
             </Link>
             <span className="breadcrumb-separator"> &gt; </span>
           </li>
           <li className="breadcrumb-item active" aria-current="page">
-            &nbsp;Teacher Add
+            &nbsp;{appConfigInfo.employee} Add
           </li>
         </ol>
         <Stepper className="my-5" activeStep={activeStep} alternativeLabel>

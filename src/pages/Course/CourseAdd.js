@@ -49,6 +49,7 @@ function CourseAdd({ onSuccess }) {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const role = localStorage.getItem("tmsrole");
   const centerId = localStorage.getItem("tmscenterId");
+  const appConfigInfo = JSON.parse(localStorage.getItem("tmsappConfigInfo"));
 
   const formik = useFormik({
     initialValues: {
@@ -168,17 +169,17 @@ function CourseAdd({ onSuccess }) {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          &nbsp;Course Management
+          &nbsp;{appConfigInfo.course}
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
           <Link to="/course" className="custom-breadcrumb">
-            &nbsp;Course{" "}
+            &nbsp;{appConfigInfo.course}{" "}
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          &nbsp;Course Add
+          &nbsp;{appConfigInfo.course} Add
         </li>
       </ol>
       <form
@@ -198,7 +199,7 @@ function CourseAdd({ onSuccess }) {
               <div class="d-flex">
                 <div class="dot active"></div>
               </div>
-              <span class="me-2 text-muted">Add Course</span>
+              <span class="me-2 text-muted">Add {appConfigInfo.course}</span>
             </div>
             <div className="my-2 pe-3 d-flex align-items-center">
               <Link to="/course">

@@ -27,7 +27,7 @@ export default function EnrollmentEdit() {
   const [activeStep, setActiveStep] = useState(0);
   const [formData, setFormData] = useState({ id });
   const [loadIndicator, setLoadIndicator] = useState(false);
-
+  const appConfigInfo = JSON.parse(localStorage.getItem("tmsappConfigInfo"));
   const childRef = React.useRef();
 
   const handleNext = () => {
@@ -89,17 +89,17 @@ export default function EnrollmentEdit() {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          &nbsp;Lead Management
+          &nbsp;{appConfigInfo.lead}
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
           <Link to="/lead/lead" className="custom-breadcrumb">
-            &nbsp;Lead
+            &nbsp;{appConfigInfo.lead}
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          &nbsp;Lead Edit
+          &nbsp;{appConfigInfo.lead} Edit
         </li>
       </ol>
       <Stepper className="my-5" activeStep={activeStep} alternativeLabel>

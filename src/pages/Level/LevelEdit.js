@@ -19,6 +19,7 @@ function Edit({ id, onSuccess, handleMenuClose }) {
   const [subjectData, setSubjectData] = useState(null);
   const [isModified, setIsModified] = useState(false);
   const role = localStorage.getItem("tmsrole");
+  const appConfigInfo = JSON.parse(localStorage.getItem("tmsappConfigInfo"));
 
   const fetchData = async () => {
     try {
@@ -126,7 +127,7 @@ function Edit({ id, onSuccess, handleMenuClose }) {
         disableBackdropClick={isModified}
         disableEscapeKeyDown={isModified}
       >
-        <DialogTitle className="headColor">Edit Level</DialogTitle>
+        <DialogTitle className="headColor">Edit {appConfigInfo.level}</DialogTitle>
         <form
           onSubmit={formik.handleSubmit}
           onKeyDown={(e) => {

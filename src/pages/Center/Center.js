@@ -18,6 +18,9 @@ const Center = () => {
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
   const tmscenterName = localStorage.getItem("tmscenterName");
+  const appConfigInfo = JSON.parse(localStorage.getItem("tmsappConfigInfo"));
+
+  console.log("appConfigInfo",appConfigInfo.appName)
 
   const columns = useMemo(
     () => [
@@ -171,11 +174,11 @@ const Center = () => {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          &nbsp;Company Management
+          &nbsp;{appConfigInfo.centreName}
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          &nbsp;Company Listing
+          &nbsp;{appConfigInfo.centreName} Listing
         </li>
       </ol>
       <div className="card">
@@ -185,7 +188,7 @@ const Center = () => {
         >
           <span className="text-muted">
             This database shows the list of{" "}
-            <strong style={{ color: "#287f71" }}>Company</strong>
+            <strong style={{ color: "#287f71" }}>{appConfigInfo.centreName}</strong>
           </span>
         </div>
         {loading ? (

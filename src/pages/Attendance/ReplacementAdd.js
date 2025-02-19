@@ -18,6 +18,7 @@ function ReplacementAdd({
   const [isModified, setIsModified] = useState(false);
   const [attendanceDatas, setAttendanceData] = useState([]);
   const [batchData, setBatchData] = useState([]);
+  const centerId = localStorage.getItem("tmscenterId")
 
   const validationSchema = Yup.object({
     studentName: Yup.string().required("*Student Name is required"),
@@ -26,13 +27,13 @@ function ReplacementAdd({
     // classCode: Yup.string().required("*Class Code is required"),
     absentDate: Yup.string().required("*Absent Date is required"),
     absentReason: Yup.string().required("*Absent Reason is required"),
-    file: Yup.mixed()
-      .required("*File is required")
-      .test(
-        "max-file-name-length",
-        "*File name must be at most 50 characters",
-        (value) => !value || value.name.length <= 50
-      ),
+    // file: Yup.mixed()
+    //   .required("*File is required")
+    //   .test(
+    //     "max-file-name-length",
+    //     "*File name must be at most 50 characters",
+    //     (value) => !value || value.name.length <= 50
+    //   ),
   });
 
   const handleClose = () => {
@@ -112,7 +113,7 @@ function ReplacementAdd({
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await api.get("/getAllAbsentReason");
+        const response = await api.get(`/getAllAbsentReasonWithCenterId/${centerId}`);
         setAttendanceData(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);

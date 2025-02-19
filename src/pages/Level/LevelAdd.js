@@ -14,6 +14,7 @@ function LevelAdd({ onSuccess }) {
   const [isModified, setIsModified] = useState(false);
   const role = localStorage.getItem("tmsrole");
   const centerId = localStorage.getItem("tmscenterId");
+  const appConfigInfo = JSON.parse(localStorage.getItem("tmsappConfigInfo"));
 
   const handleClose = () => {
     setShow(false);
@@ -112,7 +113,7 @@ function LevelAdd({ onSuccess }) {
         keyboard={isModified ? false : true}
       >
         <Modal.Header closeButton>
-          <Modal.Title className="headColor">Add Level</Modal.Title>
+          <Modal.Title className="headColor">Add {appConfigInfo.level}</Modal.Title>
         </Modal.Header>
         <form
           onSubmit={formik.handleSubmit}

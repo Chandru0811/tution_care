@@ -24,7 +24,7 @@ const Teacher = () => {
   const [loading, setLoading] = useState(true);
   const roles = localStorage.getItem("tmsuserName");
   const centerId = localStorage.getItem("tmscenterId");
-
+  const appConfigInfo = JSON.parse(localStorage.getItem("tmsappConfigInfo"));
   const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
 
   const [menuAnchor, setMenuAnchor] = useState(null);
@@ -233,12 +233,12 @@ const Teacher = () => {
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
-        <li>
+        {/* <li>
           &nbsp;Staffing
           <span className="breadcrumb-separator"> &gt; </span>
-        </li>
+        </li> */}
         <li className="breadcrumb-item active" aria-current="page">
-          &nbsp;Teacher
+          &nbsp;{appConfigInfo.employee}
         </li>
       </ol>
       <div className="card">
@@ -253,7 +253,7 @@ const Teacher = () => {
             <span class="me-2 text-muted">
               This database shows the list of{" "}
               <span className="bold" style={{ color: "#287f71" }}>
-                Teacher
+              {appConfigInfo.employee}
               </span>
             </span>
           </div>
