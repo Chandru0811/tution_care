@@ -131,7 +131,7 @@ const AccountEdit = forwardRef(
 
     const ShgType = async () => {
       try {
-        const response = await api.get("/getAllSHGSetting");
+        const response = await api.get(`/getSHGSettingWithCenterId/${centerId}`);
         setShgData(response.data);
         console.log("shgdata", shgData);
       } catch (error) {

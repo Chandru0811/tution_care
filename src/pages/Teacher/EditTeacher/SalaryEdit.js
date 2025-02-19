@@ -26,7 +26,7 @@ const SalaryEdit = forwardRef(
     const [salaryTypeData, setSalaryTypeData] = useState(null);
     const fetchData = async () => {
       try {
-        const salarytype = await fetchAllSalaryTypeWithIds();
+        const salarytype = await fetchAllSalaryTypeWithIds(centerId);
         setSalaryTypeData(salarytype);
       } catch (error) {
         toast.error(error);
