@@ -28,6 +28,7 @@ const Subject = () => {
   const [selectedId, setSelectedId] = useState(null);
   const centerId = localStorage.getItem("tmscenterId");
   const centerName = localStorage.getItem("tmscenterName");
+  const appConfigInfo = JSON.parse(localStorage.getItem("tmsappConfigInfo"));
 
   const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   console.log("Screens : ", SCREENS);
@@ -229,7 +230,7 @@ const Subject = () => {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          &nbsp;Subject
+          &nbsp;{appConfigInfo.subject}
         </li>
       </ol>
 
@@ -245,7 +246,7 @@ const Subject = () => {
             <span class="me-2 text-muted">
               This database shows the list of{" "}
               <span className="bold" style={{ color: "#287f71" }}>
-                Subject
+              {appConfigInfo.subject}
               </span>
             </span>
           </div>

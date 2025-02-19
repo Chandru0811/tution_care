@@ -16,6 +16,7 @@ function ClassAdd() {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const centerId = localStorage.getItem("tmscenterId");
   const role = localStorage.getItem("tmsrole");
+  const appConfigInfo = JSON.parse(localStorage.getItem("tmsappConfigInfo"));
 
   const validationSchema = Yup.object({
     courseId: Yup.string().required("*Course Name is required"),
@@ -234,12 +235,12 @@ function ClassAdd() {
         </li>
         <li>
           <Link to="/class" className="custom-breadcrumb">
-            &nbsp;Class
+            &nbsp;{appConfigInfo.confClass}
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          &nbsp;Class Add
+          &nbsp;{appConfigInfo.confClass} Add
         </li>
       </ol>
       <form
@@ -259,7 +260,7 @@ function ClassAdd() {
               <div class="d-flex">
                 <div class="dot active"></div>
               </div>
-              <span class="me-2 text-muted">Add Class</span>
+              <span class="me-2 text-muted">Add {appConfigInfo.confClass}</span>
             </div>
             <div className="my-2 pe-3 d-flex align-items-center">
               <Link to="/class">

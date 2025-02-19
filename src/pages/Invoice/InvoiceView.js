@@ -22,6 +22,9 @@ function InvoiceView() {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [taxData, setTaxData] = useState([]);
   const centerId = localStorage.getItem("tmscenterId");
+  const storedConfigure = JSON.parse(
+    localStorage.getItem("tmsappConfigInfo") || "{}"
+  );
 
   const fetchData = async () => {
     setLoadIndicator(true);
@@ -256,7 +259,7 @@ function InvoiceView() {
   };
 
   // Utility function to load image
-  
+
   const loadImage = (url) => {
     return new Promise((resolve, reject) => {
       const img = new Image();
@@ -297,7 +300,7 @@ function InvoiceView() {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          Invoice and Payment
+          {storedConfigure?.invoice || "Invoice and Payment"}
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>

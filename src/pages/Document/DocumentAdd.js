@@ -31,6 +31,9 @@ function DocumentAdd() {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const userName = localStorage.getItem("tmsuserName");
   const [batchData, setBatchData] = useState(null);
+  const storedConfigure = JSON.parse(
+    localStorage.getItem("tmsappConfigInfo") || "{}"
+  );
 
   const formik = useFormik({
     initialValues: {
@@ -70,7 +73,7 @@ function DocumentAdd() {
 
         let requestBody = {
           centerId: centerId,
-          userId:values.userId,
+          userId: values.userId,
           day: values.day,
           center: selectedOptionName,
           classListing: selectedClassName,
@@ -275,17 +278,17 @@ function DocumentAdd() {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          Document Management
+          {storedConfigure?.documentManagement || "Document Management"}
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
           <Link to="/document" className="custom-breadcrumb">
-            Document
+            {storedConfigure?.documentManagement || "Document"}
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          Document Add
+          {storedConfigure?.documentManagement || "Document"} Add
         </li>
       </ol>
       <form

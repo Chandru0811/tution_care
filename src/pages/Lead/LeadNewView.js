@@ -24,6 +24,7 @@ function LeadNewView() {
   //   const [showPaymentStatusModal, setShowPaymentStatusModal] = useState(false);
   //   const [showSummaryModal, setShowSummaryModal] = useState(false);
   const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
+  const appConfigInfo = JSON.parse(localStorage.getItem("tmsappConfigInfo"));
 
   const fetchData = async () => {
     try {
@@ -99,17 +100,17 @@ function LeadNewView() {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          Lead Management
+        {appConfigInfo.lead}
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
           <Link to="/lead/lead" className="custom-breadcrumb">
-            Lead Listing
+            {appConfigInfo.lead} Listing
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          Lead View
+          {appConfigInfo.lead} View
         </li>
       </ol>
       <div className="d-flex align-items-center justify-content-end mb-4">

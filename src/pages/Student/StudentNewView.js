@@ -40,6 +40,9 @@ function StudentNewView() {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const centerName = localStorage.getItem("tmscenterName");
   const centerId = localStorage.getItem("tmscenterId");
+  const storedConfigure = JSON.parse(
+    localStorage.getItem("tmsappConfigInfo") || "{}"
+  );
 
   const handleOpenModal = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
@@ -241,17 +244,17 @@ function StudentNewView() {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          Student Management
+          {storedConfigure?.student || "Student Management"}
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
           <Link to="/student" className="custom-breadcrumb">
-            Student Listing
+            {storedConfigure?.student || "Student Listing"}
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          Student Listing View
+          {storedConfigure?.student || "Student Listing"} View
         </li>
       </ol>
       <div className="d-flex align-items-center justify-content-end mb-4">

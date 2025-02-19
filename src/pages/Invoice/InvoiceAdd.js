@@ -65,6 +65,9 @@ export default function InvoiceAdd() {
   const [schedulesData, setSchedulesData] = useState([]);
   console.log("packageData : ", packageData);
   console.log("selectedPackageId : ", selectedPackageId);
+  const storedConfigure = JSON.parse(
+    localStorage.getItem("tmsappConfigInfo") || "{}"
+  );
 
   const formik = useFormik({
     initialValues: {
@@ -789,7 +792,7 @@ export default function InvoiceAdd() {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          Invoice and Payment
+          {storedConfigure?.invoice || "Invoice and Payment"}
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>

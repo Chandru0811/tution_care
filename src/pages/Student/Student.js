@@ -29,6 +29,9 @@ const Student = () => {
   const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   const [isClearFilterClicked, setIsClearFilterClicked] = useState(false);
   const centerId = localStorage.getItem("tmscenterId");
+  const storedConfigure = JSON.parse(
+    localStorage.getItem("tmsappConfigInfo") || "{}"
+  );
 
   const columns = useMemo(
     () => [
@@ -297,11 +300,11 @@ const Student = () => {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          Student Management
+          {storedConfigure?.student || "Student Management"}
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          Student Listing
+          {storedConfigure?.student || "Student Listing"}
         </li>
       </ol>
 

@@ -24,6 +24,9 @@ function PaymentsAdd() {
     totalAmount: invoice.totalAmount,
   }));
   const [selectedInvoice, setSelectedInvoice] = useState([]);
+  const storedConfigure = JSON.parse(
+    localStorage.getItem("tmsappConfigInfo") || "{}"
+  );
 
   const validationSchema = Yup.object({
     studentId: Yup.string().required("Student Name is required"),
@@ -260,7 +263,7 @@ function PaymentsAdd() {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          &nbsp;Invoice and Payment
+          &nbsp; {storedConfigure?.invoice || "Invoice and Payment"}
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>

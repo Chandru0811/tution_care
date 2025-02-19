@@ -17,6 +17,7 @@ function SubjectAdd({ onSuccess }) {
   const role = localStorage.getItem("tmsrole");
   const [isModified, setIsModified] = useState(false);
   const centerId = localStorage.getItem("tmscenterId");
+  const appConfigInfo = JSON.parse(localStorage.getItem("tmsappConfigInfo"));
 
   const handleClose = () => {
     setShow(false);
@@ -140,7 +141,7 @@ function SubjectAdd({ onSuccess }) {
           }}
         >
           <Modal.Header closeButton>
-            <Modal.Title className="headColor">Add Subject</Modal.Title>
+            <Modal.Title className="headColor">Add {appConfigInfo.subject}</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <div className="container">

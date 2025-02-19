@@ -8,6 +8,7 @@ import fetchAllCoursesWithIds from "../List/CourseList";
 function ClassView() {
   const { id } = useParams();
   const [data, setData] = useState([]);
+  const appConfigInfo = JSON.parse(localStorage.getItem("tmsappConfigInfo"));
 
   const [centerData, setCenterData] = useState(null);
   const [courseData, setCourseData] = useState(null);
@@ -54,12 +55,12 @@ function ClassView() {
         </li>
         <li>
           <Link to="/class" className="custom-breadcrumb">
-            &nbsp;Class
+            &nbsp;{appConfigInfo.confClass}
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          &nbsp;Class View
+          &nbsp;{appConfigInfo.confClass} View
         </li>
       </ol>
       <div className="card">
@@ -71,7 +72,7 @@ function ClassView() {
             <div class="d-flex">
               <div class="dot active"></div>
             </div>
-            <span class="me-2 text-muted">View Class</span>
+            <span class="me-2 text-muted">View {appConfigInfo.confClass}</span>
           </div>
           <div className="my-2 pe-3 d-flex align-items-center">
             <Link to="/class">

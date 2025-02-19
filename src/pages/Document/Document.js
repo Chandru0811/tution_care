@@ -37,6 +37,9 @@ const Document = () => {
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
   const [isClearFilterClicked, setIsClearFilterClicked] = useState(false);
+  const storedConfigure = JSON.parse(
+    localStorage.getItem("tmsappConfigInfo") || "{}"
+  );
 
   const columns = useMemo(
     () => [
@@ -244,15 +247,14 @@ const Document = () => {
       date: "",
       day: "",
     });
-  
+
     // Fetch data without filters
     setIsClearFilterClicked(true); // Set flag to trigger data fetch without filters
   };
-  
+
   useEffect(() => {
-      getDocumentData();
+    getDocumentData();
   }, [filters]);
-  
 
   const handleMenuClose = () => setMenuAnchor(null);
 
@@ -269,11 +271,11 @@ const Document = () => {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          &nbsp;Document Management
+          &nbsp;{storedConfigure?.documentManagement || "Document Management"}
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          &nbsp;Document
+          &nbsp;{storedConfigure?.documentManagement || "Document"}
         </li>
       </ol>
       <div className="card">
@@ -295,7 +297,6 @@ const Document = () => {
         </div>
         <div className="mb-3">
           <div className="individual_fliters d-lg-flex">
-           
             <div className="form-group mb-0 ms-2 mb-1">
               <select
                 className="form-select form-select-sm center_list"

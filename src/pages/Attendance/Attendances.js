@@ -15,6 +15,9 @@ function Attendances() {
   const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   const [batchData, setBatchData] = useState(null);
   const centerId = localStorage.getItem("tmscenterId");
+  const storedConfigure = JSON.parse(
+    localStorage.getItem("tmsappConfigInfo") || "{}"
+  );
 
   const getCurrentDate = () => {
     const today = new Date();
@@ -119,19 +122,18 @@ function Attendances() {
   //   try {
   //     // Construct query parameters dynamically
   //     const queryParams = new URLSearchParams({ centerId });
-  
+
   //     if (selectedDate) queryParams.append("date", selectedDate);
   //     if (selectedCourse) queryParams.append("courseId", selectedCourse);
   //     if (selectedBatch) queryParams.append("batchTime", selectedBatch);
-  
+
   //     const response = await api.get(`getAttendanceWithCustomInfo?${queryParams.toString()}`);
-      
+
   //     setAttendanceData(response.data);
   //   } catch (error) {
   //     toast.error("Error fetching data:", error);
   //   }
   // };
-  
 
   useEffect(() => {
     if (selectedDate) {
@@ -208,7 +210,7 @@ function Attendances() {
             <span className="breadcrumb-separator"> &gt; </span>
           </li>
           <li>
-            &nbsp;Student Management
+            &nbsp;{storedConfigure?.student || "Student Management"}
             <span className="breadcrumb-separator"> &gt; </span>
           </li>
           <li className="breadcrumb-item active" aria-current="page">

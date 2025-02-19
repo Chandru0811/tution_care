@@ -27,7 +27,7 @@ const Lead = () => {
   const [selectedId, setSelectedId] = useState("");
   const [selectedRow, setSelectedRow] = useState("");
   const [activeButton, setActiveButton] = useState("All");
-
+  const appConfigInfo = JSON.parse(localStorage.getItem("tmsappConfigInfo"));
   const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   const centerId = localStorage.getItem("tmscenterId");
   const [isSmallScreen, setIsSmallScreen] = useState(false);
@@ -807,11 +807,11 @@ const Lead = () => {
             <span className="breadcrumb-separator"> &gt; </span>
           </li>
           <li>
-            &nbsp;Lead Management
+            &nbsp;{appConfigInfo.lead}
             <span className="breadcrumb-separator"> &gt; </span>
           </li>
           <li className="breadcrumb-item active" aria-current="page">
-            &nbsp;Lead Listing
+            &nbsp;{appConfigInfo.lead} Listing
           </li>
         </ol>
         {/* <form
@@ -886,7 +886,7 @@ const Lead = () => {
               <span class="me-2 text-muted">
                 This database shows the list of{" "}
                 <span className="bold" style={{ color: "#287f71" }}>
-                  Lead
+                {appConfigInfo.lead}
                 </span>
               </span>
             </div>

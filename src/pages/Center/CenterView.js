@@ -8,6 +8,7 @@ function CenterView() {
   const [data, setData] = useState([]);
   const [taxTypeData, setTaxTypeData] = useState(null);
   const centerId = localStorage.getItem("tmscenterId");
+  const appConfigInfo = JSON.parse(localStorage.getItem("tmsappConfigInfo"));
 
   const fetchTaxData = async () => {
     try {
@@ -47,17 +48,17 @@ function CenterView() {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          &nbsp;Company Management
+          &nbsp;{appConfigInfo.centreName}
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
           <Link to="/companyRegister" className="custom-breadcrumb">
-            &nbsp;Company Listing
+            &nbsp;{appConfigInfo.centreName} Listing
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          &nbsp;Company Listing view
+          &nbsp;{appConfigInfo.centreName} Listing view
         </li>
       </ol>
       <div className="card">
@@ -69,7 +70,7 @@ function CenterView() {
             <div class="d-flex">
               <div class="dot active"></div>
             </div>
-            <span class="me-2 text-muted">View Company</span>
+            <span class="me-2 text-muted">View {appConfigInfo.centreName}</span>
           </div>
           <div className="my-2 pe-3 d-flex align-items-center">
             <Link to="/companyRegister">
@@ -309,7 +310,7 @@ function CenterView() {
 
             {/* Center Registrations */}
             <div className="col-md-12 col-12 mt-4">
-              <h5 className="headColor mb-3">Company Registrations</h5>
+              <h5 className="headColor mb-3">{appConfigInfo.centreName} Registrations</h5>
               <table className="table table-border-solid">
                 <thead>
                   <tr>
@@ -342,7 +343,7 @@ function CenterView() {
             </div>
             {/* Center Break */}
             <div className="col-md-12 col-12 mt-4">
-              <h5 className="headColor mb-3">Company Break</h5>
+              <h5 className="headColor mb-3">{appConfigInfo.centreName} Break</h5>
               <table class="table table-border-solid">
                 <thead>
                   <tr>
@@ -367,7 +368,7 @@ function CenterView() {
             </div>
             {/* class Room  */}
             <div className="col-md-12 col-12 mt-4">
-              <h5 className="headColor mb-3">Company Class Room</h5>
+              <h5 className="headColor mb-3">{appConfigInfo.centreName} Class Room</h5>
               <table class="table table-border-solid">
                 <thead>
                   <tr>
@@ -408,7 +409,7 @@ function CenterView() {
             </div>
             {/* Package  */}
             <div className="col-md-12 col-12 mt-4">
-              <h5 className="headColor mb-3">Company Package</h5>
+              <h5 className="headColor mb-3">{appConfigInfo.centreName} Package</h5>
               <table class="table table-border-solid">
                 <thead>
                   <tr>

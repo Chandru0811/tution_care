@@ -14,6 +14,7 @@ function SubjectEdit({ id, onSuccess, handleMenuClose }) {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const role = localStorage.getItem("tmsrole");
   const [isModified, setIsModified] = useState(false);
+  const appConfigInfo = JSON.parse(localStorage.getItem("tmsappConfigInfo"));
   console.log(isModified);
   
   const handleClose = () => {
@@ -111,7 +112,7 @@ function SubjectEdit({ id, onSuccess, handleMenuClose }) {
             }
           }}
         >
-          <DialogTitle>Edit Subject</DialogTitle>
+          <DialogTitle>Edit {appConfigInfo.subject}</DialogTitle>
           <DialogContent>
             <div className="container">
               <div className="row py-4">

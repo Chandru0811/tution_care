@@ -14,6 +14,7 @@ import { MoreVert as MoreVertIcon } from "@mui/icons-material";
 
 const Course = () => {
   const centerId = localStorage.getItem("tmscenterId");
+  const appConfigInfo = JSON.parse(localStorage.getItem("tmsappConfigInfo"));
 
   const [filters, setFilters] = useState({
     centerId: centerId,
@@ -266,11 +267,11 @@ const Course = () => {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          &nbsp;Course Management
+          &nbsp; {appConfigInfo.course}
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          &nbsp;Course
+          &nbsp;{appConfigInfo.course}
         </li>
       </ol>
       <div className="card">
@@ -285,7 +286,7 @@ const Course = () => {
             <span className="me-2 text-muted">
               This database shows the list of
               <span className="bold" style={{ color: "#287f71" }}>
-                Course
+              {appConfigInfo.course}
               </span>
             </span>
           </div>
@@ -387,12 +388,12 @@ const Course = () => {
               <MenuItem
                 onClick={() => navigate(`/course/coursefees/${selectedId}`)} className="text-start mb-0 menuitem-style"
               >
-                Course Fees
+                {appConfigInfo.course} Fees
               </MenuItem>
               <MenuItem
                 onClick={() => navigate(`/course/coursedeposit/${selectedId}`)} className="text-start mb-0 menuitem-style"
               >
-                Course Deposit Fees
+                {appConfigInfo.course} Deposit Fees
               </MenuItem>
               <MenuItem
                 onClick={() =>

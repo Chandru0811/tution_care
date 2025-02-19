@@ -35,7 +35,7 @@ const validationSchema = Yup.object().shape({
 });
 
 const Form1 = forwardRef(
-  ({ formData, setFormData, handleNext, setLoadIndicators,navigate }, ref) => {
+  ({ formData, setFormData, handleNext, setLoadIndicators, navigate }, ref) => {
     const [subjectData, setSubjectData] = useState(null);
     const [raceData, setRaceData] = useState(null);
     const [centerData, setCenterData] = useState(null);
@@ -104,12 +104,12 @@ const Form1 = forwardRef(
             //   ...data,
             //   lead_id,
             // });
-           if(navigate){
-            navigate('/lead/lead')
-           }else{
-            handleNext();
-           }
-          //  handleNext();
+            if (navigate) {
+              navigate("/lead/lead");
+            } else {
+              handleNext();
+            }
+            //  handleNext();
           } else {
             toast.error(response.data.message);
           }
@@ -201,7 +201,7 @@ const Form1 = forwardRef(
                 {subjectData &&
                   subjectData.map((subjectId) => (
                     <option key={subjectId.id} value={subjectId.id}>
-                      {subjectId.subjects}
+                      {subjectId.subject}
                     </option>
                   ))}
               </select>
@@ -358,8 +358,7 @@ const Form1 = forwardRef(
               <div className="mb-3">
                 <div>
                   <label for="exampleFormControlInput1" className="form-label">
-                    School Type
-                    <span className="text-danger">*</span>
+                    School Type<span className="text-danger">*</span>
                   </label>
                 </div>
                 <div className="form-check form-check-inline">
@@ -411,7 +410,6 @@ const Form1 = forwardRef(
                 )}
               </div>
             </div>
-
             <div className="col-md-6 col-12 ">
               <div className="mb-3">
                 <label for="exampleFormControlInput1" className="form-label">

@@ -18,6 +18,9 @@ const ReplaceClassLesson = () => {
   const [loading, setLoading] = useState(true);
   const [courseData, setCourseData] = useState([]);
   const navigate = useNavigate();
+  const storedConfigure = JSON.parse(
+    localStorage.getItem("tmsappConfigInfo") || "{}"
+  );
 
   const columns = useMemo(
     () => [
@@ -239,7 +242,7 @@ const ReplaceClassLesson = () => {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          &nbsp;Student Management
+          &nbsp; {storedConfigure?.student || "Student Management"}
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">

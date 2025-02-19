@@ -40,6 +40,7 @@ export default function TeacherEdit() {
   const roleFromURL = searchParams.get("role");
   const childRef = React.useRef();
   const [formData, setFormData] = useState({ staff_id });
+  const appConfigInfo = JSON.parse(localStorage.getItem("tmsappConfigInfo"));
   console.log("object", formData);
 
   const isStepSkipped = (step) => {
@@ -152,18 +153,18 @@ export default function TeacherEdit() {
             </Link>
             <span className="breadcrumb-separator"> &gt; </span>
           </li>
-          <li>
+          {/* <li>
             &nbsp;Staffing
             <span className="breadcrumb-separator"> &gt; </span>
-          </li>
+          </li> */}
           <li>
             <Link to="/teacher" className="custom-breadcrumb">
-              &nbsp;Teacher
+              &nbsp;{appConfigInfo.employee}
             </Link>
             <span className="breadcrumb-separator"> &gt; </span>
           </li>
           <li className="breadcrumb-item active" aria-current="page">
-            &nbsp;Teacher Edit
+            &nbsp;{appConfigInfo.employee} Edit
           </li>
         </ol>
         <Stepper className="my-5" activeStep={activeStep} alternativeLabel>

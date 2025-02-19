@@ -72,6 +72,7 @@ function CenterEdit({ handleCenterChanged }) {
   const userName = localStorage.getItem("tmsuserName");
   const centerId = localStorage.getItem("tmscenterId");
   const [menuAnchor, setMenuAnchor] = useState(null);
+  const appConfigInfo = JSON.parse(localStorage.getItem("tmsappConfigInfo"));
 
   const formik = useFormik({
     initialValues: {
@@ -220,17 +221,17 @@ function CenterEdit({ handleCenterChanged }) {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          &nbsp;Company Management
+          &nbsp;{appConfigInfo.centreName}
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
           <Link to="/companyRegister" className="custom-breadcrumb">
-            &nbsp;Company Listing
+            &nbsp;{appConfigInfo.centreName} Listing
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          &nbsp;Company Listing Edit
+          &nbsp;{appConfigInfo.centreName} Listing Edit
         </li>
       </ol>
       <form
@@ -250,7 +251,7 @@ function CenterEdit({ handleCenterChanged }) {
               <div class="d-flex">
                 <div class="dot active"></div>
               </div>
-              <span class="me-2 text-muted">Edit Company</span>
+              <span class="me-2 text-muted">Edit {appConfigInfo.centreName}</span>
             </div>
             <div className="my-2 pe-3 d-flex align-items-center">
               <Link to="/companyRegister">
@@ -806,7 +807,7 @@ function CenterEdit({ handleCenterChanged }) {
               <div className="col-md-12 col-12 mt-4">
                 <div className="d-flex justify-content-between align-items-center">
                   <div class="d-flex align-items-start">
-                    <h5 className="headColor mb-3">Company Registrations</h5>
+                    <h5 className="headColor mb-3">{appConfigInfo.centreName} Registrations</h5>
                   </div>
                   <div className="my-2 pe-3 d-flex align-items-center">
                     <AddRegister
@@ -884,7 +885,7 @@ function CenterEdit({ handleCenterChanged }) {
               <div className="col-md-12 col-12 mt-4">
                 <div className="d-flex justify-content-between align-items-center">
                   <div class="d-flex align-items-start">
-                    <h5 className="headColor mb-3">Company Break</h5>
+                    <h5 className="headColor mb-3">{appConfigInfo.centreName} Break</h5>
                   </div>
                   <div className="my-2 pe-3 d-flex align-items-center">
                     <AddBreak
@@ -955,7 +956,7 @@ function CenterEdit({ handleCenterChanged }) {
               <div className="col-md-12 col-12 mt-4">
                 <div className="d-flex justify-content-between align-items-center">
                   <div class="d-flex align-items-start">
-                    <h5 className="headColor mb-3">Company Classroom</h5>
+                    <h5 className="headColor mb-3">{appConfigInfo.centreName} Classroom</h5>
                   </div>
                   <div className="my-2 pe-3 d-flex align-items-center">
                     <AddClass
@@ -1060,7 +1061,7 @@ function CenterEdit({ handleCenterChanged }) {
               <div className="col-md-12 col-12 mt-4">
                 <div className="d-flex justify-content-between align-items-center">
                   <div class="d-flex align-items-start">
-                    <h5 className="headColor mb-3">Company Package</h5>
+                    <h5 className="headColor mb-3">{appConfigInfo.centreName} Package</h5>
                   </div>
                   <div className="my-2 pe-3 d-flex align-items-center">
                     <AddPackage

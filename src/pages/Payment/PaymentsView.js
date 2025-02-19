@@ -11,6 +11,9 @@ import { IoMdDownload } from "react-icons/io";
 function PaymentsView() {
   const { id } = useParams();
   const [data, setData] = useState({});
+  const storedConfigure = JSON.parse(
+    localStorage.getItem("tmsappConfigInfo") || "{}"
+  );
 
   const getData = async () => {
     try {
@@ -129,7 +132,7 @@ function PaymentsView() {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          Invoice and Payment
+          {storedConfigure?.invoice || "Invoice and Payment"}
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>

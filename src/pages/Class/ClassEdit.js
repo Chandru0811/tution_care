@@ -16,6 +16,7 @@ function ClassEdit() {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const role = localStorage.getItem("tmsrole");
   const centerId = localStorage.getItem("tmscenterId");
+  const appConfigInfo = JSON.parse(localStorage.getItem("tmsappConfigInfo"));
 
   const validationSchema = Yup.object({
     courseId: Yup.string().required("*Course Name is required"),
@@ -226,12 +227,12 @@ function ClassEdit() {
         </li>
         <li>
           <Link to="/class" className="custom-breadcrumb">
-            &nbsp;Class
+            &nbsp;{appConfigInfo.confClass}
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          &nbsp;Class Edit
+          &nbsp;{appConfigInfo.confClass} Edit
         </li>
       </ol>
       <form
@@ -251,7 +252,7 @@ function ClassEdit() {
               <div class="d-flex">
                 <div class="dot active"></div>
               </div>
-              <span class="me-2 text-muted">Edit Class</span>
+              <span class="me-2 text-muted">Edit {appConfigInfo.confClass}</span>
             </div>
             <div className="my-2 pe-3 d-flex align-items-center">
               <Link to="/class">

@@ -25,6 +25,7 @@ const Level = () => {
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
   const centerId = localStorage.getItem("tmscenterId");
+  const appConfigInfo = JSON.parse(localStorage.getItem("tmsappConfigInfo"));
 
   const columns = useMemo(
     () => [
@@ -216,7 +217,7 @@ const Level = () => {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          Level
+        {appConfigInfo.level}
         </li>
       </ol>
 
@@ -232,7 +233,7 @@ const Level = () => {
             <span class="me-2 text-muted">
               This database shows the list of{" "}
               <span className="bold" style={{ color: "#287f71" }}>
-                Level
+              {appConfigInfo.level}
               </span>
             </span>
           </div>
