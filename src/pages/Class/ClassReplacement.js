@@ -9,7 +9,6 @@ import {
 import * as Yup from "yup";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
-import fetchAllTeacherListByCenter from "../List/TeacherListByCenter";
 import fetchAllClassRoomWithCenterIds from "../List/ClassRoomList";
 
 const validationSchema = Yup.object({

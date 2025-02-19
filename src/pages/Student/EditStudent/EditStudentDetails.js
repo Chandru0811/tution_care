@@ -64,7 +64,7 @@ const EditStudentDetails = forwardRef(
         const languageData = await fetchAllLanguageWithIdsC();
         setLanguageData(languageData);
 
-        const nationality = await fetchAllNationalityeWithIds();
+        const nationality = await fetchAllNationalityeWithIds(centerId);
         setNationalityData(nationality);
       } catch (error) {
         toast.error(error);

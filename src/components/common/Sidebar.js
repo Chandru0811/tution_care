@@ -194,7 +194,7 @@ function Sidebar() {
                 {
                   title: "Leave Request",
                   path: "/leave",
-                  access: storedScreens.leaveIndex,
+                  access: storedScreens.leaveRequestIndex,
                 },
                 {
                   title: "Holiday",

@@ -2002,9 +2002,9 @@ function RolesAdd() {
                             <input
                               className="form-check-input"
                               type="checkbox"
-                              name="leaveIndex"
-                              checked={formik.values.leaveIndex}
-                              onChange={handleCheckboxChange(`leaveIndex`)}
+                              name="leaveRequestIndex"
+                              checked={formik.values.leaveRequestIndex}
+                              onChange={handleCheckboxChange(`leaveRequestIndex`)}
                             />
                           </td>
                           <td>
@@ -2020,9 +2020,9 @@ function RolesAdd() {
                             <input
                               className="form-check-input"
                               type="checkbox"
-                              name="leaveCreate"
-                              checked={formik.values.leaveCreate}
-                              onChange={handleCheckboxChange(`leaveCreate`)}
+                              name="leaveRequesCreate"
+                              checked={formik.values.leaveRequesCreate}
+                              onChange={handleCheckboxChange(`leaveRequesCreate`)}
                             />
                           </td>
                           <td>

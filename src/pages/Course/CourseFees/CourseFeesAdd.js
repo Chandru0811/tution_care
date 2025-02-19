@@ -60,7 +60,7 @@ function CourseFeesAdd({ onSuccess}) {
 
   const fetchTaxData = async () => {
     try {
-      const response = await api.get("getAllTaxSetting");
+      const response = await api.get(`/getAllTaxSettingByCenter/${centerId}`);
       setTaxData(response.data);
     } catch (error) {
       toast.error("Error fetching tax data:", error);
