@@ -23,6 +23,9 @@ function AssignmentEdit() {
   const [selectedStudents, setSelectedStudents] = useState([]);
   const [selectedBatchTimes, setSelectedBatchTimes] = useState([]);
   const [teacherData, setTeacherData] = useState(null);
+  const storedConfigure = JSON.parse(
+    localStorage.getItem("tmsappConfigInfo") || "{}"
+  );
 
   const validationSchema = Yup.object({
     assignmentName: Yup.string().required("*Assignment Name is required"),
@@ -354,17 +357,17 @@ function AssignmentEdit() {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          Assignment Management
+          {storedConfigure?.assignManagement || "Assignment Management"}
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
           <Link to="/assignment" className="custom-breadcrumb">
-            Assignment
+            {storedConfigure?.assignManagement || "Assignment"}
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          Assignment Edit
+          {storedConfigure?.assignManagement || "Assignment"} Edit
         </li>
       </ol>
       <form

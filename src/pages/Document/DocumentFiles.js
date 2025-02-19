@@ -13,6 +13,9 @@ function DocumentFile() {
   const [documentData, setDocumentData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const centerId = localStorage.getItem("tmscenterId");
+  const storedConfigure = JSON.parse(
+    localStorage.getItem("tmsappConfigInfo") || "{}"
+  );
 
   const navigate = useNavigate();
 
@@ -142,11 +145,10 @@ function DocumentFile() {
     setDocumentData(null);
     const classId = event.target.value;
     formik.setFieldValue("classListing", classId);
-  
+
     // Explicitly passing selected courseId from formik values
     fetchFolders(formik.values.course, classId);
   };
-  
 
   return (
     <section>
@@ -170,11 +172,11 @@ function DocumentFile() {
               <span className="breadcrumb-separator"> &gt; </span>
             </li>
             <li>
-              Document Management
+              {storedConfigure?.documentManagement || "Document Management"}
               <span className="breadcrumb-separator"> &gt; </span>
             </li>
             <li className="breadcrumb-item active" aria-current="page">
-              Document File
+              {storedConfigure?.documentManagement || "Document"} File
             </li>
           </ol>
           <div className="card">

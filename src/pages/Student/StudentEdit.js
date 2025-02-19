@@ -29,6 +29,9 @@ export default function StudentAdd() {
   const [activeStep, setActiveStep] = useState(0);
 
   const [formData, setFormData] = useState({ id });
+  const storedConfigure = JSON.parse(
+    localStorage.getItem("tmsappConfigInfo") || "{}"
+  );
 
   const childRef = React.useRef();
   // console.log("Form Data:", formData);
@@ -94,17 +97,17 @@ export default function StudentAdd() {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          Student Management
+          {storedConfigure?.student || "Student Management"}
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
           <Link to="/student" className="custom-breadcrumb">
-            Student Listing
+            {storedConfigure?.student || "Student Listing"}
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          Student Listing Edit
+          {storedConfigure?.student || "Student Listing"} Edit
         </li>
       </ol>
 

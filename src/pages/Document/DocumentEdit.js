@@ -16,13 +16,15 @@ function DocumentEdit({ id, onSuccess, handleMenuClose }) {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [isModified, setIsModified] = useState(false);
   const userName = localStorage.getItem("tmsuserName");
+  const storedConfigure = JSON.parse(
+    localStorage.getItem("tmsappConfigInfo") || "{}"
+  );
 
   const handleClose = () => {
     setShow(false);
     handleMenuClose();
   };
   const handleShow = () => setShow(true);
-
 
   const validationSchema = Yup.object({
     folderName: Yup.string().required("*Folder Name is required"),
@@ -36,7 +38,7 @@ function DocumentEdit({ id, onSuccess, handleMenuClose }) {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       setLoadIndicator(true);
-      values.updatedBy= userName;
+      values.updatedBy = userName;
       try {
         const response = await api.put(
           `/updateDocumentFoldersWithAws/${id}`,
@@ -93,7 +95,7 @@ function DocumentEdit({ id, onSuccess, handleMenuClose }) {
   return (
     <>
       <p
-      className="text-start mb-0 menuitem-style"
+        className="text-start mb-0 menuitem-style"
         onClick={handleShow}
         style={{
           whiteSpace: "nowrap",
@@ -110,7 +112,9 @@ function DocumentEdit({ id, onSuccess, handleMenuClose }) {
         disableBackdropClick={isModified}
         disableEscapeKeyDown={isModified}
       >
-        <DialogTitle className="headColor">Edit Document</DialogTitle>
+        <DialogTitle className="headColor">
+          Edit {storedConfigure?.documentManagement || "Document"}
+        </DialogTitle>
         <form
           onSubmit={formik.handleSubmit}
           onKeyDown={(e) => {
