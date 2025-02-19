@@ -99,8 +99,8 @@ const SuperAdminCenter = ({ handleCenterChanged }) => {
               bgColor: "#28a745",
             },
             {
-              label: "Pending",
-              value: "Pending",
+              label: "Trial",
+              value: "Trial",
               bgColor: "#ffc107",
             },
             {
@@ -111,7 +111,7 @@ const SuperAdminCenter = ({ handleCenterChanged }) => {
           ];
 
           const [selectedStatus, setSelectedStatus] = useState(
-            row.original.centerStatus || "Pending"
+            row.original.centerStatus || "Trial"
           );
 
           useEffect(() => {
@@ -161,7 +161,7 @@ const SuperAdminCenter = ({ handleCenterChanged }) => {
               {statusOptions
                 .filter(
                   (status) =>
-                    selectedStatus === "Pending" || status.value !== "Pending"
+                    selectedStatus === "Trial" || status.value !== "Trial"
                 )
                 .map((status) => (
                   <option
