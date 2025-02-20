@@ -45,7 +45,7 @@ function Sidebar() {
     centreName: storedConfigure?.centreName || "Company Management",
     employee: storedConfigure?.employee || "Employee Info",
     report: storedConfigure?.report || "Report Management",
-    invoice: storedConfigure?.invoice || "Invoice and Payment",
+    invoice: `${storedConfigure?.invoice || "Invoice"}  and Payment`,
     Rferal: storedConfigure?.Rferal || "Referal Management",
     message: storedConfigure?.message || "Messaging",
     assignManagement:
@@ -309,7 +309,7 @@ function Sidebar() {
           ]
         : []),
       {
-        title: storedConfigure?.invoice || "Invoice and Payment",
+        title: `${storedConfigure?.invoice || "Invoice"}  and Payment`,
         icon: "LiaFileInvoiceDollarSolid",
         isOpen: false,
         subMenus: [

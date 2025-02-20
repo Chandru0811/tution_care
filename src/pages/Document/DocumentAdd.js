@@ -308,7 +308,9 @@ function DocumentAdd() {
               <div class="d-flex">
                 <div class="dot active"></div>
               </div>
-              <span class="me-2 text-muted">Add Document</span>
+              <span class="me-2 text-muted">
+                Add {storedConfigure?.documentManagement || "Document"}
+              </span>
             </div>
             <div className="my-2 pe-3 d-flex align-items-center">
               <Link to="/document">
@@ -337,7 +339,8 @@ function DocumentAdd() {
             <div className="row py-4">
               <div class="col-md-6 col-12 mb-4">
                 <lable class="">
-                  Course<span class="text-danger">*</span>
+                  {storedConfigure?.course || "Course"}
+                  <span class="text-danger">*</span>
                 </lable>
                 <select
                   {...formik.getFieldProps("course")}
@@ -365,7 +368,8 @@ function DocumentAdd() {
 
               <div class="col-md-6 col-12 mb-4 d-flex flex-column justify-content-end">
                 <lable class="">
-                  Class Listing<span class="text-danger">*</span>
+                  {storedConfigure?.confClass || "Class"} Listing
+                  <span class="text-danger">*</span>
                 </lable>
                 <select
                   {...formik.getFieldProps("classListing")}
@@ -571,7 +575,9 @@ function DocumentAdd() {
                   <></>
                 ) : (
                   <div className="">
-                    <label className="form-label">Student Name</label>
+                    <label className="form-label">
+                      {storedConfigure?.student || "Student"} Name
+                    </label>
                     <select
                       {...formik.getFieldProps("studentSelect")}
                       className={`form-select   ${

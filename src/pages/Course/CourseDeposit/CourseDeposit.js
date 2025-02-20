@@ -20,6 +20,7 @@ const CourseDeposit = () => {
   const [loading, setLoading] = useState(true);
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
+  const appConfigInfo = JSON.parse(localStorage.getItem("tmsappConfigInfo"));
 
   const columns = useMemo(
     () => [
@@ -181,18 +182,18 @@ const CourseDeposit = () => {
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
-        <li>
-          Course Management
+        {/* <li>
+        {appConfigInfo.course}
           <span className="breadcrumb-separator"> &gt; </span>
-        </li>
+        </li> */}
         <li>
           <Link to="/course" className="custom-breadcrumb">
-            Course
+          {appConfigInfo.course}
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          Course Deposit
+        {appConfigInfo.course} Deposit
         </li>
       </ol>
       <div className="card">
@@ -207,7 +208,7 @@ const CourseDeposit = () => {
             <span class="me-2 text-muted">
               This database shows the list of{" "}
               <span className="bold" style={{ color: "#287f71" }}>
-                Course Deposit
+              {appConfigInfo.course} Deposit
               </span>
             </span>
           </div>

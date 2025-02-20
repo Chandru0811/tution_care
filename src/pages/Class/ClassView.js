@@ -50,7 +50,7 @@ function ClassView() {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          &nbsp;Course Management
+          &nbsp;{appConfigInfo.course}
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
@@ -87,7 +87,7 @@ function ClassView() {
             <div className="col-md-6 col-12">
               <div className="row mb-2">
                 <div className="col-6  ">
-                  <p className="">Course</p>
+                  <p className="">{appConfigInfo.course}</p>
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">
@@ -105,7 +105,7 @@ function ClassView() {
             <div className="col-md-6 col-12">
               <div className="row mb-2">
                 <div className="col-6">
-                  <p className="">Class Name</p>
+                  <p className="">{appConfigInfo.confClass} Name</p>
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">: {data.className || ""}</p>
@@ -115,7 +115,7 @@ function ClassView() {
             <div className="col-md-6 col-12">
               <div className="row  mb-2">
                 <div className="col-6  ">
-                  <p className="">Class Type</p>
+                  <p className="">{appConfigInfo.confClass} Type</p>
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">: {data.classType || ""}</p>

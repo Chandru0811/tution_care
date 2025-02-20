@@ -31,27 +31,27 @@ const AddParentGuardian = forwardRef(
             parentName: Yup.string().required("*Guardian Name is required"),
             // occupation: Yup.string().required("*Occupation is required"),
             // relation: Yup.string().required("*Relation is required"),
-            address: Yup.string().required("*Address  is required"),
-            postalCode: Yup.string().required("*Postal Code is required"),
-            parentDateOfBirth: Yup.string().required(
-              "*Date of Birth is required"
-            ),
-            email: Yup.string()
-              .email("*Invalid email format")
-              .required("*Email is required"),
-            mobileNumber: Yup.string()
-              .matches(/^[1-9]\d{6,9}$/, "*Invalid Mobile Number")
-              .required("*Mobile Number is required"),
-            primaryContact: Yup.boolean().required(
-              "*Primary Contact is required"
-            ),
-            file: Yup.mixed()
-              .notRequired()
-              .test(
-                "max-file-name-length",
-                "*File name must be at most 50 characters",
-                (value) => !value || (value.name && value.name.length <= 50)
-              ),
+            // address: Yup.string().required("*Address  is required"),
+            // postalCode: Yup.string().required("*Postal Code is required"),
+            // parentDateOfBirth: Yup.string().required(
+            //   "*Date of Birth is required"
+            // ),
+            // email: Yup.string()
+            //   .email("*Invalid email format")
+            //   .required("*Email is required"),
+            // mobileNumber: Yup.string()
+            //   .matches(/^[1-9]\d{6,9}$/, "*Invalid Mobile Number")
+            //   .required("*Mobile Number is required"),
+            // primaryContact: Yup.boolean().required(
+            //   "*Primary Contact is required"
+            // ),
+            // file: Yup.mixed()
+            //   .notRequired()
+            //   .test(
+            //     "max-file-name-length",
+            //     "*File name must be at most 50 characters",
+            //     (value) => !value || (value.name && value.name.length <= 50)
+            //   ),
           })
         )
         .min(1, "*At least one parent information is required"),
@@ -108,10 +108,10 @@ const AddParentGuardian = forwardRef(
             formDatas.append("mobileNumber", parent.mobileNumber);
             formDatas.append("postalCode", parent.postalCode);
             formDatas.append("address", parent.address);
-            formDatas.append(
-              "primaryContact",
-              index === selectedPrimaryContactIndex ? true : false
-            );
+            // formDatas.append(
+            //   "primaryContact",
+            //   index === selectedPrimaryContactIndex ? true : false
+            // );
 
             if (parentDetailId[index]) {
               formDatas.append("updatedBy", userName);
@@ -150,55 +150,55 @@ const AddParentGuardian = forwardRef(
       validateOnBlur: true, // Enable validation on blur
     });
 
-    const handleAddRow = () => {
-      setRows((prev) => prev + 1);
-      formik.setFieldValue("parentInformation", [
-        ...formik.values.parentInformation,
-        {
-          parentName: "",
-          occupation: "",
-          postalCode: "",
-          relation: "",
-          address: "",
-          parentDateOfBirth: "",
-          email: "",
-          mobileNumber: "",
-          primaryContact: false,
-          file: null,
-        },
-      ]);
-    };
+    // const handleAddRow = () => {
+    //   setRows((prev) => prev + 1);
+    //   formik.setFieldValue("parentInformation", [
+    //     ...formik.values.parentInformation,
+    //     {
+    //       parentName: "",
+    //       occupation: "",
+    //       postalCode: "",
+    //       relation: "",
+    //       address: "",
+    //       parentDateOfBirth: "",
+    //       email: "",
+    //       mobileNumber: "",
+    //       primaryContact: false,
+    //       file: null,
+    //     },
+    //   ]);
+    // };
 
-    const handleRemoveRow = (index) => {
-      const updatedParentInformation = [...formik.values.parentInformation];
-      updatedParentInformation.splice(index, 1);
-      formik.setFieldValue("parentInformation", updatedParentInformation);
-      setRows((prev) => prev - 1);
+    // const handleRemoveRow = (index) => {
+    //   const updatedParentInformation = [...formik.values.parentInformation];
+    //   updatedParentInformation.splice(index, 1);
+    //   formik.setFieldValue("parentInformation", updatedParentInformation);
+    //   setRows((prev) => prev - 1);
 
-      // Handle Primary Contact
-      if (selectedPrimaryContactIndex === index) {
-        setSelectedPrimaryContactIndex(null);
-      } else if (selectedPrimaryContactIndex > index) {
-        setSelectedPrimaryContactIndex((prev) => prev - 1);
-      }
-    };
+    //   // Handle Primary Contact
+    //   if (selectedPrimaryContactIndex === index) {
+    //     setSelectedPrimaryContactIndex(null);
+    //   } else if (selectedPrimaryContactIndex > index) {
+    //     setSelectedPrimaryContactIndex((prev) => prev - 1);
+    //   }
+    // };
 
-    const handleDeleteRow = async (index) => {
-      try {
-        const lastRowId = formik.values.parentInformation[index - 1]?.id;
-        console.log("lastRowId", lastRowId);
-        if (lastRowId) {
-          const response = await api.delete(
-            `/deleteStudentParentsDetails/${lastRowId}`
-          );
-          if (response.status === 200 || response.status === 201) {
-            getStudentData();
-          }
-        }
-      } catch (error) {
-        console.error("Error deleting the parent information:", error);
-      }
-    };
+    // const handleDeleteRow = async (index) => {
+    //   try {
+    //     const lastRowId = formik.values.parentInformation[index - 1]?.id;
+    //     console.log("lastRowId", lastRowId);
+    //     if (lastRowId) {
+    //       const response = await api.delete(
+    //         `/deleteStudentParentsDetails/${lastRowId}`
+    //       );
+    //       if (response.status === 200 || response.status === 201) {
+    //         getStudentData();
+    //       }
+    //     }
+    //   } catch (error) {
+    //     console.error("Error deleting the parent information:", error);
+    //   }
+    // };
 
     const getStudentData = async () => {
       setLoadIndicators(true);
@@ -367,7 +367,7 @@ const AddParentGuardian = forwardRef(
         <form onSubmit={formik.handleSubmit}>
           {(formik.values.parentInformation || []).map((row, index) => (
             <div className="border-0 mb-5" key={index}>
-              <div className="d-flex justify-content-between align-item-center my-2">
+              {/* <div className="d-flex justify-content-between align-item-center my-2">
                 <p className="headColor">Parent / Guardian Information</p>
                 <div className="col-lg-6 col-md-6 col-12 text-end">
                   <label className="fw-medium">
@@ -413,7 +413,7 @@ const AddParentGuardian = forwardRef(
                     </div>
                   )}
                 </div>
-              </div>
+              </div> */}
               <div className="row mt-2">
                 <div className="col-lg-6 col-md-6 col-12 mt-3">
                   <label className="fw-medium">
@@ -440,9 +440,7 @@ const AddParentGuardian = forwardRef(
                 </div>
                 <div className="col-lg-6 col-md-6 col-12 mt-3">
                   <label className="fw-medium">
-                    <small>
-                      Occupation
-                    </small>
+                    <small>Occupation</small>
                   </label>
                   <input
                     type="text"
@@ -463,9 +461,7 @@ const AddParentGuardian = forwardRef(
                 </div>
                 <div className="col-lg-6 col-md-6 col-12 mt-3">
                   <label className="fw-medium">
-                    <small>
-                      Email<span className="text-danger">*</span>
-                    </small>
+                    <small>Email</small>
                   </label>
                   <input
                     type="email"
@@ -486,9 +482,7 @@ const AddParentGuardian = forwardRef(
                 </div>
                 <div className="col-lg-6 col-md-6 col-12 mt-3">
                   <label className="fw-medium">
-                    <small>
-                      Mobile Number<span className="text-danger">*</span>
-                    </small>
+                    <small>Mobile number</small>
                   </label>
                   <input
                     type="tel"
@@ -510,9 +504,7 @@ const AddParentGuardian = forwardRef(
                 </div>
                 <div className="col-lg-6 col-md-6 col-12 mt-3">
                   <label className="fw-medium">
-                    <small>
-                      Relation
-                    </small>
+                    <small>Relation</small>
                   </label>
                   <select
                     className="form-select"
@@ -538,9 +530,7 @@ const AddParentGuardian = forwardRef(
                 </div>
                 <div className="col-lg-6 col-md-6 col-12 mt-3">
                   <label className="fw-medium">
-                    <small>
-                      Date of Birth<span className="text-danger">*</span>
-                    </small>
+                    <small>Date of Birth</small>
                   </label>
                   <input
                     type="date"
@@ -569,9 +559,7 @@ const AddParentGuardian = forwardRef(
                 </div>
                 <div className="col-lg-6 col-md-6 col-12 mt-3">
                   <label className="fw-medium">
-                    <small>
-                      Postal Code<span className="text-danger">*</span>
-                    </small>
+                    <small>Postal Code</small>
                   </label>
                   <input
                     type="text"
@@ -676,9 +664,7 @@ const AddParentGuardian = forwardRef(
                 </div>
                 <div className="col-lg-12 col-md-12 col-12 my-3">
                   <label className="fw-medium">
-                    <small>
-                      Address<span className="text-danger">*</span>
-                    </small>
+                    <small>Address</small>
                   </label>
                   <textarea
                     rows={5}
@@ -698,7 +684,7 @@ const AddParentGuardian = forwardRef(
                     )}
                 </div>
               </div>
-              {rows > 1 && (
+              {/* {rows > 1 && (
                 <button
                   type="button"
                   className="btn btn-danger btn-sm"
@@ -712,10 +698,10 @@ const AddParentGuardian = forwardRef(
                 >
                   Delete
                 </button>
-              )}
+              )} */}
             </div>
           ))}
-          <div className="mt-3">
+          {/* <div className="mt-3">
             <button
               type="button"
               className="btn btn-sm text-white"
@@ -727,7 +713,7 @@ const AddParentGuardian = forwardRef(
             >
               Add More
             </button>
-          </div>
+          </div> */}
         </form>
       </div>
     );

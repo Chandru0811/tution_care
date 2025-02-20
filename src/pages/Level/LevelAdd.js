@@ -128,7 +128,7 @@ function LevelAdd({ onSuccess }) {
               <div className="row py-4">
                 <div className="col-md-6 col-12 mb-2">
                   <label className="form-label">
-                    Subject<span className="text-danger">*</span>
+                  {appConfigInfo.subject}<span className="text-danger">*</span>
                   </label>
                   <select
                     {...formik.getFieldProps("subjectId")}
@@ -177,7 +177,7 @@ function LevelAdd({ onSuccess }) {
                 </div>
                 <div className="col-md-6 col-12 mb-2">
                   <label className="form-label">
-                    Level<span className="text-danger">*</span>
+                  {appConfigInfo.level}<span className="text-danger">*</span>
                   </label>
                   <input
                     type="text"
@@ -196,7 +196,7 @@ function LevelAdd({ onSuccess }) {
                 </div>
                 <div className="col-md-6 col-12 mb-2">
                   <label className="form-label">
-                    Level Code<span className="text-danger">*</span>
+                  {appConfigInfo.level} Code<span className="text-danger">*</span>
                   </label>
                   <input
                     type="text"

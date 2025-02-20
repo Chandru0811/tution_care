@@ -242,7 +242,7 @@ function CourseEdit() {
             <div className="row">
               <div className="col-md-6 col-12 mb-2">
                 <lable className="">
-                  Subject<span className="text-danger">*</span>
+                {appConfigInfo.subject}<span className="text-danger">*</span>
                 </lable>
                 <select
                   className={`form-select  ${
@@ -270,7 +270,7 @@ function CourseEdit() {
               </div>
               <div className="col-md-6 col-12 mb-2">
                 <lable className="form-lable">
-                  Level<span className="text-danger">*</span>
+                {appConfigInfo.level}<span className="text-danger">*</span>
                 </lable>
                 <div className="input-group mb-3">
                   <select
@@ -300,7 +300,7 @@ function CourseEdit() {
             <div className="row">
               <div className="col-md-6 col-12 mb-2">
                 <lable className="">
-                  Course Name<span className="text-danger">*</span>
+                {appConfigInfo.course} Name<span className="text-danger">*</span>
                 </lable>
                 <input
                   type="text"
@@ -319,7 +319,7 @@ function CourseEdit() {
               </div>
               <div className="col-md-6 col-12 mb-2">
                 <lable className="form-lable">
-                  Course Code <span className="text-danger">*</span>
+                {appConfigInfo.course} Code <span className="text-danger">*</span>
                 </lable>
                 <div className="input-group mb-3">
                   <input
@@ -405,7 +405,7 @@ function CourseEdit() {
               </div>
               <div className="col-md-6 col-12 mb-2">
                 <lable className="">
-                  Course Type<span className="text-danger">*</span>
+                {appConfigInfo.course} Type<span className="text-danger">*</span>
                 </lable>
                 <div className="d-flex mt-2">
                   <input

@@ -70,7 +70,7 @@ const Student = () => {
       },
       {
         accessorKey: "studentUniqueId",
-        header: "Student ID",
+        header: `${storedConfigure?.student || "Student"} ID`,
         enableHiding: false,
         size: 40,
       },
@@ -81,7 +81,7 @@ const Student = () => {
       // },
       {
         accessorKey: "studentName",
-        header: "Student Name",
+        header: `${storedConfigure?.student || "Student"} Name`,
         enableHiding: false,
       },
       {
@@ -300,11 +300,11 @@ const Student = () => {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          {storedConfigure?.student || "Student Management"}
+          {storedConfigure?.student || "Student"} Management
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          {storedConfigure?.student || "Student Listing"}
+          {storedConfigure?.student || "Student"} Listing
         </li>
       </ol>
 
@@ -320,7 +320,7 @@ const Student = () => {
             <span class="me-2 text-muted">
               This database shows the list of{" "}
               <span className="bold" style={{ color: "#287f71" }}>
-                Student Listing
+                {storedConfigure?.student || "Student"} Listing
               </span>
             </span>
           </div>

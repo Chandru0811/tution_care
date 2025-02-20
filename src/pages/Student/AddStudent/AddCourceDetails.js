@@ -35,7 +35,9 @@ const AddcourseDetail = forwardRef(
     console.log("Selected Row ID:", selectedRow);
     const [selectedCourseId, setSelectedCourseId] = useState(null);
     console.log("Selected Course ID:", selectedCourseId);
-
+    const storedConfigure = JSON.parse(
+      localStorage.getItem("tmsappConfigInfo") || "{}"
+    );
     const handleDayChange = (e) => {
       formik.setFieldValue("days", e.target.value); // Update Formik value
       setAvailableDays([]); // Clear available days
@@ -93,7 +95,7 @@ const AddcourseDetail = forwardRef(
         {
           accessorKey: "course",
           enableHiding: false,
-          header: "Course",
+          header: `${storedConfigure?.course || "Course"}`,
         },
         {
           accessorKey: "batch",

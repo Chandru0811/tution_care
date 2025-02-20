@@ -25,6 +25,7 @@ function CourseFeesAdd({ onSuccess }) {
   const userName = localStorage.getItem("tmsuserName");
   const centerId = localStorage.getItem("tmscenterId");
   const [isModified, setIsModified] = useState(false);
+  const appConfigInfo = JSON.parse(localStorage.getItem("tmsappConfigInfo"));
 
   const handleClose = () => {
     setShow(false);
@@ -123,7 +124,7 @@ function CourseFeesAdd({ onSuccess }) {
         keyboard={isModified ? false : true}
       >
         <Modal.Header closeButton>
-          <Modal.Title className="headColor">Add Course Deposit</Modal.Title>
+          <Modal.Title className="headColor">Add {appConfigInfo.course} Deposit</Modal.Title>
         </Modal.Header>
         <form
           onSubmit={formik.handleSubmit}

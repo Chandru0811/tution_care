@@ -222,7 +222,7 @@ function ClassEdit() {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          &nbsp;Course Management
+          &nbsp;{appConfigInfo.course}
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
@@ -280,7 +280,7 @@ function ClassEdit() {
             <div className="row">
               <div class="col-md-6 col-12 mb-4">
                 <label>
-                  Course<span class="text-danger">*</span>
+                {appConfigInfo.course}<span class="text-danger">*</span>
                 </label>
                 <select
                   {...formik.getFieldProps("courseId")}
@@ -310,7 +310,7 @@ function ClassEdit() {
               </div>
               <div class="col-md-6 col-12 mb-4">
                 <label>
-                  Class Name<span class="text-danger">*</span>
+                {appConfigInfo.confClass} Name<span class="text-danger">*</span>
                 </label>
                 <input
                   name="className"
@@ -332,7 +332,7 @@ function ClassEdit() {
               </div>
               <div class="col-md-6 col-12 mb-4">
                 <label>
-                  Class Type<span class="text-danger">*</span>
+                {appConfigInfo.confClass} Type<span class="text-danger">*</span>
                 </label>{" "}
                 <br />
                 <div class="form-check form-check-inline">

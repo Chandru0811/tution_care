@@ -43,6 +43,7 @@ const Form1 = forwardRef(
     console.log("navigate", navigate);
     const userName = localStorage.getItem("tmsuserName");
     const centerId = localStorage.getItem("tmscenterId");
+    const appConfigInfo = JSON.parse(localStorage.getItem("tmsappConfigInfo"));
 
     const formik = useFormik({
       initialValues: {
@@ -186,7 +187,7 @@ const Form1 = forwardRef(
               </div>
             </div>
             <div class="col-md-6 col-12 mb-2">
-              <label className="form-label">Subject</label>
+              <label className="form-label">{appConfigInfo.subject}</label>
               <span className="text-danger">*</span>
               <select
                 className="form-select"

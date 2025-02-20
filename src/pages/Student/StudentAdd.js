@@ -96,17 +96,17 @@ export default function StudentAdd() {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          {storedConfigure?.student || "Student Management"}
+          {storedConfigure?.student || "Student"} Management
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
           <Link to="/student" className="custom-breadcrumb">
-            {storedConfigure?.student || "Student Listing"}
+            {storedConfigure?.student || "Student"} Listing
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          {storedConfigure?.student || "Student Listing"} Add
+          {storedConfigure?.student || "Student"} Listing Add
         </li>
       </ol>
       <Stepper className="my-5" activeStep={activeStep} alternativeLabel>
@@ -181,7 +181,7 @@ export default function StudentAdd() {
           )}
 
           <div className="container-fluid p-1 d-flex align-items-center justify-content-center">
-            {activeStep > 1 && (
+            {activeStep > 0 && (
               <button
                 className="btn btn-border btn-sm"
                 style={{ padding: "7px" }}

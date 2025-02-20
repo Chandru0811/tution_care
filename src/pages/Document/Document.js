@@ -75,7 +75,7 @@ const Document = () => {
       {
         accessorKey: "studentName",
         enableHiding: false,
-        header: "Student Name",
+        header: `${storedConfigure?.student || "Student"} Name`,
       },
       {
         accessorKey: "user",
@@ -84,13 +84,13 @@ const Document = () => {
       },
       {
         accessorKey: "course",
-        header: "Course",
+        header: `${storedConfigure?.course || "Course"}`,
         enableHiding: false,
         size: 40,
       },
       {
         accessorKey: "classListing",
-        header: "Class",
+        header: `${storedConfigure?.confClass || "Class"} `,
         enableHiding: false,
         size: 50,
       },
@@ -290,7 +290,7 @@ const Document = () => {
             <span class="me-2 text-muted">
               This database shows the list of{" "}
               <span className="bold" style={{ color: "#287f71" }}>
-                Document
+                {storedConfigure?.documentManagement || "Document"}
               </span>
             </span>
           </div>

@@ -387,7 +387,9 @@ function AssignmentEdit() {
               <div className="d-flex">
                 <div className="dot active"></div>
               </div>
-              <span className="me-2 text-muted">Edit Assignment</span>
+              <span className="me-2 text-muted">
+                Edit {storedConfigure?.assignManagement || "Assignment"}
+              </span>
             </div>
             <div className="my-2 pe-3 d-flex align-items-center">
               <Link to="/assignment">
@@ -416,7 +418,8 @@ function AssignmentEdit() {
             <div className="row py-4">
               <div className="col-md-6 col-12 mb-4">
                 <label className="form-label">
-                  Assignment Name<span className="text-danger">*</span>
+                  {storedConfigure?.assignManagement || "Assignment"} Name
+                  <span className="text-danger">*</span>
                 </label>
                 <div className="input-group mb-3">
                   <input
@@ -441,7 +444,8 @@ function AssignmentEdit() {
 
               <div className="col-md-6 col-12 mb-4">
                 <label className="form-label">
-                  Course<span className="text-danger">*</span>
+                  {storedConfigure?.course || "Course"}
+                  <span className="text-danger">*</span>
                 </label>
                 <select
                   {...formik.getFieldProps("courseId")}
@@ -470,7 +474,8 @@ function AssignmentEdit() {
 
               <div className="col-md-6 col-12 mb-4 d-flex flex-column justify-content-end">
                 <label className="form-label">
-                  Class Listing<span className="text-danger">*</span>
+                  {storedConfigure?.confClass || "Class"} Listing
+                  <span className="text-danger">*</span>
                 </label>
                 <select
                   {...formik.getFieldProps("classId")}
@@ -639,7 +644,9 @@ function AssignmentEdit() {
                   <></>
                 ) : (
                   <div className="">
-                    <label className="form-label">Student Name</label>
+                    <label className="form-label">
+                      {storedConfigure?.student || "Student"} Name
+                    </label>
                     <MultiSelect
                       options={studentData || []}
                       value={selectedStudents}
@@ -822,7 +829,9 @@ function AssignmentEdit() {
               </div>
 
               <div className="col-md-6 col-12 mb-4">
-                <label className="form-label">Assignment Reason</label>
+                <label className="form-label">
+                  {storedConfigure?.assignManagement || "Assignment"} Reason
+                </label>
                 <textarea
                   name="assignmentReason"
                   className={`form-control  ${

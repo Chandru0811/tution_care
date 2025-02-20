@@ -6,12 +6,15 @@ import { toast } from "react-toastify";
 function NewDashboard() {
   const [datas, setData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const selectedcenterId = localStorage.getItem("tmsselectedCenterId");
   const centerId = localStorage.getItem("tmscenterId");
 
   const getData = async () => {
     setLoading(true);
     try {
-      const response = await api.get(`getOverAllSmsRevenueReport/${centerId}`);
+      const response = await api.get(
+        `getOverAllSmsRevenueReport/${selectedcenterId || centerId}`
+      );
       if (response.status === 200) {
         setData(response.data);
       }
@@ -24,7 +27,7 @@ function NewDashboard() {
 
   useEffect(() => {
     getData();
-  }, []);
+  }, [centerId]);
 
   const fontFamily =
     "'Outfit', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji'";
@@ -99,7 +102,8 @@ function NewDashboard() {
     colors: ["#ABBDD3", "#287F71", "#EB862A"],
   };
 
-  const lineChartSeries = datas?.revenueOverTimeReport?.lineChartData?.series || [];
+  const lineChartSeries =
+    datas?.revenueOverTimeReport?.lineChartData?.series || [];
 
   const gaugeChartOptions = {
     chart: {
@@ -189,7 +193,7 @@ function NewDashboard() {
     colors: ["#ABBDD3", "#287F71", "#EB862A"],
   };
 
-  const lineChartSeries1 = datas?.revenueGrowthByDay?.series ||[];
+  const lineChartSeries1 = datas?.revenueGrowthByDay?.series || [];
 
   return (
     <>

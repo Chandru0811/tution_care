@@ -69,6 +69,9 @@ function SuperAdminCenterAdd({ handleCenterChanged }) {
           },
         });
         if (response.status === 201) {
+          await api.put(
+            `/statusApproval/${response.data.id}?newStatus=${values.centerStatus}`
+          );
           toast.success(response.data.message);
           navigate("/companyregistration");
           handleCenterChanged();
@@ -329,6 +332,34 @@ function SuperAdminCenterAdd({ handleCenterChanged }) {
                       {formik.errors.configId}
                     </div>
                   )}
+                </div>
+              </div>
+              <div className="col-md-6 col-12">
+                <div className="mb-3">
+                  <label className="form-label">
+                    Status<span class="text-danger">*</span>
+                  </label>
+                  <select
+                    {...formik.getFieldProps("centerStatus")}
+                    className={`form-select ${
+                      formik.touched.centerStatus && formik.errors.centerStatus
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                  >
+                    <option selected value="Pending">
+                      Pending
+                    </option>
+                    <option value="Trial">Trial</option>
+                    <option value="Approve">Approve</option>
+                    <option value="Rejected">Reject</option>
+                  </select>
+                  {formik.touched.centerStatus &&
+                    formik.errors.centerStatus && (
+                      <div className="invalid-feedback">
+                        {formik.errors.centerStatus}
+                      </div>
+                    )}
                 </div>
               </div>
               <div className="col-12">

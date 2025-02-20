@@ -102,12 +102,12 @@ export default function StudentAdd() {
         </li>
         <li>
           <Link to="/student" className="custom-breadcrumb">
-            {storedConfigure?.student || "Student Listing"}
+            {storedConfigure?.student || "Student"} Listing
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          {storedConfigure?.student || "Student Listing"} Edit
+          {storedConfigure?.student || "Student"} Listing Edit
         </li>
       </ol>
 

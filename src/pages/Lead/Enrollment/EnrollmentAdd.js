@@ -91,11 +91,11 @@ export default function EnrollmentAdd() {
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
-        <li>
+        {/* <li>
           {" "}
           &nbsp;{appConfigInfo.lead}
           <span className="breadcrumb-separator"> &gt; </span>{" "}
-        </li>
+        </li> */}
         <li>
           <Link to="/lead/lead" className="custom-breadcrumb">
             {" "}
