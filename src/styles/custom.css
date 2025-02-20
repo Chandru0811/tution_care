@@ -1393,7 +1393,7 @@ thead th {
 }
 /* TrialNotification.css */
 .notification-bar {
-  padding-top: 58px;
+  /* padding-top: 58px; */
   display: flex;
   font-size: smaller;
   justify-content: space-between;
