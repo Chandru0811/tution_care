@@ -108,6 +108,11 @@ const SuperAdminCenter = ({ handleCenterChanged }) => {
               value: "Rejected",
               bgColor: "#dc3545",
             },
+            {
+              label: "Pending", 
+              value: "Pending",
+              bgColor: "#6c757d",
+            },
           ];
 
           const [selectedStatus, setSelectedStatus] = useState(
@@ -397,6 +402,10 @@ const SuperAdminCenter = ({ handleCenterChanged }) => {
                     updatedAt: false,
                   },
                 }}
+                muiTableBodyRowProps={({ row }) => ({
+                  onClick: () => navigate(`/companyregistration/view/${row.original.id}`),
+                  style: { cursor: "pointer" },
+                })}
               />
             </ThemeProvider>
 

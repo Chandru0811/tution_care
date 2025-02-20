@@ -9,28 +9,28 @@ import { CiEdit } from "react-icons/ci";
 
 const validationSchema = Yup.object().shape({
   parentName: Yup.string().required("*Guardian Name is required"),
-  parentDateOfBirth: Yup.date()
-    .required("*Date Of Birth is required")
-    .max(new Date(), "*Date Of Birth cannot be in the future"),
-  email: Yup.string().required("*Email is required"),
-  relation: Yup.string().required("*Relation is required"),
-  mobileNumber: Yup.string()
-    .matches(
-      /^(?:\+?65)?\s?(?:\d{4}\s?\d{4}|\d{3}\s?\d{3}\s?\d{4})$/,
-      "Invalid Phone Number"
-    )
-    .required("Phone Number is required"),
-  postalCode: Yup.string()
-    .matches(/^\d+$/, "Invalid Postal Code")
-    .required("*Postal code is required"),
-  address: Yup.string().required("*Address is required"),
-  files: Yup.mixed()
-    .notRequired()
-    .test(
-      "max-file-name-length",
-      "*File name must be at most 50 characters",
-      (value) => !value || (value.name && value.name.length <= 50)
-    ),
+  // parentDateOfBirth: Yup.date()
+  //   .required("*Date Of Birth is required")
+  //   .max(new Date(), "*Date Of Birth cannot be in the future"),
+  // email: Yup.string().required("*Email is required"),
+  // relation: Yup.string().required("*Relation is required"),
+  // mobileNumber: Yup.string()
+  //   .matches(
+  //     /^(?:\+?65)?\s?(?:\d{4}\s?\d{4}|\d{3}\s?\d{3}\s?\d{4})$/,
+  //     "Invalid Phone Number"
+  //   )
+  //   .required("Phone Number is required"),
+  // postalCode: Yup.string()
+  //   .matches(/^\d+$/, "Invalid Postal Code")
+  //   .required("*Postal code is required"),
+  // address: Yup.string().required("*Address is required"),
+  // files: Yup.mixed()
+  //   .notRequired()
+  //   .test(
+  //     "max-file-name-length",
+  //     "*File name must be at most 50 characters",
+  //     (value) => !value || (value.name && value.name.length <= 50)
+  //   ),
 });
 
 const EditParentDetailModel = forwardRef(({ id, getData }) => {
@@ -175,9 +175,7 @@ const EditParentDetailModel = forwardRef(({ id, getData }) => {
                   </div>
                 </div>
                 <div className="col-md-6 col-12 mb-2">
-                  <lable className="">
-                    Occupation<span class="text-danger">*</span>
-                  </lable>
+                  <lable className="">Occupation</lable>
                   <input
                     type="text"
                     className={`form-control    ${
@@ -194,9 +192,7 @@ const EditParentDetailModel = forwardRef(({ id, getData }) => {
                   )}
                 </div>
                 <div className="col-md-6 col-12 mb-2">
-                  <lable className="">
-                    Date Of Birth<span class="text-danger">*</span>
-                  </lable>
+                  <lable className="">Date Of Birth</lable>
                   <input
                     type="date"
                     // onFocus={(e) => e.target.showPicker()}
@@ -262,9 +258,7 @@ const EditParentDetailModel = forwardRef(({ id, getData }) => {
                   </div>
                 </div>
                 <div className="col-md-6 col-12 mb-2">
-                  <lable className="">
-                    Email<span class="text-danger">*</span>
-                  </lable>
+                  <lable className="">Email</lable>
                   <input
                     type="email"
                     name="Email"
@@ -282,9 +276,7 @@ const EditParentDetailModel = forwardRef(({ id, getData }) => {
                   )}
                 </div>
                 <div className="col-md-6 col-12 mb-2">
-                  <lable className="">
-                    Mobile No<span class="text-danger">*</span>
-                  </lable>
+                  <lable className="">Mobile No</lable>
                   <input
                     type="text"
                     name="mobileNumber"
@@ -303,9 +295,7 @@ const EditParentDetailModel = forwardRef(({ id, getData }) => {
                     )}
                 </div>
                 <div className="col-md-6 col-12 mb-2">
-                  <lable className="">
-                    Relation<span class="text-danger">*</span>
-                  </lable>
+                  <lable className="">Relation</lable>
                   <select
                     className={`form-select ${
                       formik.touched.relation && formik.errors.relation
@@ -328,9 +318,7 @@ const EditParentDetailModel = forwardRef(({ id, getData }) => {
                   )}
                 </div>
                 <div className="col-md-6 col-12 mb-2">
-                  <lable className="">
-                    Postal Code<span class="text-danger">*</span>
-                  </lable>
+                  <lable className="">Postal Code</lable>
                   <input
                     type="text"
                     name="postalCode"
@@ -348,9 +336,7 @@ const EditParentDetailModel = forwardRef(({ id, getData }) => {
                   )}
                 </div>
                 <div className="col-md-12 col-12 mb-2">
-                  <lable className="">
-                    Address<span class="text-danger">*</span>
-                  </lable>
+                  <lable className="">Address</lable>
                   <textarea
                     type="text"
                     name="address"

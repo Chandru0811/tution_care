@@ -27,6 +27,7 @@ function CourseFeesEdit({ id, onSuccess, handleMenuClose }) {
   const [taxData, setTaxData] = useState([]);
   const userName = localStorage.getItem("tmsuserName");
   const centerId = localStorage.getItem("tmscenterId");
+  const appConfigInfo = JSON.parse(localStorage.getItem("tmsappConfigInfo"));
 
   // const fetchPackageData = async () => {
   //   try {
@@ -156,7 +157,7 @@ function CourseFeesEdit({ id, onSuccess, handleMenuClose }) {
         Edit
       </p>
       <Dialog open={open} onClose={handleClose} fullWidth maxWidth="md">
-        <DialogTitle>Edit Course Fees</DialogTitle>
+        <DialogTitle>Edit {appConfigInfo.course} Fees</DialogTitle>
         <form onSubmit={formik.handleSubmit}>
           <DialogContent>
             <div className="container">

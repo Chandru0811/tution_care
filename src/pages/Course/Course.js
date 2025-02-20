@@ -60,24 +60,24 @@ const Course = () => {
       {
         accessorKey: "courseName",
         enableHiding: false,
-        header: "Course Name",
+        header: `${appConfigInfo.course} Name`,
       },
-      { accessorKey: "levelName", enableHiding: false, header: "Level" },
+      { accessorKey: "levelName", enableHiding: false, header:`${appConfigInfo.level}`},
      
       {
         accessorKey: "courseCode",
         enableHiding: false,
-        header: "Course Code",
+        header: `${appConfigInfo.course} Code`,
       },
       {
         accessorKey: "subjectName",
         enableHiding: false,
-        header: "Subject",
+        header: `${appConfigInfo.subject}`,
       },
       {
         accessorKey: "courseType",
         enableHiding: false,
-        header: "Course Type",
+        header: `${appConfigInfo.course} Type`,
       },
       {
         accessorKey: "minClassSize",

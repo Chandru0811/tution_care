@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { Collapse, Nav, OverlayTrigger, Tooltip } from "react-bootstrap";
-import Logo from "../../assets/images/ECSLOGO.png";
+import Logo from "../../assets/images/TMS_LOGO.png";
 import { PiBuildings } from "react-icons/pi";
 import { IoIosAdd, IoIosRemove } from "react-icons/io";
 import { PiBookOpenText } from "react-icons/pi";
@@ -123,7 +123,7 @@ function SuperAdminSidebar() {
       <div className="logo-details">
         <span className="logo_name">
           <img src={Logo} alt="logo" width={70} className="img-fluid p-2" />
-          <span className="text-dark">ECS Cloud</span>
+          <span className="text-dark">ECS School</span>
         </span>
       </div>
       <ul className="nav-links">

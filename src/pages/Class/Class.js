@@ -224,7 +224,7 @@ const Class = () => {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          &nbsp;Course Management
+          &nbsp;{appConfigInfo.course}
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
@@ -259,7 +259,7 @@ const Class = () => {
                 onChange={handleFilterChange}
                 value={filters.courseId}
               >
-                <option selected>Select a Course</option>
+                <option selected>Select a {appConfigInfo.course}</option>
                 {courseData &&
                   courseData.map((courseId) => (
                     <option key={courseId.id} value={courseId.id}>
@@ -307,7 +307,7 @@ const Class = () => {
                   onChange={handleFilterChange}
                   value={filters.classType}
                 >
-                  <option selected>Select Class Type</option>
+                  <option selected>Select {appConfigInfo.confClass} Type</option>
                   <option value="Group">Group</option>
                   <option value="Individual">Individual</option>
                 </select>

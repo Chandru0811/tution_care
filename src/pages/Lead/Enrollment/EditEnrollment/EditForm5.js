@@ -7,7 +7,7 @@ import React, {
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
-import fetchAllCentersWithIds from "../../../List/CenterList";
+// import fetchAllCentersWithIds from "../../../List/CenterList";
 import api from "../../../../config/URL";
 import fetchAllStudentListByCenter from "../../../List/StudentListByCenter";
 
@@ -30,6 +30,7 @@ const EditForm5 = forwardRef(
     const [centerData, setCenterData] = useState(null);
     const [studentData, setStudentData] = useState(null);
     const userName = localStorage.getItem("tmsuserName");
+    const centerId = localStorage.getItem("tmscenterId");
     const formik = useFormik({
       initialValues: {
         // centerId: formData.centerId,
@@ -38,7 +39,7 @@ const EditForm5 = forwardRef(
         marketingSource: formData.marketingSource || "",
         studentId: formData.studentId || "",
         nameOfReferral: formData.nameOfReferral || "",
-        referedStudentCenterNameId: formData.referedStudentCenterNameId || "",
+        referedStudentCenterNameId: centerId,
         remark: formData.remark || "",
         preferredTimeSlot: formData.preferredTimeSlot || [],
         updatedBy: userName,
@@ -91,16 +92,7 @@ const EditForm5 = forwardRef(
       }
     }, [formik.submitCount, formik.errors]);
 
-    const fetchData = async () => {
-      try {
-        const centerData = await fetchAllCentersWithIds();
-        setCenterData(centerData);
-      } catch (error) {
-        toast.error(error);
-      }
-    };
-
-    const fetchStudent = async (centerId) => {
+    const fetchStudent = async () => {
       try {
         const student = await fetchAllStudentListByCenter(centerId);
         setStudentData(student);
@@ -124,14 +116,8 @@ const EditForm5 = forwardRef(
     };
 
     useEffect(() => {
-      if (formik.values.referedStudentCenterNameId) {
-        fetchStudent(formik.values.referedStudentCenterNameId);
-      }
-    }, [formik.values.referedStudentCenterNameId]);
-
-    useEffect(() => {
       getData();
-      fetchData();
+      fetchStudent();
       window.scrollTo({ top: 0, left: 0, behavior: "instant" });
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -154,36 +140,6 @@ const EditForm5 = forwardRef(
             <div className="row px-1">
               <div className="py-3">
                 <p className="headColor">Account Information</p>
-              </div>
-
-              <div className="col-md-6 col-12 mb-3">
-                <label>Refer Student Center</label>
-                <div className="input-group">
-                  <select
-                    className="form-select"
-                    name="referedStudentCenterNameId"
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    value={formik.values.referedStudentCenterNameId}
-                  >
-                    <option selected></option>
-                    {centerData &&
-                      centerData.map((referedStudentCenterNameId) => (
-                        <option
-                          key={referedStudentCenterNameId.id}
-                          value={referedStudentCenterNameId.id}
-                        >
-                          {referedStudentCenterNameId.centerNames}
-                        </option>
-                      ))}
-                  </select>
-                </div>
-                {formik.touched.referedStudentCenterNameId &&
-                  formik.errors.referedStudentCenterNameId && (
-                    <div className="error text-danger">
-                      <small>{formik.errors.referedStudentCenterNameId}</small>
-                    </div>
-                  )}
               </div>
               <div className="col-md-6 col-12 mb-3">
                 <label>Refer By(Child’s Name)</label>
@@ -404,7 +360,9 @@ const EditForm5 = forwardRef(
                 </div>
               </div> */}
               <div className="col-md-6 col-12 mb-3">
-                <label className="form-label">Preferred Day<span className="text-danger">*</span></label>
+                <label className="form-label">
+                  Preferred Day<span className="text-danger">*</span>
+                </label>
                 <div>
                   <div className="form-check form-check-inline">
                     <input
@@ -461,7 +419,9 @@ const EditForm5 = forwardRef(
                 </div>
               </div>
               <div className="col-md-6 col-12 mb-3">
-                <label className="form-label">Preferred Time Slot<span className="text-danger">*</span></label>
+                <label className="form-label">
+                  Preferred Time Slot<span className="text-danger">*</span>
+                </label>
                 <div>
                   <div className="form-check form-check-inline">
                     <input

@@ -35,6 +35,7 @@ const EditForm1 = forwardRef(
     const [raceData, setRaceData] = useState(null);
     const [centerData, setCenterData] = useState(null);
     const userName = localStorage.getItem("tmsuserName");
+    const appConfigInfo = JSON.parse(localStorage.getItem("tmsappConfigInfo"));
 
     const formik = useFormik({
       initialValues: {
@@ -163,7 +164,7 @@ const EditForm1 = forwardRef(
               </div>
             </div>
             <div class="col-md-6 col-12 mb-2">
-              <label className="form-label">Subject</label>
+              <label className="form-label">{appConfigInfo.subject}</label>
               <span className="text-danger">*</span>
               <select
                 className="form-select"

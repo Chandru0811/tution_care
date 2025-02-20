@@ -3,8 +3,9 @@ import { Link, useNavigate } from "react-router-dom";
 import ChangePassword from "./ChangePassword";
 import { BiLogOut } from "react-icons/bi";
 import { CiCalendarDate } from "react-icons/ci";
+import Logo from "../../assets/images/ECSLOGO.png";
 
-function SuperAdminHeader({ onLogout }) {
+function SuperAdminHeader({ onLogout, handleCenterChange, centerData, selectedCenter }) {
   const navigate = useNavigate();
   const userName = localStorage.getItem("tmsuserName");
   const userEmail = localStorage.getItem("tmsemail");
@@ -66,10 +67,45 @@ function SuperAdminHeader({ onLogout }) {
               />
             </button>
           </Link> */}
-          <div className="position-relative me-3">
-            <span className="badge bg-primary rounded-pill">
-              ECS Tuition Care
+           <div className="position-relative me-3">
+            <img
+              src={Logo}
+              alt="logo"
+              width={50}
+              height={50}
+              className="img-fluid p-2"
+            />
+            <span className="text-black fw-bold rounded-pill center-name">
+               Cloud ECS Infotech Pvt Ltd
             </span>
+       
+          </div>
+          <div className="position-relative">
+            <select
+              value={selectedCenter}
+              name="studentRelationCenter"
+              className="form-select shadow-none"
+              onChange={handleCenterChange}
+              style={{
+                border: "none",
+                outline: "none",
+                fontSize: "14px", // Readable size
+                width: "auto", // Automatically adjust width based on content
+                minWidth: "150px", // Ensure the dropdown is not too small
+                maxWidth: "100%", // Allow full width on smaller screens
+                padding: "0 10px", // Add some padding for a neat look
+              }}
+            >
+              {centerData &&
+                centerData.map((studentRelationCenter) => (
+                  <option
+                    key={studentRelationCenter.id}
+                    value={studentRelationCenter.id}
+                  >
+                    {studentRelationCenter.centerNames}
+                  </option>
+                ))}
+            </select>
           </div>
           <button
             className="btn border border-1 rounded-circle"

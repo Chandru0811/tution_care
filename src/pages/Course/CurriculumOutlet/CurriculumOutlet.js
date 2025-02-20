@@ -21,6 +21,7 @@ function CurriculumOutlet() {
   const [loading, setLoading] = useState(true);
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
+  const appConfigInfo = JSON.parse(localStorage.getItem("tmsappConfigInfo"));
 
   const columns = useMemo(
     () => [
@@ -174,13 +175,13 @@ function CurriculumOutlet() {
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
-        <li>
-          Course Management
+        {/* <li>
+        {appConfigInfo.course}
           <span className="breadcrumb-separator"> &gt; </span>
-        </li>
+        </li> */}
         <li>
           <Link to="/course" className="custom-breadcrumb">
-            Course
+          {appConfigInfo.course}
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
@@ -258,7 +259,7 @@ function CurriculumOutlet() {
                 }}
                 className="text-start mb-0 menuitem-style"
               >
-                Course Curriculum
+                {appConfigInfo.course} Curriculum
               </MenuItem>
 
               <MenuItem >
