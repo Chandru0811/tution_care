@@ -148,7 +148,7 @@ function SubjectAdd({ onSuccess }) {
               <div className="row py-4">
                 <div className="col-md-6 col-12 mb-2">
                   <label className="form-label">
-                    Subject<span className="text-danger">*</span>
+                  {appConfigInfo.subject}<span className="text-danger">*</span>
                   </label>
                   <div className="input-group mb-3">
                     <input

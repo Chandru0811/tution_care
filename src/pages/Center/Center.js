@@ -20,7 +20,7 @@ const Center = () => {
   const tmscenterName = localStorage.getItem("tmscenterName");
   const appConfigInfo = JSON.parse(localStorage.getItem("tmsappConfigInfo"));
 
-  console.log("appConfigInfo",appConfigInfo.appName)
+  console.log("appConfigInfo", appConfigInfo.appName);
 
   const columns = useMemo(
     () => [
@@ -55,7 +55,7 @@ const Center = () => {
       {
         accessorKey: "centerName",
         enableHiding: false,
-        header: "Company Name",
+        header: `${appConfigInfo.centreName} Name`,
       },
       { accessorKey: "code", header: "Code", enableHiding: false, size: 40 },
       {
@@ -188,7 +188,9 @@ const Center = () => {
         >
           <span className="text-muted">
             This database shows the list of{" "}
-            <strong style={{ color: "#287f71" }}>{appConfigInfo.centreName}</strong>
+            <strong style={{ color: "#287f71" }}>
+              {appConfigInfo.centreName}
+            </strong>
           </span>
         </div>
         {loading ? (

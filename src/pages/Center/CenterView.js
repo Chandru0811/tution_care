@@ -85,7 +85,7 @@ function CenterView() {
             <div className="col-md-6 col-12">
               <div className="row mt-3  mb-2">
                 <div className="col-6 ">
-                  <p className="">Company Name</p>
+                  <p className="">{appConfigInfo.centreName} Name</p>
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">
@@ -285,7 +285,7 @@ function CenterView() {
               </div>
 
               <div className="col-md-4 col-12 ">
-                <p className="mb-0 me-2">Company Logo:</p>
+                <p className="mb-0 me-2">{appConfigInfo.centreName} Logo:</p>
                 {data.logo && (
                   <img
                     src={data.logo}

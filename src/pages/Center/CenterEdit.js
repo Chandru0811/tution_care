@@ -251,7 +251,9 @@ function CenterEdit({ handleCenterChanged }) {
               <div class="d-flex">
                 <div class="dot active"></div>
               </div>
-              <span class="me-2 text-muted">Edit {appConfigInfo.centreName}</span>
+              <span class="me-2 text-muted">
+                Edit {appConfigInfo.centreName}
+              </span>
             </div>
             <div className="my-2 pe-3 d-flex align-items-center">
               <Link to="/companyRegister">
@@ -280,7 +282,8 @@ function CenterEdit({ handleCenterChanged }) {
               <div className="col-md-6 col-12">
                 <div className="mb-3">
                   <label for="exampleFormControlInput1" className="form-label">
-                    Company Name<span className="text-danger">*</span>
+                    {appConfigInfo.centreName} Name
+                    <span className="text-danger">*</span>
                   </label>
                   <input
                     type="text"
@@ -670,7 +673,7 @@ function CenterEdit({ handleCenterChanged }) {
               <div className="col-md-4 col-12">
                 <div className="text-start mt-2">
                   <label htmlFor="" className="mb-1 fw-medium">
-                    <small>Company Logo</small>
+                    <small>{appConfigInfo.centreName} Logo</small>
                     <span className="text-danger">*</span>
                   </label>
                   <br />
@@ -807,7 +810,9 @@ function CenterEdit({ handleCenterChanged }) {
               <div className="col-md-12 col-12 mt-4">
                 <div className="d-flex justify-content-between align-items-center">
                   <div class="d-flex align-items-start">
-                    <h5 className="headColor mb-3">{appConfigInfo.centreName} Registrations</h5>
+                    <h5 className="headColor mb-3">
+                      {appConfigInfo.centreName} Registrations
+                    </h5>
                   </div>
                   <div className="my-2 pe-3 d-flex align-items-center">
                     <AddRegister
@@ -885,7 +890,9 @@ function CenterEdit({ handleCenterChanged }) {
               <div className="col-md-12 col-12 mt-4">
                 <div className="d-flex justify-content-between align-items-center">
                   <div class="d-flex align-items-start">
-                    <h5 className="headColor mb-3">{appConfigInfo.centreName} Break</h5>
+                    <h5 className="headColor mb-3">
+                      {appConfigInfo.centreName} Break
+                    </h5>
                   </div>
                   <div className="my-2 pe-3 d-flex align-items-center">
                     <AddBreak
@@ -956,7 +963,9 @@ function CenterEdit({ handleCenterChanged }) {
               <div className="col-md-12 col-12 mt-4">
                 <div className="d-flex justify-content-between align-items-center">
                   <div class="d-flex align-items-start">
-                    <h5 className="headColor mb-3">{appConfigInfo.centreName} Classroom</h5>
+                    <h5 className="headColor mb-3">
+                      {appConfigInfo.centreName} Classroom
+                    </h5>
                   </div>
                   <div className="my-2 pe-3 d-flex align-items-center">
                     <AddClass
@@ -1061,7 +1070,9 @@ function CenterEdit({ handleCenterChanged }) {
               <div className="col-md-12 col-12 mt-4">
                 <div className="d-flex justify-content-between align-items-center">
                   <div class="d-flex align-items-start">
-                    <h5 className="headColor mb-3">{appConfigInfo.centreName} Package</h5>
+                    <h5 className="headColor mb-3">
+                      {appConfigInfo.centreName} Package
+                    </h5>
                   </div>
                   <div className="my-2 pe-3 d-flex align-items-center">
                     <AddPackage
