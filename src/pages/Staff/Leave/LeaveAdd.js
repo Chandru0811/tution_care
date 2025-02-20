@@ -45,7 +45,7 @@ function LeaveAdd() {
   const formik = useFormik({
     initialValues: {
       userId: userId,
-      centerId: "",
+      centerId: centerId,
       centerName: "",
       employeeName: "",
       leaveTypeId: "",
@@ -66,6 +66,7 @@ function LeaveAdd() {
       try {
         const formDatas = new FormData();
         formDatas.append("userId", userId);
+        formDatas.append("centerId", centerId);
         formDatas.append("employeeName", datas && datas.employeeName);
         formDatas.append("leaveTypeId", data.leaveTypeId);
         formDatas.append("noOfDays", data.noOfDays);
@@ -78,7 +79,7 @@ function LeaveAdd() {
         formDatas.append("createdBy", userName);
 
         const response = await api.post(
-          `/createUserLeaveRequestWithCenterId`,
+          `/createUserLeaveRequestWithAttachment`,
           formDatas,
           {
             headers: {

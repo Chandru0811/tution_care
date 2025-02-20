@@ -40,7 +40,7 @@ function Attendances() {
     try {
       const formattedDate = formatDate(date);
       const response = await api.get(
-        `getAvailableBatchTimings?attendanceDate=${formattedDate}`
+        `getAvailableBatchTimings?centerId=${centerId}&attendanceDate=${formattedDate}`
       );
       setBatchData(response.data); // Update batch options with API response
     } catch (error) {
