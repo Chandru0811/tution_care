@@ -376,6 +376,12 @@ function RolesAdd() {
       taxSettingUpdate: true,
       taxSettingDelete: true,
 
+      languageIndex: true,
+      languageRead: true,
+      languageCreate: true,
+      languageUpdate: true,
+      languageDelete: true,
+
       raceSettingIndex: true,
       raceSettingRead: true,
       raceSettingCreate: true,
@@ -436,7 +442,7 @@ function RolesAdd() {
       console.log("Api Data:", values);
       const payload = {
         ...values,
-        centerId:centerId,
+        centerId: centerId,
         roleName: selectedRole,
         id: selectedRoleId,
         updatedBy: userName,
@@ -552,6 +558,7 @@ function RolesAdd() {
       contactUsCreate: true,
       taxSettingCreate: true,
       raceSettingCreate: true,
+      languageCreate: true,
       countrySettingCreate: true,
       shgSettingCreate: true,
       batchtimeSettingCreate: true,
@@ -629,6 +636,7 @@ function RolesAdd() {
       contactUsRead: true,
       taxSettingRead: true,
       raceSettingRead: true,
+      languageRead: true,
       countrySettingRead: true,
       shgSettingRead: true,
       batchtimeSettingRead: true,
@@ -705,8 +713,9 @@ function RolesAdd() {
       newsUpdatesUpdate: true,
       contactUsUpdate: true,
       taxSettingUpdate: true,
-      raceSettingUpdate: true,
       countrySettingUpdate: true,
+      raceSettingUpdate: true,
+      languageUpdate: true,
       shgSettingUpdate: true,
       batchtimeSettingUpdate: true,
       leaveSettingUpdate: true,
@@ -783,6 +792,7 @@ function RolesAdd() {
       contactUsDelete: true,
       taxSettingDelete: true,
       raceSettingDelete: true,
+      languageDelete: true,
       countrySettingDelete: true,
       shgSettingDelete: true,
       batchtimeSettingDelete: true,
@@ -863,6 +873,7 @@ function RolesAdd() {
       contactUsIndex: true,
       taxSettingIndex: true,
       raceSettingIndex: true,
+      languageIndex: true,
       countrySettingIndex: true,
       shgSettingIndex: true,
       batchtimeSettingIndex: true,
@@ -3739,46 +3750,40 @@ function RolesAdd() {
                             />
                           </td>
                           <td>
-                            {/* <input
+                            <input
                               className="form-check-input"
                               type="checkbox"
-                              name="raceSettingRead"
-                              checked={formik.values.raceSettingRead}
-                              onChange={handleCheckboxChange(`raceSettingRead`)}
-                            /> */}
+                              name="languageRead"
+                              checked={formik.values.languageRead}
+                              onChange={handleCheckboxChange(`languageRead`)}
+                            />
                           </td>
                           <td>
-                            {/* <input
+                            <input
                               className="form-check-input"
                               type="checkbox"
-                              name="raceSettingCreate"
-                              checked={formik.values.raceSettingCreate}
-                              onChange={handleCheckboxChange(
-                                `raceSettingCreate`
-                              )}
-                            /> */}
+                              name="languageCreate"
+                              checked={formik.values.languageCreate}
+                              onChange={handleCheckboxChange(`languageCreate`)}
+                            />
                           </td>
                           <td>
-                            {/* <input
+                            <input
                               className="form-check-input"
                               type="checkbox"
-                              name="raceSettingUpdate"
-                              checked={formik.values.raceSettingUpdate}
-                              onChange={handleCheckboxChange(
-                                `raceSettingUpdate`
-                              )}
-                            /> */}
+                              name="languageUpdate"
+                              checked={formik.values.languageUpdate}
+                              onChange={handleCheckboxChange(`languageUpdate`)}
+                            />
                           </td>
                           <td>
-                            {/* <input
+                            <input
                               className="form-check-input"
                               type="checkbox"
-                              name="raceSettingDelete"
-                              checked={formik.values.raceSettingDelete}
-                              onChange={handleCheckboxChange(
-                                `raceSettingDelete`
-                              )}
-                            /> */}
+                              name="languageDelete"
+                              checked={formik.values.languageDelete}
+                              onChange={handleCheckboxChange(`languageDelete`)}
+                            />
                           </td>
                         </tr>
                         <tr>
