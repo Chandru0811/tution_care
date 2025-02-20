@@ -233,9 +233,9 @@ function Admin({ handleLogout }) {
         <Sidebar />
         <section className="home-section">
           <Header onLogout={handleLogout} centerChange={centerChange} />
-          <TrialNotification />
           <ScrollToTop />
           <div className="home-content" style={{ minHeight: "95vh" }}>
+            <TrialNotification />
             <Routes>
               <Route path="*" element={<NewDashboard />} />
               <Route path="/" element={<NewDashboard />} />

@@ -88,11 +88,15 @@ const Subject = () => {
             </span>
           ) : null,
       },
-      { accessorKey: "subject", enableHiding: false, header: "Subject" },
+      {
+        accessorKey: "subject",
+        enableHiding: false,
+        header: `${appConfigInfo.subject}`,
+      },
       {
         accessorKey: "code",
         enableHiding: false,
-        header: "Subject Code",
+        header: `${appConfigInfo.subject} Code`,
       },
 
       {
@@ -122,7 +126,9 @@ const Subject = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await api.get(`/getCourseSubjectsByCenterId/${centerId}`);
+      const response = await api.get(
+        `/getCourseSubjectsByCenterId/${centerId}`
+      );
       setAllData(response.data);
       setData(response.data);
     } catch (error) {
@@ -226,7 +232,7 @@ const Subject = () => {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          &nbsp;Course Management
+          &nbsp;Course
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
@@ -246,7 +252,7 @@ const Subject = () => {
             <span class="me-2 text-muted">
               This database shows the list of{" "}
               <span className="bold" style={{ color: "#287f71" }}>
-              {appConfigInfo.subject}
+                {appConfigInfo.subject}
               </span>
             </span>
           </div>
