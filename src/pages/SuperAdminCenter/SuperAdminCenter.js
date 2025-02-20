@@ -90,7 +90,7 @@ const SuperAdminCenter = ({ handleCenterChanged }) => {
       {
         accessorKey: "centerStatus",
         enableHiding: false,
-        header: "Company Status",
+        header: "Centre Status",
         Cell: ({ row }) => {
           const statusOptions = [
             {
@@ -190,7 +190,7 @@ const SuperAdminCenter = ({ handleCenterChanged }) => {
       {
         accessorKey: "centerName",
         enableHiding: false,
-        header: "Company Name",
+        header: "Centre Name",
       },
       { accessorKey: "email", enableHiding: false, header: "Email" },
       { accessorKey: "mobile", enableHiding: false, header: "Mobile" },
@@ -287,11 +287,11 @@ const SuperAdminCenter = ({ handleCenterChanged }) => {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          &nbsp;Company Management
+          &nbsp;Centre Management
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          &nbsp;Company Listing
+          &nbsp;Centre Listing
         </li>
       </ol>
       <div className="card">
@@ -301,7 +301,7 @@ const SuperAdminCenter = ({ handleCenterChanged }) => {
         >
           <span className="text-muted">
             This database shows the list of{" "}
-            <strong style={{ color: "#287f71" }}>Company</strong>
+            <strong style={{ color: "#287f71" }}>Centre</strong>
           </span>
         </div>
         <div className="mb-3 d-flex justify-content-between">

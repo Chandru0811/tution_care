@@ -8,7 +8,7 @@ import { Modal } from "react-bootstrap";
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required("*Name is required"),
-  centerName: Yup.string().required("*Company Name is required"),
+  centerName: Yup.string().required("*Centre Name is required"),
   address: Yup.string().required("*Address is required"),
   mobile: Yup.string()
     .matches(
@@ -186,17 +186,17 @@ function SuperAdminCenterEdit() {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          &nbsp;Organization Management
+          &nbsp;Centre Management
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
           <Link to="/center" className="custom-breadcrumb">
-            &nbsp;Company Listing
+            &nbsp;Centre Listing
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          &nbsp;Company Listing Edit
+          &nbsp;Centre Listing Edit
         </li>
       </ol>
       <form
@@ -216,7 +216,7 @@ function SuperAdminCenterEdit() {
               <div class="d-flex">
                 <div class="dot active"></div>
               </div>
-              <span class="me-2 text-muted">Edit Company</span>
+              <span class="me-2 text-muted">Edit Centre</span>
             </div>
             <div className="my-2 pe-3 d-flex align-items-center">
               <Link to="/companyregistration">
@@ -275,7 +275,7 @@ function SuperAdminCenterEdit() {
               <div className="col-md-6 col-12">
                 <div className="mb-3">
                   <label for="exampleFormControlInput1" className="form-label">
-                    Company Name<span className="text-danger">*</span>
+                    Centre Name<span className="text-danger">*</span>
                   </label>
                   <input
                     type="text"

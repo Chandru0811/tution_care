@@ -9,7 +9,7 @@ import { Modal } from "react-bootstrap";
 const validationSchema = Yup.object().shape({
   name: Yup.string().required("*Name is required"),
   configId: Yup.string().required("*App Type is required"),
-  centerName: Yup.string().required("*Company Name is required"),
+  centerName: Yup.string().required("*Centre Name is required"),
   address: Yup.string().required("*Address is required"),
   mobile: Yup.string()
     .matches(
@@ -135,17 +135,17 @@ function SuperAdminCenterAdd({ handleCenterChanged }) {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          &nbsp;Organization Management
+          &nbsp;Centre Management
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
           <Link to="/center" className="custom-breadcrumb">
-            &nbsp;Company Listing
+            &nbsp;Centre Listing
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          &nbsp;Company Listing Add
+          &nbsp;Centre Listing Add
         </li>
       </ol>
       <form onSubmit={formik.handleSubmit}>
@@ -158,7 +158,7 @@ function SuperAdminCenterAdd({ handleCenterChanged }) {
               <div className="d-flex">
                 <div className="dot active"></div>
               </div>
-              <span className="me-2 text-muted">Add Company</span>
+              <span className="me-2 text-muted">Add Centre</span>
             </div>
             <div className="my-2 pe-3 d-flex align-items-center">
               <Link to="/companyregistration">
@@ -217,7 +217,7 @@ function SuperAdminCenterAdd({ handleCenterChanged }) {
               <div className="col-md-6 col-12">
                 <div className="mb-3">
                   <label for="exampleFormControlInput1" className="form-label">
-                    Company Name<span className="text-danger">*</span>
+                    Centre Name<span className="text-danger">*</span>
                   </label>
                   <input
                     type="text"

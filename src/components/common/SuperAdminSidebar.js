@@ -19,30 +19,18 @@ import { TbMessageCode } from "react-icons/tb";
 import { GrUserSettings } from "react-icons/gr";
 import { GiExitDoor } from "react-icons/gi";
 import { MdOutlineAssignment } from "react-icons/md";
+import { MdOutlineSettingsSuggest } from "react-icons/md";
 
 const iconMapping = {
-  "Organization": <PiBuildings />,
-  "Configuration": <PiBuildings />,
+  "Centre Management": <PiBuildings />,
+  "Configuration": <MdOutlineSettingsSuggest />,
   "Course Management": <PiBookOpenText />,
   "Lead Management": <GiExitDoor />,
-  Staffing: <HiOutlineUserGroup />,
-  "Student Management": <TbUserSearch />,
-  "Student Movement": <TbStatusChange />,
-  Schedule: <TbCalendarTime />,
-  "Document Management": <TbFolderCog />,
-  "Assignment Management": <MdOutlineAssignment />,
-  "Invoice and Payment": <LiaFileInvoiceDollarSolid />,
-  "Referal Management": <VscReferences />,
-  "Report Management": <BsFileEarmarkRichtext />,
-  "Content Management": <LiaUserEditSolid />,
-  Messaging: <TbMessageCode />,
-  Settings: <GrUserSettings />,
 };
 
 function SuperAdminSidebar() {
   const [activeMenu, setActiveMenu] = useState(null);
   const [menuItems, setMenuItems] = useState([]);
-  // const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   const location = useLocation();
   const hasRenderedOnce = useRef(false);
 
@@ -51,12 +39,12 @@ function SuperAdminSidebar() {
 
     const updatedMenuItems = [
       {
-        title: "Organization",
+        title: "Centre Management",
         icon: "PiBuildings",
         isOpen: false,
         subMenus: [
           {
-            title: "Company Listing",
+            title: "Centre Listing",
             path: "/companyregistration",
             access: true,
           },
@@ -64,7 +52,7 @@ function SuperAdminSidebar() {
       },
       {
         title: "Configuration",
-        icon: "PiBuildings",
+        icon: "MdOutlineSettingsSuggest ",
         isOpen: false,
         subMenus: [
           {

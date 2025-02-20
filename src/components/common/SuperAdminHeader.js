@@ -5,7 +5,12 @@ import { BiLogOut } from "react-icons/bi";
 import { CiCalendarDate } from "react-icons/ci";
 import Logo from "../../assets/images/ECSLOGO.png";
 
-function SuperAdminHeader({ onLogout, handleCenterChange, centerData, selectedCenter }) {
+function SuperAdminHeader({
+  onLogout,
+  handleCenterChange,
+  centerData,
+  selectedCenter,
+}) {
   const navigate = useNavigate();
   const userName = localStorage.getItem("tmsuserName");
   const userEmail = localStorage.getItem("tmsemail");
@@ -67,7 +72,7 @@ function SuperAdminHeader({ onLogout, handleCenterChange, centerData, selectedCe
               />
             </button>
           </Link> */}
-           <div className="position-relative me-3">
+          <div className="position-relative me-3">
             <img
               src={Logo}
               alt="logo"
@@ -76,9 +81,8 @@ function SuperAdminHeader({ onLogout, handleCenterChange, centerData, selectedCe
               className="img-fluid p-2"
             />
             <span className="text-black fw-bold rounded-pill center-name">
-               Cloud ECS Infotech Pvt Ltd
+              Cloud ECS Infotech Pvt Ltd
             </span>
-       
           </div>
           <div className="position-relative">
             <select
@@ -136,7 +140,9 @@ function SuperAdminHeader({ onLogout, handleCenterChange, centerData, selectedCe
         <div className="offcanvas-body d-flex flex-column">
           <div className="flex-grow-1">
             <div className="text-center">
-              <h3 className="cname_canvas" style={{ fontSize: "30px" }} >Tuition Care</h3>
+              <h3 className="cname_canvas" style={{ fontSize: "30px" }}>
+                ECS School
+              </h3>
             </div>
             <div className="text-center mt-3">
               <i
@@ -155,7 +161,13 @@ function SuperAdminHeader({ onLogout, handleCenterChange, centerData, selectedCe
             <div className="list-group list-group-flush pt-4 text-center">
               <p>{userName?.replace(/_/g, " ")}</p>
               <p>{userEmail}</p>
-              <p>{role}</p>
+              <p>
+                {role
+                  .split(" ")
+                  .slice(1)
+                  .map((word) => word.charAt(0) + word.slice(1).toLowerCase())
+                  .join(" ")}
+              </p>
             </div>
             {/* <div className="text-center cursor-pointer" data-bs-dismiss="offcanvas">
               <Link
@@ -192,7 +204,7 @@ function SuperAdminHeader({ onLogout, handleCenterChange, centerData, selectedCe
           </div>
         </div>
       </div>
-    </nav >
+    </nav>
   );
 }
 

@@ -63,7 +63,6 @@ function ConfigurationAdd() {
       isParentsGuardian: false,
       isEmergencyContact: false,
       isCourseDetails: true,
-      isStudentRelation: false,
       isTermsAndCondition: false,
     },
     validationSchema: validationSchema,
@@ -709,28 +708,6 @@ function ConfigurationAdd() {
                       formik.errors.isCourseDetails && (
                         <div className="error text-danger">
                           <small>{formik.errorsvalues.isCourseDetails}</small>
-                        </div>
-                      )}
-                  </div>
-                </div>
-                <div className="col-md-4 col-12">
-                  <div className="mb-3">
-                    <input
-                      className="form-check-input me-2"
-                      type="checkbox"
-                      checked={formik.values.isStudentRelation}
-                      onChange={() =>
-                        formik.setFieldValue(
-                          "isStudentRelation",
-                          !formik.values.isStudentRelation
-                        )
-                      }
-                    />
-                    <label className="form-check-label">Student Relation</label>
-                    {formik.touched.isStudentRelation &&
-                      formik.errors.isStudentRelation && (
-                        <div className="error text-danger">
-                          <small>{formik.errorsvalues.isStudentRelation}</small>
                         </div>
                       )}
                   </div>
