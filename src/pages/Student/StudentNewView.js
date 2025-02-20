@@ -99,12 +99,12 @@ function StudentNewView() {
       const response = await api.get(`/getAllStudentById/${id}`);
       setData(response.data);
       console.log("responseData", response.data);
-      const primaryParent = response.data.studentParentsDetails.find(
-        (parent) => parent.primaryContact === true
-      );
-      const email = primaryParent ? primaryParent.email : null;
+      // const primaryParent = response.data.studentParentsDetails.find(
+      //   (parent) => parent.primaryContact === true
+      // );
+      // const email = primaryParent ? primaryParent.email : null;
 
-      setPassword(email);
+      setPassword(response.data.studentEmail);
       console.log("StudentDetails", response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -244,17 +244,17 @@ function StudentNewView() {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          {storedConfigure?.student || "Student Management"}
+          {storedConfigure?.student || "Student"} Management
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
           <Link to="/student" className="custom-breadcrumb">
-            {storedConfigure?.student || "Student Listing"}
+            {storedConfigure?.student || "Student"} Listing
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          {storedConfigure?.student || "Student Listing"} View
+          {storedConfigure?.student || "Student"} Listing View
         </li>
       </ol>
       <div className="d-flex align-items-center justify-content-end mb-4">
@@ -321,11 +321,11 @@ function StudentNewView() {
               <hr className="mt-2 mb-0" />
               <ul style={{ listStyle: "none", paddingLeft: "0" }}>
                 <li className="stdList">
-                  <b>Student ID</b>
+                  <b>{storedConfigure?.student || "Student"} ID</b>
                   <span>{data.studentUniqueId || "--"}</span>
                 </li>
                 <li className="stdList">
-                  <b>Student Email</b>
+                  <b>{storedConfigure?.student || "Student"} Email</b>
                   <span>{data.studentEmail || "--"}</span>
                 </li>
                 <li className="stdList">
@@ -881,21 +881,25 @@ function StudentNewView() {
           </div>
         </div>
         <hr />
-        <h3>Student Details</h3>
+        <h3>{storedConfigure?.student || "Student"} Details</h3>
         <div className="row mt-3">
           <div className="d-flex col-md-4">
             <div className=" fw-medium">Centre Name&nbsp;</div>
             <div className="text-muted">: {centerName}</div>
           </div>
           <div className="d-flex col-md-4">
-            <div className="fw-medium">Student Chinese Name&nbsp;</div>
+            <div className="fw-medium">
+              {storedConfigure?.student || "Student"} Chinese Name&nbsp;
+            </div>
             <div className="text-muted">
               : {data.studentChineseName || "--"}
             </div>
           </div>
           <div className="d-flex col-md-4">
             <div className="mb-2 d-flex">
-              <div className="fw-medium">Student Name / as per ID&nbsp;</div>
+              <div className="fw-medium">
+                {storedConfigure?.student || "Student"} Name / as per ID&nbsp;
+              </div>
               <div className="text-muted"> : {data.studentName || "--"}</div>
             </div>
           </div>
@@ -935,43 +939,12 @@ function StudentNewView() {
               </div>
             </div>
           </div>
-          <div className="col-md-4">
-            <div className="mb-2 d-flex">
-              <div className="fw-medium">School Name&nbsp;</div>
-              <div className="text-muted"> : {data.schoolName || "--"}</div>
-            </div>
-          </div>
-          <div className="col-md-4">
-            <div className="mb-2 d-flex">
-              <div className="fw-medium">School Type&nbsp;</div>
-              <div className="text-muted"> : {data.schoolType || "--"}</div>
-            </div>
-          </div>
-        </div>
-        <div className="row mt-2">
-          <div className=" mb-2 col-md-4">
-            <div className="mb-2 d-flex">
-              <div className="fw-medium">Pre-Assessment Result&nbsp;</div>
-              <div className="text-muted">
-                {" "}
-                : {data.preAssessmentResult || "--"}
-              </div>
-            </div>
-          </div>
-          <div className=" mb-2 col-md-4">
-            <div className="mb-2 d-flex">
-              <div className="fw-medium">Race&nbsp;</div>
-              <div className="text-muted"> : {data.race || "--"}</div>
-            </div>
-          </div>
           <div className=" mb-2 col-md-4">
             <div className="mb-2 d-flex">
               <div className="fw-medium">Nationality&nbsp;</div>
               <div className="text-muted"> : {data.nationality || "--"}</div>
             </div>
           </div>
-        </div>
-        <div className="row mt-2">
           <div className=" mb-2 col-md-4">
             <div className="mb-2 d-flex">
               <div className="fw-medium">Primary Language Spoken&nbsp;</div>
@@ -987,52 +960,9 @@ function StudentNewView() {
               </div>
             </div>
           </div>
-          <div className="mb-2 col-md-8">
-            <div className="mb-2 d-flex">
-              <div className="fw-medium">
-                Allow display in Facility Bulletin / Magazine / Advert&nbsp;
-              </div>
-              <div className="text-muted">
-                : {data.allowMagazine ? "Yes" : "No"}
-              </div>
-            </div>
-          </div>
         </div>
+
         <div className="row mt-2">
-          <div className="mb-2 col-md-4">
-            <div className="mb-2 d-flex">
-              <div className="fw-medium">
-                Allow display on Social Media&nbsp;
-              </div>
-              <div className="text-muted">
-                : {data.allowSocialMedia ? "Yes" : "No"}
-              </div>
-            </div>
-          </div>
-          <div className="mb-2 col-md-4">
-            <div className="mb-2 d-flex">
-              <div className="fw-medium">Refer By Parent&nbsp;</div>
-              <div className="text-muted"> : {data.referByParent || "--"}</div>
-            </div>
-          </div>
-          <div className="mb-2 col-md-4">
-            <div className="mb-2 d-flex">
-              <div className="fw-medium">Refer By Student&nbsp;</div>
-              <div className="text-muted"> : {data.referByStudent || "--"}</div>
-            </div>
-          </div>
-        </div>
-        <div className="row mt-2">
-          <div className="mb-2 col-md-4">
-            <div className="mb-2 d-flex">
-              <div className="fw-medium">Profile Image&nbsp;</div>
-              <img
-                src={data.profileImage}
-                className="img-fluid rounded w-25"
-                alt=""
-              />
-            </div>
-          </div>
           <div className="mb-2 col-md-4">
             <div className="mb-2 d-flex ">
               <div className="fw-medium">Remark&nbsp;</div>
@@ -1186,9 +1116,194 @@ function StudentNewView() {
             )}
           </div>
         </div>
+        <h3 className="mt-5 mb-2">Course Details</h3>
+        <div id="panelsStayOpen-collapseFive">
+          <div className="">
+            {data.studentCourseDetailModels &&
+              data.studentCourseDetailModels.map((std) => (
+                <div className="container p-3">
+                  <div className="row pb-3">
+                    <div className="col-md-6 col-12">
+                      <div className="row  mb-2 mt-3">
+                        <div className="col-6  ">
+                          <p className="fw-medium">
+                            {storedConfigure?.course || "Course"}
+                          </p>
+                        </div>
+                        <div className="col-6">
+                          <p className="text-muted text-sm">
+                            <b className="mx-2">:</b>
+                            {std.course || "--"}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-md-6 col-12">
+                      <div className="row  mb-2 mt-3">
+                        <div className="col-6  ">
+                          <p className="fw-medium">
+                            {storedConfigure?.confClass || "Class"}
+                          </p>
+                        </div>
+                        <div className="col-6">
+                          <p className="text-muted text-sm">
+                            <b className="mx-2">:</b> {std.className || "--"}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-md-6 col-12">
+                      <div className="row  mb-2">
+                        <div className="col-6  ">
+                          <p className="fw-medium">
+                            {storedConfigure?.confClass || "Class"} Room
+                          </p>
+                        </div>
+                        <div className="col-6">
+                          <p className="text-muted text-sm">
+                            <b className="mx-2">:</b>
+                            {std.classRoom || "--"}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-md-6 col-12">
+                      <div className="row  mb-2">
+                        <div className="col-6  ">
+                          <p className="fw-medium">Batch</p>
+                        </div>
+                        <div className="col-6">
+                          <p className="text-muted text-sm">
+                            <b className="mx-2">:</b>
+                            {std.batch || "--"}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-md-6 col-12">
+                      <div className="row  mb-2">
+                        <div className="col-6  ">
+                          <p className="fw-medium">Day</p>
+                        </div>
+                        <div className="col-6">
+                          <p className="text-muted text-sm">
+                            <b className="mx-2">:</b> {std.days || "--"}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-md-6 col-12">
+                      <div className="row  mb-2">
+                        <div className="col-6  ">
+                          <p className="fw-medium">Start Date</p>
+                        </div>
+                        <div className="col-6">
+                          <p className="text-muted text-sm">
+                            <b className="mx-2">:</b> {std.startDate || "--"}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-md-6 col-12">
+                      <div className="row  mb-2">
+                        <div className="col-6  ">
+                          <p className="fw-medium">End Date</p>
+                        </div>
+                        <div className="col-6">
+                          <p className="text-muted text-sm">
+                            <b className="mx-2">:</b> {std.endDate || "--"}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-md-6 col-12">
+                      <div className="row  mb-2">
+                        <div className="col-6  ">
+                          <p className="fw-medium">Lesson Start Date</p>
+                        </div>
+                        <div className="col-6">
+                          <p className="text-muted text-sm">
+                            <b className="mx-2">:</b> {std.lessonName || "--"}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
 
-        <h3 className="mt-5 mb-2">Student Relation</h3>
-        <div id="panelsStayOpen-collapseFour">
+                    <div className="col-md-6 col-12">
+                      <div className="row  mb-2">
+                        <div className="col-6  ">
+                          <p className="fw-medium">Teacher</p>
+                        </div>
+                        <div className="col-6">
+                          <p className="text-muted text-sm">
+                            <b className="mx-2">:</b>
+                            {std.teacher || "--"}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-md-6 col-12">
+                      <div className="row  mb-2">
+                        <div className="col-6  ">
+                          <p className="fw-medium">Package Name</p>
+                        </div>
+                        <div className="col-6">
+                          <p className="text-muted text-sm">
+                            <b className="mx-2">:</b>
+                            {/* {std.packageName || "--"} */}
+                            {packageData &&
+                              packageData.map((packages) =>
+                                parseInt(packages.id) === packages.id
+                                  ? packages.packageNames || "--"
+                                  : ""
+                              )}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+          </div>
+        </div>
+        <h3 className="mt-5 mb-3">Terms & Conditions</h3>
+        <div id="panelsStayOpen-collapseSix">
+          <div className="row">
+            <div className="col-md-6 col-12">
+              {data.studentTermsAndConditions &&
+                data.studentTermsAndConditions.length > 0 &&
+                data.studentTermsAndConditions.map((parent, index) => {
+                  return (
+                    <div key={index} className="col-12 p-2">
+                      <h6 className="mt-2 mb-4">Parent Signature</h6>
+                      <img
+                        src={parent.parentSignature || "No Profile"}
+                        className="img-fluid rounded"
+                        style={{ width: "50%" }}
+                        alt="Parent Signature"
+                      />
+                    </div>
+                  );
+                })}
+              {(!data.studentTermsAndConditions ||
+                data.studentTermsAndConditions.length === 0) && <></>}
+            </div>
+            <div className="col-md-6 col-12">
+              <div className="container-fluid col-12 p-2">
+                {data.studentTermsAndConditions &&
+                  data.studentTermsAndConditions.length > 0 &&
+                  data.studentTermsAndConditions.map((parent, index) => (
+                    <div key={index} className="container-fluid col-12 p-2">
+                      <h6 className="mt-2 mb-4">Signature Date</h6>
+                      <span>{parent.termsAndConditionSignatureDate}</span>
+                    </div>
+                  ))}
+              </div>
+            </div>
+          </div>
+        </div>
+        {/* <h3 className="mt-5 mb-2">Student Relation</h3> */}
+        {/* <div id="panelsStayOpen-collapseFour">
           <div class="accordion-body">
             <div className="table-responsive">
               <table className="table">
@@ -1218,9 +1333,9 @@ function StudentNewView() {
               </table>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
-      <div
+      {/* <div
         ref={table2Ref}
         className="container rounded mb-5 p-5"
         style={{
@@ -1358,7 +1473,7 @@ function StudentNewView() {
                         <div className="col-6">
                           <p className="text-muted text-sm">
                             <b className="mx-2">:</b>
-                            {/* {std.packageName || "--"} */}
+                            {std.packageName || "--"}
                             {packageData &&
                               packageData.map((packages) =>
                                 parseInt(packages.id) === packages.id
@@ -1411,7 +1526,7 @@ function StudentNewView() {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
 
       <Modal show={showModal} onHide={handleCloseModal} centered>
         <Modal.Header closeButton>

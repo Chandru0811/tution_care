@@ -73,7 +73,7 @@ const Assignment = () => {
       {
         accessorKey: "assignmentName",
         enableHiding: false,
-        header: "Assignment Name",
+        header: `${storedConfigure?.assignManagement || "Assignment"} Name`,
       },
       // { accessorKey: "folderName", enableHiding: false, header: "Folder Name" },
       { accessorKey: "userName", enableHiding: false, header: "Teacher" },
@@ -84,13 +84,13 @@ const Assignment = () => {
       },
       {
         accessorKey: "courseName",
-        header: "Course",
+        header: `${storedConfigure?.course || "Course"}`,
         enableHiding: false,
         size: 40,
       },
       {
         accessorKey: "className",
-        header: "Class",
+        header: `${storedConfigure?.confClass || "Class"} `,
         enableHiding: false,
         size: 50,
       },
@@ -281,7 +281,7 @@ const Assignment = () => {
             <span class="me-2 text-muted">
               This database shows the list of{" "}
               <span className="bold" style={{ color: "#287f71" }}>
-                Assignment
+                {storedConfigure?.assignManagement || "Assignment"}
               </span>
             </span>
           </div>

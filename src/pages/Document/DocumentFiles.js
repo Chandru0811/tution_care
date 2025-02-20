@@ -188,7 +188,9 @@ function DocumentFile() {
                 <div class="d-flex">
                   <div class="dot active"></div>
                 </div>
-                <span class="me-2 text-muted">Add Document</span>
+                <span class="me-2 text-muted">
+                  Add {storedConfigure?.documentManagement || "Document"}
+                </span>
               </div>
               <div className="my-2 pe-3 d-flex align-items-center">
                 <Link to="/document">
@@ -220,7 +222,8 @@ function DocumentFile() {
 
                 <div className="col-md-6 col-12 mb-2 ">
                   <label>
-                    Course<span class="text-danger">*</span>
+                    {storedConfigure?.course || "Course"}
+                    <span class="text-danger">*</span>
                   </label>
                   <div className="input-group">
                     <select
@@ -248,7 +251,8 @@ function DocumentFile() {
                 <div className="col-md-6 col-12 mb-2 ">
                   <div className="row">
                     <label>
-                      Class<span class="text-danger">*</span>
+                      {storedConfigure?.confClass || "Class"}
+                      <span class="text-danger">*</span>
                     </label>
                     <div className="input-group">
                       <select

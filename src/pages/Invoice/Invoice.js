@@ -148,27 +148,30 @@ const Invoice = () => {
 
       {
         accessorKey: "invoiceNumber",
-        header: "Invoice Number",
+        header: `${storedConfigure?.invoice || "Invoice"} Number`,
         enableHiding: false,
         size: 50,
       },
       {
         accessorKey: "courseName",
         enableHiding: false,
-        header: "Course",
+        header: `${storedConfigure?.course || "Course"}`,
       },
       {
         accessorKey: "studentUniqueId",
         enableHiding: false,
-        header: "Student ID",
+        header: `${storedConfigure?.student || "Student"} ID`,
       },
-      { accessorKey: "studentName", header: "Student" },
+      {
+        accessorKey: "studentName",
+        header: `${storedConfigure?.student || "Student"}`,
+      },
       { accessorKey: "parent", enableHiding: false, header: "Parent Name" },
       { accessorKey: "packageName", header: "Package" },
 
       {
         accessorKey: "invoiceDate",
-        header: "Invoice Date",
+        header: `${storedConfigure?.invoice || "Invoice"} Date`,
         Cell: ({ cell }) => {
           const invoiceDate = cell.getValue();
           if (!invoiceDate) return "--";
@@ -322,11 +325,11 @@ const Invoice = () => {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          &nbsp;{storedConfigure?.invoice || "Invoice and Payment"}
+          &nbsp;{storedConfigure?.invoice || "Invoice"} and Payment
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          &nbsp;Invoice
+          &nbsp;{storedConfigure?.invoice || "Invoice"}
         </li>
       </ol>
       <div className="card">
@@ -336,7 +339,9 @@ const Invoice = () => {
         >
           <span className="text-muted">
             This database shows the list of{" "}
-            <strong style={{ color: "#287f71" }}>Invoice</strong>
+            <strong style={{ color: "#287f71" }}>
+              {storedConfigure?.invoice || "Invoice"}{" "}
+            </strong>
           </span>
         </div>
         <div className="mb-3 d-flex justify-content-between">

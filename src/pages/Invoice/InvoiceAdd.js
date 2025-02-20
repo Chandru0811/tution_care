@@ -792,17 +792,17 @@ export default function InvoiceAdd() {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          {storedConfigure?.invoice || "Invoice and Payment"}
+          {storedConfigure?.invoice || "Invoice"} and Payment
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
           <Link to="/invoice" className="custom-breadcrumb">
-            Invoice
+            {storedConfigure?.invoice || "Invoice"}
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          Invoice Add
+          {storedConfigure?.invoice || "Invoice"} Add
         </li>
       </ol>
       <form
@@ -822,7 +822,9 @@ export default function InvoiceAdd() {
               <div class="d-flex">
                 <div class="dot active"></div>
               </div>
-              <span class="me-2 text-muted">Add Invoice</span>
+              <span class="me-2 text-muted">
+                Add {storedConfigure?.invoice || "Invoice"}
+              </span>
             </div>
             <div className="my-2 pe-3 d-flex align-items-center">
               <Link to="/invoice">
@@ -880,7 +882,8 @@ export default function InvoiceAdd() {
                 </div> */}
                 <div className="text-start mt-3">
                   <label htmlFor="" className="mb-1 fw-medium">
-                    Student<span class="text-danger">*</span>
+                    {storedConfigure?.student || "Student"}
+                    <span class="text-danger">*</span>
                   </label>
                   <br />
                   <select
@@ -930,7 +933,8 @@ export default function InvoiceAdd() {
                 </div>
                 <div className="text-start mt-3">
                   <label htmlFor="" className="mb-1 fw-medium">
-                    Course<span class="text-danger">*</span>
+                    {storedConfigure?.course || "Course"}
+                    <span class="text-danger">*</span>
                   </label>
                   <br />
                   <select
@@ -1044,7 +1048,8 @@ export default function InvoiceAdd() {
               <div className="col-lg-6 col-md-6 col-12 px-5">
                 <div className="text-start mt-3">
                   <label htmlFor="invoiceDate" className="mb-1 fw-medium">
-                    Invoice Date<span className="text-danger">*</span>
+                    {storedConfigure?.invoice || "Invoice"} Date
+                    <span className="text-danger">*</span>
                   </label>
                   <br />
                   <input
@@ -1108,7 +1113,8 @@ export default function InvoiceAdd() {
                 </div>
                 <div className="text-start mt-3">
                   <label htmlFor="" className="mb-1 fw-medium">
-                    Invoice Period From<span class="text-danger">*</span>
+                    {storedConfigure?.invoice || "Invoice"} Period From
+                    <span class="text-danger">*</span>
                   </label>
                   <br />
                   <input
@@ -1131,7 +1137,8 @@ export default function InvoiceAdd() {
                 </div>
                 <div className="text-start mt-3">
                   <label htmlFor="" className="mb-1 fw-medium">
-                    Invoice Period To<span class="text-danger">*</span>
+                    {storedConfigure?.invoice || "Invoice"} Period To
+                    <span class="text-danger">*</span>
                   </label>
                   <br />
                   <input

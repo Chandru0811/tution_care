@@ -300,17 +300,17 @@ function InvoiceView() {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          {storedConfigure?.invoice || "Invoice and Payment"}
+          {storedConfigure?.invoice || "Invoice"} and Payment
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
           <Link to="/invoice" className="custom-breadcrumb">
-            Invoice
+            {storedConfigure?.invoice || "Invoice"}
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          Invoice View
+          {storedConfigure?.invoice || "Invoice"} View
         </li>
       </ol>
       <div className="card">
@@ -322,7 +322,9 @@ function InvoiceView() {
             <div class="d-flex">
               <div class="dot active"></div>
             </div>
-            <span class="me-2 text-muted">View Invoice</span>
+            <span class="me-2 text-muted">
+              View {storedConfigure?.invoice || "Invoice"}
+            </span>
           </div>
           <div className="my-2 pe-3 d-flex align-items-center">
             <Link to="/invoice">
@@ -406,7 +408,7 @@ function InvoiceView() {
               <div className="col-lg-6 col-md-6 col-12">
                 <div className="row my-1">
                   <div className="col-6 ">
-                    <p>Invoice </p>
+                    <p>{storedConfigure?.invoice || "Invoice"} </p>
                   </div>
                   <div className="col-6">
                     - &nbsp; {data.invoiceNumber || "--"}{" "}
@@ -414,7 +416,7 @@ function InvoiceView() {
                 </div>
                 <div className="row my-1">
                   <div className="col-6 ">
-                    <p>Student Name </p>
+                    <p>{storedConfigure?.student || "Student"} Name </p>
                   </div>
                   <div className="col-6">
                     - &nbsp; {data.studentName || "--"}
@@ -422,7 +424,7 @@ function InvoiceView() {
                 </div>
                 <div className="row my-1">
                   <div className="col-6 ">
-                    <p>Student Id</p>
+                    <p>{storedConfigure?.student || "Student"} Id</p>
                   </div>
                   <div className="col-6">
                     - &nbsp; {data.studentUniqueId || "--"}
@@ -432,7 +434,7 @@ function InvoiceView() {
               <div className="col-lg-6 col-md-6 col-12">
                 <div className="row my-1">
                   <div className="col-6 ">
-                    <p>Invoice Date</p>
+                    <p>{storedConfigure?.invoice || "Invoice"} Date</p>
                   </div>
                   <div className="col-6">
                     - &nbsp;{" "}
@@ -452,7 +454,7 @@ function InvoiceView() {
                 </div>
                 <div className="row my-1">
                   <div className="col-6 ">
-                    <p>Course Name</p>
+                    <p>{storedConfigure?.course || "Course"} Name</p>
                   </div>
                   <div className="col-6">
                     - &nbsp; {data.courseName || "--"}

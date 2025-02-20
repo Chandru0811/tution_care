@@ -59,12 +59,12 @@ function AssignmentView() {
       },
       {
         accessorKey: "studentName",
-        header: "Student Name",
+        header: `${storedConfigure?.student || "Student"} Name`,
         enableHiding: false,
       },
       {
         accessorKey: "studentUniqueId",
-        header: "Student ID",
+        header: `${storedConfigure?.student || "Student"} ID`,
         enableHiding: false,
       },
       {
@@ -180,7 +180,10 @@ function AssignmentView() {
               <div class="d-flex">
                 <div class="dot active"></div>
               </div>
-              <span class="me-2 text-muted">Assignment View</span>
+              <span class="me-2 text-muted">
+                {" "}
+                {storedConfigure?.assignManagement || "Assignment"} View
+              </span>
             </div>
             <div className="my-2 pe-3 d-flex align-items-center">
               <Link to="/assignment">
@@ -196,7 +199,10 @@ function AssignmentView() {
               <div className="col-md-6 col-12">
                 <div className="row mb-2">
                   <div className="col-6">
-                    <p className="fw-medium">Assignment Name</p>
+                    <p className="fw-medium">
+                      {" "}
+                      {storedConfigure?.assignManagement || "Assignment"} Name
+                    </p>
                   </div>
                   <div className="col-6 text-start">
                     <p className="text-muted text-sm">
@@ -209,7 +215,9 @@ function AssignmentView() {
               <div className="col-md-6 col-12">
                 <div className="row mb-2">
                   <div className="col-6">
-                    <p className="fw-medium">Course </p>
+                    <p className="fw-medium">
+                      {storedConfigure?.course || "Course"}{" "}
+                    </p>
                   </div>
                   <div className="col-6 text-start">
                     <p className="text-muted text-sm">
@@ -222,7 +230,9 @@ function AssignmentView() {
               <div className="col-md-6 col-12 mb-3">
                 <div className="row">
                   <div className="col-6">
-                    <p className="fw-medium">Class Listing</p>
+                    <p className="fw-medium">
+                      {storedConfigure?.confClass || "Class"} Listing
+                    </p>
                   </div>
                   <div className="col-6 text-start">
                     <p className="text-muted">: {data.className || "--"}</p>
@@ -279,7 +289,10 @@ function AssignmentView() {
               <div className="col-md-6 col-12">
                 <div className="row mb-2">
                   <div className="col-6">
-                    <p className="fw-medium">Assignment Reason</p>
+                    <p className="fw-medium">
+                      {" "}
+                      {storedConfigure?.assignManagement || "Assignment"} Reason
+                    </p>
                   </div>
                   <div className="col-6 text-start">
                     <p className="text-muted text-sm">

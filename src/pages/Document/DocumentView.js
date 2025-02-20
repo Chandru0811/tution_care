@@ -124,7 +124,9 @@ function DocumentView() {
             <div class="d-flex">
               <div class="dot active"></div>
             </div>
-            <span class="me-2 text-muted">View Document</span>
+            <span class="me-2 text-muted">
+              View {storedConfigure?.documentManagement || "Document"}
+            </span>
           </div>
           <div className="d-flex justify-content-end align-item-end p-2">
             {approveStatus && (

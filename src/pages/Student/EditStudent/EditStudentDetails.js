@@ -49,6 +49,9 @@ const EditStudentDetails = forwardRef(
     const [raceData, setRaceData] = useState(null);
     const [nationalityData, setNationalityData] = useState(null);
     const [languageData, setLanguageData] = useState(null);
+    const storedConfigure = JSON.parse(
+      localStorage.getItem("tmsappConfigInfo") || "{}"
+    );
 
     const userName = localStorage.getItem("tmsuserName");
     const centerId = localStorage.getItem("tmscenterId");
@@ -208,13 +211,18 @@ const EditStudentDetails = forwardRef(
         >
           <div className=" border-0 mb-5">
             <div className="mb-3">
-              <p class="headColor">Student Details</p>
+              <p class="headColor">
+                {storedConfigure?.student || "Student"} Details
+              </p>
               <div className="container-fluid">
                 <div className="row mt-3">
                   <div className="col-lg-6 col-md-6 col-12">
                     <div className="text-start mt-2">
                       <label htmlFor="" className="mb-1 fw-medium">
-                        <small>Student Name / as per ID</small>
+                        <small>
+                          {storedConfigure?.student || "Student"} Name / as per
+                          ID
+                        </small>
                         <span className="text-danger">*</span>
                       </label>
                       <br />
@@ -235,7 +243,9 @@ const EditStudentDetails = forwardRef(
                     </div>
                     <div className="text-start mt-4">
                       <label htmlFor="" className="mb-1 fw-medium">
-                        <small>Student Email</small>
+                        <small>
+                          {storedConfigure?.student || "Student"} Email
+                        </small>
                         <span className="text-danger">*</span>
                       </label>
                       <br />
@@ -433,7 +443,8 @@ const EditStudentDetails = forwardRef(
                     <div className="text-start mt-4">
                       <label className=" fw-medium">
                         <small>
-                          Student Chinese Name (put N/A if not applicable)
+                          {storedConfigure?.student || "Student"} Chinese Name
+                          (put N/A if not applicable)
                           {/* <span className="text-danger">*</span> */}
                         </small>
                         &nbsp;
