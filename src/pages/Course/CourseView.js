@@ -91,7 +91,7 @@ function CourseView() {
             <div className="col-md-6 col-12">
               <div className="row  mb-2 mt-1">
                 <div className="col-6">
-                  <p className="fw-medium">Course Name</p>
+                  <p className="fw-medium">{appConfigInfo.course} Name</p>
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">: {data.courseName}</p>
@@ -101,7 +101,7 @@ function CourseView() {
             <div className="col-md-6 col-12">
               <div className="row  mb-2 mt-1">
                 <div className="col-6">
-                  <p className="fw-medium">Course Code</p>
+                  <p className="fw-medium">{appConfigInfo.course} Code</p>
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">: {data.courseCode}</p>
@@ -111,7 +111,7 @@ function CourseView() {
             <div className="col-md-6 col-12">
               <div className="row  mb-2">
                 <div className="col-6  ">
-                  <p className="fw-medium">Subject</p>
+                  <p className="fw-medium">{appConfigInfo.subject}</p>
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">
@@ -129,7 +129,7 @@ function CourseView() {
             <div className="col-md-6 col-12">
               <div className="row  mb-2">
                 <div className="col-6  ">
-                  <p className="fw-medium">Level</p>
+                  <p className="fw-medium">{appConfigInfo.level}</p>
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">
@@ -189,7 +189,7 @@ function CourseView() {
             <div className="col-md-6 col-12">
               <div className="row  mb-2">
                 <div className="col-6  ">
-                  <p className="fw-medium">Course Type</p>
+                  <p className="fw-medium">{appConfigInfo.course} Type</p>
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">: {data.courseType}</p>

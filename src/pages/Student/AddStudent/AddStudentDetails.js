@@ -64,7 +64,9 @@ const AddStudentDetails = forwardRef(
     const userName = localStorage.getItem("tmsuserName");
     const centerId = localStorage.getItem("tmscenterId");
     const center = localStorage.getItem("tmscenterName");
-
+    const studentId = formData.student_id;
+    const appConfigInfo = JSON.parse(localStorage.getItem("tmsappConfigInfo"));
+    console.log("studentId", studentId);
     // console.log("FormData is ", formData);
 
     const maxDate = new Date();
@@ -116,7 +118,7 @@ const AddStudentDetails = forwardRef(
         studentName: formData.studentName || "",
         studentEmail: formData.studentEmail || "",
         studentChineseName: formData.studentChineseName || "",
-        file: null || "",
+        file: formData.file || "",
         age: formData.age || "",
         medicalCondition: formData.medicalCondition || "",
         dateOfBirth: formData.dateOfBirth || "",
@@ -170,27 +172,61 @@ const AddStudentDetails = forwardRef(
           // for (let [key, value] of formDatas.entries()) {
           //   console.log(`${key}: ${value}`);
           // }
-
-          const response = await api.post(
-            "/createStudentDetailsWithProfileImageLatest",
-            formDatas,
-            {
+          let response;
+          if (studentId === null || studentId === undefined) {
+            response = await api.post(
+              "/createStudentDetailsWithProfileImageLatest",
+              formDatas,
+              {
+                headers: {
+                  "Content-Type": "multipart/form-data",
+                },
+              }
+            );
+          } else {
+            const updatedData = {
+              studentName: values.studentName,
+              studentEmail: values.studentEmail,
+              studentChineseName: values.studentChineseName,
+              dateOfBirth: values.dateOfBirth,
+              age: values.age,
+              gender: values.gender,
+              medicalCondition: values.medicalCondition,
+              schoolType: values.schoolType,
+              schoolName: values.schoolName,
+              preAssessmentResult: values.preAssessmentResult,
+              race: values.race,
+              nationality: values.nationality || "",
+              referByParent: values.referByParent || "",
+              referByStudent: values.referByStudent || "",
+              remark: values.remark || "",
+              allowMagazine: values.allowMagazine,
+              allowSocialMedia: values.allowSocialMedia,
+              centerId: centerId,
+              center: center,
+              languageId: values.languageId,
+              groupName: values.groupName,
+              createdBy: userName,
+            };
+            response = await api.put(`/updateStudentDetail/${studentId}`, updatedData, {
               headers: {
-                "Content-Type": "multipart/form-data",
-              },
-            }
-          );
-
-          if (response.status === 201) {
-            const student_id = response.data.student_id;
-            const credentialsData = new FormData();
-            credentialsData.append("studentId", student_id);
-
-            await api.post("/sendStudentCredentials", credentialsData, {
-              headers: {
-                "Content-Type": "multipart/form-data",
+                "Content-Type": "application/json",
               },
             });
+          }
+
+          if (response.status === 201 || response.status === 200) {
+            const student_id = response.data.student_id || studentId;
+            if (response.data.student_id !== undefined) {
+              const credentialsData = new FormData();
+              credentialsData.append("studentId", student_id);
+
+              await api.post("/sendStudentCredentials", credentialsData, {
+                headers: {
+                  "Content-Type": "multipart/form-data",
+                },
+              });
+            }
             toast.success(response.data.message);
             setFormData((prv) => ({ ...prv, ...values, student_id }));
             handleNext();
@@ -307,7 +343,7 @@ const AddStudentDetails = forwardRef(
                   <div className="col-lg-6 col-md-6 col-12">
                     <div className="text-start mt-4">
                       <label htmlFor="" className="mb-1 fw-medium">
-                        <small>Student Name</small>
+                        <small>{appConfigInfo.student} Name</small>
                         <span className="text-danger">*</span>
                       </label>
                       <br />
@@ -328,7 +364,7 @@ const AddStudentDetails = forwardRef(
                     </div>
                     <div className="text-start mt-4">
                       <label htmlFor="" className="mb-1 fw-medium">
-                        <small>Student Email</small>
+                        <small>{appConfigInfo.student} Email</small>
                         <span className="text-danger">*</span>
                       </label>
                       <br />
@@ -520,7 +556,7 @@ const AddStudentDetails = forwardRef(
                     <div className="text-start mt-4">
                       <label className="mb-1 fw-medium">
                         <small>
-                          Student Chinese Name (put N/A if not applicable)
+                        {appConfigInfo.student} Chinese Name (put N/A if not applicable)
                           {/* <span className="text-danger">*</span> */}
                         </small>
                         &nbsp;
@@ -541,44 +577,47 @@ const AddStudentDetails = forwardRef(
                           </div>
                         )}
                     </div>
-                    <div className="text-start mt-4">
-                      <label htmlFor="file" className="mb-1 fw-medium">
-                        <small>Profile Image</small>
-                        <span className="text-danger">*</span>
-                      </label>
-                      <br />
-                      <input
-                        type="file"
-                        name="file"
-                        className="form-control"
-                        onChange={(event) => {
-                          const file = event.target.files[0];
-                          formik.setFieldValue("file", file);
-                          if (file) {
-                            const previewUrl = URL.createObjectURL(file);
-                            setImagePreviewUrl(previewUrl);
-                          } else {
-                            setImagePreviewUrl(null);
-                          }
-                        }}
-                        onBlur={formik.handleBlur}
-                        accept=".jpg, .jpeg, .png"
-                      />
-                      {formik.touched.file && formik.errors.file && (
-                        <div className="error text-danger">
-                          <small>{formik.errors.file}</small>
-                        </div>
-                      )}
-                      {imagePreviewUrl && (
-                        <div className="mt-3">
-                          <img
-                            src={imagePreviewUrl}
-                            alt="Profile Preview"
-                            className="w-25"
-                          />
-                        </div>
-                      )}
-                    </div>
+                    {(studentId === null || studentId === undefined) && (
+                      <div className="text-start mt-4">
+                        <label htmlFor="file" className="mb-1 fw-medium">
+                          <small>Profile Image</small>
+                          <span className="text-danger">*</span>
+                        </label>
+                        <br />
+                        <input
+                          type="file"
+                          name="file"
+                          className="form-control"
+                          onChange={(event) => {
+                            const file = event.target.files[0];
+                            formik.setFieldValue("file", file);
+                            if (file) {
+                              const previewUrl = URL.createObjectURL(file);
+                              setImagePreviewUrl(previewUrl);
+                            } else {
+                              setImagePreviewUrl(null);
+                            }
+                          }}
+                          onBlur={formik.handleBlur}
+                          accept=".jpg, .jpeg, .png"
+                        />
+                        {formik.touched.file && formik.errors.file && (
+                          <div className="error text-danger">
+                            <small>{formik.errors.file}</small>
+                          </div>
+                        )}
+                        {imagePreviewUrl && (
+                          <div className="mt-3">
+                            <img
+                              src={imagePreviewUrl}
+                              alt="Profile Preview"
+                              className="w-25"
+                            />
+                          </div>
+                        )}
+                      </div>
+                    )}
+
                     <div className="text-start mt-4">
                       <label htmlFor="age" className="mb-1 fw-medium">
                         <small>Age</small>

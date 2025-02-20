@@ -71,18 +71,20 @@ function SuperAdminCenterEdit() {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      const isAnyModuleSelected =
-        values.leadManagement ||
-        values.staffManagement ||
-        values.documentManagement ||
-        values.referalManagement ||
-        values.assessmentManagement ||
-        values.reportManagement ||
-        values.messages;
+      if (formik.submitCount === 1) {
+        const isAnyModuleSelected =
+          values.leadManagement ||
+          values.staffManagement ||
+          values.documentManagement ||
+          values.referalManagement ||
+          values.assessmentManagement ||
+          values.reportManagement ||
+          values.messages;
 
-      if (!isAnyModuleSelected) {
-        setShowModal(true);
-        return;
+        if (!isAnyModuleSelected) {
+          setShowModal(true);
+          return;
+        }
       }
       setLoadIndicator(true);
       try {
@@ -457,7 +459,7 @@ function SuperAdminCenterEdit() {
                         <input
                           className="form-check-input"
                           type="checkbox"
-                          style={{ cursor: "pointer" }}
+                          // style={{ cursor: "pointer" }}
                           checked={formik.values[key]}
                           onChange={() =>
                             formik.setFieldValue(key, !formik.values[key])

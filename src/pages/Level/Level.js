@@ -82,16 +82,16 @@ const Level = () => {
             </span>
           ) : null,
       },
-      { accessorKey: "level", enableHiding: false, header: "Level" },
+      { accessorKey: "level", enableHiding: false, header: `${appConfigInfo.level}` },
       {
         accessorKey: "levelCode",
         enableHiding: false,
-        header: "Level Code",
+        header: `${appConfigInfo.level} Code`,
       },
       {
         accessorKey: "subjectName",
         enableHiding: false,
-        header: "Subject Name",
+        header: `${appConfigInfo.subject} Name`,
       },
 
       { accessorKey: "createdBy", header: "Created By" },
@@ -217,7 +217,7 @@ const Level = () => {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-        {appConfigInfo.level}
+          {appConfigInfo.level}
         </li>
       </ol>
 
@@ -233,7 +233,7 @@ const Level = () => {
             <span class="me-2 text-muted">
               This database shows the list of{" "}
               <span className="bold" style={{ color: "#287f71" }}>
-              {appConfigInfo.level}
+                {appConfigInfo.level}
               </span>
             </span>
           </div>
@@ -326,7 +326,11 @@ const Level = () => {
                 View
               </MenuItem> */}
               <MenuItem>
-                <LevelEdit onSuccess={fetchData} id={selectedId}  handleMenuClose={handleMenuClose}/>
+                <LevelEdit
+                  onSuccess={fetchData}
+                  id={selectedId}
+                  handleMenuClose={handleMenuClose}
+                />
               </MenuItem>
               <MenuItem>
                 <GlobalDelete
