@@ -149,10 +149,7 @@ function AddPayroll() {
       }
       console.log("Payload Values:", payload);
       try {
-        const response = await api.post(
-          empRole === "freelancer"
-            ? "/createFreelancerPayroll"
-            : "/createUserPayroll",
+        const response = await api.post(`createUserPayrollOrFreelancer`,
           payload,   
           {
             headers: {

@@ -462,7 +462,7 @@ function Sidebar() {
                 {
                   title: "Other Messages",
                   path: "/othermessaging",
-                  access: storedScreens.smsMessageIndex,
+                  access: storedScreens.otherMessageIndex,
                   // access:true
                 },
                 {
