@@ -28,6 +28,22 @@ const validationSchema = Yup.object().shape({
       "*Enter a valid email address"
     )
     .required("*Email is required"),
+    trialDate: Yup.date().test(
+      "is-required-if-trial",
+      "Trial date is required",
+      function (value) {
+        const { centerStatus } = this.parent;
+        if (centerStatus === "Trial") {
+          if (!value) {
+            return false;
+          }
+          if (new Date(value) < new Date()) {
+            return this.createError({ message: "Date cannot be in the past" });
+          }
+        }
+        return true;
+      }
+    ),
 });
 
 function SuperAdminCenterEdit() {
@@ -38,6 +54,7 @@ function SuperAdminCenterEdit() {
   const userName = localStorage.getItem("tmsuserName");
   const [showModal, setShowModal] = useState(false);
   const [appData, setAppData] = useState(null);
+  const [status, setStatus] = useState("Pending");
 
   const handleClose = () => setShowModal(false);
   const handleShow = () => setShowModal(true);
@@ -50,6 +67,12 @@ function SuperAdminCenterEdit() {
       toast.error(error);
     }
   };
+  useEffect(() => {
+    const today = new Date();
+    today.setDate(today.getDate() + 30);
+    const formattedDate = today.toISOString().split("T")[0];
+    formik.setFieldValue("trialDate", formattedDate);
+  }, []);
 
   const formik = useFormik({
     initialValues: {
@@ -57,6 +80,8 @@ function SuperAdminCenterEdit() {
       centerName: "",
       email: "",
       senderMail: "",
+      centerStatus: "",
+      trialDate: "",
       configId: "",
       mobile: "",
       address: "",
@@ -147,6 +172,12 @@ function SuperAdminCenterEdit() {
     }
   }, [formik.submitCount, formik.errors]);
 
+  const handleStatusChange = (e) => {
+    const value = e.target.value;
+    setStatus(value);
+    formik.setFieldValue("centerStatus", value);
+  };
+
   useEffect(() => {
     const getData = async () => {
       const response = await api.get(`/getAllCenterById/${id}`);
@@ -170,7 +201,6 @@ function SuperAdminCenterEdit() {
 
   const handleAllow = () => {
     setShowModal(false);
-    toast.success("Access Modules Saved");
   };
 
   return (
@@ -392,6 +422,58 @@ function SuperAdminCenterEdit() {
                   )}
                 </div>
               </div>
+              <div className="col-md-6 col-12">
+                <div className="mb-3">
+                  <label className="form-label">
+                    Status<span className="text-danger">*</span>
+                  </label>
+                  <select
+                    {...formik.getFieldProps("centerStatus")}
+                    onChange={handleStatusChange}
+                    className={`form-select ${
+                      formik.touched.centerStatus && formik.errors.centerStatus
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                  >
+                    <option value="Pending">Pending</option>
+                    <option value="Trial">Trial</option>
+                    <option value="Approve">Approve</option>
+                    <option value="Rejected">Reject</option>
+                  </select>
+                  {formik.touched.centerStatus &&
+                    formik.errors.centerStatus && (
+                      <div className="invalid-feedback">
+                        {formik.errors.centerStatus}
+                      </div>
+                    )}
+                </div>
+              </div>
+
+              {status === "Trial" && (
+                <div className="col-md-6 col-12">
+                  <div className="mb-3">
+                    <label className="form-label">
+                      Trial Date<span className="text-danger">*</span>
+                    </label>
+                    <input
+                      type="date"
+                      {...formik.getFieldProps("trialDate")}
+                      className={`form-control ${
+                        formik.touched.trialDate && formik.errors.trialDate
+                          ? "is-invalid"
+                          : ""
+                      }`}
+                      min={new Date().toISOString().split("T")[0]}
+                    />
+                    {formik.touched.trialDate && formik.errors.trialDate && (
+                      <div className="invalid-feedback">
+                        {formik.errors.trialDate}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
               <div className="col-12">
                 <div className="mb-3">
                   <label for="exampleFormControlInput1" className="form-label">
@@ -459,7 +541,7 @@ function SuperAdminCenterEdit() {
                         <input
                           className="form-check-input"
                           type="checkbox"
-                          // style={{ cursor: "pointer" }}
+                          style={{ cursor: "pointer" }}
                           checked={formik.values[key]}
                           onChange={() =>
                             formik.setFieldValue(key, !formik.values[key])

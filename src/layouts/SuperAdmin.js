@@ -66,7 +66,7 @@ function SuperAdmin({ handleLogout }) {
     };
 
     fetchData();
-  }, []);
+  }, [centerChange]);
 
   return (
     <div>
@@ -90,15 +90,15 @@ function SuperAdmin({ handleLogout }) {
               {/* SuperAdminCenter */}
               <Route
                 path="/companyregistration"
-                element={<SuperAdminCenter />}
+                element={<SuperAdminCenter handleCenterChanged={handleCenterChanged}/>}
               />
               <Route
                 path="/companyregistration/add"
-                element={<SuperAdminCenterAdd />}
+                element={<SuperAdminCenterAdd  handleCenterChanged={handleCenterChanged}/>}
               />
               <Route
                 path="/companyregistration/edit/:id"
-                element={<SuperAdminCenterEdit />}
+                element={<SuperAdminCenterEdit handleCenterChanged={handleCenterChanged}/>}
               />
               <Route
                 path="/companyregistration/view/:id"

@@ -15,6 +15,7 @@ function LevelAdd({ onSuccess }) {
   const role = localStorage.getItem("tmsrole");
   const centerId = localStorage.getItem("tmscenterId");
   const appConfigInfo = JSON.parse(localStorage.getItem("tmsappConfigInfo"));
+  const userName = localStorage.getItem("tmsuserName");
 
   const handleClose = () => {
     setShow(false);
@@ -56,18 +57,22 @@ function LevelAdd({ onSuccess }) {
       levelCode: "",
       status: "",
       subjectId: "",
-      createdBy: role,
+      createdBy: userName,
     },
     validationSchema: validationSchema, // Assign the validation schema
     onSubmit: async (values) => {
       setLoadIndicator(true);
       values.createdBy = role;
       try {
-        const response = await api.post("/createCourseLevelWithCenter", values, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+        const response = await api.post(
+          "/createCourseLevelWithCenter",
+          values,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
         if (response.status === 201) {
           onSuccess();
           handleClose();
@@ -113,7 +118,9 @@ function LevelAdd({ onSuccess }) {
         keyboard={isModified ? false : true}
       >
         <Modal.Header closeButton>
-          <Modal.Title className="headColor">Add {appConfigInfo.level}</Modal.Title>
+          <Modal.Title className="headColor">
+            Add {appConfigInfo.level}
+          </Modal.Title>
         </Modal.Header>
         <form
           onSubmit={formik.handleSubmit}
@@ -128,7 +135,8 @@ function LevelAdd({ onSuccess }) {
               <div className="row py-4">
                 <div className="col-md-6 col-12 mb-2">
                   <label className="form-label">
-                  {appConfigInfo.subject}<span className="text-danger">*</span>
+                    {appConfigInfo.subject}
+                    <span className="text-danger">*</span>
                   </label>
                   <select
                     {...formik.getFieldProps("subjectId")}
@@ -177,7 +185,8 @@ function LevelAdd({ onSuccess }) {
                 </div>
                 <div className="col-md-6 col-12 mb-2">
                   <label className="form-label">
-                  {appConfigInfo.level}<span className="text-danger">*</span>
+                    {appConfigInfo.level}
+                    <span className="text-danger">*</span>
                   </label>
                   <input
                     type="text"
@@ -196,7 +205,8 @@ function LevelAdd({ onSuccess }) {
                 </div>
                 <div className="col-md-6 col-12 mb-2">
                   <label className="form-label">
-                  {appConfigInfo.level} Code<span className="text-danger">*</span>
+                    {appConfigInfo.level} Code
+                    <span className="text-danger">*</span>
                   </label>
                   <input
                     type="text"

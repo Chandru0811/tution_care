@@ -87,7 +87,6 @@ function CourseView() {
         </div>
         <div className="container-fluid px-4">
           <div className="row pb-3">
-            
             <div className="col-md-6 col-12">
               <div className="row  mb-2 mt-1">
                 <div className="col-6">
@@ -119,7 +118,7 @@ function CourseView() {
                     {subjectData &&
                       subjectData.map((subjectId) =>
                         parseInt(data.subjectId) === subjectId.id
-                          ? subjectId.subjects || "--"
+                          ? subjectId.subject || "--"
                           : ""
                       )}
                   </p>

@@ -213,7 +213,7 @@ const Level = () => {
           <span className="breadcrumb-separator "> &gt; </span>
         </li>
         <li>
-          Course Management
+        {appConfigInfo.course}
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">

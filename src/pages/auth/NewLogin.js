@@ -76,10 +76,15 @@ export default function NewLogin({ onLogin }) {
           toast.error(response.data.message);
         }
       } catch (error) {
-        if (error?.response?.status === 409) {
+        if (error?.response?.status === 401) {
+          // toast.warning("test");
+        } else if (error?.response?.status === 409) {
           toast.warning("Wrong username or password!");
         } else {
-          toast.error(error?.response?.data?.message);
+          toast.error(
+            error?.response?.data?.message ||
+              "Something went wrong. Please try again."
+          );
         }
       } finally {
         setLoadIndicator(false);

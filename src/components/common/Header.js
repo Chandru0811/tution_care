@@ -8,7 +8,7 @@ import { GrUserSettings } from "react-icons/gr";
 import api from "../../config/URL";
 import Logo from "../../assets/images/TMS_LOGO.png";
 
-function Header({ onLogout }) {
+function Header({ onLogout ,data}) {
   const navigate = useNavigate();
   const userName = localStorage.getItem("tmsuserName");
   const centerId = localStorage.getItem("tmscenterId");
@@ -18,7 +18,7 @@ function Header({ onLogout }) {
   const teacherImage = localStorage.getItem("tmsteacherImage");
   const teacherName = localStorage.getItem("tmsteacherName");
   const role = localStorage.getItem("tmsrole")?.replace(/_/g, " ");
-  const [data, setData] = useState([]);
+  // const [data, setData] = useState([]);
   const userInfo = localStorage.getItem("tmsuserInfo");
 
   const handleLogOutClick = () => {
@@ -29,18 +29,18 @@ function Header({ onLogout }) {
     navigate("/login");
   };
 
-  const getData = async () => {
-    try {
-      const response = await api.get(`/getAllCenterById/${centerId}`);
-      setData(response.data);
-    } catch (error) {
-      toast.error("Error Fetching Data");
-    }
-  };
+  // const getData = async () => {
+  //   try {
+  //     const response = await api.get(`/getAllCenterById/${centerId}`);
+  //     setData(response.data);
+  //   } catch (error) {
+  //     toast.error("Error Fetching Data");
+  //   }
+  // };
 
-  useEffect(() => {
-    getData();
-  }, []);
+  // useEffect(() => {
+  //   getData();
+  // }, []);
 
   return (
     <nav>
@@ -107,7 +107,7 @@ function Header({ onLogout }) {
             ) : (
               <i
                 className="fa fa-user"
-                style={{ color: "#eb862a", fontSize: "2rem" }}
+                style={{ color: "#eb862a", fontSize: "1.5rem" }}
               ></i>
             )}
           </button>

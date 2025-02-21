@@ -62,7 +62,7 @@ import DocumentReport from "../pages/Report/DocumentReport";
 import WithdrawAdd from "../pages/Student/WithdrawAdd";
 import EnrollmentAdd from "../pages/Lead/Enrollment/EnrollmentAdd";
 import Video from "../pages/Video";
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import Reschedule from "../pages/Reschedule/Reschedule";
 import RescheduleStudent from "../pages/Reschedule/RescheduleStudent";
 import AttendancesCourse from "../pages/Attendance/AttendancesCourse";
@@ -208,9 +208,12 @@ import AssignmentEdit from "../pages/Assignment/AssignmentEdit";
 import PaymentsView from "../pages/Payment/PaymentsView";
 import Language from "../pages/Settings/Language/Language";
 import TrialNotification from "../components/common/TrialNotification";
+import api from "../config/URL";
 
 function Admin({ handleLogout }) {
   const [centerChange, setCenterChange] = useState(0);
+  const centerId = localStorage.getItem("tmscenterId");
+  const [data, setData] = useState([]);
   useEffect(() => {
     let sidebar = document.querySelector(".sidebar");
     let sidebarBtn = document.querySelector(".sidebarBtn");
@@ -226,13 +229,30 @@ function Admin({ handleLogout }) {
     console.log("centerChange", centerChange);
   };
 
+  const getData = async () => {
+    try {
+      const response = await api.get(`/getAllCenterById/${centerId}`);
+      setData(response.data);
+    } catch (error) {
+      console.error("Error Fetching Data");
+    }
+  };
+
+  useEffect(() => {
+    getData();
+  }, [centerChange]);
+
   return (
     <div>
       <BrowserRouter basename="/tuitions">
         <ToastContainer position="top-center" />
         <Sidebar />
         <section className="home-section">
-          <Header onLogout={handleLogout} centerChange={centerChange} />
+          <Header
+            onLogout={handleLogout}
+            centerChange={centerChange}
+            data={data}
+          />
           <ScrollToTop />
           <div className="home-content" style={{ minHeight: "95vh" }}>
             <TrialNotification />

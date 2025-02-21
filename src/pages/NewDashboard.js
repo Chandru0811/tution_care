@@ -19,7 +19,7 @@ function NewDashboard() {
         setData(response.data);
       }
     } catch (e) {
-      toast.error("Error Fetching Dashboard Data");
+      console.error("Error Fetching Dashboard Data");
     } finally {
       setLoading(false);
     }
@@ -27,7 +27,7 @@ function NewDashboard() {
 
   useEffect(() => {
     getData();
-  }, [centerId]);
+  }, [selectedcenterId,centerId]);
 
   const fontFamily =
     "'Outfit', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji'";
