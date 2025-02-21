@@ -29,6 +29,22 @@ const validationSchema = Yup.object().shape({
       "*Enter a valid email address"
     )
     .required("*Email is required"),
+    trialDate: Yup.date().test(
+      "is-required-if-trial",
+      "Trial date is required",
+      function (value) {
+        const { centerStatus } = this.parent;
+        if (centerStatus === "Trial") {
+          if (!value) {
+            return false;
+          }
+          if (new Date(value) < new Date()) {
+            return this.createError({ message: "Date cannot be in the past" });
+          }
+        }
+        return true;
+      }
+    ),
 });
 
 function SuperAdminCenterAdd({ handleCenterChanged }) {
@@ -37,15 +53,22 @@ function SuperAdminCenterAdd({ handleCenterChanged }) {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const userName = localStorage.getItem("tmsuserName");
   const [showModal, setShowModal] = useState(false);
-
+  const [status, setStatus] = useState("Pending");
   const handleClose = () => setShowModal(false);
   const handleShow = () => setShowModal(true);
+  useEffect(() => {
+    const today = new Date();
+    today.setDate(today.getDate() + 30);
+    const formattedDate = today.toISOString().split("T")[0];
+    formik.setFieldValue("trialDate", formattedDate);
+  }, []);
 
   const formik = useFormik({
     initialValues: {
       name: "",
       centerName: "",
       centerStatus: "Pending",
+      trialDate: "",
       email: "",
       senderMail: "",
       mobile: "",
@@ -73,8 +96,8 @@ function SuperAdminCenterAdd({ handleCenterChanged }) {
             `/statusApproval/${response.data.id}?newStatus=${values.centerStatus}`
           );
           toast.success(response.data.message);
-          navigate("/companyregistration");
           handleCenterChanged();
+          navigate("/companyregistration");
         } else {
           toast.error(response.data.message);
         }
@@ -107,7 +130,6 @@ function SuperAdminCenterAdd({ handleCenterChanged }) {
 
   const handleAllow = () => {
     setShowModal(false);
-    toast.success("Access Modules Saved");
   };
   const fetchData = async () => {
     try {
@@ -116,6 +138,11 @@ function SuperAdminCenterAdd({ handleCenterChanged }) {
     } catch (error) {
       console.error("Error fetching data:", error);
     }
+  };
+  const handleStatusChange = (e) => {
+    const value = e.target.value;
+    setStatus(value);
+    formik.setFieldValue("centerStatus", value);
   };
 
   useEffect(() => {
@@ -337,19 +364,18 @@ function SuperAdminCenterAdd({ handleCenterChanged }) {
               <div className="col-md-6 col-12">
                 <div className="mb-3">
                   <label className="form-label">
-                    Status<span class="text-danger">*</span>
+                    Status<span className="text-danger">*</span>
                   </label>
                   <select
                     {...formik.getFieldProps("centerStatus")}
+                    onChange={handleStatusChange}
                     className={`form-select ${
                       formik.touched.centerStatus && formik.errors.centerStatus
                         ? "is-invalid"
                         : ""
                     }`}
                   >
-                    <option selected value="Pending">
-                      Pending
-                    </option>
+                    <option value="Pending">Pending</option>
                     <option value="Trial">Trial</option>
                     <option value="Approve">Approve</option>
                     <option value="Rejected">Reject</option>
@@ -362,6 +388,31 @@ function SuperAdminCenterAdd({ handleCenterChanged }) {
                     )}
                 </div>
               </div>
+
+              {status === "Trial" && (
+                <div className="col-md-6 col-12">
+                  <div className="mb-3">
+                    <label className="form-label">
+                      Trial Date<span className="text-danger">*</span>
+                    </label>
+                    <input
+                      type="date"
+                      {...formik.getFieldProps("trialDate")}
+                      className={`form-control ${
+                        formik.touched.trialDate && formik.errors.trialDate
+                          ? "is-invalid"
+                          : ""
+                      }`}
+                      min={new Date().toISOString().split("T")[0]}
+                    />
+                    {formik.touched.trialDate && formik.errors.trialDate && (
+                      <div className="invalid-feedback">
+                        {formik.errors.trialDate}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
               <div className="col-12">
                 <div className="mb-3">
                   <label for="exampleFormControlInput1" className="form-label">
