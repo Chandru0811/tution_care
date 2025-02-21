@@ -384,10 +384,10 @@ function InvoiceView() {
               <div className="col-lg-6 col-md-6 col-12 p-3">
                 <div className="d-flex justify-content-center flex-column align-items-start">
                   {/* <img src={Logo} className="img-fluid" width={150} alt=".." /> */}
-                  <p className="text-start fw-small">
+                  {/* <p className="text-start fw-small">
                     Learning Languages <br />
                     The Creative Way
-                  </p>
+                  </p> */}
                 </div>
               </div>
               <div className="col-lg-6 col-md-6 col-12 p-3 d-flex justify-content-center flex-column align-items-start">

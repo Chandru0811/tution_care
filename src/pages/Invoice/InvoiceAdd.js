@@ -7,8 +7,9 @@ import api from "../../config/URL";
 import { toast } from "react-toastify";
 import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
 import fetchAllPackageListByCenter from "../List/PackageListByCenter";
-import fetchAllStudentListByCenter from "../List/StudentListByCenter";
 import { ImCancelCircle } from "react-icons/im";
+import fetchAllStudentListByCenter from "../List/StudentListByCenter";
+import fetchAllTaxWithIds from "../List/TaxTypeList";
 
 const invoiceItemSchema = Yup.object().shape({
   item: Yup.string().required("Item name is required"),
@@ -59,6 +60,7 @@ export default function InvoiceAdd() {
   const [studentData, setStudentData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [taxData, setTaxData] = useState([]);
+  const [taxTypeData, setTaxTypeData] = useState([]);
   const [packageData, setPackageData] = useState(null);
   const [selectedStudentId, setSelectedStudentId] = useState(null);
   const [selectedPackageId, setSelectedPackageId] = useState(null);
@@ -210,6 +212,15 @@ export default function InvoiceAdd() {
     }
   };
 
+  const fetchtTaxType = async (centerId) => {
+    try {
+      const taxs = await fetchAllTaxWithIds(centerId);
+      setTaxTypeData(taxs);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
+
   const fetchTaxData = async () => {
     try {
       const response = await api.get("getAllTaxSetting");
@@ -223,6 +234,7 @@ export default function InvoiceAdd() {
     fetchCourses(centerId); // Fetch courses for the selected centerId
     fetchPackage(centerId); // Fetch courses for the selected centerId
     fetchStudent(centerId);
+    fetchtTaxType(centerId);
   };
   useEffect(() => {
     handleCenterChange();
@@ -306,7 +318,7 @@ export default function InvoiceAdd() {
             }
           } else {
             const selectedTax = taxData.find(
-              (tax) => parseInt(feeData.taxType) === tax.id
+              (taxs) => parseInt(feeData.taxType) === taxs.id
             );
 
             const amount =
@@ -396,7 +408,7 @@ export default function InvoiceAdd() {
             );
 
             const selectedTax = taxData.find(
-              (tax) => parseInt(response1.data.taxId) === tax.id
+              (taxs) => parseInt(response1.data.taxId) === taxs.id
             );
             const gstRate = selectedTax ? selectedTax.rate : 0;
             const amount = response1.data.amount || 0;
@@ -427,7 +439,7 @@ export default function InvoiceAdd() {
             );
 
             const selectedTax = taxData.find(
-              (tax) => parseInt(response2.data?.taxType) === tax.id
+              (taxs) => parseInt(response2.data?.taxType) === taxs.id
             );
             // const selectedCourse = courseData.find(
             //   (course) => parseInt(response2.data?.courseId) === course.id
@@ -474,7 +486,7 @@ export default function InvoiceAdd() {
             );
 
             const selectedTax = taxData.find(
-              (tax) => parseInt(response3.data.taxType) === tax.id
+              (taxs) => parseInt(response3.data.taxType) === taxs.id
             );
             const gstRate = selectedTax ? selectedTax.rate : 0;
             const amount = response3.data?.depositFees || 0;
@@ -537,7 +549,7 @@ export default function InvoiceAdd() {
   }, [studentID]);
 
   const handleSelectChange = (index, value) => {
-    const selectedTax = taxData.find((tax) => tax.id === parseInt(value));
+    const selectedTax = taxTypeData.find((taxs) => taxs.id === parseInt(value));
     const gstRate = selectedTax ? selectedTax.rate : 0;
     const totalAmount =
       parseFloat(formik.values.invoiceItems[index]?.totalAmount) || 0;
@@ -574,7 +586,7 @@ export default function InvoiceAdd() {
   const handelTotalAmountChange = (index, value) => {
     const selectedTaxType = formik.values.invoiceItems[index]?.taxType;
     const selectedTax = taxData.find(
-      (tax) => tax.id === parseInt(selectedTaxType)
+      (taxs) => taxs.id === parseInt(selectedTaxType)
     );
 
     const gstRate = selectedTax ? selectedTax.rate : 0;
@@ -1158,7 +1170,7 @@ export default function InvoiceAdd() {
                       </div>
                     )}
                 </div>
-                <div className="text-start mt-3">
+                {/* <div className="text-start mt-3">
                   <label htmlFor="" className="mb-1 fw-medium">
                     Receipt Amount<span class="text-danger">*</span>
                   </label>
@@ -1183,7 +1195,7 @@ export default function InvoiceAdd() {
                         {formik.errors.receiptAmount}
                       </div>
                     )}
-                </div>
+                </div> */}
                 <div className="text-start mt-3">
                   <label htmlFor="" className="mb-1 fw-medium">
                     Number of Lesson
@@ -1314,10 +1326,11 @@ export default function InvoiceAdd() {
                                 }
                               >
                                 <option value=""></option>
-                                {taxData &&
-                                  taxData.map((tax) => (
-                                    <option key={tax.id} value={tax.id}>
-                                      {`${tax.taxType} ${tax.rate}%`}
+
+                                {taxTypeData &&
+                                  taxTypeData.map((taxs) => (
+                                    <option key={taxs.id} value={taxs.id}>
+                                      {`${taxs.taxType} ${taxs.rate}%`}
                                     </option>
                                   ))}
                               </select>
