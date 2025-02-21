@@ -1434,3 +1434,12 @@ thead th {
   background-color: #d19900;
   color: #fff3cd;
 }
+
+.newLead{
+  width: 50%;
+}
+@media (max-width: 650px) {
+  .newLead{
+    width: 100%;
+  }
+}

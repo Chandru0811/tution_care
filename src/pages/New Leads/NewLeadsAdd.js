@@ -314,17 +314,6 @@ function NewLeadsAdd() {
                     />
                     <label className="form-check-label">Female</label>
                   </div>
-                  <div className="form-check form-check-inline">
-                    <input
-                      className="form-check-input"
-                      type="radio"
-                      name="gender"
-                      value="Other"
-                      checked={formik.values.gender === "Other"}
-                      onChange={formik.handleChange}
-                    />
-                    <label className="form-check-label">Other</label>
-                  </div>
                   {formik.touched.gender && formik.errors.gender && (
                     <div className="invalid-feedback d-block">
                       {formik.errors.gender}

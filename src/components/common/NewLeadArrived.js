@@ -1,0 +1,345 @@
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import api from "../../config/URL";
+import { toast } from "react-toastify";
+
+const validationSchema = Yup.object({
+  leadName: Yup.string().required("Lead name is required"),
+  primaryEmail: Yup.string()
+    .email("Invalid email format")
+    .required("Primary email is required"),
+  primaryMobile: Yup.string()
+    .matches(/^\d{8}$/, "Mobile number must be 8 digits")
+    .required("Primary mobile number is required"),
+  gender: Yup.string().required("Gender is required"),
+  dob: Yup.date().required("Date of Birth is required"),
+  remarks: Yup.string().required("Remarks is required"),
+  termsAndCondition: Yup.boolean()
+    .oneOf([true], "You must accept the terms and conditions")
+    .required("Terms and conditions must be accepted"),
+});
+
+function NewLeadArrived() {
+  const navigate = useNavigate();
+  const [loadIndicator, setLoadIndicator] = useState(false);
+  const centerId = localStorage.getItem("tmscenterId");
+
+  const formik = useFormik({
+    initialValues: {
+      leadName: "",
+      leadStatus: "NEW_WAITLIST" || "",
+      primaryEmail: "",
+      primaryMobile: "",
+      gender: "",
+      dob: "",
+      referBy: "",
+      marketingSource: "",
+      remarks: "",
+      termsAndCondition: false,
+    },
+    validationSchema: validationSchema,
+    onSubmit: async (values) => {
+      console.log("Create New Lead ::", values);
+      // setLoadIndicator(true);
+      // try {
+      //   const response = await api.post("/creatNewLead", values, {
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //     },
+      //   });
+      //   if (response.status === 201) {
+      //     toast.success(response.data.message);
+      //     navigate("/lead");
+      //   } else {
+      //     toast.error(response.data.message);
+      //   }
+      // } catch (error) {
+      //   if (
+      //     error?.response?.status === 409 ||
+      //     error?.response?.status === 404
+      //   ) {
+      //     toast.warning(error?.response?.data?.message);
+      //   } else {
+      //     toast.error("Error submitting data: " + error.message);
+      //   }
+      // } finally {
+      //   setLoadIndicator(false);
+      // }
+    },
+  });
+
+  useEffect(() => {
+    if (formik.submitCount > 0 && Object.keys(formik.errors).length > 0) {
+      const errorField = Object.keys(formik.errors)[0];
+      const errorElement = document.querySelector(`[name="${errorField}"]`);
+      if (errorElement) {
+        errorElement.scrollIntoView({ behavior: "smooth", block: "center" });
+        errorElement.focus();
+      }
+    }
+  }, [formik.submitCount, formik.errors]);
+
+  return (
+    <div className="container my-4 newLead">
+      <form
+        onSubmit={formik.handleSubmit}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && !formik.isSubmitting) {
+            e.preventDefault(); // Prevent default form submission
+          }
+        }}
+      >
+          <div className="container">
+            <h1 style={{color:"#287f71"}} className="m-0">Welcome!</h1>
+            <p style={{color:"#287f71"}} className="m-0">Help us understand you better...</p>
+            <div className="row py-4">
+              <div className="col-md-6 mb-3">
+                <label className="form-label">
+                  Name<span className="text-danger">*</span>
+                </label>
+                <input
+                  name="leadName"
+                  type="text"
+                  className={`form-control ${
+                    formik.touched.leadName && formik.errors.leadName
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  {...formik.getFieldProps("leadName")}
+                />
+                {formik.touched.leadName && formik.errors.leadName && (
+                  <div className="invalid-feedback">
+                    {formik.errors.leadName}
+                  </div>
+                )}
+              </div>
+
+              <div className="col-md-6 mb-3">
+                <label className="form-label">
+                  Email<span className="text-danger">*</span>
+                </label>
+                <input
+                  name="primaryEmail"
+                  type="email"
+                  className={`form-control ${
+                    formik.touched.primaryEmail && formik.errors.primaryEmail
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  {...formik.getFieldProps("primaryEmail")}
+                />
+                {formik.touched.primaryEmail && formik.errors.primaryEmail && (
+                  <div className="invalid-feedback">
+                    {formik.errors.primaryEmail}
+                  </div>
+                )}
+              </div>
+
+              <div className="col-md-6 mb-3">
+                <label className="form-label">
+                  Date of Birth<span className="text-danger">*</span>
+                </label>
+                <input
+                  name="dob"
+                  type="date"
+                  className={`form-control ${
+                    formik.touched.dob && formik.errors.dob ? "is-invalid" : ""
+                  }`}
+                  {...formik.getFieldProps("dob")}
+                />
+                {formik.touched.dob && formik.errors.dob && (
+                  <div className="invalid-feedback">{formik.errors.dob}</div>
+                )}
+              </div>
+
+              <div className="col-md-6 mb-3">
+                <label className="form-label">
+                  Mobile<span className="text-danger">*</span>
+                </label>
+                <input
+                  name="primaryMobile"
+                  type="text"
+                  className={`form-control ${
+                    formik.touched.primaryMobile && formik.errors.primaryMobile
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  {...formik.getFieldProps("primaryMobile")}
+                />
+                {formik.touched.primaryMobile &&
+                  formik.errors.primaryMobile && (
+                    <div className="invalid-feedback">
+                      {formik.errors.primaryMobile}
+                    </div>
+                  )}
+              </div>
+
+              <div className="col-md-6 mb-3">
+                <label className="form-label">
+                  Gender<span className="text-danger">*</span>
+                </label>
+                <div>
+                  <div className="form-check form-check-inline">
+                    <input
+                      className="form-check-input"
+                      type="radio"
+                      name="gender"
+                      value="Male"
+                      checked={formik.values.gender === "Male"}
+                      onChange={formik.handleChange}
+                    />
+                    <label className="form-check-label">Male</label>
+                  </div>
+                  <div className="form-check form-check-inline">
+                    <input
+                      className="form-check-input"
+                      type="radio"
+                      name="gender"
+                      value="Female"
+                      checked={formik.values.gender === "Female"}
+                      onChange={formik.handleChange}
+                    />
+                    <label className="form-check-label">Female</label>
+                  </div>
+                  {formik.touched.gender && formik.errors.gender && (
+                    <div className="invalid-feedback d-block">
+                      {formik.errors.gender}
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className="col-md-6 mb-3">
+               
+              </div>
+            
+
+              <div className="col-md-6 mb-3">
+                <label className="form-label">Refer By</label>
+                <input
+                  name="referBy"
+                  type="text"
+                  className={`form-control ${
+                    formik.touched.referBy && formik.errors.referBy
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  {...formik.getFieldProps("referBy")}
+                />
+                {formik.touched.referBy && formik.errors.referBy && (
+                  <div className="invalid-feedback">
+                    {formik.errors.referBy}
+                  </div>
+                )}
+              </div>
+
+              <div className="col-md-6 col-12 mb-3">
+                <label className="form-label">Marketing Source</label>
+                <div className="input-group ">
+                  <select
+                    name="marketingSource"
+                    {...formik.getFieldProps("marketingSource")}
+                    className={`form-select ${
+                      formik.touched.marketingSource &&
+                      formik.errors.marketingSource
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                  >
+                    <option selected></option>
+                    <option value="Friends or Relatives">
+                      Friends or Relatives
+                    </option>
+                    <option value="Facebook">Facebook</option>
+                    <option value="Google">Google</option>
+                    <option value="Others">Others</option>
+                  </select>
+                </div>
+                {formik.touched.marketingSource &&
+                  formik.errors.marketingSource && (
+                    <div className="error text-danger">
+                      <small>{formik.errors.marketingSource}</small>
+                    </div>
+                  )}
+              </div>
+
+              <div className="col-md-12 col-12">
+                <div className="mb-3">
+                  <div>
+                    <label
+                      for="exampleFormControlInput1"
+                      className="form-label"
+                    >
+                      Remarks
+                    </label><span className="text-danger">*</span>
+                  </div>
+                  <div className="">
+                    <textarea
+                      type="text"
+                      name="remarks"
+                      {...formik.getFieldProps("remarks")}
+                      className={`form-control ${
+                        formik.touched.remarks && formik.errors.Remarks
+                          ? "is-invalid"
+                          : ""
+                      }`}
+                    />
+                    {formik.touched.remarks && formik.errors.remarks && (
+                      <div className="error text-danger ">
+                        <small>{formik.errors.remarks}</small>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              <div className="col-12 mt-3">
+                <div className="form-check">
+                  <input
+                    type="checkbox"
+                    name="termsAndCondition"
+                    className={`form-check-input ${
+                      formik.touched.termsAndCondition &&
+                      formik.errors.termsAndCondition
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                    {...formik.getFieldProps("termsAndCondition")}
+                  />
+                  <label className="form-check-label">
+                    I agree of the terms and Condition
+                    <span className="text-danger">*</span>
+                  </label>
+                  {formik.touched.termsAndCondition &&
+                    formik.errors.termsAndCondition && (
+                      <div className="invalid-feedback">
+                        {formik.errors.termsAndCondition}
+                      </div>
+                    )}
+                </div>
+              </div>
+
+              <div className="mt-4">
+                <button
+                  type="submit"
+                  className="btn btn-button btn-md"
+                  disabled={loadIndicator}
+                >
+                  {loadIndicator && (
+                    <span
+                      className="spinner-border spinner-border-sm me-2"
+                      aria-hidden="true"
+                    ></span>
+                  )}
+                  <span className="fw-medium">Submit</span>
+                </button>
+              </div>
+            </div>
+          </div>
+      </form>
+    </div>
+  );
+}
+
+export default NewLeadArrived;
