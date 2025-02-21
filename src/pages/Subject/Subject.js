@@ -232,7 +232,7 @@ const Subject = () => {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          &nbsp;Course
+          &nbsp;{appConfigInfo.course}
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">

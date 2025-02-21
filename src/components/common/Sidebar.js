@@ -53,6 +53,7 @@ function Sidebar() {
     documentManagement:
       storedConfigure?.documentManagement || "Document Management",
     settings: storedConfigure?.settings || "Settings",
+    schedule: storedConfigure?.schedule || "Schedule",
   };
   const iconMapping = {
     [Key.centreName]: <PiBuildings />,
@@ -62,7 +63,7 @@ function Sidebar() {
     Staffing: <HiOutlineUserGroup />,
     [Key.student]: <TbUserSearch />,
     "Student Movement": <TbStatusChange />,
-    Schedule: <TbCalendarTime />,
+    [Key.schedule]: <TbCalendarTime />,
     [Key.documentManagement]: <TbFolderCog />,
     [Key.assignManagement]: <MdOutlineAssignment />,
     [Key.invoice]: <LiaFileInvoiceDollarSolid />,

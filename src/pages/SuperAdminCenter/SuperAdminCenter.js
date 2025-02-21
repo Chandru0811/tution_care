@@ -155,6 +155,7 @@ const SuperAdminCenter = ({ handleCenterChanged }) => {
               className="form-control w-50 badge"
               value={selectedStatus}
               onChange={handleStatusChange}
+              onClick={(e) => e.stopPropagation()}
               style={{
                 height: "20px",
                 textAlign: "center",
