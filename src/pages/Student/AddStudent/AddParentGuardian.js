@@ -10,7 +10,7 @@ import { toast } from "react-toastify";
 import api from "../../../config/URL";
 
 const AddParentGuardian = forwardRef(
-  ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
+  ({ formData, setLoadIndicators, setFormData, handleNext,navigate }, ref) => {
     const [rows, setRows] = useState(
       formData.parentInformation ? formData.parentInformation.length : 1
     ); // Initially one row for one parent
@@ -137,7 +137,11 @@ const AddParentGuardian = forwardRef(
           }
           toast.success("Parent details processed successfully!");
           setFormData((prev) => ({ ...prev, ...values }));
-          handleNext();
+          if (navigate) {
+            navigate("/student");
+          } else {
+            handleNext();
+          }
         } catch (error) {
           toast.error(error?.response?.data?.message);
           console.error(error);

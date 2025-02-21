@@ -19,7 +19,7 @@ const validationSchema = Yup.object().shape({
 });
 
 const AddcourseDetail = forwardRef(
-  ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
+  ({ formData, setLoadIndicators, setFormData, handleNext, navigate }, ref) => {
     // console.log("Student Id:", formData.student_id);
     const [courseData, setCourseData] = useState(null);
     const [packageData, setPackageData] = useState(null);
@@ -35,6 +35,7 @@ const AddcourseDetail = forwardRef(
     console.log("Selected Row ID:", selectedRow);
     const [selectedCourseId, setSelectedCourseId] = useState(null);
     console.log("Selected Course ID:", selectedCourseId);
+    const centerId = localStorage.getItem("tmscenterId");
     const storedConfigure = JSON.parse(
       localStorage.getItem("tmsappConfigInfo") || "{}"
     );
@@ -258,7 +259,11 @@ const AddcourseDetail = forwardRef(
           if (response.status === 201 || response.status === 200) {
             toast.success(response.data.message);
             setFormData((prv) => ({ ...prv, ...data }));
-            handleNext();
+            if (navigate) {
+              navigate("/student");
+            } else {
+              handleNext();
+            }
             // setSelectedRow(null);
           } else {
             toast.error(response.data.message);
@@ -348,7 +353,7 @@ const AddcourseDetail = forwardRef(
     const fetchBatchandTeacherData = async (day) => {
       try {
         const response = await api.get(
-          `getTeacherWithBatchListByDay?day=${day}`
+          `getTeacherWithBatchListByDay?centerId=${centerId}&day=${day}`
         );
         setBatchData(response.data.batchList);
       } catch (error) {

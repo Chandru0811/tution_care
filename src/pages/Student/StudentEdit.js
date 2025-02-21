@@ -3,25 +3,15 @@ import { useState } from "react";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
-// import EditRegistration from "./EditStudent/EditRegistration";
-// import EditDetails from "./EditStudent/EditDetails";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import Tooltip from "react-bootstrap/Tooltip";
 import { OverlayTrigger } from "react-bootstrap";
 import EditStudentDetails from "./EditStudent/EditStudentDetails";
 import EditParentGuardian from "./EditStudent/EditParentGuardian";
 import EditEmergencyContact from "./EditStudent/EditEmergencyContact";
-// import EditStudentRelation from "./EditStudent/EditStudentRelation";
 import EditTermsAndCondition from "./EditStudent/EditTermsAndCondition";
+import EditCourseDetails from "./EditStudent/EditCourceDetails";
 
-const steps = [
-  { tooltip: "Student Details" },
-  { tooltip: "Parents/Guardian" },
-  { tooltip: "Emergency Contact" },
-  // { tooltip: "Course Details" },
-  // { tooltip: "Student Relation" },
-  { tooltip: "Terms and Conditions" },
-];
 
 export default function StudentAdd() {
   const { id } = useParams();
@@ -29,12 +19,39 @@ export default function StudentAdd() {
   const [activeStep, setActiveStep] = useState(0);
 
   const [formData, setFormData] = useState({ id });
-  const storedConfigure = JSON.parse(
-    localStorage.getItem("tmsappConfigInfo") || "{}"
-  );
+  const ConfigurationData = JSON.parse(
+     localStorage.getItem("tmsappConfigInfo")
+   );
+   const navigate = useNavigate();
+
+   const allSteps = [
+    {
+      key: "isStudentDetails",
+      tooltip: "Student Details",
+    },
+    {
+      key: "isParentsGuardian",
+      tooltip: "Parent Guardian",
+    },
+    {
+      key: "isEmergencyContact",
+      tooltip: "Emergency Contact",
+    },
+    {
+      key: "isCourseDetails",
+      tooltip: "Course Details",
+    },
+    {
+      key: "isTermsAndCondition",
+      tooltip: "Terms AndCondition",
+    },
+  ];
+  let filteredSteps = allSteps;
+  if (ConfigurationData) {
+    filteredSteps = allSteps.filter((step) => ConfigurationData[step.key]);
+  }
 
   const childRef = React.useRef();
-  // console.log("Form Data:", formData);
 
   const handleNext = () => {
     setActiveStep((prevStep) => prevStep + 1);
@@ -45,42 +62,30 @@ export default function StudentAdd() {
   };
 
   const handleButtonClick = () => {
-    // console.log("1",childRef);
-    // Call the child function using the ref
-    switch (activeStep.toString()) {
-      case "0":
-        if (childRef.current) {
-          childRef.current.Editstudentdetails();
-        }
-        break;
-      case "1":
-        if (childRef.current) {
-          childRef.current.editParentGuardian();
-        }
-        break;
-      case "2":
-        if (childRef.current) {
-          childRef.current.emergencyContact();
-        }
-        break;
-      // case "3":
-      //   if (childRef.current) {
-      //     childRef.current.coursedetail();
-      //   }
-      //   break;
-      // case "3":
-      //   if (childRef.current) {
-      //     childRef.current.Studentrelation();
-      //   }
-      //   break;
-      case "3":
-        if (childRef.current) {
-          childRef.current.termsAndCondition();
-        }
-        break;
+    if (loadIndicator) return;
 
-      default:
-        break;
+    const currentForm = filteredSteps[activeStep];
+
+    if (childRef.current) {
+      switch (currentForm.key) {
+        case "isStudentDetails":
+          childRef.current.StudentDetails();
+          break;
+        case "isParentsGuardian":
+          childRef.current.ParentGuardian();
+          break;
+        case "isEmergencyContact":
+          childRef.current.EmergencyContact();
+          break;
+        case "isCourseDetails":
+          childRef.current.CourseDetail();
+          break;
+        case "isTermsAndCondition":
+          childRef.current.TermsAndCondition();
+          break;
+        default:
+          break;
+      }
     }
   };
 
@@ -97,22 +102,22 @@ export default function StudentAdd() {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          {storedConfigure?.student || "Student Management"}
+          {ConfigurationData?.student || "Student Management"}
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
           <Link to="/student" className="custom-breadcrumb">
-            {storedConfigure?.student || "Student"} Listing
+            {ConfigurationData?.student || "Student"} Listing
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          {storedConfigure?.student || "Student"} Listing Edit
+          {ConfigurationData?.student || "Student"} Listing Edit
         </li>
       </ol>
 
       <Stepper className="my-5" activeStep={activeStep} alternativeLabel>
-        {steps.map((step, index) => (
+        {filteredSteps.map((step, index) => (
           <Step key={index} onClick={() => setActiveStep(index)}>
             <OverlayTrigger
               placement="top"
@@ -128,58 +133,64 @@ export default function StudentAdd() {
 
       <div className="container-fluid card shadow border-0 mb-4">
         <React.Fragment>
-          {activeStep === 0 && (
+          {filteredSteps[activeStep].key === "isStudentDetails" && (
             <EditStudentDetails
               formData={formData}
               ref={childRef}
               setFormData={setFormData}
               handleNext={handleNext}
               setLoadIndicators={setLoadIndicator}
+               navigate={
+                activeStep === filteredSteps.length - 1 ? navigate : undefined
+              }
             />
           )}
-          {activeStep === 1 && (
+          {filteredSteps[activeStep].key === "isParentsGuardian" && (
             <EditParentGuardian
               formData={formData}
               ref={childRef}
               setFormData={setFormData}
               handleNext={handleNext}
               setLoadIndicators={setLoadIndicator}
+               navigate={
+                activeStep === filteredSteps.length - 1 ? navigate : undefined
+              }
             />
           )}
-          {activeStep === 2 && (
+          {filteredSteps[activeStep].key === "isEmergencyContact" && (
             <EditEmergencyContact
               formData={formData}
               ref={childRef}
               setFormData={setFormData}
               handleNext={handleNext}
               setLoadIndicators={setLoadIndicator}
+               navigate={
+                activeStep === filteredSteps.length - 1 ? navigate : undefined
+              }
             />
           )}
-          {/* {activeStep === 3 && (
-            <EditCourseDetail
+          {filteredSteps[activeStep].key === "isCourseDetails" && (
+            <EditCourseDetails
               formData={formData}
               ref={childRef}
               setFormData={setFormData}
               handleNext={handleNext}
               setLoadIndicators={setLoadIndicator}
+               navigate={
+                activeStep === filteredSteps.length - 1 ? navigate : undefined
+              }
             />
-          )} */}
-          {/* {activeStep === 3 && (
-            <EditStudentRelation
-              formData={formData}
-              ref={childRef}
-              setFormData={setFormData}
-              handleNext={handleNext}
-              setLoadIndicators={setLoadIndicator}
-            />
-          )} */}
-          {activeStep === 3 && (
+          )}
+          {filteredSteps[activeStep].key === "isTermsAndCondition" && (
             <EditTermsAndCondition
               formData={formData}
               ref={childRef}
               setFormData={setFormData}
               handleNext={handleNext}
               setLoadIndicators={setLoadIndicator}
+               navigate={
+                activeStep === filteredSteps.length - 1 ? navigate : undefined
+              }
             />
           )}
 
@@ -210,7 +221,7 @@ export default function StudentAdd() {
                   aria-hidden="true"
                 ></span>
               )}
-              {activeStep === steps.length - 1 ? "Submit" : " Save And Next"}
+              {activeStep === filteredSteps.length - 1 ? "Submit" : " Save And Next"}
             </button>
           </div>
         </React.Fragment>

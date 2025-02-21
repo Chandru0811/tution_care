@@ -33,7 +33,7 @@ const validationSchema = Yup.object().shape({
 });
 
 const EditEmergencyContact = forwardRef(
-  ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
+  ({ formData, setLoadIndicators, setFormData, handleNext,navigate }, ref) => {
     const userName = localStorage.getItem("tmsuserName");
     const [profileImage, setProfileImage] = useState([]);
     // Initialize rows based on emergencyContactInformation length
@@ -109,7 +109,11 @@ const EditEmergencyContact = forwardRef(
 
             if (response.status === 200 || response.status === 201) {
               toast.success(response.data.message);
-              handleNext();
+              if (navigate) {
+                navigate("/student");
+              } else {
+                handleNext();
+              }
               setleadDataTrue(false);
             } else {
               toast.error(response.data.message);
@@ -276,7 +280,7 @@ const EditEmergencyContact = forwardRef(
     };
 
     useImperativeHandle(ref, () => ({
-      emergencyContact: formik.handleSubmit,
+      EmergencyContact: formik.handleSubmit,
     }));
 
     useEffect(() => {

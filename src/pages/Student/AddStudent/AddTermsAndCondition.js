@@ -1,6 +1,5 @@
 import React, { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import { useFormik } from "formik";
-import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
@@ -16,10 +15,8 @@ const validationSchema = Yup.object().shape({
 });
 
 const AddTermsAndCondition = forwardRef(
-  ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
-    const navigate = useNavigate();
+  ({ formData, setLoadIndicators, setFormData, handleNext,navigate }, ref) => {
     const userName = localStorage.getItem("tmsuserName");
-
     const [sign, setSign] = useState();
     const [url, setUrl] = useState();
 

@@ -44,7 +44,7 @@ const validationSchema = Yup.object().shape({
 });
 
 const EditStudentDetails = forwardRef(
-  ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
+  ({ formData, setLoadIndicators, setFormData, handleNext,navigate }, ref) => {
     const [studentData, setStudentData] = useState(null);
     const [raceData, setRaceData] = useState(null);
     const [nationalityData, setNationalityData] = useState(null);
@@ -136,7 +136,11 @@ const EditStudentDetails = forwardRef(
           if (response.status === 200) {
             toast.success(response.data.message);
             setFormData((prv) => ({ ...prv, ...data }));
-            handleNext();
+            if (navigate) {
+              navigate("/student");
+            } else {
+              handleNext();
+            }
           } else {
             toast.error(response.data.message);
           }
@@ -196,7 +200,7 @@ const EditStudentDetails = forwardRef(
     }, [formik.values.dateOfBirth]);
 
     useImperativeHandle(ref, () => ({
-      Editstudentdetails: formik.handleSubmit,
+      StudentDetails: formik.handleSubmit,
     }));
 
     return (

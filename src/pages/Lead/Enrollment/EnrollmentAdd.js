@@ -18,7 +18,6 @@ export default function EnrollmentAdd() {
   const ConfigurationData = JSON.parse(
     localStorage.getItem("tmsappConfigInfo")
   );
-  const appConfigInfo = JSON.parse(localStorage.getItem("tmsappConfigInfo"));
   const navigate = useNavigate();
 
   const allSteps = [
@@ -99,12 +98,12 @@ export default function EnrollmentAdd() {
         <li>
           <Link to="/lead/lead" className="custom-breadcrumb">
             {" "}
-            &nbsp;{appConfigInfo.lead}
+            &nbsp;{ConfigurationData.lead}
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>{" "}
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          {appConfigInfo.lead} Add
+          {ConfigurationData.lead} Add
         </li>
       </ol>
 

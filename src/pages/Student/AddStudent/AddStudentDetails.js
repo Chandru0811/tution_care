@@ -55,7 +55,7 @@ const validationSchema = Yup.object().shape({
 });
 
 const AddStudentDetails = forwardRef(
-  ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
+  ({ formData, setLoadIndicators, setFormData, handleNext,navigate }, ref) => {
     const [studentData, setStudentData] = useState(null);
     const [imagePreviewUrl, setImagePreviewUrl] = useState(null);
     const [raceData, setRaceData] = useState(null);
@@ -229,7 +229,11 @@ const AddStudentDetails = forwardRef(
             }
             toast.success(response.data.message);
             setFormData((prv) => ({ ...prv, ...values, student_id }));
-            handleNext();
+            if (navigate) {
+              navigate("/student");
+            } else {
+              handleNext();
+            }
           } else {
             toast.error(response.data.message);
           }

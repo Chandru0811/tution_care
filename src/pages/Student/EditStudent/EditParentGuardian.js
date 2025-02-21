@@ -14,7 +14,7 @@ import { Button, Modal } from "react-bootstrap";
 import { toast } from "react-toastify";
 
 const EditParentGuardian = forwardRef(
-  ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
+  ({ formData, setLoadIndicators, setFormData, handleNext,navigate }, ref) => {
     const [data, setData] = useState({});
     const [primaryContact, setPrimaryContact] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -71,7 +71,7 @@ const EditParentGuardian = forwardRef(
     };
 
     useImperativeHandle(ref, () => ({
-      editParentGuardian: handleNext,
+      ParentGuardian: handleNext,
     }));
 
     useEffect(() => {

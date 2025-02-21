@@ -196,7 +196,7 @@ const EditTermsAndCondition = forwardRef(
     }, []);
 
     useImperativeHandle(ref, () => ({
-      termsAndCondition: formik.handleSubmit,
+      TermsAndCondition: formik.handleSubmit,
     }));
 
     return (
