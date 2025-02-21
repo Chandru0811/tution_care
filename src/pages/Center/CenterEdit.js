@@ -38,11 +38,11 @@ const validationSchema = Yup.object().shape({
     )
     .required("*Email is required"),
   openingDate: Yup.date().required("*Date is required"),
-  uenNumber: Yup.string().required("*UEN number is required"),
-  bankName: Yup.string().required("*Bank Name is required"),
-  bankBranch: Yup.string().required("*Bank Branch is required"),
-  bankAccountNumber: Yup.string().required("*Bank Account Number is required"),
-  bankAccountName: Yup.string().required("*Bank Account Name is required"),
+  // uenNumber: Yup.string().required("*UEN number is required"),
+  // bankName: Yup.string().required("*Bank Name is required"),
+  // bankBranch: Yup.string().required("*Bank Branch is required"),
+  // bankAccountNumber: Yup.string().required("*Bank Account Number is required"),
+  // bankAccountName: Yup.string().required("*Bank Account Name is required"),
   invoiceNotes: Yup.string()
     .notRequired()
     .max(200, "*The maximum length is 200 characters"),
@@ -53,11 +53,11 @@ const validationSchema = Yup.object().shape({
   //     "*File name must be at most 50 characters",
   //     (value) => !value || value.name.length <= 50
   //   ),
-  target: Yup.number()
-    .typeError("*Must be a number")
-    .required("*Target is required")
-    .positive("*Must be a positive number")
-    .integer("*Must be a whole number"),
+  // target: Yup.number()
+  //   .typeError("*Must be a number")
+  //   .required("*Target is required")
+  //   .positive("*Must be a positive number")
+  //   .integer("*Must be a whole number"),
 });
 
 function CenterEdit({ handleCenterChanged }) {
@@ -433,7 +433,7 @@ function CenterEdit({ handleCenterChanged }) {
                       for="exampleFormControlInput1"
                       className="form-label"
                     >
-                      GST<span className="text-danger">*</span>
+                      GST
                     </label>
                   </div>
                   <div className="form-check form-check-inline">
@@ -477,7 +477,7 @@ function CenterEdit({ handleCenterChanged }) {
               <div className="col-md-6 col-12">
                 <div className="mb-3">
                   <label for="exampleFormControlInput1" className="form-label">
-                    UEN Number<span class="text-danger">*</span>
+                    UEN Number
                   </label>
                   <input
                     {...formik.getFieldProps("uenNumber")}
@@ -521,7 +521,7 @@ function CenterEdit({ handleCenterChanged }) {
               <div className="col-md-6 col-12">
                 <div className="mb-3">
                   <label for="exampleFormControlInput1" className="form-label">
-                    Bank Name<span className="text-danger">*</span>
+                    Bank Name
                   </label>
                   <input
                     {...formik.getFieldProps("bankName")}
@@ -542,7 +542,7 @@ function CenterEdit({ handleCenterChanged }) {
               <div className="col-md-6 col-12">
                 <div className="mb-3">
                   <label for="exampleFormControlInput1" className="form-label">
-                    Bank Branch<span className="text-danger">*</span>
+                    Bank Branch
                   </label>
                   <input
                     {...formik.getFieldProps("bankBranch")}
@@ -563,7 +563,7 @@ function CenterEdit({ handleCenterChanged }) {
               <div className="col-md-6 col-12">
                 <div className="mb-3">
                   <label for="exampleFormControlInput1" className="form-label">
-                    Bank Account Name<span className="text-danger">*</span>
+                    Bank Account Name
                   </label>
                   <input
                     {...formik.getFieldProps("bankAccountName")}
@@ -586,7 +586,7 @@ function CenterEdit({ handleCenterChanged }) {
               <div className="col-md-6 col-12">
                 <div className="mb-3">
                   <label for="exampleFormControlInput1" className="form-label">
-                    Bank Account Number<span className="text-danger">*</span>
+                    Bank Account Number
                   </label>
                   <input
                     {...formik.getFieldProps("bankAccountNumber")}
@@ -609,7 +609,7 @@ function CenterEdit({ handleCenterChanged }) {
               <div className="col-md-6 col-12">
                 <div className="mb-3">
                   <label for="exampleFormControlInput1" className="form-label">
-                    Target<span className="text-danger">*</span>
+                    Target
                   </label>
                   <input
                     {...formik.getFieldProps("target")}
@@ -631,7 +631,6 @@ function CenterEdit({ handleCenterChanged }) {
                 <div className="text-start mt-2">
                   <label htmlFor="" className="mb-1 fw-medium">
                     <small>QR Code</small>
-                    <span className="text-danger">*</span>
                   </label>
                   <br />
                   <input
@@ -674,7 +673,6 @@ function CenterEdit({ handleCenterChanged }) {
                 <div className="text-start mt-2">
                   <label htmlFor="" className="mb-1 fw-medium">
                     <small>{appConfigInfo.centreName} Logo</small>
-                    <span className="text-danger">*</span>
                   </label>
                   <br />
                   <input
@@ -717,7 +715,6 @@ function CenterEdit({ handleCenterChanged }) {
                 <div className="text-start mt-2">
                   <label htmlFor="" className="mb-1 fw-medium">
                     <small>Profile Image</small>
-                    <span className="text-danger">*</span>
                   </label>
                   <br />
                   <input

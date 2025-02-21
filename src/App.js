@@ -28,7 +28,7 @@ function App() {
       (error) => {
         console.log("Error is", error.response);
         if (error.response?.status === 401) {
-          toast.warning("Session Experied!! Please Login");
+          toast.warning(error.response.data.message);
           handleLogout();
         }
         return Promise.reject(error);

@@ -32,7 +32,7 @@ const validationSchema = Yup.object().shape({
   // taxRegistrationNumber: Yup.string().required("*Tax Registration Number is required"),
   bankName: Yup.string().required("*Bank Name is required"),
   bankBranch: Yup.string().required("*Bank Branch is required"),
-  bankAccountNumber:Yup.string().required("*Bank Account Number is required"),
+  bankAccountNumber: Yup.string().required("*Bank Account Number is required"),
   bankAccountName: Yup.string().required("*Bank Account Name is required"),
   file: Yup.mixed()
     .required("*File is required")
@@ -78,6 +78,7 @@ function CenterAdd({ handleCenterChanged }) {
       bankAccountName: "",
       target: "",
       file: null,
+      createdBy: userName,
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
@@ -310,7 +311,9 @@ function CenterAdd({ handleCenterChanged }) {
                     onKeyDown={(e) => {
                       if (e.key === "Enter") {
                         // Allow the default behavior for Enter key
-                        console.log("Enter key pressed: moving to the next line");
+                        console.log(
+                          "Enter key pressed: moving to the next line"
+                        );
                       }
                     }}
                   ></textarea>
