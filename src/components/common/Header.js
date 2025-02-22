@@ -208,7 +208,7 @@ function Header({ onLogout ,data}) {
                   onMouseLeave={(e) => (e.target.style.color = "inherit")}
                 >
                   <GrUserSettings className="mx-2" />
-                  <span>Edit Company</span>
+                  <span>Edit Centre</span>
                 </Link>
               </div>
             ) : null}
