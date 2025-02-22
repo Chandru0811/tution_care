@@ -8,13 +8,20 @@ import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
 import fetchAllClassesWithIdsC from "../List/ClassListByCourse";
 import fetchAllTeacherListByCenter from "../List/TeacherListByCenter";
 import fetchAllStudentListByCenter from "../List/StudentListByCenter";
-
+const storedConfigure = JSON.parse(
+  localStorage.getItem("tmsappConfigInfo") || "{}"
+);
 const validationSchema = Yup.object({
-  course: Yup.string().required("*Course is required"),
+  course: Yup.string().required(
+    `*${storedConfigure?.course || "Course"} is required`
+  ),
   userId: Yup.string().required("*Teacher is required"),
   day: Yup.string().required("*Days is required"),
   batchTime: Yup.string().required("*Batch Time is required"),
-  classListing: Yup.string().required("*Class Listing is required"),
+  classListing: Yup.string().required(
+    `*${storedConfigure?.confClass || "Class"} Listing is required`
+  ),
+
   folderCategoryListing: Yup.string().required("*FolderCategory is required"),
   date: Yup.string().required("*Date is required"),
   expiredDate: Yup.string().required("*Expired Date is required"),
@@ -31,9 +38,6 @@ function DocumentAdd() {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const userName = localStorage.getItem("tmsuserName");
   const [batchData, setBatchData] = useState(null);
-  const storedConfigure = JSON.parse(
-    localStorage.getItem("tmsappConfigInfo") || "{}"
-  );
 
   const formik = useFormik({
     initialValues: {

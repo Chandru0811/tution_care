@@ -12,9 +12,12 @@ import fetchAllRaceWithIds from "../../List/RaceList";
 import fetchAllNationalityeWithIds from "../../List/NationalityAndCountryList";
 import fetchAllStudentsWithIds from "../../List/StudentList";
 import fetchAllLanguageWithIdsC from "../../List/LanguageList";
+const appConfigInfo = JSON.parse(localStorage.getItem("tmsappConfigInfo"));
 
 const validationSchema = Yup.object().shape({
-  studentName: Yup.string().required("*Student Name is required"),
+  studentName: Yup.string().required(
+    `*${appConfigInfo?.student || "Student"} Name is required`
+  ),
   dateOfBirth: Yup.date()
     .required("*Date of Birth is required")
     .max(
@@ -22,8 +25,9 @@ const validationSchema = Yup.object().shape({
       "*Date of Birth must be at least 1 year ago"
     ),
   studentEmail: Yup.string()
-    .email("*Invalid Student Email")
-    .required("*Student Email is required"),
+    .email(`*Invalid ${appConfigInfo?.student || "Student"} Email`)
+    .required(`*${appConfigInfo?.student || "Student"} Email is required`),
+
   age: Yup.string().required("*Age is required"),
   gender: Yup.string().required("*Gender is required"),
   // schoolType: Yup.string().required("*School Type is required"),
@@ -55,7 +59,7 @@ const validationSchema = Yup.object().shape({
 });
 
 const AddStudentDetails = forwardRef(
-  ({ formData, setLoadIndicators, setFormData, handleNext,navigate }, ref) => {
+  ({ formData, setLoadIndicators, setFormData, handleNext, navigate }, ref) => {
     const [studentData, setStudentData] = useState(null);
     const [imagePreviewUrl, setImagePreviewUrl] = useState(null);
     const [raceData, setRaceData] = useState(null);
@@ -65,7 +69,7 @@ const AddStudentDetails = forwardRef(
     const centerId = localStorage.getItem("tmscenterId");
     const center = localStorage.getItem("tmscenterName");
     const studentId = formData.student_id;
-    const appConfigInfo = JSON.parse(localStorage.getItem("tmsappConfigInfo"));
+
     console.log("studentId", studentId);
     // console.log("FormData is ", formData);
 
@@ -208,11 +212,15 @@ const AddStudentDetails = forwardRef(
               groupName: values.groupName,
               createdBy: userName,
             };
-            response = await api.put(`/updateStudentDetail/${studentId}`, updatedData, {
-              headers: {
-                "Content-Type": "application/json",
-              },
-            });
+            response = await api.put(
+              `/updateStudentDetail/${studentId}`,
+              updatedData,
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              }
+            );
           }
 
           if (response.status === 201 || response.status === 200) {
@@ -560,7 +568,8 @@ const AddStudentDetails = forwardRef(
                     <div className="text-start mt-4">
                       <label className="mb-1 fw-medium">
                         <small>
-                        {appConfigInfo.student} Chinese Name (put N/A if not applicable)
+                          {appConfigInfo.student} Chinese Name (put N/A if not
+                          applicable)
                           {/* <span className="text-danger">*</span> */}
                         </small>
                         &nbsp;

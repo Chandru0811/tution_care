@@ -26,21 +26,28 @@ const invoiceItemSchema = Yup.object().shape({
     .required("Total amount is required")
     .min(0, "Total amount must be a positive number or zero"),
 });
+const storedConfigure = JSON.parse(
+  localStorage.getItem("tmsappConfigInfo") || "{}"
+);
 
 const validationSchema = Yup.object({
   // centerId: Yup.string().required("*Select a Centre"),
   parent: Yup.string().required("*Select a parent"),
-  studentId: Yup.string().required("*Select a Student"),
-  courseId: Yup.string().required("*Select a Course"),
+  studentId: Yup.string().required(
+    `*Select a ${storedConfigure?.student || "Student"}`
+  ),
+  courseId: Yup.string().required(
+    `*Select a {storedConfigure?.course || "Course"}`
+  ),
   // schedule: Yup.string().required("*Select a Schedule"),
   invoiceDate: Yup.string().required("*Invoice Date is required"),
   dueDate: Yup.string().required("*Due Date is required"),
   packageId: Yup.string().required("*Package is required"),
   invoicePeriodTo: Yup.string().required("*Invoice Period To is required"),
   invoicePeriodFrom: Yup.string().required("*Invoice Period From is required"),
-  receiptAmount: Yup.number()
-    .required("*Receipt Amount is required")
-    .typeError("*Must be a Number"),
+  // receiptAmount: Yup.number()
+  //   .required("*Receipt Amount is required")
+  //   .typeError("*Must be a Number"),
   invoiceItems: Yup.array()
     .of(invoiceItemSchema)
     .required("Invoice items are required"),
@@ -62,9 +69,6 @@ export default function InvoiceEdit() {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const userName = localStorage.getItem("tmsuserName");
   const centerId = localStorage.getItem("tmscenterId");
-  const storedConfigure = JSON.parse(
-    localStorage.getItem("tmsappConfigInfo") || "{}"
-  );
 
   const lessonOptions = [];
   for (let i = 1; i <= 50; i++) {

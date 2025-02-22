@@ -335,7 +335,7 @@ const Student = () => {
                 onChange={handleFilterChange}
                 className="form-control form-control-sm center_list"
                 style={{ width: "180px" }}
-                placeholder="Student"
+                placeholder={storedConfigure?.student || "Student"}
                 autoComplete="off"
               />
             </div>

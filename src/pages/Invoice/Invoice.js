@@ -354,7 +354,9 @@ const Invoice = () => {
                 onChange={handleFilterChange}
                 value={filters.courseId}
               >
-                <option selected>Select a Course</option>
+                <option selected>
+                  Select a {storedConfigure?.course || "Course"}
+                </option>
                 {courseData &&
                   courseData.map((courseId) => (
                     <option key={courseId.id} value={courseId.id}>
@@ -371,7 +373,9 @@ const Invoice = () => {
                 onChange={handleFilterChange}
                 value={filters.studentId}
               >
-                <option selected>Select a Student</option>
+                <option selected>
+                  Select a {storedConfigure?.student || "Student"}
+                </option>
                 {studentData &&
                   studentData.map((student) => (
                     <option key={student.id} value={student.id}>

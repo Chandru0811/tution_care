@@ -252,7 +252,9 @@ function Attendances() {
                 className="form-select "
                 onChange={(e) => setSelectedCourse(e.target.value)}
               >
-                <option value="">Select a course</option>
+                <option value="">
+                  Select a {storedConfigure?.student || "Course"}
+                </option>
                 {courseData &&
                   courseData.map((courseId) => (
                     <option key={courseId.id} value={courseId.id}>
@@ -310,7 +312,7 @@ function Attendances() {
                 </div> */}
                 <div style={{ width: "20%" }} className="py-2">
                   <p style={{ marginBottom: "0px", fontWeight: "700" }}>
-                    Course
+                    {storedConfigure?.course || "Course"}
                   </p>
                 </div>
                 <div style={{ width: "20%" }} className="py-2">
@@ -325,12 +327,12 @@ function Attendances() {
                 </div>
                 <div style={{ width: "20%" }} className="py-2">
                   <p style={{ marginBottom: "0px", fontWeight: "700" }}>
-                    Course Type
+                    {storedConfigure?.course || "Course"} Type
                   </p>
                 </div>
                 <div style={{ width: "20%" }} className="py-2">
                   <p style={{ marginBottom: "0px", fontWeight: "700" }}>
-                    Class Listing Teacher
+                    {storedConfigure.confClass} Listing Teacher
                   </p>
                 </div>
               </div>
