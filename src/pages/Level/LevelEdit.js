@@ -40,9 +40,10 @@ function Edit({ id, onSuccess, handleMenuClose }) {
   };
 
   const validationSchema = Yup.object({
-    level: Yup.string().required("*Level is required"),
-    levelCode: Yup.string().required("*Level Code is required"),
+    level: Yup.string().required(`*${appConfigInfo.subject} is required`),
+    levelCode: Yup.string().required(`*${appConfigInfo.subject} Code is required`),
     status: Yup.string().required("*Status is required"),
+    subjectId: Yup.string().required(`*${appConfigInfo.subject} is required`),
   });
 
   const formik = useFormik({

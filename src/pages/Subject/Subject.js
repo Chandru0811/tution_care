@@ -264,7 +264,7 @@ const Subject = () => {
                 type="text"
                 className="form-control form-control-sm center_list"
                 style={{ width: "160px" }}
-                placeholder="Subject"
+                placeholder={appConfigInfo.subject}
                 name="subject"
                 value={filters.subject}
                 onChange={handleFilterChange}
@@ -275,7 +275,7 @@ const Subject = () => {
                 type="text"
                 className="form-control form-control-sm center_list"
                 style={{ width: "160px" }}
-                placeholder="Subject Code"
+                placeholder={`${appConfigInfo.subject} code`}
                 name="code"
                 value={filters.code}
                 onChange={handleFilterChange}
