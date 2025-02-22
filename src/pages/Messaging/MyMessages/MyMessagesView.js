@@ -79,37 +79,7 @@ function MyMessagesView() {
         }
       }
     },
-  });
-
-  // const getData = async () => {
-  //   try {
-  //     const response = await api.get(
-  //       `getSingleChatConversation?transcriptOne=${senderId}&transcriptTwo=${receiverId}`
-  //     );
-  //     setData(response.data);
-  //     const messages = response.data;
-  //     console.log("messages", messages);
-
-  //     const combinedMessages = messages.map((msg) => ({
-  //       content: msg.message,
-  //       isSender: msg.senderId === userId,
-  //       attachments: msg.attachments,
-  //       time: new Date(msg.createdAt).toLocaleTimeString([], {
-  //         hour: "2-digit",
-  //         minute: "2-digit",
-  //       }),
-  //       // time: msg.createdAt
-  //     }));
-
-  //     setMessages(combinedMessages);
-  //     console.log("Messages:", combinedMessages);
-  //   } catch (error) {
-  //     toast.error(`Error Fetching Data: ${error.message}`);
-  //   }
-  // };
-
-  // Process Messages Function
-  
+  }); 
   const processMessages = (messages, currentUserId, currentRole) => {
     return messages.map((msg) => {
       if (msg.senderId === msg.receiverId) {
@@ -274,33 +244,7 @@ function MyMessagesView() {
                   overflowX: "hidden",
                 }}
               >
-                {/* {messages.map((msg, index) => (
-                  <div key={index}>
-                    <div className={`message ${msg.isSender ? "right" : "left"}`}>
-                      <div className="message-bubble my-2 w-75">
-                        {msg.content}
-                      </div>
-                      {msg.attachments.length > 0 ? (
-                        msg.attachments.map((attachment, attIndex) => (
-                          <div
-                            key={attIndex}
-                            className="message-bubble w-75 mt-2"
-                          >
-                            {renderAttachment(attachment, attIndex)}
-                          </div>
-                        ))
-                      ) : (
-                        <></>
-                      )}
-                      <div
-                        className="message-bubble my-2 w-75"
-                        style={{ fontSize: "11px", background: "transparent" }}
-                      >
-                        {msg.time}
-                      </div>
-                    </div>
-                  </div>
-                ))} */}
+             
                  {messages.map((msg, index) => (
                   <div key={index} className={`message ${msg.isSender ? "right" : "left"}`}>
                     <div className={`message-bubble my-2 w-75 ${msg.isSender ? "align-self-end" : "align-self-start"}`}>

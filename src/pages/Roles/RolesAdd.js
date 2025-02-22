@@ -307,6 +307,9 @@ function RolesAdd() {
       smsMessageIndex: true,
       smsMessageRead: true,
       smsMessageCreate: true,
+      otherMessageIndex: true,
+      otherMessageCreate: true,
+      otherMessageRead: true,
       account_read: true,
       headerIndex: true,
       headerRead: true,
@@ -523,7 +526,6 @@ function RolesAdd() {
       curriculumOutlineCreate: true,
       centerListingCreate: true,
       leadListingCreate: true,
-      leadListingUpdate: true,
       enrollmentCreate: true,
       staffCreate: true,
       teacherCreate: true,
@@ -564,6 +566,7 @@ function RolesAdd() {
       timeScheduleAdd: true,
       sendNotificationCreate: true,
       smsMessageCreate: true,
+      otherMessageCreate: true,
       account_create: true,
       headerCreate: true,
       homeCreate: true,
@@ -644,6 +647,7 @@ function RolesAdd() {
       timeScheduleBlock: true,
       sendNotificationRead: true,
       smsMessageRead: true,
+      otherMessageRead: true,
       account_read: true,
       headerRead: true,
       homeRead: true,
@@ -887,6 +891,7 @@ function RolesAdd() {
       timeScheduleBlockIndex: true,
       sendNotificationIndex: true,
       smsMessageIndex: true,
+      otherMessageIndex: true,
       account_index: true,
       headerIndex: true,
       homeIndex: true,
@@ -2083,10 +2088,10 @@ function RolesAdd() {
                               <input
                                 className="form-check-input"
                                 type="checkbox"
-                                name="leaveRequesCreate"
-                                checked={formik.values.leaveRequesCreate}
+                                name="leaveRequestCreate"
+                                checked={formik.values.leaveRequestCreate}
                                 onChange={handleCheckboxChange(
-                                  `leaveRequesCreate`
+                                  `leaveRequestCreate`
                                 )}
                               />
                             </td>
@@ -2583,64 +2588,6 @@ function RolesAdd() {
                                 onChange={handleCheckboxChange(
                                   `changeClassCreate`
                                 )}
-                              />
-                            </td>
-                            <td>
-                              {/* <input
-                          className="form-check-input"
-                          type="checkbox"
-                          name="studentListingUpdate"
-                          checked={formik.values.studentListingUpdate}
-                          onChange={handleCheckboxChange}
-                        /> */}
-                            </td>
-                            <td>
-                              {/* <input
-                          className="form-check-input"
-                          type="checkbox"
-                          name="studentListingDelete"
-                          checked={formik.values.studentListingDelete}
-                          onChange={handleCheckboxChange}
-                        /> */}
-                            </td>
-                          </tr>
-
-                          <tr>
-                            <td>
-                              <p
-                                style={{
-                                  marginLeft: "30px",
-                                  marginBottom: "0px",
-                                }}
-                              >
-                                Withdraw
-                              </p>
-                            </td>
-                            <td>
-                              {/* <input
-                          className="form-check-input"
-                          type="checkbox"
-                          name="studentListingIdex"
-                          checked={formik.values.studentListingIdex}
-                          onChange={handleCheckboxChange(`studentListingIdex`)}
-                        /> */}
-                            </td>
-                            <td>
-                              {/* <input
-                          className="form-check-input"
-                          type="checkbox"
-                          name="studentListingRead"
-                          checked={formik.values.studentListingRead}
-                          onChange={handleCheckboxChange}
-                        /> */}
-                            </td>
-                            <td>
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                name="withdrawIndex"
-                                checked={formik.values.withdrawIndex}
-                                onChange={handleCheckboxChange(`withdrawIndex`)}
                               />
                             </td>
                             <td>
