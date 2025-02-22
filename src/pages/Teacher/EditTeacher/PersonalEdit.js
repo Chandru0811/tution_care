@@ -28,6 +28,7 @@ const PersonalEdit = forwardRef(
     const [nationalityData, setNationalityData] = useState(null);
     const userName = localStorage.getItem("tmsuserName");
     const centerId = localStorage.getItem("tmscenterId");
+    const [roleData, setRoleData] = useState(null);
 
     const formik = useFormik({
       initialValues: {
@@ -148,10 +149,18 @@ const PersonalEdit = forwardRef(
         toast.error(error);
       }
     };
-
+    const rolesData = async () => {
+      try {
+        const response = await api.get(`/getUserRolesByCenterId/${centerId}`);
+        setRoleData(response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
     useEffect(() => {
       fetchIDTypeData();
       fetchCitizenShipData();
+      rolesData();
     }, []);
 
     useImperativeHandle(ref, () => ({
@@ -395,6 +404,33 @@ const PersonalEdit = forwardRef(
                     <small>{formik.errors.gender}</small>
                   </div>
                 ) : null}
+              </div>
+              <div class="col-md-6 col-12 mb-2 mt-3">
+                <div class="form-group col-sm">
+                  <label>Role</label>
+                  <span className="text-danger">*</span>
+                  <select
+                    type="text"
+                    class="form-select"
+                    name="role"
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    value={formik.values.role}
+                  >
+                    <option selected></option>
+                    {roleData &&
+                      roleData.map((role) => (
+                        <option key={role.id} value={role.id}>
+                          {role.roleName}
+                        </option>
+                      ))}
+                  </select>
+                  {formik.touched.role && formik.errors.role && (
+                    <div className="error text-danger ">
+                      <small>{formik.errors.role}</small>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
             <div className="row mt-2">

@@ -252,7 +252,9 @@ function ClassEdit() {
               <div class="d-flex">
                 <div class="dot active"></div>
               </div>
-              <span class="me-2 text-muted">Edit {appConfigInfo.confClass}</span>
+              <span class="me-2 text-muted">
+                Edit {appConfigInfo.confClass}
+              </span>
             </div>
             <div className="my-2 pe-3 d-flex align-items-center">
               <Link to="/class">
@@ -280,7 +282,8 @@ function ClassEdit() {
             <div className="row">
               <div class="col-md-6 col-12 mb-4">
                 <label>
-                {appConfigInfo.course}<span class="text-danger">*</span>
+                  {appConfigInfo.course}
+                  <span class="text-danger">*</span>
                 </label>
                 <select
                   {...formik.getFieldProps("courseId")}
@@ -310,7 +313,8 @@ function ClassEdit() {
               </div>
               <div class="col-md-6 col-12 mb-4">
                 <label>
-                {appConfigInfo.confClass} Name<span class="text-danger">*</span>
+                  {appConfigInfo.confClass} Name
+                  <span class="text-danger">*</span>
                 </label>
                 <input
                   name="className"
@@ -332,7 +336,8 @@ function ClassEdit() {
               </div>
               <div class="col-md-6 col-12 mb-4">
                 <label>
-                {appConfigInfo.confClass} Type<span class="text-danger">*</span>
+                  {appConfigInfo.confClass} Type
+                  <span class="text-danger">*</span>
                 </label>{" "}
                 <br />
                 <div class="form-check form-check-inline">
@@ -372,31 +377,31 @@ function ClassEdit() {
                 )}
               </div>
               <div class="col-md-6 col-12 mb-4">
-                <label>
-                  Day<span class="text-danger">*</span>
-                </label>
+                <label>Class Room</label>
                 <select
-                  {...formik.getFieldProps("day")}
+                  {...formik.getFieldProps("classId")}
                   className={`form-select  ${
-                    formik.touched.day && formik.errors.day ? "is-invalid" : ""
+                    formik.touched.classId && formik.errors.classId
+                      ? "is-invalid"
+                      : ""
                   }`}
-                  name="day"
-                  disabled
+                  name="classId"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  value={formik.values.day}
+                  value={formik.values.classId}
                 >
                   <option></option>
-                  <option value="MONDAY">Monday</option>
-                  <option value="TUESDAY">Tuesday</option>
-                  <option value="WEDNESDAY">Wednesday</option>
-                  <option value="THURSDAY">Thursday</option>
-                  <option value="FRIDAY">Friday</option>
-                  <option value="SATURDAY">Saturday</option>
-                  <option value="SUNDAY">Sunday</option>
+                  {classRoomData &&
+                    classRoomData.map((classId) => (
+                      <option key={classId.id} value={classId.id}>
+                        {classId.classRoomName}
+                      </option>
+                    ))}
                 </select>
-                {formik.touched.day && formik.errors.day && (
-                  <div className="invalid-feedback">{formik.errors.day}</div>
+                {formik.touched.classId && formik.errors.classId && (
+                  <div className="invalid-feedback">
+                    {formik.errors.classId}
+                  </div>
                 )}
               </div>
               <div class="col-md-6 col-12 mb-4">
@@ -461,6 +466,34 @@ function ClassEdit() {
                   )}
               </div>
               <div class="col-md-6 col-12 mb-4">
+                <label>
+                  Day<span class="text-danger">*</span>
+                </label>
+                <select
+                  {...formik.getFieldProps("day")}
+                  className={`form-select  ${
+                    formik.touched.day && formik.errors.day ? "is-invalid" : ""
+                  }`}
+                  name="day"
+                  disabled
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.day}
+                >
+                  <option></option>
+                  <option value="MONDAY">Monday</option>
+                  <option value="TUESDAY">Tuesday</option>
+                  <option value="WEDNESDAY">Wednesday</option>
+                  <option value="THURSDAY">Thursday</option>
+                  <option value="FRIDAY">Friday</option>
+                  <option value="SATURDAY">Saturday</option>
+                  <option value="SUNDAY">Sunday</option>
+                </select>
+                {formik.touched.day && formik.errors.day && (
+                  <div className="invalid-feedback">{formik.errors.day}</div>
+                )}
+              </div>
+              <div class="col-md-6 col-12 mb-4">
                 <label>Teacher</label>
                 <select
                   {...formik.getFieldProps("userId")}
@@ -487,34 +520,7 @@ function ClassEdit() {
                   <div className="invalid-feedback">{formik.errors.userId}</div>
                 )}
               </div>
-              <div class="col-md-6 col-12 mb-4">
-                <label>Class Room</label>
-                <select
-                  {...formik.getFieldProps("classId")}
-                  className={`form-select  ${
-                    formik.touched.classId && formik.errors.classId
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  name="classId"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.classId}
-                >
-                  <option></option>
-                  {classRoomData &&
-                    classRoomData.map((classId) => (
-                      <option key={classId.id} value={classId.id}>
-                        {classId.classRoomName}
-                      </option>
-                    ))}
-                </select>
-                {formik.touched.classId && formik.errors.classId && (
-                  <div className="invalid-feedback">
-                    {formik.errors.classId}
-                  </div>
-                )}
-              </div>
+
               <div class="col-md-6 col-12 mb-4">
                 <label>
                   Start Date<span class="text-danger">*</span>
