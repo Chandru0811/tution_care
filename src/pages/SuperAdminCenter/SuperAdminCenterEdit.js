@@ -190,6 +190,7 @@ function SuperAdminCenterEdit() {
       };
       formik.setValues(formattedData);
       setData(response.data);
+      setStatus(response.data.centerStatus)
     };
 
     getData();

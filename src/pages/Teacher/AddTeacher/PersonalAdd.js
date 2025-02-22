@@ -26,8 +26,8 @@ const validationSchema = Yup.object().shape({
   email: Yup.string().email("*Invalid Email").required("*Email is required"),
   // shortIntroduction: Yup.string().required("*Short Introduction is required!"),
   gender: Yup.string().required("*Gender is required"),
-  latitude: Yup.string().required("*Latitude is required"),
-  longitude: Yup.string().required("*Longitude is required"),
+  // latitude: Yup.string().required("*Latitude is required"),
+  // longitude: Yup.string().required("*Longitude is required"),
   file: Yup.mixed()
     .required("*Photo is required")
     .test(
@@ -598,7 +598,7 @@ const PersonalAdd = forwardRef(
                 )}
               </div>
             </div>
-            <div class="col-md-6 col-12 mb-3">
+            {/* <div class="col-md-6 col-12 mb-3">
               <div class="form-group col-sm">
                 <label>Latitude</label>
                 <span className="text-danger">*</span>
@@ -635,7 +635,7 @@ const PersonalAdd = forwardRef(
                   </div>
                 )}
               </div>
-            </div>
+            </div> */}
           </div>
           <div className="row mt-2">
             <div className="col-12">

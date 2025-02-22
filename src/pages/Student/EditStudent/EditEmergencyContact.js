@@ -21,13 +21,13 @@ const validationSchema = Yup.object().shape({
       postalCode: Yup.string()
         .matches(/^\d{6}$/, "Invalid Number(6 digit)")
         .notRequired(),
-      files: Yup.mixed()
-        .notRequired()
-        .test(
-          "max-file-name-length",
-          "*File name must be at most 50 characters",
-          (value) => !value || (value.name && value.name.length <= 50)
-        ),
+      // files: Yup.mixed()
+      //   .notRequired()
+      //   .test(
+      //     "max-file-name-length",
+      //     "*File name must be at most 50 characters",
+      //     (value) => !value || (value.name && value.name.length <= 50)
+      //   ),
     })
   ),
 });
@@ -120,7 +120,7 @@ const EditEmergencyContact = forwardRef(
             }
           } else {
             const response = await api.post(
-              `/createEmergencyContactWithEmergencyAuthorizedContact/${formData.student_id}`,
+              `/createEmergencyContactWithEmergencyAuthorizedContact/${formData.id}`,
               formDatas,
               {
                 headers: {

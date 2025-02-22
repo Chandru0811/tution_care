@@ -209,7 +209,7 @@ function DocumentAdd() {
 
   const fetchBatchandTeacherData = async (day) => {
     try {
-      const response = await api.get(`getTeacherWithBatchListByDay?day=${day}`);
+      const response = await api.get(`getTeacherWithBatchListByDay?centerId=${centerId}&day=${day}`);
       setBatchData(response.data.batchList);
     } catch (error) {
       toast.error(error.message);
