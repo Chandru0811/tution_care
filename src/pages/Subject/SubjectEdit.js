@@ -30,7 +30,7 @@ function SubjectEdit({ id, onSuccess, handleMenuClose }) {
   };
 
   const validationSchema = yup.object().shape({
-    subject: yup.string().required("*Subject is required"),
+    subject: yup.string().required(`*${appConfigInfo.subject} is required`),
     code: yup.string().required("*Code is required"),
     status: yup.string().required("*Status is required"),
   });
