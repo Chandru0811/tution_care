@@ -130,7 +130,7 @@ function Sidebar() {
             access: storedScreens.courseIndex,
           },
           {
-            title: storedConfigure?.class || "Class",
+            title: storedConfigure?.confClass || "Class",
             path: "/class",
             access: storedScreens.classIndex,
           },

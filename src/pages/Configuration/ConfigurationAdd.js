@@ -69,6 +69,11 @@ function ConfigurationAdd() {
     onSubmit: async (values) => {
       console.log("values", values);
       setLoadIndicator(true);
+      values.isChildAbility = true;
+      values.isParentInfo = true;
+      values.isAddress = true;
+      values.isAccountInfo = true;
+      values.isMediaPosting = true;
       try {
         const response = await api.post("/createConfiguration", values, {
           headers: {
@@ -690,7 +695,9 @@ function ConfigurationAdd() {
                     {formik.touched.isEmergencyContact &&
                       formik.errors.isEmergencyContact && (
                         <div className="error text-danger">
-                          <small>{formik.errorsvalues.isEmergencyContact}</small>
+                          <small>
+                            {formik.errorsvalues.isEmergencyContact}
+                          </small>
                         </div>
                       )}
                   </div>
@@ -731,7 +738,9 @@ function ConfigurationAdd() {
                     {formik.touched.isTermsAndCondition &&
                       formik.errors.isTermsAndCondition && (
                         <div className="error text-danger">
-                          <small>{formik.errorsvalues.isTermsAndCondition}</small>
+                          <small>
+                            {formik.errorsvalues.isTermsAndCondition}
+                          </small>
                         </div>
                       )}
                   </div>

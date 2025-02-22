@@ -55,11 +55,11 @@ function ConfigurationEdit() {
       settings: "",
       message: "",
       isStudentInfo: true,
-      isChildAbility: false,
-      isParentInfo: false,
-      isAddress: false,
-      isAccountInfo: false,
-      isMediaPosting: false,
+      isChildAbility: true,
+      isParentInfo: true,
+      isAddress: true,
+      isAccountInfo: true,
+      isMediaPosting: true,
       isStudentDetails: true,
       isParentsGuardian: false,
       isEmergencyContact: false,
@@ -70,6 +70,11 @@ function ConfigurationEdit() {
     onSubmit: async (values) => {
       console.log("values", values);
       setLoadIndicator(true);
+      values.isChildAbility = true
+      values.isParentInfo = true
+      values.isAddress = true
+      values.isAccountInfo = true
+      values.isMediaPosting = true
       try {
         const response = await api.put(`/updateConfiguration/${id}`, values, {
           headers: {
