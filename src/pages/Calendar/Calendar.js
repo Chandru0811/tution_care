@@ -31,6 +31,9 @@ function Calendar() {
     userId: "",
     date: "",
   });
+  const storedConfigure = JSON.parse(
+    localStorage.getItem("tmsappConfigInfo") || "{}"
+  );
   console.log("filters:", filters.centerId);
 
   // Process event data for calendar rendering
@@ -178,7 +181,9 @@ function Calendar() {
             onChange={handleFilterChange}
             value={filters.courseId}
           >
-            <option selected>Select a Course</option>
+            <option selected>
+              Select a {storedConfigure?.course || "Course"}
+            </option>
             {courseData &&
               courseData.map((courseId) => (
                 <option key={courseId.id} value={courseId.id}>

@@ -36,6 +36,7 @@ const AddcourseDetail = forwardRef(
     const [selectedCourseId, setSelectedCourseId] = useState(null);
     console.log("Selected Course ID:", selectedCourseId);
     const centerId = localStorage.getItem("tmscenterId");
+    const studentId = formData.student_id
     const storedConfigure = JSON.parse(
       localStorage.getItem("tmsappConfigInfo") || "{}"
     );
@@ -260,7 +261,7 @@ const AddcourseDetail = forwardRef(
             toast.success(response.data.message);
             setFormData((prv) => ({ ...prv, ...data }));
             if (navigate) {
-              navigate("/student");
+              navigate(`/invoice/add?studentID=${studentId}`);
             } else {
               handleNext();
             }
@@ -549,7 +550,8 @@ const AddcourseDetail = forwardRef(
                       name="courseId"
                     >
                       <option value="" disabled selected>
-                        Select Course
+                        Select {storedConfigure?.course || "Course"}
+
                       </option>
                       {courseData &&
                         courseData.map((course) => (

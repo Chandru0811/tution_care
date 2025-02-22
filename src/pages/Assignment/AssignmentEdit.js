@@ -28,14 +28,20 @@ function AssignmentEdit() {
   );
 
   const validationSchema = Yup.object({
-    assignmentName: Yup.string().required("*Assignment Name is required"),
-    courseId: Yup.string().required("*Course is required"),
+    assignmentName: Yup.string().required(
+      `* ${storedConfigure?.assignManagement || "Assignment"} Name is required`
+    ),
+    courseId: Yup.string().required(
+      `* ${storedConfigure?.course || "Course"} is required`
+    ),
     userId: Yup.string().required("*Teacher is required"),
     day: Yup.string().required("*Days is required"),
     batchTimes: Yup.array()
       .of(Yup.string().required("*Batch Time is required"))
       .min(1, "*At least one Batch Time is required"),
-    classId: Yup.string().required("*Class Listing is required"),
+    classId: Yup.string().required(
+      `* ${storedConfigure?.confClass || "Class"} Listing is required`
+    ),
     folderCategory: Yup.string().required("*FolderCategory is required"),
     date: Yup.string().required("*Date is required"),
   });

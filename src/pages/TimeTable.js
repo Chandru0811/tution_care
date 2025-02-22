@@ -23,7 +23,9 @@ function TimeTable() {
     teacherId: "",
     date: new Date().toISOString().split("T")[0], // Default to today's date
   });
-
+  const storedConfigure = JSON.parse(
+    localStorage.getItem("tmsappConfigInfo") || "{}"
+  );
   const fetchData = async () => {
     try {
       if (centerId) {
@@ -149,7 +151,7 @@ function TimeTable() {
                   value={filters.courseId}
                 >
                   <option value="" disabled>
-                    Select a Course
+                    Select a {storedConfigure?.course || "Course"}
                   </option>
                   {courseData &&
                     courseData.map((courseId) => (

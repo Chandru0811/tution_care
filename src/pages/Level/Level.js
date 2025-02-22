@@ -245,7 +245,7 @@ const Level = () => {
                 type="text"
                 className="form-control form-control-sm center_list"
                 style={{ width: "160px" }}
-                placeholder="Level"
+                placeholder={appConfigInfo.level}
                 name="level"
                 value={filters.level}
                 onChange={handleFilterChange}

@@ -19,47 +19,6 @@ import User from "../../assets/clientimage/User.jpg";
 import { MdOutlineDownloadForOffline } from "react-icons/md";
 import pdfLogo from "../../assets/images/Attactmentpdf.jpg";
 
-const validationSchema = Yup.object().shape({
-  centerName: Yup.string().required("*Centre Name is required"),
-  code: Yup.string().required("*Code is required"),
-  address: Yup.string().required("*Address is required"),
-  // userId: Yup.string().required("*Select the Centre Manager"),
-  mobile: Yup.string()
-    .matches(/^\d{8}$/, "*Mobile Number must be exactly 8 digits")
-    .required("*Mobile Number is required"),
-
-  zipCode: Yup.string()
-    .matches(/^\d{6}$/, "*Zip Code must be exactly 6 digits")
-    .required("*Zip Code is required"),
-  email: Yup.string()
-    .matches(
-      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-      "*Enter a valid email address"
-    )
-    .required("*Email is required"),
-  openingDate: Yup.date().required("*Date is required"),
-  uenNumber: Yup.string().required("*UEN number is required"),
-  // bankName: Yup.string().required("*Bank Name is required"),
-  // bankBranch: Yup.string().required("*Bank Branch is required"),
-  // bankAccountNumber: Yup.string().required("*Bank Account Number is required"),
-  // bankAccountName: Yup.string().required("*Bank Account Name is required"),
-  invoiceNotes: Yup.string()
-    .notRequired()
-    .max(200, "*The maximum length is 200 characters"),
-  // file: Yup.mixed()
-  //   .required("*File is required")
-  //   .test(
-  //     "max-file-name-length",
-  //     "*File name must be at most 50 characters",
-  //     (value) => !value || value.name.length <= 50
-  //   ),
-  // target: Yup.number()
-  //   .typeError("*Must be a number")
-  //   .required("*Target is required")
-  //   .positive("*Must be a positive number")
-  //   .integer("*Must be a whole number"),
-});
-
 function CenterEdit({ handleCenterChanged }) {
   const { id } = useParams();
   const [data, setData] = useState([]);
@@ -73,6 +32,47 @@ function CenterEdit({ handleCenterChanged }) {
   const centerId = localStorage.getItem("tmscenterId");
   const [menuAnchor, setMenuAnchor] = useState(null);
   const appConfigInfo = JSON.parse(localStorage.getItem("tmsappConfigInfo"));
+
+  const validationSchema = Yup.object().shape({
+    centerName: Yup.string().required(`*${appConfigInfo.centreName} Name is required`),
+    code: Yup.string().required("*Code is required"),
+    address: Yup.string().required("*Address is required"),
+    // userId: Yup.string().required("*Select the Centre Manager"),
+    mobile: Yup.string()
+      .matches(/^\d{8}$/, "*Mobile Number must be exactly 8 digits")
+      .required("*Mobile Number is required"),
+  
+    zipCode: Yup.string()
+      .matches(/^\d{6}$/, "*Zip Code must be exactly 6 digits")
+      .required("*Zip Code is required"),
+    email: Yup.string()
+      .matches(
+        /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+        "*Enter a valid email address"
+      )
+      .required("*Email is required"),
+    openingDate: Yup.date().required("*Date is required"),
+    uenNumber: Yup.string().required("*UEN number is required"),
+    // bankName: Yup.string().required("*Bank Name is required"),
+    // bankBranch: Yup.string().required("*Bank Branch is required"),
+    // bankAccountNumber: Yup.string().required("*Bank Account Number is required"),
+    // bankAccountName: Yup.string().required("*Bank Account Name is required"),
+    invoiceNotes: Yup.string()
+      .notRequired()
+      .max(200, "*The maximum length is 200 characters"),
+    // file: Yup.mixed()
+    //   .required("*File is required")
+    //   .test(
+    //     "max-file-name-length",
+    //     "*File name must be at most 50 characters",
+    //     (value) => !value || value.name.length <= 50
+    //   ),
+    // target: Yup.number()
+    //   .typeError("*Must be a number")
+    //   .required("*Target is required")
+    //   .positive("*Must be a positive number")
+    //   .integer("*Must be a whole number"),
+  });
 
   const formik = useFormik({
     initialValues: {

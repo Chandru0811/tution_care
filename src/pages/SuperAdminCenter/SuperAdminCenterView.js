@@ -72,9 +72,7 @@ function SuperAdminCenterView() {
                   <p className="">Name</p>
                 </div>
                 <div className="col-6">
-                  <p className="text-muted text-sm">
-                    : {data.name || "--"}
-                  </p>
+                  <p className="text-muted text-sm">: {data.name || "--"}</p>
                 </div>
               </div>
             </div>
@@ -154,10 +152,27 @@ function SuperAdminCenterView() {
                   <p className="">Status</p>
                 </div>
                 <div className="col-6">
-                  <p className="text-muted text-sm">: {data.centerStatus || "--"}</p>
+                  <p className="text-muted text-sm">
+                    : {data.centerStatus || "--"}
+                  </p>
                 </div>
               </div>
             </div>
+            {data.centerStatus === "Trial" && (
+              <div className="col-md-6 col-12">
+                <div className="row  mb-2">
+                  <div className="col-6  ">
+                    <p className="">Trail Date</p>
+                  </div>
+                  <div className="col-6">
+                    <p className="text-muted text-sm">
+                      : {data.trailDate || "--"}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+
             <div className="col-md-6 col-12">
               <div className="row  mb-2">
                 <div className="col-6  ">
@@ -168,8 +183,6 @@ function SuperAdminCenterView() {
                 </div>
               </div>
             </div>
-          
-                    
           </div>
         </div>
       </div>

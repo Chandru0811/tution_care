@@ -26,6 +26,8 @@ const validationSchema = Yup.object().shape({
   email: Yup.string().email("*Invalid Email").required("*Email is required"),
   // shortIntroduction: Yup.string().required("*Short Introduction is required!"),
   gender: Yup.string().required("*Gender is required"),
+  latitude: Yup.string().required("*Latitude is required"),
+  longitude: Yup.string().required("*Longitude is required"),
   file: Yup.mixed()
     .required("*Photo is required")
     .test(
@@ -69,6 +71,8 @@ const PersonalAdd = forwardRef(
         shortIntroduction: formData.shortIntroduction,
         gender: formData.gender,
         status: formData.status || "",
+        latitude: formData.latitude || "",
+        longitude: formData.longitude || "",
         createdBy: userName,
       },
       validationSchema: validationSchema,
@@ -85,7 +89,9 @@ const PersonalAdd = forwardRef(
               (prv) => prv.id === parseInt(values.nationalityId)
             );
           // Add each data field manually to the FormData object
-          formData.append("role", values.role);
+          formData.append("latitude", values.latitude);
+          formData.append("longitude", values.longitude);
+          formData.append("roleId", values.role);
           formData.append("centerId", centerId);
           formData.append("teacherName", values.teacherName);
           formData.append("dateOfBirth", values.dateOfBirth);
@@ -580,7 +586,7 @@ const PersonalAdd = forwardRef(
                   <option selected></option>
                   {roleData &&
                     roleData.map((role) => (
-                      <option key={role.id} value={role.roleName}>
+                      <option key={role.id} value={role.id}>
                         {role.roleName}
                       </option>
                     ))}
@@ -588,6 +594,44 @@ const PersonalAdd = forwardRef(
                 {formik.touched.role && formik.errors.role && (
                   <div className="error text-danger ">
                     <small>{formik.errors.role}</small>
+                  </div>
+                )}
+              </div>
+            </div>
+            <div class="col-md-6 col-12 mb-3">
+              <div class="form-group col-sm">
+                <label>Latitude</label>
+                <span className="text-danger">*</span>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="latitude"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.latitude}
+                ></input>
+                {formik.touched.latitude && formik.errors.latitude && (
+                  <div className="error text-danger ">
+                    <small>{formik.errors.latitude}</small>
+                  </div>
+                )}
+              </div>
+            </div>
+            <div class="col-md-6 col-12 mb-3">
+              <div class="form-group col-sm">
+                <label>Longitude</label>
+                <span className="text-danger">*</span>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="longitude"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.longitude}
+                ></input>
+                {formik.touched.longitude && formik.errors.longitude && (
+                  <div className="error text-danger ">
+                    <small>{formik.errors.longitude}</small>
                   </div>
                 )}
               </div>

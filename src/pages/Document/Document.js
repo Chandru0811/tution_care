@@ -305,7 +305,9 @@ const Document = () => {
                 onChange={handleCourseChange}
                 value={filters.courseId}
               >
-                <option>Select the Course</option>
+                <option>
+                  Select the {storedConfigure?.course || "Course"}
+                </option>
                 {courseData &&
                   courseData.map((course) => (
                     <option key={course.id} value={course.id}>
@@ -322,7 +324,9 @@ const Document = () => {
                 onChange={handleFilterChange}
                 value={filters.classId}
               >
-                <option>Select the Class</option>
+                <option>
+                  Select the {storedConfigure?.confClass || "Class"}
+                </option>
                 {classData &&
                   classData.map((classes) => (
                     <option key={classes.id} value={classes.id}>

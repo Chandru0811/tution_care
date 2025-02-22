@@ -549,7 +549,7 @@ const EditCourseDetails = forwardRef(
                       name="courseId"
                     >
                       <option value="" disabled selected>
-                        Select Course
+                        Select {storedConfigure?.course || "Course"}
                       </option>
                       {courseData &&
                         courseData.map((course) => (

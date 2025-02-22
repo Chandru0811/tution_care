@@ -12,9 +12,13 @@ import fetchAllRaceWithIds from "../../List/RaceList";
 import fetchAllNationalityeWithIds from "../../List/NationalityAndCountryList";
 import fetchAllStudentsWithIds from "../../List/StudentList";
 import fetchAllLanguageWithIdsC from "../../List/LanguageList";
-
+const storedConfigure = JSON.parse(
+  localStorage.getItem("tmsappConfigInfo") || "{}"
+);
 const validationSchema = Yup.object().shape({
-  studentName: Yup.string().required("*Student Name is required"),
+  studentName: Yup.string().required(
+    `*${storedConfigure?.student || "Student"} Name is required`
+  ),
   dateOfBirth: Yup.date()
     .required("*Date of Birth is required")
     .max(new Date(), "*Date of Birth cannot be in the future"),
@@ -28,8 +32,8 @@ const validationSchema = Yup.object().shape({
   //   "*Student Chinese Name is required"
   // ),
   studentEmail: Yup.string()
-    .email("*Invalid Student Email")
-    .required("*Student Email is required"),
+    .email(`*Invalid ${storedConfigure?.student || "Student"} Email`)
+    .required(`*${storedConfigure?.student || "Student"} Email is required`),
   remark: Yup.string()
     .max(200, "*The maximum length is 200 characters")
     .notRequired(),
@@ -44,14 +48,11 @@ const validationSchema = Yup.object().shape({
 });
 
 const EditStudentDetails = forwardRef(
-  ({ formData, setLoadIndicators, setFormData, handleNext,navigate }, ref) => {
+  ({ formData, setLoadIndicators, setFormData, handleNext, navigate }, ref) => {
     const [studentData, setStudentData] = useState(null);
     const [raceData, setRaceData] = useState(null);
     const [nationalityData, setNationalityData] = useState(null);
     const [languageData, setLanguageData] = useState(null);
-    const storedConfigure = JSON.parse(
-      localStorage.getItem("tmsappConfigInfo") || "{}"
-    );
 
     const userName = localStorage.getItem("tmsuserName");
     const centerId = localStorage.getItem("tmscenterId");
