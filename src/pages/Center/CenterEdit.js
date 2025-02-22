@@ -38,7 +38,7 @@ const validationSchema = Yup.object().shape({
     )
     .required("*Email is required"),
   openingDate: Yup.date().required("*Date is required"),
-  // uenNumber: Yup.string().required("*UEN number is required"),
+  uenNumber: Yup.string().required("*UEN number is required"),
   // bankName: Yup.string().required("*Bank Name is required"),
   // bankBranch: Yup.string().required("*Bank Branch is required"),
   // bankAccountNumber: Yup.string().required("*Bank Account Number is required"),
@@ -477,7 +477,7 @@ function CenterEdit({ handleCenterChanged }) {
               <div className="col-md-6 col-12">
                 <div className="mb-3">
                   <label for="exampleFormControlInput1" className="form-label">
-                    UEN Number
+                    UEN Number<span className="text-danger">*</span>
                   </label>
                   <input
                     {...formik.getFieldProps("uenNumber")}
@@ -677,7 +677,7 @@ function CenterEdit({ handleCenterChanged }) {
                   <br />
                   <input
                     type="file"
-                    accept=".png"
+                    accept=".jpg, .jpeg, .png"
                     name="logo"
                     className="form-control"
                     onChange={(event) => {
