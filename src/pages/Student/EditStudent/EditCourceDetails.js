@@ -35,10 +35,12 @@ const EditCourseDetails = forwardRef(
     console.log("Selected Row ID:", selectedRow);
     const [selectedCourseId, setSelectedCourseId] = useState(null);
     console.log("Selected Course ID:", selectedCourseId);
+    console.log("formData",formData)
     const centerId = localStorage.getItem("tmscenterId");
     const storedConfigure = JSON.parse(
       localStorage.getItem("tmsappConfigInfo") || "{}"
     );
+    const studentId = formData.student_id
     const handleDayChange = (e) => {
       formik.setFieldValue("days", e.target.value); // Update Formik value
       setAvailableDays([]); // Clear available days
@@ -218,7 +220,7 @@ const EditCourseDetails = forwardRef(
         setLoadIndicators(true);
         const payload = {
           ...data,
-          studentId: String(formData.student_id),
+          studentId: String(formData.id),
           centerId: selectedRowData.centerId,
           centerName: selectedRowData.centerName,
           classId: selectedRowData.classId,
@@ -260,7 +262,7 @@ const EditCourseDetails = forwardRef(
             toast.success(response.data.message);
             setFormData((prv) => ({ ...prv, ...data }));
             if (navigate) {
-              navigate("/student");
+              navigate(`/student`);
             } else {
               handleNext();
             }
@@ -486,7 +488,7 @@ const EditCourseDetails = forwardRef(
     const getStudentData = async () => {
       try {
         const response = await api.get(
-          `/getAllStudentById/${formData.student_id}`
+          `/getAllStudentById/${formData.id}`
         );
         const data = response.data;
         const studentCourseDetail = data.studentCourseDetailModels[0];

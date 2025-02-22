@@ -32,7 +32,7 @@ const storedConfigure = JSON.parse(
 
 const validationSchema = Yup.object({
   // centerId: Yup.string().required("*Select a Centre"),
-  parent: Yup.string().required("*Select a parent"),
+  // parent: Yup.string().required("*Select a parent"),
   studentId: Yup.string().required(
     `*Select a ${storedConfigure?.student || "Student"}`
   ),
@@ -533,27 +533,7 @@ export default function InvoiceEdit() {
                     </div>
                   )}
                 </div> */}
-                <div className="text-start mt-3">
-                  <label htmlFor="" className="mb-1 fw-medium">
-                    Parent<span class="text-danger">*</span>
-                  </label>
-                  <br />
-                  <input
-                    {...formik.getFieldProps("parent")}
-                    className={`form-control  ${
-                      formik.touched.parent && formik.errors.parent
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    type="text"
-                    disabled
-                  />
-                  {formik.touched.parent && formik.errors.parent && (
-                    <div className="invalid-feedback">
-                      {formik.errors.parent}
-                    </div>
-                  )}
-                </div>
+           
                 <div className="text-start mt-3">
                   <label htmlFor="" className="mb-1 fw-medium">
                     {storedConfigure?.student || "Student"}
@@ -581,6 +561,27 @@ export default function InvoiceEdit() {
                   {formik.touched.studentId && formik.errors.studentId && (
                     <div className="invalid-feedback">
                       {formik.errors.studentId}
+                    </div>
+                  )}
+                </div>
+                <div className="text-start mt-3">
+                  <label htmlFor="" className="mb-1 fw-medium">
+                    Parent<span class="text-danger">*</span>
+                  </label>
+                  <br />
+                  <input
+                    {...formik.getFieldProps("parent")}
+                    className={`form-control  ${
+                      formik.touched.parent && formik.errors.parent
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                    type="text"
+                    disabled
+                  />
+                  {formik.touched.parent && formik.errors.parent && (
+                    <div className="invalid-feedback">
+                      {formik.errors.parent}
                     </div>
                   )}
                 </div>

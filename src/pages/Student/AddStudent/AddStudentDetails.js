@@ -139,6 +139,8 @@ const AddStudentDetails = forwardRef(
         allowMagazine: formData.allowMagazine || "",
         allowSocialMedia: formData.allowSocialMedia || "",
         createdby: userName,
+        longitude: "",
+        lattitude: "",
       },
       validationSchema: validationSchema,
       onSubmit: async (values) => {
@@ -172,6 +174,8 @@ const AddStudentDetails = forwardRef(
           formDatas.append("groupName", values.groupName);
           formDatas.append("file", values.file);
           formDatas.append("createdBy", userName);
+          formDatas.append("lattitude", "");
+          formDatas.append("longitude", "");
 
           // for (let [key, value] of formDatas.entries()) {
           //   console.log(`${key}: ${value}`);

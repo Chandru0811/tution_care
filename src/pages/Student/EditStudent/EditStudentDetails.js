@@ -109,6 +109,8 @@ const EditStudentDetails = forwardRef(
         primaryLanguage: true,
         referByParent: formData.referByParent || "",
         referByStudent: formData.referByStudent || "",
+        latitude: formData.latitude || "",
+        longitude: formData.longitude || "",
         remark: formData.remark || "",
         allowMagazine: true || "",
         allowSocialMedia: true || "",

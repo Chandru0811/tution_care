@@ -30,7 +30,7 @@ const storedConfigure = JSON.parse(
 );
 const validationSchema = Yup.object({
   // center: Yup.string().required("*Select a Centre"),
-  parent: Yup.string().required("*Parent is required"),
+  // parent: Yup.string().required("*Parent is required"),
   student: Yup.string().required(
     `*Select a ${storedConfigure?.student || "Student"}`
   ),
@@ -442,7 +442,7 @@ export default function InvoiceAdd() {
             );
 
             const selectedTax = taxData.find(
-              (taxs) => parseInt(response2.data?.taxType) === taxs.id
+              (taxs) => parseInt(response2.data?.taxTypeId) === taxs.id
             );
             // const selectedCourse = courseData.find(
             //   (course) => parseInt(response2.data?.courseId) === course.id
@@ -456,7 +456,6 @@ export default function InvoiceAdd() {
             const amount = isWeekend ? weekendFee : weekdayFee || 0;
             const gstAmount = (amount * gstRate) / 100 || 0;
             const amountBeforeGST = amount - gstAmount || 0;
-
             if (!response2.data) {
               invoiceItems.push({
                 item: "Course Fee",
@@ -489,7 +488,7 @@ export default function InvoiceAdd() {
             );
 
             const selectedTax = taxData.find(
-              (taxs) => parseInt(response3.data.taxType) === taxs.id
+              (taxs) => parseInt(response3.data.taxTypeId) === taxs.id
             );
             const gstRate = selectedTax ? selectedTax.rate : 0;
             const amount = response3.data?.depositFees || 0;

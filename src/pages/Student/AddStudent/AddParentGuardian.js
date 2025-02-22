@@ -10,7 +10,7 @@ import { toast } from "react-toastify";
 import api from "../../../config/URL";
 
 const AddParentGuardian = forwardRef(
-  ({ formData, setLoadIndicators, setFormData, handleNext,navigate }, ref) => {
+  ({ formData, setLoadIndicators, setFormData, handleNext, navigate }, ref) => {
     const [rows, setRows] = useState(
       formData.parentInformation ? formData.parentInformation.length : 1
     ); // Initially one row for one parent
@@ -25,36 +25,36 @@ const AddParentGuardian = forwardRef(
     const [profileImage, setProfileImage] = useState([]);
 
     const validationSchema = Yup.object({
-      parentInformation: Yup.array()
-        .of(
-          Yup.object().shape({
-            parentName: Yup.string().required("*Guardian Name is required"),
-            // occupation: Yup.string().required("*Occupation is required"),
-            // relation: Yup.string().required("*Relation is required"),
-            // address: Yup.string().required("*Address  is required"),
-            // postalCode: Yup.string().required("*Postal Code is required"),
-            // parentDateOfBirth: Yup.string().required(
-            //   "*Date of Birth is required"
-            // ),
-            // email: Yup.string()
-            //   .email("*Invalid email format")
-            //   .required("*Email is required"),
-            // mobileNumber: Yup.string()
-            //   .matches(/^[1-9]\d{6,9}$/, "*Invalid Mobile Number")
-            //   .required("*Mobile Number is required"),
-            // primaryContact: Yup.boolean().required(
-            //   "*Primary Contact is required"
-            // ),
-            // file: Yup.mixed()
-            //   .notRequired()
-            //   .test(
-            //     "max-file-name-length",
-            //     "*File name must be at most 50 characters",
-            //     (value) => !value || (value.name && value.name.length <= 50)
-            //   ),
-          })
-        )
-        .min(1, "*At least one parent information is required"),
+      // parentInformation: Yup.array()
+      //   .of(
+      //     Yup.object().shape({
+      //       parentName: Yup.string().required("*Guardian Name is required"),
+      // occupation: Yup.string().required("*Occupation is required"),
+      // relation: Yup.string().required("*Relation is required"),
+      // address: Yup.string().required("*Address  is required"),
+      // postalCode: Yup.string().required("*Postal Code is required"),
+      // parentDateOfBirth: Yup.string().required(
+      //   "*Date of Birth is required"
+      // ),
+      // email: Yup.string()
+      //   .email("*Invalid email format")
+      //   .required("*Email is required"),
+      // mobileNumber: Yup.string()
+      //   .matches(/^[1-9]\d{6,9}$/, "*Invalid Mobile Number")
+      //   .required("*Mobile Number is required"),
+      // primaryContact: Yup.boolean().required(
+      //   "*Primary Contact is required"
+      // ),
+      // file: Yup.mixed()
+      //   .notRequired()
+      //   .test(
+      //     "max-file-name-length",
+      //     "*File name must be at most 50 characters",
+      //     (value) => !value || (value.name && value.name.length <= 50)
+      //   ),
+      //   })
+      // )
+      // .min(1, "*At least one parent information is required"),
     });
 
     const formik = useFormik({
@@ -421,9 +421,7 @@ const AddParentGuardian = forwardRef(
               <div className="row mt-2">
                 <div className="col-lg-6 col-md-6 col-12 mt-3">
                   <label className="fw-medium">
-                    <small>
-                      Parent/Guardian Name<span className="text-danger">*</span>
-                    </small>
+                    <small>Parent/Guardian Name</small>
                   </label>
                   <input
                     type="text"

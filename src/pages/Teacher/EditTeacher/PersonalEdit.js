@@ -21,8 +21,8 @@ const validationSchema = Yup.object().shape({
   // email: Yup.string().email("*Invalid Email").required("*Email is required"),
   nationalityId: Yup.string().required("*Nationality is required"),
   citizenship: Yup.string().required("*Citizenship is required"),
-  latitude: Yup.string().required("*Latitude is required"),
-  longitude: Yup.string().required("*Longitude is required"),
+  // latitude: Yup.string().required("*Latitude is required"),
+  // longitude: Yup.string().required("*Longitude is required"),
 });
 const PersonalEdit = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
@@ -49,6 +49,7 @@ const PersonalEdit = forwardRef(
         gender: formData.gender || "",
         email: formData.email || "",
         password: formData.password || "",
+        roleId: formData.roleId || "",
         latitude: formData.latitude || "",
         longitude: formData.longitude || "",
         updatedBy: userName,
@@ -115,11 +116,11 @@ const PersonalEdit = forwardRef(
             `/getAllUserById/${formData.staff_id}`
           );
           const dateOfBirth = response.data.dateOfBirth.substring(0, 10);
-          const role = response.data.role;
+          const role = response.data.roleId;
           setFormData((prev) => ({
             ...prev,
             ...response.data,
-            role: role, // Include role in formData
+            roleId: role, // Include role in formData
           }));
           // console.log(response)
           formik.setValues({
@@ -416,10 +417,10 @@ const PersonalEdit = forwardRef(
                   <select
                     type="text"
                     class="form-select"
-                    name="role"
+                    name="roleId"
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    value={formik.values.role}
+                    value={formik.values.roleId}
                   >
                     <option selected></option>
                     {roleData &&
@@ -429,14 +430,14 @@ const PersonalEdit = forwardRef(
                         </option>
                       ))}
                   </select>
-                  {formik.touched.role && formik.errors.role && (
+                  {formik.touched.roleId && formik.errors.roleId && (
                     <div className="error text-danger ">
-                      <small>{formik.errors.role}</small>
+                      <small>{formik.errors.roleId}</small>
                     </div>
                   )}
                 </div>
               </div>
-              <div class="col-md-6 col-12 mb-3">
+              {/* <div class="col-md-6 col-12 mb-3">
                 <div class="form-group col-sm">
                   <label>Latitude</label>
                   <span className="text-danger">*</span>
@@ -473,7 +474,7 @@ const PersonalEdit = forwardRef(
                     </div>
                   )}
                 </div>
-              </div>
+              </div> */}
             </div>
             <div className="row mt-2">
               <div className="col-12">
