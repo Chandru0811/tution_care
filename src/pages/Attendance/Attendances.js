@@ -44,7 +44,7 @@ function Attendances() {
       );
       setBatchData(response.data); // Update batch options with API response
     } catch (error) {
-      toast.error("Error fetching slots:", error);
+      toast.error(error.message);
     }
   };
 

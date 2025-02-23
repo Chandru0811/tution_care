@@ -4,6 +4,12 @@ import api from "../../config/URL";
 import { MaterialReactTable } from "material-react-table";
 import { ThemeProvider, createTheme } from "@mui/material";
 import { GoDotFill } from "react-icons/go";
+import { IoMdDownload } from "react-icons/io";
+import AttactmentPdf from "../../assets/images/Attactmentpdf.jpg";
+import AttactmentExcel from "../../assets/images/AttactmentExcel.jpg";
+import AttactmentOther from "../../assets/images/Attactmentothers.jpg";
+import AttactmentWord from "../../assets/images/AttactmentWord.jpg";
+import AttactmentPpt from "../../assets/images/AttachmentPpt.png";
 
 function AssignmentView() {
   const { id } = useParams();
@@ -25,6 +31,86 @@ function AssignmentView() {
       setLoading(false);
     }
   }, [id]);
+
+  const renderAttachment = (attachment) => {
+    if (!attachment) return <span>No attachment available</span>;
+
+    const url = typeof attachment === "string" ? attachment : attachment.url;
+    const extension = url.split(".").pop().toLowerCase();
+    let fileName = url.split("/").pop().replace(/\+/g, " ");
+
+    const downloadFile = () => {
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    };
+
+    const renderCard = (src, label, isVideo = false) => (
+      <div className="position-relative d-flex align-items-center mb-3">
+        <div className="card" style={{ width: "18rem", marginTop: "20px" }}>
+          {isVideo ? (
+            <video
+              width="100%"
+              height="auto"
+              controls
+              style={{ maxHeight: "150px" }}
+            >
+              <source src={src} type="video/mp4" />
+              <source src={src} type="video/ogg" />
+              Your browser does not support the video tag.
+            </video>
+          ) : (
+            <img
+              src={src}
+              alt={label}
+              style={{ width: "100%", maxHeight: "120px", objectFit: "cover" }}
+            />
+          )}
+          <div className="card-body p-1">
+            <div className="row">
+              <div className="col-md-8 col-12 text-end">
+                <p>{fileName}</p>
+              </div>
+              <div className="col-md-4 col-12 text-end">
+                <IoMdDownload
+                  onClick={downloadFile}
+                  style={{ cursor: "pointer" }}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+
+    switch (extension) {
+      case "jpg":
+      case "jpeg":
+      case "png":
+      case "gif":
+        return renderCard(url, "Image");
+      case "pdf":
+        return renderCard(AttactmentPdf, "PDF");
+      case "xls":
+      case "xlsx":
+      case "csv":
+        return renderCard(AttactmentExcel, "Excel");
+      case "mp4":
+      case "ogg":
+        return renderCard(url, "Video", true);
+      case "doc":
+      case "docx":
+        return renderCard(AttactmentWord, "Word");
+      case "ppt":
+      case "pptx":
+        return renderCard(AttactmentPpt, "PPT");
+      default:
+        return renderCard(AttactmentOther, "Other");
+    }
+  };
 
   const columns = useMemo(
     () => [
@@ -321,6 +407,27 @@ function AssignmentView() {
                       : {data.expiredDate || "--"}
                     </p>
                   </div>
+                </div>
+              </div>
+
+              <div className="col-md-12 col-12 mb-3">
+                <div className="row mb-2">
+                  <div className="col-12">
+                    <p className="fw-medium">Teacher Questions :</p>
+                  </div>
+                  {data?.questions && data?.questions.length > 0 ? (
+                    <div className="col-12">
+                      <div className="row">
+                        {data?.questions?.map((attachment, index) => (
+                          <div key={index} className="col-md-3 col-12 mb-2">
+                            {renderAttachment(attachment)}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ) : (
+                    <p className="text-muted">No attachments available</p>
+                  )}
                 </div>
               </div>
 

@@ -286,7 +286,7 @@ function AssignmentAdd() {
     const newFiles = Array.from(event.target.files);
     let errors = [];
 
-    // Validate files
+    // Validate each file
     newFiles.forEach((file) => {
       if (
         ![
@@ -309,7 +309,7 @@ function AssignmentAdd() {
       }
     });
 
-    // Check total size
+    // Check total file size (including new files)
     const totalSize = [...uploadedFiles, ...newFiles].reduce(
       (total, file) => total + file.size,
       0
@@ -319,21 +319,28 @@ function AssignmentAdd() {
     }
 
     if (errors.length > 0) {
-      formik.setFieldError("files", errors.join(" "));
+      // Show all errors at once
+      alert(errors.join("\n"));
     } else {
       const updatedFiles = [...uploadedFiles, ...newFiles];
-      setUploadedFiles(updatedFiles);
+      setUploadedFiles(updatedFiles); // Update the uploaded files state
       formik.setFieldValue("files", updatedFiles);
-      formik.setFieldError("files", null);
     }
   };
 
+  // Handle file removal
   const handleFileRemove = (index) => {
-    const filteredFiles = uploadedFiles.filter((_, i) => i !== index);
-    setUploadedFiles(filteredFiles);
-    formik.setFieldValue("files", filteredFiles);
-  };
+    const filteredFiles = uploadedFiles.filter((_, i) => i !== index); // Remove the file at the given index
+    setUploadedFiles(filteredFiles); // Update the uploaded files state after removal
 
+    // If there are no more files, reset the file input (simulate clearing the input field)
+    if (filteredFiles.length === 0) {
+      const fileInput = document.querySelector('input[type="file"]');
+      if (fileInput) {
+        fileInput.value = ""; // Clear the input field programmatically
+      }
+    }
+  };
   const fetchBatchandTeacherData = async (day) => {
     try {
       const response = await api.get(
@@ -800,12 +807,18 @@ function AssignmentAdd() {
                     accept="image/jpeg, image/png, application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
                     onChange={handleFileChange}
                   />
+                  {/* Display the file count inside or near the input field */}
+                  {/* <div className="file-count-display">
+                    {uploadedFiles.length > 0
+                      ? `${uploadedFiles.length} file(s) selected`
+                      : "No files selected"}
+                  </div> */}
                   {formik.errors.files && (
                     <small className="text-danger">{formik.errors.files}</small>
                   )}
                 </div>
 
-                {/* Display uploaded files */}
+                {/* Display selected files with removal options */}
                 {uploadedFiles.length > 0 && (
                   <div className="mt-3">
                     <h6>Uploaded Files:</h6>
@@ -817,7 +830,7 @@ function AssignmentAdd() {
                         >
                           <span>{file.name}</span>
                           <MdOutlineCancel
-                            onClick={() => handleFileRemove(index)}
+                            onClick={() => handleFileRemove(index)} // Call remove function on click
                             className="text-danger"
                           />
                         </li>
@@ -825,7 +838,6 @@ function AssignmentAdd() {
                     </ul>
                   </div>
                 )}
-
                 <p className="text-muted mt-2">
                   <strong>Note:</strong> Only JPG, PNG, PDF, DOC, or DOCX files
                   are allowed. Each file must be less than 5MB. Total size must

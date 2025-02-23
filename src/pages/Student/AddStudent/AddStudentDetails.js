@@ -353,13 +353,13 @@ const AddStudentDetails = forwardRef(
         >
           <div className=" border-0 mb-5">
             <div className="mb-3">
-              <p class="headColor">Student Details</p>
+              <p class="headColor">{appConfigInfo.student} Details</p>
               <div className="container">
                 <div className="row mt-3">
                   <div className="col-lg-6 col-md-6 col-12">
                     <div className="text-start mt-4">
                       <label htmlFor="" className="mb-1 fw-medium">
-                        <small>{appConfigInfo.student} Name</small>
+                        <small>Name</small>
                         <span className="text-danger">*</span>
                       </label>
                       <br />
@@ -380,7 +380,7 @@ const AddStudentDetails = forwardRef(
                     </div>
                     <div className="text-start mt-4">
                       <label htmlFor="" className="mb-1 fw-medium">
-                        <small>{appConfigInfo.student} Email</small>
+                        <small> Email</small>
                         <span className="text-danger">*</span>
                       </label>
                       <br />
@@ -572,7 +572,7 @@ const AddStudentDetails = forwardRef(
                     <div className="text-start mt-4">
                       <label className="mb-1 fw-medium">
                         <small>
-                          {appConfigInfo.student} Chinese Name (put N/A if not
+                           Chinese Name (put N/A if not
                           applicable)
                           {/* <span className="text-danger">*</span> */}
                         </small>
