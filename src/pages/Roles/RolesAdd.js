@@ -15,6 +15,9 @@ function RolesAdd() {
   const [selectedRole, setSelectedRole] = useState("");
   const [selectedRoleId, setSelectedRoleId] = useState("");
   const [loading, setLoading] = useState(false);
+  const storedConfigure = JSON.parse(
+    localStorage.getItem("tmsappConfigInfo") || "{}"
+  );
 
   const fetchRole = async () => {
     try {
@@ -1093,7 +1096,9 @@ function RolesAdd() {
                         <tbody>
                           {/* Course  */}
                           <tr>
-                            <th colspan="6">Course Management</th>
+                            <th colspan="6">
+                              {storedConfigure?.course || "Course"} Management
+                            </th>
                           </tr>
                           <tr>
                             <td>
@@ -1103,7 +1108,7 @@ function RolesAdd() {
                                   marginBottom: "0px",
                                 }}
                               >
-                                Course
+                                {storedConfigure?.course || "Course"}
                               </p>
                             </td>
                             <td>
@@ -1160,7 +1165,7 @@ function RolesAdd() {
                                   marginBottom: "0px",
                                 }}
                               >
-                                Class
+                                {storedConfigure?.confClass || "Class"}
                               </p>
                             </td>
                             <td>
@@ -1217,7 +1222,7 @@ function RolesAdd() {
                                   marginBottom: "0px",
                                 }}
                               >
-                                Level
+                                {storedConfigure?.level || "Level"}
                               </p>
                             </td>
                             <td>
@@ -1274,7 +1279,7 @@ function RolesAdd() {
                                   marginBottom: "0px",
                                 }}
                               >
-                                Subject
+                                {storedConfigure?.subject || "Subject"}
                               </p>
                             </td>
                             <td>
@@ -1398,7 +1403,7 @@ function RolesAdd() {
                                   marginBottom: "0px",
                                 }}
                               >
-                                Course Fees
+                                {storedConfigure?.course || "Course"} Fees
                               </p>
                             </td>
                             <td>
@@ -1466,7 +1471,8 @@ function RolesAdd() {
                                   marginBottom: "0px",
                                 }}
                               >
-                                Course Deposit Fees
+                                {storedConfigure?.course || "Course"} Deposit
+                                Fees
                               </p>
                             </td>
                             <td>
@@ -1666,7 +1672,9 @@ function RolesAdd() {
                           </tr>
                           {/* Lead Management  */}
                           <tr>
-                            <th colspan="6">Lead Management</th>
+                            <th colspan="6">
+                              {storedConfigure?.lead || "Lead"} Management
+                            </th>
                           </tr>
                           <tr>
                             <td>
@@ -1676,7 +1684,7 @@ function RolesAdd() {
                                   marginBottom: "0px",
                                 }}
                               >
-                                Lead Listing
+                                {storedConfigure?.lead || "Lead"} Listing
                               </p>
                             </td>
                             <td>
@@ -1805,7 +1813,7 @@ function RolesAdd() {
                                   marginBottom: "0px",
                                 }}
                               >
-                                Teacher
+                                {storedConfigure?.employee || "Employee"}
                               </p>
                             </td>
                             <td>
@@ -2420,7 +2428,9 @@ function RolesAdd() {
                           </tr>
                           {/* Student Management  */}
                           <tr>
-                            <th colspan="6">Student Management</th>
+                            <th colspan="6">
+                              {storedConfigure?.student || "Student"} Management
+                            </th>
                           </tr>
                           <tr>
                             <td>
@@ -2430,7 +2440,7 @@ function RolesAdd() {
                                   marginBottom: "0px",
                                 }}
                               >
-                                Student Listing
+                                {storedConfigure?.student || "Student"} Listing
                               </p>
                             </td>
                             <td>
@@ -2497,7 +2507,7 @@ function RolesAdd() {
                                   marginBottom: "0px",
                                 }}
                               >
-                                Attendance
+                                {storedConfigure?.attendance || "Attendance"}
                               </p>
                             </td>
                             <td>
@@ -2558,7 +2568,7 @@ function RolesAdd() {
                                   marginBottom: "0px",
                                 }}
                               >
-                                Change Class
+                                Change {storedConfigure?.confClass || "Class"}
                               </p>
                             </td>
                             <td>
@@ -2617,7 +2627,7 @@ function RolesAdd() {
                                   marginBottom: "0px",
                                 }}
                               >
-                                End Class
+                                End {storedConfigure?.confClass || "Class"}
                               </p>
                             </td>
                             <td>
@@ -2676,7 +2686,8 @@ function RolesAdd() {
                                   marginBottom: "0px",
                                 }}
                               >
-                                Register New Course
+                                Register New{" "}
+                                {storedConfigure?.course || "Course"}
                               </p>
                             </td>
                             <td>
@@ -2788,7 +2799,10 @@ function RolesAdd() {
                           </tr>
                           {/* Document Management  */}
                           <tr>
-                            <th colspan="6">Document Management</th>
+                            <th colspan="6">
+                              {storedConfigure?.documentManagement ||
+                                "Document Management"}
+                            </th>
                           </tr>
                           <tr>
                             <td>
@@ -2798,7 +2812,9 @@ function RolesAdd() {
                                   marginBottom: "0px",
                                 }}
                               >
-                                Document Listing
+                                {storedConfigure?.documentManagement ||
+                                  "Document"}{" "}
+                                Listing
                               </p>
                             </td>
                             <td>
@@ -2863,7 +2879,9 @@ function RolesAdd() {
                                   marginBottom: "0px",
                                 }}
                               >
-                                Document File
+                                {storedConfigure?.documentManagement ||
+                                  "Document"}{" "}
+                                File
                               </p>
                             </td>
                             <td>
@@ -2917,7 +2935,11 @@ function RolesAdd() {
 
                           {/* Assignment Management  */}
                           <tr>
-                            <th colspan="6">Assignment Management</th>
+                            <th colspan="6">
+                              {storedConfigure?.assignManagement ||
+                                "Assignment"}{" "}
+                              Management
+                            </th>
                           </tr>
                           <tr>
                             <td>
@@ -2927,7 +2949,9 @@ function RolesAdd() {
                                   marginBottom: "0px",
                                 }}
                               >
-                                Assignment Listing
+                                {storedConfigure?.assignManagement ||
+                                  "Assignment"}{" "}
+                                Listing
                               </p>
                             </td>
                             <td>
@@ -2988,7 +3012,9 @@ function RolesAdd() {
                                   marginBottom: "0px",
                                 }}
                               >
-                                Assignment Result
+                                {storedConfigure?.assignManagement ||
+                                  "Assignment"}{" "}
+                                Result
                               </p>
                             </td>
                             <td>
@@ -3040,7 +3066,10 @@ function RolesAdd() {
 
                           {/* Invoice Management  */}
                           <tr>
-                            <th colspan="6">Invoice and Payment</th>
+                            <th colspan="6">
+                              {storedConfigure?.invoice || "Invoice"} and
+                              Payment
+                            </th>
                           </tr>
                           <tr>
                             <td>
@@ -3050,7 +3079,7 @@ function RolesAdd() {
                                   marginBottom: "0px",
                                 }}
                               >
-                                Invoice
+                                {storedConfigure?.invoice || "Invoice"}
                               </p>
                             </td>
                             <td>
@@ -3158,7 +3187,10 @@ function RolesAdd() {
                           </tr>
                           {/* Time Schedule attendance */}
                           <tr>
-                            <th colspan="6">Time Schedule Teacher</th>
+                            <th colspan="6">
+                              Time {storedConfigure?.schedule || "Schedule"}{" "}
+                              Teacher
+                            </th>
                           </tr>
                           <tr>
                             <td>
@@ -3168,7 +3200,8 @@ function RolesAdd() {
                                   marginBottom: "0px",
                                 }}
                               >
-                                Schedule Teacher
+                                {storedConfigure?.schedule || "Schedule"}{" "}
+                                Teacher
                               </p>
                             </td>
                             <td>
@@ -3230,7 +3263,9 @@ function RolesAdd() {
 
                           {/* Report Management  */}
                           <tr>
-                            <th colspan="6">Report Management</th>
+                            <th colspan="6">
+                              {storedConfigure?.report || "Report"} Management
+                            </th>
                           </tr>
                           <tr>
                             <td>
@@ -3240,7 +3275,7 @@ function RolesAdd() {
                                   marginBottom: "0px",
                                 }}
                               >
-                                Attendance Report
+                                Attendance {storedConfigure?.report || "Report"}
                               </p>
                             </td>
                             <td>
@@ -3299,7 +3334,8 @@ function RolesAdd() {
                                   marginBottom: "0px",
                                 }}
                               >
-                                Student Report
+                                {storedConfigure?.student || "Student"}{" "}
+                                {storedConfigure?.report || "Report"}
                               </p>
                             </td>
                             <td>
@@ -3358,7 +3394,7 @@ function RolesAdd() {
                                   marginBottom: "0px",
                                 }}
                               >
-                                Enrollment Report
+                                Enrollment {storedConfigure?.report || "Report"}
                               </p>
                             </td>
                             <td>
@@ -3619,7 +3655,9 @@ function RolesAdd() {
 
                           {/* Settings */}
                           <tr>
-                            <th colspan="6">Settings</th>
+                            <th colspan="6">
+                              {storedConfigure?.settings || "Settings"}
+                            </th>
                           </tr>
                           <tr>
                             <td>
