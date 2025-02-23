@@ -381,7 +381,7 @@ function Sidebar() {
           {
             title: "Roles",
             path: "/roles",
-            access: true,
+            access: storedScreens.rolesMatrixIndex,
           },
           {
             title: "Role & Matrix",
@@ -396,7 +396,7 @@ function Sidebar() {
           {
             title: "Primary Language",
             path: "/language",
-            access: true,
+            access: storedScreens.languageIndex,
           },
           {
             title: "Race",
@@ -416,7 +416,7 @@ function Sidebar() {
           {
             title: "Batch Time",
             path: "/batchtime",
-            access: true,
+            access: storedScreens.batchtimeIndex,
           },
           {
             title: "Leave Type",
