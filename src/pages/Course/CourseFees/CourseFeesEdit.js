@@ -136,11 +136,8 @@ function CourseFeesEdit({ id, onSuccess, handleMenuClose }) {
   useEffect(() => {
     const fetchData = async () => {
       await fetchTaxData();
-
-      for (const center of centerId) {
-        await fetchPackageData(center.id);
+        await fetchPackageData(centerId);
       }
-    };
 
     fetchData();
   }, [centerId]);

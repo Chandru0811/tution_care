@@ -29,22 +29,22 @@ const validationSchema = Yup.object().shape({
       "*Enter a valid email address"
     )
     .required("*Email is required"),
-    trialDate: Yup.date().test(
-      "is-required-if-trial",
-      "Trial date is required",
-      function (value) {
-        const { centerStatus } = this.parent;
-        if (centerStatus === "Trial") {
-          if (!value) {
-            return false;
-          }
-          if (new Date(value) < new Date()) {
-            return this.createError({ message: "Date cannot be in the past" });
-          }
+  trialDate: Yup.date().test(
+    "is-required-if-trial",
+    "Trial date is required",
+    function (value) {
+      const { centerStatus } = this.parent;
+      if (centerStatus === "Trial") {
+        if (!value) {
+          return false;
         }
-        return true;
+        if (new Date(value) < new Date()) {
+          return this.createError({ message: "Date cannot be in the past" });
+        }
       }
-    ),
+      return true;
+    }
+  ),
 });
 
 function SuperAdminCenterAdd({ handleCenterChanged }) {
@@ -102,7 +102,11 @@ function SuperAdminCenterAdd({ handleCenterChanged }) {
           toast.error(response.data.message);
         }
       } catch (error) {
-        toast.error(error);
+        if (error.response && error.response.status === 409) {
+          toast.warn(error.message);
+        } else {
+          toast.error(error.message);
+        }
       } finally {
         setLoadIndicator(false);
       }

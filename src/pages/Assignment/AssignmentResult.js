@@ -12,6 +12,7 @@ import {
 import { MoreVert as MoreVertIcon } from "@mui/icons-material";
 import { toast } from "react-toastify";
 import GlobalDelete from "../../components/common/GlobalDelete";
+import fetchAllTeacherListByCenter from "../List/TeacherListByCenter";
 
 const AssignmentResult = () => {
   const centerId = localStorage.getItem("tmscenterId");
@@ -21,6 +22,11 @@ const AssignmentResult = () => {
   const navigate = useNavigate();
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
+    const [teacherData, setTeacherData] = useState([]);
+    const [filters, setFilters] = useState({
+      centerId: centerId,
+      userId: "",
+    });
 
   const columns = useMemo(
     () => [
@@ -158,24 +164,65 @@ const AssignmentResult = () => {
       },
     },
   });
+  const fetchListData = async () => {
+    try {
+      const teacherDatas = await fetchAllTeacherListByCenter(centerId);
+      setTeacherData(teacherDatas);
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
 
   const getAssignmentData = async () => {
     try {
       setLoading(true);
+
+      // Filter out empty values before constructing query params
+      const filteredParams = Object.fromEntries(
+        Object.entries(filters).filter(([_, value]) => value !== "")
+      );
+
+      // Ensure centerId is always included
+      if (!filteredParams.centerId) {
+        filteredParams.centerId = centerId;
+      }
+      if (userId) {
+        filteredParams.userId = userId;
+      }
+
+      const queryParams = new URLSearchParams(filteredParams);
+
       const response = await api.get(
-        `/getAllQuestionsWithAnswersByUserId?userId=${userId}`
+        `/getAllQuestionsWithAnswersByUserId?${queryParams.toString()}`
       );
       setData(response.data);
     } catch (error) {
       toast.error("Error Fetching Data : " + error.message);
     } finally {
       setLoading(false);
+      // setIsClearFilterClicked(false);
     }
   };
+  useEffect(() => {
+      fetchListData();
+    }, []);
 
   useEffect(() => {
     getAssignmentData();
-  }, []);
+  }, [filters]);
+
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+    setFilters((prevFilters) => ({ ...prevFilters, [name]: value }));
+  };
+
+  const clearFilter = () => {
+    setFilters({
+      centerId: centerId,
+      userId: "",
+    });
+    // setIsClearFilterClicked(true); // Set flag to trigger data fetch without filters
+  };
 
   const handleMenuClose = () => setMenuAnchor(null);
 
@@ -216,6 +263,36 @@ const AssignmentResult = () => {
             </span>
           </div>
         </div>
+        <div className="individual_fliters d-lg-flex">
+        {!userId && (
+              <div className="form-group mb-0 ms-2 mb-1">
+                <select
+                  className="form-select form-select-sm center_list"
+                  name="userId"
+                  style={{ width: "100%" }}
+                  onChange={handleFilterChange}
+                  value={filters.userId}
+                >
+                  <option>Select the Teacher</option>
+                  {teacherData &&
+                    teacherData.map((teacher) => (
+                      <option key={teacher.id} value={teacher.id}>
+                        {teacher.teacherNames}
+                      </option>
+                    ))}
+                </select>
+              </div>
+            )}
+             <div className="form-group mb-0 ms-2 mb-1 ">
+                <button
+                  type="button"
+                  className="btn btn-sm btn-border"
+                  onClick={clearFilter}
+                >
+                  Clear
+                </button>
+              </div>
+              </div>
         {loading ? (
           <div className="loader-container">
             <div className="loading">
