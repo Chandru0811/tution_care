@@ -11,7 +11,7 @@ import {
   IconButton,
 } from "@mui/material";
 import GlobalDelete from "../../components/common/GlobalDelete";
-import { toast } from "react-toastify";
+
 
 const Student = () => {
   const [filters, setFilters] = useState({
@@ -74,11 +74,6 @@ const Student = () => {
         enableHiding: false,
         size: 40,
       },
-      // {
-      //   accessorKey: "center",
-      //   header: "Centre Name",
-      //   enableHiding: false,
-      // },
       {
         accessorKey: "studentName",
         header: `${storedConfigure?.student || "Student"} Name`,
@@ -90,39 +85,10 @@ const Student = () => {
         enableHiding: false,
       },
       {
-        accessorKey: "parentPrimaryName",
-        header: "Parent Name",
-        enableHiding: false,
-      },
-      {
-        accessorKey: "parentPrimaryEmail",
-        header: "Parent Email",
-        enableHiding: false,
-      },
-      {
-        accessorKey: "parentPrimaryMobileNumber",
-        header: "Parent Mobile",
-        enableHiding: false,
-      },
-      {
         accessorKey: "gender",
         header: "Gender",
         enableHiding: false,
         size: 30,
-      },
-      {
-        accessorKey: "allowMagazine",
-        header: "Allow Magazine",
-        enableHiding: false,
-        size: 30,
-        Cell: ({ cell }) => (cell.getValue() ? "Yes" : "No"),
-      },
-      {
-        accessorKey: "allowSocialMedia",
-        header: "Allow Social Media",
-        enableHiding: false,
-        size: 30,
-        Cell: ({ cell }) => (cell.getValue() ? "Yes" : "No"),
       },
       {
         accessorKey: "age",
@@ -431,6 +397,9 @@ const Student = () => {
                     schoolType: false,
                     schoolName: false,
                     preAssessmentResult: false,
+                    parentPrimaryName: false,
+                    parentPrimaryEmail: false,
+                    parentPrimaryMobile: false,
                     createdBy: false,
                     createdAt: false,
                     updatedBy: false,

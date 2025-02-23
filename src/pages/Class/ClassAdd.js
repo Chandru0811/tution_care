@@ -23,6 +23,7 @@ function ClassAdd() {
     courseId: Yup.string().required("*Course Name is required"),
     className: Yup.string().required("*Class Name is required"),
     classType: Yup.string().required("*Class Type is required"),
+    userId: Yup.string().required("*Employee is required"),
     durationInHrs: Yup.number().required("*Duration Hours is required"),
     durationInMins: Yup.number().required("*Duration Minutes is required"),
     startDate: Yup.date().required("*Start Date is required"),
@@ -502,7 +503,10 @@ function ClassAdd() {
               </div>
               <div className="col-md-6 col-12 mb-4">
                 <div className="d-flex justify-content-between align-items-center">
-                  <label>Teacher</label>
+                  <label>
+                    Employee<span class="text-danger">*</span>
+                  </label>
+
                   <Link to={`/teacher/add`} style={{ textDecoration: "none" }}>
                     <p className="stdSettings mb-0">
                       Add Employee

@@ -330,7 +330,7 @@ function StudentNewView() {
                 </li>
                 <li className="stdList">
                   <b>Gender</b>
-                  <span>{data.gender ? "Male" : "Female"}</span>
+                  <span>{data.gender}</span>
                 </li>
                 <li className="stdList">
                   <b>Nationality</b>

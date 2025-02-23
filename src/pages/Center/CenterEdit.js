@@ -15,9 +15,6 @@ import AddBreak from "./Add/AddBreak";
 import AddClass from "./Add/AddClass";
 import AddPackage from "./Add/AddPackage";
 import { Menu, MenuItem } from "@mui/material";
-import User from "../../assets/clientimage/User.jpg";
-import { MdOutlineDownloadForOffline } from "react-icons/md";
-import pdfLogo from "../../assets/images/Attactmentpdf.jpg";
 
 function CenterEdit({ handleCenterChanged }) {
   const { id } = useParams();
@@ -103,29 +100,29 @@ function CenterEdit({ handleCenterChanged }) {
       setLoadIndicator(true);
       setLoadIndicator(true);
       const formData = new FormData();
-      formData.append("centerName", values.centerName);
-      formData.append("code", values.code);
+      formData.append("centerName", values.centerName || "");
+      formData.append("code", values.code || "");
       if (values.userId) {
-        formData.append("userId", values.userId);
+        formData.append("userId", values.userId || "");
       }
-      formData.append("address", values.address);
-      formData.append("zipCode", values.zipCode);
-      formData.append("mobile", values.mobile);
-      formData.append("email", values.email);
-      formData.append("openingDate", values.openingDate);
-      formData.append("uenNumber", values.uenNumber);
-      formData.append("gst", values.gst);
-      formData.append("taxRegistrationNumber", values.taxRegistrationNumber);
-      formData.append("bankName", values.bankName);
-      formData.append("bankBranch", values.bankBranch);
-      formData.append("bankAccountNumber", values.bankAccountNumber);
-      formData.append("bankAccountName", values.bankAccountName);
-      formData.append("invoiceNotes", values.invoiceNotes);
-      formData.append("file", values.file);
-      formData.append("profile", values.profile);
-      formData.append("logo", values.logo);
-      formData.append("updatedBy", userName);
-      formData.append("target", values.target);
+      formData.append("address", values.address || "");
+      formData.append("zipCode", values.zipCode || "");
+      formData.append("mobile", values.mobile || "");
+      formData.append("email", values.email || "");
+      formData.append("openingDate", values.openingDate || "");
+      formData.append("uenNumber", values.uenNumber || "");
+      formData.append("gst", values.gst || "");
+      formData.append("taxRegistrationNumber", values.taxRegistrationNumber || "");
+      formData.append("bankName", values.bankName || "");
+      formData.append("bankBranch", values.bankBranch || "");
+      formData.append("bankAccountNumber", values.bankAccountNumber || "");
+      formData.append("bankAccountName", values.bankAccountName || "");
+      formData.append("invoiceNotes", values.invoiceNotes || "");
+      formData.append("file", values.file || "");
+      formData.append("profile", values.profile  || "");
+      formData.append("logo", values.logo || "");
+      formData.append("updatedBy", userName || "");
+      formData.append("target", values.target || "");
       try {
         const response = await api.put(`/updateCenters/${id}`, formData, {
           headers: {
