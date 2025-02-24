@@ -329,6 +329,7 @@ const ReferalFees = () => {
                 enableDensityToggle={false}
                 enableFullScreenToggle={false}
                 initialState={{
+                 pagination: { pageSize: 50, pageIndex: 0 },
                   columnVisibility: {
                     // createdAt: false,
                     updatedAt: false,

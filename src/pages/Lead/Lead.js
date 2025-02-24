@@ -945,6 +945,7 @@ const Lead = () => {
                       taxRegistrationNumber: false,
                       zipCode: false,
                     },
+                   pagination: { pageSize: 50, pageIndex: 0 },
                   }}
                   muiTableBodyRowProps={({ row }) => ({
                     onClick: () =>

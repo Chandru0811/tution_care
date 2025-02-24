@@ -360,6 +360,7 @@ const Course = () => {
                 enableDensityToggle={false}
                 enableFullScreenToggle={false}
                 initialState={{
+                 pagination: { pageSize: 50, pageIndex: 0 },
                   columnVisibility: {
                     colorCode: false,
                     description: false,

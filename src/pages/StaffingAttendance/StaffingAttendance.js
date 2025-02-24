@@ -293,6 +293,7 @@ const StaffingAttendance = () => {
                 enableDensityToggle={false}
                 enableFullScreenToggle={false}
                 initialState={{
+                 pagination: { pageSize: 50, pageIndex: 0 },
                   columnVisibility: {
                     gst: false,
                     address: false,

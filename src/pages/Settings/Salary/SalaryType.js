@@ -205,7 +205,8 @@ const Salary = () => {
               enableColumnFilters={false}
               enableDensityToggle={false}
               enableFullScreenToggle={false}
-              initialState={{
+                 initialState={{
+                 pagination: { pageSize: 50, pageIndex: 0 },
                 columnVisibility: {
                   createdBy: false,
                   createdAt: false,

@@ -308,6 +308,7 @@ const Level = () => {
                     updatedBy: false,
                     updatedAt: false,
                   },
+                 pagination: { pageSize: 50, pageIndex: 0 },
                 }}
                 // muiTableBodyRowProps={({ row }) => ({
                 //   onClick: () => navigate(`/level/view/${row.original.id}`),

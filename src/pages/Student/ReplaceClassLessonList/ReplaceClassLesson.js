@@ -336,6 +336,7 @@ const ReplaceClassLesson = () => {
                 enableDensityToggle={false}
                 enableFullScreenToggle={false}
                 initialState={{
+                 pagination: { pageSize: 50, pageIndex: 0 },
                   columnVisibility: {
                     createdBy: false,
                     createdAt: false,

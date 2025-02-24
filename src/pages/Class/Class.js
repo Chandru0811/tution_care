@@ -374,11 +374,13 @@ const Class = () => {
                     updatedBy: false,
                     updatedAt: false,
                   },
+                 pagination: { pageSize: 50, pageIndex: 0 },
                 }}
                 muiTableBodyRowProps={({ row }) => ({
                   onClick: () => navigate(`/class/view/${row.original.id}`),
                   style: { cursor: "pointer" },
                 })}
+                
               />
             </ThemeProvider>
 

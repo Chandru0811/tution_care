@@ -392,6 +392,7 @@ const Staff = () => {
                 enableDensityToggle={false}
                 enableFullScreenToggle={false}
                 initialState={{
+                 pagination: { pageSize: 50, pageIndex: 0 },
                   columnVisibility: {
                     // teacherId: true,
                     teacherName: true,

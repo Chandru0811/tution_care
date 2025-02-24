@@ -23,7 +23,9 @@ const SendNotification = () => {
 
   const getData = async () => {
     try {
-      const response = await api.get(`/getSmsPushNotificationsByCenterId?centerId=${centerId}`);
+      const response = await api.get(
+        `/getSmsPushNotificationsByCenterId?centerId=${centerId}`
+      );
       setDatas(response.data);
       console.log("message", response.data);
     } catch (error) {
@@ -215,6 +217,7 @@ const SendNotification = () => {
                 enableDensityToggle={false}
                 enableFullScreenToggle={false}
                 initialState={{
+                 pagination: { pageSize: 50, pageIndex: 0 },
                   columnVisibility: {
                     createdBy: false,
                     createdAt: false,

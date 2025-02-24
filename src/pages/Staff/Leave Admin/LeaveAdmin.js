@@ -233,6 +233,7 @@ const LeaveAdmin = () => {
                 enableDensityToggle={false}
                 enableFullScreenToggle={false}
                 initialState={{
+                 pagination: { pageSize: 50, pageIndex: 0 },
                   columnVisibility: {
                     leaveReason: false,
                     approverName: false,

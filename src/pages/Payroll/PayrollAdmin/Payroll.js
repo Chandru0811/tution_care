@@ -162,7 +162,7 @@ const Payroll = () => {
 
   useEffect(() => {
     fetchData();
-  },[]);
+  }, []);
 
   const theme = createTheme({
     components: {
@@ -378,6 +378,7 @@ const Payroll = () => {
                 enableDensityToggle={false}
                 enableFullScreenToggle={false}
                 initialState={{
+                 pagination: { pageSize: 50, pageIndex: 0 },
                   columnVisibility: {
                     bonus: false,
                     cpfContributions: false,

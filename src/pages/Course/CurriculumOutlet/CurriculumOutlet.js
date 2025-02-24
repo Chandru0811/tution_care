@@ -236,6 +236,7 @@ function CurriculumOutlet() {
                     updatedBy: false,
                     updatedAt: false,
                   },
+                 pagination: { pageSize: 50, pageIndex: 0 },
                 }}
               />
             </ThemeProvider>
