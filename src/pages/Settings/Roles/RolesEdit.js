@@ -39,11 +39,15 @@ function RolesEdit({ id, onSuccess, handleMenuClose }) {
     getData();
   };
 
-  const validationSchema = Yup.object({});
+  const validationSchema = Yup.object({
+    name: Yup.string().required("*Name is required"),
+    roleCategory: Yup.string().required("*Role Category is required"),
+  });
 
   const formik = useFormik({
     initialValues: {
       name: "",
+      roleCategory: "",
       centerId: centerId,
       updatedBy: userName,
     },
@@ -66,9 +70,9 @@ function RolesEdit({ id, onSuccess, handleMenuClose }) {
           toast.error(response.data.message);
         }
       } catch (error) {
-        if(error.status === 403){
-          toast.warning("The role is protected and cannot be updated")
-        }else{
+        if (error.status === 403) {
+          toast.warning("The role is protected and cannot be updated");
+        } else {
           toast.error(error.message);
         }
       } finally {
@@ -138,6 +142,31 @@ function RolesEdit({ id, onSuccess, handleMenuClose }) {
                   {formik.touched.name && formik.errors.name && (
                     <div className="invalid-feedback">{formik.errors.name}</div>
                   )}
+                </div>
+                <div className="col-12 mb-3">
+                  <label className="form-label">Role Category</label>
+                  <div className="input-group">
+                    <select
+                      name="roleCategory"
+                      {...formik.getFieldProps("roleCategory")}
+                      className={`form-select ${
+                        formik.touched.roleCategory &&
+                        formik.errors.roleCategory
+                          ? "is-invalid"
+                          : ""
+                      }`}
+                    >
+                      <option value=""></option>
+                      <option value="Teaching">Teaching</option>
+                      <option value="Non_Teaching">Non Teaching</option>
+                    </select>
+                  </div>
+                  {formik.touched.roleCategory &&
+                    formik.errors.roleCategory && (
+                      <div className="error text-danger">
+                        <small>{formik.errors.roleCategory}</small>
+                      </div>
+                    )}
                 </div>
               </div>
             </div>

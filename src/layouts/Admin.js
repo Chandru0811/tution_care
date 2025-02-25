@@ -7,7 +7,6 @@ import Sidebar from "../components/common/Sidebar";
 import Header from "../components/common/Header";
 import Footer from "../components/common/Footer";
 import Course from "../pages/Course/Course";
-import Lead from "../pages/Lead/Lead";
 import Student from "../pages/Student/Student";
 import Teacher from "../pages/Teacher/Teacher";
 import TeacherAdd from "../pages/Teacher/TeacherAdd";
@@ -62,13 +61,12 @@ import DocumentReport from "../pages/Report/DocumentReport";
 import WithdrawAdd from "../pages/Student/WithdrawAdd";
 import EnrollmentAdd from "../pages/Lead/Enrollment/EnrollmentAdd";
 import Video from "../pages/Video";
-import { toast, ToastContainer } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import Reschedule from "../pages/Reschedule/Reschedule";
 import RescheduleStudent from "../pages/Reschedule/RescheduleStudent";
 import AttendancesCourse from "../pages/Attendance/AttendancesCourse";
 import DocumentFiles from "../pages/Document/DocumentFiles";
 import Curriculum from "../pages/Curriculum/Curriculum";
-import EnrollmentEdit from "../pages/Lead/Enrollment/EnrollmentEdit";
 import StudentRegisterCourse from "../pages/Student/StudentRegisterCourse";
 import ReplaceClassLesson from "../pages/Student/ReplaceClassLessonList/ReplaceClassLesson";
 import SendNotification from "../pages/SendNotification/SendNotification";
@@ -193,7 +191,6 @@ import StaffNewView from "../pages/Staff/StaffNewView";
 import Calendar from "../pages/Calendar/Calendar";
 import BatchTime from "../pages/Settings/BatchTime/BatchTime";
 import BatchTimeEdit from "../pages/Settings/BatchTime/BatchTimeEdit";
-import LeadNewView from "../pages/Lead/LeadNewView";
 import TimeTable from "../pages/TimeTable";
 import Assignment from "../pages/Assignment/Assignment";
 import AssignmentAdd from "../pages/Assignment/AssignmentAdd";
@@ -209,6 +206,10 @@ import PaymentsView from "../pages/Payment/PaymentsView";
 import Language from "../pages/Settings/Language/Language";
 import TrialNotification from "../components/common/TrialNotification";
 import api from "../config/URL";
+import NewLeads from "../pages/New Leads/NewLeads";
+import NewLeadsAdd from "../pages/New Leads/NewLeadsAdd";
+import NewLeadsEdit from "../pages/New Leads/NewLeadsEdit";
+import NewLeadsView from "../pages/New Leads/NewLeadsView";
 
 function Admin({ handleLogout }) {
   const [centerChange, setCenterChange] = useState(0);
@@ -268,10 +269,10 @@ function Admin({ handleLogout }) {
               <Route path="/calendar" element={<Calendar />} />
 
               {/* Lead */}
-              <Route path="/lead/lead" element={<Lead />} />
-              <Route path="/lead/lead/add" element={<EnrollmentAdd />} />
-              <Route path="/lead/lead/edit/:id" element={<EnrollmentEdit />} />
-              <Route path="/lead/lead/view/:id" element={<LeadNewView />} />
+              <Route path="/lead/lead" element={<NewLeads />} />
+              <Route path="/lead/lead/add" element={<NewLeadsAdd />} />
+              <Route path="/lead/lead/edit/:id" element={<NewLeadsEdit />} />
+              <Route path="/lead/lead/view/:id" element={<NewLeadsView />} />
               <Route
                 path="/lead/lead/assessment/:leadId"
                 element={<LeadAssessment />}

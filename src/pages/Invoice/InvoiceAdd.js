@@ -927,7 +927,7 @@ export default function InvoiceAdd() {
                 </div>
                 <div className="text-start mt-3">
                   <label htmlFor="" className="mb-1 fw-medium">
-                    Parent<span class="text-danger">*</span>
+                    Parent
                   </label>
                   <br />
                   <input

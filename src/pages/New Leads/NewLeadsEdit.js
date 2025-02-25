@@ -1,121 +1,85 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
-import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
-import fetchAllClassesWithIdsC from "../List/ClassListByCourse";
-import fetchAllTeacherListByCenter from "../List/TeacherListByCenter";
-import fetchAllStudentListByCenter from "../List/StudentListByCenter";
-import { MultiSelect } from "react-multi-select-component";
+
+const validationSchema = Yup.object({
+  name: Yup.string().required("Lead name is required"),
+  email: Yup.string()
+    .email("Invalid email format")
+    .required("Primary email is required"),
+  phone: Yup.string()
+    .matches(/^\d{8}$/, "Mobile number must be 8 digits")
+    .required("Primary mobile number is required"),
+  subjectId: Yup.string().required("Subject is required"),
+  gender: Yup.string().required("Gender is required"),
+  dob: Yup.date().required("Date of Birth is required"),
+  referredBy: Yup.string().nullable(),
+  parentName: Yup.string().required("Parent name is required"),
+  // occupation: Yup.string().required("Occupation is required"),
+  // parentMobile: Yup.string().matches(/^\d{8}$/, "Mobile number must be 10 digits"),
+  parentEmail: Yup.string().email("Invalid email format"),
+  address: Yup.string().required("Address is required"),
+  postalCode: Yup.string()
+    .matches(/^\d{6}$/, "Postal code must be 6 digits")
+    .required("Postal code is required"),
+  // preferredDay: Yup.string().required("Preferred day is required"),
+  // preferredTimeSlot: Yup.string().required("Preferred time slot is required"),
+  // marketingSource: Yup.string().required("Marketing source is required"),
+  // remarks: Yup.string().nullable(),
+  termsAndCondition: Yup.boolean()
+    .oneOf([true], "You must accept the terms and conditions")
+    .required("Terms and conditions must be accepted"),
+});
 
 function NewLeadsEdit() {
-  const { id } = useParams();
   const navigate = useNavigate();
-  const [folderCategory, setFolderCategory] = useState("group");
-  const [classData, setClassData] = useState(null);
-  const [courseData, setCourseData] = useState(null);
-  const [studentData, setStudentData] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
+  const userName = localStorage.getItem("tmsemail");
   const centerId = localStorage.getItem("tmscenterId");
-  const [batchData, setBatchData] = useState(null);
-  const [selectedStudents, setSelectedStudents] = useState([]);
-  const [selectedBatchTimes, setSelectedBatchTimes] = useState([]);
-  const [teacherData, setTeacherData] = useState(null);
+  const [subjectData, setSubjectData] = useState(null);
   const storedConfigure = JSON.parse(
     localStorage.getItem("tmsappConfigInfo") || "{}"
   );
 
-  const validationSchema = Yup.object({
-    assignmentName: Yup.string().required("*Assignment Name is required"),
-    courseId: Yup.string().required("*Course is required"),
-    userId: Yup.string().required("*Teacher is required"),
-    day: Yup.string().required("*Days is required"),
-    batchTimes: Yup.array()
-      .of(Yup.string().required("*Batch Time is required"))
-      .min(1, "*At least one Batch Time is required"),
-    classId: Yup.string().required("*Class Listing is required"),
-    folderCategory: Yup.string().required("*FolderCategory is required"),
-    date: Yup.string().required("*Date is required"),
-  });
-
   const formik = useFormik({
     initialValues: {
-      center: centerId,
-      assignmentName: "",
-      courseId: "",
-      userId: "",
-      classId: "",
-      date: "",
-      day: "",
-      expiredDate: "",
-      folderCategory: "group",
-      batchTimes: [],
-      groupSelect: "",
-      studentSelect: "",
-      studentIds: [],
-      assignmentReason: "",
-      files: [] || null,
+      centerId: centerId,
+      name: "",
+      leadStatus: "NEW_WAITLIST" || "",
+      email: "",
+      phone: "",
+      subjectId: "",
+      gender: "",
+      dob: "",
+      referredBy: "",
+      parentName: "",
+      occupation: "",
+      parentMobile: "",
+      parentEmail: "",
+      address: "",
+      postalCode: "",
+      preferredDay: "",
+      preferredTimeSlot: "",
+      marketingSource: "",
+      remarks: "",
+      termsAndCondition: false,
+      createdBy: userName,
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       setLoadIndicator(true);
       try {
-        let selectedClassName = "";
-        let selectedCourseName = "";
-
-        classData.forEach((cls) => {
-          if (parseInt(values.classId) === cls.id) {
-            selectedClassName = cls.classNames || "--";
-          }
-        });
-
-        courseData.forEach((courseId) => {
-          if (parseInt(values.courseId) === courseId.id) {
-            selectedCourseName = courseId.courseNames || "--";
-          }
-        });
-        const formData = new FormData();
-        formData.append("centerId", centerId);
-        formData.append("userId", values.userId);
-        formData.append("assignmentName", values.assignmentName);
-        formData.append("assignmentReason", values.assignmentReason);
-        formData.append("day", values.day);
-        formData.append("classListing", selectedClassName);
-        formData.append("course", selectedCourseName);
-        formData.append("courseId", values.courseId);
-        formData.append("classId", values.classId);
-        formData.append("folderCategory", folderCategory);
-        formData.append("batchTimes", values.batchTimes);
-        formData.append("date", values.date);
-        formData.append("expiredDate", values.expiredDate);
-
-        if (folderCategory === "group") {
-          formData.append("isGroupUpload", true);
-        } else {
-          formData.append("isGroupUpload", false);
-          formData.append("studentIds", values.studentIds.join(",")); // Convert array to comma-separated string
-        }
-
-        // Append files
-        if (values.files && values.files.length > 0) {
-          values.files.forEach((file, index) =>
-            formData.append(`files[${index}]`, file)
-          );
-        }
-
-        // Send the request
-        const response = await api.put(`/updateAssignment/${id}`, formData, {
+        const response = await api.post("/createLeadDynamicForm", values, {
           headers: {
-            "Content-Type": "multipart/form-data",
+            "Content-Type": "application/json",
           },
         });
-
-        // Handle the response
-        if (response.status === 201 || response.status === 200) {
+        if (response.status === 201) {
           toast.success(response.data.message);
-          navigate("/assignment");
+          navigate("/lead/lead");
         } else {
           toast.error(response.data.message);
         }
@@ -126,7 +90,7 @@ function NewLeadsEdit() {
         ) {
           toast.warning(error?.response?.data?.message);
         } else {
-          toast.error("Error deleting data:", error.message);
+          toast.error("Error submitting data: " + error.message);
         }
       } finally {
         setLoadIndicator(false);
@@ -134,215 +98,31 @@ function NewLeadsEdit() {
     },
   });
 
-  // Function to scroll to the first error field
-  const scrollToError = (errors) => {
-    const errorField = Object.keys(errors)[0]; // Get the first error field
-    const errorElement = document.querySelector(`[name="${errorField}"]`); // Find the DOM element
-    if (errorElement) {
-      errorElement.scrollIntoView({ behavior: "smooth", block: "center" });
-      errorElement.focus(); // Set focus to the error element
-    }
-  };
-
-  // Watch for form submit and validation errors
-  useEffect(() => {
-    if (formik.submitCount > 0 && Object.keys(formik.errors).length > 0) {
-      scrollToError(formik.errors);
-    }
-  }, [formik.submitCount, formik.errors]);
-
-  const fetchCourses = async () => {
-    try {
-      const courses = await fetchAllCoursesWithIdsC(centerId);
-      setCourseData(courses);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
-
-  // const fetchTeacher = async () => {
-  //   try {
-  //     const teacher = await fetchAllTeacherListByCenter(centerId);
-  //     setUserData(teacher);
-  //   } catch (error) {
-  //     toast.error(error);
-  //   }
-  // };
-
-  const fetchStudent = async () => {
-    try {
-      const studentList = await fetchAllStudentListByCenter(centerId); // API call to fetch students
-      if (Array.isArray(studentList)) {
-        // Ensure the response is an array
-        const mappedStudents = studentList.map((student) => ({
-          label: student.studentNames, // Display value in MultiSelect
-          value: student.id, // Underlying value
-        }));
-        setStudentData(mappedStudents);
-      } else {
-        throw new Error("Invalid student data format");
-      }
-    } catch (error) {
-      toast.error("Failed to fetch student data: " + error.message);
-      setStudentData([]); // Clear data if error occurs
-    }
-  };
-
-  const fetchClasses = async (courseId) => {
-    try {
-      console.log("Fetching classes for courseId:", courseId);
-      const classes = await fetchAllClassesWithIdsC(courseId);
-      console.log("Fetched Classes:", classes);
-      setClassData(classes);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
-
-  // const fetchBatchandTeacherData = async (day) => {
-  //   try {
-  //     const response = await api.get(`getTeacherWithBatchListByDay?day=${day}`);
-  //     setBatchData(response.data.batchList);
-  //   } catch (error) {
-  //     toast.error(error.message);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   if (formik.values.day) {
-  //     fetchBatchandTeacherData(formik.values.day);
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [formik.values.day]);
-
-  const fetchBatchandTeacherData = async (day) => {
+  const fetchSubject = async () => {
     try {
       const response = await api.get(
-        `getTeacherWithBatchListByDay?day=${day}&centerId=${centerId}`
+        `/getCourseSubjectsByCenterId/${centerId}`
       );
-      setTeacherData(response.data.teacherList);
-      setBatchData(response.data.batchList);
+      setSubjectData(response.data);
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error);
     }
   };
 
   useEffect(() => {
-    if (formik.values.day) {
-      fetchBatchandTeacherData(formik.values.day);
-    }
-  }, [formik.values.day]);
-
-  const formatTo12Hour = (time) => {
-    const [hours, minutes] = time.split(":");
-    let period = "AM";
-    let hour = parseInt(hours, 10);
-
-    if (hour === 0) {
-      hour = 12;
-    } else if (hour >= 12) {
-      period = "PM";
-      if (hour > 12) hour -= 12;
-    }
-
-    return `${hour}:${minutes} ${period}`;
-  };
-
-  const normalizeTime = (time) => {
-    if (time.includes("AM") || time.includes("PM")) {
-      return time;
-    }
-
-    return formatTo12Hour(time);
-  };
-
-  const convertTo24Hour = (time) => {
-    const [timePart, modifier] = time.split(" ");
-    let [hours, minutes] = timePart.split(":").map(Number);
-
-    if (modifier === "PM" && hours < 12) {
-      hours += 12;
-    } else if (modifier === "AM" && hours === 12) {
-      hours = 0;
-    }
-
-    return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(
-      2,
-      "0"
-    )}`;
-  };
-
-  const handleCourseChange = (event) => {
-    const courseId = event.target.value;
-    console.log("Selected Course ID:", courseId);
-
-    // Reset classId and classData when course changes
-    setClassData([]);
-    formik.setFieldValue("classId", "");
-    formik.setFieldValue("courseId", courseId);
-
-    fetchClasses(courseId);
-  };
-
-  const getData = async () => {
-    try {
-      const response = await api.get(`/getAssignmentQuestionWithAnswer/${id}`);
-      const data = response.data;
-      console.log("Data:", data.classId);
-      // Ensure correct mappings
-      formik.setValues({
-        assignmentName: data.assignmentName || "",
-        assignmentReason: data.assignmentReason || "",
-        userId: data.userId || "",
-        center: data.centerId || "",
-        classId: data.classId || "",
-        courseId: data.courseId || "",
-        folderCategory: data.folderCategory || "group",
-        day: data.day || "",
-        date: data.date || "",
-        expiredDate: data.expiredDate || "",
-        batchTimes: data.batchTimes || "", // Assign first batch time if available
-        studentIds: data.studentIds || [], // Ensure array format
-        questions: data.questions || [],
-        files: [], // Reset files
-      });
-
-      setFolderCategory(data.folderCategory || "group");
-      await fetchClasses(data.courseId);
-      setTimeout(() => {
-        console.log("Setting classId after fetching classes:", data.classId);
-        formik.setFieldValue("classId", data.classId);
-      }, 500);
-      // Map batchTimes for MultiSelect
-      if (data.batchTimes && Array.isArray(data.batchTimes)) {
-        setSelectedBatchTimes(
-          data.batchTimes.map((time) => ({
-            label: normalizeTime(time),
-            value: convertTo24Hour(time),
-          }))
-        );
-      }
-      // Set student multi-select values
-      if (Array.isArray(data.studentIds) && Array.isArray(data.studentNames)) {
-        const selectedStudents = data.studentIds.map((id, index) => ({
-          value: id,
-          label: data.studentNames[index] || "Unknown",
-        }));
-        setSelectedStudents(selectedStudents);
-      }
-    } catch (error) {
-      console.error("Error fetching data ", error);
-    }
-  };
-
-  useEffect(() => {
-    getData();
-  }, [id]);
-
-  useEffect(() => {
-    fetchCourses(centerId);
-    fetchStudent(centerId);
+    fetchSubject();
   }, []);
+
+  useEffect(() => {
+    if (formik.submitCount > 0 && Object.keys(formik.errors).length > 0) {
+      const errorField = Object.keys(formik.errors)[0];
+      const errorElement = document.querySelector(`[name="${errorField}"]`);
+      if (errorElement) {
+        errorElement.scrollIntoView({ behavior: "smooth", block: "center" });
+        errorElement.focus();
+      }
+    }
+  }, [formik.submitCount, formik.errors]);
 
   return (
     <div className="container">
@@ -357,17 +137,17 @@ function NewLeadsEdit() {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          {storedConfigure?.assignManagement || "Assignment Management"}
+          {storedConfigure?.lead || "Lead Management"}
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
           <Link to="/assignment" className="custom-breadcrumb">
-            {storedConfigure?.assignManagement || "Assignment"}
+            {storedConfigure?.lead || "Lead"}
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          {storedConfigure?.assignManagement || "Assignment"} Edit
+          {storedConfigure?.lead || "Lead"} Edit
         </li>
       </ol>
       <form
@@ -387,7 +167,9 @@ function NewLeadsEdit() {
               <div className="d-flex">
                 <div className="dot active"></div>
               </div>
-              <span className="me-2 text-muted">Edit Assignment</span>
+              <span className="me-2 text-muted">
+                Update {storedConfigure?.lead || "Lead"}
+              </span>
             </div>
             <div className="my-2 pe-3 d-flex align-items-center">
               <Link to="/assignment">
@@ -414,432 +196,443 @@ function NewLeadsEdit() {
 
           <div className="container">
             <div className="row py-4">
-              <div className="col-md-6 col-12 mb-4">
+              <div className="col-md-6 mb-3">
                 <label className="form-label">
-                  Assignment Name<span className="text-danger">*</span>
+                  Name<span className="text-danger">*</span>
                 </label>
-                <div className="input-group mb-3">
-                  <input
-                    name="text"
-                    type="assignmentName"
-                    className={`form-control  ${
-                      formik.touched.assignmentName &&
-                      formik.errors.assignmentName
+                <input
+                  name="name"
+                  type="text"
+                  className={`form-control ${
+                    formik.touched.name && formik.errors.name
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  {...formik.getFieldProps("name")}
+                />
+                {formik.touched.name && formik.errors.name && (
+                  <div className="invalid-feedback">
+                    {formik.errors.name}
+                  </div>
+                )}
+              </div>
+
+              <div className="col-md-6 mb-3">
+                <label className="form-label">
+                  Email<span className="text-danger">*</span>
+                </label>
+                <input
+                  name="email"
+                  type="email"
+                  className={`form-control ${
+                    formik.touched.email && formik.errors.email
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  {...formik.getFieldProps("email")}
+                />
+                {formik.touched.email && formik.errors.email && (
+                  <div className="invalid-feedback">
+                    {formik.errors.email}
+                  </div>
+                )}
+              </div>
+
+              <div className="col-md-6 mb-3">
+                <label className="form-label">
+                  Mobile<span className="text-danger">*</span>
+                </label>
+                <input
+                  name="phone"
+                  type="text"
+                  className={`form-control ${
+                    formik.touched.phone && formik.errors.phone
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  {...formik.getFieldProps("phone")}
+                />
+                {formik.touched.phone && formik.errors.phone && (
+                  <div className="invalid-feedback">
+                    {formik.errors.phone}
+                  </div>
+                )}
+              </div>
+
+              <div className="col-md-6 col-12 mb-2">
+                <label className="form-label">
+                  Subject
+                </label><span className="text-danger">*</span>
+                <select
+                  className={`form-select  ${
+                    formik.touched.subjectId && formik.errors.subjectId
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  {...formik.getFieldProps("subjectId")}
+                >
+                  <option selected></option>
+                  {subjectData &&
+                    subjectData.map((subjectId) => (
+                      <option key={subjectId.subjectId} value={subjectId.id}>
+                        {subjectId.subject}
+                      </option>
+                    ))}
+                </select>
+                {formik.touched.subjectId && formik.errors.subjectId && (
+                  <div className="invalid-feedback">
+                    {formik.errors.subjectId}
+                  </div>
+                )}
+              </div>
+
+              <div className="col-md-6 mb-3">
+                <label className="form-label">
+                  Gender<span className="text-danger">*</span>
+                </label>
+                <div>
+                  <div className="form-check form-check-inline">
+                    <input
+                      className="form-check-input"
+                      type="radio"
+                      name="gender"
+                      value="Male"
+                      checked={formik.values.gender === "Male"}
+                      onChange={formik.handleChange}
+                    />
+                    <label className="form-check-label">Male</label>
+                  </div>
+                  <div className="form-check form-check-inline">
+                    <input
+                      className="form-check-input"
+                      type="radio"
+                      name="gender"
+                      value="Female"
+                      checked={formik.values.gender === "Female"}
+                      onChange={formik.handleChange}
+                    />
+                    <label className="form-check-label">Female</label>
+                  </div>
+                  {formik.touched.gender && formik.errors.gender && (
+                    <div className="invalid-feedback d-block">
+                      {formik.errors.gender}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <div className="col-md-6 mb-3">
+                <label className="form-label">
+                  Date of Birth<span className="text-danger">*</span>
+                </label>
+                <input
+                  name="dob"
+                  type="date"
+                  className={`form-control ${
+                    formik.touched.dob && formik.errors.dob ? "is-invalid" : ""
+                  }`}
+                  {...formik.getFieldProps("dob")}
+                />
+                {formik.touched.dob && formik.errors.dob && (
+                  <div className="invalid-feedback">{formik.errors.dob}</div>
+                )}
+              </div>
+
+              <div className="col-md-6 mb-3">
+                <label className="form-label">
+                  Parent Name<span className="text-danger">*</span>
+                </label>
+                <input
+                  name="parentName"
+                  type="text"
+                  className={`form-control ${
+                    formik.touched.parentName && formik.errors.parentName
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  {...formik.getFieldProps("parentName")}
+                />
+                {formik.touched.parentName && formik.errors.parentName && (
+                  <div className="invalid-feedback">
+                    {formik.errors.parentName}
+                  </div>
+                )}
+              </div>
+
+              <div className="col-md-6 mb-3">
+                <label className="form-label">
+                  Parent Email<span className="text-danger">*</span>
+                </label>
+                <input
+                  name="parentEmail"
+                  type="email"
+                  className={`form-control ${
+                    formik.touched.parentEmail && formik.errors.parentEmail
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  {...formik.getFieldProps("parentEmail")}
+                />
+                {formik.touched.parentEmail && formik.errors.parentEmail && (
+                  <div className="invalid-feedback">
+                    {formik.errors.parentEmail}
+                  </div>
+                )}
+              </div>
+
+              <div className="col-md-6 mb-3">
+                <label className="form-label">Parent Mobile</label>
+                <input
+                  name="parentMobile"
+                  type="text"
+                  className={`form-control ${
+                    formik.touched.parentMobile && formik.errors.parentMobile
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  {...formik.getFieldProps("parentMobile")}
+                />
+                {formik.touched.parentMobile && formik.errors.parentMobile && (
+                  <div className="invalid-feedback">
+                    {formik.errors.parentMobile}
+                  </div>
+                )}
+              </div>
+
+              <div className="col-md-6 mb-3">
+                <label className="form-label">Occupation</label>
+                <input
+                  name="occupation"
+                  type="text"
+                  className={`form-control ${
+                    formik.touched.occupation && formik.errors.occupation
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  {...formik.getFieldProps("occupation")}
+                />
+                {formik.touched.occupation && formik.errors.occupation && (
+                  <div className="invalid-feedback">
+                    {formik.errors.occupation}
+                  </div>
+                )}
+              </div>
+
+              <div className="col-md-6 col-12 mb-3">
+                <label className="form-label">Preferred Day</label>
+                <div className="input-group">
+                  <select
+                    name="preferredDay"
+                    {...formik.getFieldProps("preferredDay")}
+                    className={`form-select ${
+                      formik.touched.preferredDay && formik.errors.preferredDay
                         ? "is-invalid"
                         : ""
                     }`}
-                    {...formik.getFieldProps("assignmentName")}
-                  />
-                  {formik.touched.assignmentName &&
-                    formik.errors.assignmentName && (
-                      <div className="invalid-feedback">
-                        {formik.errors.assignmentName}
-                      </div>
-                    )}
+                  >
+                    <option value="">Select a day</option>
+                    <option value="MONDAY">Monday</option>
+                    <option value="TUESDAY">Tuesday</option>
+                    <option value="WEDNESDAY">Wednesday</option>
+                    <option value="THURSDAY">Thursday</option>
+                    <option value="FRIDAY">Friday</option>
+                    <option value="SATURDAY">Saturday</option>
+                    <option value="SUNDAY">Sunday</option>
+                  </select>
                 </div>
-              </div>
-
-              <div className="col-md-6 col-12 mb-4">
-                <label className="form-label">
-                  Course<span className="text-danger">*</span>
-                </label>
-                <select
-                  {...formik.getFieldProps("courseId")}
-                  name="courseId"
-                  className={`form-select ${
-                    formik.touched.courseId && formik.errors.courseId
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  onChange={handleCourseChange}
-                >
-                  <option disabled></option>
-                  {courseData &&
-                    courseData.map((courses) => (
-                      <option key={courses.id} value={courses.id}>
-                        {courses.courseNames}
-                      </option>
-                    ))}
-                </select>
-                {formik.touched.courseId && formik.errors.courseId && (
-                  <div className="invalid-feedback">
-                    {formik.errors.courseId}
+                {formik.touched.preferredDay && formik.errors.preferredDay && (
+                  <div className="error text-danger">
+                    <small>{formik.errors.preferredDay}</small>
                   </div>
                 )}
               </div>
 
-              <div className="col-md-6 col-12 mb-4 d-flex flex-column justify-content-end">
-                <label className="form-label">
-                  Class Listing<span className="text-danger">*</span>
-                </label>
-                <select
-                  {...formik.getFieldProps("classId")}
-                  name="classId"
-                  className={`form-select ${
-                    formik.touched.classId && formik.errors.classId
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                >
-                  <option disabled></option>
-                  {classData &&
-                    classData.map((cls) => (
-                      <option key={cls.id} value={cls.id}>
-                        {cls.classNames}
-                      </option>
-                    ))}
-                </select>
-                {formik.touched.classId && formik.errors.classId && (
-                  <div className="invalid-feedback">
-                    {formik.errors.classId}
-                  </div>
-                )}
-              </div>
-              <div className="col-md-6 col-12 mb-4">
-                <label className="form-label">
-                  Days<span className="text-danger">*</span>
-                </label>
-                <select
-                  {...formik.getFieldProps("day")}
-                  className={`form-select  ${
-                    formik.touched.day && formik.errors.day ? "is-invalid" : ""
-                  }`}
-                  name="day"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.day}
-                >
-                  <option></option>
-                  <option value="MONDAY">Monday</option>
-                  <option value="TUESDAY">Tuesday</option>
-                  <option value="WEDNESDAY">Wednesday</option>
-                  <option value="THURSDAY">Thursday</option>
-                  <option value="FRIDAY">Friday</option>
-                  <option value="SATURDAY">Saturday</option>
-                  <option value="SUNDAY">Sunday</option>
-                </select>
-                {formik.touched.day && formik.errors.day && (
-                  <div className="invalid-feedback">{formik.errors.day}</div>
-                )}
-              </div>
-              <div className="col-md-6 col-12 mb-4">
-                <label className="form-label">
-                  Teacher<span className="text-danger">*</span>
-                </label>
-                <select
-                  {...formik.getFieldProps("userId")}
-                  name="userId"
-                  className={`form-select  ${
-                    formik.touched.userId && formik.errors.userId
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                >
-                  <option disabled></option>
-                  {teacherData &&
-                    teacherData.map((userId) => (
-                      <option key={userId.id} value={userId.teacherId}>
-                        {userId.teacherName}
-                      </option>
-                    ))}
-                </select>
-                {formik.touched.userId && formik.errors.userId && (
-                  <div className="invalid-feedback">{formik.errors.userId}</div>
-                )}
-              </div>
-              <div className="col-md-6 col-12 mb-4">
-                <label className="form-label">
-                  Batch Time<span className="text-danger">*</span>
-                </label>
-                <MultiSelect
-                  options={
-                    batchData
-                      ? batchData.map((time) => ({
-                          label: normalizeTime(time), // Convert batch time to 12-hour format for display
-                          value:
-                            time.includes("AM") || time.includes("PM")
-                              ? convertTo24Hour(time) // Convert selected time to 24-hour format
-                              : time,
-                        }))
-                      : []
-                  }
-                  value={selectedBatchTimes} // Ensure correct selected values are displayed
-                  onChange={(selected) => {
-                    setSelectedBatchTimes(selected);
-                    formik.setFieldValue(
-                      "batchTimes",
-                      selected.map((option) => option.value)
-                    );
-                  }}
-                  labelledBy="Select Batch Time"
-                  className={`form-multi-select ${
-                    formik.touched.batchTimes && formik.errors.batchTimes
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                />
-                {formik.touched.batchTimes && formik.errors.batchTimes && (
-                  <div className="invalid-feedback">
-                    {formik.errors.batchTimes}
-                  </div>
-                )}
-              </div>
-
-              {/* Radio buttons for selecting folder category */}
-              <div className="col-md-6 col-12 mb-4">
-                <label className="form-label">
-                  Folder Category<span className="text-danger">*</span>
-                </label>
-                <div className="d-flex">
-                  <div>
-                    <input
-                      className="form-check-input"
-                      type="radio"
-                      id="group"
-                      name="folderCategory"
-                      value="group"
-                      checked={folderCategory === "group"}
-                      onChange={() => {
-                        setFolderCategory("group");
-                        formik.setFieldValue("folderCategory", "group");
-                      }}
-                    />{" "}
-                    &nbsp;
-                    <label htmlFor="group">Group</label>
-                  </div>
-                  &nbsp;&nbsp;&nbsp;
-                  <div>
-                    <input
-                      className="form-check-input"
-                      type="radio"
-                      id="individual"
-                      name="folderCategory"
-                      value="individual"
-                      checked={folderCategory === "individual"}
-                      onChange={() => {
-                        setFolderCategory("individual");
-                        formik.setFieldValue("folderCategory", "individual");
-                      }}
-                    />
-                    &nbsp;
-                    <label htmlFor="individual">Individual</label>
-                  </div>
+              <div className="col-md-6 col-12 mb-3">
+                <label className="form-label">Preferred Time</label>
+                <div className="input-group">
+                  <select
+                    name="preferredTimeSlot"
+                    {...formik.getFieldProps("preferredTimeSlot")}
+                    className={`form-select ${
+                      formik.touched.preferredTimeSlot &&
+                      formik.errors.preferredTimeSlot
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                  >
+                    <option value="">Select a Time</option>
+                    <option value="3.30PM">3.30PM</option>
+                    <option value="5.00PM">5.00PM</option>
+                    <option value="7.00PM">7.00PM</option>
+                    <option value="9AM - 12NN">9.00AM</option>
+                    <option value="12NN - 3PM">12.00AM</option>
+                    <option value="3PM - 6PM">6.00PM</option>
+                  </select>
                 </div>
-
-                {formik.touched.folderCategory &&
-                  formik.errors.folderCategory && (
-                    <div className="invalid-feedback">
-                      {formik.errors.folderCategory}
+                {formik.touched.preferredTimeSlot &&
+                  formik.errors.preferredTimeSlot && (
+                    <div className="error text-danger">
+                      <small>{formik.errors.preferredTimeSlot}</small>
                     </div>
                   )}
               </div>
 
+              <div className="col-md-6 mb-3">
+                <label className="form-label">
+                  Refer By
+                </label>
+                <input
+                  name="referredBy"
+                  type="text"
+                  className={`form-control ${
+                    formik.touched.referredBy && formik.errors.referredBy
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  {...formik.getFieldProps("referredBy")}
+                />
+                {formik.touched.referredBy && formik.errors.referredBy && (
+                  <div className="invalid-feedback">
+                    {formik.errors.referredBy}
+                  </div>
+                )}
+              </div>
+
               <div className="col-md-6 col-12 mb-3">
-                {folderCategory === "group" ? (
-                  <></>
-                ) : (
+                <label className="form-label">Marketing Source</label>
+                <div className="input-group ">
+                  <select
+                    name="marketingSource"
+                    {...formik.getFieldProps("marketingSource")}
+                    className={`form-select ${
+                      formik.touched.marketingSource && formik.errors.marketingSource
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                  >
+                    <option selected></option>
+                    <option value="Friends or Relatives">
+                      Friends or Relatives
+                    </option>
+                    <option value="Facebook">Facebook</option>
+                    <option value="Google">Google</option>
+                    <option value="Others">Others</option>
+                  </select>
+                </div>
+                {formik.touched.marketingSource &&
+                  formik.errors.marketingSource && (
+                    <div className="error text-danger">
+                      <small>{formik.errors.marketingSource}</small>
+                    </div>
+                  )}
+              </div>
+
+              <div className="col-md-6 col-12">
+                <div className="mb-3">
+                  <div>
+                    <label
+                      for="exampleFormControlInput1"
+                      className="form-label"
+                    >
+                      Address
+                      <span className="text-danger">*</span>
+                    </label>
+                  </div>
                   <div className="">
-                    <label className="form-label">Student Name</label>
-                    <MultiSelect
-                      options={studentData || []}
-                      value={selectedStudents}
-                      onChange={(selected) => {
-                        setSelectedStudents(selected);
-                        formik.setFieldValue(
-                          "studentIds",
-                          selected.map((option) => option.value) // Convert selected options to an array of student IDs
-                        );
-                      }}
-                      labelledBy="Select Student"
-                      className={`form-multi-select ${
-                        formik.touched.studentIds && formik.errors.studentIds
+                    <textarea
+                      type="text"
+                      name="address"
+                      {...formik.getFieldProps("address")}
+                      className={`form-control ${
+                        formik.touched.address && formik.errors.address
                           ? "is-invalid"
                           : ""
                       }`}
                     />
-                    {formik.touched.studentIds && formik.errors.studentIds && (
-                      <div className="invalid-feedback">
-                        {formik.errors.studentIds}
+                    {formik.touched.address && formik.errors.address && (
+                      <div className="error text-danger ">
+                        <small>{formik.errors.address}</small>
                       </div>
                     )}
+                  </div>
+                </div>
+              </div>
+
+              <div className="col-md-6 mb-3">
+                <label className="form-label">Postal Code</label><span className="text-danger">*</span>
+                <input
+                  name="postalCode"
+                  type="text"
+                  className={`form-control ${
+                    formik.touched.postalCode && formik.errors.postalCode
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  {...formik.getFieldProps("postalCode")}
+                />
+                {formik.touched.postalCode && formik.errors.postalCode && (
+                  <div className="invalid-feedback">
+                    {formik.errors.postalCode}
                   </div>
                 )}
               </div>
 
-              <div className="col-md-6 col-12 mb-4">
-                <label className="form-label">
-                  Date<span className="text-danger">*</span>
-                </label>
-                <div className="input-group mb-3">
+              <div className="col-md-12 col-12">
+                <div className="mb-3">
+                  <div>
+                    <label
+                      for="exampleFormControlInput1"
+                      className="form-label"
+                    >
+                      Remarks
+                    </label>
+                  </div>
+                  <div className="">
+                    <textarea
+                      type="text"
+                      name="remarks"
+                      {...formik.getFieldProps("remarks")}
+                      className={`form-control ${
+                        formik.touched.remarks && formik.errors.remarks
+                          ? "is-invalid"
+                          : ""
+                      }`}
+                    />
+                    {formik.touched.remarks && formik.errors.remarks && (
+                      <div className="error text-danger ">
+                        <small>{formik.errors.remarks}</small>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/** Terms and Conditions */}
+              <div className="col-12 mt-3">
+                <div className="form-check">
                   <input
-                    name="date"
-                    type="date"
-                    className={`form-control  ${
-                      formik.touched.date && formik.errors.date
+                    type="checkbox"
+                    name="termsAndCondition"
+                    className={`form-check-input ${
+                      formik.touched.termsAndCondition &&
+                      formik.errors.termsAndCondition
                         ? "is-invalid"
                         : ""
                     }`}
-                    {...formik.getFieldProps("date")}
+                    {...formik.getFieldProps("termsAndCondition")}
                   />
-                  {formik.touched.date && formik.errors.date && (
-                    <div className="invalid-feedback">{formik.errors.date}</div>
-                  )}
-                </div>
-              </div>
-
-              <div className="col-md-6 col-12 mb-4">
-                <label className="form-label">Expiry Date</label>
-                <input
-                  name="expiredDate"
-                  type="date"
-                  className={`form-control  ${
-                    formik.touched.expiredDate && formik.errors.expiredDate
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  {...formik.getFieldProps("expiredDate")}
-                />
-                {formik.touched.expiredDate && formik.errors.expiredDate && (
-                  <div className="invalid-feedback">
-                    {formik.errors.expiredDate}
-                  </div>
-                )}
-              </div>
-              <div className="col-md-6 col-12 mb-2">
-                <div className="row">
-                  <label className="form-label">Files</label>
-                  <div className="input-group">
-                    <input
-                      className="form-control"
-                      type="file"
-                      multiple
-                      accept="image/jpeg, image/png, application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                      onChange={(event) => {
-                        const files = Array.from(event.target.files);
-                        let errors = [];
-
-                        // Validate each file
-                        files.forEach((file) => {
-                          if (
-                            ![
-                              "image/jpeg",
-                              "image/png",
-                              "application/pdf",
-                              "application/msword",
-                              "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-                            ].includes(file.type)
-                          ) {
-                            errors.push(
-                              `${file.name} is not an allowed file type.`
-                            );
-                          }
-
-                          if (file.size > 5 * 1024 * 1024) {
-                            errors.push(
-                              `${file.name} exceeds the 5MB size limit.`
-                            );
-                          }
-
-                          if (file.name.length > 50) {
-                            errors.push(
-                              `${file.name} has a name longer than 50 characters.`
-                            );
-                          }
-                        });
-
-                        // Check total size
-                        const totalSize = files.reduce(
-                          (total, file) => total + file.size,
-                          0
-                        );
-                        if (totalSize > 1024 * 1024 * 1024) {
-                          errors.push("Total file size exceeds 1GB.");
-                        }
-
-                        if (errors.length > 0) {
-                          formik.setFieldError("files", errors.join(" "));
-                        } else {
-                          formik.setFieldValue("files", files); // Set files if valid
-                          formik.setFieldError("files", null); // Clear errors
-                        }
-                      }}
-                    />
-                  </div>
-
-                  {/* Display validation errors */}
-                  {formik.errors.files && (
-                    <small className="text-danger">{formik.errors.files}</small>
-                  )}
-
-                  {/* Note about file upload rules */}
-                  <label className="text-muted">
-                    Note: Only JPG, PNG, PDF, DOC, or DOCX files are allowed.
-                    Each file must be less than 5MB. Total size must be under
-                    1GB, and file names must not exceed 50 characters.
+                  <label className="form-check-label">
+                    By submitting this form, I confirm that I agree on releasing
+                    the above details.
+                    <span className="text-danger">*</span>
                   </label>
-
-                  {/* Show already uploaded files with download option */}
-                  {formik.values.questions &&
-                    formik.values.questions.length > 0 && (
-                      <div className="mt-3">
-                        <h6>Uploaded Files:</h6>
-                        <ul className="list-group">
-                          {formik.values.questions.map((fileUrl, index) => (
-                            <ol
-                              key={index}
-                              className="list-group-item d-flex justify-content-between align-items-center"
-                            >
-                              <a
-                                href={fileUrl}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-primary"
-                              >
-                                {decodeURIComponent(fileUrl.split("/").pop())}
-                              </a>
-                              {/* <button
-                                type="button"
-                                className="btn btn-sm btn-danger"
-                                onClick={() => {
-                                  const updatedFiles = [
-                                    ...formik.values.questions,
-                                  ];
-                                  updatedFiles.splice(index, 1);
-                                  formik.setFieldValue(
-                                    "questions",
-                                    updatedFiles
-                                  );
-                                }}
-                              >
-                                <CgTrash/>
-                              </button> */}
-                            </ol>
-                          ))}
-                        </ul>
+                  {formik.touched.termsAndCondition &&
+                    formik.errors.termsAndCondition && (
+                      <div className="invalid-feedback">
+                        {formik.errors.termsAndCondition}
                       </div>
                     )}
                 </div>
-              </div>
-
-              <div className="col-md-6 col-12 mb-4">
-                <label className="form-label">Assignment Reason</label>
-                <textarea
-                  name="assignmentReason"
-                  className={`form-control  ${
-                    formik.touched.assignmentReason &&
-                    formik.errors.assignmentReason
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  rows={5}
-                  {...formik.getFieldProps("assignmentReason")}
-                />
-                {formik.touched.assignmentReason &&
-                  formik.errors.assignmentReason && (
-                    <div className="invalid-feedback">
-                      {formik.errors.assignmentReason}
-                    </div>
-                  )}
               </div>
             </div>
           </div>

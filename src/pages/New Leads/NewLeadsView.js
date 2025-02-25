@@ -1,15 +1,11 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import api from "../../config/URL";
-import { MaterialReactTable } from "material-react-table";
-import { ThemeProvider, createTheme } from "@mui/material";
-import { GoDotFill } from "react-icons/go";
 
 function NewLeadsView() {
   const { id } = useParams();
   const [data, setData] = useState({});
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
   const storedConfigure = JSON.parse(
     localStorage.getItem("tmsappConfigInfo") || "{}"
   );
@@ -25,120 +21,6 @@ function NewLeadsView() {
       setLoading(false);
     }
   }, [id]);
-
-  const columns = useMemo(
-    () => [
-      {
-        accessorFn: (row, index) => index + 1,
-        header: "S.NO",
-        enableSorting: true,
-        enableHiding: false,
-        size: 20,
-        cell: ({ cell }) => (
-          <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
-        ),
-      },
-      {
-        accessorKey: "answers",
-        enableHiding: false,
-        header: "Status",
-        size: 20,
-        Cell: ({ row }) => {
-          const answers = Array.isArray(row.original.answers)
-            ? row.original.answers
-            : []; // Ensure it's always an array
-
-          console.log("Row ID:", row.original.id, "Answers:", answers); // Debugging log
-
-          return answers.length > 0 ? (
-            <GoDotFill className="text-success fs-6" />
-          ) : (
-            <GoDotFill className="text-danger fs-6" />
-          );
-        },
-      },
-      {
-        accessorKey: "studentName",
-        header: "Student Name",
-        enableHiding: false,
-      },
-      {
-        accessorKey: "studentUniqueId",
-        header: "Student ID",
-        enableHiding: false,
-      },
-      {
-        accessorKey: "uploadDate",
-        header: "Submited Date",
-        enableHiding: false,
-        Cell: ({ cell }) => cell.getValue()?.substring(0, 10) || "-",
-      },
-      {
-        accessorKey: "createdBy",
-        header: "Created By",
-        enableHiding: false,
-      },
-      {
-        accessorKey: "createdAt",
-        header: "Created At",
-        Cell: ({ cell }) => cell.getValue()?.substring(0, 10),
-      },
-      {
-        accessorKey: "updatedAt",
-        header: "Updated At",
-        Cell: ({ cell }) => cell.getValue()?.substring(0, 10) || "",
-      },
-      {
-        accessorKey: "updatedBy",
-        header: "Updated By",
-        Cell: ({ cell }) => cell.getValue() || "",
-      },
-    ],
-    []
-  );
-
-  const theme = createTheme({
-    components: {
-      MuiTableCell: {
-        styleOverrides: {
-          head: {
-            color: "#535454 !important",
-            backgroundColor: "#e6edf7 !important",
-            fontWeight: "400 !important",
-            fontSize: "13px !important",
-            textAlign: "center !important",
-          },
-        },
-      },
-      MuiSwitch: {
-        styleOverrides: {
-          root: {
-            "&.Mui-disabled .MuiSwitch-track": {
-              backgroundColor: "#f5e1d0",
-              opacity: 1,
-            },
-            "&.Mui-disabled .MuiSwitch-thumb": {
-              color: "#eb862a",
-            },
-          },
-          track: {
-            backgroundColor: "#e0e0e0",
-          },
-          thumb: {
-            color: "#eb862a",
-          },
-          switchBase: {
-            "&.Mui-checked": {
-              color: "#eb862a",
-            },
-            "&.Mui-checked + .MuiSwitch-track": {
-              backgroundColor: "#eb862a",
-            },
-          },
-        },
-      },
-    },
-  });
 
   useEffect(() => {
     getData();
@@ -309,48 +191,6 @@ function NewLeadsView() {
                     </p>
                   </div>
                 </div>
-              </div>
-
-              <div className="col-md-12 col-12 p-1">
-                {loading ? (
-                  <div className="loader-container">
-                    <div className="loading">
-                      <span></span>
-                      <span></span>
-                      <span></span>
-                      <span></span>
-                      <span></span>
-                    </div>
-                  </div>
-                ) : (
-                  <>
-                    <ThemeProvider theme={theme}>
-                      <MaterialReactTable
-                        columns={columns}
-                        data={data?.assignmentAnswerFiles || []} // Ensure it's always an array
-                        enableColumnActions={false}
-                        enableColumnFilters={false}
-                        enableDensityToggle={false}
-                        enableFullScreenToggle={false}
-                        initialState={{
-                          columnVisibility: {
-                            createdBy: false,
-                            createdAt: false,
-                            updatedBy: false,
-                            updatedAt: false,
-                          },
-                        }}
-                        muiTableBodyRowProps={({ row }) => ({
-                          onClick: () =>
-                            navigate(
-                              `/assignmentResult/view/${id}?studentId=${row.original.studentId}`
-                            ),
-                          style: { cursor: "pointer" },
-                        })}
-                      />
-                    </ThemeProvider>
-                  </>
-                )}
               </div>
             </div>
           </div>

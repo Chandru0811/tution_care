@@ -24,11 +24,13 @@ function RolesAdd({ onSuccess }) {
   };
   const validationSchema = Yup.object({
     name: Yup.string().required("*Name is required"),
+    roleCategory: Yup.string().required("*Role Category is required"),
   });
 
   const formik = useFormik({
     initialValues: {
       name: "",
+      roleCategory: "",
       centerId: centerId,
       createdBy: userName,
     },
@@ -106,7 +108,7 @@ function RolesAdd({ onSuccess }) {
           <Modal.Body>
             <div className="container">
               <div className="row">
-                <div className="col-12 mb-2">
+                <div className="col-12 mb-3">
                   <label className="form-label">
                     Name<span className="text-danger">*</span>
                   </label>
@@ -122,6 +124,31 @@ function RolesAdd({ onSuccess }) {
                   {formik.touched.name && formik.errors.name && (
                     <div className="invalid-feedback">{formik.errors.name}</div>
                   )}
+                </div>
+                <div className="col-12 mb-3">
+                  <label className="form-label">Role Category</label>
+                  <div className="input-group">
+                    <select
+                      name="roleCategory"
+                      {...formik.getFieldProps("roleCategory")}
+                      className={`form-select ${
+                        formik.touched.roleCategory &&
+                        formik.errors.roleCategory
+                          ? "is-invalid"
+                          : ""
+                      }`}
+                    >
+                      <option value=""></option>
+                      <option value="Teaching">Teaching</option>
+                      <option value="Non_Teaching">Non Teaching</option>
+                    </select>
+                  </div>
+                  {formik.touched.roleCategory &&
+                    formik.errors.roleCategory && (
+                      <div className="error text-danger">
+                        <small>{formik.errors.roleCategory}</small>
+                      </div>
+                    )}
                 </div>
               </div>
             </div>
