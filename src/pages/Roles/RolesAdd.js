@@ -426,11 +426,11 @@ function RolesAdd() {
       shgSettingUpdate: true,
       shgSettingDelete: true,
 
-      batchtimeSettingIndex: true,
-      batchtimeSettingRead: true,
-      batchtimeSettingCreate: true,
-      batchtimeSettingUpdate: true,
-      batchtimeSettingDelete: true,
+      batchtimeIndex: true,
+      batchtimeRead: true,
+      batchtimeCreate: true,
+      batchtimeUpdate: true,
+      batchtimeDelete: true,
 
       leaveSettingIndex: true,
       leaveSettingRead: true,
@@ -589,7 +589,7 @@ function RolesAdd() {
       emailCreate: true,
       countrySettingCreate: true,
       shgSettingCreate: true,
-      batchtimeSettingCreate: true,
+      batchtimeCreate: true,
       leaveSettingCreate: true,
       idTypeSettingCreate: true,
       salarySettingCreate: true,
@@ -670,7 +670,7 @@ function RolesAdd() {
       emailRead: true,
       countrySettingRead: true,
       shgSettingRead: true,
-      batchtimeSettingRead: true,
+      batchtimeRead: true,
       leaveSettingRead: true,
       idTypeSettingRead: true,
       salarySettingRead: true,
@@ -750,7 +750,7 @@ function RolesAdd() {
       roleUpdate: true,
       emailUpdate: true,
       shgSettingUpdate: true,
-      batchtimeSettingUpdate: true,
+      batchtimeUpdate: true,
       leaveSettingUpdate: true,
       idTypeSettingUpdate: true,
       salarySettingUpdate: true,
@@ -830,7 +830,7 @@ function RolesAdd() {
       emailDelete: true,
       countrySettingDelete: true,
       shgSettingDelete: true,
-      batchtimeSettingDelete: true,
+      batchtimeDelete: true,
       leaveSettingDelete: true,
       idTypeSettingDelete: true,
       salarySettingDelete: true,
@@ -914,7 +914,7 @@ function RolesAdd() {
       emailIndex: true,
       countrySettingIndex: true,
       shgSettingIndex: true,
-      batchtimeSettingIndex: true,
+      batchtimeIndex: true,
       leaveSettingIndex: true,
       idTypeSettingIndex: true,
       salarySettingIndex: true,
@@ -4005,10 +4005,10 @@ function RolesAdd() {
                               <input
                                 className="form-check-input"
                                 type="checkbox"
-                                name="batchtimeSettingIndex"
-                                checked={formik.values.batchtimeSettingIndex}
+                                name="batchtimeIndex"
+                                checked={formik.values.batchtimeIndex}
                                 onChange={handleCheckboxChange(
-                                  `batchtimeSettingIndex`
+                                  `batchtimeIndex`
                                 )}
                               />
                             </td>
@@ -4016,10 +4016,10 @@ function RolesAdd() {
                               <input
                                 className="form-check-input"
                                 type="checkbox"
-                                name="batchtimeSettingRead"
-                                checked={formik.values.batchtimeSettingRead}
+                                name="batchtimeRead"
+                                checked={formik.values.batchtimeRead}
                                 onChange={handleCheckboxChange(
-                                  `batchtimeSettingRead`
+                                  `batchtimeRead`
                                 )}
                               />
                             </td>
@@ -4027,10 +4027,10 @@ function RolesAdd() {
                               <input
                                 className="form-check-input"
                                 type="checkbox"
-                                name="batchtimeSettingCreate"
-                                checked={formik.values.batchtimeSettingCreate}
+                                name="batchtimeCreate"
+                                checked={formik.values.batchtimeCreate}
                                 onChange={handleCheckboxChange(
-                                  `batchtimeSettingCreate`
+                                  `batchtimeCreate`
                                 )}
                               />
                             </td>
@@ -4038,10 +4038,10 @@ function RolesAdd() {
                               <input
                                 className="form-check-input"
                                 type="checkbox"
-                                name="batchtimeSettingUpdate"
-                                checked={formik.values.batchtimeSettingUpdate}
+                                name="batchtimeUpdate"
+                                checked={formik.values.batchtimeUpdate}
                                 onChange={handleCheckboxChange(
-                                  `batchtimeSettingUpdate`
+                                  `batchtimeUpdate`
                                 )}
                               />
                             </td>
@@ -4049,10 +4049,10 @@ function RolesAdd() {
                               <input
                                 className="form-check-input"
                                 type="checkbox"
-                                name="batchtimeSettingDelete"
-                                checked={formik.values.batchtimeSettingDelete}
+                                name="batchtimeDelete"
+                                checked={formik.values.batchtimeDelete}
                                 onChange={handleCheckboxChange(
-                                  `batchtimeSettingDelete`
+                                  `batchtimeDelete`
                                 )}
                               />
                             </td>

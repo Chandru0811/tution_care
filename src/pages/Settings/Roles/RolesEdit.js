@@ -144,7 +144,7 @@ function RolesEdit({ id, onSuccess, handleMenuClose }) {
                   )}
                 </div>
                 <div className="col-12 mb-3">
-                  <label className="form-label">Role Category</label>
+                  <label className="form-label">Role Category<span className="text-danger">*</span></label>
                   <div className="input-group">
                     <select
                       name="roleCategory"

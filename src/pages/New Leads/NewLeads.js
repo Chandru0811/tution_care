@@ -698,13 +698,28 @@ const NewLeads = () => {
         ),
       },
       {
-        accessorKey: "studentName",
+        accessorKey: "name",
         enableHiding: false,
-        header: "Student Name",
+        header: "Name",
       },
       {
-        accessorKey: "dateOfBirth",
-        header: "Date Of Birth",
+        accessorKey: "email",
+        enableHiding: false,
+        header: "Email",
+      },
+      {
+        accessorKey: "phone",
+        enableHiding: false,
+        header: "Mobile",
+      },
+      {
+        accessorKey: "gender",
+        enableHiding: false,
+        header: "Gender",
+      },
+      {
+        accessorKey: "dob",
+        header: "DOB",
         enableHiding: false,
         Cell: ({ cell }) =>
           cell.getValue()?.substring(0, 10)?.split("").join(""),
@@ -713,15 +728,6 @@ const NewLeads = () => {
         header: "Subject",
         accessorKey: "subject",
         enableHiding: false,
-      },
-      {
-        accessorKey: "fathersFullName",
-        enableHiding: false,
-        header: "Parent Name",
-        // cell: ({ row }) => {
-        //   const { fathersFullName, mothersFullName } = row.original; // Access row data
-        //   return fathersFullName || mothersFullName || " "; // Priority: Father's name, then Mother's name, then "N/A"
-        // },
       },
       { accessorKey: "address", header: "Address" },
       {
@@ -929,21 +935,12 @@ const NewLeads = () => {
                   enableDensityToggle={false}
                   enableFullScreenToggle={false}
                   initialState={{
+                    pagination: { pageSize: 50, pageIndex: 0 },
                     columnVisibility: {
-                      gst: false,
-                      address: false,
-                      bankAccountName: false,
-                      bankAccountNumber: false,
-                      bankBranch: false,
-                      bankName: false,
                       createdBy: false,
                       createdAt: false,
                       updatedBy: false,
                       updatedAt: false,
-                      invoiceNotes: false,
-                      openingDate: false,
-                      taxRegistrationNumber: false,
-                      zipCode: false,
                     },
                   }}
                   muiTableBodyRowProps={({ row }) => ({
@@ -960,11 +957,6 @@ const NewLeads = () => {
                 open={Boolean(menuAnchor)}
                 onClose={handleMenuClose}
               >
-                {/* <MenuItem
-                  onClick={() => navigate(`/lead/lead/view/${selectedId}`)}
-                >
-                  View
-                </MenuItem> */}
                 {storedScreens?.leadListingUpdate && (
                   <MenuItem
                     onClick={() => navigate(`/lead/lead/edit/${selectedId}`)}
@@ -973,7 +965,7 @@ const NewLeads = () => {
                     Edit
                   </MenuItem>
                 )}
-                {/* {storedScreens?.centerListingDelete && ( */}
+                {storedScreens?.centerListingDelete && (
                 <MenuItem>
                   <GlobalDelete
                     path={`/deleteLeadInfo/${selectedId}`}
@@ -981,7 +973,7 @@ const NewLeads = () => {
                     onOpen={handleMenuClose}
                   />
                 </MenuItem>
-                {/* )} */}
+               )}
               </Menu>
             </>
           )}

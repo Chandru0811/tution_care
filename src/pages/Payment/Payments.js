@@ -177,7 +177,7 @@ const Payments = () => {
 
       const response = await api.get(
         // `/getInvoiceWithCustomInfo?${queryParams.toString()}`
-        `/paymentByCenterId/${centerId}`
+        `/paymentByCenterId?centerId=${centerId}`
       );
       setData(response.data);
     } catch (error) {

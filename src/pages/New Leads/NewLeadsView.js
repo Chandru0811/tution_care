@@ -13,7 +13,7 @@ function NewLeadsView() {
   const getData = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await api.get(`/getAssignmentQuestionWithAnswer/${id}`);
+      const response = await api.get(`/getLeadDynamicFormById/${id}`);
       setData(response.data);
     } catch (error) {
       console.error("Error fetching data ", error);
@@ -29,7 +29,7 @@ function NewLeadsView() {
   return (
     <div className="container-fluid ">
       <ol
-        className="breadcrumb my-3 px-2"
+        className="breadcrumb my-3"
         style={{ listStyle: "none", padding: 0, margin: 0 }}
       >
         <li>
@@ -39,17 +39,17 @@ function NewLeadsView() {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          {storedConfigure?.assignManagement || "Assignment Management"}
+          {storedConfigure?.lead || "Lead Management"}
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
           <Link to="/assignment" className="custom-breadcrumb">
-            {storedConfigure?.assignManagement || "Assignment"}
+            {storedConfigure?.lead || "Lead"}
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          {storedConfigure?.assignManagement || "Assignment"} View
+          {storedConfigure?.lead || "Lead"} View
         </li>
       </ol>
       <div>
@@ -62,10 +62,10 @@ function NewLeadsView() {
               <div class="d-flex">
                 <div class="dot active"></div>
               </div>
-              <span class="me-2 text-muted">Assignment View</span>
+              <span class="me-2 text-muted">{storedConfigure?.lead || "Lead"} View</span>
             </div>
             <div className="my-2 pe-3 d-flex align-items-center">
-              <Link to="/assignment">
+              <Link to="/lead/lead">
                 <button type="button " className="btn btn-sm btn-border   ">
                   Back
                 </button>
@@ -78,25 +78,22 @@ function NewLeadsView() {
               <div className="col-md-6 col-12">
                 <div className="row mb-2">
                   <div className="col-6">
-                    <p className="fw-medium">Assignment Name</p>
+                    <p className="fw-medium">Name</p>
+                  </div>
+                  <div className="col-6 text-start">
+                    <p className="text-muted text-sm"> : {data.name || "--"}</p>
+                  </div>
+                </div>
+              </div>
+              <div className="col-md-6 col-12">
+                <div className="row mb-2">
+                  <div className="col-6">
+                    <p className="fw-medium">Email</p>
                   </div>
                   <div className="col-6 text-start">
                     <p className="text-muted text-sm">
                       {" "}
-                      : {data.assignmentName || "--"}
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div className="col-md-6 col-12">
-                <div className="row mb-2">
-                  <div className="col-6">
-                    <p className="fw-medium">Course </p>
-                  </div>
-                  <div className="col-6 text-start">
-                    <p className="text-muted text-sm">
-                      {" "}
-                      : {data.courseName || "--"}
+                      : {data.email || "--"}
                     </p>
                   </div>
                 </div>
@@ -104,44 +101,31 @@ function NewLeadsView() {
               <div className="col-md-6 col-12 mb-3">
                 <div className="row">
                   <div className="col-6">
-                    <p className="fw-medium">Class Listing</p>
+                    <p className="fw-medium">Mobile</p>
                   </div>
                   <div className="col-6 text-start">
-                    <p className="text-muted">: {data.className || "--"}</p>
+                    <p className="text-muted">: {data.phone || "--"}</p>
                   </div>
                 </div>
               </div>
               <div className="col-md-6 col-12 mb-3">
                 <div className="row">
                   <div className="col-6">
-                    <p className="fw-medium">Teacher</p>
+                    <p className="fw-medium">Gender</p>
                   </div>
                   <div className="col-6 text-start">
-                    <p className="text-muted">: {data.userName || "--"}</p>
-                  </div>
-                </div>
-              </div>
-              <div className="col-md-6 col-12 mb-3">
-                <div className="row">
-                  <div className="col-6">
-                    <p className="fw-medium">Days</p>
-                  </div>
-                  <div className="col-6 text-start">
-                    <p className="text-muted">: {data.day || "--"}</p>
+                    <p className="text-muted">: {data.gender || "--"}</p>
                   </div>
                 </div>
               </div>
               <div className="col-md-6 col-12">
                 <div className="row mb-2">
                   <div className="col-6">
-                    <p className="fw-medium">Batch Time</p>
+                    <p className="fw-medium">Subject</p>
                   </div>
                   <div className="col-6 text-start">
                     <p className="text-muted text-sm">
-                      :{" "}
-                      {data.batchTimes && data.batchTimes.length > 0
-                        ? data.batchTimes.join(", ")
-                        : "--"}
+                      : {data.subjectName || "--"}
                     </p>
                   </div>
                 </div>
@@ -149,11 +133,21 @@ function NewLeadsView() {
               <div className="col-md-6 col-12">
                 <div className="row mb-2">
                   <div className="col-6">
-                    <p className="fw-medium">Folder Category</p>
+                    <p className="fw-medium">Date of Birth</p>
+                  </div>
+                  <div className="col-6 text-start">
+                    <p className="text-muted text-sm">: {data.dob || "--"}</p>
+                  </div>
+                </div>
+              </div>
+              <div className="col-md-6 col-12">
+                <div className="row mb-2">
+                  <div className="col-6">
+                    <p className="fw-medium">Parent Name</p>
                   </div>
                   <div className="col-6 text-start">
                     <p className="text-muted text-sm">
-                      : {data.folderCategory || "--"}
+                      : {data.parentName || "--"}
                     </p>
                   </div>
                 </div>
@@ -161,11 +155,11 @@ function NewLeadsView() {
               <div className="col-md-6 col-12">
                 <div className="row mb-2">
                   <div className="col-6">
-                    <p className="fw-medium">Assignment Reason</p>
+                    <p className="fw-medium">Parent Email</p>
                   </div>
                   <div className="col-6 text-start">
                     <p className="text-muted text-sm">
-                      : {data.assignmentReason || "--"}
+                      : {data.parentEmail || "--"}
                     </p>
                   </div>
                 </div>
@@ -173,21 +167,119 @@ function NewLeadsView() {
               <div className="col-md-6 col-12">
                 <div className="row mb-2">
                   <div className="col-6">
-                    <p className="fw-medium">Date</p>
+                    <p className="fw-medium">Parent Mobile</p>
                   </div>
                   <div className="col-6 text-start">
-                    <p className="text-muted text-sm">: {data.date || "--"}</p>
+                    <p className="text-muted text-sm">
+                      : {data.parentMobile || "--"}
+                    </p>
                   </div>
                 </div>
               </div>
               <div className="col-md-6 col-12">
                 <div className="row mb-2">
                   <div className="col-6">
-                    <p className="fw-medium">Expiry Date</p>
+                    <p className="fw-medium">Occupation</p>
                   </div>
                   <div className="col-6 text-start">
                     <p className="text-muted text-sm">
-                      : {data.expiredDate || "--"}
+                      : {data.occupation || "--"}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="col-md-6 col-12">
+                <div className="row mb-2">
+                  <div className="col-6">
+                    <p className="fw-medium">Preferred Day</p>
+                  </div>
+                  <div className="col-6 text-start">
+                    <p className="text-muted text-sm">
+                      : {data.preferredDay || "--"}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="col-md-6 col-12">
+                <div className="row mb-2">
+                  <div className="col-6">
+                    <p className="fw-medium">Preferred Time Slot</p>
+                  </div>
+                  <div className="col-6 text-start">
+                    <p className="text-muted text-sm">
+                      : {data.preferredTimeSlot || "--"}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="col-md-6 col-12">
+                <div className="row mb-2">
+                  <div className="col-6">
+                    <p className="fw-medium">Refer By Student</p>
+                  </div>
+                  <div className="col-6 text-start">
+                    <p className="text-muted text-sm">
+                      : {data.studentName || data.referredBy || "--"}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="col-md-6 col-12">
+                <div className="row mb-2">
+                  <div className="col-6">
+                    <p className="fw-medium">Marketing Source</p>
+                  </div>
+                  <div className="col-6 text-start">
+                    <p className="text-muted text-sm">
+                      : {data.marketingSource || "--"}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="col-md-6 col-12">
+                <div className="row mb-2">
+                  <div className="col-6">
+                    <p className="fw-medium">Postal Code</p>
+                  </div>
+                  <div className="col-6 text-start">
+                    <p className="text-muted text-sm">
+                      : {data.postalCode || "--"}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="col-md-6 col-12">
+                <div className="row mb-2">
+                  <div className="col-6">
+                    <p className="fw-medium">Address</p>
+                  </div>
+                  <div className="col-6 text-start">
+                    <p className="text-muted text-sm">
+                      : {data.address || "--"}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="col-md-6 col-12">
+                <div className="row mb-2">
+                  <div className="col-6">
+                    <p className="fw-medium">Remarks</p>
+                  </div>
+                  <div className="col-6 text-start">
+                    <p className="text-muted text-sm">
+                      : {data.remarks || "--"}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="col-md-6 col-12">
+                <div className="row mb-2">
+                  <div className="col-6">
+                    <p className="fw-medium">Terms And Condition</p>
+                  </div>
+                  <div className="col-6 text-start">
+                    <p className="text-muted text-sm">
+                      : {data.termsAndCondition === true ? "Yes" : "No"}
                     </p>
                   </div>
                 </div>

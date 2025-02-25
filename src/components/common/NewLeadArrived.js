@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import api from "../../config/URL";
@@ -17,18 +17,20 @@ const validationSchema = Yup.object({
   dob: Yup.date().required("Date of Birth is required"),
   remarks: Yup.string().required("Remarks is required"),
   termsAndCondition: Yup.boolean()
-    .oneOf([true], "You must accept the terms and conditions")
+    .oneOf([true], "Please accept the terms and conditions")
     .required("Terms and conditions must be accepted"),
 });
 
 function NewLeadArrived() {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
+  const { token } = useParams();
   const [loadIndicator, setLoadIndicator] = useState(false);
-  const centerId = localStorage.getItem("tmscenterId");
+  console.log("Received Token:", token);
 
   const formik = useFormik({
     initialValues: {
       name: "",
+      encodedCenterData: token || "",
       leadStatus: "NEW_WAITLIST" || "",
       email: "",
       phone: "",

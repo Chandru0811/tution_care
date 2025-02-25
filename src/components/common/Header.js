@@ -7,8 +7,9 @@ import { CiCalendarDate } from "react-icons/ci";
 import { GrUserSettings } from "react-icons/gr";
 import api from "../../config/URL";
 import Logo from "../../assets/images/TMS_LOGO.png";
+import { MdOutlineContentCopy } from "react-icons/md";
 
-function Header({ onLogout ,data}) {
+function Header({ onLogout, data }) {
   const navigate = useNavigate();
   const userName = localStorage.getItem("tmsuserName");
   const centerId = localStorage.getItem("tmscenterId");
@@ -18,8 +19,14 @@ function Header({ onLogout ,data}) {
   const teacherImage = localStorage.getItem("tmsteacherImage");
   const teacherName = localStorage.getItem("tmsteacherName");
   const role = localStorage.getItem("tmsrole")?.replace(/_/g, " ");
-  // const [data, setData] = useState([]);
+  const [tokenData, setTokenData] = useState([]);
+  console.log("Token Data:",tokenData);
+  
   const userInfo = localStorage.getItem("tmsuserInfo");
+
+  const storedConfigure = JSON.parse(
+    localStorage.getItem("tmsappConfigInfo") || "{}"
+  );
 
   const handleLogOutClick = () => {
     document.body.classList.remove("offcanvas-backdrop", "modal-open");
@@ -29,18 +36,36 @@ function Header({ onLogout ,data}) {
     navigate("/login");
   };
 
-  // const getData = async () => {
-  //   try {
-  //     const response = await api.get(`/getAllCenterById/${centerId}`);
-  //     setData(response.data);
-  //   } catch (error) {
-  //     toast.error("Error Fetching Data");
-  //   }
-  // };
+  const getTokenData = async () => {
+    try {
+      const response = await api.get(`/generateLeadForm?centerId=${centerId}`);
+      setTokenData(response.data.response);
+    } catch (error) {
+      toast.error("Error Fetching Data");
+    }
+  };
 
-  // useEffect(() => {
-  //   getData();
-  // }, []);
+  const handleCopyTokenData = async () => {
+    try {      
+      const token = tokenData;
+      if (!token) {
+        toast.error("Token not available.");
+        return;
+      }
+      // const url = `https://hrisasia.com/tuitions/newLead/${token}`;
+      const url = `http://localhost:3000/tuitions/newLead/${token}`;
+      await navigator.clipboard.writeText(url);
+      toast.success("URL copied to clipboard! 🚀 Opening form...");
+      // window.open(url, "_blank");
+    } catch (err) {
+      toast.error("Failed to copy URL.");
+    }
+  };
+  
+
+  useEffect(() => {
+    getTokenData();
+  }, []);
 
   return (
     <nav>
@@ -195,22 +220,30 @@ function Header({ onLogout ,data}) {
               {teacherName && <p>{teacherName}</p>}
             </div>
             {userInfo.length <= 2 ? (
-              <div
-                className="text-center cursor-pointer"
-                data-bs-dismiss="offcanvas"
-              >
-                <Link
-                  to={`/companyRegister/edit/${centerId}`}
-                  style={{ textDecoration: "none", color: "inherit" }}
-                  onMouseEnter={(e) =>
-                    (e.target.style.color = "rgb(233,158,94)")
-                  }
-                  onMouseLeave={(e) => (e.target.style.color = "inherit")}
+              <>
+                <div
+                  className="text-center cursor-pointer"
+                  data-bs-dismiss="offcanvas"
                 >
-                  <GrUserSettings className="mx-2" />
-                  <span>Edit Centre</span>
-                </Link>
-              </div>
+                  <Link
+                    to={`/companyRegister/edit/${centerId}`}
+                    style={{ textDecoration: "none", color: "inherit" }}
+                    onMouseEnter={(e) =>
+                      (e.target.style.color = "rgb(233,158,94)")
+                    }
+                    onMouseLeave={(e) => (e.target.style.color = "inherit")}
+                  >
+                    <GrUserSettings className="mx-2" />
+                    <span>Edit Centre</span>
+                  </Link>
+                </div>
+                <div className="text-center cursor-pointer mt-2">
+                  <button className="btn btn-sm btn-border" type="button"  onClick={handleCopyTokenData}>
+                    <MdOutlineContentCopy className="mx-2 fs-6" />
+                    <span>Copy URL</span>
+                  </button>
+                </div>
+              </>
             ) : null}
 
             {/* Calendar button visible only on smaller screens */}

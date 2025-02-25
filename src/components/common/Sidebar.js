@@ -144,7 +144,7 @@ function Sidebar() {
               isOpen: false,
               subMenus: [
                 {
-                  title: "Lead Listing",
+                  title: `${storedConfigure?.lead} Listing` || "Lead Listing",
                   path: "lead/lead",
                   access: storedScreens.leadListingIndex,
                 },

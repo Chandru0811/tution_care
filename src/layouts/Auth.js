@@ -15,7 +15,7 @@ function Auth({ handleLogin }) {
       <Routes>
         <Route path="/login" element={<NewLogin onLogin={handleLogin} />} />
         <Route path="/companyRegister" element={<CompanyRegister onLogin={handleLogin} />} />
-        <Route path="/newLead" element={<NewLeadArrived onLogin={handleLogin} />} />
+        <Route path="/newLead/:token" element={<NewLeadArrived />} />
         <Route path="*" element={<NewLogin onLogin={handleLogin} />} />
       </Routes>
       {/* <Footer /> */}

@@ -32,17 +32,17 @@ function SuperAdminCenterView() {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          &nbsp;Company Management
+          &nbsp;Centre Management
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
           <Link to="/center" className="custom-breadcrumb">
-            &nbsp;Company Listing
+            &nbsp;Centre Listing
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          &nbsp;Company Listing view
+          &nbsp;Centre Listing view
         </li>
       </ol>
       <div className="card">
@@ -54,7 +54,7 @@ function SuperAdminCenterView() {
             <div class="d-flex">
               <div class="dot active"></div>
             </div>
-            <span class="me-2 text-muted">View Company</span>
+            <span class="me-2 text-muted">View Centre</span>
           </div>
           <div className="my-2 pe-3 d-flex align-items-center">
             <Link to="/companyregistration">
@@ -79,7 +79,7 @@ function SuperAdminCenterView() {
             <div className="col-md-6 col-12">
               <div className="row mt-3  mb-2">
                 <div className="col-6 ">
-                  <p className="">Company Name</p>
+                  <p className="">Centre Name</p>
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">
