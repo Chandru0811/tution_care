@@ -69,6 +69,12 @@ const Roles = () => {
         header: "Role Name",
         size: 20,
       },
+      {
+        accessorKey: "roleCategory",
+        enableHiding: false,
+        header: "Role Category",
+        size: 20,
+      },
       { accessorKey: "createdBy", header: "Created By" },
       {
         accessorKey: "createdAt",
@@ -197,8 +203,8 @@ const Roles = () => {
                 enableColumnFilters={false}
                 enableDensityToggle={false}
                 enableFullScreenToggle={false}
-                   initialState={{
-                 pagination: { pageSize: 50, pageIndex: 0 },
+                initialState={{
+                  pagination: { pageSize: 50, pageIndex: 0 },
                   columnVisibility: {
                     createdBy: false,
                     createdAt: false,
