@@ -148,7 +148,7 @@ const AddEmergencyContact = forwardRef(
       if (formData.LeadId && leadDataTrue) {
         try {
           const response = await api.get(
-            `/getAllLeadInfoById/${formData.LeadId}`
+            `/getLeadDynamicFormById/${formData.LeadId}`
           );
           const leadData = response.data;
           console.log("Lead Data ", leadData);
@@ -641,7 +641,7 @@ const AddEmergencyContact = forwardRef(
           </div>
 
           {/* Add Buttons */}
-          <div className="row">
+          {/* <div className="row">
             <div className="col-12 mb-4">
               <button
                 type="button"
@@ -668,7 +668,7 @@ const AddEmergencyContact = forwardRef(
                 Add More
               </button>
             </div>
-          </div>
+          </div> */}
         </form>
       </div>
     );

@@ -63,7 +63,7 @@ function NewLeadsEdit() {
       preferredTimeSlot: "",
       marketingSource: "",
       remarks: "",
-      termsAndCondition: false,
+      termsAndCondition: "",
       createdBy: userName,
     },
     validationSchema: validationSchema,

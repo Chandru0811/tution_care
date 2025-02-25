@@ -70,7 +70,7 @@ const Addrelation = forwardRef(
         if (formData.LeadId) {
           try {
             const response = await api.get(
-              `/getAllLeadInfoById/${formData.LeadId}`
+              `/getLeadDynamicFormById/${formData.LeadId}`
             );
 
             const leadData = response.data;

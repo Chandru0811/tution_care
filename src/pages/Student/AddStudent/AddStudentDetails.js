@@ -286,39 +286,29 @@ const AddStudentDetails = forwardRef(
         if (formData.LeadId) {
           try {
             const response = await api.get(
-              `/getAllLeadInfoById/${formData.LeadId}`
+              `/getLeadDynamicFormById/${formData.LeadId}`
             );
 
             const leadData = response.data;
             formik.setValues({
-              centerId: leadData.centerId || "",
-              studentName: leadData.studentName || "",
+              centerId: centerId || "",
+              studentName: leadData.name || "",
+              studentEmail: leadData.email || "",
               leadId: leadData.id || "",
-              studentChineseName: leadData.studentChineseName || "",
+              studentChineseName: "",
               file: null || "",
-              age: leadData.dateOfBirth
-                ? calculateAge(leadData.dateOfBirth)
-                : "0 years, 0 months",
-              medicalCondition: leadData.medicalCondition || "",
-              dateOfBirth: leadData.dateOfBirth.substring(0, 10) || "",
+              age: "",
+              medicalCondition: "",
+              dateOfBirth: leadData.dob || "",
               gender: leadData.gender || "",
-              schoolType: leadData.schoolType || "",
-              schoolName: leadData.nameOfSchool || "",
-              preAssessmentResult:
-                leadData.gradeCategory || "No Assessment Performed",
-              race: leadData.ethnicGroup || "",
-              nationality: leadData.nationality || "",
-              languageId: leadData.languageId || "",
-              referByParent: leadData.referByParentName || "",
-              referByStudent: leadData.referByStudentName || "",
-              remark: leadData.remark || "",
-              allowMagazine: leadData.allowMagazine || "",
-              allowSocialMedia: leadData.allowSocialMedia || "",
+              nationality: "",
+              languageId: "",
+              remark: leadData.remarks || "",
             });
             // console.log("Lead Data:", response.data);
           } catch (error) {
             console.error("Error fetching lead data:", error);
-            toast.error("Error fetching lead data");
+            // toast.error("Error fetching lead data");
           }
         }
       };

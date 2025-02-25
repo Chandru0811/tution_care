@@ -221,7 +221,6 @@ const AddParentGuardian = forwardRef(
           mobileNumber: detail.mobileNumber || "",
           postalCode: detail.postalCode || "",
           address: detail.address || "",
-          primaryContact: detail.primaryContact || false,
         }));
         const parentDetailIds = response.data.studentParentsDetails.map(
           (detail) => detail.id
@@ -244,7 +243,6 @@ const AddParentGuardian = forwardRef(
                 parentDateOfBirth: "",
                 email: "",
                 mobileNumber: "",
-                primaryContact: false,
                 file: null,
               },
             ],
@@ -266,52 +264,24 @@ const AddParentGuardian = forwardRef(
       if (formData.LeadId && leadDataTrue) {
         try {
           const response = await api.get(
-            `/getAllLeadInfoById/${formData.LeadId}`
+            `/getLeadDynamicFormById/${formData.LeadId}`
           );
           const leadData = response.data;
           console.log("Lead Data", leadData);
           if (!formData.parentInformation) {
-            const primaryContactMother = leadData.primaryContactMother
-              ? true
-              : false;
-            const primaryContactFather = leadData.primaryContactFather
-              ? true
-              : false;
             formik.setFieldValue("parentInformation", [
               {
-                parentName: leadData.mothersFullName || "",
-                parentDateOfBirth:
-                  leadData?.mothersDateOfBirth?.substring(0, 10) || "",
-                email: leadData.mothersEmailAddress || "",
+                parentName: leadData.parentName || "",
+                parentDateOfBirth: "",
+                email: leadData.parentEmail || "",
                 relation: "Mother" || "",
-                occupation: leadData.mothersOccupation || "",
+                occupation: leadData.occupation || "",
                 file: null || "",
-                mobileNumber: leadData.mothersMobileNumber || "",
+                mobileNumber: leadData.parentMobile || "",
                 address: leadData.address,
                 postalCode: leadData.postalCode || "",
-                primaryContact: leadData.primaryContactMother === true,
-              },
-              {
-                parentName: leadData.fathersFullName || "",
-                parentDateOfBirth:
-                  leadData?.fathersDateOfBirth?.substring(0, 10) || "",
-                email: leadData.fathersEmailAddress || "",
-                relation: "Father" || "",
-                occupation: leadData.fathersOccupation || "",
-                file: null || "",
-                mobileNumber: leadData.fathersMobileNumber || "",
-                address: leadData.address || "",
-                postalCode: leadData.postalCode || "",
-                primaryContact: leadData.primaryContactFather === true,
               },
             ]);
-
-            const selectedContactIndex = leadData.primaryContactMother
-              ? 0
-              : leadData.primaryContactFather
-              ? 1
-              : null;
-            setSelectedPrimaryContactIndex(selectedContactIndex);
             setRows(2);
           }
         } catch (error) {
