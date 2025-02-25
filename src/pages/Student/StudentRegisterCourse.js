@@ -221,25 +221,29 @@ function StudentRegisterCourse() {
       };
       console.log("Payload Data:", payload);
       try {
-        let response;
+        // let response;
 
-        if (studentCourseDetailsId !== null) {
-          response = await api.put(
-            `/updateStudentCourseDetails/${studentCourseDetailsId}`,
-            payload,
-            {
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }
-          );
-        } else {
-          response = await api.post(`/createStudentCourseDetails`, payload, {
+        // if (studentCourseDetailsId !== null) {
+        //   response = await api.put(
+        //     `/updateStudentCourseDetails/${studentCourseDetailsId}`,
+        //     payload,
+        //     {
+        //       headers: {
+        //         "Content-Type": "application/json",
+        //       },
+        //     }
+        //   );
+        // } else {
+        const response = await api.post(
+          `/createStudentCourseDetails`,
+          payload,
+          {
             headers: {
               "Content-Type": "application/json",
             },
-          });
-        }
+          }
+        );
+        // }
         if (response.status === 200 || response.status === 201) {
           toast.success(response.data.message);
           // navigate("/student");
