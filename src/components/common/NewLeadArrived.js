@@ -6,11 +6,11 @@ import api from "../../config/URL";
 import { toast } from "react-toastify";
 
 const validationSchema = Yup.object({
-  leadName: Yup.string().required("Lead name is required"),
-  primaryEmail: Yup.string()
+  name: Yup.string().required("Lead name is required"),
+  email: Yup.string()
     .email("Invalid email format")
     .required("Primary email is required"),
-  primaryMobile: Yup.string()
+  phone: Yup.string()
     .matches(/^\d{8}$/, "Mobile number must be 8 digits")
     .required("Primary mobile number is required"),
   gender: Yup.string().required("Gender is required"),
@@ -28,13 +28,13 @@ function NewLeadArrived() {
 
   const formik = useFormik({
     initialValues: {
-      leadName: "",
+      name: "",
       leadStatus: "NEW_WAITLIST" || "",
-      primaryEmail: "",
-      primaryMobile: "",
+      email: "",
+      phone: "",
       gender: "",
       dob: "",
-      referBy: "",
+      referredBy: "",
       marketingSource: "",
       remarks: "",
       termsAndCondition: false,
@@ -42,31 +42,31 @@ function NewLeadArrived() {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       console.log("Create New Lead ::", values);
-      // setLoadIndicator(true);
-      // try {
-      //   const response = await api.post("/creatNewLead", values, {
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //     },
-      //   });
-      //   if (response.status === 201) {
-      //     toast.success(response.data.message);
-      //     navigate("/lead");
-      //   } else {
-      //     toast.error(response.data.message);
-      //   }
-      // } catch (error) {
-      //   if (
-      //     error?.response?.status === 409 ||
-      //     error?.response?.status === 404
-      //   ) {
-      //     toast.warning(error?.response?.data?.message);
-      //   } else {
-      //     toast.error("Error submitting data: " + error.message);
-      //   }
-      // } finally {
-      //   setLoadIndicator(false);
-      // }
+      setLoadIndicator(true);
+      try {
+        const response = await api.post("/createLeadDynamicFormWithOutToken", values, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        if (response.status === 201) {
+          toast.success(response.data.message);
+          // navigate("/lead");
+        } else {
+          toast.error(response.data.message);
+        }
+      } catch (error) {
+        if (
+          error?.response?.status === 409 ||
+          error?.response?.status === 404
+        ) {
+          toast.warning(error?.response?.data?.message);
+        } else {
+          toast.error("Error submitting data: " + error.message);
+        }
+      } finally {
+        setLoadIndicator(false);
+      }
     },
   });
 
@@ -100,18 +100,18 @@ function NewLeadArrived() {
                   Name<span className="text-danger">*</span>
                 </label>
                 <input
-                  name="leadName"
+                  name="name"
                   type="text"
                   className={`form-control ${
-                    formik.touched.leadName && formik.errors.leadName
+                    formik.touched.name && formik.errors.name
                       ? "is-invalid"
                       : ""
                   }`}
-                  {...formik.getFieldProps("leadName")}
+                  {...formik.getFieldProps("name")}
                 />
-                {formik.touched.leadName && formik.errors.leadName && (
+                {formik.touched.name && formik.errors.name && (
                   <div className="invalid-feedback">
-                    {formik.errors.leadName}
+                    {formik.errors.name}
                   </div>
                 )}
               </div>
@@ -121,18 +121,18 @@ function NewLeadArrived() {
                   Email<span className="text-danger">*</span>
                 </label>
                 <input
-                  name="primaryEmail"
+                  name="email"
                   type="email"
                   className={`form-control ${
-                    formik.touched.primaryEmail && formik.errors.primaryEmail
+                    formik.touched.email && formik.errors.email
                       ? "is-invalid"
                       : ""
                   }`}
-                  {...formik.getFieldProps("primaryEmail")}
+                  {...formik.getFieldProps("email")}
                 />
-                {formik.touched.primaryEmail && formik.errors.primaryEmail && (
+                {formik.touched.email && formik.errors.email && (
                   <div className="invalid-feedback">
-                    {formik.errors.primaryEmail}
+                    {formik.errors.email}
                   </div>
                 )}
               </div>
@@ -159,19 +159,19 @@ function NewLeadArrived() {
                   Mobile<span className="text-danger">*</span>
                 </label>
                 <input
-                  name="primaryMobile"
+                  name="phone"
                   type="text"
                   className={`form-control ${
-                    formik.touched.primaryMobile && formik.errors.primaryMobile
+                    formik.touched.phone && formik.errors.phone
                       ? "is-invalid"
                       : ""
                   }`}
-                  {...formik.getFieldProps("primaryMobile")}
+                  {...formik.getFieldProps("phone")}
                 />
-                {formik.touched.primaryMobile &&
-                  formik.errors.primaryMobile && (
+                {formik.touched.phone &&
+                  formik.errors.phone && (
                     <div className="invalid-feedback">
-                      {formik.errors.primaryMobile}
+                      {formik.errors.phone}
                     </div>
                   )}
               </div>
@@ -218,18 +218,18 @@ function NewLeadArrived() {
               <div className="col-md-6 mb-3">
                 <label className="form-label">Refer By</label>
                 <input
-                  name="referBy"
+                  name="referredBy"
                   type="text"
                   className={`form-control ${
-                    formik.touched.referBy && formik.errors.referBy
+                    formik.touched.referredBy && formik.errors.referredBy
                       ? "is-invalid"
                       : ""
                   }`}
-                  {...formik.getFieldProps("referBy")}
+                  {...formik.getFieldProps("referredBy")}
                 />
-                {formik.touched.referBy && formik.errors.referBy && (
+                {formik.touched.referredBy && formik.errors.referredBy && (
                   <div className="invalid-feedback">
-                    {formik.errors.referBy}
+                    {formik.errors.referredBy}
                   </div>
                 )}
               </div>
