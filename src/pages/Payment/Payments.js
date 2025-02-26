@@ -20,9 +20,9 @@ const Payments = () => {
   const centerId = localStorage.getItem("tmscenterId");
   const [filters, setFilters] = useState({
     centerId: centerId,
-    courseId: "",
+    paymentDate: "",
     studentId: "",
-    packageId: "",
+    paidAmount: "",
   });
   const [packageData, setPackageData] = useState(null);
   const [studentData, setStudentData] = useState(null);
@@ -158,30 +158,20 @@ const Payments = () => {
   const getInvoiceData = async () => {
     try {
       setLoading(true);
-      // Dynamically construct query parameters based on filters
-      // const queryParams = new URLSearchParams();
-      // if (!isClearFilterClicked) {
-      //   if (filters.centerId) {
-      //     queryParams.append("centerId", filters.centerId);
-      //   } else if (centerIDLocal && centerIDLocal !== "undefined") {
-      //     queryParams.append("centerId", centerIDLocal);
-      //   }
-      // }
-
-      // // Loop through other filters and add key-value pairs if they have a value
-      // for (let key in filters) {
-      //   if (filters[key] && key !== "centerId") {
-      //     queryParams.append(key, filters[key]);
-      //   }
-      // }
+      const queryParams = new URLSearchParams();
+      for (let key in filters) {
+        if (filters[key]) {
+          queryParams.append(key, filters[key]);
+        }
+      }
 
       const response = await api.get(
-        // `/getInvoiceWithCustomInfo?${queryParams.toString()}`
-        `/paymentByCenterId?centerId=${centerId}`
+        `/paymentByCenterId?${queryParams.toString()}`
+        // `/paymentByCenterId?centerId=${centerId}`
       );
       setData(response.data);
     } catch (error) {
-      toast.error("Error Fetching Data : ", error);
+      toast.error(error);
     } finally {
       setLoading(false);
       setIsClearFilterClicked(false);
@@ -196,9 +186,9 @@ const Payments = () => {
   const clearFilters = () => {
     setFilters({
       centerId: centerId,
-      courseId: "",
+      paymentDate: "",
       studentId: "",
-      packageId: "",
+      paidAmount: "",
     });
     getInvoiceData();
     setIsClearFilterClicked(true);
@@ -268,23 +258,6 @@ const Payments = () => {
               <select
                 className="form-select form-select-sm center_list"
                 style={{ width: "100%" }}
-                name="courseId"
-                onChange={handleFilterChange}
-                value={filters.courseId}
-              >
-                <option selected>Select a Course</option>
-                {courseData &&
-                  courseData.map((courseId) => (
-                    <option key={courseId.id} value={courseId.id}>
-                      {courseId.courseNames}
-                    </option>
-                  ))}
-              </select>
-            </div>
-            <div className="form-group mb-0 ms-2 mb-1">
-              <select
-                className="form-select form-select-sm center_list"
-                style={{ width: "100%" }}
                 name="studentId"
                 onChange={handleFilterChange}
                 value={filters.studentId}
@@ -299,21 +272,28 @@ const Payments = () => {
               </select>
             </div>
             <div className="form-group mb-0 ms-2 mb-1">
-              <select
-                className="form-select form-select-sm center_list"
+              <input
+                className="form-control form-control-sm center_list"
+                type="date"
                 style={{ width: "100%" }}
-                name="packageId"
+                name="paymentDate"
                 onChange={handleFilterChange}
-                value={filters.packageId}
-              >
-                <option selected>Select a Package</option>
-                {packageData &&
-                  packageData.map((packages) => (
-                    <option key={packages.id} value={packages.id}>
-                      {packages.packageNames}
-                    </option>
-                  ))}
-              </select>
+                value={filters.paymentDate}
+              />
+            </div>
+            <div className="form-group mb-0 ms-2 mb-1">
+              <input
+                className="form-control form-control-sm center_list"
+                type="text"
+                style={{ width: "100%" }}
+                name="paidAmount"
+                onChange={handleFilterChange}
+                value={filters.paidAmount}
+                onInput={(e) => {
+                  e.target.value = e.target.value.replace(/[^0-9]/g, "");
+                }}
+                placeholder="Paid Amount"
+              />
             </div>
             <div className="form-group mb-2 ms-2">
               <button
@@ -356,7 +336,7 @@ const Payments = () => {
                 enableDensityToggle={false}
                 enableFullScreenToggle={false}
                 initialState={{
-                 pagination: { pageSize: 50, pageIndex: 0 },
+                  pagination: { pageSize: 50, pageIndex: 0 },
                   columnVisibility: {
                     createdBy: false,
                     createdAt: false,

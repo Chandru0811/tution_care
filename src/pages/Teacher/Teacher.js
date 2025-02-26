@@ -84,18 +84,18 @@ const Teacher = () => {
       {
         accessorKey: "userUniqueId",
         enableHiding: false,
-        header: "Teacher Id",
+        header: `${appConfigInfo.employee} Id`,
       },
       {
         accessorKey: "teacherName",
-        header: "Teacher Name",
+        header: `${appConfigInfo.employee} Name`,
         enableHiding: false,
         size: 40,
       },
       { accessorKey: "countryName", enableHiding: false, header: "Country" },
       {
         accessorKey: "teacherType",
-        header: "Teacher Type",
+        header: `${appConfigInfo.employee} Type`,
         enableHiding: false,
         size: 50,
       },
@@ -250,7 +250,7 @@ const Teacher = () => {
                 name="teacherName"
                 className="form-control form-control-sm center_list"
                 style={{ width: "160px" }}
-                placeholder="Teacher Name"
+                placeholder={`${appConfigInfo.employee} Name`}
                 value={filters.teacherName}
                 onChange={handleFilterChange}
               />
@@ -276,7 +276,7 @@ const Teacher = () => {
                 onChange={handleFilterChange}
               >
                 <option value="" disabled>
-                  Select Teacher Type
+                {`Select ${appConfigInfo.employee} Type`}
                 </option>
                 <option value="Permanent">Permanent</option>
                 <option value="Temporary">Temporary</option>

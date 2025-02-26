@@ -539,12 +539,15 @@ function InvoiceView() {
             </div>
             <div className="col-lg-4 col-md-8 col-12">
               <div className="d-flex justify-content-center flex-column align-items-center">
-                <img
-                  src={centerValues.qrCode || qrCodeUrl}
-                  alt="Teacher"
-                  width="100"
-                  height="100"
-                />
+                {centerValues.qrCode && (
+                  <img
+                    src={centerValues.qrCode || qrCodeUrl}
+                    alt="Teacher"
+                    width="100"
+                    height="100"
+                  />
+                )}
+
                 <p className="text-center">
                   {centerValues.centerName} Pvt.Ltd <br />
                   UEN : {centerValues.uenNumber || "--"}

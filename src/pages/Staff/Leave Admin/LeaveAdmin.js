@@ -68,8 +68,6 @@ const LeaveAdmin = () => {
             <span className="badge badges-red fw-light">Rejected</span>
           ) : null,
       },
-
-      { accessorKey: "centerName", enableHiding: false, header: "Centre Name" },
       {
         accessorKey: "employeeName",
         enableHiding: false,
@@ -249,11 +247,11 @@ const LeaveAdmin = () => {
                     updatedAt: false,
                   },
                 }}
-                muiTableBodyRowProps={({ row }) => ({
-                  onClick: () =>
-                    navigate(`/leaveadmin/view/${row.original.id}`),
-                  style: { cursor: "pointer" },
-                })}
+                // muiTableBodyRowProps={({ row }) => ({
+                //   onClick: () =>
+                //     navigate(`/leaveadmin/view/${row.original.id}`),
+                //   style: { cursor: "pointer" },
+                // })}
               />
             </ThemeProvider>
 

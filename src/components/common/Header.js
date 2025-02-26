@@ -55,7 +55,7 @@ function Header({ onLogout, data }) {
       // const url = `https://hrisasia.com/tuitions/newLead/${token}`;
       const url = `http://localhost:3000/tuitions/newLead/${token}`;
       await navigator.clipboard.writeText(url);
-      toast.success("URL copied to clipboard! 🚀 Opening form...");
+      toast.success("URL copied to clipboard! 🚀");
       // window.open(url, "_blank");
     } catch (err) {
       toast.error("Failed to copy URL.");
