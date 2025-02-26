@@ -20,7 +20,7 @@ function Header({ onLogout, data }) {
   const teacherName = localStorage.getItem("tmsteacherName");
   const role = localStorage.getItem("tmsrole")?.replace(/_/g, " ");
   const [tokenData, setTokenData] = useState([]);
-  console.log("Token Data:",tokenData);
+  // console.log("Token Data:",tokenData);
   
   const userInfo = localStorage.getItem("tmsuserInfo");
 
