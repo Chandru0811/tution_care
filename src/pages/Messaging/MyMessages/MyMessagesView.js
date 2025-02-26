@@ -16,12 +16,8 @@ function MyMessagesView() {
   const [messages, setMessages] = useState([]);
   const [data, setData] = useState(null);
   const location = useLocation();
-  const {
-    studentId,
-    studentName,
-    studentRole,
-    studentUniqueId,
-  } = location.state || {};
+  const { studentId, studentName, studentRole, studentUniqueId } =
+    location.state || {};
   const [fileCount, setFileCount] = useState(0);
   const userId = localStorage.getItem("tmsuserId");
   const LoginUserName = localStorage.getItem("tmsteacherName");
@@ -77,41 +73,48 @@ function MyMessagesView() {
         }
       }
     },
-  }); 
-  const processMessages = (messages, currentUserId, currentRole) => {
+  });
+
+  const processMessages = (messages, currentUserId) => {
     return messages.map((msg) => {
-      if (msg.studentId === msg.receiverId) {
-        return { ...msg, messageType: "Self-Message" };
-      } else if (msg.studentId === currentUserId && msg.senderRole === currentRole) {
-        return { ...msg, messageType: "Sent" };
-      } else if (msg.receiverId === currentUserId && msg.receiverRole === currentRole) {
-        return { ...msg, messageType: "Received" };
-      } else {
-        return { ...msg, messageType: "Other" };
-      }
+      const isSender = msg.senderId === currentUserId; // Check only senderId
+      return {
+        ...msg,
+        messageType: isSender ? "Sent" : "Received",
+        isSender: isSender,
+      };
     });
   };
+  
 
   const getData = async () => {
     try {
-      const response = await api.get(`getSingleChatConversation?transcriptOne=${userId}&transcriptTwo=${studentId}`);
-      setData(response.data);
-      const messages = processMessages(response.data, userId, LoginUserRole); // Process Messages
+      const response = await api.get(
+        `getSingleChatConversation?transcriptOne=${userId}&transcriptTwo=${studentId}`
+      );
+      const data = response.data;
+      setData(data);
+      console.log("Data MSG:", data);
+
+      const messages = processMessages(data, userId, LoginUserRole);
       const combinedMessages = messages.map((msg) => ({
         content: msg.message,
-        isSender: msg.messageType === "Sent",
-        messageType: msg.messageType, // Add message type
+        isSender: msg.isSender,
+        messageType: msg.messageType,
         attachments: msg.attachments,
-        time: new Date(msg.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+        time: new Date(msg.createdAt).toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
       }));
+
       setMessages(combinedMessages);
-      console.log("combinedMessages::",combinedMessages);
-      
+      console.log("combinedMessages::", combinedMessages);
     } catch (error) {
       toast.error(`Error Fetching Data: ${error.message}`);
     }
   };
-  
+
   const handleFileChange = (event) => {
     const files = Array.from(event.target.files);
     setFileCount(files.length);
@@ -220,23 +223,33 @@ function MyMessagesView() {
                   overflowX: "hidden",
                 }}
               >
-             
-                 {messages.map((msg, index) => (
-                  <div key={index} className={`message ${msg.isSender ? "right" : "left"}`}>
-                    <div className={`message-bubble my-2 w-75 ${msg.isSender ? "align-self-end" : "align-self-start"}`}>
+                {messages.map((msg, index) => (
+                  <div
+                    key={index}
+                    className={`message ${msg.isSender ? "right" : "left"}`}
+                  >
+                    <div
+                      className={`message-bubble my-2 w-75 ${
+                        msg.isSender ? "align-self-end" : "align-self-start"
+                      }`}
+                    >
                       {msg.content}
                     </div>
                     {msg.attachments?.length > 0 &&
                       msg.attachments.map((attachment, attIndex) => (
                         <div
                           key={attIndex}
-                          className={`message-bubble w-75 mt-2 ${msg.isSender ? "align-self-end" : "align-self-start"}`}
+                          className={`message-bubble w-75 mt-2 ${
+                            msg.isSender ? "align-self-end" : "align-self-start"
+                          }`}
                         >
                           {renderAttachment(attachment, attIndex)}
                         </div>
                       ))}
                     <div
-                      className={`message-bubble my-2 w-75 ${msg.isSender ? "align-self-end" : "align-self-start"}`}
+                      className={`message-bubble my-2 w-75 ${
+                        msg.isSender ? "align-self-end" : "align-self-start"
+                      }`}
                       style={{ fontSize: "11px", background: "transparent" }}
                     >
                       {msg.time}
