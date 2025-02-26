@@ -74,20 +74,6 @@ function MyMessagesView() {
     },
   });  
 
-  // const processMessages = (messages, currentUserId) => {
-  //   return messages.map((msg) => {
-  //     const isSender = String(msg.senderId).trim() === String(currentUserId).trim();
-  //     const isReceiver = String(msg.senderId).trim() === String(studentId).trim();
-  
-  //     console.log("isSender Message::", msg.senderId, currentUserId, isSender, isReceiver);
-  //     return {
-  //       ...msg,
-  //       messageType: isSender ? "sent" : "received",
-  //       isSender: isSender,
-  //       isReceiver: isReceiver,
-  //     };
-  //   });
-  // };
   const processMessages = (messages, currentUserId) => {
     return messages.map((msg) => {
       const isSender = String(msg.senderId).trim() === String(currentUserId).trim();
@@ -131,36 +117,6 @@ function MyMessagesView() {
       toast.error(`Error Fetching Data: ${error.message}`);
     }
   };
-  
-  
-  // const getData = async () => {
-  //   try {
-  //     const response = await api.get(
-  //       `getSingleChatConversation?transcriptOne=${userId}&transcriptTwo=${studentId}`
-  //     );
-  //     const data = response.data;
-  //     setData(data);
-  //     console.log("Data MSG:", data);
-  
-  //     const messages = processMessages(data, userId);
-  //     const combinedMessages = messages.map((msg) => ({
-  //       content: msg.message,
-  //       isSender: msg.isSender,
-  //       messageType: msg.messageType,
-  //       attachments: msg.attachments,
-  //       time: new Date(msg.createdAt).toLocaleTimeString([], {
-  //         hour: "2-digit",
-  //         minute: "2-digit",
-  //       }),
-  //     }));
-  
-  //     setMessages(combinedMessages);
-  //     console.log("combinedMessages::", combinedMessages);
-  //   } catch (error) {
-  //     toast.error(`Error Fetching Data: ${error.message}`);
-  //   }
-  // };
-  
 
   const handleFileChange = (event) => {
     const files = Array.from(event.target.files);

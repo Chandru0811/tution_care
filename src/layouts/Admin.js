@@ -245,7 +245,7 @@ function Admin({ handleLogout }) {
 
   return (
     <div>
-      <BrowserRouter basename="/tuitions">
+      <BrowserRouter basename="/ecsschools">
         <ToastContainer position="top-center" />
         <Sidebar />
         <section className="home-section">

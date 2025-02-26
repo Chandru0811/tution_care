@@ -8,7 +8,7 @@ import NewLeadArrived from "../components/common/NewLeadArrived.js";
 
 function Auth({ handleLogin }) {
   return (
-    <BrowserRouter basename="/tuitions">
+    <BrowserRouter basename="/ecsschools">
       <ToastContainer position="top-center" />
       {/* <TopBar /> */}
       {/* <Header /> */}
