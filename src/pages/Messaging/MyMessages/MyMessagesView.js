@@ -17,17 +17,15 @@ function MyMessagesView() {
   const [data, setData] = useState(null);
   const location = useLocation();
   const {
-    senderId,
-    receiverId,
-    senderName,
-    senderRole,
-    receiverName,
-    message,
+    studentId,
+    studentName,
+    studentRole,
+    studentUniqueId,
   } = location.state || {};
   const [fileCount, setFileCount] = useState(0);
-  const userId = localStorage.getItem("userId");
-  const LoginUserName = localStorage.getItem("LoginUserName");
-  const LoginUserRole = localStorage.getItem("userName");
+  const userId = localStorage.getItem("tmsuserId");
+  const LoginUserName = localStorage.getItem("tmsteacherName");
+  const LoginUserRole = localStorage.getItem("tmsrole");
   const { id } = useParams();
 
   const formik = useFormik({
@@ -42,16 +40,16 @@ function MyMessagesView() {
         formData.append("senderName", LoginUserName);
         formData.append("senderId", userId);
         formData.append("senderRole", LoginUserRole);
-        formData.append("messageTo", "PARENT");
+        formData.append("messageTo", "STUDENT");
 
-        if (senderId === userId) {
+        if (studentId === userId) {
           formData.append("recipientId", data.receiverId);
           formData.append("recipientName", data.receiverName);
           formData.append("recipientRole", data.receiverRole);
         } else {
-          formData.append("recipientId", senderId);
-          formData.append("recipientName", senderName);
-          formData.append("recipientRole", senderRole);
+          formData.append("recipientId", studentId);
+          formData.append("recipientName", studentName);
+          formData.append("recipientRole", studentRole);
         }
         formData.append("message", values.message);
 
@@ -82,9 +80,9 @@ function MyMessagesView() {
   }); 
   const processMessages = (messages, currentUserId, currentRole) => {
     return messages.map((msg) => {
-      if (msg.senderId === msg.receiverId) {
+      if (msg.studentId === msg.receiverId) {
         return { ...msg, messageType: "Self-Message" };
-      } else if (msg.senderId === currentUserId && msg.senderRole === currentRole) {
+      } else if (msg.studentId === currentUserId && msg.senderRole === currentRole) {
         return { ...msg, messageType: "Sent" };
       } else if (msg.receiverId === currentUserId && msg.receiverRole === currentRole) {
         return { ...msg, messageType: "Received" };
@@ -96,7 +94,7 @@ function MyMessagesView() {
 
   const getData = async () => {
     try {
-      const response = await api.get(`getSingleChatConversation?transcriptOne=${senderId}&transcriptTwo=${receiverId}`);
+      const response = await api.get(`getSingleChatConversation?transcriptOne=${userId}&transcriptTwo=${studentId}`);
       setData(response.data);
       const messages = processMessages(response.data, userId, LoginUserRole); // Process Messages
       const combinedMessages = messages.map((msg) => ({
@@ -107,28 +105,13 @@ function MyMessagesView() {
         time: new Date(msg.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
       }));
       setMessages(combinedMessages);
+      console.log("combinedMessages::",combinedMessages);
+      
     } catch (error) {
       toast.error(`Error Fetching Data: ${error.message}`);
     }
   };
   
-  const handleDeleteMessage = async (messageId) => {
-    try {
-      const response = await api.delete(`/deleteMessage/${id}`);
-      if (response.status === 200) {
-        toast.success("Message deleted successfully!");
-        getData();
-        setMessages((prevMessages) =>
-          prevMessages.filter((msg) => msg.messageId !== messageId)
-        );
-      } else {
-        toast.error("Failed to delete the message.");
-      }
-    } catch (error) {
-      toast.error(`Error: ${error.message}`);
-    }
-  };
-
   const handleFileChange = (event) => {
     const files = Array.from(event.target.files);
     setFileCount(files.length);
@@ -225,13 +208,6 @@ function MyMessagesView() {
     <>
       <section className="chat-section">
         <div className="container-fluid">
-          {/* <div className="text-end bg-light p-1">
-            <Link to={"/messaging"}>
-              <button type="button" className="btn btn-border btn-sm">
-                Back
-              </button>
-            </Link>
-          </div> */}
           <div className="row message-list">
             <div className="col-12">
               {/* Message List */}
@@ -265,11 +241,6 @@ function MyMessagesView() {
                     >
                       {msg.time}
                     </div>
-                    {msg.isSender && (
-                      <div className="text-end message-bubble">
-                        <MdDelete style={{ cursor: "pointer" }} onClick={() => handleDeleteMessage(msg.messageId)} />
-                      </div>
-                    )}
                   </div>
                 ))}
               </div>
