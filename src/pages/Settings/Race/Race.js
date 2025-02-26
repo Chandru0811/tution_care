@@ -15,6 +15,7 @@ import { MaterialReactTable } from "material-react-table";
 import GlobalDelete from "../../../components/common/GlobalDelete";
 
 const Race = () => {
+  const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedId, setSelectedId] = useState(null);
@@ -172,6 +173,7 @@ const Race = () => {
             </span>
           </div>
         </div>
+        {storedScreens?.raceSettingCreate && (
         <div className="d-flex justify-content-end align-items-center">
           <span>
             <RaceAdd onSuccess={getData} />
@@ -184,6 +186,7 @@ const Race = () => {
 
       </button> </p> */}
         </div>
+        )}
         {loading ? (
           <div className="loader-container">
             <div className="loading">
@@ -227,14 +230,17 @@ const Race = () => {
               onClose={handleMenuClose}
             >
               <MenuItem>
+              {storedScreens?.raceSettingUpdate && (
                 <RaceEdit onSuccess={getData} id={selectedId} handleMenuClose={handleMenuClose}/>
-              </MenuItem>
+                )}  </MenuItem>
               <MenuItem>
+              {storedScreens?.raceSettingDelete && (
                 <GlobalDelete
                   path={`/deleteRaceSetting/${selectedId}`}
                   onDeleteSuccess={getData}
                   onOpen={handleMenuClose}
                 />
+              )}
               </MenuItem>
             </Menu>
           </>

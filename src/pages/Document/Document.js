@@ -19,6 +19,7 @@ import GlobalDelete from "../../components/common/GlobalDelete";
 
 const Document = () => {
   const centerId = localStorage.getItem("tmscenterId");
+  const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   const [filters, setFilters] = useState({
     centerId: centerId,
     courseId: "",
@@ -397,7 +398,7 @@ const Document = () => {
                 </button>
               </div>
             </div>
-            {/* {storedScreens?.centerListingCreate && ( */}
+            {storedScreens?.documentListingDelete && (
             <Link to="/document/add">
               <button
                 type="button"
@@ -407,7 +408,7 @@ const Document = () => {
                 &nbsp; Add &nbsp;&nbsp; <i className="bx bx-plus"></i>
               </button>
             </Link>
-            {/* )} */}
+          )} 
           </div>
         </div>
         {loading ? (
@@ -470,11 +471,13 @@ const Document = () => {
                 />
               </MenuItem>
               <MenuItem>
+              {storedScreens?.documentListingCreate && (
                 <GlobalDelete
                   path={`/deleteDocumentFolder/${selectedId}`}
                   onDeleteSuccess={getDocumentData}
                   onOpen={handleMenuClose}
                 />
+              )}
               </MenuItem>
             </Menu>
           </>

@@ -14,6 +14,7 @@ import api from "../../../config/URL";
 import GlobalDelete from "../../../components/common/GlobalDelete";
 
 const LeaveAdmin = () => {
+  const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   const navigate = useNavigate();
   const [data, setData] = useState([]);
   console.log("Leave Data:", data);
@@ -268,11 +269,13 @@ const LeaveAdmin = () => {
                 Edit
               </MenuItem>
               <MenuItem>
+              {storedScreens?.leaveRequestDelete && (
                 <GlobalDelete
                   path={`/deleteUserLeaveRequest/${selectedId}`}
                   onDeleteSuccess={fetchLeaveType}
                   onOpen={handleMenuClose}
                 />
+              )}
               </MenuItem>
             </Menu>
           </div>

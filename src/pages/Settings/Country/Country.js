@@ -15,6 +15,7 @@ import CountryAdd from "./CountryAdd";
 import CountryEdit from "./CountryEdit";
 
 const Country = () => {
+  const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedId, setSelectedId] = useState(null);
@@ -184,11 +185,13 @@ const Country = () => {
             </span>
           </div>
         </div>
+        {storedScreens?.countrySettingCreate && (
         <div className="d-flex justify-content-end align-items-center">
           <span>
             <CountryAdd onSuccess={getData} />
           </span>
         </div>
+        )}
         {loading ? (
           <div className="loader-container">
             <div className="loading">
@@ -235,11 +238,13 @@ const Country = () => {
               <CountryEdit onSuccess={getData} id={selectedId} handleMenuClose={handleMenuClose}/>
             </MenuItem>
             <MenuItem>
+            {storedScreens?.countrySettingDelete && (
               <GlobalDelete
                 path={`/deleteCountrySetting/${selectedId}`}
                 onDeleteSuccess={getData}
                 onOpen={handleMenuClose}
               />
+            )}
             </MenuItem>
           </Menu>
         </>

@@ -18,6 +18,7 @@ import fetchAllPackageListByCenter from "../List/PackageListByCenter";
 
 const Payments = () => {
   const centerId = localStorage.getItem("tmscenterId");
+  const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   const [filters, setFilters] = useState({
     centerId: centerId,
     paymentDate: "",
@@ -305,6 +306,7 @@ const Payments = () => {
               </button>
             </div>
           </div>
+          {storedScreens?.paymentCreate && (
           <Link to="/payments/add">
             <button
               type="button"
@@ -314,6 +316,7 @@ const Payments = () => {
               &nbsp; Add &nbsp;&nbsp; <i className="bx bx-plus"></i>
             </button>
           </Link>
+          )}
         </div>
         {loading ? (
           <div className="loader-container">
@@ -364,11 +367,13 @@ const Payments = () => {
                 Edit
               </MenuItem>
               <MenuItem>
+              {storedScreens?.paymentDelete && (
                 <GlobalDelete
                   path={`/deletePayment/${selectedId}`}
                   onDeleteSuccess={getInvoiceData}
                   onOpen={handleMenuClose}
                 />
+              )}
               </MenuItem>
             </Menu>
           </>

@@ -453,11 +453,13 @@ const Assignment = () => {
                 Edit
               </MenuItem>
               <MenuItem>
+              {storedScreens?.questionDelete && (
                 <GlobalDelete
                   path={`/deleteAssignmentQuestionFile/${selectedId}`}
                   onDeleteSuccess={getAssignmentData}
                   onOpen={handleMenuClose}
                 />
+              )}
               </MenuItem>
             </Menu>
           </>

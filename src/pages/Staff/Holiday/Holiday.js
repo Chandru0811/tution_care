@@ -267,11 +267,13 @@ const Holiday = () => {
                 Edit
               </MenuItem>
               <MenuItem>
+              {storedScreens?.holidayDelete && (
                 <GlobalDelete
                   path={`/deleteUserHoliday/${selectedId}`}
                   onDeleteSuccess={getData}
                   onOpen={handleMenuClose}
                 />
+              )}
               </MenuItem>
             </Menu>
           </div>

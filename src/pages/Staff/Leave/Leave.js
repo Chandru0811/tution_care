@@ -281,11 +281,13 @@ const Leave = () => {
                 Edit
               </MenuItem>
               <MenuItem>
+              {storedScreens?.leaveRequestDelete && (
                 <GlobalDelete
                   path={`/deleteUserLeaveRequest/${selectedId}`}
                   onDeleteSuccess={getData}
                   onOpen={handleMenuClose}
                 />
+              )}
               </MenuItem>
             </Menu>
           </>
