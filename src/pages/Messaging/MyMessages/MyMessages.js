@@ -1,11 +1,8 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { FaEye } from "react-icons/fa";
 import api from "../../../config/URL";
-import { MoreVert as MoreVertIcon } from "@mui/icons-material";
 import {
   createTheme,
-  IconButton,
   Menu,
   MenuItem,
   ThemeProvider,
@@ -48,51 +45,6 @@ const MyMessages = () => {
     getData();
   }, []);
 
-  // const columns = useMemo(
-  //   () => [
-  //     {
-  //       accessorFn: (row, index) => index + 1,
-  //       header: "S.NO",
-  //       size: 20,
-  //       cell: ({ cell }) => (
-  //         <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
-  //       ),
-  //     },
-  //     {
-  //       accessorKey: "studentProfile",
-  //       header: "Profile",
-  //       size: 20,
-  //     },
-  //     {
-  //       accessorKey: "studentUniqueId",
-  //       header: "Student ID",
-  //       size: 20,
-  //     },
-  //     {
-  //       accessorKey: "studentName",
-  //       header: "Student Name",
-  //       size: 20,
-  //     },
-  //     {
-  //       accessorKey: "message",
-  //       enableHiding: false,
-  //       header: "Message",
-  //       size: 40,
-  //     },
-  //     {
-  //       accessorKey: "createdAt",
-  //       header: "Created At",
-  //       Cell: ({ cell }) => cell.getValue()?.substring(0, 10),
-  //     },
-  //     {
-  //       accessorKey: "updatedAt",
-  //       header: "Updated At",
-  //       Cell: ({ cell }) => cell.getValue()?.substring(0, 10) || "",
-  //     },
-  //   ],
-  //   []
-  // );
-
   const columns = useMemo(
     () => [
       {
@@ -132,12 +84,6 @@ const MyMessages = () => {
         size: 150,
         Cell: ({ cell }) => <span>{cell.getValue()}</span>,
       },
-      // {
-      //   accessorKey: "message",
-      //   enableHiding: false,
-      //   header: "Message",
-      //   size: 200,
-      // },
       {
         accessorKey: "createdAt",
         header: "Created At",

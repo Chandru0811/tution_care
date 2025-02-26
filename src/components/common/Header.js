@@ -52,8 +52,8 @@ function Header({ onLogout, data }) {
         toast.error("Token not available.");
         return;
       }
-      // const url = `https://hrisasia.com/tuitions/newLead/${token}`;
-      const url = `http://localhost:3000/tuitions/newLead/${token}`;
+      const url = `https://hrisasia.com/tuitions/newLead/${token}`;
+      // const url = `http://localhost:3000/tuitions/newLead/${token}`;
       await navigator.clipboard.writeText(url);
       toast.success("URL copied to clipboard! 🚀");
       // window.open(url, "_blank");
