@@ -338,11 +338,13 @@ const StaffingAttendance = () => {
                 Edit
               </MenuItem>
               <MenuItem>
+              {storedScreens?.staffAttendanceDelete && (
                 <GlobalDelete
                   path={`/deleteUserAttendance/${selectedId}`}
                   onDeleteSuccess={getData}
                   onOpen={handleMenuClose}
                 />
+              )}
               </MenuItem>
             </Menu>
           </div>

@@ -15,6 +15,7 @@ import { MaterialReactTable } from "material-react-table";
 import GlobalDelete from "../../../components/common/GlobalDelete";
 
 const Salary = () => {
+  const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
     const [selectedId, setSelectedId] = useState(null);
@@ -173,6 +174,7 @@ const Salary = () => {
             </span>
           </div>
         </div>
+        {storedScreens?.salarySettingCreate && (
         <div className="d-flex justify-content-end align-items-center">
           <span>
             <SalaryTypeAdd onSuccess={getData} />
@@ -185,6 +187,7 @@ const Salary = () => {
 
         </button> </p> */}
         </div>
+        )}
         {loading ? (
           <div className="loader-container">
             <div className="loading">
@@ -228,14 +231,17 @@ const Salary = () => {
             onClose={handleMenuClose}
           >
             <MenuItem>
+            {storedScreens?.salarySettingUpdate && (
               <SalaryTypeEdit onSuccess={getData} id={selectedId} handleMenuClose={handleMenuClose}/>
-            </MenuItem>
+            )}</MenuItem>
             <MenuItem>
+            {storedScreens?.salarySettingDelete && (
               <GlobalDelete
                 path={`/deleteSalarySetting/${selectedId}`}
                 onDeleteSuccess={getData}
                 onOpen={handleMenuClose}
               />
+            )}
             </MenuItem>
           </Menu>
         </>

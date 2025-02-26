@@ -327,7 +327,7 @@ const Course = () => {
               </button>
             </div>
           </div>
-          {storedScreens?.centerListingCreate && (
+          {storedScreens?.courseCreate && (
             <Link to="/course/add">
               <button
                 type="button"
@@ -411,11 +411,13 @@ const Course = () => {
                 Edit
               </MenuItem>
               <MenuItem>
+              {storedScreens?.courseDelete && (
                 <GlobalDelete
                   path={`/deleteCourse/${selectedId}`}
                   onOpen={handleMenuClose}
                   onDeleteSuccess={fetchData}
                 />
+              )}
               </MenuItem>
             </Menu>
           </>

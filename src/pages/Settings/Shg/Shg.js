@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo,  useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import api from "../../../config/URL";
 import ShgAdd from "./ShgAdd";
 import ShgEdit from "./ShgEdit";
@@ -15,6 +15,7 @@ import { MaterialReactTable } from "material-react-table";
 import GlobalDelete from "../../../components/common/GlobalDelete";
 
 const Shg = () => {
+  const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedId, setSelectedId] = useState(null);
@@ -179,18 +180,20 @@ const Shg = () => {
             </span>
           </div>
         </div>
-        <div className="d-flex justify-content-end align-items-center">
-          <span>
-            <ShgAdd onSuccess={getData} />
-          </span>
-          {/* } */}
-          {/* <p>        <button className="btn btn-light border-secondary mx-2" onClick={handleDataShow}>
+        {storedScreens?.shgSettingCreate && (
+          <div className="d-flex justify-content-end align-items-center">
+            <span>
+              <ShgAdd onSuccess={getData} />
+            </span>
+            {/* } */}
+            {/* <p>        <button className="btn btn-light border-secondary mx-2" onClick={handleDataShow}>
 
           {extraData?"Hide":'Show'}
           <MdViewColumn className="fs-4 text-secondary"/>
 
         </button> </p> */}
-        </div>
+          </div>
+        )}
         {loading ? (
           <div className="loader-container">
             <div className="loading">
@@ -211,8 +214,8 @@ const Shg = () => {
                 enableColumnFilters={false}
                 enableDensityToggle={false}
                 enableFullScreenToggle={false}
-                   initialState={{
-                 pagination: { pageSize: 50, pageIndex: 0 },
+                initialState={{
+                  pagination: { pageSize: 50, pageIndex: 0 },
                   columnVisibility: {
                     createdBy: false,
                     createdAt: false,
@@ -234,14 +237,22 @@ const Shg = () => {
               onClose={handleMenuClose}
             >
               <MenuItem>
-                <ShgEdit onSuccess={getData} id={selectedId} handleMenuClose={handleMenuClose}/>
+                {storedScreens?.shgSettingUpdate && (
+                  <ShgEdit
+                    onSuccess={getData}
+                    id={selectedId}
+                    handleMenuClose={handleMenuClose}
+                  />
+                )}
               </MenuItem>
               <MenuItem>
-                <GlobalDelete
-                  path={`/deleteSHGSetting/${selectedId}`}
-                  onDeleteSuccess={getData}
-                  onOpen={handleMenuClose}
-                />
+                {storedScreens?.shgSettingDelete && (
+                  <GlobalDelete
+                    path={`/deleteSHGSetting/${selectedId}`}
+                    onDeleteSuccess={getData}
+                    onOpen={handleMenuClose}
+                  />
+                )}
               </MenuItem>
             </Menu>
           </>

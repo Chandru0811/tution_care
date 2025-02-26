@@ -379,11 +379,13 @@ const Teacher = () => {
                 Edit
               </MenuItem>
               <MenuItem>
+              {storedScreens?.teacherDelete && (
                 <GlobalDelete
                   path={`/deleteUser/${selectedId}`}
                   onDeleteSuccess={fetchData}
                   onOpen={handleMenuClose}
                 />
+              )}
               </MenuItem>
             </Menu>
           </div>

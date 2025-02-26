@@ -16,6 +16,7 @@ import fetchAllTeacherListByCenter from "../List/TeacherListByCenter";
 
 const AssignmentResult = () => {
   const centerId = localStorage.getItem("tmscenterId");
+  const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   const userId = localStorage.getItem("tmsuserId");
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -349,11 +350,13 @@ const AssignmentResult = () => {
               onClose={handleMenuClose}
             >
               <MenuItem>
+              {storedScreens?.answerDelete && (
                 <GlobalDelete
                   path={`/deleteAssignmentFolder/${selectedId}`}
                   onDeleteSuccess={getAssignmentData}
                   onOpen={handleMenuClose}
                 />
+              )}
               </MenuItem>
             </Menu>
           </>

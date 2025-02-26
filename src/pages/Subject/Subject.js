@@ -342,18 +342,22 @@ const Subject = () => {
                 View
               </MenuItem> */}
               <MenuItem>
+              {storedScreens?.subjectUpdate && (
                 <SubjectEdit
                   onSuccess={fetchData}
                   id={selectedId}
                   handleMenuClose={handleMenuClose}
                 />
+              )}
               </MenuItem>
               <MenuItem>
+              {storedScreens?.subjectDelete && (
                 <GlobalDelete
                   path={`/deleteCourseSubject/${selectedId}`}
                   onDeleteSuccess={fetchData}
                   onOpen={handleMenuClose}
                 />
+              )}
               </MenuItem>
             </Menu>
           </>

@@ -259,11 +259,13 @@ const Deduction = () => {
                 />
               </MenuItem>
               <MenuItem>
+              {storedScreens?.deductionDelete && (
                 <GlobalDelete
                   path={`/deleteUserDeduction/${selectedId}`}
                   onDeleteSuccess={getData}
                   onOpen={handleMenuClose}
                 />
+              )}
               </MenuItem>
             </Menu>
           </div>

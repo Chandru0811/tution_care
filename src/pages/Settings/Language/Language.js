@@ -15,6 +15,7 @@ import LanguageAdd from "./LanguageAdd";
 import LanguageEdit from "./LanguageEdit";
 
 const Language = () => {
+  const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedId, setSelectedId] = useState(null);
@@ -172,11 +173,13 @@ const Language = () => {
             </span>
           </div>
         </div>
+        {storedScreens?.languageCreate && (
         <div className="d-flex justify-content-end align-items-center">
           <span>
             <LanguageAdd onSuccess={getData} />
           </span>
         </div>
+        )}
         {loading ? (
           <div className="loader-container">
             <div className="loading">
@@ -216,18 +219,22 @@ const Language = () => {
               onClose={handleMenuClose}
             >
               <MenuItem>
+              {storedScreens?.languageUpdate && (
                 <LanguageEdit
                   onSuccess={getData}
                   id={selectedId}
                   handleMenuClose={handleMenuClose}
                 />
+              )}
               </MenuItem>
               <MenuItem>
+              {storedScreens?.languageDelete && (
                 <GlobalDelete
                   path={`/deleteLanguage/${selectedId}`}
                   onDeleteSuccess={getData}
                   onOpen={handleMenuClose}
                 />
+              )}
               </MenuItem>
             </Menu>
           </>

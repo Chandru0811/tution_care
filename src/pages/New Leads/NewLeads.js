@@ -901,7 +901,7 @@ const NewLeads = () => {
             <div className="individual_fliters d-lg-flex ">
             
             </div>
-            {storedScreens?.centerListingCreate && (
+            {storedScreens?.leadListingCreate && (
               <Link to="/lead/lead/add">
                 <button
                   type="button"
@@ -965,7 +965,7 @@ const NewLeads = () => {
                     Edit
                   </MenuItem>
                 )}
-                {storedScreens?.centerListingDelete && (
+                {storedScreens?.leadListingDelete && (
                 <MenuItem>
                   <GlobalDelete
                     path={`/deleteLeadInfo/${selectedId}`}

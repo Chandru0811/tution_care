@@ -16,6 +16,7 @@ import GlobalDelete from "../../../components/common/GlobalDelete";
 
 const AbsentReason = () => {
   const [loading, setLoading] = useState(true);
+  const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   const [datas, setDatas] = useState([]);
   const [selectedId, setSelectedId] = useState(null);
   const [menuAnchor, setMenuAnchor] = useState(null);
