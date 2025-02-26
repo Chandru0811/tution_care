@@ -73,20 +73,22 @@ function MyMessagesView() {
         }
       }
     },
-  });
+  });  
 
   const processMessages = (messages, currentUserId) => {
     return messages.map((msg) => {
-      const isSender = msg.senderId === currentUserId; // Check only senderId
+      const isSender = String(msg.senderId).trim() === String(currentUserId).trim();
+      const isReceiver = String(msg.senderId).trim() === String(studentId).trim();
+  
+      console.log("isSender Message::", msg.senderId, currentUserId, isSender, isReceiver);
       return {
         ...msg,
-        messageType: isSender ? "Sent" : "Received",
+        messageType: isSender ? "sent" : "received",
         isSender: isSender,
       };
     });
   };
   
-
   const getData = async () => {
     try {
       const response = await api.get(
@@ -95,8 +97,8 @@ function MyMessagesView() {
       const data = response.data;
       setData(data);
       console.log("Data MSG:", data);
-
-      const messages = processMessages(data, userId, LoginUserRole);
+  
+      const messages = processMessages(data, userId);
       const combinedMessages = messages.map((msg) => ({
         content: msg.message,
         isSender: msg.isSender,
@@ -107,13 +109,14 @@ function MyMessagesView() {
           minute: "2-digit",
         }),
       }));
-
+  
       setMessages(combinedMessages);
       console.log("combinedMessages::", combinedMessages);
     } catch (error) {
       toast.error(`Error Fetching Data: ${error.message}`);
     }
   };
+  
 
   const handleFileChange = (event) => {
     const files = Array.from(event.target.files);
