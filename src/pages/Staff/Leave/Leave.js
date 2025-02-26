@@ -22,18 +22,20 @@ const Leave = () => {
   const userId = localStorage.getItem("tmsuserId");
 
   const getData = async () => {
-    try {
-      const response = await api.get(`/getUserLeaveRequestByUserId/${userId}`);
-      setDatas(response.data);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    } finally {
-      setLoading(false);
+    if(userId){
+      try {
+        const response = await api.get(`/getUserLeaveRequestByUserId/${userId}`);
+        setDatas(response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
     }
   };
   useEffect(() => {
     getData();
-  }, []);
+  }, [userId]);
 
   const columns = useMemo(
     () => [
