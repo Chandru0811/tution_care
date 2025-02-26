@@ -271,7 +271,9 @@ const ReplaceClassLesson = () => {
                 onChange={handleFilterChange}
                 value={filters.courseId}
               >
-                <option selected>Select a Course</option>
+                <option value="" disabled>
+                  Select a Course
+                </option>
                 {courseData &&
                   courseData.map((courseId) => (
                     <option key={courseId.id} value={courseId.id}>
@@ -336,7 +338,7 @@ const ReplaceClassLesson = () => {
                 enableDensityToggle={false}
                 enableFullScreenToggle={false}
                 initialState={{
-                 pagination: { pageSize: 50, pageIndex: 0 },
+                  pagination: { pageSize: 50, pageIndex: 0 },
                   columnVisibility: {
                     createdBy: false,
                     createdAt: false,

@@ -354,7 +354,7 @@ const Invoice = () => {
                 onChange={handleFilterChange}
                 value={filters.courseId}
               >
-                <option selected>
+                <option value="" disabled>
                   Select a {storedConfigure?.course || "Course"}
                 </option>
                 {courseData &&
@@ -373,7 +373,7 @@ const Invoice = () => {
                 onChange={handleFilterChange}
                 value={filters.studentId}
               >
-                <option selected>
+                <option value="" disabled>
                   Select a {storedConfigure?.student || "Student"}
                 </option>
                 {studentData &&
@@ -392,7 +392,9 @@ const Invoice = () => {
                 onChange={handleFilterChange}
                 value={filters.packageId}
               >
-                <option selected>Select a Package</option>
+                <option value="" disabled>
+                  Select a Package
+                </option>
                 {packageData &&
                   packageData.map((packages) => (
                     <option key={packages.id} value={packages.id}>
@@ -442,7 +444,7 @@ const Invoice = () => {
                 enableDensityToggle={false}
                 enableFullScreenToggle={false}
                 initialState={{
-                 pagination: { pageSize: 50, pageIndex: 0 },
+                  pagination: { pageSize: 50, pageIndex: 0 },
                   columnVisibility: {
                     gst: false,
                     address: false,

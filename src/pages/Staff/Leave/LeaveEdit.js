@@ -46,7 +46,7 @@ function LeaveEdit() {
 
   const formik = useFormik({
     initialValues: {
-      userId: userId,
+      // userId: userId,
       centerId: "",
       centerName: "",
       employeeName: "",
@@ -67,7 +67,8 @@ function LeaveEdit() {
       setLoadIndicator(true);
       try {
         const formDatas = new FormData();
-        formDatas.append("userId", userId);
+        // formDatas.append("userId", userId);
+        formDatas.append("centerId", centerId);
         formDatas.append("employeeName", datas && datas.employeeName);
         formDatas.append("leaveTypeId", data.leaveTypeId);
         formDatas.append("noOfDays", data.noOfDays);
@@ -117,7 +118,9 @@ function LeaveEdit() {
 
   const fetchLeaveType = async () => {
     try {
-      const response = await api.get(`/getLeaveSettingWithCenterId/${centerId}`);
+      const response = await api.get(
+        `/getLeaveSettingWithCenterId/${centerId}`
+      );
       setLeaveTypeData(response.data);
     } catch (error) {
       toast.error(error.message);

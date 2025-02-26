@@ -252,8 +252,8 @@ function Attendances() {
                 className="form-select "
                 onChange={(e) => setSelectedCourse(e.target.value)}
               >
-                <option value="">
-                  Select a {storedConfigure?.student || "Course"}
+                <option value="" disabled>
+                  Select a {storedConfigure?.course || "Course"}
                 </option>
                 {courseData &&
                   courseData.map((courseId) => (

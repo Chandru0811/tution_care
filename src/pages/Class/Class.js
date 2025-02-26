@@ -244,7 +244,7 @@ const Class = () => {
             <span class="me-2 text-muted">
               This database shows the list of{" "}
               <span className="bold" style={{ color: "#287f71" }}>
-              {appConfigInfo.confClass}
+                {appConfigInfo.confClass}
               </span>
             </span>
           </div>
@@ -259,7 +259,9 @@ const Class = () => {
                 onChange={handleFilterChange}
                 value={filters.courseId}
               >
-                <option selected>Select a {appConfigInfo.course}</option>
+                <option value="" disabled>
+                  Select a {appConfigInfo.course}
+                </option>
                 {courseData &&
                   courseData.map((courseId) => (
                     <option key={courseId.id} value={courseId.id}>
@@ -287,7 +289,9 @@ const Class = () => {
                 onChange={handleFilterChange}
                 value={filters.userId}
               >
-                <option selected>Select a Teacher</option>
+                <option value="" disabled>
+                  Select a Teacher
+                </option>
                 {teacherData &&
                   teacherData.map((teacher) => (
                     <option key={teacher.id} value={teacher.id}>
@@ -307,7 +311,9 @@ const Class = () => {
                   onChange={handleFilterChange}
                   value={filters.classType}
                 >
-                  <option selected>Select {appConfigInfo.confClass} Type</option>
+                  <option value="" disabled>
+                    Select {appConfigInfo.confClass} Type
+                  </option>
                   <option value="Group">Group</option>
                   <option value="Individual">Individual</option>
                 </select>
@@ -374,13 +380,12 @@ const Class = () => {
                     updatedBy: false,
                     updatedAt: false,
                   },
-                 pagination: { pageSize: 50, pageIndex: 0 },
+                  pagination: { pageSize: 50, pageIndex: 0 },
                 }}
                 muiTableBodyRowProps={({ row }) => ({
                   onClick: () => navigate(`/class/view/${row.original.id}`),
                   style: { cursor: "pointer" },
                 })}
-                
               />
             </ThemeProvider>
 

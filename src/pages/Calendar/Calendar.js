@@ -181,7 +181,7 @@ function Calendar() {
             onChange={handleFilterChange}
             value={filters.courseId}
           >
-            <option selected>
+            <option value="" disabled>
               Select a {storedConfigure?.course || "Course"}
             </option>
             {courseData &&
@@ -201,7 +201,9 @@ function Calendar() {
             value={filters.userId}
             onChange={handleFilterChange}
           >
-            <option selected>Select a Teacher</option>
+            <option value="" disabled>
+              Select a Teacher
+            </option>
             {teacherData &&
               teacherData.map((teacher) => (
                 <option key={teacher.id} value={teacher.id}>

@@ -296,7 +296,7 @@ const Assignment = () => {
                 onChange={handleCourseChange}
                 value={filters.courseId}
               >
-                <option>
+                <option value="" disabled>
                   Select the {storedConfigure?.course || "Course"}
                 </option>
                 {courseData &&
@@ -315,7 +315,7 @@ const Assignment = () => {
                 onChange={handleFilterChange}
                 value={filters.classId}
               >
-                <option>
+                <option value="" disabled>
                   Select the {storedConfigure?.confClass || "Class"}
                 </option>
                 {classData &&
@@ -345,7 +345,9 @@ const Assignment = () => {
                   onChange={handleFilterChange}
                   value={filters.userId}
                 >
-                  <option>Select the Teacher</option>
+                  <option value="" disabled>
+                    Select the Teacher
+                  </option>
                   {teacherData &&
                     teacherData.map((teacher) => (
                       <option key={teacher.id} value={teacher.id}>
@@ -366,7 +368,9 @@ const Assignment = () => {
                   onChange={handleFilterChange}
                   value={filters.day}
                 >
-                  <option>Select a Day</option>
+                  <option value="" disabled>
+                    Select a Day
+                  </option>
                   <option value="SUNDAY">Sunday</option>
                   <option value="MONDAY">Monday</option>
                   <option value="TUESDAY">Tuesday</option>
@@ -420,7 +424,7 @@ const Assignment = () => {
                 enableDensityToggle={false}
                 enableFullScreenToggle={false}
                 initialState={{
-                 pagination: { pageSize: 50, pageIndex: 0 },
+                  pagination: { pageSize: 50, pageIndex: 0 },
                   columnVisibility: {
                     createdBy: false,
                     createdAt: false,

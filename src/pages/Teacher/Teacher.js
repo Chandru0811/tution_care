@@ -275,7 +275,7 @@ const Teacher = () => {
                 value={filters.teacherType}
                 onChange={handleFilterChange}
               >
-                <option value="" selected>
+                <option value="" disabled>
                   Select Teacher Type
                 </option>
                 <option value="Permanent">Permanent</option>
@@ -292,7 +292,7 @@ const Teacher = () => {
                 value={filters.status}
                 onChange={handleFilterChange}
               >
-                <option value="" selected>
+                <option value="" disabled>
                   Select a status
                 </option>
                 <option value={"ACTIVE"}>Active</option>
@@ -343,7 +343,7 @@ const Teacher = () => {
                 enableDensityToggle={false}
                 enableFullScreenToggle={false}
                 initialState={{
-                 pagination: { pageSize: 50, pageIndex: 0 },
+                  pagination: { pageSize: 50, pageIndex: 0 },
                   columnVisibility: {
                     gst: false,
                     address: false,
