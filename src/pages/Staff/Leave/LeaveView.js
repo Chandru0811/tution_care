@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import api from "../../../config/URL";
-import { toast } from "react-toastify";
-import fetchAllCentersWithIds from "../../List/CenterList";
-import fetchAllTeachersWithIds from "../../List/TeacherList";
 import pdfLogo from "../../../assets/images/Attactmentpdf.jpg";
 import { MdOutlineDownloadForOffline } from "react-icons/md";
 
@@ -11,19 +8,7 @@ function LeaveView() {
   const [data, setData] = useState([]);
   console.log("Leave Datas:", data);
   const { id } = useParams();
-  const [centerData, setCenterData] = useState(null);
-  const [teacherData, setTeacherData] = useState(null);
 
-  const fetchData = async () => {
-    try {
-      const centerData = await fetchAllCentersWithIds();
-      const teacherData = await fetchAllTeachersWithIds();
-      setCenterData(centerData);
-      setTeacherData(teacherData);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
 
   useEffect(() => {
     const getData = async () => {
@@ -35,7 +20,6 @@ function LeaveView() {
       }
     };
     getData();
-    fetchData();
   }, []);
 
   return (
@@ -85,16 +69,6 @@ function LeaveView() {
         </div>
         <div class="container-fluid minHeight mb-5">
           <div className="row mt-5">
-            <div className="col-md-6 col-12">
-              <div className="row mb-3">
-                <div className="col-6 d-flex">
-                  <p className="text-sm fw-medium">Centre Name</p>
-                </div>
-                <div className="col-6">
-                  <p className="text-muted text-sm">: {data.centerName}</p>
-                </div>
-              </div>
-            </div>
             <div className="col-md-6 col-12">
               <div className="row mb-3">
                 <div className="col-6 d-flex">

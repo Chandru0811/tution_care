@@ -851,7 +851,7 @@ const NewLeads = () => {
                   displayName: "Waiting for Payment",
                   backendName: "WAITING_FOR_PAYMENT",
                 },
-                { displayName: "Confirmed", backendName: "CONFIRMED" },
+                // { displayName: "Confirmed", backendName: "CONFIRMED" },
                 // {
                 //   displayName: "Assessment Done",
                 //   backendName: "ASSESSMENT_DONE",

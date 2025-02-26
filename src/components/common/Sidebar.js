@@ -416,7 +416,7 @@ function Sidebar() {
           {
             title: "Batch Time",
             path: "/batchtime",
-            access: storedScreens.batchtimeIndex,
+            access: storedScreens.batchtimeSettingIndex,
           },
           {
             title: "Leave Type",

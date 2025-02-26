@@ -156,7 +156,7 @@ function Edit({ id, onSuccess, handleMenuClose }) {
                     {subjectData &&
                       subjectData.map((subject) => (
                         <option key={subject.id} value={subject.id}>
-                          {subject.subjects}
+                          {subject.subject}
                         </option>
                       ))}
                   </select>
