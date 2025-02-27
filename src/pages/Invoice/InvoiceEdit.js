@@ -11,6 +11,7 @@ import fetchAllStudentListByCenter from "../List/StudentListByCenter";
 import { ImCancelCircle } from "react-icons/im";
 import { Modal, Button } from "react-bootstrap";
 import fetchAllCentersWithStudentList from "../List/CenterAvailableStudentLidt";
+import fetchAllTaxWithIds from "../List/TaxTypeList";
 
 const invoiceItemSchema = Yup.object().shape({
   item: Yup.string().required("Item name is required"),
@@ -69,6 +70,7 @@ export default function InvoiceEdit() {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const userName = localStorage.getItem("tmsuserName");
   const centerId = localStorage.getItem("tmscenterId");
+  const [taxTypeData, setTaxTypeData] = useState([]);
 
   const lessonOptions = [];
   for (let i = 1; i <= 50; i++) {
@@ -259,7 +261,7 @@ export default function InvoiceEdit() {
 
   // NEW Code
   const handleSelectChange = (index, value) => {
-    const selectedTax = taxData.find((tax) => tax.id === parseInt(value));
+    const selectedTax = taxTypeData.find((taxs) => taxs.id === parseInt(value));
     const gstRate = selectedTax ? selectedTax.rate : 0;
     const totalAmount =
       parseFloat(formik.values.invoiceItems[index]?.totalAmount) || 0;
@@ -296,7 +298,7 @@ export default function InvoiceEdit() {
   const handelTotalAmountChange = (index, value) => {
     const selectedTaxType = formik.values.invoiceItems[index]?.taxType;
     const selectedTax = taxData.find(
-      (tax) => tax.id === parseInt(selectedTaxType)
+      (taxs) => taxs.id === parseInt(selectedTaxType)
     );
 
     const gstRate = selectedTax ? selectedTax.rate : 0;
@@ -324,7 +326,14 @@ export default function InvoiceEdit() {
     );
     formik.setFieldValue(`invoiceItems[${index}].totalAmount`, value);
   };
-
+  const fetchtTaxType = async (centerId) => {
+    try {
+      const taxs = await fetchAllTaxWithIds(centerId);
+      setTaxTypeData(taxs);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
   useEffect(() => {
     const getData = async () => {
       try {
@@ -345,6 +354,8 @@ export default function InvoiceEdit() {
         fetchCourses(response.data.centerId);
         fetchPackage(response.data.centerId);
         fetchData(response.data.centerId);
+        fetchtTaxType(centerId);
+
         // console.log("Response:", response);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -533,7 +544,7 @@ export default function InvoiceEdit() {
                     </div>
                   )}
                 </div> */}
-           
+
                 <div className="text-start mt-3">
                   <label htmlFor="" className="mb-1 fw-medium">
                     {storedConfigure?.student || "Student"}
@@ -954,10 +965,10 @@ export default function InvoiceEdit() {
                                 }
                               >
                                 <option value=""></option>
-                                {taxData &&
-                                  taxData.map((tax) => (
-                                    <option key={tax.id} value={tax.id}>
-                                      {`${tax.taxType} ${tax.rate}%`}
+                                {taxTypeData &&
+                                  taxTypeData.map((taxs) => (
+                                    <option key={taxs.id} value={taxs.id}>
+                                      {`${taxs.taxType} ${taxs.rate}%`}
                                     </option>
                                   ))}
                               </select>

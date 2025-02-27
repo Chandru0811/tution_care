@@ -48,7 +48,7 @@ function RolesAdd() {
 
     if (selectedRoleObj) {
       setLoading(true); // Show loader
-      formik.setValues(selectedRoleObj)
+      formik.setValues(selectedRoleObj);
       setSelectedRole(selectedRoleObj.name); // Set role name
       setSelectedRoleId(selectedRoleObj.id); // Set role ID
 
@@ -963,16 +963,17 @@ function RolesAdd() {
       >
         <div className="card">
           <div className="row d-flex align-items-start p-2">
-            <div className="col-md-7 col-12">
+            <div className="col-md-3 col-12">
               <label className="form-label">
                 User Role <span className="text-danger">*</span>
               </label>
               <div className="input-group mb-3">
                 <select
-                  className="form-select form-select-sm iconInput"
+                  className="form-select form-select-sm iconInput w-25"
                   name="roleName"
                   onChange={handleRoleChange}
                   disabled={loading} // Prevent interaction while loading
+                  // style={{ width: "50px" }}
                 >
                   <option disabled>Select Role</option>
                   {roleName &&
@@ -986,11 +987,11 @@ function RolesAdd() {
               </div>
             </div>
 
-            <div className="col-md-5 col-12 d-flex justify-content-end">
+            {/* <div className="col-md-5 col-12 d-flex justify-content-end">
               <button type="submit" className="btn btn-button btn-sm ">
                 Save
               </button>
-            </div>
+            </div> */}
           </div>
           {loading ? (
             <div className="loader-container">
@@ -1058,6 +1059,11 @@ function RolesAdd() {
                     onClick={handleUncheckAll}
                   >
                     Uncheck All
+                  </button>
+                </div>
+                <div className="col-md-5 col-12 d-flex justify-content-end mb-2">
+                  <button type="submit" className="btn btn-button btn-sm ">
+                    Save
                   </button>
                 </div>
               </div>
