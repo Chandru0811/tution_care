@@ -16,6 +16,7 @@ import RolesEdit from "./RolesEdit";
 
 const Roles = () => {
   const centerId = localStorage.getItem("tmscenterId");
+  const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedId, setSelectedId] = useState(null);
@@ -178,11 +179,13 @@ const Roles = () => {
             </span>
           </div>
         </div>
+        {storedScreens?.roleCreate && (
         <div className="d-flex justify-content-end align-items-center">
           <span>
             <RolesAdd onSuccess={getData} />
           </span>
         </div>
+        )}
         {loading ? (
           <div className="loader-container">
             <div className="loading">
@@ -222,18 +225,22 @@ const Roles = () => {
               onClose={handleMenuClose}
             >
               <MenuItem>
+              {storedScreens?.roleUpdate && (
                 <RolesEdit
                   onSuccess={getData}
                   id={selectedId}
                   handleMenuClose={handleMenuClose}
                 />
+              )}
               </MenuItem>
               <MenuItem>
+              {storedScreens?.roleDelete && (
                 <GlobalDelete
                   path={`/deleteUserRole/${selectedId}`}
                   onDeleteSuccess={getData}
                   onOpen={handleMenuClose}
                 />
+              )}
               </MenuItem>
             </Menu>
           </>

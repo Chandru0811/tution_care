@@ -435,11 +435,13 @@ const Student = () => {
                 Edit
               </MenuItem>
               <MenuItem>
+              {storedScreens?.studentListingDelete && (
                 <GlobalDelete
                   path={`/deleteStudentDetail/${selectedId}`}
                   onDeleteSuccess={fetchStudentData}
                   onOpen={handleMenuClose}
                 />
+              )}
               </MenuItem>
             </Menu>
           </>

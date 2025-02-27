@@ -421,11 +421,13 @@ const Payroll = () => {
                 Edit
               </MenuItem>
               <MenuItem>
+              {storedScreens?.payrollDelete && (
                 <GlobalDelete
                   path={`/deleteUserPayroll/${selectedId}`}
                   onDeleteSuccess={fetchData}
                   onOpen={handleMenuClose}
                 />
+              )}
               </MenuItem>
             </Menu>
           </>

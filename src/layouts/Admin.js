@@ -709,7 +709,7 @@ function Admin({ handleLogout }) {
               {/* Messaging */}
               <Route path="/messaging" element={<MyMessages />} />
               <Route path="/messaging/add" element={<MyMessagesAdd />} />
-              <Route path="/messaging/view/:id" element={<MyMessagesView />} />
+              <Route path="/messaging/view/:studentId" element={<MyMessagesView />} />
 
               {/* Other Messaging */}
               <Route path="/othermessaging" element={<OtherMessages />} />

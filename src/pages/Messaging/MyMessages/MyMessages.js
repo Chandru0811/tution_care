@@ -20,7 +20,7 @@ const MyMessages = () => {
   const userName = localStorage.getItem("tmsrole");
 
   const getData = async () => {
-    if (userName === "TUITION_ADMIN") {
+    if (userName === "ADMIN") {
       try {
         const response = await api.get(`/getAllMessagesByAdminId/${id}`);
         setDatas(response.data);
@@ -31,7 +31,7 @@ const MyMessages = () => {
       }
     } else {
       try {
-        const response = await api.get(`/getAllMessagesByTeacherId/${id}`);
+        const response = await api.get(`/getAllStudentsByTeacherId/${id}`);
         setDatas(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -56,20 +56,33 @@ const MyMessages = () => {
         ),
       },
       {
-        accessorKey: "senderName",
+        accessorKey: "studentProfile",
+        header: "Profile",
+        size: 50,
+        Cell: ({ cell }) => (
+          <img
+            src={cell.getValue()}
+            alt="Student"
+            style={{
+              width: "40px",
+              height: "40px",
+              borderRadius: "50%",
+              objectFit: "cover",
+            }}
+          />
+        ),
+      },
+      {
+        accessorKey: "studentUniqueId",
+        header: "Student ID",
+        size: 100,
+        Cell: ({ cell }) => <span style={{ fontWeight: "bold" }}>{cell.getValue()}</span>,
+      },
+      {
+        accessorKey: "studentName",
         header: "Student Name",
-        size: 20,
-      },
-      {
-        accessorKey: "receiverName",
-        header: "Receiver Name",
-        size: 20,
-      },
-      {
-        accessorKey: "message",
-        enableHiding: false,
-        header: "Message",
-        size: 40,
+        size: 150,
+        Cell: ({ cell }) => <span>{cell.getValue()}</span>,
       },
       {
         accessorKey: "createdAt",
@@ -85,6 +98,7 @@ const MyMessages = () => {
     []
   );
 
+  
   const theme = createTheme({
     components: {
       MuiTableCell: {
@@ -182,7 +196,6 @@ const MyMessages = () => {
                   enableDensityToggle={false}
                   enableFullScreenToggle={false}
                   initialState={{
-                   pagination: { pageSize: 50, pageIndex: 0 },
                     columnVisibility: {
                       createdBy: false,
                       createdAt: false,
@@ -193,12 +206,10 @@ const MyMessages = () => {
                   muiTableBodyRowProps={({ row }) => ({
                     onClick: () => navigate(`/messaging/view/${row.original.id}`, {
                       state: {
-                        senderId: row.original.senderId,
-                        receiverId: row.original.receiverId,
-                        senderName: row.original.senderName,
-                        senderRole: row.original.senderRole,
-                        receiverName: row.original.receiverName,
-                        message: row.original.message,
+                        studentId: row.original.studentId,
+                        studentName: row.original.studentName,
+                        studentRole: row.original.studentRole,
+                        studentUniqueId: row.original.studentUniqueId,
                       },
                     }),
                     style: { cursor: "pointer" },

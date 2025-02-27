@@ -20,7 +20,7 @@ function Header({ onLogout, data }) {
   const teacherName = localStorage.getItem("tmsteacherName");
   const role = localStorage.getItem("tmsrole")?.replace(/_/g, " ");
   const [tokenData, setTokenData] = useState([]);
-  console.log("Token Data:",tokenData);
+  // console.log("Token Data:",tokenData);
   
   const userInfo = localStorage.getItem("tmsuserInfo");
 
@@ -52,10 +52,10 @@ function Header({ onLogout, data }) {
         toast.error("Token not available.");
         return;
       }
-      // const url = `https://hrisasia.com/tuitions/newLead/${token}`;
-      const url = `http://localhost:3000/tuitions/newLead/${token}`;
+      const url = `https://hrisasia.com/tuitions/newLead/${token}`;
+      // const url = `http://localhost:3000/tuitions/newLead/${token}`;
       await navigator.clipboard.writeText(url);
-      toast.success("URL copied to clipboard! 🚀 Opening form...");
+      toast.success("URL copied to clipboard! 🚀");
       // window.open(url, "_blank");
     } catch (err) {
       toast.error("Failed to copy URL.");

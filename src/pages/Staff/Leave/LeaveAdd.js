@@ -116,7 +116,9 @@ function LeaveAdd() {
 
   const fetchLeaveType = async () => {
     try {
-      const response = await api.get(`/getLeaveSettingWithCenterId/${centerId}`);
+      const response = await api.get(
+        `/getLeaveSettingWithCenterId/${centerId}`
+      );
       setLeaveTypeData(response.data);
     } catch (error) {
       toast.error(error.message);
@@ -127,8 +129,8 @@ function LeaveAdd() {
     fetchLeaveType();
   }, []);
 
-  useEffect(() => {
-    const getData = async () => {
+  const getData = async () => {
+    if (userId) {
       try {
         const response = await api.get(
           `/getUserLeaveRequestByUserId/${userId}`
@@ -137,9 +139,11 @@ function LeaveAdd() {
       } catch (error) {
         toast.error("Error Fetching Data : ", error);
       }
-    };
+    }
+  };
+  useEffect(() => {
     getData();
-  }, []);
+  }, [userId]);
 
   return (
     <section>
@@ -370,7 +374,7 @@ function LeaveAdd() {
                     }}
                     onBlur={formik.handleBlur}
                   />
-                   {formik.touched.file && formik.errors.file && (
+                  {formik.touched.file && formik.errors.file && (
                     <div className="error text-danger">
                       <small>{formik.errors.file}</small>
                     </div>

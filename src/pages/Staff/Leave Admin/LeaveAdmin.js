@@ -14,6 +14,7 @@ import api from "../../../config/URL";
 import GlobalDelete from "../../../components/common/GlobalDelete";
 
 const LeaveAdmin = () => {
+  const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   const navigate = useNavigate();
   const [data, setData] = useState([]);
   console.log("Leave Data:", data);
@@ -68,8 +69,6 @@ const LeaveAdmin = () => {
             <span className="badge badges-red fw-light">Rejected</span>
           ) : null,
       },
-
-      { accessorKey: "centerName", enableHiding: false, header: "Centre Name" },
       {
         accessorKey: "employeeName",
         enableHiding: false,
@@ -249,11 +248,11 @@ const LeaveAdmin = () => {
                     updatedAt: false,
                   },
                 }}
-                muiTableBodyRowProps={({ row }) => ({
-                  onClick: () =>
-                    navigate(`/leaveadmin/view/${row.original.id}`),
-                  style: { cursor: "pointer" },
-                })}
+                // muiTableBodyRowProps={({ row }) => ({
+                //   onClick: () =>
+                //     navigate(`/leaveadmin/view/${row.original.id}`),
+                //   style: { cursor: "pointer" },
+                // })}
               />
             </ThemeProvider>
 
@@ -270,11 +269,13 @@ const LeaveAdmin = () => {
                 Edit
               </MenuItem>
               <MenuItem>
+              {storedScreens?.leaveRequestDelete && (
                 <GlobalDelete
                   path={`/deleteUserLeaveRequest/${selectedId}`}
                   onDeleteSuccess={fetchLeaveType}
                   onOpen={handleMenuClose}
                 />
+              )}
               </MenuItem>
             </Menu>
           </div>

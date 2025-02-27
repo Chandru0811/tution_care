@@ -7,19 +7,49 @@ const TimeTable2 = () => {
       week: [
         {
           day: "Tuesday",
-          periods: [{ time: "15:30", Calista: "AP03 cvc an" }],
+          periods: [
+            {
+              time: "15:30",
+              teacherList: [
+                { teacherName: "Calista", class: "AP03 cvc an" },
+              ],
+            },
+            {
+              time: "17:00",
+              teacherList: [
+                { teacherName: "Calista", class: "AB c" },
+              ],
+            },
+            {
+              time: "19:00",
+              teacherList: [
+                { teacherName: "Calista", class: "AP 59 silent E story" },
+              ],
+            },
+          ],
         },
         {
           day: "Wednesday",
           periods: [
-            { time: "15:30", Jen: "Grad", XP: "AP 71.2 vowels oa, oe, ow" },
-            { time: "15:45", Jen: "Grad", XP: "AP 71.2 vowels oa, oe, ow" },
+            {
+              time: "15:30",
+              teacherList: [
+                { teacherName: "Jen", class: "Grad" },
+                { teacherName: "XP", class: "AP 71.2 vowels oa, oe, ow" },
+              ],
+            },
           ],
         },
         {
           day: "Thursday",
           periods: [
-            { time: "15:30", Calista: "AP 32 cvc all", XP: "h bro wh" },
+            {
+              time: "15:30",
+              teacherList: [
+                { teacherName: "Calista", class: "AP 32 cvc all" },
+                { teacherName: "XP", class: "h bro wh" },
+              ],
+            },
           ],
         },
         {
@@ -27,18 +57,10 @@ const TimeTable2 = () => {
           periods: [
             {
               time: "15:30",
-              Calista: "AD/q/ /s/",
-              XP: "AP 75 - ghost wr Obs XP",
-            },
-            {
-              time: "15:30",
-              Calista: "AD/q/ /s/",
-              XP: "AP 75 - ghost wr Obs XP",
-            },
-            {
-              time: "15:30",
-              Calista: "AD/q/ /s/",
-              XP: "AP 75 - ghost wr Obs XP",
+              teacherList: [
+                { teacherName: "Calista", class: "AD/q/ /s/" },
+                { teacherName: "XP", class: "AP 75 - ghost wr Obs XP" },
+              ],
             },
           ],
         },
@@ -47,105 +69,10 @@ const TimeTable2 = () => {
           periods: [
             {
               time: "09:00",
-              Calista: "AP74 oi oy 2",
-              XP: "AP80 silent e a_e/ea_oe",
-            },
-          ],
-        },
-        {
-          day: "Sunday",
-          periods: [
-            { time: "10:00", Calista: "AP90 review", XP: "Weekend recap" },
-            { time: "10:00", Calista: "AP90 review", XP: "Weekend recap" },
-            { time: "10:00", Calista: "AP90 review", XP: "Weekend recap" },
-            { time: "10:00", Calista: "AP90 review", XP: "Weekend recap" },
-          ],
-        },
-      ],
-    },
-    {
-      sno: "4 Feb - 10 Feb",
-      week: [
-        {
-          day: "Tuesday",
-          periods: [{ time: "15:30", Calista: "AP03 cvc an" }],
-        },
-        {
-          day: "Wednesday",
-          periods: [
-            { time: "15:30", Jen: "Grad", XP: "AP 71.2 vowels oa, oe, ow" },
-          ],
-        },
-        {
-          day: "Thursday",
-          periods: [
-            { time: "15:30", Calista: "AP 32 cvc all", XP: "h bro wh" },
-          ],
-        },
-        {
-          day: "Friday",
-          periods: [
-            {
-              time: "15:30",
-              Calista: "AD/q/ /s/",
-              XP: "AP 75 - ghost wr Obs XP",
-            },
-          ],
-        },
-        {
-          day: "Saturday",
-          periods: [
-            {
-              time: "09:00",
-              Calista: "AP74 oi oy 2",
-              XP: "AP80 silent e a_e/ea_oe",
-            },
-          ],
-        },
-        {
-          day: "Sunday",
-          periods: [
-            { time: "10:00", Calista: "AP91 weekend", XP: "Relax & revise" },
-          ],
-        },
-      ],
-    },
-    {
-      sno: "12 Feb - 17 Feb",
-      week: [
-        {
-          day: "Tuesday",
-          periods: [{ time: "15:30", Calista: "AP03 cvc an" }],
-        },
-        {
-          day: "Wednesday",
-          periods: [
-            { time: "15:30", Jen: "Grad", XP: "AP 71.2 vowels oa, oe, ow" },
-          ],
-        },
-        {
-          day: "Thursday",
-          periods: [
-            { time: "15:30", Calista: "AP 32 cvc all", XP: "h bro wh" },
-          ],
-        },
-        {
-          day: "Friday",
-          periods: [
-            {
-              time: "15:30",
-              Calista: "AD/q/ /s/",
-              XP: "AP 75 - ghost wr Obs XP",
-            },
-          ],
-        },
-        {
-          day: "Saturday",
-          periods: [
-            {
-              time: "09:00",
-              Calista: "AP74 oi oy 2",
-              XP: "AP80 silent e a_e/ea_oe",
+              teacherList: [
+                { teacherName: "Calista", class: "AP74 oi oy 2" },
+                { teacherName: "XP", class: "AP80 silent e a_e/ea_oe" },
+              ],
             },
           ],
         },
@@ -154,8 +81,99 @@ const TimeTable2 = () => {
           periods: [
             {
               time: "10:00",
-              Calista: "AP92 fun day",
-              XP: "Game-based learning",
+              teacherList: [
+                { teacherName: "Calista", class: "AP90 review" },
+                { teacherName: "XP", class: "Weekend recap" },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+    {
+      sno: "4 Mar - 9 Mar",
+      week: [
+        {
+          day: "Tuesday",
+          periods: [
+            {
+              time: "15:30",
+              teacherList: [
+                { teacherName: "Calista", class: "AP03 cvc an" },
+              ],
+            },
+            {
+              time: "17:00",
+              teacherList: [
+                { teacherName: "Calista", class: "AB c" },
+              ],
+            },
+          ],
+        },
+        {
+          day: "Wednesday",
+          periods: [
+            {
+              time: "15:30",
+              teacherList: [
+                { teacherName: "Jen", class: "Grad" },
+                { teacherName: "XP", class: "AP 71.2 vowels oa, oe, ow" },
+              ],
+            },
+            {
+              time: "17:00",
+              teacherList: [
+                { teacherName: "Jen", class: "Grad" },
+                { teacherName: "XP", class: "AP 71.2 vowels oa, oe, ow" },
+              ],
+            },
+          ],
+        },
+        {
+          day: "Thursday",
+          periods: [
+            {
+              time: "15:30",
+              teacherList: [
+                { teacherName: "Mogana", class: "AP 32 cvc all" },
+                { teacherName: "Vivian", class: "h bro wh" },
+              ],
+            },
+          ],
+        },
+        {
+          day: "Friday",
+          periods: [
+            {
+              time: "15:30",
+              teacherList: [
+                { teacherName: "Calista", class: "AD/q/ /s/" },
+                { teacherName: "XP", class: "AP 75 - ghost wr Obs XP" },
+              ],
+            },
+          ],
+        },
+        {
+          day: "Saturday",
+          periods: [
+            {
+              time: "09:00",
+              teacherList: [
+                { teacherName: "Calista", class: "AP74 oi oy 2" },
+                { teacherName: "XP", class: "AP80 silent e a_e/ea_oe" },
+              ],
+            },
+          ],
+        },
+        {
+          day: "Sunday",
+          periods: [
+            {
+              time: "10:00",
+              teacherList: [
+                { teacherName: "Jing En", class: "AP90 review" },
+                { teacherName: "Joyce", class: "Weekend recap" },
+              ],
             },
           ],
         },
@@ -163,7 +181,17 @@ const TimeTable2 = () => {
     },
   ];
 
-  console.log("scheduleData",scheduleData)
+  const allTeachers = Array.from(
+    new Set(
+      scheduleData.flatMap((entry) =>
+        entry.week.flatMap((day) =>
+          day.periods.flatMap((period) =>
+            period.teacherList.map((t) => t.teacherName)
+          )
+        )
+      )
+    )
+  );
 
   return (
     <div>
@@ -173,9 +201,11 @@ const TimeTable2 = () => {
             <th className="text-center fw-medium">Period</th>
             <th className="text-center fw-medium">Day</th>
             <th className="text-center fw-medium">Time</th>
-            <th className="text-center fw-medium">Calista</th>
-            <th className="text-center fw-medium">Jen</th>
-            <th className="text-center fw-medium">XP</th>
+            {allTeachers.map((teacher) => (
+              <th key={teacher} className="text-center fw-medium">
+                {teacher}
+              </th>
+            ))}
           </tr>
         </thead>
         <tbody>
@@ -183,7 +213,6 @@ const TimeTable2 = () => {
             entry.week.map((dayEntry, dayIndex) =>
               dayEntry.periods.map((period, periodIndex) => (
                 <tr key={`${snoIndex}-${dayIndex}-${periodIndex}`}>
-                  {/* Merge S.No Column for First Period of Each Student Data */}
                   {dayIndex === 0 && periodIndex === 0 && (
                     <td
                       rowSpan={entry.week.reduce(
@@ -195,18 +224,22 @@ const TimeTable2 = () => {
                     </td>
                   )}
 
-                  {/* Merge Day Column for the Same Day */}
                   {periodIndex === 0 && (
                     <td rowSpan={dayEntry.periods.length}>{dayEntry.day}</td>
                   )}
 
-                  {/* Time */}
                   <td className="text-center">{period.time}</td>
 
-                  {/* Subjects */}
-                  <td className="text-center">{period.Calista || ""}</td>
-                  <td className="text-center">{period.Jen || ""}</td>
-                  <td className="text-center">{period.XP || ""}</td>
+                  {allTeachers.map((teacher) => {
+                    const teacherClass = period.teacherList.find(
+                      (t) => t.teacherName === teacher
+                    );
+                    return (
+                      <td key={teacher} className="text-center">
+                        {teacherClass ? teacherClass.class : ""}
+                      </td>
+                    );
+                  })}
                 </tr>
               ))
             )

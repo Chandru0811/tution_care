@@ -327,18 +327,22 @@ const Level = () => {
                 View
               </MenuItem> */}
               <MenuItem>
+              {storedScreens?.levelUpdate && (
                 <LevelEdit
                   onSuccess={fetchData}
                   id={selectedId}
                   handleMenuClose={handleMenuClose}
                 />
+              )}
               </MenuItem>
               <MenuItem>
+              {storedScreens?.levelDelete && (
                 <GlobalDelete
                   path={`/deleteCourseLevel/${selectedId}`}
                   onDeleteSuccess={fetchData}
                   onOpen={handleMenuClose}
                 />
+              )}
               </MenuItem>
             </Menu>
           </>

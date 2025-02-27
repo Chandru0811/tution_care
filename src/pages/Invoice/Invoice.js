@@ -18,6 +18,7 @@ import fetchAllPackageListByCenter from "../List/PackageListByCenter";
 
 const Invoice = () => {
   const centerId = localStorage.getItem("tmscenterId");
+  const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   const [filters, setFilters] = useState({
     centerId: centerId,
     courseId: "",
@@ -413,6 +414,7 @@ const Invoice = () => {
               </button>
             </div>
           </div>
+          {storedScreens?.invoiceCreate && (
           <Link to="/invoice/add">
             <button
               type="button"
@@ -422,6 +424,7 @@ const Invoice = () => {
               &nbsp; Add &nbsp;&nbsp; <i className="bx bx-plus"></i>
             </button>
           </Link>
+          )}
         </div>
         {loading ? (
           <div className="loader-container">
@@ -478,11 +481,13 @@ const Invoice = () => {
                 </MenuItem>
               )}
               <MenuItem>
+              {storedScreens?.invoiceDelete && (
                 <GlobalDelete
                   path={`/deleteGenerateInvoice/${selectedId}`}
                   onDeleteSuccess={getInvoiceData}
                   onOpen={handleMenuClose}
                 />
+              )}
               </MenuItem>
             </Menu>
           </>

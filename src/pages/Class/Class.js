@@ -329,7 +329,7 @@ const Class = () => {
               </div>
             </div>
             <div className="me-2">
-              {storedScreens?.documentListingCreate && (
+              {storedScreens?.classCreate && (
                 <Link to="/class/add">
                   <button type="button" className="btn btn-button btn-sm">
                     Add <i className="bx bx-plus"></i>
@@ -406,14 +406,17 @@ const Class = () => {
                 onClick={() => navigate(`/class/edit/${selectedId}`)}
                 className="text-start mb-0 menuitem-style"
               >
+                
                 Edit
               </MenuItem>
               <MenuItem>
+              {storedScreens?.classDelete && (
                 <GlobalDelete
                   path={`/deleteCourseClassListing/${selectedId}`}
                   onDeleteSuccess={getClassData}
                   onOpen={handleMenuClose}
                 />
+              )}
               </MenuItem>
             </Menu>
           </>

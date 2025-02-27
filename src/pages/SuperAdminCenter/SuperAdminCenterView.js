@@ -166,7 +166,7 @@ function SuperAdminCenterView() {
                   </div>
                   <div className="col-6">
                     <p className="text-muted text-sm">
-                      : {data.trailDate || "--"}
+                      : {data.trialDate || "--"}
                     </p>
                   </div>
                 </div>
