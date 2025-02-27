@@ -272,7 +272,9 @@ const Payroll = () => {
   }, [filters, allData]);
 
   const handleMenuClose = () => setMenuAnchor(null);
-
+  const hideColumn =
+    storedScreens?.payrollUpdate === false &&
+    storedScreens?.payrollDelete === false;
   return (
     <div className="container-fluid my-4 center">
       <ol
@@ -378,7 +380,7 @@ const Payroll = () => {
                 enableDensityToggle={false}
                 enableFullScreenToggle={false}
                 initialState={{
-                 pagination: { pageSize: 50, pageIndex: 0 },
+                  pagination: { pageSize: 50, pageIndex: 0 },
                   columnVisibility: {
                     bonus: false,
                     cpfContributions: false,
@@ -398,6 +400,7 @@ const Payroll = () => {
                     createdAt: false,
                     updatedBy: false,
                     updatedAt: false,
+                    id: !hideColumn,
                   },
                 }}
                 muiTableBodyRowProps={({ row }) => ({
@@ -414,20 +417,22 @@ const Payroll = () => {
               open={Boolean(menuAnchor)}
               onClose={handleMenuClose}
             >
-              <MenuItem
-                onClick={() => navigate(`/payrolladmin/edit/${selectedId}`)}
-                className="text-start mb-0 menuitem-style"
-              >
-                Edit
-              </MenuItem>
-              <MenuItem>
-              {storedScreens?.payrollDelete && (
-                <GlobalDelete
-                  path={`/deleteUserPayroll/${selectedId}`}
-                  onDeleteSuccess={fetchData}
-                  onOpen={handleMenuClose}
-                />
+              {storedScreens?.payrollUpdate && (
+                <MenuItem
+                  onClick={() => navigate(`/payrolladmin/edit/${selectedId}`)}
+                  className="text-start mb-0 menuitem-style"
+                >
+                  Edit
+                </MenuItem>
               )}
+              <MenuItem>
+                {storedScreens?.payrollDelete && (
+                  <GlobalDelete
+                    path={`/deleteUserPayroll/${selectedId}`}
+                    onDeleteSuccess={fetchData}
+                    onOpen={handleMenuClose}
+                  />
+                )}
               </MenuItem>
             </Menu>
           </>

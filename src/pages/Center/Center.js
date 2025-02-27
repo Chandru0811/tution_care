@@ -19,6 +19,7 @@ const Center = () => {
   const [selectedId, setSelectedId] = useState(null);
   const tmscenterName = localStorage.getItem("tmscenterName");
   const appConfigInfo = JSON.parse(localStorage.getItem("tmsappConfigInfo"));
+  const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
 
   console.log("appConfigInfo", appConfigInfo.appName);
 
@@ -160,7 +161,9 @@ const Center = () => {
   });
 
   const handleMenuClose = () => setMenuAnchor(null);
-
+  const hideColumn =
+    storedScreens?.centerListingUpdate === false &&
+    storedScreens?.centerListingDelete === false;
   return (
     <div className="container-fluid px-2 my-4 center">
       <ol
@@ -214,7 +217,7 @@ const Center = () => {
                 enableDensityToggle={false}
                 enableFullScreenToggle={false}
                 initialState={{
-                 pagination: { pageSize: 50, pageIndex: 0 },
+                  pagination: { pageSize: 50, pageIndex: 0 },
                   columnVisibility: {
                     gst: false,
                     address: false,
@@ -230,6 +233,7 @@ const Center = () => {
                     openingDate: false,
                     taxRegistrationNumber: false,
                     zipCode: false,
+                    id: !hideColumn,
                   },
                 }}
                 muiTableBodyRowProps={({ row }) => ({
@@ -247,12 +251,16 @@ const Center = () => {
               onClose={handleMenuClose}
               disableScrollLock
             >
-              <MenuItem
-                onClick={() => navigate(`/companyRegister/edit/${selectedId}`)}
-                className="text-start mb-0 menuitem-style"
-              >
-                Edit
-              </MenuItem>
+              {storedScreens?.centerListingUpdate && (
+                <MenuItem
+                  onClick={() =>
+                    navigate(`/companyRegister/edit/${selectedId}`)
+                  }
+                  className="text-start mb-0 menuitem-style"
+                >
+                  Edit
+                </MenuItem>
+              )}
             </Menu>
           </>
         )}

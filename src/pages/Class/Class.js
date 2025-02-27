@@ -17,7 +17,6 @@ import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
 import fetchAllTeacherListByCenter from "../List/TeacherListByCenter";
 
 const Class = () => {
-  const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   const navigate = useNavigate();
 
   const [datas, setDatas] = useState([]);
@@ -28,6 +27,8 @@ const Class = () => {
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
   const appConfigInfo = JSON.parse(localStorage.getItem("tmsappConfigInfo"));
+  const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
+
   const [filters, setFilters] = useState({
     centerId: centerId,
     courseId: "",
@@ -210,7 +211,9 @@ const Class = () => {
   }, [filters]);
 
   const handleMenuClose = () => setMenuAnchor(null);
-
+  const hideColumn =
+    storedScreens?.classUpdate === false &&
+    storedScreens?.classDelete === false;
   return (
     <div className="container-fluid my-4 center">
       <ol
@@ -379,6 +382,7 @@ const Class = () => {
                     createdAt: false,
                     updatedBy: false,
                     updatedAt: false,
+                    id: !hideColumn,
                   },
                   pagination: { pageSize: 50, pageIndex: 0 },
                 }}
@@ -402,21 +406,22 @@ const Class = () => {
                   onOpen={handleMenuClose}
                 />
               </MenuItem>
-              <MenuItem
-                onClick={() => navigate(`/class/edit/${selectedId}`)}
-                className="text-start mb-0 menuitem-style"
-              >
-                
-                Edit
-              </MenuItem>
-              <MenuItem>
-              {storedScreens?.classDelete && (
-                <GlobalDelete
-                  path={`/deleteCourseClassListing/${selectedId}`}
-                  onDeleteSuccess={getClassData}
-                  onOpen={handleMenuClose}
-                />
+              {storedScreens?.classUpdate && (
+                <MenuItem
+                  onClick={() => navigate(`/class/edit/${selectedId}`)}
+                  className="text-start mb-0 menuitem-style"
+                >
+                  Edit
+                </MenuItem>
               )}
+              <MenuItem>
+                {storedScreens?.classDelete && (
+                  <GlobalDelete
+                    path={`/deleteCourseClassListing/${selectedId}`}
+                    onDeleteSuccess={getClassData}
+                    onOpen={handleMenuClose}
+                  />
+                )}
               </MenuItem>
             </Menu>
           </>

@@ -218,7 +218,9 @@ const Subject = () => {
   };
 
   const handleMenuClose = () => setMenuAnchor(null);
-
+  const hideColumn =
+    storedScreens?.subjectUpdate === false &&
+    storedScreens?.subjectDelete === false;
   return (
     <div className="container-fluid my-4 center">
       <ol
@@ -321,12 +323,13 @@ const Subject = () => {
                 enableDensityToggle={false}
                 enableFullScreenToggle={false}
                 initialState={{
-                 pagination: { pageSize: 50, pageIndex: 0 },
+                  pagination: { pageSize: 50, pageIndex: 0 },
                   columnVisibility: {
                     createdBy: false,
                     createdAt: false,
                     updatedBy: false,
                     updatedAt: false,
+                    id: !hideColumn,
                   },
                 }}
               />
@@ -342,22 +345,22 @@ const Subject = () => {
                 View
               </MenuItem> */}
               <MenuItem>
-              {storedScreens?.subjectUpdate && (
-                <SubjectEdit
-                  onSuccess={fetchData}
-                  id={selectedId}
-                  handleMenuClose={handleMenuClose}
-                />
-              )}
+                {storedScreens?.subjectUpdate && (
+                  <SubjectEdit
+                    onSuccess={fetchData}
+                    id={selectedId}
+                    handleMenuClose={handleMenuClose}
+                  />
+                )}
               </MenuItem>
               <MenuItem>
-              {storedScreens?.subjectDelete && (
-                <GlobalDelete
-                  path={`/deleteCourseSubject/${selectedId}`}
-                  onDeleteSuccess={fetchData}
-                  onOpen={handleMenuClose}
-                />
-              )}
+                {storedScreens?.subjectDelete && (
+                  <GlobalDelete
+                    path={`/deleteCourseSubject/${selectedId}`}
+                    onDeleteSuccess={fetchData}
+                    onOpen={handleMenuClose}
+                  />
+                )}
               </MenuItem>
             </Menu>
           </>

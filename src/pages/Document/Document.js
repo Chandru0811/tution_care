@@ -258,7 +258,9 @@ const Document = () => {
   }, [filters]);
 
   const handleMenuClose = () => setMenuAnchor(null);
-
+  const hideColumn =
+    storedScreens?.documentListingUpdate === false &&
+    storedScreens?.documentListingDelete === false;
   return (
     <div className="container-fluid px-2 my-4 center">
       <ol
@@ -398,17 +400,17 @@ const Document = () => {
                 </button>
               </div>
             </div>
-            {storedScreens?.documentListingDelete && (
-            <Link to="/document/add">
-              <button
-                type="button"
-                className="btn btn-button btn-sm me-2"
-                style={{ fontWeight: "600px !important" }}
-              >
-                &nbsp; Add &nbsp;&nbsp; <i className="bx bx-plus"></i>
-              </button>
-            </Link>
-          )} 
+            {storedScreens?.documentListingCreate && (
+              <Link to="/document/add">
+                <button
+                  type="button"
+                  className="btn btn-button btn-sm me-2"
+                  style={{ fontWeight: "600px !important" }}
+                >
+                  &nbsp; Add &nbsp;&nbsp; <i className="bx bx-plus"></i>
+                </button>
+              </Link>
+            )}
           </div>
         </div>
         {loading ? (
@@ -448,6 +450,7 @@ const Document = () => {
                     openingDate: false,
                     taxRegistrationNumber: false,
                     zipCode: false,
+                    id: !hideColumn,
                   },
                 }}
                 muiTableBodyRowProps={({ row }) => ({
@@ -464,20 +467,22 @@ const Document = () => {
               onClose={handleMenuClose}
             >
               <MenuItem>
-                <DocumentEdit
-                  onSuccess={getDocumentData}
-                  id={selectedId}
-                  handleMenuClose={handleMenuClose}
-                />
+                {storedScreens?.documentListingUpdate && (
+                  <DocumentEdit
+                    onSuccess={getDocumentData}
+                    id={selectedId}
+                    handleMenuClose={handleMenuClose}
+                  />
+                )}
               </MenuItem>
               <MenuItem>
-              {storedScreens?.documentListingCreate && (
-                <GlobalDelete
-                  path={`/deleteDocumentFolder/${selectedId}`}
-                  onDeleteSuccess={getDocumentData}
-                  onOpen={handleMenuClose}
-                />
-              )}
+                {storedScreens?.documentListingCreate && (
+                  <GlobalDelete
+                    path={`/deleteDocumentFolder/${selectedId}`}
+                    onDeleteSuccess={getDocumentData}
+                    onOpen={handleMenuClose}
+                  />
+                )}
               </MenuItem>
             </Menu>
           </>

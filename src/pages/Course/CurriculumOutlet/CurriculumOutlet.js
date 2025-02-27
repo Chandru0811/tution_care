@@ -22,6 +22,7 @@ function CurriculumOutlet() {
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
   const appConfigInfo = JSON.parse(localStorage.getItem("tmsappConfigInfo"));
+  const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
 
   const columns = useMemo(
     () => [
@@ -151,7 +152,7 @@ function CurriculumOutlet() {
   const getData = async () => {
     try {
       const response = await api.get(`/getCurriculumOutLetByCourseId/${id}`);
-        setDatas(response.data);
+      setDatas(response.data);
     } catch (error) {
       console.error("Error fetching data ", error);
     } finally {
@@ -162,7 +163,9 @@ function CurriculumOutlet() {
   useEffect(() => {
     getData();
   }, []);
-
+  const hideColumn =
+    storedScreens?.curriculumUpdate === false &&
+    storedScreens?.curriculumDelete === false;
   return (
     <div className="container-fluid">
       <ol
@@ -181,7 +184,7 @@ function CurriculumOutlet() {
         </li> */}
         <li>
           <Link to="/course" className="custom-breadcrumb">
-          {appConfigInfo.course}
+            {appConfigInfo.course}
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
@@ -201,13 +204,15 @@ function CurriculumOutlet() {
             <span class="me-2 text-muted">
               This database shows the list of{" "}
               <span className="bold" style={{ color: "#287f71" }}>
-              Curriculum Outlet
+                Curriculum Outlet
               </span>
             </span>
           </div>
-          <span>
-            <CurriculumOutletAdd onSuccess={getData} />
-          </span>
+          {storedScreens?.curriculumCreate && (
+            <span>
+              <CurriculumOutletAdd onSuccess={getData} />
+            </span>
+          )}
         </div>
         {loading ? (
           <div className="loader-container">
@@ -235,8 +240,9 @@ function CurriculumOutlet() {
                     createdAt: false,
                     updatedBy: false,
                     updatedAt: false,
+                    id: !hideColumn,
                   },
-                 pagination: { pageSize: 50, pageIndex: 0 },
+                  pagination: { pageSize: 50, pageIndex: 0 },
                 }}
               />
             </ThemeProvider>
@@ -263,19 +269,23 @@ function CurriculumOutlet() {
                 {appConfigInfo.course} Curriculum
               </MenuItem>
 
-              <MenuItem >
-                <CurriculumOutletEdit
-                  onSuccess={getData}
-                  id={selectedId}
-                  handleMenuClose={handleMenuClose}
-                />
+              <MenuItem>
+                {storedScreens?.curriculumUpdate && (
+                  <CurriculumOutletEdit
+                    onSuccess={getData}
+                    id={selectedId}
+                    handleMenuClose={handleMenuClose}
+                  />
+                )}
               </MenuItem>
               <MenuItem>
-                <GlobalDelete
-                  path={`/deleteCurriculumOutLet/${selectedId}`}
-                  onDeleteSuccess={getData}
-                  onOpen={handleMenuClose}
-                />
+                {storedScreens?.curriculumDelete && (
+                  <GlobalDelete
+                    path={`/deleteCurriculumOutLet/${selectedId}`}
+                    onDeleteSuccess={getData}
+                    onOpen={handleMenuClose}
+                  />
+                )}
               </MenuItem>
             </Menu>
           </>

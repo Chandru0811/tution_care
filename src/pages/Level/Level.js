@@ -82,7 +82,11 @@ const Level = () => {
             </span>
           ) : null,
       },
-      { accessorKey: "level", enableHiding: false, header: `${appConfigInfo.level}` },
+      {
+        accessorKey: "level",
+        enableHiding: false,
+        header: `${appConfigInfo.level}`,
+      },
       {
         accessorKey: "levelCode",
         enableHiding: false,
@@ -199,7 +203,9 @@ const Level = () => {
       return matchesLevel && matchesCode;
     });
   }, [data, filters]);
-
+  const hideColumn =
+    storedScreens?.levelUpdate === false &&
+    storedScreens?.levelDelete === false;
   return (
     <div className="container-fluid my-4 center">
       <ol
@@ -213,7 +219,7 @@ const Level = () => {
           <span className="breadcrumb-separator "> &gt; </span>
         </li>
         <li>
-        {appConfigInfo.course}
+          {appConfigInfo.course}
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
@@ -272,7 +278,7 @@ const Level = () => {
               </button>
             </div>
           </div>
-          {storedScreens?.subjectCreate && (
+          {storedScreens?.levelCreate && (
             <div className="d-flex justify-content-end align-items-center me-2">
               <span>
                 <LevelAdd onSuccess={fetchData} />
@@ -307,8 +313,9 @@ const Level = () => {
                     createdAt: false,
                     updatedBy: false,
                     updatedAt: false,
+                    id: !hideColumn,
                   },
-                 pagination: { pageSize: 50, pageIndex: 0 },
+                  pagination: { pageSize: 50, pageIndex: 0 },
                 }}
                 // muiTableBodyRowProps={({ row }) => ({
                 //   onClick: () => navigate(`/level/view/${row.original.id}`),
@@ -327,22 +334,22 @@ const Level = () => {
                 View
               </MenuItem> */}
               <MenuItem>
-              {storedScreens?.levelUpdate && (
-                <LevelEdit
-                  onSuccess={fetchData}
-                  id={selectedId}
-                  handleMenuClose={handleMenuClose}
-                />
-              )}
+                {storedScreens?.levelUpdate && (
+                  <LevelEdit
+                    onSuccess={fetchData}
+                    id={selectedId}
+                    handleMenuClose={handleMenuClose}
+                  />
+                )}
               </MenuItem>
               <MenuItem>
-              {storedScreens?.levelDelete && (
-                <GlobalDelete
-                  path={`/deleteCourseLevel/${selectedId}`}
-                  onDeleteSuccess={fetchData}
-                  onOpen={handleMenuClose}
-                />
-              )}
+                {storedScreens?.levelDelete && (
+                  <GlobalDelete
+                    path={`/deleteCourseLevel/${selectedId}`}
+                    onDeleteSuccess={fetchData}
+                    onOpen={handleMenuClose}
+                  />
+                )}
               </MenuItem>
             </Menu>
           </>

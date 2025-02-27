@@ -152,7 +152,9 @@ const Deduction = () => {
   });
 
   const handleMenuClose = () => setMenuAnchor(null);
-
+  const hideColumn =
+    storedScreens?.deductionUpdate === false &&
+    storedScreens?.deductionDelete === false;
   return (
     <div className="container-fluid my-4 center">
       <ol
@@ -236,6 +238,7 @@ const Deduction = () => {
                     createdAt: false,
                     updatedBy: false,
                     updatedAt: false,
+                    id: !hideColumn,
                   },
                 }}
                 // muiTableBodyRowProps={({ row }) => ({
@@ -252,20 +255,22 @@ const Deduction = () => {
               onClose={handleMenuClose}
             >
               <MenuItem>
-                <DeductionEdit
-                  onSuccess={getData}
-                  id={selectedId}
-                  handleMenuClose={handleMenuClose}
-                />
+                {storedScreens?.deductionUpdate && (
+                  <DeductionEdit
+                    onSuccess={getData}
+                    id={selectedId}
+                    handleMenuClose={handleMenuClose}
+                  />
+                )}
               </MenuItem>
               <MenuItem>
-              {storedScreens?.deductionDelete && (
-                <GlobalDelete
-                  path={`/deleteUserDeduction/${selectedId}`}
-                  onDeleteSuccess={getData}
-                  onOpen={handleMenuClose}
-                />
-              )}
+                {storedScreens?.deductionDelete && (
+                  <GlobalDelete
+                    path={`/deleteUserDeduction/${selectedId}`}
+                    onDeleteSuccess={getData}
+                    onOpen={handleMenuClose}
+                  />
+                )}
               </MenuItem>
             </Menu>
           </div>

@@ -248,7 +248,9 @@ const Assignment = () => {
   }, [filters]);
 
   const handleMenuClose = () => setMenuAnchor(null);
-
+  const hideColumn =
+    storedScreens?.questionUpdate === false &&
+    storedScreens?.questionDelete === false;
   return (
     <div className="container-fluid px-2 my-4 center">
       <ol
@@ -430,6 +432,7 @@ const Assignment = () => {
                     createdAt: false,
                     updatedBy: false,
                     updatedAt: false,
+                    id: !hideColumn,
                   },
                 }}
                 muiTableBodyRowProps={({ row }) => ({
@@ -446,20 +449,22 @@ const Assignment = () => {
               open={Boolean(menuAnchor)}
               onClose={handleMenuClose}
             >
-              <MenuItem
-                onClick={() => navigate(`/assignment/edit/${selectedId}`)}
-                className="text-start mb-0 menuitem-style"
-              >
-                Edit
-              </MenuItem>
-              <MenuItem>
-              {storedScreens?.questionDelete && (
-                <GlobalDelete
-                  path={`/deleteAssignmentQuestionFile/${selectedId}`}
-                  onDeleteSuccess={getAssignmentData}
-                  onOpen={handleMenuClose}
-                />
+              {storedScreens?.questionUpdate && (
+                <MenuItem
+                  onClick={() => navigate(`/assignment/edit/${selectedId}`)}
+                  className="text-start mb-0 menuitem-style"
+                >
+                  Edit
+                </MenuItem>
               )}
+              <MenuItem>
+                {storedScreens?.questionDelete && (
+                  <GlobalDelete
+                    path={`/deleteAssignmentQuestionFile/${selectedId}`}
+                    onDeleteSuccess={getAssignmentData}
+                    onOpen={handleMenuClose}
+                  />
+                )}
               </MenuItem>
             </Menu>
           </>

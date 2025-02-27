@@ -222,7 +222,9 @@ const Payments = () => {
     setMenuAnchor(null);
     console.log("null");
   };
-
+  const hideColumn =
+    storedScreens?.paymentUpdate === false &&
+    storedScreens?.paymentDelete === false;
   return (
     <div className="container-fluid px-2 my-4 center">
       <ol
@@ -307,15 +309,15 @@ const Payments = () => {
             </div>
           </div>
           {storedScreens?.paymentCreate && (
-          <Link to="/payments/add">
-            <button
-              type="button"
-              className="btn btn-button btn-sm me-2"
-              style={{ fontWeight: "600px !important" }}
-            >
-              &nbsp; Add &nbsp;&nbsp; <i className="bx bx-plus"></i>
-            </button>
-          </Link>
+            <Link to="/payments/add">
+              <button
+                type="button"
+                className="btn btn-button btn-sm me-2"
+                style={{ fontWeight: "600px !important" }}
+              >
+                &nbsp; Add &nbsp;&nbsp; <i className="bx bx-plus"></i>
+              </button>
+            </Link>
           )}
         </div>
         {loading ? (
@@ -345,6 +347,7 @@ const Payments = () => {
                     createdAt: false,
                     updatedBy: false,
                     updatedAt: false,
+                    id: !hideColumn,
                   },
                 }}
                 muiTableBodyRowProps={({ row }) => ({
@@ -360,20 +363,22 @@ const Payments = () => {
               open={Boolean(menuAnchor)}
               onClose={handleMenuClose}
             >
-              <MenuItem
-                onClick={() => navigate(`/payments/edit/${selectedId}`)}
-                className="text-start mb-0 menuitem-style"
-              >
-                Edit
-              </MenuItem>
-              <MenuItem>
-              {storedScreens?.paymentDelete && (
-                <GlobalDelete
-                  path={`/deletePayment/${selectedId}`}
-                  onDeleteSuccess={getInvoiceData}
-                  onOpen={handleMenuClose}
-                />
+              {storedScreens?.paymentUpdate && (
+                <MenuItem
+                  onClick={() => navigate(`/payments/edit/${selectedId}`)}
+                  className="text-start mb-0 menuitem-style"
+                >
+                  Edit
+                </MenuItem>
               )}
+              <MenuItem>
+                {storedScreens?.paymentDelete && (
+                  <GlobalDelete
+                    path={`/deletePayment/${selectedId}`}
+                    onDeleteSuccess={getInvoiceData}
+                    onOpen={handleMenuClose}
+                  />
+                )}
               </MenuItem>
             </Menu>
           </>

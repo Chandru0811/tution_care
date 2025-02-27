@@ -16,13 +16,11 @@ import RolesEdit from "./RolesEdit";
 
 const Roles = () => {
   const centerId = localStorage.getItem("tmscenterId");
-  const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedId, setSelectedId] = useState(null);
   const [menuAnchor, setMenuAnchor] = useState(null);
-  console.log("roleDelete,", storedScreens?.roleDelete);
-  console.log("roleUpdate,", storedScreens?.roleUpdate);
+  const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
 
   const getData = async () => {
     try {
@@ -77,6 +75,12 @@ const Roles = () => {
         enableHiding: false,
         header: "Role Category",
         size: 20,
+        Cell: ({ row }) =>
+          row.original.roleCategory === "Teaching" ? (
+            <span className="">Teaching</span>
+          ) : row.original.roleCategory === "Non_Teaching" ? (
+            <span className="">Non Teaching</span>
+          ) : null,
       },
       { accessorKey: "createdBy", header: "Created By" },
       {
@@ -141,11 +145,10 @@ const Roles = () => {
       },
     },
   });
-  const hideColumn =
-    storedScreens?.roleDelete === false && storedScreens?.roleUpdate === false;
 
   const handleMenuClose = () => setMenuAnchor(null);
-
+  const hideColumn =
+    storedScreens?.roleUpdate === false && storedScreens?.roleDelete === false;
   return (
     <div className="container-fluid my-4 center">
       <ol

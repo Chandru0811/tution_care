@@ -50,7 +50,6 @@ const Lead = () => {
     setShowEditDialog(true);
   };
 
-
   const handleStatusChange = async (row, status) => {
     setSelectedRow(row);
     let message = "Are you sure want to change the lead status?";
@@ -112,7 +111,7 @@ const Lead = () => {
   const getData = async () => {
     setLoading(true);
     let params = {};
-      params.centerId = centerId;
+    params.centerId = centerId;
     if (filters.subjectId !== "") {
       params.subjectId = filters.subjectId;
     }
@@ -793,6 +792,9 @@ const Lead = () => {
   });
 
   const handleMenuClose = () => setMenuAnchor(null);
+  const hideColumn =
+    storedScreens?.leadListingUpdate === false &&
+    storedScreens?.leadListingDelete === false;
   return (
     <div>
       <div className="container-fluid my-4 center">
@@ -886,16 +888,14 @@ const Lead = () => {
               <span class="me-2 text-muted">
                 This database shows the list of{" "}
                 <span className="bold" style={{ color: "#287f71" }}>
-                {appConfigInfo.lead}
+                  {appConfigInfo.lead}
                 </span>
               </span>
             </div>
           </div>
           <div className="d-flex justify-content-between mb-3 px-2">
-            <div className="individual_fliters d-lg-flex ">
-            
-            </div>
-            {storedScreens?.centerListingCreate && (
+            <div className="individual_fliters d-lg-flex "></div>
+            {storedScreens?.leadListingCreate && (
               <Link to="/lead/lead/add">
                 <button
                   type="button"
@@ -944,8 +944,9 @@ const Lead = () => {
                       openingDate: false,
                       taxRegistrationNumber: false,
                       zipCode: false,
+                      id: !hideColumn,
                     },
-                   pagination: { pageSize: 50, pageIndex: 0 },
+                    pagination: { pageSize: 50, pageIndex: 0 },
                   }}
                   muiTableBodyRowProps={({ row }) => ({
                     onClick: () =>
@@ -976,11 +977,13 @@ const Lead = () => {
                 )}
                 {/* {storedScreens?.centerListingDelete && ( */}
                 <MenuItem>
-                  <GlobalDelete
-                    path={`/deleteLeadInfo/${selectedId}`}
-                    onDeleteSuccess={getData}
-                    onOpen={handleMenuClose}
-                  />
+                  {storedScreens?.leadListingDelete && (
+                    <GlobalDelete
+                      path={`/deleteLeadInfo/${selectedId}`}
+                      onDeleteSuccess={getData}
+                      onOpen={handleMenuClose}
+                    />
+                  )}
                 </MenuItem>
                 {/* )} */}
               </Menu>
@@ -1022,7 +1025,6 @@ const Lead = () => {
           </div>
         </Modal.Body>
       </Modal>
-     
     </div>
   );
 };

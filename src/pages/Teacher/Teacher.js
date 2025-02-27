@@ -208,7 +208,9 @@ const Teacher = () => {
   };
 
   const handleMenuClose = () => setMenuAnchor(null);
-
+  const hideColumn =
+    storedScreens?.teacherUpdate === false &&
+    storedScreens?.teacherDelete === false;
   return (
     <div className="container-fluid my-4 center">
       <ol
@@ -276,7 +278,7 @@ const Teacher = () => {
                 onChange={handleFilterChange}
               >
                 <option value="" disabled>
-                {`Select ${appConfigInfo.employee} Type`}
+                  {`Select ${appConfigInfo.employee} Type`}
                 </option>
                 <option value="Permanent">Permanent</option>
                 <option value="Temporary">Temporary</option>
@@ -357,6 +359,7 @@ const Teacher = () => {
                     openingDate: false,
                     taxRegistrationNumber: false,
                     zipCode: false,
+                    id: !hideColumn,
                   },
                 }}
                 muiTableBodyRowProps={({ row }) => ({
@@ -372,20 +375,22 @@ const Teacher = () => {
               open={Boolean(menuAnchor)}
               onClose={handleMenuClose}
             >
-              <MenuItem
-                onClick={() => navigate(`/teacher/edit/${selectedId}`)}
-                className="text-start mb-0 menuitem-style"
-              >
-                Edit
-              </MenuItem>
-              <MenuItem>
-              {storedScreens?.teacherDelete && (
-                <GlobalDelete
-                  path={`/deleteUser/${selectedId}`}
-                  onDeleteSuccess={fetchData}
-                  onOpen={handleMenuClose}
-                />
+              {storedScreens?.teacherUpdate && (
+                <MenuItem
+                  onClick={() => navigate(`/teacher/edit/${selectedId}`)}
+                  className="text-start mb-0 menuitem-style"
+                >
+                  Edit
+                </MenuItem>
               )}
+              <MenuItem>
+                {storedScreens?.teacherDelete && (
+                  <GlobalDelete
+                    path={`/deleteUser/${selectedId}`}
+                    onDeleteSuccess={fetchData}
+                    onOpen={handleMenuClose}
+                  />
+                )}
               </MenuItem>
             </Menu>
           </div>

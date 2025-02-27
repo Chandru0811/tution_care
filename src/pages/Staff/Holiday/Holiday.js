@@ -160,7 +160,9 @@ const Holiday = () => {
   });
 
   const handleMenuClose = () => setMenuAnchor(null);
-
+  const hideColumn =
+    storedScreens?.holidayUpdate === false &&
+    storedScreens?.holidayDelete === false;
   return (
     <div className="container-fluid my-4 center">
       <ol
@@ -232,7 +234,7 @@ const Holiday = () => {
                 enableDensityToggle={false}
                 enableFullScreenToggle={false}
                 initialState={{
-                 pagination: { pageSize: 50, pageIndex: 0 },
+                  pagination: { pageSize: 50, pageIndex: 0 },
                   columnVisibility: {
                     leaveReason: true,
                     leaveType: true,
@@ -245,6 +247,7 @@ const Holiday = () => {
                     createdAt: false,
                     updatedBy: false,
                     updatedAt: false,
+                    id: !hideColumn,
                   },
                 }}
                 muiTableBodyRowProps={({ row }) => ({
@@ -260,20 +263,22 @@ const Holiday = () => {
               open={Boolean(menuAnchor)}
               onClose={handleMenuClose}
             >
-              <MenuItem
-                onClick={() => navigate(`/holiday/edit/${selectedId}`)}
-                className="text-start mb-0 menuitem-style"
-              >
-                Edit
-              </MenuItem>
-              <MenuItem>
-              {storedScreens?.holidayDelete && (
-                <GlobalDelete
-                  path={`/deleteUserHoliday/${selectedId}`}
-                  onDeleteSuccess={getData}
-                  onOpen={handleMenuClose}
-                />
+              {storedScreens?.holidayUpdate && (
+                <MenuItem
+                  onClick={() => navigate(`/holiday/edit/${selectedId}`)}
+                  className="text-start mb-0 menuitem-style"
+                >
+                  Edit
+                </MenuItem>
               )}
+              <MenuItem>
+                {storedScreens?.holidayDelete && (
+                  <GlobalDelete
+                    path={`/deleteUserHoliday/${selectedId}`}
+                    onDeleteSuccess={getData}
+                    onOpen={handleMenuClose}
+                  />
+                )}
               </MenuItem>
             </Menu>
           </div>

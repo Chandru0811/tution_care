@@ -62,8 +62,12 @@ const Course = () => {
         enableHiding: false,
         header: `${appConfigInfo.course} Name`,
       },
-      { accessorKey: "levelName", enableHiding: false, header:`${appConfigInfo.level}`},
-     
+      {
+        accessorKey: "levelName",
+        enableHiding: false,
+        header: `${appConfigInfo.level}`,
+      },
+
       {
         accessorKey: "courseCode",
         enableHiding: false,
@@ -178,7 +182,6 @@ const Course = () => {
   //   fetchData();
   // }, [filters]);
 
-
   const fetchData = async () => {
     try {
       setLoading(true);
@@ -253,7 +256,9 @@ const Course = () => {
   };
 
   const handleMenuClose = () => setMenuAnchor(null);
-
+  const hideColumn =
+    storedScreens?.courseUpdate === false &&
+    storedScreens?.courseDelete === false;
   return (
     <div className="container-fluid my-4 center">
       <ol
@@ -286,7 +291,7 @@ const Course = () => {
             <span className="me-2 text-muted">
               This database shows the list of
               <span className="bold" style={{ color: "#287f71" }}>
-              {appConfigInfo.course}
+                {appConfigInfo.course}
               </span>
             </span>
           </div>
@@ -360,7 +365,7 @@ const Course = () => {
                 enableDensityToggle={false}
                 enableFullScreenToggle={false}
                 initialState={{
-                 pagination: { pageSize: 50, pageIndex: 0 },
+                  pagination: { pageSize: 50, pageIndex: 0 },
                   columnVisibility: {
                     colorCode: false,
                     description: false,
@@ -372,6 +377,7 @@ const Course = () => {
                     createdAt: false,
                     updatedBy: false,
                     updatedAt: false,
+                    id: !hideColumn,
                   },
                 }}
                 muiTableBodyRowProps={({ row }) => ({
@@ -387,12 +393,14 @@ const Course = () => {
               onClose={handleMenuClose}
             >
               <MenuItem
-                onClick={() => navigate(`/course/coursefees/${selectedId}`)} className="text-start mb-0 menuitem-style"
+                onClick={() => navigate(`/course/coursefees/${selectedId}`)}
+                className="text-start mb-0 menuitem-style"
               >
                 {appConfigInfo.course} Fees
               </MenuItem>
               <MenuItem
-                onClick={() => navigate(`/course/coursedeposit/${selectedId}`)} className="text-start mb-0 menuitem-style"
+                onClick={() => navigate(`/course/coursedeposit/${selectedId}`)}
+                className="text-start mb-0 menuitem-style"
               >
                 {appConfigInfo.course} Deposit Fees
               </MenuItem>
@@ -407,17 +415,22 @@ const Course = () => {
               {/* <MenuItem onClick={() => navigate(`/course/view/${selectedId}`)}>
                 View
               </MenuItem> */}
-              <MenuItem onClick={() => navigate(`/course/edit/${selectedId}`)} className="text-start mb-0 menuitem-style">
-                Edit
-              </MenuItem>
-              <MenuItem>
-              {storedScreens?.courseDelete && (
-                <GlobalDelete
-                  path={`/deleteCourse/${selectedId}`}
-                  onOpen={handleMenuClose}
-                  onDeleteSuccess={fetchData}
-                />
+              {storedScreens?.courseUpdate && (
+                <MenuItem
+                  onClick={() => navigate(`/course/edit/${selectedId}`)}
+                  className="text-start mb-0 menuitem-style"
+                >
+                  Edit
+                </MenuItem>
               )}
+              <MenuItem>
+                {storedScreens?.courseDelete && (
+                  <GlobalDelete
+                    path={`/deleteCourse/${selectedId}`}
+                    onOpen={handleMenuClose}
+                    onDeleteSuccess={fetchData}
+                  />
+                )}
               </MenuItem>
             </Menu>
           </>

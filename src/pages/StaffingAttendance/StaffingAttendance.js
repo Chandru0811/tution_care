@@ -21,7 +21,7 @@ const StaffingAttendance = () => {
   const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
-  const centerId = localStorage.getItem("tmscenterId")
+  const centerId = localStorage.getItem("tmscenterId");
 
   const columns = useMemo(
     () => [
@@ -148,7 +148,7 @@ const StaffingAttendance = () => {
           ) : null,
       },
       { accessorKey: "userId", header: "User Id" },
-  
+
       { accessorKey: "otEndTime", header: "Ot End Time" },
       { accessorKey: "otStartTime", header: "Ot Start Time" },
       {
@@ -167,7 +167,9 @@ const StaffingAttendance = () => {
 
   const getData = async () => {
     try {
-      const response = await api.get(`/getAttendanceWithCustomInfo?centerId=${centerId}`);
+      const response = await api.get(
+        `/getAttendanceWithCustomInfo?centerId=${centerId}`
+      );
       setData(response.data);
       setLoading(false);
     } catch (error) {
@@ -221,7 +223,9 @@ const StaffingAttendance = () => {
     },
   });
   const handleMenuClose = () => setMenuAnchor(null);
-
+  const hideColumn =
+    storedScreens?.staffAttendanceUpdate === false &&
+    storedScreens?.staffAttendanceDelete === false;
   return (
     <div className="container-fluid my-4 center">
       <ol
@@ -293,7 +297,7 @@ const StaffingAttendance = () => {
                 enableDensityToggle={false}
                 enableFullScreenToggle={false}
                 initialState={{
-                 pagination: { pageSize: 50, pageIndex: 0 },
+                  pagination: { pageSize: 50, pageIndex: 0 },
                   columnVisibility: {
                     gst: false,
                     address: false,
@@ -313,6 +317,7 @@ const StaffingAttendance = () => {
                     openingDate: false,
                     taxRegistrationNumber: false,
                     zipCode: false,
+                    id: !hideColumn,
                   },
                 }}
                 muiTableBodyRowProps={({ row }) => ({
@@ -329,22 +334,24 @@ const StaffingAttendance = () => {
               open={Boolean(menuAnchor)}
               onClose={handleMenuClose}
             >
-              <MenuItem
-                onClick={() =>
-                  navigate(`/staffing/attendance/edit/${selectedId}`)
-                }
-                className="text-start mb-0 menuitem-style"
-              >
-                Edit
-              </MenuItem>
-              <MenuItem>
-              {storedScreens?.staffAttendanceDelete && (
-                <GlobalDelete
-                  path={`/deleteUserAttendance/${selectedId}`}
-                  onDeleteSuccess={getData}
-                  onOpen={handleMenuClose}
-                />
+              {storedScreens?.staffAttendanceUpdate && (
+                <MenuItem
+                  onClick={() =>
+                    navigate(`/staffing/attendance/edit/${selectedId}`)
+                  }
+                  className="text-start mb-0 menuitem-style"
+                >
+                  Edit
+                </MenuItem>
               )}
+              <MenuItem>
+                {storedScreens?.staffAttendanceDelete && (
+                  <GlobalDelete
+                    path={`/deleteUserAttendance/${selectedId}`}
+                    onDeleteSuccess={getData}
+                    onOpen={handleMenuClose}
+                  />
+                )}
               </MenuItem>
             </Menu>
           </div>

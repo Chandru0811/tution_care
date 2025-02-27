@@ -21,6 +21,7 @@ const CourseDeposit = () => {
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
   const appConfigInfo = JSON.parse(localStorage.getItem("tmsappConfigInfo"));
+  const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
 
   const columns = useMemo(
     () => [
@@ -125,7 +126,9 @@ const CourseDeposit = () => {
   }, []);
 
   const handleMenuClose = () => setMenuAnchor(null);
-
+  const hideColumn =
+    storedScreens?.courseDepositFeesUpdate === false &&
+    storedScreens?.courseDepositFeesDelete === false;
   const theme = createTheme({
     components: {
       MuiTableCell: {
@@ -188,12 +191,12 @@ const CourseDeposit = () => {
         </li> */}
         <li>
           <Link to="/course" className="custom-breadcrumb">
-          {appConfigInfo.course}
+            {appConfigInfo.course}
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-        {appConfigInfo.course} Deposit
+          {appConfigInfo.course} Deposit
         </li>
       </ol>
       <div className="card">
@@ -208,13 +211,15 @@ const CourseDeposit = () => {
             <span class="me-2 text-muted">
               This database shows the list of{" "}
               <span className="bold" style={{ color: "#287f71" }}>
-              {appConfigInfo.course} Deposit
+                {appConfigInfo.course} Deposit
               </span>
             </span>
           </div>
-          <span>
-            <CourseDepositAdd onSuccess={getData} />
-          </span>
+          {storedScreens?.courseDepositFeesCreate && (
+            <span>
+              <CourseDepositAdd onSuccess={getData} />
+            </span>
+          )}
         </div>
         {loading ? (
           <div className="loader-container">
@@ -242,8 +247,9 @@ const CourseDeposit = () => {
                     createdAt: false,
                     updatedBy: false,
                     updatedAt: false,
+                    id: !hideColumn,
                   },
-                 pagination: { pageSize: 50, pageIndex: 0 },
+                  pagination: { pageSize: 50, pageIndex: 0 },
                 }}
               />
             </ThemeProvider>
@@ -253,19 +259,23 @@ const CourseDeposit = () => {
               open={Boolean(menuAnchor)}
               onClose={handleMenuClose}
             >
+              {storedScreens?.courseDepositFeesUpdate && (
+                <MenuItem>
+                  <CourseDepositEdit
+                    onSuccess={getData}
+                    id={selectedId}
+                    handleMenuClose={handleMenuClose}
+                  />
+                </MenuItem>
+              )}
               <MenuItem>
-                <CourseDepositEdit
-                  onSuccess={getData}
-                  id={selectedId}
-                  handleMenuClose={handleMenuClose}
-                />
-              </MenuItem>
-              <MenuItem>
-                <GlobalDelete
-                  path={`/deleteCourseDepositFees/${selectedId}`}
-                  onDeleteSuccess={getData}
-                  onOpen={handleMenuClose}
-                />
+                {storedScreens?.courseDepositFeesDelete && (
+                  <GlobalDelete
+                    path={`/deleteCourseDepositFees/${selectedId}`}
+                    onDeleteSuccess={getData}
+                    onOpen={handleMenuClose}
+                  />
+                )}
               </MenuItem>
             </Menu>
           </>

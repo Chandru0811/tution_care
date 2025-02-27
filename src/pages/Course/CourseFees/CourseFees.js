@@ -25,7 +25,7 @@ const CourseFees = () => {
   const [selectedId, setSelectedId] = useState(null);
   const [packageData, setPackageData] = useState(null);
   const appConfigInfo = JSON.parse(localStorage.getItem("tmsappConfigInfo"));
-
+  const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
 
   const columns = useMemo(
     () => [
@@ -112,7 +112,9 @@ const CourseFees = () => {
   );
 
   const handleMenuClose = () => setMenuAnchor(null);
-
+  const hideColumn =
+    storedScreens?.courseFeesUpdate === false &&
+    storedScreens?.courseFeesDelete === false;
   const theme = createTheme({
     components: {
       MuiTableCell: {
@@ -250,13 +252,15 @@ const CourseFees = () => {
             <span class="me-2 text-muted">
               This database shows the list of{" "}
               <span className="bold" style={{ color: "#287f71" }}>
-              {appConfigInfo.course} Fees
+                {appConfigInfo.course} Fees
               </span>
             </span>
           </div>
-          <span>
-            <CourseFeesAdd onSuccess={getData}/>
-          </span>
+          {storedScreens?.courseFeesCreate && (
+            <span>
+              <CourseFeesAdd onSuccess={getData} />
+            </span>
+          )}
         </div>
         {loading ? (
           <div className="loader-container">
@@ -284,8 +288,9 @@ const CourseFees = () => {
                     createdAt: false,
                     updatedBy: false,
                     updatedAt: false,
+                    id: !hideColumn,
                   },
-                 pagination: { pageSize: 50, pageIndex: 0 },
+                  pagination: { pageSize: 50, pageIndex: 0 },
                 }}
               />
             </ThemeProvider>
@@ -296,19 +301,23 @@ const CourseFees = () => {
               onClose={handleMenuClose}
             >
               <MenuItem>
-                <CourseFeesEdit
-                  onSuccess={getData}
-                  id={selectedId}
-                  handleMenuClose={handleMenuClose}
-                />
+                {storedScreens?.courseFeesUpdate && (
+                  <CourseFeesEdit
+                    onSuccess={getData}
+                    id={selectedId}
+                    handleMenuClose={handleMenuClose}
+                  />
+                )}
               </MenuItem>
 
               <MenuItem>
-                <GlobalDelete
-                  path={`/deleteCourseFees/${selectedId}`}
-                  onDeleteSuccess={getData}
-                  onOpen={handleMenuClose}
-                />
+                {storedScreens?.courseFeesDelete && (
+                  <GlobalDelete
+                    path={`/deleteCourseFees/${selectedId}`}
+                    onDeleteSuccess={getData}
+                    onOpen={handleMenuClose}
+                  />
+                )}
               </MenuItem>
             </Menu>
           </>

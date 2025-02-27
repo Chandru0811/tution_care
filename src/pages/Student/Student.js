@@ -12,7 +12,6 @@ import {
 } from "@mui/material";
 import GlobalDelete from "../../components/common/GlobalDelete";
 
-
 const Student = () => {
   const [filters, setFilters] = useState({
     centerId: "",
@@ -252,7 +251,9 @@ const Student = () => {
   };
 
   const handleMenuClose = () => setMenuAnchor(null);
-
+  const hideColumn =
+    storedScreens?.studentListingUpdate === false &&
+    storedScreens?.studentListingDelete === false;
   return (
     <div className="container-fluid my-4 center">
       <ol
@@ -389,7 +390,7 @@ const Student = () => {
                 enableDensityToggle={false}
                 enableFullScreenToggle={false}
                 initialState={{
-                 pagination: { pageSize: 50, pageIndex: 0 },
+                  pagination: { pageSize: 50, pageIndex: 0 },
                   columnVisibility: {
                     studentChineseName: false,
                     age: false,
@@ -412,6 +413,7 @@ const Student = () => {
                     referByStudent: false,
                     referByParent: false,
                     remark: false,
+                    id: !hideColumn,
                   },
                 }}
                 muiTableBodyRowProps={({ row }) => ({
@@ -428,20 +430,22 @@ const Student = () => {
               onClose={handleMenuClose}
               disableScrollLock
             >
-              <MenuItem
-                onClick={() => navigate(`/student/edit/${selectedId}`)}
-                className="text-start mb-0 menuitem-style"
-              >
-                Edit
-              </MenuItem>
-              <MenuItem>
-              {storedScreens?.studentListingDelete && (
-                <GlobalDelete
-                  path={`/deleteStudentDetail/${selectedId}`}
-                  onDeleteSuccess={fetchStudentData}
-                  onOpen={handleMenuClose}
-                />
+              {storedScreens?.studentListingUpdate && (
+                <MenuItem
+                  onClick={() => navigate(`/student/edit/${selectedId}`)}
+                  className="text-start mb-0 menuitem-style"
+                >
+                  Edit
+                </MenuItem>
               )}
+              <MenuItem>
+                {storedScreens?.studentListingDelete && (
+                  <GlobalDelete
+                    path={`/deleteStudentDetail/${selectedId}`}
+                    onDeleteSuccess={fetchStudentData}
+                    onOpen={handleMenuClose}
+                  />
+                )}
               </MenuItem>
             </Menu>
           </>

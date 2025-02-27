@@ -21,6 +21,7 @@ const ReplaceClassLesson = () => {
   const storedConfigure = JSON.parse(
     localStorage.getItem("tmsappConfigInfo") || "{}"
   );
+  const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
 
   const columns = useMemo(
     () => [
