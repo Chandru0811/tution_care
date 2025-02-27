@@ -141,7 +141,8 @@ const AbsentReason = () => {
       },
     },
   });
-
+  // const hideColumn =
+  //   storedScreens?.roleDelete === false && storedScreens?.roleUpdate === false;
   const handleMenuClose = () => setMenuAnchor(null);
 
   return (

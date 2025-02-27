@@ -143,6 +143,9 @@ const Shg = () => {
   });
 
   const handleMenuClose = () => setMenuAnchor(null);
+  const hideColumn =
+    storedScreens?.shgSettingUpdate === false &&
+    storedScreens?.shgSettingDelete === false;
   return (
     <div className="container-fluid my-4 center">
       <ol
@@ -221,6 +224,7 @@ const Shg = () => {
                     createdAt: false,
                     updatedBy: false,
                     updatedAt: false,
+                    id: !hideColumn,
                   },
                 }}
                 // muiTableBodyRowProps={({ row }) => ({

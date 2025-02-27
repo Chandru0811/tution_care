@@ -21,6 +21,8 @@ const Roles = () => {
   const [loading, setLoading] = useState(true);
   const [selectedId, setSelectedId] = useState(null);
   const [menuAnchor, setMenuAnchor] = useState(null);
+  console.log("roleDelete,", storedScreens?.roleDelete);
+  console.log("roleUpdate,", storedScreens?.roleUpdate);
 
   const getData = async () => {
     try {
@@ -139,6 +141,8 @@ const Roles = () => {
       },
     },
   });
+  const hideColumn =
+    storedScreens?.roleDelete === false && storedScreens?.roleUpdate === false;
 
   const handleMenuClose = () => setMenuAnchor(null);
 
@@ -180,11 +184,11 @@ const Roles = () => {
           </div>
         </div>
         {storedScreens?.roleCreate && (
-        <div className="d-flex justify-content-end align-items-center">
-          <span>
-            <RolesAdd onSuccess={getData} />
-          </span>
-        </div>
+          <div className="d-flex justify-content-end align-items-center">
+            <span>
+              <RolesAdd onSuccess={getData} />
+            </span>
+          </div>
         )}
         {loading ? (
           <div className="loader-container">
@@ -213,6 +217,7 @@ const Roles = () => {
                     createdAt: false,
                     updatedBy: false,
                     updatedAt: false,
+                    id: !hideColumn,
                   },
                 }}
               />
@@ -225,22 +230,22 @@ const Roles = () => {
               onClose={handleMenuClose}
             >
               <MenuItem>
-              {storedScreens?.roleUpdate && (
-                <RolesEdit
-                  onSuccess={getData}
-                  id={selectedId}
-                  handleMenuClose={handleMenuClose}
-                />
-              )}
+                {storedScreens?.roleUpdate && (
+                  <RolesEdit
+                    onSuccess={getData}
+                    id={selectedId}
+                    handleMenuClose={handleMenuClose}
+                  />
+                )}
               </MenuItem>
               <MenuItem>
-              {storedScreens?.roleDelete && (
-                <GlobalDelete
-                  path={`/deleteUserRole/${selectedId}`}
-                  onDeleteSuccess={getData}
-                  onOpen={handleMenuClose}
-                />
-              )}
+                {storedScreens?.roleDelete && (
+                  <GlobalDelete
+                    path={`/deleteUserRole/${selectedId}`}
+                    onDeleteSuccess={getData}
+                    onOpen={handleMenuClose}
+                  />
+                )}
               </MenuItem>
             </Menu>
           </>

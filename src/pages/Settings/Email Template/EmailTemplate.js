@@ -14,6 +14,7 @@ import { MaterialReactTable } from "material-react-table";
 
 
 const EmailTemplate = () => {
+  const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedId, setSelectedId] = useState(null);
@@ -136,6 +137,7 @@ const EmailTemplate = () => {
   });
 
   const handleMenuClose = () => setMenuAnchor(null);
+  const hideColumn = storedScreens?.emailUpdate === false;
   return (
     <div className="container-fluid my-4 center">
       <ol
@@ -203,6 +205,7 @@ const EmailTemplate = () => {
                     createdAt: false,
                     updatedBy: false,
                     updatedAt: false,
+                    id:!hideColumn
                   },
                 }}
                 // muiTableBodyRowProps={({ row }) => ({
@@ -219,8 +222,9 @@ const EmailTemplate = () => {
               onClose={handleMenuClose}
             >
               <MenuItem>
+              {storedScreens?.emailUpdate && (
                 <EmailTemplateEdit onSuccess={getData} id={selectedId} handleMenuClose={handleMenuClose}/>
-              </MenuItem>
+               )} </MenuItem>
             </Menu>
           </>
         )}

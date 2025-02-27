@@ -52,8 +52,9 @@ function NewLeadArrived() {
           },
         });
         if (response.status === 201) {
-          toast.success(response.data.message);
+          toast.success("New Lead Register Successfully");
           // navigate("/lead");
+          formik.resetForm();
         } else {
           toast.error(response.data.message);
         }

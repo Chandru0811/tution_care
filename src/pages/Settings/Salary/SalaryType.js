@@ -18,13 +18,15 @@ const Salary = () => {
   const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
-    const [selectedId, setSelectedId] = useState(null);
-    const [menuAnchor, setMenuAnchor] = useState(null);
-    const centerId = localStorage.getItem("tmscenterId");
+  const [selectedId, setSelectedId] = useState(null);
+  const [menuAnchor, setMenuAnchor] = useState(null);
+  const centerId = localStorage.getItem("tmscenterId");
 
   const getData = async () => {
     try {
-      const response = await api.get(`/getSalarySettingWithCenterId/${centerId}`);
+      const response = await api.get(
+        `/getSalarySettingWithCenterId/${centerId}`
+      );
       setDatas(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -37,62 +39,62 @@ const Salary = () => {
     getData();
   }, []);
 
-   const columns = useMemo(
-     () => [
-       {
-         accessorFn: (row, index) => index + 1,
-         header: "S.NO",
-         enableSorting: true,
-         enableHiding: false,
-         size: 40,
-         cell: ({ cell }) => (
-           <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
-         ),
-       },
-       {
-         accessorKey: "id",
-         header: "",
-         enableHiding: false,
-         enableSorting: false,
-         size: 20,
-         Cell: ({ cell }) => (
-           <IconButton
-             onClick={(e) => {
-               setMenuAnchor(e.currentTarget);
-               setSelectedId(cell.getValue());
-             }}
-           >
-             <MoreVertIcon />
-           </IconButton>
-         ),
-       },
-       {
-         accessorKey: "salaryType",
-         enableHiding: false,
-         header: "Salary Type",
-         size: 20,
-       },
-       { accessorKey: "createdBy", header: "Created By" },
-       {
-         accessorKey: "createdAt",
-         header: "Created At",
-         Cell: ({ cell }) => cell.getValue()?.substring(0, 10),
-       },
-       {
-         accessorKey: "updatedAt",
-         header: "Updated At",
-         Cell: ({ cell }) => cell.getValue()?.substring(0, 10) || "",
-       },
-       {
-         accessorKey: "updatedBy",
-         header: "Updated By",
-         Cell: ({ cell }) => cell.getValue() || "",
-       },
-     ],
-     []
-   );
- 
-   const theme = createTheme({
+  const columns = useMemo(
+    () => [
+      {
+        accessorFn: (row, index) => index + 1,
+        header: "S.NO",
+        enableSorting: true,
+        enableHiding: false,
+        size: 40,
+        cell: ({ cell }) => (
+          <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
+        ),
+      },
+      {
+        accessorKey: "id",
+        header: "",
+        enableHiding: false,
+        enableSorting: false,
+        size: 20,
+        Cell: ({ cell }) => (
+          <IconButton
+            onClick={(e) => {
+              setMenuAnchor(e.currentTarget);
+              setSelectedId(cell.getValue());
+            }}
+          >
+            <MoreVertIcon />
+          </IconButton>
+        ),
+      },
+      {
+        accessorKey: "salaryType",
+        enableHiding: false,
+        header: "Salary Type",
+        size: 20,
+      },
+      { accessorKey: "createdBy", header: "Created By" },
+      {
+        accessorKey: "createdAt",
+        header: "Created At",
+        Cell: ({ cell }) => cell.getValue()?.substring(0, 10),
+      },
+      {
+        accessorKey: "updatedAt",
+        header: "Updated At",
+        Cell: ({ cell }) => cell.getValue()?.substring(0, 10) || "",
+      },
+      {
+        accessorKey: "updatedBy",
+        header: "Updated By",
+        Cell: ({ cell }) => cell.getValue() || "",
+      },
+    ],
+    []
+  );
+
+  const theme = createTheme({
     components: {
       MuiTableCell: {
         styleOverrides: {
@@ -135,8 +137,11 @@ const Salary = () => {
       },
     },
   });
- 
-   const handleMenuClose = () => setMenuAnchor(null);
+
+  const handleMenuClose = () => setMenuAnchor(null);
+  const hideColumn =
+    storedScreens?.salarySettingUpdate === false &&
+    storedScreens?.salarySettingDelete === false;
   return (
     <div className="container-fluid my-4 center">
       <ol
@@ -169,24 +174,24 @@ const Salary = () => {
             <span class="me-2 text-muted">
               This database shows the list of{" "}
               <span className="bold" style={{ color: "#287f71" }}>
-              Salary Type
+                Salary Type
               </span>
             </span>
           </div>
         </div>
         {storedScreens?.salarySettingCreate && (
-        <div className="d-flex justify-content-end align-items-center">
-          <span>
-            <SalaryTypeAdd onSuccess={getData} />
-          </span>
-          {/* } */}
-          {/* <p>        <button className="btn btn-light border-secondary mx-2" onClick={handleDataShow}>
+          <div className="d-flex justify-content-end align-items-center">
+            <span>
+              <SalaryTypeAdd onSuccess={getData} />
+            </span>
+            {/* } */}
+            {/* <p>        <button className="btn btn-light border-secondary mx-2" onClick={handleDataShow}>
 
           {extraData?"Hide":'Show'}
           <MdViewColumn className="fs-4 text-secondary"/>
 
         </button> </p> */}
-        </div>
+          </div>
         )}
         {loading ? (
           <div className="loader-container">
@@ -200,51 +205,57 @@ const Salary = () => {
           </div>
         ) : (
           <>
-          <ThemeProvider theme={theme}>
-            <MaterialReactTable
-              columns={columns}
-              data={datas}
-              enableColumnActions={false}
-              enableColumnFilters={false}
-              enableDensityToggle={false}
-              enableFullScreenToggle={false}
-                 initialState={{
-                 pagination: { pageSize: 50, pageIndex: 0 },
-                columnVisibility: {
-                  createdBy: false,
-                  createdAt: false,
-                  updatedBy: false,
-                  updatedAt: false,
-                },
-              }}
-              // muiTableBodyRowProps={({ row }) => ({
-              //   onClick: () => navigate(`/center/view/${row.original.id}`),
-              //   style: { cursor: "pointer" },
-              // })}
-            />
-          </ThemeProvider>
-
-          <Menu
-            id="action-menu"
-            anchorEl={menuAnchor}
-            open={Boolean(menuAnchor)}
-            onClose={handleMenuClose}
-          >
-            <MenuItem>
-            {storedScreens?.salarySettingUpdate && (
-              <SalaryTypeEdit onSuccess={getData} id={selectedId} handleMenuClose={handleMenuClose}/>
-            )}</MenuItem>
-            <MenuItem>
-            {storedScreens?.salarySettingDelete && (
-              <GlobalDelete
-                path={`/deleteSalarySetting/${selectedId}`}
-                onDeleteSuccess={getData}
-                onOpen={handleMenuClose}
+            <ThemeProvider theme={theme}>
+              <MaterialReactTable
+                columns={columns}
+                data={datas}
+                enableColumnActions={false}
+                enableColumnFilters={false}
+                enableDensityToggle={false}
+                enableFullScreenToggle={false}
+                initialState={{
+                  pagination: { pageSize: 50, pageIndex: 0 },
+                  columnVisibility: {
+                    createdBy: false,
+                    createdAt: false,
+                    updatedBy: false,
+                    updatedAt: false,
+                    id: !hideColumn,
+                  },
+                }}
+                // muiTableBodyRowProps={({ row }) => ({
+                //   onClick: () => navigate(`/center/view/${row.original.id}`),
+                //   style: { cursor: "pointer" },
+                // })}
               />
-            )}
-            </MenuItem>
-          </Menu>
-        </>
+            </ThemeProvider>
+
+            <Menu
+              id="action-menu"
+              anchorEl={menuAnchor}
+              open={Boolean(menuAnchor)}
+              onClose={handleMenuClose}
+            >
+              <MenuItem>
+                {storedScreens?.salarySettingUpdate && (
+                  <SalaryTypeEdit
+                    onSuccess={getData}
+                    id={selectedId}
+                    handleMenuClose={handleMenuClose}
+                  />
+                )}
+              </MenuItem>
+              <MenuItem>
+                {storedScreens?.salarySettingDelete && (
+                  <GlobalDelete
+                    path={`/deleteSalarySetting/${selectedId}`}
+                    onDeleteSuccess={getData}
+                    onOpen={handleMenuClose}
+                  />
+                )}
+              </MenuItem>
+            </Menu>
+          </>
         )}
       </div>
     </div>

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo,  useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../../../config/URL";
 import RaceAdd from "./RaceAdd";
@@ -135,6 +135,9 @@ const Race = () => {
   });
 
   const handleMenuClose = () => setMenuAnchor(null);
+  const hideColumn =
+    storedScreens?.raceSettingUpdate === false &&
+    storedScreens?.raceSettingDelete === false;
 
   return (
     <div className="container-fluid my-4 center">
@@ -174,18 +177,18 @@ const Race = () => {
           </div>
         </div>
         {storedScreens?.raceSettingCreate && (
-        <div className="d-flex justify-content-end align-items-center">
-          <span>
-            <RaceAdd onSuccess={getData} />
-          </span>
-          {/* } */}
-          {/* <p>        <button className="btn btn-light border-secondary mx-2" onClick={handleDataShow}>
+          <div className="d-flex justify-content-end align-items-center">
+            <span>
+              <RaceAdd onSuccess={getData} />
+            </span>
+            {/* } */}
+            {/* <p>        <button className="btn btn-light border-secondary mx-2" onClick={handleDataShow}>
 
         {extraData?"Hide":'Show'}
         <MdViewColumn className="fs-4 text-secondary"/>
 
       </button> </p> */}
-        </div>
+          </div>
         )}
         {loading ? (
           <div className="loader-container">
@@ -207,13 +210,14 @@ const Race = () => {
                 enableColumnFilters={false}
                 enableDensityToggle={false}
                 enableFullScreenToggle={false}
-                   initialState={{
+                initialState={{
                   pagination: { pageSize: 50 },
                   columnVisibility: {
                     createdBy: false,
                     createdAt: false,
                     updatedBy: false,
                     updatedAt: false,
+                    id: !hideColumn,
                   },
                 }}
                 // muiTableBodyRowProps={({ row }) => ({
@@ -230,17 +234,22 @@ const Race = () => {
               onClose={handleMenuClose}
             >
               <MenuItem>
-              {storedScreens?.raceSettingUpdate && (
-                <RaceEdit onSuccess={getData} id={selectedId} handleMenuClose={handleMenuClose}/>
-                )}  </MenuItem>
+                {storedScreens?.raceSettingUpdate && (
+                  <RaceEdit
+                    onSuccess={getData}
+                    id={selectedId}
+                    handleMenuClose={handleMenuClose}
+                  />
+                )}{" "}
+              </MenuItem>
               <MenuItem>
-              {storedScreens?.raceSettingDelete && (
-                <GlobalDelete
-                  path={`/deleteRaceSetting/${selectedId}`}
-                  onDeleteSuccess={getData}
-                  onOpen={handleMenuClose}
-                />
-              )}
+                {storedScreens?.raceSettingDelete && (
+                  <GlobalDelete
+                    path={`/deleteRaceSetting/${selectedId}`}
+                    onDeleteSuccess={getData}
+                    onOpen={handleMenuClose}
+                  />
+                )}
               </MenuItem>
             </Menu>
           </>

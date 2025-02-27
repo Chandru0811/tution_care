@@ -139,6 +139,9 @@ const IDType = () => {
   });
 
   const handleMenuClose = () => setMenuAnchor(null);
+  
+  const hideColumn =
+  storedScreens?.idTypeSettingDelete === false && storedScreens?.idTypeSettingUpdate === false;
 
   return (
     <div className="container-fluid my-4 center">
@@ -218,6 +221,7 @@ const IDType = () => {
                     createdAt: false,
                     updatedBy: false,
                     updatedAt: false,
+                    id:!hideColumn
                   },
                 }}
                 // muiTableBodyRowProps={({ row }) => ({

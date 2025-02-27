@@ -103,7 +103,7 @@ function SuperAdminCenterAdd({ handleCenterChanged }) {
         }
       } catch (error) {
         if (error.response && error.response.status === 409) {
-          toast.warn(error.message);
+          toast.warn(error.response.data.message);
         } else {
           toast.error(error.message);
         }

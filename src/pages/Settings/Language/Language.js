@@ -135,6 +135,9 @@ const Language = () => {
   });
 
   const handleMenuClose = () => setMenuAnchor(null);
+  const hideColumn =
+    storedScreens?.languageUpdate === false &&
+    storedScreens?.languageDelete === false;
 
   return (
     <div className="container-fluid my-4 center">
@@ -174,11 +177,11 @@ const Language = () => {
           </div>
         </div>
         {storedScreens?.languageCreate && (
-        <div className="d-flex justify-content-end align-items-center">
-          <span>
-            <LanguageAdd onSuccess={getData} />
-          </span>
-        </div>
+          <div className="d-flex justify-content-end align-items-center">
+            <span>
+              <LanguageAdd onSuccess={getData} />
+            </span>
+          </div>
         )}
         {loading ? (
           <div className="loader-container">
@@ -206,6 +209,7 @@ const Language = () => {
                     createdAt: false,
                     updatedBy: false,
                     updatedAt: false,
+                    id: !hideColumn,
                   },
                   pagination: { pageSize: 50, pageIndex: 0 },
                 }}
@@ -219,22 +223,22 @@ const Language = () => {
               onClose={handleMenuClose}
             >
               <MenuItem>
-              {storedScreens?.languageUpdate && (
-                <LanguageEdit
-                  onSuccess={getData}
-                  id={selectedId}
-                  handleMenuClose={handleMenuClose}
-                />
-              )}
+                {storedScreens?.languageUpdate && (
+                  <LanguageEdit
+                    onSuccess={getData}
+                    id={selectedId}
+                    handleMenuClose={handleMenuClose}
+                  />
+                )}
               </MenuItem>
               <MenuItem>
-              {storedScreens?.languageDelete && (
-                <GlobalDelete
-                  path={`/deleteLanguage/${selectedId}`}
-                  onDeleteSuccess={getData}
-                  onOpen={handleMenuClose}
-                />
-              )}
+                {storedScreens?.languageDelete && (
+                  <GlobalDelete
+                    path={`/deleteLanguage/${selectedId}`}
+                    onDeleteSuccess={getData}
+                    onOpen={handleMenuClose}
+                  />
+                )}
               </MenuItem>
             </Menu>
           </>

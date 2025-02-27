@@ -139,6 +139,9 @@ const Leave = () => {
   });
 
   const handleMenuClose = () => setMenuAnchor(null);
+  const hideColumn =
+    storedScreens?.leaveSettingUpdate === false &&
+    storedScreens?.leaveSettingDelete === false;
 
   return (
     <div className="container-fluid my-4 center">
@@ -218,6 +221,7 @@ const Leave = () => {
                     createdAt: false,
                     updatedBy: false,
                     updatedAt: false,
+                    id: !hideColumn,
                   },
                 }}
                 // muiTableBodyRowProps={({ row }) => ({

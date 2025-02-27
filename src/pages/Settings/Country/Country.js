@@ -147,6 +147,8 @@ const Country = () => {
   });
 
   const handleMenuClose = () => setMenuAnchor(null);
+  const hideColumn =
+  storedScreens?.countrySettingUpdate === false && storedScreens?.countrySettingDelete === false;
 
   return (
     <div className="container-fluid my-4 center">
@@ -219,6 +221,7 @@ const Country = () => {
                   createdAt: false,
                   updatedBy: false,
                   updatedAt: false,
+                  id:!hideColumn
                 },
               }}
               // muiTableBodyRowProps={({ row }) => ({
@@ -235,8 +238,9 @@ const Country = () => {
             onClose={handleMenuClose}
           >
             <MenuItem>
+            {storedScreens?.countrySettingUpdate && (
               <CountryEdit onSuccess={getData} id={selectedId} handleMenuClose={handleMenuClose}/>
-            </MenuItem>
+             )} </MenuItem>
             <MenuItem>
             {storedScreens?.countrySettingDelete && (
               <GlobalDelete

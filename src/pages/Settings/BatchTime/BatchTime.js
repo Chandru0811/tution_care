@@ -13,6 +13,7 @@ import {
 import { MaterialReactTable } from "material-react-table";
 
 const BatchTime = () => {
+  const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedId, setSelectedId] = useState(null);
@@ -21,7 +22,9 @@ const BatchTime = () => {
 
   const getData = async () => {
     try {
-      const response = await api.get(`/getAllBatchDayTimeByCenterId/${centerId}`);
+      const response = await api.get(
+        `/getAllBatchDayTimeByCenterId/${centerId}`
+      );
       setDatas(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -141,6 +144,7 @@ const BatchTime = () => {
   });
 
   const handleMenuClose = () => setMenuAnchor(null);
+  const hideColumn = storedScreens?.batchtimeSettingUpdate === false;
 
   const formatBatchTimes = (batchTimes) => {
     if (!batchTimes) return "";
@@ -220,13 +224,14 @@ const BatchTime = () => {
                 enableColumnFilters={false}
                 enableDensityToggle={false}
                 enableFullScreenToggle={false}
-                   initialState={{
-                 pagination: { pageSize: 50, pageIndex: 0 },
+                initialState={{
+                  pagination: { pageSize: 50, pageIndex: 0 },
                   columnVisibility: {
                     createdBy: false,
                     createdAt: false,
                     updatedBy: false,
                     updatedAt: false,
+                    id :!hideColumn
                   },
                 }}
                 // muiTableBodyRowProps={({ row }) => ({
@@ -243,7 +248,13 @@ const BatchTime = () => {
               onClose={handleMenuClose}
             >
               <MenuItem>
-                <BatchTimeEdit onSuccess={getData} id={selectedId} handleMenuClose={handleMenuClose}/>
+                {storedScreens?.batchtimeSettingUpdate && (
+                  <BatchTimeEdit
+                    onSuccess={getData}
+                    id={selectedId}
+                    handleMenuClose={handleMenuClose}
+                  />
+                )}
               </MenuItem>
             </Menu>
           </>

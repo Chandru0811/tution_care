@@ -160,6 +160,9 @@ const Tax = () => {
   });
 
   const handleMenuClose = () => setMenuAnchor(null);
+  const hideColumn =
+    storedScreens?.taxSettingUpdate === false &&
+    storedScreens?.taxSettingDelete === false;
 
   return (
     <div className="container-fluid my-4 center">
@@ -199,18 +202,18 @@ const Tax = () => {
           </div>
         </div>
         {storedScreens?.taxSettingCreate && (
-        <div className="d-flex justify-content-end align-items-center">
-          <span>
-            <TaxAdd onSuccess={getData} />
-          </span>
-          {/* } */}
-          {/* <p>        <button className="btn btn-light border-secondary mx-2" onClick={handleDataShow}>
+          <div className="d-flex justify-content-end align-items-center">
+            <span>
+              <TaxAdd onSuccess={getData} />
+            </span>
+            {/* } */}
+            {/* <p>        <button className="btn btn-light border-secondary mx-2" onClick={handleDataShow}>
 
           {extraData?"Hide":'Show'}
           <MdViewColumn className="fs-4 text-secondary"/>
 
         </button> </p> */}
-        </div>
+          </div>
         )}
         {loading ? (
           <div className="loader-container">
@@ -239,6 +242,7 @@ const Tax = () => {
                     createdAt: false,
                     updatedBy: false,
                     updatedAt: false,
+                    id: !hideColumn,
                   },
                 }}
                 // muiTableBodyRowProps={({ row }) => ({
@@ -255,22 +259,22 @@ const Tax = () => {
               onClose={handleMenuClose}
             >
               <MenuItem>
-              {storedScreens?.taxSettingUpdate && (
-                <TaxEdit
-                  onSuccess={getData}
-                  id={selectedId}
-                  handleMenuClose={handleMenuClose}
-                />
-              )}
+                {storedScreens?.taxSettingUpdate && (
+                  <TaxEdit
+                    onSuccess={getData}
+                    id={selectedId}
+                    handleMenuClose={handleMenuClose}
+                  />
+                )}
               </MenuItem>
               <MenuItem>
-              {storedScreens?.taxSettingDelete && (
-                <GlobalDelete
-                  path={`/deleteTaxSetting/${selectedId}`}
-                  onDeleteSuccess={getData}
-                  onOpen={handleMenuClose}
-                />
-              )}
+                {storedScreens?.taxSettingDelete && (
+                  <GlobalDelete
+                    path={`/deleteTaxSetting/${selectedId}`}
+                    onDeleteSuccess={getData}
+                    onOpen={handleMenuClose}
+                  />
+                )}
               </MenuItem>
             </Menu>
           </>
