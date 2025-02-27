@@ -139,7 +139,7 @@ function SuperAdminCenterView() {
             <div className="col-md-6 col-12">
               <div className="row  mb-2">
                 <div className="col-6  ">
-                  <p className="">App Name</p>
+                  <p className="">App Type</p>
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">: {data.appName || "--"}</p>
