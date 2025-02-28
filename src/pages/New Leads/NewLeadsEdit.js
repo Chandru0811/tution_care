@@ -17,12 +17,11 @@ const validationSchema = Yup.object({
   gender: Yup.string().required("Gender is required"),
   dob: Yup.date().required("Date of Birth is required"),
   referredBy: Yup.string().nullable(),
-  parentName: Yup.string().required("Parent name is required"),
-  parentEmail: Yup.string().email("Invalid email format"),
-  address: Yup.string().required("Address is required"),
-  postalCode: Yup.string()
-    .matches(/^\d{6}$/, "Postal code must be 6 digits")
-    .required("Postal code is required"),
+  // parentName: Yup.string().required("Parent name is required"),
+  // parentEmail: Yup.string().email("Invalid email format"),
+  // address: Yup.string().required("Address is required"),
+  postalCode: Yup.string().matches(/^\d{6}$/, "Postal code must be 6 digits"),
+  // .required("Postal code is required"),
   termsAndCondition: Yup.boolean()
     .oneOf([true], "Please accept the terms and conditions")
     .required("Terms and conditions must be accepted"),
@@ -63,7 +62,7 @@ function NewLeadsEdit() {
       preferredTimeSlot: "",
       marketingSource: "",
       remarks: "",
-      termsAndCondition: "",
+      termsAndCondition: false,
       createdBy: userName,
     },
     validationSchema: validationSchema,
@@ -122,14 +121,14 @@ function NewLeadsEdit() {
     try {
       const response = await api.get(`/getLeadDynamicFormById/${id}`);
       formik.setValues(response.data);
-      console.log("getLeadDynamicFormById ::",response.data);
+      console.log("getLeadDynamicFormById ::", response.data);
     } catch (error) {
       console.error("Error fetching data ", error);
     } finally {
       setLoadIndicator(false);
     }
   }, [id]);
-
+  console.log("Loaded", formik.values.termsAndCondition);
   useEffect(() => {
     getData();
   }, [getData]);
@@ -415,9 +414,7 @@ function NewLeadsEdit() {
               </div>
 
               <div className="col-md-6 mb-3">
-                <label className="form-label">
-                  Parent Name<span className="text-danger">*</span>
-                </label>
+                <label className="form-label">Parent Name</label>
                 <input
                   name="parentName"
                   type="text"
@@ -436,9 +433,7 @@ function NewLeadsEdit() {
               </div>
 
               <div className="col-md-6 mb-3">
-                <label className="form-label">
-                  Parent Email<span className="text-danger">*</span>
-                </label>
+                <label className="form-label">Parent Email</label>
                 <input
                   name="parentEmail"
                   type="email"
@@ -636,7 +631,7 @@ function NewLeadsEdit() {
               </div>
               <div className="col-md-6 mb-3">
                 <label className="form-label">Postal Code</label>
-                <span className="text-danger">*</span>
+                {/* <span className="text-danger">*</span> */}
                 <input
                   name="postalCode"
                   type="text"
@@ -662,7 +657,7 @@ function NewLeadsEdit() {
                       className="form-label"
                     >
                       Address
-                      <span className="text-danger">*</span>
+                      {/* <span className="text-danger">*</span> */}
                     </label>
                   </div>
                   <div className="">
@@ -721,6 +716,7 @@ function NewLeadsEdit() {
                   <input
                     type="checkbox"
                     name="termsAndCondition"
+                    checked={formik.values.termsAndCondition}
                     className={`form-check-input ${
                       formik.touched.termsAndCondition &&
                       formik.errors.termsAndCondition
@@ -730,8 +726,7 @@ function NewLeadsEdit() {
                     {...formik.getFieldProps("termsAndCondition")}
                   />
                   <label className="form-check-label">
-                    By submitting this form, I confirm that I agree on releasing
-                    the above details.
+                    I agree of the terms and Condition.
                     <span className="text-danger">*</span>
                   </label>
                   {formik.touched.termsAndCondition &&
