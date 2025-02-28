@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 import api from "../../../config/URL";
 import fetchAllIDTypeWithIds from "../../List/IDTypeList";
 import fetchAllNationality from "../../List/NationalityAndCountryList";
+import { useJsApiLoader } from "@react-google-maps/api";
 
 const validationSchema = Yup.object().shape({
   teacherName: Yup.string().required("*Teacher Name is required"),
@@ -24,6 +25,7 @@ const validationSchema = Yup.object().shape({
   // latitude: Yup.string().required("*Latitude is required"),
   // longitude: Yup.string().required("*Longitude is required"),
 });
+const libraries = ["places"];
 const PersonalEdit = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const [idTypeData, setIdTypeData] = useState(null);
@@ -31,7 +33,10 @@ const PersonalEdit = forwardRef(
     const userName = localStorage.getItem("tmsuserName");
     const centerId = localStorage.getItem("tmscenterId");
     const [roleData, setRoleData] = useState(null);
-
+    const { isLoaded } = useJsApiLoader({
+      googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
+      libraries,
+    });
     const formik = useFormik({
       initialValues: {
         teacherName: formData.teacherName || "",
@@ -44,6 +49,7 @@ const PersonalEdit = forwardRef(
         employeeType: null || null,
         countryId: formData.countryId,
         nationality: formData.nationality || "",
+        status: formData.status || "",
         age: 0,
         shortIntroduction: formData.shortIntroduction || "",
         gender: formData.gender || "",
@@ -59,14 +65,31 @@ const PersonalEdit = forwardRef(
         setLoadIndicators(true);
         data.updatedBy = userName;
         data.centerId = centerId;
-        setFormData((prev) => ({ ...prev, ...data }));
         try {
+          const formDatas = new FormData();
+
+          formDatas.append("teacherName", data.teacherName);
+          formDatas.append("dateOfBirth", data.dateOfBirth);
+          formDatas.append("idTypeId", data.idTypeId);
+          formDatas.append("idNo", data.idNo);
+          formDatas.append("nationalityId", data.nationalityId);
+          formDatas.append("countryId", data.countryId);
+          formDatas.append("citizenship", data.citizenship);
+          formDatas.append("status", data.status);
+          formDatas.append("gender", data.gender);
+          formDatas.append("roleId", data.roleId);
+          formDatas.append("shortIntroduction", data.shortIntroduction);
+          formDatas.append("updatedBy", userName);
+          // formData.append("address", data.address);
+          // formData.append("postalCode", data.postalCode);
+          formData.append("latitude", data.latitude);
+          formData.append("longitude", data.longitude);
           const response = await api.put(
             `/updateUser/${formData.staff_id}`,
-            data,
+            formDatas,
             {
               headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "multipart/form-data",
               },
             }
           );
@@ -167,6 +190,48 @@ const PersonalEdit = forwardRef(
       fetchCitizenShipData();
       rolesData();
     }, []);
+
+        const fetchCoordinates = async (postalCode) => {
+          if (!postalCode) return;
+    
+          const API_KEY = "AIzaSyCpzT4NCRo4A2-8s0pj8L-6L6LIdEGQkGU";
+          const geoCodeURL = `https://maps.googleapis.com/maps/api/geocode/json?address=${postalCode}&key=${API_KEY}`;
+    
+          try {
+            const response = await fetch(geoCodeURL);
+            const data = await response.json();
+    
+            if (data.status !== "OK" || !data.results.length) {
+              toast.error("Invalid postal code or no results found.");
+              return;
+            }
+    
+            const result = data.results[0];
+    
+            // Extract Address Components
+            const addressComponents = result.address_components;
+            const formattedAddress = result.formatted_address; // Full address
+            const latitude = result.geometry.location.lat;
+            const longitude = result.geometry.location.lng;
+    
+            // Extracting City & State
+            const city =
+              addressComponents.find((comp) => comp.types.includes("locality"))
+                ?.long_name || "";
+            const state =
+              addressComponents.find((comp) =>
+                comp.types.includes("administrative_area_level_1")
+              )?.long_name || "";
+            // Update form fields using Formik
+            formik.setFieldValue("postalCode", postalCode);
+            formik.setFieldValue("address", formattedAddress); // Set full address
+            formik.setFieldValue("latitude", latitude);
+            formik.setFieldValue("longitude", longitude);
+          } catch (error) {
+            console.error("Error fetching coordinates:", error);
+            toast.error("Error fetching coordinates. Please try again.");
+          }
+        };
 
     useImperativeHandle(ref, () => ({
       personalEdit: formik.handleSubmit,
@@ -437,44 +502,66 @@ const PersonalEdit = forwardRef(
                   )}
                 </div>
               </div>
-              {/* <div class="col-md-6 col-12 mb-3">
-                <div class="form-group col-sm">
-                  <label>Latitude</label>
-                  <span className="text-danger">*</span>
-                  <input
-                    type="text"
-                    class="form-control"
-                    name="latitude"
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    value={formik.values.latitude}
-                  ></input>
-                  {formik.touched.latitude && formik.errors.latitude && (
-                    <div className="error text-danger ">
-                      <small>{formik.errors.latitude}</small>
-                    </div>
-                  )}
-                </div>
+              <input
+              type="hidden"
+              className="form-control"
+              name="latitude"
+              value={formik.values.latitude}
+            />
+            <input
+              type="hidden"
+              className="form-control"
+              name="latitude"
+              value={formik.values.longitude}
+            />
+            <div class="col-md-6 col-12 mb-3">
+              <div class="form-group col-sm">
+                <label>Postal Code</label>
+                {/* <span className="text-danger">*</span> */}
+                <input
+                  type="text"
+                  class="form-control"
+                  name="postalCode"
+                  onChange={(e) => {
+                    formik.handleChange(e);
+                    if (
+                      e.target.value.length === 6 &&
+                      !isNaN(e.target.value) &&
+                      !e.target.value.includes(" ")
+                    ) {
+                      fetchCoordinates(e.target.value);
+                    }
+                  }}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.postalCode}
+                ></input>
+                {formik.touched.postalCode && formik.errors.postalCode && (
+                  <div className="error text-danger ">
+                    <small>{formik.errors.postalCode}</small>
+                  </div>
+                )}
               </div>
-              <div class="col-md-6 col-12 mb-3">
-                <div class="form-group col-sm">
-                  <label>Longitude</label>
-                  <span className="text-danger">*</span>
-                  <input
-                    type="text"
-                    class="form-control"
-                    name="longitude"
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    value={formik.values.longitude}
-                  ></input>
-                  {formik.touched.longitude && formik.errors.longitude && (
-                    <div className="error text-danger ">
-                      <small>{formik.errors.longitude}</small>
-                    </div>
-                  )}
-                </div>
-              </div> */}
+            </div>
+            <div class="col-md-6 col-12 mb-3">
+              <div class="form-group col-sm">
+                <label>Address</label>
+                {/* <span className="text-danger">*</span> */}
+                <input
+                  type="text"
+                  class="form-control"
+                  name="address"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.address}
+                  readOnly
+                ></input>
+                {formik.touched.address && formik.errors.address && (
+                  <div className="error text-danger ">
+                    <small>{formik.errors.address}</small>
+                  </div>
+                )}
+              </div>
+            </div>
             </div>
             <div className="row mt-2">
               <div className="col-12">
