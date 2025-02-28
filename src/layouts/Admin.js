@@ -210,6 +210,7 @@ import NewLeads from "../pages/New Leads/NewLeads";
 import NewLeadsAdd from "../pages/New Leads/NewLeadsAdd";
 import NewLeadsEdit from "../pages/New Leads/NewLeadsEdit";
 import NewLeadsView from "../pages/New Leads/NewLeadsView";
+import EmployeeAttendance from "../pages/Report/EmployeeAttendance";
 
 function Admin({ handleLogout }) {
   const [centerChange, setCenterChange] = useState(0);
@@ -422,6 +423,10 @@ function Admin({ handleLogout }) {
 
               {/* Report */}
               <Route path="/report/attendance" element={<Attendance />} />
+              <Route
+                path="/report/attendance/employee"
+                element={<EmployeeAttendance />}
+              />
               <Route path="/report/enrolment" element={<Enrolment />} />
               <Route path="/report/package" element={<Package />} />
               <Route path="/report/document" element={<DocumentReport />} />
@@ -709,7 +714,10 @@ function Admin({ handleLogout }) {
               {/* Messaging */}
               <Route path="/messaging" element={<MyMessages />} />
               <Route path="/messaging/add" element={<MyMessagesAdd />} />
-              <Route path="/messaging/view/:studentId" element={<MyMessagesView />} />
+              <Route
+                path="/messaging/view/:studentId"
+                element={<MyMessagesView />}
+              />
 
               {/* Other Messaging */}
               <Route path="/othermessaging" element={<OtherMessages />} />

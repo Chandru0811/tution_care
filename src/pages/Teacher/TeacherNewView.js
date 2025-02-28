@@ -1,22 +1,19 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IoIosSettings } from "react-icons/io";
 import { Link, useParams } from "react-router-dom";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
-import fetchAllCentersWithIds from "../List/CenterList";
-import jsPDF from "jspdf";
-import html2canvas from "html2canvas";
 import fetchAllSalaryTypeWithIds from "../List/SalaryTypeList";
+import PasswordModal from "../Student/StudentNewView/PasswordModal";
 // import PasswordModal from "../Student/StudentNewView/PasswordModal";
 
 function TeacherNewView() {
   const { id } = useParams();
   const [data, setData] = useState({});
-  const [packageData, setPackageData] = useState(null);
   const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
-  const table1Ref = useRef();
   const [shgData, setShgData] = useState([]);
   const [salaryTypeData, setSalaryTypeData] = useState(null);
+  const [password, setPassword] = useState(null);
 
   const fetchSalaryTypeData = async () => {
     try {
@@ -33,6 +30,7 @@ function TeacherNewView() {
       try {
         const response = await api.get(`/getAllUserById/${id}`);
         setData(response.data);
+        setPassword(response.data.email)
         console.log("StudentDetails", response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -87,7 +85,6 @@ function TeacherNewView() {
         </li>
       </ol>
       <div className="d-flex align-items-center justify-content-end mb-4">
-        {/* <PasswordModal /> */}
         <Link to={"/teacher"}>
           <button className="btn btn-border btn-sm me-3">Back</button>
         </Link>
@@ -118,8 +115,10 @@ function TeacherNewView() {
                   <p className="stdSettings mb-0">
                     <IoIosSettings /> Edit
                   </p>
+                 
                 </Link>
               )}
+               <PasswordModal password={password} />
               {/* <p className="stdSettings mt-1 mb-0" onClick={handleGeneratePDF}>
                 <IoIosSettings /> Student Detail PDF
               </p> */}

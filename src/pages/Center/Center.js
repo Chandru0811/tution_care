@@ -22,6 +22,126 @@ const Center = () => {
   const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
 
   console.log("appConfigInfo", appConfigInfo.appName);
+  const studentName = {
+    success: true,
+    status: 200,
+    data: {
+      id: 6,
+      school_id: 1,
+      center_id: "[4]",
+      generated_by: 2,
+      grade_id: "[3]",
+      subject_id: "[3]",
+      topic_id: "[3]",
+      ques_type: '["fillable","closed","multichoice","short_answer","upload"]',
+      type: "question",
+      title: "Model exam-1",
+      question_id: "[31,33,34,35]",
+      ques_id_with_type:
+        '[{"id":31,"questype":"upload"},{"id":33,"questype":"multichoice"},{"id":34,"questype":"short_answer"},{"id":35,"questype":"fillable"}]',
+      difficult_level: "Hard",
+      total_score: "100",
+      target_score: "80",
+      reward: 10,
+      active: 1,
+      created_at: "2025-02-25T09:12:43.000000Z",
+      updated_at: "2025-02-25T09:12:43.000000Z",
+      user_name: "Harish",
+      center_names: ["Centre 22"],
+      grade_names: ["Grade 22"],
+      subject_names: ["Subject 22"],
+      topic_names: ["Topic 22"],
+      questions: [
+        {
+          id: 31,
+          school_id: 1,
+          center_id: "[4]",
+          grade_id: "3",
+          subject_id: "3",
+          topic_id: "3",
+          ques_type:
+            '["fillable","closed","multichoice","short_answer","upload"]',
+          question: "What is the fastest land animal?`",
+          options: '["Cheetah","Lion","Deer"]',
+          upload: "assets/images/questions/31/1740373538_CloudECS.png",
+          difficult_level: "Hard",
+          hint: "Chee",
+          created_at: "2025-02-24T05:05:38.000000Z",
+          updated_at: "2025-02-24T05:05:38.000000Z",
+        },
+        {
+          id: 33,
+          school_id: 1,
+          center_id: "[4]",
+          grade_id: "3",
+          subject_id: "3",
+          topic_id: "3",
+          ques_type:
+            '["fillable","closed","multichoice","short_answer","upload"]',
+          question: "What is the largest living reptile?",
+          options: '["Cheetah","Lion","Saltwater crocodile"]',
+          upload: null,
+          difficult_level: "Hard",
+          hint: "Saltwater live",
+          created_at: "2025-02-25T09:09:03.000000Z",
+          updated_at: "2025-02-25T09:09:03.000000Z",
+        },
+        {
+          id: 34,
+          school_id: 1,
+          center_id: "[4]",
+          grade_id: "3",
+          subject_id: "3",
+          topic_id: "3",
+          ques_type: '["fillable","short_answer","upload"]',
+          question: "What color is a polar bear\u2019s skin?",
+          options: null,
+          upload: null,
+          difficult_level: "Hard",
+          hint: null,
+          created_at: "2025-02-25T09:10:03.000000Z",
+          updated_at: "2025-02-25T09:10:03.000000Z",
+        },
+        {
+          id: 35,
+          school_id: 1,
+          center_id: "[4]",
+          grade_id: "3",
+          subject_id: "3",
+          topic_id: "3",
+          ques_type: '["fillable","short_answer","upload"]',
+          question: 'Which animal is known as the "King of the Jungle"?',
+          options: null,
+          upload: null,
+          difficult_level: "Hard",
+          hint: "Lio",
+          created_at: "2025-02-25T09:11:44.000000Z",
+          updated_at: "2025-02-25T09:11:44.000000Z",
+        },
+      ],
+      student_assigned: [
+        {
+          id: 4,
+          assigned_id: "6",
+          assigned_type: "App\\Models\\Worksheet",
+          student_id: "[3]",
+          student_names: [" Harishragavendhar","sakthivel"],
+          grade_id: 3,
+          grade_name: "Grade 22",
+          created_at: "2025-02-25T09:19:28.000000Z",
+          updated_at: "2025-02-25T09:19:28.000000Z",
+        },
+      ],
+    },
+    message: "Worksheet Retrieved Successfully!",
+  };
+
+  const studentNames = studentName.data.student_assigned[0].student_names;
+  
+  const mappedStudentNames = studentNames.join(", ");
+  
+  console.log("Names:", mappedStudentNames);
+  
 
   const columns = useMemo(
     () => [

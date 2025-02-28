@@ -6,19 +6,7 @@ import { PiBuildings } from "react-icons/pi";
 import { IoIosAdd, IoIosRemove } from "react-icons/io";
 import { PiBookOpenText } from "react-icons/pi";
 import { RiDashboardLine } from "react-icons/ri";
-import { HiOutlineUserGroup } from "react-icons/hi2";
-import { TbUserSearch } from "react-icons/tb";
-import { TbStatusChange } from "react-icons/tb";
-import { TbCalendarTime } from "react-icons/tb";
-import { TbFolderCog } from "react-icons/tb";
-import { LiaFileInvoiceDollarSolid } from "react-icons/lia";
-import { VscReferences } from "react-icons/vsc";
-import { BsFileEarmarkRichtext } from "react-icons/bs";
-import { LiaUserEditSolid } from "react-icons/lia";
-import { TbMessageCode } from "react-icons/tb";
-import { GrUserSettings } from "react-icons/gr";
 import { GiExitDoor } from "react-icons/gi";
-import { MdOutlineAssignment } from "react-icons/md";
 import { MdOutlineSettingsSuggest } from "react-icons/md";
 
 const iconMapping = {

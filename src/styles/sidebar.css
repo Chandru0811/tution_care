@@ -10,7 +10,7 @@
 
 .sidebar {
   position: fixed;
-  overflow: auto;
+  overflow-y: auto;
   height: 100%;
   width: 286px;
   background: #fff;
@@ -19,7 +19,7 @@
 }
 
 .sidebar.active {
-  width: 60px;
+  width: 75px;
 }
 
 .sidebar .logo-details {

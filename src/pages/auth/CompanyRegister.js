@@ -54,10 +54,14 @@ export default function CompanyRegister() {
           toast.error(response.data.message);
         }
       } catch (error) {
-        toast.error(error);
+        if (error.response && error.response.status === 409) {
+          toast.warn(error.response.data.message);
+        } else {
+          toast.error(error.message);
+        }
       } finally {
         setLoadIndicator(false);
-        resetForm();
+        // resetForm();
       }
     },
   });
@@ -240,14 +244,14 @@ export default function CompanyRegister() {
                       borderRadius: "8px",
                     }}
                     disabled={loadIndicator}
-                    >
-                      {loadIndicator && (
-                        <span
-                          className="spinner-border spinner-border-sm me-2"
-                          aria-hidden="true"
-                        ></span>
-                      )}
-                      Submit
+                  >
+                    {loadIndicator && (
+                      <span
+                        className="spinner-border spinner-border-sm me-2"
+                        aria-hidden="true"
+                      ></span>
+                    )}
+                    Submit
                   </button>
                 </form>
                 <p className="text-center mt-3 mb-0">

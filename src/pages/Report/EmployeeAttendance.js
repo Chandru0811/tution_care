@@ -8,7 +8,7 @@ import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
 import api from "../../config/URL";
 import { Link } from "react-router-dom";
 
-const Attendance = () => {
+const EmployeeAttendance = () => {
   const tableRef = useRef(null);
   const [datas, setDatas] = useState([]);
   const [courseData, setCourseData] = useState(null);
@@ -45,12 +45,12 @@ const Attendance = () => {
         modeOfAttendance: values.modeOfAttendance,
         ...(values.attendanceStatus && {
           attendanceStatus: values.attendanceStatus,
-        }), 
+        }),
       };
       console.log("Payload:", payload);
       try {
         const response = await api.post(
-          "getAttendanceByCenterIdAndDate",
+          "getUserAttendanceByCenterIdAndDate",
           payload
         );
         if (response.status === 200) {
@@ -297,4 +297,4 @@ const Attendance = () => {
   );
 };
 
-export default Attendance;
+export default EmployeeAttendance;

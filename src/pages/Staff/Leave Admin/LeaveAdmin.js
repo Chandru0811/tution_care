@@ -106,14 +106,6 @@ const LeaveAdmin = () => {
     []
   );
 
-  const fetchLeaveType = async () => {
-    try {
-      const response = await api.get(`getAllLeaveSetting`);
-    } catch (error) {
-      toast.error(error.message);
-    }
-  };
-
   const getData = async () => {
     try {
       const response = await api.get(`getAllUserLeaveRequestWithCenterId/${centerId}`);
@@ -126,7 +118,6 @@ const LeaveAdmin = () => {
 
   useEffect(() => {
     getData();
-    fetchLeaveType();
   }, []);
 
   const theme = createTheme({
@@ -272,7 +263,7 @@ const LeaveAdmin = () => {
               {storedScreens?.leaveRequestDelete && (
                 <GlobalDelete
                   path={`/deleteUserLeaveRequest/${selectedId}`}
-                  onDeleteSuccess={fetchLeaveType}
+                  onDeleteSuccess={getData}
                   onOpen={handleMenuClose}
                 />
               )}

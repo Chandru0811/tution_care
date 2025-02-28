@@ -68,23 +68,7 @@ function App() {
 
   const handleLogout = () => {
     setIsAuthenticated(false);
-    localStorage.removeItem("tmsisAuthenticated");
-    localStorage.removeItem("tmsscreens");
-    localStorage.removeItem("tmsroleId");
-    localStorage.removeItem("tmstoken");
-    localStorage.removeItem("tmsuserId");
-    localStorage.removeItem("tmsuserName");
-    localStorage.removeItem("tmsloginUserId");
-    localStorage.removeItem("tmscenterId");
-    localStorage.removeItem("tmsselectedCenterId");
-    localStorage.removeItem("tmsemail");
-    localStorage.removeItem("tmscenterName");
-    localStorage.removeItem("tmsrole");
-    localStorage.removeItem("tmsteacherName");
-    localStorage.removeItem("tmsteacherImage");
-    localStorage.removeItem("tmsidNo");
-    localStorage.removeItem("tmsroleType");
-    localStorage.removeItem("tmsappConfigInfo");
+    localStorage.clear();
   };
 
   return (

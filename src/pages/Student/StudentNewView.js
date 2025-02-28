@@ -12,8 +12,6 @@ import ReferralList from "../../pages/Student/StudentNewView/ReferralList";
 import { Link, useParams } from "react-router-dom";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
-import fetchAllCentersWithIds from "../List/CenterList";
-import fetchAllPackageList from "../List/PackageList";
 import { jsPDF } from "jspdf";
 import html2canvas from "html2canvas";
 import Logo from "../../assets/images/TMS_LOGO.png";

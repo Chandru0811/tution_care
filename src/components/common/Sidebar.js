@@ -355,8 +355,13 @@ function Sidebar() {
               isOpen: false,
               subMenus: [
                 {
-                  title: "Attendance Report",
+                  title: `${storedConfigure?.student} Attendance Report`,
                   path: "/report/attendance",
+                  access: storedScreens.attendanceReportIndex,
+                },
+                {
+                  title: `${storedConfigure?.employee} Attendance Report`,
+                  path: "/report/attendance/employee",
                   access: storedScreens.attendanceReportIndex,
                 },
                 {
@@ -524,7 +529,7 @@ function Sidebar() {
     <div className="sidebar">
       <div className="logo-details">
         <span className="logo_name">
-          <img src={Logo} alt="logo" width={80} className="img-fluid p-2" />
+          <img src={Logo} alt="logo" width={80} className="img-fluid p-2 "/>
           <span className="text-dark">ECS Schools</span>
         </span>
       </div>

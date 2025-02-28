@@ -851,12 +851,12 @@ const NewLeads = () => {
                   displayName: "Waiting for Payment",
                   backendName: "WAITING_FOR_PAYMENT",
                 },
-                // { displayName: "Confirmed", backendName: "CONFIRMED" },
+                { displayName: "Confirmed", backendName: "CONFIRMED" },
                 // {
                 //   displayName: "Assessment Done",
                 //   backendName: "ASSESSMENT_DONE",
                 // },
-                { displayName: "Enrolled", backendName: "ENROLLED" },
+                // { displayName: "Enrolled", backendName: "ENROLLED" },
                 { displayName: "Drop", backendName: "DROP" },
                 { displayName: "All", backendName: "ALL" },
               ].map((status, index) => (

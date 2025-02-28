@@ -162,9 +162,17 @@ const Class = () => {
   const getClassData = async () => {
     try {
       setLoading(true);
+      const queryParams = new URLSearchParams();
+      for (let key in filters) {
+        if (filters[key]) {
+          queryParams.append(key, filters[key]);
+        }
+      }
+
       const response = await api.get(
-        `/getAllCourseClassListingsWithCenterId/${centerId}`
+        `/getClassWithCustomInfo?${queryParams.toString()}`
       );
+
       setDatas(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
