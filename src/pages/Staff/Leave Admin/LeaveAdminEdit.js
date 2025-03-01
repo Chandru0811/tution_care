@@ -28,6 +28,7 @@ function LeaveAdminEdit() {
   const centerId = localStorage.getItem("tmscenterId");
   const userName = localStorage.getItem("tmsuserName");
   const navigate = useNavigate();
+  const appConfigInfo = JSON.parse(localStorage.getItem("tmsappConfigInfo"));
 
   const fileName = data?.attachment?.split("/").pop();
   const maxLength = 10;
@@ -216,7 +217,7 @@ function LeaveAdminEdit() {
 
               <div className="col-md-6 col-12 mb-3">
                 <label className="form-label">
-                  Employee Name<span className="text-danger">*</span>
+                {appConfigInfo.employee} Name<span className="text-danger">*</span>
                 </label>
                 <input
                   type="text"

@@ -13,7 +13,7 @@ function AddPayroll() {
   const userName = localStorage.getItem("tmsuserName");
   const [netPay, setNetPay] = useState(0);
   const centerId = localStorage.getItem("tmscenterId");
-
+  const appConfigInfo = JSON.parse(localStorage.getItem("tmsappConfigInfo"));
   console.log("NET PAY:", netPay);
 
   console.log("empRole", empRole);
@@ -426,7 +426,7 @@ function AddPayroll() {
                 )}
               </div> */}
               <div className="col-md-6 col-12 mb-3 ">
-                <lable className="">Employee Name</lable>{" "}
+                <lable className="">{appConfigInfo.employee} Name</lable>{" "}
                 <span className="text-danger">*</span>
                 <select
                   {...formik.getFieldProps("userId")}

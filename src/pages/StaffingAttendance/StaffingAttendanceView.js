@@ -11,6 +11,7 @@ function StaffingAttendanceView() {
   const { id } = useParams();
   const [centerData, setCenterData] = useState(null);
   const [teacherData, setTeacherData] = useState(null);
+  const appConfigInfo = JSON.parse(localStorage.getItem("tmsappConfigInfo"));
 
   const fetchData = async () => {
     try {
@@ -94,7 +95,7 @@ function StaffingAttendanceView() {
             <div className="col-md-6 col-12">
               <div className="row    mb-2">
                 <div className="col-6 ">
-                  <p className="fw-medium">Employee Name </p>
+                  <p className="fw-medium">{appConfigInfo.employee} Name </p>
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">

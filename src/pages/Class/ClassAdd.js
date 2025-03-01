@@ -504,12 +504,12 @@ function ClassAdd() {
               <div className="col-md-6 col-12 mb-4">
                 <div className="d-flex justify-content-between align-items-center">
                   <label>
-                    Employee<span class="text-danger">*</span>
+                  {appConfigInfo.employee}<span class="text-danger">*</span>
                   </label>
 
                   <Link to={`/teacher/add`} style={{ textDecoration: "none" }}>
                     <p className="stdSettings mb-0">
-                      Add Employee
+                      Add {appConfigInfo.employee}
                       <i className="bx bx-plus"></i>
                     </p>
                   </Link>

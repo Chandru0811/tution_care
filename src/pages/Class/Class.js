@@ -66,15 +66,31 @@ const Class = () => {
           </IconButton>
         ),
       },
-      { accessorKey: "className", header: "Class Name", enableHiding: false },
+      {
+        accessorKey: "className",
+        header: `${appConfigInfo.confClass}`,
+        enableHiding: false,
+      },
       // { accessorKey: "centerName", header: "Center Name", enableHiding: false },
-      { accessorKey: "courseName", header: "Course Name", enableHiding: false },
-      { accessorKey: "classCode", header: "Class Code", enableHiding: false },
+      {
+        accessorKey: "courseName",
+        header: `${appConfigInfo.course}`,
+        enableHiding: false,
+      },
+      {
+        accessorKey: "classCode",
+        header: `${appConfigInfo.confClass} Code`,
+        enableHiding: false,
+      },
 
-      { accessorKey: "classType", header: "Class Type", enableHiding: false },
+      {
+        accessorKey: "classType",
+        header: `${appConfigInfo.confClass} Type`,
+        enableHiding: false,
+      },
       {
         accessorKey: "teacherName",
-        header: "Teacher Name",
+        header: `${appConfigInfo.employee}`,
         enableHiding: false,
       },
       {
@@ -301,7 +317,7 @@ const Class = () => {
                 value={filters.userId}
               >
                 <option value="" disabled>
-                  Select a Teacher
+                  Select a {appConfigInfo.employee}
                 </option>
                 {teacherData &&
                   teacherData.map((teacher) => (

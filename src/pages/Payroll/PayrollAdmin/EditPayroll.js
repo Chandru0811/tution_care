@@ -18,6 +18,7 @@ function EditPayroll() {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const userName = localStorage.getItem("tmsuserName");
   const centerId = localStorage.getItem("tmscenterId");
+  const appConfigInfo = JSON.parse(localStorage.getItem("tmsappConfigInfo"));
   const [netPay, setNetPay] = useState(0);
   console.log("NET PAY:", netPay);
   const navigate = useNavigate();
@@ -402,7 +403,7 @@ function EditPayroll() {
                 )}
               </div> */}
               <div className="col-md-6 col-12 mb-3 ">
-                <lable className="">Employee Name</lable>{" "}
+                <lable className="">{appConfigInfo.employee} Name</lable>{" "}
                 <span className="text-danger">*</span>
                 <input
                   type="text"

@@ -30,6 +30,7 @@ function DeductionEdit({ id, onSuccess, handleMenuClose }) {
   const [show, setShow] = useState(false);
   const userName = localStorage.getItem("tmsuserName");
   const centerId = localStorage.getItem("tmscenterId");
+  const appConfigInfo = JSON.parse(localStorage.getItem("tmsappConfigInfo"));
 
   const getData = async () => {
     try {
@@ -148,7 +149,7 @@ function DeductionEdit({ id, onSuccess, handleMenuClose }) {
           <DialogContent>
             <div className="row">
               <div className="col-md-6 col-12 mb-3">
-                <label className="form-label">Employee Name</label>
+                <label className="form-label">{appConfigInfo.employee} Name</label>
                 <span className="text-danger">*</span>
                 <select
                   {...formik.getFieldProps("userId")}

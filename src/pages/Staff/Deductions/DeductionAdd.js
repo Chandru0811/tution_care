@@ -21,7 +21,7 @@ function DeductionAdd({ onSuccess }) {
   const [userNamesData, setUserNameData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [showModal, setShowModal] = useState(false);
-
+  const appConfigInfo = JSON.parse(localStorage.getItem("tmsappConfigInfo"));
   const userName = localStorage.getItem("tmsuserName");
   const centerId = localStorage.getItem("tmscenterId");
 
@@ -120,7 +120,7 @@ function DeductionAdd({ onSuccess }) {
           <Modal.Body>
             <div className="row">
               <div className="col-md-6 col-12 mb-3">
-                <label className="form-label">Employee Name</label>
+                <label className="form-label">{appConfigInfo.employee} Name</label>
                 <span className="text-danger">*</span>
                 <select
                   {...formik.getFieldProps("userId")}

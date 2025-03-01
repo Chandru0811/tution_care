@@ -50,6 +50,7 @@ function StaffingAttendanceEdit() {
   const userName = localStorage.getItem("tmsuserName");
   const centerId = localStorage.getItem("tmscenterId");
   const { id } = useParams();
+  const appConfigInfo = JSON.parse(localStorage.getItem("tmsappConfigInfo"));
 
   const formik = useFormik({
     initialValues: {
@@ -289,7 +290,7 @@ function StaffingAttendanceEdit() {
             <div className="container-fluid px-4 pb-3">
               <div className="row">
                 <div className="col-md-6 col-12 mb-3 ">
-                  <lable className="">Employee Name</lable>
+                  <lable className="">{appConfigInfo.employee} Name</lable>
                   <span className="text-danger">*</span>
                   <select
                     {...formik.getFieldProps("userId")}
