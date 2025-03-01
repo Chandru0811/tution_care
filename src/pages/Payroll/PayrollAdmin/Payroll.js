@@ -25,6 +25,7 @@ const Payroll = () => {
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
   const centerId = localStorage.getItem("tmscenterId");
+  const appConfigInfo = JSON.parse(localStorage.getItem("tmsappConfigInfo"));
 
   const columns = useMemo(
     () => [
@@ -108,7 +109,7 @@ const Payroll = () => {
       {
         accessorKey: "employeeName",
         enableHiding: false,
-        header: "Employee Name",
+        header: `${appConfigInfo.employee}`,
       },
       {
         accessorKey: "netPay",

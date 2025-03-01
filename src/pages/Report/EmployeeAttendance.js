@@ -42,7 +42,9 @@ const EmployeeAttendance = () => {
         centerId: values.centerId,
         courseId: values.courseId,
         attendanceDate: selectedDate,
-        modeOfAttendance: values.modeOfAttendance,
+        ...(values.modeOfAttendance && {
+          modeOfAttendance: values.modeOfAttendance,
+        }),
         ...(values.attendanceStatus && {
           attendanceStatus: values.attendanceStatus,
         }),

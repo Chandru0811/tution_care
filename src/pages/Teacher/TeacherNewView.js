@@ -14,6 +14,7 @@ function TeacherNewView() {
   const [shgData, setShgData] = useState([]);
   const [salaryTypeData, setSalaryTypeData] = useState(null);
   const [password, setPassword] = useState(null);
+  const appConfigInfo = JSON.parse(localStorage.getItem("tmsappConfigInfo"));
 
   const fetchSalaryTypeData = async () => {
     try {
@@ -76,12 +77,12 @@ function TeacherNewView() {
         </li>
         <li>
           <Link to="/teacher" className="custom-breadcrumb">
-            &nbsp;Teacher
+            &nbsp;{appConfigInfo.employee}
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          &nbsp;Teacher View
+          &nbsp;{appConfigInfo.employee} View
         </li>
       </ol>
       <div className="d-flex align-items-center justify-content-end mb-4">
@@ -125,7 +126,7 @@ function TeacherNewView() {
               <hr className="mt-2 mb-0" />
               <ul style={{ listStyle: "none", paddingLeft: "0" }}>
                 <li className="stdList">
-                  <b>Teacher Name</b>
+                  <b>Name</b>
                   <span>{data.teacherName || "--"}</span>
                 </li>
                 <li className="stdList">
@@ -223,7 +224,7 @@ function TeacherNewView() {
                     </span>
                   </li>
                   <li className="stdList">
-                    <b>Teacher Type</b>
+                    <b>Type</b>
                     <span>
                       {" "}
                       {data.userAccountInfo &&

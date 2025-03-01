@@ -28,22 +28,22 @@ const validationSchema = Yup.object().shape({
       "*Enter a valid email address"
     )
     .required("*Email is required"),
-    trialDate: Yup.date().test(
-      "is-required-if-trial",
-      "Trial date is required",
-      function (value) {
-        const { centerStatus } = this.parent;
-        if (centerStatus === "Trial") {
-          if (!value) {
-            return false;
-          }
-          if (new Date(value) < new Date()) {
-            return this.createError({ message: "Date cannot be in the past" });
-          }
+  trialDate: Yup.date().test(
+    "is-required-if-trial",
+    "Trial date is required",
+    function (value) {
+      const { centerStatus } = this.parent;
+      if (centerStatus === "Trial") {
+        if (!value) {
+          return false;
         }
-        return true;
+        if (new Date(value) < new Date() || null) {
+          return this.createError({ message: "Date cannot be in the past" });
+        }
       }
-    ),
+      return true;
+    }
+  ),
 });
 
 function SuperAdminCenterEdit() {
@@ -67,12 +67,6 @@ function SuperAdminCenterEdit() {
       toast.error(error);
     }
   };
-  useEffect(() => {
-    const today = new Date();
-    today.setDate(today.getDate() + 30);
-    const formattedDate = today.toISOString().split("T")[0];
-    formik.setFieldValue("trialDate", formattedDate);
-  }, []);
 
   const formik = useFormik({
     initialValues: {
@@ -114,28 +108,69 @@ function SuperAdminCenterEdit() {
       setLoadIndicator(true);
       try {
         const formData = new FormData();
-        formData.append("name", values.name);
-        formData.append("centerName", values.centerName);
-        formData.append("email", values.email);
-        formData.append("senderMail", values.senderMail);
-        formData.append("configId", values.configId);
-        formData.append("mobile", values.mobile);
-        formData.append("address", values.address);
-        formData.append("updatedBy", values.updatedBy);
-        formData.append("leadManagement", values.leadManagement);
-        formData.append("staffManagement", values.staffManagement);
-        formData.append("documentManagement", values.documentManagement);
-        formData.append("referalManagement", values.referalManagement);
-        formData.append("assessmentManagement", values.assessmentManagement);
-        formData.append("reportManagement", values.reportManagement);
-        formData.append("messages", values.messages);
+        if (values.name !== null && values.name !== undefined)
+          formData.append("name", values.name);
+        if (values.centerName !== null && values.centerName !== undefined)
+          formData.append("centerName", values.centerName);
+        if (values.email !== null && values.email !== undefined)
+          formData.append("email", values.email);
+        if (values.senderMail !== null && values.senderMail !== undefined)
+          formData.append("senderMail", values.senderMail);
+        if (values.configId !== null && values.configId !== undefined)
+          formData.append("configId", values.configId);
+        if (values.mobile !== null && values.mobile !== undefined)
+          formData.append("mobile", values.mobile);
+        if (values.address !== null && values.address !== undefined)
+          formData.append("address", values.address);
+        if (values.centerStatus !== null && values.centerStatus !== undefined)
+          formData.append("centerStatus", values.centerStatus);
+        if (values.trialDate !== null && values.trialDate !== undefined)
+          formData.append("trialDate", values.trialDate);
+        if (values.updatedBy !== null && values.updatedBy !== undefined)
+          formData.append("updatedBy", values.updatedBy);
+        if (
+          values.leadManagement !== null &&
+          values.leadManagement !== undefined
+        )
+          formData.append("leadManagement", values.leadManagement);
+        if (
+          values.staffManagement !== null &&
+          values.staffManagement !== undefined
+        )
+          formData.append("staffManagement", values.staffManagement);
+        if (
+          values.documentManagement !== null &&
+          values.documentManagement !== undefined
+        )
+          formData.append("documentManagement", values.documentManagement);
+        if (
+          values.referalManagement !== null &&
+          values.referalManagement !== undefined
+        )
+          formData.append("referalManagement", values.referalManagement);
+        if (
+          values.assessmentManagement !== null &&
+          values.assessmentManagement !== undefined
+        )
+          formData.append("assessmentManagement", values.assessmentManagement);
+        if (
+          values.reportManagement !== null &&
+          values.reportManagement !== undefined
+        )
+          formData.append("reportManagement", values.reportManagement);
+        if (values.messages !== null && values.messages !== undefined)
+          formData.append("messages", values.messages);
 
         const response = await api.put(`/updateCenters/${id}`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
         });
+
         if (response.status === 200) {
+          await api.put(
+            `/statusApproval/${response.data.id}?newStatus=${values.centerStatus}`
+          );
           toast.success(response.data.message);
           navigate("/companyregistration");
         } else {
@@ -182,15 +217,34 @@ function SuperAdminCenterEdit() {
     const getData = async () => {
       const response = await api.get(`/getAllCenterById/${id}`);
       console.log("response", response.data);
+
+      const filteredData = Object.keys(response.data).reduce((acc, key) => {
+        if (response.data[key] !== null && response.data[key] !== undefined) {
+          acc[key] = response.data[key];
+        }
+        return acc;
+      }, {});
+
       const formattedData = {
-        ...response.data,
-        openingDate: response.data.openingDate
-          ? new Date(response.data.openingDate).toISOString().substring(0, 10)
-          : null,
+        ...filteredData,
+        openingDate: filteredData.openingDate
+          ? new Date(filteredData.openingDate).toISOString().substring(0, 10)
+          : undefined,
       };
+
+      // Set form values with formatted data
       formik.setValues(formattedData);
-      setData(response.data);
-      setStatus(response.data.centerStatus)
+      setData(filteredData);
+      setStatus(filteredData.centerStatus);
+
+      // If trialDate is null, set it to 30 days from today
+      if (!filteredData.trialDate) {
+        const today = new Date();
+        today.setDate(today.getDate() + 30);
+        const formattedDate = today.toISOString().split("T")[0];
+        formik.setFieldValue("trialDate", formattedDate);
+        console.log("trialDate", formattedDate);
+      }
     };
 
     getData();
@@ -203,6 +257,7 @@ function SuperAdminCenterEdit() {
   const handleAllow = () => {
     setShowModal(false);
   };
+  console.log("trialDate", formik.values.trialDate);
 
   return (
     <div className="container-fluid">

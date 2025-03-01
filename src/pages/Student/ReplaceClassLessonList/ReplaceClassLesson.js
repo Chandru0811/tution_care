@@ -56,37 +56,37 @@ const ReplaceClassLesson = () => {
       // },
       {
         accessorKey: "studentUniqueId",
-        header: "Student ID",
+        header: `${storedConfigure?.student } ID`,
         enableHiding: false,
         size: 40,
       },
       {
         accessorKey: "studentName",
         enableHiding: false,
-        header: "Student Name",
+        header: `${storedConfigure?.student } Name`,
       },
       {
         accessorKey: "course",
-        header: "Course",
+        header: `${storedConfigure?.course }`,
         enableHiding: false,
         size: 40,
       },
       { accessorKey: "month", header: "Month", enableHiding: false, size: 40 },
       {
         accessorKey: "className",
-        header: "Class Listing",
+        header: `${storedConfigure?.confClass } Listing`,
         enableHiding: false,
         size: 40,
       },
       {
         accessorKey: "classDate",
-        header: "Class Date",
+        header: `${storedConfigure.confClass} Date`,
         enableHiding: false,
         size: 40,
       },
       {
         accessorKey: "classCode",
-        header: "Class Code",
+        header: `${storedConfigure.confClass} Code`,
         enableHiding: false,
         size: 50,
       },
@@ -243,7 +243,7 @@ const ReplaceClassLesson = () => {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          &nbsp; {storedConfigure?.student || "Student Management"}
+          &nbsp; {storedConfigure?.student }
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
@@ -273,7 +273,7 @@ const ReplaceClassLesson = () => {
                 value={filters.courseId}
               >
                 <option value="" disabled>
-                  Select a Course
+                  Select a {storedConfigure?.course }
                 </option>
                 {courseData &&
                   courseData.map((courseId) => (
@@ -291,7 +291,7 @@ const ReplaceClassLesson = () => {
                 onChange={handleFilterChange}
                 className="form-control form-control-sm center_list"
                 style={{ width: "160px" }}
-                placeholder="Student Unique Id"
+                placeholder="Unique Id"
                 autoComplete="off"
               />
             </div>
@@ -303,7 +303,7 @@ const ReplaceClassLesson = () => {
                 onChange={handleFilterChange}
                 className="form-control form-control-sm center_list"
                 style={{ width: "160px" }}
-                placeholder="Student Name"
+                placeholder={storedConfigure?.student }
                 autoComplete="off"
               />
             </div>
