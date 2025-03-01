@@ -3,7 +3,7 @@ import api from "../../config/URL";
 
 const TrialNotification = () => {
   const [showNotification, setShowNotification] = useState(false);
-  const centerId =localStorage.getItem("tmscenterId")
+  const centerId = localStorage.getItem("tmscenterId");
   console.log("Show Notification", showNotification);
   const [daysLeft, setDaysLeft] = useState(0);
   const closeNotification = () => {
@@ -15,10 +15,10 @@ const TrialNotification = () => {
       try {
         const response = await api.get(`/trialEndDate/${centerId}`);
         if (response.status === 200) {
-          console.log(response.data.trial);
-          if (response.data.trial === true) {
+          console.log("response.data.trial", response?.data[0]?.trial);
+          if (response?.data[0]?.trial === true) {
             setShowNotification(true);
-            setDaysLeft(response.data.daysRemaining);
+            setDaysLeft(response?.data[0]?.daysRemaining);
           }
         }
       } catch (error) {

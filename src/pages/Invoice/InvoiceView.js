@@ -336,14 +336,14 @@ function InvoiceView() {
         </div>
         <div className=" row">
           <div className="col-6 d-flex justify-content-start my-2">
-            {/* <Link to={`/payments/add?invoiceId=${id}&studentId=${data.studentId}`}>
+            <Link to={`/payments/add?invoiceId=${id}&studentId=${data.studentId}`}>
               <button
                 type="button"
                 className="btn btn-border btn-sm ms-2 btn-button"
               >
                 Make Payment
               </button>
-            </Link> */}
+            </Link>
           </div>
           <div className="col-6 d-flex justify-content-end my-2">
             {data.invoiceStatus !== "PAID" && (

@@ -8,10 +8,10 @@ import fetchAllStudentListByCenter from "../List/StudentListByCenter";
 import { MultiSelect } from "react-multi-select-component";
 
 function PaymentsAdd() {
-  // const location = useLocation();
-  // const queryParams = new URLSearchParams(location.search);
-  // const invoiceId = queryParams.get("invoiceId");
-  // const studentId = queryParams.get("studentId");
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const invoiceId = queryParams.get("invoiceId");
+  const student_Id = queryParams.get("studentId");
 
   const navigate = useNavigate();
   const [loadIndicator, setLoadIndicator] = useState(false);
@@ -105,7 +105,7 @@ function PaymentsAdd() {
   const formik = useFormik({
     initialValues: {
       centerId: centerId,
-      studentId: "",
+      studentId: student_Id || "",
       paymentDate: "",
       paymentMethod: "",
       paymentReference: "",
@@ -249,6 +249,41 @@ function PaymentsAdd() {
     formik.setFieldValue("transactionNo", "");
     formik.setFieldValue("mobileNumber", "");
   };
+
+  const getData = async () => {
+    try {
+      if (student_Id) {
+        try {
+          const response = await api.get(
+            `/paymentInvoiceList?centerId=${centerId}&studentId=${student_Id}`
+          );
+          setInvoiceData(response.data);
+        } catch (error) {
+          toast.error(error.message || "Error fetching invoices");
+        }
+      }
+    } catch (error) {
+      toast.error(error);
+    }
+  };
+
+  useEffect(() => {
+    if (invoiceData.length > 0 && invoiceId) {
+      const selectedInvoices = invoiceOptions.filter((option) =>
+        invoiceId.includes(option.value)
+      );
+      setSelectedInvoice(selectedInvoices);
+      formik.setFieldValue(
+        "invoiceIds",
+        selectedInvoices.map((option) => option.value)
+      );
+      formik.setFieldValue("paidAmount", selectedInvoices.map((option) => option.totalAmount))
+    }
+  }, [invoiceData, invoiceId]);
+
+  useEffect(() => {
+    getData();
+  }, [student_Id]);
 
   return (
     <div className="container-fluid">
