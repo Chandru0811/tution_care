@@ -74,7 +74,7 @@ const EmployeeAttendance = () => {
         formik.setFieldValue("courseId", defaultCourseId);
         setCourseData(courses);
       } else {
-        toast.error("No courses found for the selected center.");
+        console.log("");
       }
     } catch (error) {
       toast.error(error.message || "Error fetching courses.");
