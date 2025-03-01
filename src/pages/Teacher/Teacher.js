@@ -84,11 +84,11 @@ const Teacher = () => {
       {
         accessorKey: "userUniqueId",
         enableHiding: false,
-        header: `${appConfigInfo.employee} Id`,
+        header: `ID`,
       },
       {
         accessorKey: "teacherName",
-        header: `${appConfigInfo.employee} Name`,
+        header: `Name`,
         enableHiding: false,
         size: 40,
       },
@@ -252,7 +252,7 @@ const Teacher = () => {
                 name="teacherName"
                 className="form-control form-control-sm center_list"
                 style={{ width: "160px" }}
-                placeholder={`${appConfigInfo.employee} Name`}
+                placeholder={`Name`}
                 value={filters.teacherName}
                 onChange={handleFilterChange}
               />
