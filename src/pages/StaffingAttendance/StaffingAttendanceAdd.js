@@ -51,6 +51,7 @@ function StaffingAttendanceAdd() {
   const navigate = useNavigate();
   const userName = localStorage.getItem("tmsuserName");
   const centerId = localStorage.getItem("tmscenterId");
+  const appConfigInfo = JSON.parse(localStorage.getItem("tmsappConfigInfo"));
 
   const formik = useFormik({
     initialValues: {
@@ -263,7 +264,7 @@ function StaffingAttendanceAdd() {
               <div className="row">
                
                 <div className="col-md-6 col-12 mb-3 ">
-                  <lable className="">Employee Name</lable>
+                  <lable className="">{appConfigInfo.employee} Name</lable>
                   <span className="text-danger">*</span>
                   <select
                     {...formik.getFieldProps("userId")}

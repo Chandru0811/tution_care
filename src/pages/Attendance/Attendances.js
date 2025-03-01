@@ -247,7 +247,7 @@ function Attendances() {
               />
             </div>
             <div className="col-md-6 col-12 mb-2">
-              <label className="form-lable">Course</label>
+              <label className="form-lable">{storedConfigure.course}</label>
               <select
                 className="form-select "
                 onChange={(e) => setSelectedCourse(e.target.value)}

@@ -19,7 +19,9 @@ function AssignmentResultView() {
   const [data, setData] = useState({});
   const [showModal, setShowModal] = useState(false);
   const userId = localStorage.getItem("tmsuserId");
-
+  const storedConfigure = JSON.parse(
+    localStorage.getItem("tmsappConfigInfo") || "{}"
+  );
   const getData = async () => {
     try {
       const response = await api.get(
@@ -174,17 +176,17 @@ function AssignmentResultView() {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          Assignment Management
+          {storedConfigure?.assignManagement || "Assignment"} Management
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
           <Link to="/assignmentResult" className="custom-breadcrumb">
-            Assignment Result
+            {storedConfigure?.assignManagement || "Assignment"} Result
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          Assignment View
+          {storedConfigure?.assignManagement || "Assignment"} View
         </li>
       </ol>
       <div>
@@ -197,7 +199,9 @@ function AssignmentResultView() {
               <div class="d-flex">
                 <div class="dot active"></div>
               </div>
-              <span class="me-2 text-muted">Assignment View</span>
+              <span class="me-2 text-muted">
+                {storedConfigure?.assignManagement || "Assignment"} View
+              </span>
             </div>
             <div className="my-2 pe-3 d-flex align-items-center">
               <button
@@ -221,7 +225,9 @@ function AssignmentResultView() {
               <div className="col-md-6 col-12">
                 <div className="row mb-2">
                   <div className="col-6">
-                    <p className="fw-medium">Assignment Name </p>
+                    <p className="fw-medium">
+                      {storedConfigure?.assignManagement || "Assignment"} Name{" "}
+                    </p>
                   </div>
                   <div className="col-6 text-start">
                     <p className="text-muted text-sm">
@@ -234,7 +240,9 @@ function AssignmentResultView() {
               <div className="col-md-6 col-12">
                 <div className="row mb-2">
                   <div className="col-6">
-                    <p className="fw-medium">Assignment Reason </p>
+                    <p className="fw-medium">
+                      {storedConfigure?.assignManagement || "Assignment"} Reason{" "}
+                    </p>
                   </div>
                   <div className="col-6 text-start">
                     <p className="text-muted text-sm">
@@ -247,7 +255,9 @@ function AssignmentResultView() {
               <div className="col-md-6 col-12">
                 <div className="row mb-2">
                   <div className="col-6">
-                    <p className="fw-medium">Course </p>
+                    <p className="fw-medium">
+                      {storedConfigure?.course || "Course"}{" "}
+                    </p>
                   </div>
                   <div className="col-6 text-start">
                     <p className="text-muted text-sm">
@@ -260,7 +270,9 @@ function AssignmentResultView() {
               <div className="col-md-6 col-12 mb-3">
                 <div className="row">
                   <div className="col-6">
-                    <p className="fw-medium">Class Listing</p>
+                    <p className="fw-medium">
+                      {storedConfigure?.confClass || "Class"} Listing
+                    </p>
                   </div>
                   <div className="col-6 text-start">
                     <p className="text-muted">: {data[0]?.className || "--"}</p>
@@ -270,7 +282,9 @@ function AssignmentResultView() {
               <div className="col-md-6 col-12 mb-3">
                 <div className="row">
                   <div className="col-6">
-                    <p className="fw-medium">Teacher</p>
+                    <p className="fw-medium">
+                      {storedConfigure?.employee || "Employee"}
+                    </p>
                   </div>
                   <div className="col-6 text-start">
                     <p className="text-muted">: {data[0]?.userName || "--"}</p>
@@ -336,7 +350,9 @@ function AssignmentResultView() {
               <div className="col-md-12 col-12 mb-3">
                 <div className="row mb-2">
                   <div className="col-12">
-                    <p className="fw-medium">Teacher Questions :</p>
+                    <p className="fw-medium">
+                      {storedConfigure?.employee || "Employee"} Questions :
+                    </p>
                   </div>
                   {data[0]?.questions && data[0]?.questions.length > 0 ? (
                     <div className="col-12">

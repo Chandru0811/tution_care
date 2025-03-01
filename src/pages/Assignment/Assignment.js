@@ -76,7 +76,11 @@ const Assignment = () => {
         header: `${storedConfigure?.assignManagement || "Assignment"} Name`,
       },
       // { accessorKey: "folderName", enableHiding: false, header: "Folder Name" },
-      { accessorKey: "userName", enableHiding: false, header: "Teacher" },
+      {
+        accessorKey: "userName",
+        enableHiding: false,
+        header: `${storedConfigure?.employee || "Employee"}`,
+      },
       {
         accessorKey: "folderCategory",
         enableHiding: false,
@@ -348,7 +352,7 @@ const Assignment = () => {
                   value={filters.userId}
                 >
                   <option value="" disabled>
-                    Select the Teacher
+                    Select the {storedConfigure?.employee || "Employee"}
                   </option>
                   {teacherData &&
                     teacherData.map((teacher) => (

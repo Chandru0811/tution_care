@@ -286,7 +286,7 @@ const PersonalAdd = forwardRef(
           <div className="container-fluid row d-flex my-4">
             <div className="col-md-6 col-12 mb-2 mt-3">
               <label>
-                Teacher Name<span className="text-danger">*</span>
+                 Name<span className="text-danger">*</span>
               </label>
               <input
                 type="text"

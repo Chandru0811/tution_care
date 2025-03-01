@@ -23,12 +23,14 @@ const AssignmentResult = () => {
   const navigate = useNavigate();
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
-    const [teacherData, setTeacherData] = useState([]);
-    const [filters, setFilters] = useState({
-      centerId: centerId,
-      userId: "",
-    });
-
+  const [teacherData, setTeacherData] = useState([]);
+  const [filters, setFilters] = useState({
+    centerId: centerId,
+    userId: "",
+  });
+  const storedConfigure = JSON.parse(
+    localStorage.getItem("tmsappConfigInfo") || "{}"
+  );
   const columns = useMemo(
     () => [
       {
@@ -62,27 +64,27 @@ const AssignmentResult = () => {
       {
         accessorKey: "assignmentName",
         enableHiding: false,
-        header: "Assignment Name",
+        header: `${storedConfigure?.assignManagement || "Assignment"} Name`,
       },
       {
         accessorKey: "userName",
         enableHiding: false,
-        header: "Teacher",
+        header: `${storedConfigure?.employee || "Employee"}`,
       },
       {
         accessorKey: "studentName",
         enableHiding: false,
-        header: "Student Name",
+        header: `${storedConfigure?.student || "Student"} Name`,
       },
       {
         accessorKey: "courseName",
-        header: "Course",
+        header: `${storedConfigure?.course || "Course"}Course`,
         enableHiding: false,
         size: 40,
       },
       {
         accessorKey: "className",
-        header: "Class",
+        header: `${storedConfigure?.confClass || "Class"}`,
         enableHiding: false,
         size: 50,
       },
@@ -205,8 +207,8 @@ const AssignmentResult = () => {
     }
   };
   useEffect(() => {
-      fetchListData();
-    }, []);
+    fetchListData();
+  }, []);
 
   useEffect(() => {
     getAssignmentData();
@@ -240,11 +242,11 @@ const AssignmentResult = () => {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          &nbsp;Assignment Management
+          &nbsp;{storedConfigure?.assignManagement || "Assignment"} Management
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          &nbsp;Assignment Results
+          &nbsp;{storedConfigure?.assignManagement || "Assignment"} Results
         </li>
       </ol>
       <div className="card">
@@ -259,41 +261,43 @@ const AssignmentResult = () => {
             <span class="me-2 text-muted">
               This database shows the list of{" "}
               <span className="bold" style={{ color: "#287f71" }}>
-                Assignment Results
+                {storedConfigure?.assignManagement || "Assignment"} Results
               </span>
             </span>
           </div>
         </div>
         <div className="individual_fliters d-lg-flex">
-        {!userId && (
-              <div className="form-group mb-0 ms-2 mb-1">
-                <select
-                  className="form-select form-select-sm center_list"
-                  name="userId"
-                  style={{ width: "100%" }}
-                  onChange={handleFilterChange}
-                  value={filters.userId}
-                >
-                  <option>Select the Teacher</option>
-                  {teacherData &&
-                    teacherData.map((teacher) => (
-                      <option key={teacher.id} value={teacher.id}>
-                        {teacher.teacherNames}
-                      </option>
-                    ))}
-                </select>
-              </div>
-            )}
-             <div className="form-group mb-0 ms-2 mb-1 ">
-                <button
-                  type="button"
-                  className="btn btn-sm btn-border"
-                  onClick={clearFilter}
-                >
-                  Clear
-                </button>
-              </div>
-              </div>
+          {!userId && (
+            <div className="form-group mb-0 ms-2 mb-1">
+              <select
+                className="form-select form-select-sm center_list"
+                name="userId"
+                style={{ width: "100%" }}
+                onChange={handleFilterChange}
+                value={filters.userId}
+              >
+                <option>
+                  Select the {storedConfigure?.employee || "Employee"}
+                </option>
+                {teacherData &&
+                  teacherData.map((teacher) => (
+                    <option key={teacher.id} value={teacher.id}>
+                      {teacher.teacherNames}
+                    </option>
+                  ))}
+              </select>
+            </div>
+          )}
+          <div className="form-group mb-0 ms-2 mb-1 ">
+            <button
+              type="button"
+              className="btn btn-sm btn-border"
+              onClick={clearFilter}
+            >
+              Clear
+            </button>
+          </div>
+        </div>
         {loading ? (
           <div className="loader-container">
             <div className="loading">
@@ -315,7 +319,7 @@ const AssignmentResult = () => {
                 enableDensityToggle={false}
                 enableFullScreenToggle={false}
                 initialState={{
-                 pagination: { pageSize: 50, pageIndex: 0 },
+                  pagination: { pageSize: 50, pageIndex: 0 },
                   columnVisibility: {
                     gst: false,
                     address: false,
@@ -350,13 +354,13 @@ const AssignmentResult = () => {
               onClose={handleMenuClose}
             >
               <MenuItem>
-              {storedScreens?.answerDelete && (
-                <GlobalDelete
-                  path={`/deleteAssignmentFolder/${selectedId}`}
-                  onDeleteSuccess={getAssignmentData}
-                  onOpen={handleMenuClose}
-                />
-              )}
+                {storedScreens?.answerDelete && (
+                  <GlobalDelete
+                    path={`/deleteAssignmentFolder/${selectedId}`}
+                    onDeleteSuccess={getAssignmentData}
+                    onOpen={handleMenuClose}
+                  />
+                )}
               </MenuItem>
             </Menu>
           </>

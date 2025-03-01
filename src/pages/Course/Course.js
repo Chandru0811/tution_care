@@ -306,7 +306,7 @@ const Course = () => {
                 onChange={handleFilterChange}
                 className="form-control form-control-sm center_list"
                 style={{ width: "160px" }}
-                placeholder="Course"
+                placeholder= {appConfigInfo.course}
                 autoComplete="off"
               />
             </div>

@@ -173,7 +173,7 @@ function TimeTable() {
                   onChange={handleFilterChange}
                 >
                   <option value="" disabled>
-                    Select a Teacher
+                    Select a {storedConfigure.employee}
                   </option>
                   {teacherData &&
                     teacherData.map((teacher) => (
@@ -213,8 +213,8 @@ function TimeTable() {
                 <table className="table table-bordered table-striped">
                   <thead>
                     <tr>
-                      <th className="text-center fw-medium">Class</th>
-                      <th className="text-center fw-medium">Teacher</th>
+                      <th className="text-center fw-medium">{storedConfigure.confClass}</th>
+                      <th className="text-center fw-medium">{storedConfigure.employee}</th>
                       <th
                         colSpan={classData.maxClassSizeofDay}
                         className="text-center fw-medium"
