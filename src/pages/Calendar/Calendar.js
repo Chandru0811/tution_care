@@ -202,7 +202,7 @@ function Calendar() {
             onChange={handleFilterChange}
           >
             <option value="" disabled>
-              Select a Teacher
+              Select a {storedConfigure?.employee || "Employee"}
             </option>
             {teacherData &&
               teacherData.map((teacher) => (

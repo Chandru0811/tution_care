@@ -328,7 +328,9 @@ function AssignmentView() {
               <div className="col-md-6 col-12 mb-3">
                 <div className="row">
                   <div className="col-6">
-                    <p className="fw-medium">Teacher</p>
+                    <p className="fw-medium">
+                      {storedConfigure?.employee || "Employee"}
+                    </p>
                   </div>
                   <div className="col-6 text-start">
                     <p className="text-muted">: {data.userName || "--"}</p>

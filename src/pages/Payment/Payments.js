@@ -84,7 +84,7 @@ const Payments = () => {
       {
         accessorKey: "studentName",
         enableHiding: false,
-        header: "Student Name",
+        header: `${storedConfigure?.student || "Student"} Name`,
       },
       {
         accessorKey: "paymentDate",
@@ -265,7 +265,9 @@ const Payments = () => {
                 onChange={handleFilterChange}
                 value={filters.studentId}
               >
-                <option selected>Select a Student</option>
+                <option selected>
+                  Select a {storedConfigure?.student || "Student"}
+                </option>
                 {studentData &&
                   studentData.map((student) => (
                     <option key={student.id} value={student.id}>
