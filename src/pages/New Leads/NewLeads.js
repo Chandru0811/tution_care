@@ -50,7 +50,6 @@ const NewLeads = () => {
     setShowEditDialog(true);
   };
 
-
   const handleStatusChange = async (row, status) => {
     setSelectedRow(row);
     let message = "Are you sure want to change the lead status?";
@@ -112,7 +111,7 @@ const NewLeads = () => {
   const getData = async () => {
     setLoading(true);
     let params = {};
-      params.centerId = centerId;
+    params.centerId = centerId;
     if (filters.subjectId !== "") {
       params.subjectId = filters.subjectId;
     }
@@ -276,7 +275,7 @@ const NewLeads = () => {
                       : row.original.leadStatus === "KIV"
                       ? "#6c757d"
                       : row.original.leadStatus === "WAITING_FOR_PAYMENT"
-                      ? "#0d6efd"
+                      ? "#ffc107"
                       : row.original.leadStatus === "ARRANGING_ASSESSMENT"
                       ? "#ffd107"
                       : row.original.leadStatus === "ASSESSMENT_DONE"
@@ -892,15 +891,13 @@ const NewLeads = () => {
               <span class="me-2 text-muted">
                 This database shows the list of{" "}
                 <span className="bold" style={{ color: "#287f71" }}>
-                {appConfigInfo.lead}
+                  {appConfigInfo.lead}
                 </span>
               </span>
             </div>
           </div>
           <div className="d-flex justify-content-between mb-3 px-2">
-            <div className="individual_fliters d-lg-flex ">
-            
-            </div>
+            <div className="individual_fliters d-lg-flex "></div>
             {storedScreens?.leadListingCreate && (
               <Link to="/lead/lead/add">
                 <button
@@ -966,14 +963,14 @@ const NewLeads = () => {
                   </MenuItem>
                 )}
                 {storedScreens?.leadListingDelete && (
-                <MenuItem>
-                  <GlobalDelete
-                    path={`/deleteLeadInfo/${selectedId}`}
-                    onDeleteSuccess={getData}
-                    onOpen={handleMenuClose}
-                  />
-                </MenuItem>
-               )}
+                  <MenuItem>
+                    <GlobalDelete
+                      path={`/deleteLeadInfo/${selectedId}`}
+                      onDeleteSuccess={getData}
+                      onOpen={handleMenuClose}
+                    />
+                  </MenuItem>
+                )}
               </Menu>
             </>
           )}
@@ -1013,7 +1010,6 @@ const NewLeads = () => {
           </div>
         </Modal.Body>
       </Modal>
-     
     </div>
   );
 };
