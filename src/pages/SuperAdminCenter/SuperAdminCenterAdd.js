@@ -81,6 +81,11 @@ function SuperAdminCenterAdd({ handleCenterChanged }) {
       reportManagement: false,
       messages: false,
       file: null,
+
+      isFacialRegForTeacher: true,
+      isGeoFenceForTeacher: true,
+      isFacialRegForStudent: true,
+      isGeoFenceForStudent: true,
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
@@ -365,6 +370,91 @@ function SuperAdminCenterAdd({ handleCenterChanged }) {
                   )}
                 </div>
               </div>
+              <div className="col-md-6 col-12">
+                <div className="mb-3">
+                  <label className="form-label">Student</label>
+                  <div className="d-flex gap-3">
+                    <div className="form-check">
+                      <input
+                        {...formik.getFieldProps("isFacialRegForStudent")}
+                        type="checkbox"
+                        className={`form-check-input ${
+                          formik.touched.isFacialRegForStudent &&
+                          formik.errors.isFacialRegForStudent
+                            ? "is-invalid"
+                            : ""
+                        }`}
+                        id="facialRecognizer"
+                      />
+                      <label
+                        className="form-check-label"
+                        htmlFor="facialRecognizer"
+                      >
+                        Facial Recognizer
+                      </label>
+                    </div>
+                    <div className="form-check">
+                      <input
+                        {...formik.getFieldProps("isGeoFenceForStudent")}
+                        type="checkbox"
+                        className={`form-check-input ${
+                          formik.touched.isGeoFenceForStudent &&
+                          formik.errors.isGeoFenceForStudent
+                            ? "is-invalid"
+                            : ""
+                        }`}
+                        id="geoFence"
+                      />
+                      <label className="form-check-label" htmlFor="geoFence">
+                        Geofence
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="col-md-6 col-12">
+                <div className="mb-3">
+                  <label className="form-label">User(Emplyees)</label>
+                  <div className="d-flex gap-3">
+                    <div className="form-check">
+                      <input
+                        {...formik.getFieldProps("isFacialRegForTeacher")}
+                        type="checkbox"
+                        className={`form-check-input ${
+                          formik.touched.isFacialRegForTeacher &&
+                          formik.errors.isFacialRegForTeacher
+                            ? "is-invalid"
+                            : ""
+                        }`}
+                        id="facialRecognizer"
+                      />
+                      <label
+                        className="form-check-label"
+                        htmlFor="facialRecognizer"
+                      >
+                        Facial Recognizer
+                      </label>
+                    </div>
+                    <div className="form-check">
+                      <input
+                        {...formik.getFieldProps("isGeoFenceForTeacher")}
+                        type="checkbox"
+                        className={`form-check-input ${
+                          formik.touched.isGeoFenceForTeacher &&
+                          formik.errors.isGeoFenceForTeacher
+                            ? "is-invalid"
+                            : ""
+                        }`}
+                        id="geoFence"
+                      />
+                      <label className="form-check-label" htmlFor="geoFence">
+                        Geofence
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
               <div className="col-md-6 col-12">
                 <div className="mb-3">
                   <label className="form-label">
