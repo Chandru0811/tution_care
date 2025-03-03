@@ -29,6 +29,7 @@ const AssignmentResult = () => {
   const [filters, setFilters] = useState({
     centerId: centerId,
     userId: "",
+    studentId: "",
   });
   const storedConfigure = JSON.parse(
     localStorage.getItem("tmsappConfigInfo") || "{}"
@@ -234,6 +235,7 @@ const AssignmentResult = () => {
     setFilters({
       centerId: centerId,
       userId: "",
+      studentId: "",
     });
     // setIsClearFilterClicked(true); // Set flag to trigger data fetch without filters
   };
