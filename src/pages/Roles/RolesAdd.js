@@ -18,6 +18,20 @@ function RolesAdd() {
   const storedConfigure = JSON.parse(
     localStorage.getItem("tmsappConfigInfo") || "{}"
   );
+  const [data, setData] = useState({});
+
+  const getAccess = async () => {
+    try {
+      const response = await api.get(`/getAllCenterById/${centerId}`);
+      setData(response.data);
+    } catch (error) {
+      console.error("Error Fetching Data: " + error.message);
+    }
+  };
+
+  useEffect(() => {
+    getAccess();
+  }, []);
 
   const fetchRole = async () => {
     try {
@@ -1687,12 +1701,72 @@ function RolesAdd() {
                               />
                             </td>
                           </tr>
-                          {/* Lead Management  */}
                           <tr>
-                            <th colspan="6">
-                              {storedConfigure?.lead || "Lead"} Management
-                            </th>
+                            <td>
+                              <p
+                                style={{
+                                  marginLeft: "30px",
+                                  marginBottom: "0px",
+                                }}
+                              >
+                                {storedConfigure?.employee || "Employee"}
+                              </p>
+                            </td>
+                            <td>
+                              <input
+                                className="form-check-input"
+                                type="checkbox"
+                                name="teacherIndex"
+                                checked={formik.values.teacherIndex}
+                                onChange={handleCheckboxChange(`teacherIndex`)}
+                              />
+                            </td>
+                            <td>
+                              <input
+                                className="form-check-input"
+                                type="checkbox"
+                                name="teacherRead"
+                                checked={formik.values.teacherRead}
+                                onChange={handleCheckboxChange(`teacherRead`)}
+                              />
+                            </td>
+                            <td>
+                              <input
+                                className="form-check-input"
+                                type="checkbox"
+                                name="teacherCreate"
+                                checked={formik.values.teacherCreate}
+                                onChange={handleCheckboxChange(`teacherCreate`)}
+                              />
+                            </td>
+                            <td>
+                              <input
+                                className="form-check-input"
+                                type="checkbox"
+                                name="teacherUpdate"
+                                checked={formik.values.teacherUpdate}
+                                onChange={handleCheckboxChange(`teacherUpdate`)}
+                              />
+                            </td>
+                            <td>
+                              <input
+                                className="form-check-input"
+                                type="checkbox"
+                                name="teacherDelete"
+                                checked={formik.values.teacherDelete}
+                                onChange={handleCheckboxChange(`teacherDelete`)}
+                              />
+                            </td>
                           </tr>
+                          {/* Lead Management  */}
+                          {data.leadManagement === true && (
+                            <tr>
+                              <th colspan="6">
+                                {storedConfigure?.lead || "Lead"} Management
+                              </th>
+                            </tr>
+                          )}
+
                           <tr>
                             <td>
                               <p
@@ -1822,154 +1896,105 @@ function RolesAdd() {
                               />
                             </td>
                           </tr> */}
-                          <tr>
-                            <td>
-                              <p
-                                style={{
-                                  marginLeft: "30px",
-                                  marginBottom: "0px",
-                                }}
-                              >
-                                {storedConfigure?.employee || "Employee"}
-                              </p>
-                            </td>
-                            <td>
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                name="teacherIndex"
-                                checked={formik.values.teacherIndex}
-                                onChange={handleCheckboxChange(`teacherIndex`)}
-                              />
-                            </td>
-                            <td>
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                name="teacherRead"
-                                checked={formik.values.teacherRead}
-                                onChange={handleCheckboxChange(`teacherRead`)}
-                              />
-                            </td>
-                            <td>
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                name="teacherCreate"
-                                checked={formik.values.teacherCreate}
-                                onChange={handleCheckboxChange(`teacherCreate`)}
-                              />
-                            </td>
-                            <td>
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                name="teacherUpdate"
-                                checked={formik.values.teacherUpdate}
-                                onChange={handleCheckboxChange(`teacherUpdate`)}
-                              />
-                            </td>
-                            <td>
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                name="teacherDelete"
-                                checked={formik.values.teacherDelete}
-                                onChange={handleCheckboxChange(`teacherDelete`)}
-                              />
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>
-                              <p
-                                style={{
-                                  marginLeft: "30px",
-                                  marginBottom: "0px",
-                                }}
-                              >
-                                Staffing Attendance
-                              </p>
-                            </td>
-                            <td>
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                name="staffAttendanceIndex"
-                                checked={formik.values.staffAttendanceIndex}
-                                onChange={handleCheckboxChange(
-                                  `staffAttendanceIndex`
-                                )}
-                              />
-                            </td>
-                            <td>
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                name="staffAttendanceRead"
-                                checked={formik.values.staffAttendanceRead}
-                                onChange={handleCheckboxChange(
-                                  `staffAttendanceRead`
-                                )}
-                              />
-                            </td>
-                            <td>
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                name="staffAttendanceCreate"
-                                checked={formik.values.staffAttendanceCreate}
-                                onChange={handleCheckboxChange(
-                                  `staffAttendanceCreate`
-                                )}
-                              />
-                            </td>
-                            <td>
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                name="staffAttendanceUpdate"
-                                checked={formik.values.staffAttendanceUpdate}
-                                onChange={handleCheckboxChange(
-                                  `staffAttendanceUpdate`
-                                )}
-                              />
-                            </td>
-                            <td>
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                name="staffAttendanceDelete"
-                                checked={formik.values.staffAttendanceDelete}
-                                onChange={handleCheckboxChange(
-                                  `staffAttendanceDelete`
-                                )}
-                              />
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>
-                              <p
-                                style={{
-                                  marginLeft: "30px",
-                                  marginBottom: "0px",
-                                }}
-                              >
-                                Check Attendance
-                              </p>
-                            </td>
-                            <td>
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                name="checkAttendanceIndex"
-                                checked={formik.values.checkAttendanceIndex}
-                                onChange={handleCheckboxChange(
-                                  `checkAttendanceIndex`
-                                )}
-                              />
-                            </td>
-                            <td>
-                              {/* <input
+                          {data.staffManagement === true && (
+                            <>
+                              <tr>
+                                <td>
+                                  <p
+                                    style={{
+                                      marginLeft: "30px",
+                                      marginBottom: "0px",
+                                    }}
+                                  >
+                                    Staffing Attendance
+                                  </p>
+                                </td>
+                                <td>
+                                  <input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    name="staffAttendanceIndex"
+                                    checked={formik.values.staffAttendanceIndex}
+                                    onChange={handleCheckboxChange(
+                                      `staffAttendanceIndex`
+                                    )}
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    name="staffAttendanceRead"
+                                    checked={formik.values.staffAttendanceRead}
+                                    onChange={handleCheckboxChange(
+                                      `staffAttendanceRead`
+                                    )}
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    name="staffAttendanceCreate"
+                                    checked={
+                                      formik.values.staffAttendanceCreate
+                                    }
+                                    onChange={handleCheckboxChange(
+                                      `staffAttendanceCreate`
+                                    )}
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    name="staffAttendanceUpdate"
+                                    checked={
+                                      formik.values.staffAttendanceUpdate
+                                    }
+                                    onChange={handleCheckboxChange(
+                                      `staffAttendanceUpdate`
+                                    )}
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    name="staffAttendanceDelete"
+                                    checked={
+                                      formik.values.staffAttendanceDelete
+                                    }
+                                    onChange={handleCheckboxChange(
+                                      `staffAttendanceDelete`
+                                    )}
+                                  />
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                  <p
+                                    style={{
+                                      marginLeft: "30px",
+                                      marginBottom: "0px",
+                                    }}
+                                  >
+                                    Check Attendance
+                                  </p>
+                                </td>
+                                <td>
+                                  <input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    name="checkAttendanceIndex"
+                                    checked={formik.values.checkAttendanceIndex}
+                                    onChange={handleCheckboxChange(
+                                      `checkAttendanceIndex`
+                                    )}
+                                  />
+                                </td>
+                                <td>
+                                  {/* <input
                               className="form-check-input"
                               type="checkbox"
                               name="staffAttendanceRead"
@@ -1978,9 +2003,9 @@ function RolesAdd() {
                                 `staffAttendanceRead`
                               )}
                             /> */}
-                            </td>
-                            <td>
-                              {/* <input
+                                </td>
+                                <td>
+                                  {/* <input
                               className="form-check-input"
                               type="checkbox"
                               name="staffAttendanceCreate"
@@ -1989,9 +2014,9 @@ function RolesAdd() {
                                 `staffAttendanceCreate`
                               )}
                             /> */}
-                            </td>
-                            <td>
-                              {/* <input
+                                </td>
+                                <td>
+                                  {/* <input
                               className="form-check-input"
                               type="checkbox"
                               name="staffAttendanceUpdate"
@@ -2000,9 +2025,9 @@ function RolesAdd() {
                                 `staffAttendanceUpdate`
                               )}
                             /> */}
-                            </td>
-                            <td>
-                              {/* <input
+                                </td>
+                                <td>
+                                  {/* <input
                               className="form-check-input"
                               type="checkbox"
                               name="staffAttendanceDelete"
@@ -2011,438 +2036,406 @@ function RolesAdd() {
                                 `staffAttendanceDelete`
                               )}
                             /> */}
-                            </td>
-                          </tr>
+                                </td>
+                              </tr>
 
-                          <tr>
-                            <td>
-                              <p
-                                style={{
-                                  marginLeft: "30px",
-                                  marginBottom: "0px",
-                                }}
-                              >
-                                Leave
-                              </p>
-                            </td>
-                            <td>
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                name="leaveAdminIndex"
-                                checked={formik.values.leaveAdminIndex}
-                                onChange={handleCheckboxChange(
-                                  `leaveAdminIndex`
-                                )}
-                              />
-                            </td>
-                            <td>
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                name="leaveAdminceRead"
-                                checked={formik.values.leaveAdminRead}
-                                onChange={handleCheckboxChange(
-                                  `leaveAdminRead`
-                                )}
-                              />
-                            </td>
-                            <td>
-                              {/* <input
+                              <tr>
+                                <td>
+                                  <p
+                                    style={{
+                                      marginLeft: "30px",
+                                      marginBottom: "0px",
+                                    }}
+                                  >
+                                    Leave
+                                  </p>
+                                </td>
+                                <td>
+                                  <input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    name="leaveAdminIndex"
+                                    checked={formik.values.leaveAdminIndex}
+                                    onChange={handleCheckboxChange(
+                                      `leaveAdminIndex`
+                                    )}
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    name="leaveAdminceRead"
+                                    checked={formik.values.leaveAdminRead}
+                                    onChange={handleCheckboxChange(
+                                      `leaveAdminRead`
+                                    )}
+                                  />
+                                </td>
+                                <td>
+                                  {/* <input
                           className="form-check-input"
                           type="checkbox"
                           name="leaveAdminceCreate"
                           checked={formik.values.leaveAdminCreate}
                           onChange={handleCheckboxChange}
                         /> */}
-                            </td>
-                            <td>
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                name="leaveAdminUpdate"
-                                checked={formik.values.leaveAdminUpdate}
-                                onChange={handleCheckboxChange(
-                                  `leaveAdminUpdate`
-                                )}
-                              />
-                            </td>
-                            <td>
-                              {/* <input
+                                </td>
+                                <td>
+                                  <input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    name="leaveAdminUpdate"
+                                    checked={formik.values.leaveAdminUpdate}
+                                    onChange={handleCheckboxChange(
+                                      `leaveAdminUpdate`
+                                    )}
+                                  />
+                                </td>
+                                <td>
+                                  {/* <input
                           className="form-check-input"
                           type="checkbox"
                           name="leaveAdminDelete"
                           checked={formik.values.leaveAdminDelete}
                           onChange={handleCheckboxChange}
                         /> */}
-                            </td>
-                          </tr>
+                                </td>
+                              </tr>
 
-                          <tr>
-                            <td>
-                              <p
-                                style={{
-                                  marginLeft: "30px",
-                                  marginBottom: "0px",
-                                }}
-                              >
-                                Leave Request
-                              </p>
-                            </td>
-                            <td>
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                name="leaveRequestIndex"
-                                checked={formik.values.leaveRequestIndex}
-                                onChange={handleCheckboxChange(
-                                  `leaveRequestIndex`
-                                )}
-                              />
-                            </td>
-                            <td>
-                              {/* <input
+                              <tr>
+                                <td>
+                                  <p
+                                    style={{
+                                      marginLeft: "30px",
+                                      marginBottom: "0px",
+                                    }}
+                                  >
+                                    Leave Request
+                                  </p>
+                                </td>
+                                <td>
+                                  <input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    name="leaveRequestIndex"
+                                    checked={formik.values.leaveRequestIndex}
+                                    onChange={handleCheckboxChange(
+                                      `leaveRequestIndex`
+                                    )}
+                                  />
+                                </td>
+                                <td>
+                                  {/* <input
                           className="form-check-input"
                           type="checkbox"
                           name="leaveRead"
                           checked={formik.values.leaveRead}
                           onChange={handleCheckboxChange}
                         /> */}
-                            </td>
-                            <td>
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                name="leaveRequestCreate"
-                                checked={formik.values.leaveRequestCreate}
-                                onChange={handleCheckboxChange(
-                                  `leaveRequestCreate`
-                                )}
-                              />
-                            </td>
-                            <td>
-                              {/* <input
+                                </td>
+                                <td>
+                                  <input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    name="leaveRequestCreate"
+                                    checked={formik.values.leaveRequestCreate}
+                                    onChange={handleCheckboxChange(
+                                      `leaveRequestCreate`
+                                    )}
+                                  />
+                                </td>
+                                <td>
+                                  {/* <input
                           className="form-check-input"
                           type="checkbox"
                           name="leaveUpdate"
                           checked={formik.values.leaveUpdate}
                           onChange={handleCheckboxChange}
                         /> */}
-                            </td>
-                            <td>
-                              {/* <input
+                                </td>
+                                <td>
+                                  {/* <input
                           className="form-check-input"
                           type="checkbox"
                           name="leaveDelete"
                           checked={formik.values.leaveDelete}
                           onChange={handleCheckboxChange}
                         /> */}
-                            </td>
-                          </tr>
+                                </td>
+                              </tr>
 
-                          <tr>
-                            <td>
-                              <p
-                                style={{
-                                  marginLeft: "30px",
-                                  marginBottom: "0px",
-                                }}
-                              >
-                                Holiday
-                              </p>
-                            </td>
-                            <td>
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                name="holidayIndex"
-                                checked={formik.values.holidayIndex}
-                                onChange={handleCheckboxChange(`holidayIndex`)}
-                              />
-                            </td>
-                            <td>
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                name="holidayRead"
-                                checked={formik.values.holidayRead}
-                                onChange={handleCheckboxChange(`holidayRead`)}
-                              />
-                            </td>
-                            <td>
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                name="holidayCreate"
-                                checked={formik.values.holidayCreate}
-                                onChange={handleCheckboxChange(`holidayCreate`)}
-                              />
-                            </td>
-                            <td>
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                name="holidayUpdate"
-                                checked={formik.values.holidayUpdate}
-                                onChange={handleCheckboxChange(`holidayUpdate`)}
-                              />
-                            </td>
-                            <td>
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                name="holidayDelete"
-                                checked={formik.values.holidayDelete}
-                                onChange={handleCheckboxChange(`holidayDelete`)}
-                              />
-                            </td>
-                          </tr>
+                              <tr>
+                                <td>
+                                  <p
+                                    style={{
+                                      marginLeft: "30px",
+                                      marginBottom: "0px",
+                                    }}
+                                  >
+                                    Holiday
+                                  </p>
+                                </td>
+                                <td>
+                                  <input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    name="holidayIndex"
+                                    checked={formik.values.holidayIndex}
+                                    onChange={handleCheckboxChange(
+                                      `holidayIndex`
+                                    )}
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    name="holidayRead"
+                                    checked={formik.values.holidayRead}
+                                    onChange={handleCheckboxChange(
+                                      `holidayRead`
+                                    )}
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    name="holidayCreate"
+                                    checked={formik.values.holidayCreate}
+                                    onChange={handleCheckboxChange(
+                                      `holidayCreate`
+                                    )}
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    name="holidayUpdate"
+                                    checked={formik.values.holidayUpdate}
+                                    onChange={handleCheckboxChange(
+                                      `holidayUpdate`
+                                    )}
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    name="holidayDelete"
+                                    checked={formik.values.holidayDelete}
+                                    onChange={handleCheckboxChange(
+                                      `holidayDelete`
+                                    )}
+                                  />
+                                </td>
+                              </tr>
 
-                          <tr>
-                            <td>
-                              <p
-                                style={{
-                                  marginLeft: "30px",
-                                  marginBottom: "0px",
-                                }}
-                              >
-                                Deduction
-                              </p>
-                            </td>
-                            <td>
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                name="deductionIndex"
-                                checked={formik.values.deductionIndex}
-                                onChange={handleCheckboxChange(
-                                  `deductionIndex`
-                                )}
-                              />
-                            </td>
-                            <td>
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                name="deductionRead"
-                                checked={formik.values.deductionRead}
-                                onChange={handleCheckboxChange(`deductionRead`)}
-                              />
-                            </td>
-                            <td>
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                name="deductionCreate"
-                                checked={formik.values.deductionCreate}
-                                onChange={handleCheckboxChange(
-                                  `deductionCreate`
-                                )}
-                              />
-                            </td>
-                            <td>
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                name="deductionUpdate"
-                                checked={formik.values.deductionUpdate}
-                                onChange={handleCheckboxChange(
-                                  `deductionUpdate`
-                                )}
-                              />
-                            </td>
-                            <td>
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                name="deductionDelete"
-                                checked={formik.values.deductionDelete}
-                                onChange={handleCheckboxChange(
-                                  `deductionDelete`
-                                )}
-                              />
-                            </td>
-                          </tr>
+                              <tr>
+                                <td>
+                                  <p
+                                    style={{
+                                      marginLeft: "30px",
+                                      marginBottom: "0px",
+                                    }}
+                                  >
+                                    Deduction
+                                  </p>
+                                </td>
+                                <td>
+                                  <input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    name="deductionIndex"
+                                    checked={formik.values.deductionIndex}
+                                    onChange={handleCheckboxChange(
+                                      `deductionIndex`
+                                    )}
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    name="deductionRead"
+                                    checked={formik.values.deductionRead}
+                                    onChange={handleCheckboxChange(
+                                      `deductionRead`
+                                    )}
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    name="deductionCreate"
+                                    checked={formik.values.deductionCreate}
+                                    onChange={handleCheckboxChange(
+                                      `deductionCreate`
+                                    )}
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    name="deductionUpdate"
+                                    checked={formik.values.deductionUpdate}
+                                    onChange={handleCheckboxChange(
+                                      `deductionUpdate`
+                                    )}
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    name="deductionDelete"
+                                    checked={formik.values.deductionDelete}
+                                    onChange={handleCheckboxChange(
+                                      `deductionDelete`
+                                    )}
+                                  />
+                                </td>
+                              </tr>
 
-                          <tr>
-                            <td>
-                              <p
-                                style={{
-                                  marginLeft: "30px",
-                                  marginBottom: "0px",
-                                }}
-                              >
-                                Payroll
-                              </p>
-                            </td>
-                            <td>
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                name="payrollIndex"
-                                checked={formik.values.payrollIndex}
-                                onChange={handleCheckboxChange(`payrollIndex`)}
-                              />
-                            </td>
-                            <td>
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                name="payrollRead"
-                                checked={formik.values.payrollRead}
-                                onChange={handleCheckboxChange(`payrollRead`)}
-                              />
-                            </td>
-                            <td>
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                name="payrollCreate"
-                                checked={formik.values.payrollCreate}
-                                onChange={handleCheckboxChange(`payrollCreate`)}
-                              />
-                            </td>
-                            <td>
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                name="payrollUpdate"
-                                checked={formik.values.payrollUpdate}
-                                onChange={handleCheckboxChange(`payrollUpdate`)}
-                              />
-                            </td>
-                            <td>
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                name="payrollDelete"
-                                checked={formik.values.payrollDelete}
-                                onChange={handleCheckboxChange(`payrollDelete`)}
-                              />
-                            </td>
-                          </tr>
+                              <tr>
+                                <td>
+                                  <p
+                                    style={{
+                                      marginLeft: "30px",
+                                      marginBottom: "0px",
+                                    }}
+                                  >
+                                    Payroll
+                                  </p>
+                                </td>
+                                <td>
+                                  <input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    name="payrollIndex"
+                                    checked={formik.values.payrollIndex}
+                                    onChange={handleCheckboxChange(
+                                      `payrollIndex`
+                                    )}
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    name="payrollRead"
+                                    checked={formik.values.payrollRead}
+                                    onChange={handleCheckboxChange(
+                                      `payrollRead`
+                                    )}
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    name="payrollCreate"
+                                    checked={formik.values.payrollCreate}
+                                    onChange={handleCheckboxChange(
+                                      `payrollCreate`
+                                    )}
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    name="payrollUpdate"
+                                    checked={formik.values.payrollUpdate}
+                                    onChange={handleCheckboxChange(
+                                      `payrollUpdate`
+                                    )}
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    name="payrollDelete"
+                                    checked={formik.values.payrollDelete}
+                                    onChange={handleCheckboxChange(
+                                      `payrollDelete`
+                                    )}
+                                  />
+                                </td>
+                              </tr>
 
-                          <tr>
-                            <td>
-                              <p
-                                style={{
-                                  marginLeft: "30px",
-                                  marginBottom: "0px",
-                                }}
-                              >
-                                Payslip
-                              </p>
-                            </td>
-                            <td>
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                name="payslipIndex"
-                                checked={formik.values.payslipIndex}
-                                onChange={handleCheckboxChange(`payslipIndex`)}
-                              />
-                            </td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                          </tr>
-                          <tr>
-                            <td>
-                              <p
-                                style={{
-                                  marginLeft: "30px",
-                                  marginBottom: "0px",
-                                }}
-                              >
-                                Freelancer Invoice
-                              </p>
-                            </td>
-                            <td>
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                name="freeLancerIndex"
-                                checked={formik.values.freeLancerIndex}
-                                onChange={handleCheckboxChange(
-                                  `freeLancerIndex`
-                                )}
-                              />
-                            </td>
-                            <td>
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                name="freeLancerRead"
-                                checked={formik.values.freeLancerRead}
-                                onChange={handleCheckboxChange(
-                                  `freeLancerRead`
-                                )}
-                              />
-                            </td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                          </tr>
-                          <tr>
-                            <td>
-                              <p
-                                style={{
-                                  marginLeft: "30px",
-                                  marginBottom: "0px",
-                                }}
-                              >
-                                Roles & Matrix
-                              </p>
-                            </td>
-                            <td>
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                name="rolesMatrixIndex"
-                                checked={formik.values.rolesMatrixIndex}
-                                onChange={handleCheckboxChange(
-                                  `rolesMatrixIndex`
-                                )}
-                              />
-                            </td>
-                            <td>
-                              {/* <input
-                          className="form-check-input"
-                          type="checkbox"
-                          name="teacherRead"
-                          checked={formik.values.teacherRead}
-                          onChange={handleCheckboxChange}
-                        /> */}
-                            </td>
-                            <td>
-                              {/* <input
-                          className="form-check-input"
-                          type="checkbox"
-                          name="teacherCreate"
-                          checked={formik.values.teacherCreate}
-                          onChange={handleCheckboxChange}
-                        /> */}
-                            </td>
-                            <td>
-                              {/* <input
-                          className="form-check-input"
-                          type="checkbox"
-                          name="teacherUpdate"
-                          checked={formik.values.teacherUpdate}
-                          onChange={handleCheckboxChange}
-                        /> */}
-                            </td>
-                            <td>
-                              {/* <input
-                          className="form-check-input"
-                          type="checkbox"
-                          name="teacherDelete"
-                          checked={formik.values.teacherDelete}
-                          onChange={handleCheckboxChange}
-                        /> */}
-                            </td>
-                          </tr>
+                              <tr>
+                                <td>
+                                  <p
+                                    style={{
+                                      marginLeft: "30px",
+                                      marginBottom: "0px",
+                                    }}
+                                  >
+                                    Payslip
+                                  </p>
+                                </td>
+                                <td>
+                                  <input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    name="payslipIndex"
+                                    checked={formik.values.payslipIndex}
+                                    onChange={handleCheckboxChange(
+                                      `payslipIndex`
+                                    )}
+                                  />
+                                </td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                              </tr>
+                              <tr>
+                                <td>
+                                  <p
+                                    style={{
+                                      marginLeft: "30px",
+                                      marginBottom: "0px",
+                                    }}
+                                  >
+                                    Freelancer Invoice
+                                  </p>
+                                </td>
+                                <td>
+                                  <input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    name="freeLancerIndex"
+                                    checked={formik.values.freeLancerIndex}
+                                    onChange={handleCheckboxChange(
+                                      `freeLancerIndex`
+                                    )}
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    name="freeLancerRead"
+                                    checked={formik.values.freeLancerRead}
+                                    onChange={handleCheckboxChange(
+                                      `freeLancerRead`
+                                    )}
+                                  />
+                                </td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                              </tr>
+                            </>
+                          )}
+
                           {/* Student Management  */}
                           <tr>
                             <th colspan="6">
@@ -2815,271 +2808,297 @@ function RolesAdd() {
                             </td>
                           </tr>
                           {/* Document Management  */}
-                          <tr>
-                            <th colspan="6">
-                              {storedConfigure?.documentManagement ||
-                                "Document Management"}
-                            </th>
-                          </tr>
-                          <tr>
-                            <td>
-                              <p
-                                style={{
-                                  marginLeft: "30px",
-                                  marginBottom: "0px",
-                                }}
-                              >
-                                {storedConfigure?.documentManagement ||
-                                  "Document"}{" "}
-                                Listing
-                              </p>
-                            </td>
-                            <td>
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                name="documentListingIndex"
-                                checked={formik.values.documentListingIndex}
-                                onChange={handleCheckboxChange(
-                                  `documentListingIndex`
-                                )}
-                              />
-                            </td>
-                            <td>
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                name="documentListingRead"
-                                checked={formik.values.documentListingRead}
-                                onChange={handleCheckboxChange(
-                                  `documentListingRead`
-                                )}
-                              />
-                            </td>
-                            <td>
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                name="documentListingCreate"
-                                checked={formik.values.documentListingCreate}
-                                onChange={handleCheckboxChange(
-                                  `documentListingCreate`
-                                )}
-                              />
-                            </td>
-                            <td>
-                              {/* <input
+                          {data.documentManagement === true && (
+                            <>
+                              <tr>
+                                <th colspan="6">
+                                  {storedConfigure?.documentManagement ||
+                                    "Document Management"}
+                                </th>
+                              </tr>
+                              <tr>
+                                <td>
+                                  <p
+                                    style={{
+                                      marginLeft: "30px",
+                                      marginBottom: "0px",
+                                    }}
+                                  >
+                                    {storedConfigure?.documentManagement ||
+                                      "Document"}{" "}
+                                    Listing
+                                  </p>
+                                </td>
+                                <td>
+                                  <input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    name="documentListingIndex"
+                                    checked={formik.values.documentListingIndex}
+                                    onChange={handleCheckboxChange(
+                                      `documentListingIndex`
+                                    )}
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    name="documentListingRead"
+                                    checked={formik.values.documentListingRead}
+                                    onChange={handleCheckboxChange(
+                                      `documentListingRead`
+                                    )}
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    name="documentListingCreate"
+                                    checked={
+                                      formik.values.documentListingCreate
+                                    }
+                                    onChange={handleCheckboxChange(
+                                      `documentListingCreate`
+                                    )}
+                                  />
+                                </td>
+                                <td>
+                                  {/* <input
                           className="form-check-input"
                           type="checkbox"
                           name="documentListingUpdate"
                           checked={formik.values.documentListingUpdate}
                           onChange={handleCheckboxChange}
                         /> */}
-                            </td>
-                            <td>
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                name="documentListingDelete"
-                                checked={formik.values.documentListingDelete}
-                                onChange={handleCheckboxChange(
-                                  `documentListingDelete`
-                                )}
-                              />
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>
-                              <p
-                                style={{
-                                  marginLeft: "30px",
-                                  marginBottom: "0px",
-                                }}
-                              >
-                                {storedConfigure?.documentManagement ||
-                                  "Document"}{" "}
-                                File
-                              </p>
-                            </td>
-                            <td>
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                name="documentFileIndex"
-                                checked={formik.values.documentFileIndex}
-                                onChange={handleCheckboxChange(
-                                  `documentFileIndex`
-                                )}
-                              />
-                            </td>
-                            <td>
-                              {/* <input
+                                </td>
+                                <td>
+                                  <input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    name="documentListingDelete"
+                                    checked={
+                                      formik.values.documentListingDelete
+                                    }
+                                    onChange={handleCheckboxChange(
+                                      `documentListingDelete`
+                                    )}
+                                  />
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                  <p
+                                    style={{
+                                      marginLeft: "30px",
+                                      marginBottom: "0px",
+                                    }}
+                                  >
+                                    {storedConfigure?.documentManagement ||
+                                      "Document"}{" "}
+                                    File
+                                  </p>
+                                </td>
+                                <td>
+                                  <input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    name="documentFileIndex"
+                                    checked={formik.values.documentFileIndex}
+                                    onChange={handleCheckboxChange(
+                                      `documentFileIndex`
+                                    )}
+                                  />
+                                </td>
+                                <td>
+                                  {/* <input
                           className="form-check-input"
                           type="checkbox"
                           name="documentFileIdex"
                           checked={formik.values.documentFileIdex}
                           onChange={handleCheckboxChange}
                         /> */}
-                            </td>
-                            <td>
-                              {/* <input
+                                </td>
+                                <td>
+                                  {/* <input
                           className="form-check-input"
                           type="checkbox"
                           name="documentFileIdex"
                           checked={formik.values.documentFileIdex}
                           onChange={handleCheckboxChange}
                         /> */}
-                            </td>
-                            <td>
-                              {/* <input
+                                </td>
+                                <td>
+                                  {/* <input
                           className="form-check-input"
                           type="checkbox"
                           name="documentFileIdex"
                           checked={formik.values.documentFileIdex}
                           onChange={handleCheckboxChange}
                         /> */}
-                            </td>
-                            <td>
-                              {/* <input
+                                </td>
+                                <td>
+                                  {/* <input
                           className="form-check-input"
                           type="checkbox"
                           name="documentListingDelete"
                           checked={formik.values.documentListingDelete}
                           onChange={handleCheckboxChange}
                         /> */}
-                            </td>
-                          </tr>
+                                </td>
+                              </tr>
+                            </>
+                          )}
 
                           {/* Assignment Management  */}
-                          <tr>
-                            <th colspan="6">
-                              {storedConfigure?.assignManagement ||
-                                "Assignment"}{" "}
-                              Management
-                            </th>
-                          </tr>
-                          <tr>
-                            <td>
-                              <p
-                                style={{
-                                  marginLeft: "30px",
-                                  marginBottom: "0px",
-                                }}
-                              >
-                                {storedConfigure?.assignManagement ||
-                                  "Assignment"}{" "}
-                                Listing
-                              </p>
-                            </td>
-                            <td>
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                name="questionIndex"
-                                checked={formik.values.questionIndex}
-                                onChange={handleCheckboxChange(`questionIndex`)}
-                              />
-                            </td>
-                            <td>
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                name="questionRead"
-                                checked={formik.values.questionRead}
-                                onChange={handleCheckboxChange(`questionRead`)}
-                              />
-                            </td>
-                            <td>
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                name="questionCreate"
-                                checked={formik.values.questionCreate}
-                                onChange={handleCheckboxChange(
-                                  `questionCreate`
-                                )}
-                              />
-                            </td>
-                            <td>
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                name="questionUpdate"
-                                checked={formik.values.questionUpdate}
-                                onChange={handleCheckboxChange}
-                              />
-                            </td>
-                            <td>
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                name="questionDelete"
-                                checked={formik.values.questionDelete}
-                                onChange={handleCheckboxChange(
-                                  `questionDelete`
-                                )}
-                              />
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>
-                              <p
-                                style={{
-                                  marginLeft: "30px",
-                                  marginBottom: "0px",
-                                }}
-                              >
-                                {storedConfigure?.assignManagement ||
-                                  "Assignment"}{" "}
-                                Result
-                              </p>
-                            </td>
-                            <td>
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                name="answerIndex"
-                                checked={formik.values.answerIndex}
-                                onChange={handleCheckboxChange(`answerIndex`)}
-                              />
-                            </td>
-                            <td>
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                name="answerRead"
-                                checked={formik.values.answerRead}
-                                onChange={handleCheckboxChange(`answerRead`)}
-                              />
-                            </td>
-                            <td>
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                name="answerCreate"
-                                checked={formik.values.answerCreate}
-                                onChange={handleCheckboxChange(`answerCreate`)}
-                              />
-                            </td>
-                            <td>
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                name="answerUpdate"
-                                checked={formik.values.answerUpdate}
-                                onChange={handleCheckboxChange(`answerUpdate`)}
-                              />
-                            </td>
-                            <td>
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                name="answerDelete"
-                                checked={formik.values.answerDelete}
-                                onChange={handleCheckboxChange(`answerDelete`)}
-                              />
-                            </td>
-                          </tr>
+                          {data.assessmentManagement && (
+                            <>
+                              <tr>
+                                <th colspan="6">
+                                  {storedConfigure?.assignManagement ||
+                                    "Assignment"}{" "}
+                                  Management
+                                </th>
+                              </tr>
+                              <tr>
+                                <td>
+                                  <p
+                                    style={{
+                                      marginLeft: "30px",
+                                      marginBottom: "0px",
+                                    }}
+                                  >
+                                    {storedConfigure?.assignManagement ||
+                                      "Assignment"}{" "}
+                                    Listing
+                                  </p>
+                                </td>
+                                <td>
+                                  <input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    name="questionIndex"
+                                    checked={formik.values.questionIndex}
+                                    onChange={handleCheckboxChange(
+                                      `questionIndex`
+                                    )}
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    name="questionRead"
+                                    checked={formik.values.questionRead}
+                                    onChange={handleCheckboxChange(
+                                      `questionRead`
+                                    )}
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    name="questionCreate"
+                                    checked={formik.values.questionCreate}
+                                    onChange={handleCheckboxChange(
+                                      `questionCreate`
+                                    )}
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    name="questionUpdate"
+                                    checked={formik.values.questionUpdate}
+                                    onChange={handleCheckboxChange}
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    name="questionDelete"
+                                    checked={formik.values.questionDelete}
+                                    onChange={handleCheckboxChange(
+                                      `questionDelete`
+                                    )}
+                                  />
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                  <p
+                                    style={{
+                                      marginLeft: "30px",
+                                      marginBottom: "0px",
+                                    }}
+                                  >
+                                    {storedConfigure?.assignManagement ||
+                                      "Assignment"}{" "}
+                                    Result
+                                  </p>
+                                </td>
+                                <td>
+                                  <input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    name="answerIndex"
+                                    checked={formik.values.answerIndex}
+                                    onChange={handleCheckboxChange(
+                                      `answerIndex`
+                                    )}
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    name="answerRead"
+                                    checked={formik.values.answerRead}
+                                    onChange={handleCheckboxChange(
+                                      `answerRead`
+                                    )}
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    name="answerCreate"
+                                    checked={formik.values.answerCreate}
+                                    onChange={handleCheckboxChange(
+                                      `answerCreate`
+                                    )}
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    name="answerUpdate"
+                                    checked={formik.values.answerUpdate}
+                                    onChange={handleCheckboxChange(
+                                      `answerUpdate`
+                                    )}
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    name="answerDelete"
+                                    checked={formik.values.answerDelete}
+                                    onChange={handleCheckboxChange(
+                                      `answerDelete`
+                                    )}
+                                  />
+                                </td>
+                              </tr>
+                            </>
+                          )}
 
                           {/* Invoice Management  */}
                           <tr>
@@ -3279,309 +3298,330 @@ function RolesAdd() {
                           </tr>
 
                           {/* Report Management  */}
-                          <tr>
-                            <th colspan="6">
-                              {storedConfigure?.report || "Report"} Management
-                            </th>
-                          </tr>
-                          <tr>
-                            <td>
-                              <p
-                                style={{
-                                  marginLeft: "30px",
-                                  marginBottom: "0px",
-                                }}
-                              >
-                                {storedConfigure?.student} Attendance{" "}
-                                {storedConfigure?.report || "Report"}
-                              </p>
-                            </td>
-                            <td>
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                name="attendanceReportIndex"
-                                checked={formik.values.attendanceReportIndex}
-                                onChange={handleCheckboxChange(
-                                  `attendanceReportIndex`
-                                )}
-                              />
-                            </td>
-                            <td>
-                              {/* <input
+                          {data.reportManagement && (
+                            <>
+                              <tr>
+                                <th colspan="6">
+                                  {storedConfigure?.report || "Report"}{" "}
+                                  Management
+                                </th>
+                              </tr>
+                              <tr>
+                                <td>
+                                  <p
+                                    style={{
+                                      marginLeft: "30px",
+                                      marginBottom: "0px",
+                                    }}
+                                  >
+                                    {storedConfigure?.student} Attendance{" "}
+                                    {storedConfigure?.report || "Report"}
+                                  </p>
+                                </td>
+                                <td>
+                                  <input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    name="attendanceReportIndex"
+                                    checked={
+                                      formik.values.attendanceReportIndex
+                                    }
+                                    onChange={handleCheckboxChange(
+                                      `attendanceReportIndex`
+                                    )}
+                                  />
+                                </td>
+                                <td>
+                                  {/* <input
                           className="form-check-input"
                           type="checkbox"
                           name="attendanceReportRead"
                           checked={formik.values.attendanceReportRead}
                           onChange={handleCheckboxChange}
                         /> */}
-                            </td>
-                            <td>
-                              {/* <input
+                                </td>
+                                <td>
+                                  {/* <input
                           className="form-check-input"
                           type="checkbox"
                           name="attendanceReportCreate"
                           checked={formik.values.attendanceReportCreate}
                           onChange={handleCheckboxChange}
                         /> */}
-                            </td>
-                            <td>
-                              {/* <input
+                                </td>
+                                <td>
+                                  {/* <input
                           className="form-check-input"
                           type="checkbox"
                           name="attendanceReportUpdate"
                           checked={formik.values.attendanceReportUpdate}
                           onChange={handleCheckboxChange}
                         /> */}
-                            </td>
-                            <td>
-                              {/* <input
+                                </td>
+                                <td>
+                                  {/* <input
                           className="form-check-input"
                           type="checkbox"
                           name="attendanceReportDelete"
                           checked={formik.values.attendanceReportDelete}
                           onChange={handleCheckboxChange}
                         /> */}
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>
-                              <p
-                                style={{
-                                  marginLeft: "30px",
-                                  marginBottom: "0px",
-                                }}
-                              >
-                                {storedConfigure?.employee} Attendance{" "}
-                                {storedConfigure?.report || "Report"}
-                              </p>
-                            </td>
-                            <td>
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                name="userAttendanceReportIndex"
-                                checked={formik.values.userAttendanceReportIndex}
-                                onChange={handleCheckboxChange(
-                                  `userAttendanceReportIndex`
-                                )}
-                              />
-                            </td>
-                            <td>
-                              {/* <input
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                  <p
+                                    style={{
+                                      marginLeft: "30px",
+                                      marginBottom: "0px",
+                                    }}
+                                  >
+                                    {storedConfigure?.employee} Attendance{" "}
+                                    {storedConfigure?.report || "Report"}
+                                  </p>
+                                </td>
+                                <td>
+                                  <input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    name="userAttendanceReportIndex"
+                                    checked={
+                                      formik.values.userAttendanceReportIndex
+                                    }
+                                    onChange={handleCheckboxChange(
+                                      `userAttendanceReportIndex`
+                                    )}
+                                  />
+                                </td>
+                                <td>
+                                  {/* <input
                           className="form-check-input"
                           type="checkbox"
                           name="attendanceReportRead"
                           checked={formik.values.attendanceReportRead}
                           onChange={handleCheckboxChange}
                         /> */}
-                            </td>
-                            <td>
-                              {/* <input
+                                </td>
+                                <td>
+                                  {/* <input
                           className="form-check-input"
                           type="checkbox"
                           name="attendanceReportCreate"
                           checked={formik.values.attendanceReportCreate}
                           onChange={handleCheckboxChange}
                         /> */}
-                            </td>
-                            <td>
-                              {/* <input
+                                </td>
+                                <td>
+                                  {/* <input
                           className="form-check-input"
                           type="checkbox"
                           name="attendanceReportUpdate"
                           checked={formik.values.attendanceReportUpdate}
                           onChange={handleCheckboxChange}
                         /> */}
-                            </td>
-                            <td>
-                              {/* <input
+                                </td>
+                                <td>
+                                  {/* <input
                           className="form-check-input"
                           type="checkbox"
                           name="attendanceReportDelete"
                           checked={formik.values.attendanceReportDelete}
                           onChange={handleCheckboxChange}
                         /> */}
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>
-                              <p
-                                style={{
-                                  marginLeft: "30px",
-                                  marginBottom: "0px",
-                                }}
-                              >
-                                {storedConfigure?.student || "Student"}{" "}
-                                {storedConfigure?.report || "Report"}
-                              </p>
-                            </td>
-                            <td>
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                name="studentReportIndex"
-                                checked={formik.values.studentReportIndex}
-                                onChange={handleCheckboxChange(
-                                  `studentReportIndex`
-                                )}
-                              />
-                            </td>
-                            <td>
-                              {/* <input
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                  <p
+                                    style={{
+                                      marginLeft: "30px",
+                                      marginBottom: "0px",
+                                    }}
+                                  >
+                                    {storedConfigure?.student || "Student"}{" "}
+                                    {storedConfigure?.report || "Report"}
+                                  </p>
+                                </td>
+                                <td>
+                                  <input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    name="studentReportIndex"
+                                    checked={formik.values.studentReportIndex}
+                                    onChange={handleCheckboxChange(
+                                      `studentReportIndex`
+                                    )}
+                                  />
+                                </td>
+                                <td>
+                                  {/* <input
                           className="form-check-input"
                           type="checkbox"
                           name="studentReportRead"
                           checked={formik.values.studentReportRead}
                           onChange={handleCheckboxChange}
                         /> */}
-                            </td>
-                            <td>
-                              {/* <input
+                                </td>
+                                <td>
+                                  {/* <input
                           className="form-check-input"
                           type="checkbox"
                           name="studentReportCreate"
                           checked={formik.values.studentReportCreate}
                           onChange={handleCheckboxChange}
                         /> */}
-                            </td>
-                            <td>
-                              {/* <input
+                                </td>
+                                <td>
+                                  {/* <input
                           className="form-check-input"
                           type="checkbox"
                           name="studentReportUpdate"
                           checked={formik.values.studentReportUpdate}
                           onChange={handleCheckboxChange}
                         /> */}
-                            </td>
-                            <td>
-                              {/* <input
+                                </td>
+                                <td>
+                                  {/* <input
                           className="form-check-input"
                           type="checkbox"
                           name="studentReportDelete"
                           checked={formik.values.studentReportDelete}
                           onChange={handleCheckboxChange}
                         /> */}
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>
-                              <p
-                                style={{
-                                  marginLeft: "30px",
-                                  marginBottom: "0px",
-                                }}
-                              >
-                                Enrollment {storedConfigure?.report || "Report"}
-                              </p>
-                            </td>
-                            <td>
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                name="enrollmentReportIndex"
-                                checked={formik.values.enrollmentReportIndex}
-                                onChange={handleCheckboxChange(
-                                  `enrollmentReportIndex`
-                                )}
-                              />
-                            </td>
-                            <td>
-                              {/* <input
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                  <p
+                                    style={{
+                                      marginLeft: "30px",
+                                      marginBottom: "0px",
+                                    }}
+                                  >
+                                    Enrollment{" "}
+                                    {storedConfigure?.report || "Report"}
+                                  </p>
+                                </td>
+                                <td>
+                                  <input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    name="enrollmentReportIndex"
+                                    checked={
+                                      formik.values.enrollmentReportIndex
+                                    }
+                                    onChange={handleCheckboxChange(
+                                      `enrollmentReportIndex`
+                                    )}
+                                  />
+                                </td>
+                                <td>
+                                  {/* <input
                           className="form-check-input"
                           type="checkbox"
                           name="enrollmentReportRead"
                           checked={formik.values.enrollmentReportRead}
                           onChange={handleCheckboxChange}
                         /> */}
-                            </td>
-                            <td>
-                              {/* <input
+                                </td>
+                                <td>
+                                  {/* <input
                           className="form-check-input"
                           type="checkbox"
                           name="enrollmentReportCreate"
                           checked={formik.values.enrollmentReportCreate}
                           onChange={handleCheckboxChange}
                         /> */}
-                            </td>
-                            <td>
-                              {/* <input
+                                </td>
+                                <td>
+                                  {/* <input
                           className="form-check-input"
                           type="checkbox"
                           name="enrollmentReportUpdate"
                           checked={formik.values.enrollmentReportUpdate}
                           onChange={handleCheckboxChange}
                         /> */}
-                            </td>
-                            <td>
-                              {/* <input
+                                </td>
+                                <td>
+                                  {/* <input
                           className="form-check-input"
                           type="checkbox"
                           name="enrollmentReportDelete"
                           checked={formik.values.enrollmentReportDelete}
                           onChange={handleCheckboxChange}
                         /> */}
-                            </td>
-                          </tr>
+                                </td>
+                              </tr>
+                            </>
+                          )}
+
                           {/* Send Notification */}
-                          <tr>
-                            <th colspan="6">Messaging</th>
-                          </tr>
-                          <tr>
-                            <td>
-                              <p
-                                style={{
-                                  marginLeft: "30px",
-                                  marginBottom: "0px",
-                                }}
-                              >
-                                School Announcement
-                              </p>
-                            </td>
-                            <td>
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                name="sendNotificationIndex"
-                                checked={formik.values.sendNotificationIndex}
-                                onChange={handleCheckboxChange(
-                                  `sendNotificationIndex`
-                                )}
-                              />
-                            </td>
-                            <td>
-                              {/* <input
+                          {data.messages && (
+                            <>
+                              <tr>
+                                <th colspan="6">Messaging</th>
+                              </tr>
+                              <tr>
+                                <td>
+                                  <p
+                                    style={{
+                                      marginLeft: "30px",
+                                      marginBottom: "0px",
+                                    }}
+                                  >
+                                    School Announcement
+                                  </p>
+                                </td>
+                                <td>
+                                  <input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    name="sendNotificationIndex"
+                                    checked={
+                                      formik.values.sendNotificationIndex
+                                    }
+                                    onChange={handleCheckboxChange(
+                                      `sendNotificationIndex`
+                                    )}
+                                  />
+                                </td>
+                                <td>
+                                  {/* <input
                           className="form-check-input"
                           type="checkbox"
                           name="sendNotificationRead"
                           checked={formik.values.sendNotificationRead}
                           onChange={handleCheckboxChange(`sendNotificationRead`)}
                         /> */}
-                            </td>
-                            <td>
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                name="sendNotificationCreate"
-                                checked={formik.values.sendNotificationCreate}
-                                onChange={handleCheckboxChange(
-                                  `sendNotificationCreate`
-                                )}
-                              />
-                            </td>
-                            <td>
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                name="sendNotificationUpdate"
-                                checked={formik.values.sendNotificationUpdate}
-                                onChange={handleCheckboxChange(
-                                  `sendNotificationUpdate`
-                                )}
-                              />
-                            </td>
-                            <td>
-                              {/* <input
+                                </td>
+                                <td>
+                                  <input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    name="sendNotificationCreate"
+                                    checked={
+                                      formik.values.sendNotificationCreate
+                                    }
+                                    onChange={handleCheckboxChange(
+                                      `sendNotificationCreate`
+                                    )}
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    name="sendNotificationUpdate"
+                                    checked={
+                                      formik.values.sendNotificationUpdate
+                                    }
+                                    onChange={handleCheckboxChange(
+                                      `sendNotificationUpdate`
+                                    )}
+                                  />
+                                </td>
+                                <td>
+                                  {/* <input
                           className="form-check-input"
                           type="checkbox"
                           name="sendNotificationDelete"
@@ -3590,56 +3630,56 @@ function RolesAdd() {
                             `sendNotificationDelete`
                           )}
                         /> */}
-                            </td>
-                          </tr>
+                                </td>
+                              </tr>
 
-                          <tr>
-                            <td>
-                              <p
-                                style={{
-                                  marginLeft: "30px",
-                                  marginBottom: "0px",
-                                }}
-                              >
-                                My Messaging
-                              </p>
-                            </td>
-                            <td>
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                name="smsMessageIndex"
-                                checked={formik.values.smsMessageIndex}
-                                onChange={handleCheckboxChange(
-                                  `smsMessageIndex`
-                                )}
-                              />
-                            </td>
-                            <td>
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                name="smsMessageRead"
-                                checked={formik.values.smsMessageRead}
-                                onChange={handleCheckboxChange(
-                                  `smsMessageRead`
-                                )}
-                              />
-                            </td>
-                            <td>
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                name="smsMessageCreate"
-                                checked={formik.values.smsMessageCreate}
-                                onChange={handleCheckboxChange(
-                                  `smsMessageCreate`
-                                )}
-                              />
-                            </td>
+                              <tr>
+                                <td>
+                                  <p
+                                    style={{
+                                      marginLeft: "30px",
+                                      marginBottom: "0px",
+                                    }}
+                                  >
+                                    My Messaging
+                                  </p>
+                                </td>
+                                <td>
+                                  <input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    name="smsMessageIndex"
+                                    checked={formik.values.smsMessageIndex}
+                                    onChange={handleCheckboxChange(
+                                      `smsMessageIndex`
+                                    )}
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    name="smsMessageRead"
+                                    checked={formik.values.smsMessageRead}
+                                    onChange={handleCheckboxChange(
+                                      `smsMessageRead`
+                                    )}
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    name="smsMessageCreate"
+                                    checked={formik.values.smsMessageCreate}
+                                    onChange={handleCheckboxChange(
+                                      `smsMessageCreate`
+                                    )}
+                                  />
+                                </td>
 
-                            <td>
-                              {/* <input
+                                <td>
+                                  {/* <input
                           className="form-check-input"
                           type="checkbox"
                           name="smsMessageUpdate"
@@ -3648,9 +3688,9 @@ function RolesAdd() {
                             `smsMessageUpdate`
                           )}
                         /> */}
-                            </td>
-                            <td>
-                              {/* <input
+                                </td>
+                                <td>
+                                  {/* <input
                           className="form-check-input"
                           type="checkbox"
                           name="smsMessageDelete"
@@ -3659,56 +3699,56 @@ function RolesAdd() {
                             `smsMessageDelete`
                           )}
                         /> */}
-                            </td>
-                          </tr>
+                                </td>
+                              </tr>
 
-                          <tr>
-                            <td>
-                              <p
-                                style={{
-                                  marginLeft: "30px",
-                                  marginBottom: "0px",
-                                }}
-                              >
-                                Other Messages
-                              </p>
-                            </td>
-                            <td>
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                name="otherMessageIndex"
-                                checked={formik.values.otherMessageIndex}
-                                onChange={handleCheckboxChange(
-                                  `otherMessageIndex`
-                                )}
-                              />
-                            </td>
-                            <td>
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                name="otherMessageRead"
-                                checked={formik.values.otherMessageRead}
-                                onChange={handleCheckboxChange(
-                                  `otherMessageRead`
-                                )}
-                              />
-                            </td>
-                            <td>
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                name="otherMessageCreate"
-                                checked={formik.values.otherMessageCreate}
-                                onChange={handleCheckboxChange(
-                                  `otherMessageCreate`
-                                )}
-                              />
-                            </td>
+                              <tr>
+                                <td>
+                                  <p
+                                    style={{
+                                      marginLeft: "30px",
+                                      marginBottom: "0px",
+                                    }}
+                                  >
+                                    Other Messages
+                                  </p>
+                                </td>
+                                <td>
+                                  <input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    name="otherMessageIndex"
+                                    checked={formik.values.otherMessageIndex}
+                                    onChange={handleCheckboxChange(
+                                      `otherMessageIndex`
+                                    )}
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    name="otherMessageRead"
+                                    checked={formik.values.otherMessageRead}
+                                    onChange={handleCheckboxChange(
+                                      `otherMessageRead`
+                                    )}
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    name="otherMessageCreate"
+                                    checked={formik.values.otherMessageCreate}
+                                    onChange={handleCheckboxChange(
+                                      `otherMessageCreate`
+                                    )}
+                                  />
+                                </td>
 
-                            <td>
-                              {/* <input
+                                <td>
+                                  {/* <input
                           className="form-check-input"
                           type="checkbox"
                           name="smsMessageUpdate"
@@ -3717,9 +3757,9 @@ function RolesAdd() {
                             `smsMessageUpdate`
                           )}
                         /> */}
-                            </td>
-                            <td>
-                              {/* <input
+                                </td>
+                                <td>
+                                  {/* <input
                           className="form-check-input"
                           type="checkbox"
                           name="smsMessageDelete"
@@ -3728,14 +3768,75 @@ function RolesAdd() {
                             `smsMessageDelete`
                           )}
                         /> */}
-                            </td>
-                          </tr>
+                                </td>
+                              </tr>
+                            </>
+                          )}
 
                           {/* Settings */}
                           <tr>
                             <th colspan="6">
                               {storedConfigure?.settings || "Settings"}
                             </th>
+                          </tr>
+                          <tr>
+                            <td>
+                              <p
+                                style={{
+                                  marginLeft: "30px",
+                                  marginBottom: "0px",
+                                }}
+                              >
+                                Roles & Matrix
+                              </p>
+                            </td>
+                            <td>
+                              <input
+                                className="form-check-input"
+                                type="checkbox"
+                                name="rolesMatrixIndex"
+                                checked={formik.values.rolesMatrixIndex}
+                                onChange={handleCheckboxChange(
+                                  `rolesMatrixIndex`
+                                )}
+                              />
+                            </td>
+                            <td>
+                              {/* <input
+                          className="form-check-input"
+                          type="checkbox"
+                          name="teacherRead"
+                          checked={formik.values.teacherRead}
+                          onChange={handleCheckboxChange}
+                        /> */}
+                            </td>
+                            <td>
+                              {/* <input
+                          className="form-check-input"
+                          type="checkbox"
+                          name="teacherCreate"
+                          checked={formik.values.teacherCreate}
+                          onChange={handleCheckboxChange}
+                        /> */}
+                            </td>
+                            <td>
+                              {/* <input
+                          className="form-check-input"
+                          type="checkbox"
+                          name="teacherUpdate"
+                          checked={formik.values.teacherUpdate}
+                          onChange={handleCheckboxChange}
+                        /> */}
+                            </td>
+                            <td>
+                              {/* <input
+                          className="form-check-input"
+                          type="checkbox"
+                          name="teacherDelete"
+                          checked={formik.values.teacherDelete}
+                          onChange={handleCheckboxChange}
+                        /> */}
+                            </td>
                           </tr>
                           <tr>
                             <td>
