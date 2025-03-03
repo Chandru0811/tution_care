@@ -87,6 +87,10 @@ function SuperAdminCenterEdit() {
       assessmentManagement: false,
       reportManagement: false,
       messages: false,
+      isFacialRegForTeacher: true,
+      isGeoFenceForTeacher: true,
+      isFacialRegForStudent: true,
+      isGeoFenceForStudent: true,
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
@@ -161,6 +165,26 @@ function SuperAdminCenterEdit() {
         if (values.messages !== null && values.messages !== undefined)
           formData.append("messages", values.messages);
 
+        if (
+          values.isFacialRegForStudent !== null &&
+          values.isFacialRegForStudent !== undefined
+        )
+          formData.append("isFacialRegForStudent", values.isFacialRegForStudent);
+        if (
+          values.isGeoFenceForStudent !== null &&
+          values.isGeoFenceForStudent !== undefined
+        )
+          formData.append("isGeoFenceForStudent", values.isGeoFenceForStudent);
+        if (
+          values.isFacialRegForTeacher !== null &&
+          values.isFacialRegForTeacher !== undefined
+        )
+          formData.append("isFacialRegForTeacher", values.isFacialRegForTeacher);
+        if (
+          values.isGeoFenceForTeacher !== null &&
+          values.isGeoFenceForTeacher !== undefined
+        )
+          formData.append("isGeoFenceForTeacher", values.isGeoFenceForTeacher);
         const response = await api.put(`/updateCenters/${id}`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
@@ -230,10 +254,15 @@ function SuperAdminCenterEdit() {
         openingDate: filteredData.openingDate
           ? new Date(filteredData.openingDate).toISOString().substring(0, 10)
           : undefined,
+        isFacialRegForTeacher: !!filteredData.isFacialRegForTeacher,
+        isGeoFenceForTeacher: !!filteredData.isGeoFenceForTeacher,
+        isFacialRegForStudent: !!filteredData.isFacialRegForStudent,
+        isGeoFenceForStudent: !!filteredData.isGeoFenceForStudent, // Convert null to false
       };
 
       // Set form values with formatted data
       formik.setValues(formattedData);
+      console.log("formattedData", formattedData);
       setData(filteredData);
       setStatus(filteredData.centerStatus);
 
@@ -476,6 +505,98 @@ function SuperAdminCenterEdit() {
                       {formik.errors.configId}
                     </div>
                   )}
+                </div>
+              </div>
+              <div className="col-md-6 col-12">
+                <div className="mb-3">
+                  <label className="form-label">Student</label>
+                  <div className="d-flex gap-3">
+                    <div className="form-check">
+                      <input
+                        type="checkbox"
+                        name="isFacialRegForStudent"
+                        className={`form-check-input ${
+                          formik.touched.isFacialRegForStudent &&
+                          formik.errors.isFacialRegForStudent
+                            ? "is-invalid"
+                            : ""
+                        }`}
+                        id="facialRecognizer"
+                        checked={formik.values.isFacialRegForStudent}
+                        {...formik.getFieldProps("isFacialRegForStudent")}
+                      />
+                      <label
+                        className="form-check-label"
+                        htmlFor="facialRecognizer"
+                      >
+                        Facial Recognizer
+                      </label>
+                    </div>
+                    <div className="form-check">
+                      <input
+                        type="checkbox"
+                        name="isGeoFenceForStudent"
+                        className={`form-check-input ${
+                          formik.touched.isGeoFenceForStudent &&
+                          formik.errors.isGeoFenceForStudent
+                            ? "is-invalid"
+                            : ""
+                        }`}
+                        id="geoFence"
+                        checked={formik.values.isGeoFenceForStudent}
+                        {...formik.getFieldProps("isGeoFenceForStudent")}
+                      />
+                      <label className="form-check-label" htmlFor="geoFence">
+                        Geofence
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="col-md-6 col-12">
+                <div className="mb-3">
+                  <label className="form-label">User(Emplyees)</label>
+                  <div className="d-flex gap-3">
+                    <div className="form-check">
+                      <input
+                        type="checkbox"
+                        name="isFacialRegForTeacher"
+                        className={`form-check-input ${
+                          formik.touched.isFacialRegForTeacher &&
+                          formik.errors.isFacialRegForTeacher
+                            ? "is-invalid"
+                            : ""
+                        }`}
+                        id="facialRecognizer"
+                        checked={formik.values.isFacialRegForTeacher}
+                        {...formik.getFieldProps("isFacialRegForTeacher")}
+                      />
+                      <label
+                        className="form-check-label"
+                        htmlFor="facialRecognizer"
+                      >
+                        Facial Recognizer
+                      </label>
+                    </div>
+                    <div className="form-check">
+                      <input
+                        type="checkbox"
+                        name="isGeoFenceForTeacher"
+                        className={`form-check-input ${
+                          formik.touched.isGeoFenceForTeacher &&
+                          formik.errors.isGeoFenceForTeacher
+                            ? "is-invalid"
+                            : ""
+                        }`}
+                        id="geoFence"
+                        checked={formik.values.isGeoFenceForTeacher}
+                        {...formik.getFieldProps("isGeoFenceForTeacher")}
+                      />
+                      <label className="form-check-label" htmlFor="geoFence">
+                        Geofence
+                      </label>
+                    </div>
+                  </div>
                 </div>
               </div>
               <div className="col-md-6 col-12">

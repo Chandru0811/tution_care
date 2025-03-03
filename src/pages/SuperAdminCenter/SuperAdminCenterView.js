@@ -147,6 +147,78 @@ function SuperAdminCenterView() {
               </div>
             </div>
             <div className="col-md-6 col-12">
+              <div className="row mb-2">
+                <div className="col-6">
+                  <p>Facial Recognizer (Student)</p>
+                </div>
+                <div className="col-6">
+                  <p className="text-muted text-sm">
+                    :{" "}
+                    {data.isFacialRegForStudent === true
+                      ? "Yes"
+                      : data.isFacialRegForStudent === false
+                      ? "No"
+                      : "--"}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="col-md-6 col-12">
+              <div className="row mb-2">
+                <div className="col-6">
+                  <p>Geofence (Student)</p>
+                </div>
+                <div className="col-6">
+                  <p className="text-muted text-sm">
+                    :{" "}
+                    {data.isGeoFenceForStudent === true
+                      ? "Yes"
+                      : data.isGeoFenceForStudent === false
+                      ? "No"
+                      : "--"}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="col-md-6 col-12">
+              <div className="row mb-2">
+                <div className="col-6">
+                  <p>Facial Recognizer (User/Employees)</p>
+                </div>
+                <div className="col-6">
+                  <p className="text-muted text-sm">
+                    :{" "}
+                    {data.isFacialRegForTeacher === true
+                      ? "Yes"
+                      : data.isFacialRegForTeacher === false
+                      ? "No"
+                      : "--"}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="col-md-6 col-12">
+              <div className="row mb-2">
+                <div className="col-6">
+                  <p>Geofence (User/Employees)</p>
+                </div>
+                <div className="col-6">
+                  <p className="text-muted text-sm">
+                    :{" "}
+                    {data.isGeoFenceForTeacher === true
+                      ? "Yes"
+                      : data.isGeoFenceForTeacher === false
+                      ? "No"
+                      : "--"}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="col-md-6 col-12">
               <div className="row  mb-2">
                 <div className="col-6  ">
                   <p className="">Status</p>
