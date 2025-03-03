@@ -63,8 +63,6 @@ const PersonalEdit = forwardRef(
       validationSchema: validationSchema,
       onSubmit: async (data) => {
         setLoadIndicators(true);
-        data.updatedBy = userName;
-        data.centerId = centerId;
         try {
           const formDatas = new FormData();
 
@@ -82,8 +80,8 @@ const PersonalEdit = forwardRef(
           formDatas.append("updatedBy", userName);
           // formData.append("address", data.address);
           // formData.append("postalCode", data.postalCode);
-          formData.append("latitude", data.latitude);
-          formData.append("longitude", data.longitude);
+          formDatas.append("latitude", data.latitude);
+          formDatas.append("longitude", data.longitude);
           const response = await api.put(
             `/updateUser/${formData.staff_id}`,
             formDatas,

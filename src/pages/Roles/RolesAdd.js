@@ -237,6 +237,18 @@ function RolesAdd() {
       answerUpdate: true,
       answerDelete: true,
 
+      absentReasonIndex: true,
+      absentReasonRead: true,
+      absentReasonCreate: true,
+      absentReasonUpdate: true,
+      absentReasonDelete: true,
+
+      userAttendanceReportIndex: true,
+      userAttendanceReportRead: true,
+      userAttendanceReportCreate: true,
+      userAttendanceReportUpdate: true,
+      userAttendanceReportDelete: true,
+
       invoiceIndex: true,
       invoiceRead: true,
       invoiceCreate: true,
@@ -980,7 +992,6 @@ function RolesAdd() {
                     roleName.map((role) => (
                       <option key={role.id} value={role.id}>
                         {role.roleName}
-                         
                       </option>
                     ))}
                 </select>
@@ -3281,7 +3292,8 @@ function RolesAdd() {
                                   marginBottom: "0px",
                                 }}
                               >
-                                Attendance {storedConfigure?.report || "Report"}
+                                {storedConfigure?.student} Attendance{" "}
+                                {storedConfigure?.report || "Report"}
                               </p>
                             </td>
                             <td>
@@ -3292,6 +3304,66 @@ function RolesAdd() {
                                 checked={formik.values.attendanceReportIndex}
                                 onChange={handleCheckboxChange(
                                   `attendanceReportIndex`
+                                )}
+                              />
+                            </td>
+                            <td>
+                              {/* <input
+                          className="form-check-input"
+                          type="checkbox"
+                          name="attendanceReportRead"
+                          checked={formik.values.attendanceReportRead}
+                          onChange={handleCheckboxChange}
+                        /> */}
+                            </td>
+                            <td>
+                              {/* <input
+                          className="form-check-input"
+                          type="checkbox"
+                          name="attendanceReportCreate"
+                          checked={formik.values.attendanceReportCreate}
+                          onChange={handleCheckboxChange}
+                        /> */}
+                            </td>
+                            <td>
+                              {/* <input
+                          className="form-check-input"
+                          type="checkbox"
+                          name="attendanceReportUpdate"
+                          checked={formik.values.attendanceReportUpdate}
+                          onChange={handleCheckboxChange}
+                        /> */}
+                            </td>
+                            <td>
+                              {/* <input
+                          className="form-check-input"
+                          type="checkbox"
+                          name="attendanceReportDelete"
+                          checked={formik.values.attendanceReportDelete}
+                          onChange={handleCheckboxChange}
+                        /> */}
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>
+                              <p
+                                style={{
+                                  marginLeft: "30px",
+                                  marginBottom: "0px",
+                                }}
+                              >
+                                {storedConfigure?.employee} Attendance{" "}
+                                {storedConfigure?.report || "Report"}
+                              </p>
+                            </td>
+                            <td>
+                              <input
+                                className="form-check-input"
+                                type="checkbox"
+                                name="userAttendanceReportIndex"
+                                checked={formik.values.userAttendanceReportIndex}
+                                onChange={handleCheckboxChange(
+                                  `userAttendanceReportIndex`
                                 )}
                               />
                             </td>
@@ -4336,10 +4408,10 @@ function RolesAdd() {
                               <input
                                 className="form-check-input"
                                 type="checkbox"
-                                name="salarySettingIndex"
-                                checked={formik.values.salarySettingIndex}
+                                name="absentReasonIndex"
+                                checked={formik.values.absentReasonIndex}
                                 onChange={handleCheckboxChange(
-                                  `salarySettingIndex`
+                                  `absentReasonIndex`
                                 )}
                               />
                             </td>
@@ -4347,10 +4419,10 @@ function RolesAdd() {
                               <input
                                 className="form-check-input"
                                 type="checkbox"
-                                name="salarySettingRead"
-                                checked={formik.values.salarySettingRead}
+                                name="absentReasonRead"
+                                checked={formik.values.absentReasonRead}
                                 onChange={handleCheckboxChange(
-                                  `salarySettingRead`
+                                  `absentReasonRead`
                                 )}
                               />
                             </td>
@@ -4358,10 +4430,10 @@ function RolesAdd() {
                               <input
                                 className="form-check-input"
                                 type="checkbox"
-                                name="salarySettingCreate"
-                                checked={formik.values.salarySettingCreate}
+                                name="absentReasonCreate"
+                                checked={formik.values.absentReasonCreate}
                                 onChange={handleCheckboxChange(
-                                  `salarySettingCreate`
+                                  `absentReasonCreate`
                                 )}
                               />
                             </td>
@@ -4369,10 +4441,10 @@ function RolesAdd() {
                               <input
                                 className="form-check-input"
                                 type="checkbox"
-                                name="salarySettingUpdate"
-                                checked={formik.values.salarySettingUpdate}
+                                name="absentReasonUpdate"
+                                checked={formik.values.absentReasonUpdate}
                                 onChange={handleCheckboxChange(
-                                  `salarySettingUpdate`
+                                  `absentReasonUpdate`
                                 )}
                               />
                             </td>
@@ -4380,10 +4452,10 @@ function RolesAdd() {
                               <input
                                 className="form-check-input"
                                 type="checkbox"
-                                name="salarySettingDelete"
-                                checked={formik.values.salarySettingDelete}
+                                name="absentReasonDelete"
+                                checked={formik.values.absentReasonDelete}
                                 onChange={handleCheckboxChange(
-                                  `salarySettingDelete`
+                                  `absentReasonDelete`
                                 )}
                               />
                             </td>

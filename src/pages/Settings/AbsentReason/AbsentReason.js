@@ -24,7 +24,9 @@ const AbsentReason = () => {
 
   const getData = async () => {
     try {
-      const response = await api.get(`/getAllAbsentReasonWithCenterId/${centerId}`);
+      const response = await api.get(
+        `/getAllAbsentReasonWithCenterId/${centerId}`
+      );
       setDatas(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -141,8 +143,9 @@ const AbsentReason = () => {
       },
     },
   });
-  // const hideColumn =
-  //   storedScreens?.roleDelete === false && storedScreens?.roleUpdate === false;
+  const hideColumn =
+    storedScreens?.userAttendanceReportDelete === false &&
+    storedScreens?.userAttendanceReportUpdate === false;
   const handleMenuClose = () => setMenuAnchor(null);
 
   return (
@@ -183,9 +186,9 @@ const AbsentReason = () => {
           </div>
         </div>
         <div className="mb-3 d-flex justify-content-end">
-          {/* {storedScreens?.centerListingCreate && ( */}
-          <AbsentReasonAdd onSuccess={getData} />
-          {/* )} */}
+          {storedScreens?.absentReasonCreate && (
+            <AbsentReasonAdd onSuccess={getData} />
+          )}
         </div>
         {loading ? (
           <div className="loader-container">
@@ -199,48 +202,57 @@ const AbsentReason = () => {
           </div>
         ) : (
           <>
-          <ThemeProvider theme={theme}>
-            <MaterialReactTable
-              columns={columns}
-              data={datas}
-              enableColumnActions={false}
-              enableColumnFilters={false}
-              enableDensityToggle={false}
-              enableFullScreenToggle={false}
-                 initialState={{
-                 pagination: { pageSize: 50, pageIndex: 0 },
-                columnVisibility: {
-                  createdBy: false,
-                  createdAt: false,
-                  updatedBy: false,
-                  updatedAt: false,
-                },
-              }}
-              // muiTableBodyRowProps={({ row }) => ({
-              //   onClick: () => navigate(`/center/view/${row.original.id}`),
-              //   style: { cursor: "pointer" },
-              // })}
-            />
-          </ThemeProvider>
-
-          <Menu
-            id="action-menu"
-            anchorEl={menuAnchor}
-            open={Boolean(menuAnchor)}
-            onClose={handleMenuClose}
-          >
-            <MenuItem>
-              <AbsentReasonEdit onSuccess={getData} id={selectedId} handleMenuClose={handleMenuClose}/>
-            </MenuItem>
-            <MenuItem>
-              <GlobalDelete
-                path={`/deleteAbsentReason/${selectedId}`}
-                onDeleteSuccess={getData}
-                onOpen={handleMenuClose}
+            <ThemeProvider theme={theme}>
+              <MaterialReactTable
+                columns={columns}
+                data={datas}
+                enableColumnActions={false}
+                enableColumnFilters={false}
+                enableDensityToggle={false}
+                enableFullScreenToggle={false}
+                initialState={{
+                  pagination: { pageSize: 50, pageIndex: 0 },
+                  columnVisibility: {
+                    createdBy: false,
+                    createdAt: false,
+                    updatedBy: false,
+                    updatedAt: false,
+                    id: !hideColumn,
+                  },
+                }}
+                // muiTableBodyRowProps={({ row }) => ({
+                //   onClick: () => navigate(`/center/view/${row.original.id}`),
+                //   style: { cursor: "pointer" },
+                // })}
               />
-            </MenuItem>
-          </Menu>
-        </>
+            </ThemeProvider>
+
+            <Menu
+              id="action-menu"
+              anchorEl={menuAnchor}
+              open={Boolean(menuAnchor)}
+              onClose={handleMenuClose}
+            >
+              <MenuItem>
+                {storedScreens?.userAttendanceReportUpdate && (
+                  <AbsentReasonEdit
+                    onSuccess={getData}
+                    id={selectedId}
+                    handleMenuClose={handleMenuClose}
+                  />
+                )}{" "}
+              </MenuItem>
+              <MenuItem>
+                {storedScreens?.userAttendanceReportDelete && (
+                  <GlobalDelete
+                    path={`/deleteAbsentReason/${selectedId}`}
+                    onDeleteSuccess={getData}
+                    onOpen={handleMenuClose}
+                  />
+                )}
+              </MenuItem>
+            </Menu>
+          </>
         )}
       </div>
     </div>

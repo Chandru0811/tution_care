@@ -13,6 +13,7 @@ import { MoreVert as MoreVertIcon } from "@mui/icons-material";
 import { toast } from "react-toastify";
 import GlobalDelete from "../../components/common/GlobalDelete";
 import fetchAllTeacherListByCenter from "../List/TeacherListByCenter";
+import fetchAllStudentListByCenter from "../List/StudentListByCenter";
 
 const AssignmentResult = () => {
   const centerId = localStorage.getItem("tmscenterId");
@@ -24,6 +25,7 @@ const AssignmentResult = () => {
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
   const [teacherData, setTeacherData] = useState([]);
+  const [studentData, setStudentData] = useState([]);
   const [filters, setFilters] = useState({
     centerId: centerId,
     userId: "",
@@ -175,6 +177,14 @@ const AssignmentResult = () => {
       toast.error(error.message);
     }
   };
+  const fetchStudentData = async () => {
+    try {
+      const student = await fetchAllStudentListByCenter(centerId);
+      setStudentData(student);
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
 
   const getAssignmentData = async () => {
     try {
@@ -208,6 +218,7 @@ const AssignmentResult = () => {
   };
   useEffect(() => {
     fetchListData();
+    fetchStudentData();
   }, []);
 
   useEffect(() => {
@@ -288,6 +299,25 @@ const AssignmentResult = () => {
               </select>
             </div>
           )}
+          <div className="form-group mb-0 ms-2 mb-1">
+            <select
+              className="form-select form-select-sm center_list"
+              style={{ width: "100%" }}
+              name="studentId"
+              onChange={handleFilterChange}
+              value={filters.studentId}
+            >
+              <option value="" disabled>
+                Select a {storedConfigure?.student || "Student"}
+              </option>
+              {studentData &&
+                studentData.map((student) => (
+                  <option key={student.id} value={student.id}>
+                    {student.studentNames}
+                  </option>
+                ))}
+            </select>
+          </div>
           <div className="form-group mb-0 ms-2 mb-1 ">
             <button
               type="button"

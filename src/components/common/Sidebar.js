@@ -362,7 +362,7 @@ function Sidebar() {
                 {
                   title: `${storedConfigure?.employee} Attendance Report`,
                   path: "/report/attendance/employee",
-                  access: storedScreens.attendanceReportIndex,
+                  access: storedScreens.userAttendanceReportIndex,
                 },
                 {
                   title: "Revenue Report",
@@ -442,7 +442,7 @@ function Sidebar() {
             title: "Absent Reason",
             path: "/absentreason",
             // access: storedScreens.absentSettingIndex,
-            access: storedScreens.salarySettingIndex,
+            access: storedScreens.absentReasonIndex,
           },
           {
             title: "Email Template",
