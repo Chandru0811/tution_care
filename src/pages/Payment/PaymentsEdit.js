@@ -62,7 +62,7 @@ function PaymentsEdit() {
       }),
 
     mobileNumber: Yup.string()
-      .matches(/^\d{10}$/, "Mobile Number must be 10 digits")
+      .matches(/^\d{8}$/, "Mobile Number must be 8 digits")
       .nullable()
       .when("paymentMethod", {
         is: "Internet Banking",
