@@ -57,6 +57,12 @@ const PersonalAdd = forwardRef(
     const centerId = localStorage.getItem("tmscenterId");
     const userId = formData.user_id;
     const [roleData, setRoleData] = useState(null);
+    const [centreData, setCentreData] = useState([]);
+    // console.log("isFacialRegForStudent", centreData?.isFacialRegForStudent);
+    // console.log("isFacialRegForTeacher", centreData?.isFacialRegForTeacher);
+    // console.log("isGeoFenceForStudent", centreData?.isGeoFenceForStudent);
+    // console.log("isGeoFenceForTeacher", centreData?.isGeoFenceForTeacher);
+    
 
     const formik = useFormik({
       initialValues: {
@@ -194,6 +200,14 @@ const PersonalAdd = forwardRef(
         toast.error(error);
       }
     };
+    const centerData = async () => {
+      try {
+        const response = await api.get(`/getAllCenterById/${centerId}`);
+        setCentreData(response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
     const rolesData = async () => {
       try {
         const response = await api.get(`/getUserRolesByCenterId/${centerId}`);
@@ -258,6 +272,7 @@ const PersonalAdd = forwardRef(
       fetchIDTypeData();
       fetchCitizenShipData();
       rolesData();
+      centerData();
     }, []);
 
     useImperativeHandle(ref, () => ({
