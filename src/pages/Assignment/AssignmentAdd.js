@@ -210,10 +210,12 @@ function AssignmentAdd() {
 
   const fetchStudent = async () => {
     try {
-      const studentList = await fetchAllStudentListByCenter(centerId); // API call to fetch students
-      if (Array.isArray(studentList)) {
+      const response = await api.get(
+        `/getIdsAndStudentNamesByScheduleCenterId/${centerId}`
+      ); // API call to fetch students
+      if (Array.isArray(response.data)) {
         // Ensure the response is an array
-        const mappedStudents = studentList.map((student) => ({
+        const mappedStudents = response.data?.map((student) => ({
           label: student.studentNames, // Display value in MultiSelect
           value: student.id, // Underlying value
         }));
@@ -344,7 +346,7 @@ function AssignmentAdd() {
   const fetchBatchandTeacherData = async (day) => {
     try {
       const response = await api.get(
-        `getTeacherWithBatchListByDay?day=${day}&centerId=${centerId}`
+        `getTeacherWithBatchListByScheduleDay?day=${day}&centerId=${centerId}`
       );
       setTeacherData(response.data.teacherList);
       setBatchData(response.data.batchList);

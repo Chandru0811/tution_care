@@ -154,8 +154,8 @@ function DocumentAdd() {
 
   const fetchTeacher = async () => {
     try {
-      const teacher = await fetchAllTeacherListByCenter(centerId);
-      setUserData(teacher);
+      const response = await api.get(`/getTeacherListByCenterScheduleId/${centerId}`);
+      setUserData(response.data);
     } catch (error) {
       toast.error(error);
     }
@@ -163,8 +163,8 @@ function DocumentAdd() {
 
   const fetchStudent = async () => {
     try {
-      const teacher = await fetchAllStudentListByCenter(centerId);
-      setStudentData(teacher);
+      const response = await api.get(`/getIdsAndStudentNamesByScheduleCenterId/${centerId}`);
+      setStudentData(response.data);
     } catch (error) {
       toast.error(error);
     }
@@ -209,7 +209,7 @@ function DocumentAdd() {
 
   const fetchBatchandTeacherData = async (day) => {
     try {
-      const response = await api.get(`getTeacherWithBatchListByDay?centerId=${centerId}&day=${day}`);
+      const response = await api.get(`getTeacherWithBatchListByScheduleDay?centerId=${centerId}&day=${day}`);
       setBatchData(response.data.batchList);
     } catch (error) {
       toast.error(error.message);

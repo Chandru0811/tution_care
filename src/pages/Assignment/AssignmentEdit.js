@@ -224,7 +224,7 @@ function AssignmentEdit() {
   const fetchBatchandTeacherData = async (day) => {
     try {
       const response = await api.get(
-        `getTeacherWithBatchListByDay?day=${day}&centerId=${centerId}`
+        `getTeacherWithBatchListByScheduleDay?day=${day}&centerId=${centerId}`
       );
       setTeacherData(response.data.teacherList);
       setBatchData(response.data.batchList);
