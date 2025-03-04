@@ -11,6 +11,9 @@ function ScheduleTeacherDetails({ showViewModal, teacherDetail, onClose }) {
   const [loading, setLoading] = useState(true); // Loading state
   const [error, setError] = useState(""); // Error state
   console.log("replaceedTeacher", replaceedTeacher);
+  const storedConfigure = JSON.parse(
+    localStorage.getItem("tmsappConfigInfo") || "{}"
+  );
 
   useEffect(() => {
     if (!teacherId || !startDate) return; // Prevent API call if data is incomplete
@@ -170,7 +173,7 @@ function ScheduleTeacherDetails({ showViewModal, teacherDetail, onClose }) {
                             </div>
                           </div>
                         </div>
-                        <div className="col-md-6 col-12 mb-2">
+                        {/* <div className="col-md-6 col-12 mb-2">
                           <div className="row">
                             <div className="col-5">
                               <p className="">Center Name</p>
@@ -179,7 +182,7 @@ function ScheduleTeacherDetails({ showViewModal, teacherDetail, onClose }) {
                               <p>:&nbsp;{item.details.centerName || "--"}</p>
                             </div>
                           </div>
-                        </div>
+                        </div> */}
                         <div className="col-md-6 col-12 mb-2">
                           <div className="row">
                             <div className="col-5">
@@ -195,7 +198,9 @@ function ScheduleTeacherDetails({ showViewModal, teacherDetail, onClose }) {
                         <div className="col-md-6 col-12 mb-2">
                           <div className="row">
                             <div className="col-5">
-                              <p className="">Class Code</p>
+                              <p className="">
+                                {storedConfigure?.confClass || "Class"} Code
+                              </p>
                             </div>
                             <div className="col-7">
                               <p>:&nbsp;{item.details.classUniqueId || "--"}</p>
@@ -205,7 +210,9 @@ function ScheduleTeacherDetails({ showViewModal, teacherDetail, onClose }) {
                         <div className="col-md-6 col-12 mb-2">
                           <div className="row">
                             <div className="col-5">
-                              <p className="">Class Name</p>
+                              <p className="">
+                                {storedConfigure?.confClass || "Class"} Name
+                              </p>
                             </div>
                             <div className="col-7">
                               <p>:&nbsp;{item.details.className || "--"}</p>
@@ -264,12 +271,14 @@ function ScheduleTeacherDetails({ showViewModal, teacherDetail, onClose }) {
                         <div className="col-md-6 col-12 mb-2">
                           <div className="row">
                             <div className="col-5">
-                              <p className="">Teacher</p>
+                              <p className="">
+                                {storedConfigure?.employee || "Staff"}
+                              </p>
                             </div>
                             <div className="col-7">
                               <p className="">
                                 :&nbsp;{item.details.teacherName || "--"}
-                                <br/>
+                                <br />
                                 {replaceedTeacher === true && (
                                   <span
                                     className=" p-1"
@@ -291,7 +300,9 @@ function ScheduleTeacherDetails({ showViewModal, teacherDetail, onClose }) {
                         <div className="col-md-6 col-12 mb-2">
                           <div className="row">
                             <div className="col-5">
-                              <p className="">No of Students</p>
+                              <p className="">
+                                No of {storedConfigure?.student || "Students"}
+                              </p>
                             </div>
                             <div className="col-7">
                               <p>:&nbsp;{item.details.noOfStudents || "--"}</p>
@@ -341,7 +352,8 @@ function ScheduleTeacherDetails({ showViewModal, teacherDetail, onClose }) {
                       </div>
                       <div className="row">
                         <div className="col-md-6 col-12-12 mb-2">
-                          Students Available in this Batch:
+                          {storedConfigure?.student || "Students"} Available in
+                          this Batch:
                           <ol>
                             {item.details.students &&
                             item.details.students.length > 0 ? (
@@ -358,12 +370,12 @@ function ScheduleTeacherDetails({ showViewModal, teacherDetail, onClose }) {
                                 </li>
                               ))
                             ) : (
-                              <p>No Students</p>
+                              <p>No {storedConfigure?.student || "Students"}</p>
                             )}
                           </ol>
                         </div>
                         <div className="col-md-6 col-12-12 mb-2">
-                          Remaining Students:
+                          Remaining {storedConfigure?.student || "Students"}:
                           <ol>
                             {item.details.nonBatchStudents &&
                             item.details.nonBatchStudents.length > 0 ? (
@@ -380,7 +392,7 @@ function ScheduleTeacherDetails({ showViewModal, teacherDetail, onClose }) {
                                 </li>
                               ))
                             ) : (
-                              <p>No Students</p>
+                              <p>No {storedConfigure?.student || "Students"}</p>
                             )}
                           </ol>
                         </div>

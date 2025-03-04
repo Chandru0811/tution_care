@@ -17,9 +17,7 @@ import { useJsApiLoader } from "@react-google-maps/api";
 const appConfigInfo = JSON.parse(localStorage.getItem("tmsappConfigInfo"));
 
 const validationSchema = Yup.object().shape({
-  studentName: Yup.string().required(
-    `*${appConfigInfo?.student || "Student"} Name is required`
-  ),
+  studentName: Yup.string().required("Name is required"),
   dateOfBirth: Yup.date()
     .required("*Date of Birth is required")
     .max(
@@ -27,8 +25,8 @@ const validationSchema = Yup.object().shape({
       "*Date of Birth must be at least 1 year ago"
     ),
   studentEmail: Yup.string()
-    .email(`*Invalid ${appConfigInfo?.student || "Student"} Email`)
-    .required(`*${appConfigInfo?.student || "Student"} Email is required`),
+    .email("*Invalid Email")
+    .required(" Email is required"),
 
   age: Yup.string().required("*Age is required"),
   gender: Yup.string().required("*Gender is required"),

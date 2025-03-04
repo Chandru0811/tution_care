@@ -988,36 +988,6 @@ function RolesAdd() {
         }}
       >
         <div className="card">
-          <div className="row d-flex align-items-start p-2">
-            <div className="col-md-3 col-12">
-              <label className="form-label">
-                User Role <span className="text-danger">*</span>
-              </label>
-              <div className="input-group mb-3">
-                <select
-                  className="form-select form-select-sm iconInput w-25"
-                  name="roleName"
-                  onChange={handleRoleChange}
-                  disabled={loading} // Prevent interaction while loading
-                  // style={{ width: "50px" }}
-                >
-                  <option disabled>Select Role</option>
-                  {roleName &&
-                    roleName.map((role) => (
-                      <option key={role.id} value={role.id}>
-                        {role.roleName}
-                      </option>
-                    ))}
-                </select>
-              </div>
-            </div>
-
-            {/* <div className="col-md-5 col-12 d-flex justify-content-end">
-              <button type="submit" className="btn btn-button btn-sm ">
-                Save
-              </button>
-            </div> */}
-          </div>
           {loading ? (
             <div className="loader-container">
               <div className="loading">
@@ -1030,68 +1000,97 @@ function RolesAdd() {
             </div>
           ) : (
             <div>
-              <div className="d-flex justify-content-start align-items-center p-2">
-                <div
-                  className="btn-group"
-                  role="group"
-                  aria-label="Basic example"
-                >
-                  <button
-                    type="button"
-                    className="btn find_roll"
-                    onClick={handleCheckAllIndex}
-                  >
-                    Index
-                  </button>
-                  <button
-                    type="button"
-                    className="btn find_roll"
-                    onClick={handleCheckAllRead}
-                  >
-                    Read
-                  </button>
-                  <button
-                    type="button"
-                    className="btn find_roll"
-                    onClick={handleCheckAllCreate}
-                  >
-                    Create
-                  </button>
-                  <button
-                    type="button"
-                    className="btn find_roll"
-                    onClick={handleCheckAllUpdate}
-                  >
-                    Update
-                  </button>
-                  <button
-                    type="button"
-                    className="btn find_roll"
-                    onClick={handleCheckAllDelete}
-                  >
-                    Delete
-                  </button>
-                  <button
-                    type="button"
-                    className="btn find_roll"
-                    onClick={handleCheckAll}
-                  >
-                    Check All
-                  </button>
-                  <button
-                    type="button"
-                    className="btn find_roll"
-                    onClick={handleUncheckAll}
-                  >
-                    Uncheck All
-                  </button>
+              <div className="row align-items-center">
+                {/* Role Selection */}
+                <div className="col-md-3 col-12 mb-2 mx-2">
+                  <label className="form-label">
+                    Roles <span className="text-danger">*</span>
+                  </label>
+                  <div className="input-group">
+                    <select
+                      className="form-select form-select-sm iconInput"
+                      name="roleName"
+                      onChange={handleRoleChange}
+                      disabled={loading}
+                    >
+                      <option disabled>Select Role</option>
+                      {roleName &&
+                        roleName.map((role) => (
+                          <option key={role.id} value={role.id}>
+                            {role.roleName}
+                          </option>
+                        ))}
+                    </select>
+                  </div>
                 </div>
-                <div className="col-md-5 col-12 d-flex justify-content-end mb-2">
-                  <button type="submit" className="btn btn-button btn-sm ">
+
+                {/* Button Group */}
+                <div className="col-md-7 col-12 d-flex justify-content-start p-2 mt-2">
+                  <div
+                    className="btn-group"
+                    role="group"
+                    aria-label="Basic example"
+                  >
+                    <button
+                      type="button"
+                      className="btn find_roll"
+                      onClick={handleCheckAllIndex}
+                    >
+                      Index
+                    </button>
+                    <button
+                      type="button"
+                      className="btn find_roll"
+                      onClick={handleCheckAllRead}
+                    >
+                      Read
+                    </button>
+                    <button
+                      type="button"
+                      className="btn find_roll"
+                      onClick={handleCheckAllCreate}
+                    >
+                      Create
+                    </button>
+                    <button
+                      type="button"
+                      className="btn find_roll"
+                      onClick={handleCheckAllUpdate}
+                    >
+                      Update
+                    </button>
+                    <button
+                      type="button"
+                      className="btn find_roll"
+                      onClick={handleCheckAllDelete}
+                    >
+                      Delete
+                    </button>
+                    <button
+                      type="button"
+                      className="btn find_roll"
+                      onClick={handleCheckAll}
+                    >
+                      Check All
+                    </button>
+                    <button
+                      type="button"
+                      className="btn find_roll"
+                      onClick={handleUncheckAll}
+                    >
+                      Uncheck All
+                    </button>
+                  </div>
+                </div>
+
+                {/* Save Button */}
+                <div className="col-md-1 col-12 justify-content-end ms-5">
+                  <button type="submit" className="btn btn-button btn-sm">
                     Save
                   </button>
                 </div>
               </div>
+
               <div className="row">
                 <div className="clo-12">
                   <div className="table-responsive">

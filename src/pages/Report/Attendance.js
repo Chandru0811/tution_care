@@ -132,7 +132,9 @@ const Attendance = () => {
           <div className="container-fluid">
             <div className="row my-4">
               <div className="col-md-4 col-12 mb-2">
-                <label className="form-label">Course</label>
+                <label className="form-label">
+                  {storedConfigure?.course || "Course"}
+                </label>
                 <select
                   {...formik.getFieldProps("courseId")}
                   className={`form-select ${
@@ -251,11 +253,17 @@ const Attendance = () => {
                   <th scope="col" style={{ whiteSpace: "nowrap" }}>
                     S No
                   </th>
-                  <th scope="col">Student ID</th>
-                  <th scope="col">Student Name</th>
+                  <th scope="col">
+                    {storedConfigure?.student || "Students"} ID
+                  </th>
+                  <th scope="col">
+                    {storedConfigure?.student || "Students"} Name
+                  </th>
                   <th scope="col">Centre</th>
-                  <th scope="col">Course</th>
-                  <th scope="col">Class Code</th>
+                  <th scope="col">{storedConfigure?.course || "Course"}</th>
+                  <th scope="col">
+                    {storedConfigure?.confClass || "Class"} Code
+                  </th>
                   <th scope="col">Status</th>
                 </tr>
               </thead>
@@ -278,7 +286,7 @@ const Attendance = () => {
                           </span>
                         ) : data.attendanceStatus === "class_replaced" ? (
                           <span className="badge badges-Orange">
-                            Class Replaced
+                            {storedConfigure?.confClass || "Class"} Replaced
                           </span>
                         ) : data.attendanceStatus === "absent" ? (
                           <span className="badge badges-Red">Absent</span>

@@ -322,8 +322,8 @@ function Calendar() {
                 return (
                   <div className="popover-text-wrapper p-2 border-bottom">
                     <div className="p-1 text-wrap">
-                      <FaChalkboardUser className="me-1" /> Teacher:{" "}
-                      {teacherName}
+                      <FaChalkboardUser className="me-1" />{" "}
+                      {storedConfigure?.employee || "Staff"}: {teacherName}
                     </div>
 
                     <div className="p-1 text-wrap">

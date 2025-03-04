@@ -424,9 +424,9 @@ function LeaveEdit() {
                                 cursor: "not-allowed",
                               }}
                               src={
-                                leavedatas.attachment.endsWith(".pdf")
+                                leavedatas?.attachment?.endsWith(".pdf")
                                   ? pdfLogo
-                                  : leavedatas.attachment
+                                  : leavedatas?.attachment
                               }
                               alt="Attachment Preview"
                             />
