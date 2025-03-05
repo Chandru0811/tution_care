@@ -1,4 +1,9 @@
-import React, { forwardRef, useEffect, useImperativeHandle, useState } from "react";
+import React, {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useState,
+} from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import api from "../../../config/URL";
@@ -6,16 +11,13 @@ import { toast } from "react-toastify";
 import SignatureCanvas from "react-signature-canvas";
 
 const validationSchema = Yup.object().shape({
-  termsAndConditionSignatureDate: Yup.string().required(
-    "*Signature Date is required"
-  ),
   agree: Yup.boolean()
     .oneOf([true], "*You Must Accept Terms and conditions is required")
     .required("*You Must Accept Terms and conditions is required"),
 });
 
 const AddTermsAndCondition = forwardRef(
-  ({ formData, setLoadIndicators, setFormData, handleNext,navigate }, ref) => {
+  ({ formData, setLoadIndicators, setFormData, handleNext, navigate }, ref) => {
     const userName = localStorage.getItem("tmsuserName");
     const [sign, setSign] = useState();
     const [url, setUrl] = useState();
@@ -34,7 +36,8 @@ const AddTermsAndCondition = forwardRef(
       initialValues: {
         file: null || "",
         termsAndConditionSignatureDate:
-          formData.termsAndConditionSignatureDate || "",
+          formData.termsAndConditionSignatureDate ||
+          new Date().toISOString().split("T")[0],
         agree: formData.agree || "",
       },
       validationSchema: validationSchema,
@@ -78,7 +81,7 @@ const AddTermsAndCondition = forwardRef(
             setFormData((prv) => ({ ...prv, ...data }));
             const studentId = formData.student_id;
             navigate(`/invoice/add?studentID=${studentId}`);
-            if(formData.LeadId){
+            if (formData.LeadId) {
               try {
                 const response = await api.put(
                   `/updateLeadInfo/${formData.LeadId}`,
@@ -95,28 +98,29 @@ const AddTermsAndCondition = forwardRef(
                 console.log("Lead Status Not CONFIRMED");
               }
             }
-            
           } else {
             toast.error(response.data.message);
           }
-           // Trigger the second API call to update referral lead info
-        if (formData.LeadId) {
-          try {
-            const referralResponse = await api.put(
-              `/updateLeadInfoForReferral/${formData.LeadId}`,{
-                headers: {
-                  "Content-Type": "application/json",
-                },
-              });
-            if (referralResponse.status === 200) {
-              console.log("Referral Lead Info UPDATED");
-            } else {
-              console.log("Referral Lead Info NOT UPDATED");
+          // Trigger the second API call to update referral lead info
+          if (formData.LeadId) {
+            try {
+              const referralResponse = await api.put(
+                `/updateLeadInfoForReferral/${formData.LeadId}`,
+                {
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                }
+              );
+              if (referralResponse.status === 200) {
+                console.log("Referral Lead Info UPDATED");
+              } else {
+                console.log("Referral Lead Info NOT UPDATED");
+              }
+            } catch (error) {
+              console.log("Error updating Referral Lead Info", error);
             }
-          } catch (error) {
-            console.log("Error updating Referral Lead Info", error);
           }
-        }
         } catch (error) {
           toast.error(error);
         } finally {
@@ -124,7 +128,7 @@ const AddTermsAndCondition = forwardRef(
         }
       },
       validateOnChange: false, // Enable validation on change
-      validateOnBlur: true,   // Enable validation on blur
+      validateOnBlur: true, // Enable validation on blur
     });
 
     // Function to scroll to the first error field
@@ -165,24 +169,6 @@ const AddTermsAndCondition = forwardRef(
                 <div className="container py-3">
                   <div className="row">
                     <div className="col-md-6 col-12">
-                      {/* <div className="text-start">
-                        <label htmlFor="" className="mb-1 fw-medium">
-                          <small>Parent Signature</small>
-                        </label>
-                        <br />
-                        <input
-                          type="file"
-                          className="form-control"
-                          name="file"
-                          onChange={(event) => {
-                            formik.setFieldValue(
-                              "file",
-                              event.currentTarget.files[0]
-                            );
-                          }}
-                          onBlur={formik.handleBlur}
-                        />
-                      </div> */}
                       {/* SignatureCanvas */}
                       <div className="text-start mt-3">
                         <label htmlFor="" className="mb-1 fw-medium">
@@ -241,7 +227,6 @@ const AddTermsAndCondition = forwardRef(
                           className="form-control  form-contorl-sm"
                           name="termsAndConditionSignatureDate"
                           type="date"
-                          // onFocus={(e) => e.target.showPicker()}
                           onChange={formik.handleChange}
                           onBlur={formik.handleBlur}
                           value={formik.values.termsAndConditionSignatureDate}
@@ -268,6 +253,7 @@ const AddTermsAndCondition = forwardRef(
                         formik.setFieldValue("agree", newValue);
                       }}
                       onBlur={formik.handleBlur}
+                      readOnly
                     />
                     <small>
                       By submitting this form, I confirm that I have read and

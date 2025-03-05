@@ -8,9 +8,12 @@ function NewDashboard() {
   const [loading, setLoading] = useState(true);
   const selectedcenterId = localStorage.getItem("tmsselectedCenterId");
   const centerId = localStorage.getItem("tmscenterId");
-  const storedConfigure = JSON.parse(
-    localStorage.getItem("tmsappConfigInfo") || "{}"
-  );
+  const tmsrole = localStorage.getItem("tmsrole");
+  const storedConfigure =
+    tmsrole !== "TUITION_SUPER_ADMIN"
+      ? JSON.parse(localStorage.getItem("tmsappConfigInfo") || "{}")
+      : {}; // Use storedConfigure only if role is TUITION_SUPER_ADMIN
+
   const getData = async () => {
     setLoading(true);
     try {
@@ -215,9 +218,9 @@ function NewDashboard() {
             {datas?.revenueGrowthByMonth &&
               datas?.revenueGrowthByMonth?.map((data, index) => {
                 const defaultTitles = [
-                  `${storedConfigure?.lead}`,
-                  `${storedConfigure?.student}`,
-                  `${storedConfigure?.employee}`,
+                  `${storedConfigure?.lead || "Lead"}`,
+                  `${storedConfigure?.student || "Student"}`,
+                  `${storedConfigure?.employee || "Employee"}`,
                   "Revenue",
                 ];
                 const title = data.title?.trim()
@@ -298,59 +301,7 @@ function NewDashboard() {
                 )}
               </div>
             </div>
-            {/* <div className="col-md-4 mb-4">
-              <div
-                className="card shadow-sm p-3 h-100 shadow-sm border-0"
-                style={{
-                  borderRadius: "10px",
-                  maxHeight: "270px",
-                  overflowY: "auto",
-                }}
-              >
-                <div className="d-flex justify-content-between">
-                  <h6 className="card-title">Capacity Status</h6>
-                </div>
-                {datas?.productionSalesComparisonReport?.progressValues &&
-                  datas?.productionSalesComparisonReport?.progressValues?.map(
-                    (center, index) => (
-                      <div key={index}>
-                        <div className="d-flex justify-content-between">
-                          <p
-                            className="text-secondary m-1"
-                            style={{ fontSize: "14px" }}
-                          >
-                            {center.centerName}
-                          </p>
-                          <span
-                            style={{ fontSize: "13px" }}
-                            className="fw-bold"
-                          >
-                            {center.value}%
-                          </span>
-                        </div>
-                        <div
-                          className="progress mb-3"
-                          style={{ height: "7px" }}
-                        >
-                          <div
-                            className="progress-bar"
-                            role="progressbar"
-                            style={{
-                              width: `${center.value}%`,
-                              backgroundColor:
-                                center.value === 0 ? "#f8d7da" : "#287F71", // Change color for 0% values
-                            }}
-                            aria-valuenow={center.value}
-                            aria-valuemin="0"
-                            aria-valuemax="100"
-                          ></div>
-                        </div>
-                      </div>
-                    )
-                  )}
-              </div>
-            </div> */}
-
+        
             <div className="col-md-8 col-12 mb-4">
               <div
                 className="card shadow-sm p-3 h-100 border-0"

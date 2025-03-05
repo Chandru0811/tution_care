@@ -15,37 +15,6 @@ import fetchAllLanguageWithIdsC from "../../List/LanguageList";
 const storedConfigure = JSON.parse(
   localStorage.getItem("tmsappConfigInfo") || "{}"
 );
-const validationSchema = Yup.object().shape({
-  studentName: Yup.string().required(
-    `*${storedConfigure?.student || "Student"} Name is required`
-  ),
-  dateOfBirth: Yup.date()
-    .required("*Date of Birth is required")
-    .max(new Date(), "*Date of Birth cannot be in the future"),
-  age: Yup.string().required("*Age is required"),
-  gender: Yup.string().required("*Gender is required"),
-  // schoolType: Yup.string().required("*School Type is required"),
-  // schoolName: Yup.string().required("*School Name is required"),
-  // allowMagazine: Yup.string().required("*Select a filed"),
-  // allowSocialMedia: Yup.string().required("*Select a filed"),
-  // studentChineseName: Yup.string().required(
-  //   "*Student Chinese Name is required"
-  // ),
-  studentEmail: Yup.string()
-    .email(`*Invalid ${storedConfigure?.student || "Student"} Email`)
-    .required(`*${storedConfigure?.student || "Student"} Email is required`),
-  remark: Yup.string()
-    .max(200, "*The maximum length is 200 characters")
-    .notRequired(),
-  // medicalCondition: Yup.string().required(
-  //   "*Medical Condition Result is required"
-  // ),
-  // nationality: Yup.string().required("*Select a Nationality!"),
-  primaryLanguage: Yup.string().required("*Primary Language is required"),
-  // race: Yup.string().required("*Select a Race"),
-  // referByStudent: Yup.string().required("*Refer By Student is required!"),
-  // referByParent: Yup.string().required("*Refer By Parent is required!"),
-});
 
 const EditStudentDetails = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext, navigate }, ref) => {
@@ -56,6 +25,37 @@ const EditStudentDetails = forwardRef(
 
     const userName = localStorage.getItem("tmsuserName");
     const centerId = localStorage.getItem("tmscenterId");
+    const [centreData, setCentreData] = useState([]);
+    console.log("isGeoFenceForTeacher", centreData?.isGeoFenceForTeacher);
+    const validationSchema = Yup.object().shape({
+      studentName: Yup.string().required(
+        `*${storedConfigure?.student || "Student"} Name is required`
+      ),
+      dateOfBirth: Yup.date()
+        .required("*Date of Birth is required")
+        .max(new Date(), "*Date of Birth cannot be in the future"),
+      age: Yup.string().required("*Age is required"),
+      gender: Yup.string().required("*Gender is required"),
+      studentEmail: Yup.string()
+        .email(`*Invalid ${storedConfigure?.student || "Student"} Email`)
+        .required(
+          `*${storedConfigure?.student || "Student"} Email is required`
+        ),
+      remark: Yup.string()
+        .max(200, "*The maximum length is 200 characters")
+        .notRequired(),
+      primaryLanguage: Yup.string().required("*Primary Language is required"),
+      postalCode: Yup.string().when([], {
+        is: () => centreData?.isGeoFenceForTeacher,
+        then: (schema) => schema.required("*Postal Code is required"),
+        otherwise: (schema) => schema.notRequired(),
+      }),
+      address: Yup.string().when([], {
+        is: () => centreData?.isGeoFenceForTeacher,
+        then: (schema) => schema.required("*Address is required"),
+        otherwise: (schema) => schema.notRequired(),
+      }),
+    });
 
     const fetchData = async () => {
       try {
@@ -109,7 +109,9 @@ const EditStudentDetails = forwardRef(
         primaryLanguage: true,
         referByParent: formData.referByParent || "",
         referByStudent: formData.referByStudent || "",
-        latitude: formData.latitude || "",
+        address: formData.address || "",
+        postalCode: formData.postalCode || "",
+        lattitude: formData.lattitude || "",
         longitude: formData.longitude || "",
         remark: formData.remark || "",
         allowMagazine: true || "",
@@ -174,6 +176,15 @@ const EditStudentDetails = forwardRef(
       }
     }, [formik.submitCount, formik.errors]);
 
+    const centerData = async () => {
+      try {
+        const response = await api.get(`/getAllCenterById/${centerId}`);
+        setCentreData(response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
     useEffect(() => {
       const getData = async () => {
         try {
@@ -193,8 +204,49 @@ const EditStudentDetails = forwardRef(
       };
       getData();
       fetchData();
-      // eslint-disable-next-line react-hooks/exhaustive-deps
+      centerData();
     }, []);
+    const fetchCoordinates = async (postalCode) => {
+      if (!postalCode) return;
+
+      const API_KEY = "AIzaSyCpzT4NCRo4A2-8s0pj8L-6L6LIdEGQkGU";
+      const geoCodeURL = `https://maps.googleapis.com/maps/api/geocode/json?address=${postalCode}&key=${API_KEY}`;
+
+      try {
+        const response = await fetch(geoCodeURL);
+        const data = await response.json();
+
+        if (data.status !== "OK" || !data.results.length) {
+          toast.error("Invalid postal code or no results found.");
+          return;
+        }
+
+        const result = data.results[0];
+
+        // Extract Address Components
+        const addressComponents = result.address_components;
+        const formattedAddress = result.formatted_address; // Full address
+        const lattitude = result.geometry.location.lat;
+        const longitude = result.geometry.location.lng;
+
+        // Extracting City & State
+        const city =
+          addressComponents.find((comp) => comp.types.includes("locality"))
+            ?.long_name || "";
+        const state =
+          addressComponents.find((comp) =>
+            comp.types.includes("administrative_area_level_1")
+          )?.long_name || "";
+        // Update form fields using Formik
+        formik.setFieldValue("postalCode", postalCode);
+        formik.setFieldValue("address", formattedAddress); // Set full address
+        formik.setFieldValue("lattitude", lattitude);
+        formik.setFieldValue("longitude", longitude);
+      } catch (error) {
+        console.error("Error fetching coordinates:", error);
+        toast.error("Error fetching coordinates. Please try again.");
+      }
+    };
 
     useEffect(() => {
       if (formik.values.dateOfBirth) {
@@ -327,74 +379,6 @@ const EditStudentDetails = forwardRef(
                         </div>
                       )}
                     </div>
-                    {/* <div className="text-start mt-4">
-                      <label htmlFor="" className="fw-medium">
-                        <small>School Type</small>
-                        <span className="text-danger">*</span>
-                      </label>
-                      <br />
-                      <div className="mt-1">
-                        <input
-                          className="form-check-input mx-2"
-                          type="radio"
-                          name="schoolType"
-                          value="CHILDCARE"
-                          checked={formik.values.schoolType === "CHILDCARE"}
-                          onChange={formik.handleChange}
-                          onBlur={formik.handleBlur}
-                        />
-                        <span style={{ color: "gray" }}>Childcare</span>{" "}
-                        &nbsp;&nbsp;
-                        <input
-                          className="form-check-input mx-2"
-                          type="radio"
-                          name="schoolType"
-                          value="KINDERGARTEN"
-                          checked={formik.values.schoolType === "KINDERGARTEN"}
-                          onChange={formik.handleChange}
-                          onBlur={formik.handleBlur}
-                        />
-                        <span style={{ color: "gray" }}>Kindergarten</span>{" "}
-                        &nbsp;&nbsp;
-                        <input
-                          className="form-check-input mx-2"
-                          type="radio"
-                          name="schoolType"
-                          value="OTHERS"
-                          checked={formik.values.schoolType === "OTHERS"}
-                          onChange={formik.handleChange}
-                          onBlur={formik.handleBlur}
-                        />
-                        <span style={{ color: "gray" }}>Others</span>
-                      </div>
-                      {formik.touched.schoolType &&
-                        formik.errors.schoolType && (
-                          <div className="error text-danger">
-                            <small>{formik.errors.schoolType}</small>
-                          </div>
-                        )}
-                    </div> */}
-                    {/* <div className="text-start mt-4">
-                      <label htmlFor="" className=" fw-medium">
-                        <small>Pre-Assessment Result</small>
-                      </label>
-                      <br />
-                      <input
-                        className="form-control "
-                        type="text"
-                        name="preAssessmentResult"
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        value={formik.values.preAssessmentResult}
-                        readOnly
-                      />
-                      {formik.touched.preAssessmentResult &&
-                        formik.errors.preAssessmentResult && (
-                          <div className="error text-danger ">
-                            <small>{formik.errors.preAssessmentResult}</small>
-                          </div>
-                        )}
-                    </div> */}
                     <div className="text-start mt-4">
                       <label htmlFor="" className="mb-1 fw-medium">
                         <small>Nationality</small>
@@ -425,26 +409,42 @@ const EditStudentDetails = forwardRef(
                           </div>
                         )}
                     </div>
-                    {/* <div className="text-start mt-4">
-                      <label htmlFor="" className=" fw-medium">
-                        <small>Refered By Parents</small>
-                      </label>
-                      <br />
-                      <input
-                        name="referByParent"
-                        className="form-control"
-                        type="text"
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        value={formik.values.referByParent}
-                      />
-                      {formik.touched.referByParent &&
-                        formik.errors.referByParent && (
-                          <div className="error text-danger ">
-                            <small>{formik.errors.referByParent}</small>
+                    {centreData?.isGeoFenceForStudent && (
+                      <>
+                        <div className="col-md-6 col-12 mb-3">
+                          <div className="form-group col-sm">
+                            <label>Postal Code</label>
+                            <span className="text-danger">*</span>
+                            <input
+                              className="form-control"
+                              name="postalCode"
+                              onChange={(e) => {
+                                formik.handleChange(e);
+                                if (
+                                  e.target.value.length === 6 &&
+                                  !isNaN(e.target.value) &&
+                                  !e.target.value.includes(" ")
+                                ) {
+                                  fetchCoordinates(e.target.value);
+                                  formik.setFieldValue(
+                                    "address",
+                                    formik.values.address || ""
+                                  );
+                                }
+                              }}
+                              onBlur={formik.handleBlur}
+                              value={formik.values.postalCode}
+                            />
+                            {formik.touched.postalCode &&
+                              formik.errors.postalCode && (
+                                <div className="error text-danger">
+                                  <small>{formik.errors.postalCode}</small>
+                                </div>
+                              )}
                           </div>
-                        )}
-                    </div> */}
+                        </div>
+                      </>
+                    )}
                   </div>
                   <div className="col-lg-6 col-md-6 col-12 px-5">
                     <div className="text-start mt-4">
@@ -513,53 +513,6 @@ const EditStudentDetails = forwardRef(
                         </div>
                       )}
                     </div>
-                    {/* <div className="text-start mt-4">
-                      <label htmlFor="" className="mb-1 fw-medium">
-                        <small>School Name</small>
-                        <span className="text-danger">*</span>
-                      </label>
-                      <br />
-                      <input
-                        name="schoolName"
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        value={formik.values.schoolName}
-                        className="form-control "
-                        type="text"
-                      />
-                      {formik.touched.schoolName &&
-                        formik.errors.schoolName && (
-                          <div className="text-danger">
-                            <small>{formik.errors.schoolName}</small>
-                          </div>
-                        )}
-                    </div> */}
-                    {/* <div className="text-start mt-3">
-                      <label className="mb-1 fw-medium">
-                        <small>Race</small>
-                        <span className="text-danger">*</span>
-                      </label>
-                      <br />
-                      <select
-                        name="race"
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        value={formik.values.race}
-                        className="form-select"
-                      >
-                        {raceData &&
-                          raceData.map((raceId) => (
-                            <option key={raceId.id} value={raceId.race}>
-                              {raceId.race}
-                            </option>
-                          ))}
-                      </select>
-                      {formik.touched.race && formik.errors.race && (
-                        <div className="error text-danger ">
-                          <small>{formik.errors.race}</small>
-                        </div>
-                      )}
-                    </div> */}
                     <div className="text-start mt-4">
                       <label htmlFor="" className=" fw-medium">
                         <small>Primary Language Spoken</small>
@@ -591,21 +544,31 @@ const EditStudentDetails = forwardRef(
                           </div>
                         )}
                     </div>
-                    {/* <div className="text-start mt-4">
-                      <label htmlFor="" className=" fw-medium">
-                        <small>Refer By Student</small>
-                      </label>
-                      <br />
-                      <input
-                        className="form-control "
-                        type="text"
-                        name="referByStudent"
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        value={formik.values.referByStudent}
-                        readOnly
-                      />
-                    </div> */}
+                    {centreData?.isGeoFenceForStudent && (
+                      <>
+                        <div className="col-md-6 col-12 mb-3">
+                          <div className="form-group col-sm">
+                            <label>Address</label>
+                            <span className="text-danger">*</span>
+                            <input
+                              type="text"
+                              className="form-control"
+                              name="address"
+                              onChange={formik.handleChange}
+                              onBlur={formik.handleBlur}
+                              value={formik.values.address}
+                              readOnly
+                            />
+                            {formik.touched.address &&
+                              formik.errors.address && (
+                                <div className="error text-danger">
+                                  <small>{formik.errors.address}</small>
+                                </div>
+                              )}
+                          </div>
+                        </div>
+                      </>
+                    )}
                   </div>
                 </div>
                 <div className="text-start mt-4">

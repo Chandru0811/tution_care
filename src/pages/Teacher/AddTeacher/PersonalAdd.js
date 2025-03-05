@@ -12,38 +12,7 @@ import fetchAllIDTypeWithIds from "../../List/IDTypeList";
 import fetchAllNationality from "../../List/NationalityAndCountryList";
 import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 import { useJsApiLoader } from "@react-google-maps/api";
-const validationSchema = Yup.object().shape({
-  teacherName: Yup.string().required("*Teacher Name is required"),
-  role: Yup.string().required("*Role is required"),
-  countryId: Yup.string().required("*Country is required"),
-  dateOfBirth: Yup.date()
-    .required("*Date of Birth is required")
-    .max(new Date(), "*Date of Birth cannot be in the future"),
-  idTypeId: Yup.string().required("*Id Type is required"),
-  idNo: Yup.string().required("*Id No is required"),
-  nationalityId: Yup.string().required("*Nationality is required"),
-  citizenship: Yup.string().required("*Citizenship is required"),
-  email: Yup.string().email("*Invalid Email").required("*Email is required"),
-  // shortIntroduction: Yup.string().required("*Short Introduction is required!"),
-  gender: Yup.string().required("*Gender is required"),
-  // latitude: Yup.string().required("*Latitude is required"),
-  // longitude: Yup.string().required("*Longitude is required"),
-  file: Yup.mixed()
-    .required("*Photo is required")
-    .test(
-      "max-file-name-length",
-      "*File name must be at most 50 characters",
-      (value) => !value || value.name.length <= 50
-    ),
-  status: Yup.string().required("*Status is required"),
 
-  password: Yup.string()
-    .matches(/^\S*$/, "*Password must not contain spaces.")
-    .required("*Enter the valid Password"),
-  confirmPassword: Yup.string()
-    .oneOf([Yup.ref("password"), null], "*Passwords must match")
-    .required("*Confirm Password is required"),
-});
 const libraries = ["places"];
 const PersonalAdd = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
@@ -58,12 +27,48 @@ const PersonalAdd = forwardRef(
     const userId = formData.user_id;
     const [roleData, setRoleData] = useState(null);
     const [centreData, setCentreData] = useState([]);
-    // console.log("isFacialRegForStudent", centreData?.isFacialRegForStudent);
-    // console.log("isFacialRegForTeacher", centreData?.isFacialRegForTeacher);
-    // console.log("isGeoFenceForStudent", centreData?.isGeoFenceForStudent);
-    // console.log("isGeoFenceForTeacher", centreData?.isGeoFenceForTeacher);
-    
+    console.log("isGeoFenceForTeacher", centreData?.isGeoFenceForTeacher);
 
+    const validationSchema = Yup.object().shape({
+      teacherName: Yup.string().required("*Teacher Name is required"),
+      role: Yup.string().required("*Role is required"),
+      countryId: Yup.string().required("*Country is required"),
+      dateOfBirth: Yup.date()
+        .required("*Date of Birth is required")
+        .max(new Date(), "*Date of Birth cannot be in the future"),
+      idTypeId: Yup.string().required("*Id Type is required"),
+      idNo: Yup.string().required("*Id No is required"),
+      nationalityId: Yup.string().required("*Nationality is required"),
+      citizenship: Yup.string().required("*Citizenship is required"),
+      email: Yup.string().email("*Invalid Email").required("*Email is required"),
+      gender: Yup.string().required("*Gender is required"),
+      file: Yup.mixed()
+        .required("*Photo is required")
+        .test(
+          "max-file-name-length",
+          "*File name must be at most 50 characters",
+          (value) => !value || value.name.length <= 50
+        ),
+      status: Yup.string().required("*Status is required"),
+    
+      password: Yup.string()
+        .matches(/^\S*$/, "*Password must not contain spaces.")
+        .required("*Enter the valid Password"),
+      confirmPassword: Yup.string()
+        .oneOf([Yup.ref("password"), null], "*Passwords must match")
+        .required("*Confirm Password is required"),
+      postalCode: Yup.string().when([], {
+        is: () => centreData?.isGeoFenceForTeacher,
+        then: (schema) => schema.required("*Postal Code is required"),
+        otherwise: (schema) => schema.notRequired(),
+      }),
+      address: Yup.string().when([], {
+        is: () => centreData?.isGeoFenceForTeacher,
+        then: (schema) => schema.required("*Address is required"),
+        otherwise: (schema) => schema.notRequired(),
+      }),
+    });
+    
     const formik = useFormik({
       initialValues: {
         role: formData.role,
@@ -84,11 +89,10 @@ const PersonalAdd = forwardRef(
         status: formData.status || "",
         address: formData.address || "",
         postalCode: formData.postalCode || "",
-        latitude: formData.latitude || "",
+        lattitude: formData.lattitude || "",
         longitude: formData.longitude || "",
         createdBy: userName,
       },
-      
 
       validationSchema: validationSchema,
       onSubmit: async (values) => {
@@ -106,7 +110,7 @@ const PersonalAdd = forwardRef(
           // Add each data field manually to the FormData object
           formData.append("address", values.address);
           formData.append("postalCode", values.postalCode);
-          formData.append("latitude", values.latitude);
+          formData.append("lattitude", values.lattitude);
           formData.append("longitude", values.longitude);
           formData.append("roleId", values.role);
           formData.append("centerId", centerId);
@@ -122,9 +126,7 @@ const PersonalAdd = forwardRef(
           formData.append("nationality", nationalityName.nationality);
           formData.append("nationalityId", values.nationalityId);
           formData.append("status", values.status);
- 
           formData.append("createdBy", userName);
-
           if (userId === null || userId === undefined) {
             formData.append("email", values.email);
             formData.append("password", values.password);
@@ -246,7 +248,7 @@ const PersonalAdd = forwardRef(
         // Extract Address Components
         const addressComponents = result.address_components;
         const formattedAddress = result.formatted_address; // Full address
-        const latitude = result.geometry.location.lat;
+        const lattitude = result.geometry.location.lat;
         const longitude = result.geometry.location.lng;
 
         // Extracting City & State
@@ -260,7 +262,7 @@ const PersonalAdd = forwardRef(
         // Update form fields using Formik
         formik.setFieldValue("postalCode", postalCode);
         formik.setFieldValue("address", formattedAddress); // Set full address
-        formik.setFieldValue("latitude", latitude);
+        formik.setFieldValue("lattitude", lattitude);
         formik.setFieldValue("longitude", longitude);
       } catch (error) {
         console.error("Error fetching coordinates:", error);
@@ -301,7 +303,7 @@ const PersonalAdd = forwardRef(
           <div className="container-fluid row d-flex my-4">
             <div className="col-md-6 col-12 mb-2 mt-3">
               <label>
-                 Name<span className="text-danger">*</span>
+                Name<span className="text-danger">*</span>
               </label>
               <input
                 type="text"
@@ -678,63 +680,71 @@ const PersonalAdd = forwardRef(
             <input
               type="hidden"
               className="form-control"
-              name="latitude"
-              value={formik.values.latitude}
+              name="lattitude"
+              value={formik.values.lattitude}
             />
             <input
               type="hidden"
               className="form-control"
-              name="latitude"
+              name="lattitude"
               value={formik.values.longitude}
             />
-            <div class="col-md-6 col-12 mb-3">
-              <div class="form-group col-sm">
-                <label>Postal Code</label>
-                {/* <span className="text-danger">*</span> */}
-                <input
-                  type="text"
-                  class="form-control"
-                  name="postalCode"
-                  onChange={(e) => {
-                    formik.handleChange(e);
-                    if (
-                      e.target.value.length === 6 &&
-                      !isNaN(e.target.value) &&
-                      !e.target.value.includes(" ")
-                    ) {
-                      fetchCoordinates(e.target.value);
-                    }
-                  }}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.postalCode}
-                ></input>
-                {formik.touched.postalCode && formik.errors.postalCode && (
-                  <div className="error text-danger ">
-                    <small>{formik.errors.postalCode}</small>
+            {centreData?.isGeoFenceForTeacher && (
+              <>
+                <div className="col-md-6 col-12 mb-3">
+                  <div className="form-group col-sm">
+                    <label>Postal Code</label>
+                    <span className="text-danger">*</span>
+                    <input
+                      className="form-control"
+                      name="postalCode"
+                      onChange={(e) => {
+                        formik.handleChange(e);
+                        if (
+                          e.target.value.length === 6 &&
+                          !isNaN(e.target.value) &&
+                          !e.target.value.includes(" ")
+                        ) {
+                          fetchCoordinates(e.target.value);
+                          formik.setFieldValue(
+                            "address",
+                            formik.values.address || ""
+                          );
+                        }
+                      }}
+                      onBlur={formik.handleBlur}
+                      value={formik.values.postalCode}
+                    />
+                    {formik.touched.postalCode && formik.errors.postalCode && (
+                      <div className="error text-danger">
+                        <small>{formik.errors.postalCode}</small>
+                      </div>
+                    )}
                   </div>
-                )}
-              </div>
-            </div>
-            <div class="col-md-6 col-12 mb-3">
-              <div class="form-group col-sm">
-                <label>Address</label>
-                {/* <span className="text-danger">*</span> */}
-                <input
-                  type="text"
-                  class="form-control"
-                  name="address"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.address}
-                  readOnly
-                ></input>
-                {formik.touched.address && formik.errors.address && (
-                  <div className="error text-danger ">
-                    <small>{formik.errors.address}</small>
+                </div>
+
+                <div className="col-md-6 col-12 mb-3">
+                  <div className="form-group col-sm">
+                    <label>Address</label>
+                    <span className="text-danger">*</span>
+                    <input
+                      type="text"
+                      className="form-control"
+                      name="address"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      value={formik.values.address}
+                      readOnly
+                    />
+                    {formik.touched.address && formik.errors.address && (
+                      <div className="error text-danger">
+                        <small>{formik.errors.address}</small>
+                      </div>
+                    )}
                   </div>
-                )}
-              </div>
-            </div>
+                </div>
+              </>
+            )}
           </div>
           <div className="row mt-2">
             <div className="col-12">

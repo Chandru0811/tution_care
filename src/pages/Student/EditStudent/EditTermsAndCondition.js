@@ -12,9 +12,6 @@ import { toast } from "react-toastify";
 import SignatureCanvas from "react-signature-canvas";
 
 const validationSchema = Yup.object().shape({
-  termsAndConditionSignatureDate: Yup.string().required(
-    "*Signature Date is required"
-  ),
   agree: Yup.boolean()
     .oneOf([true], "*You Must Accept Terms and conditions is required")
     .required("*You Must Accept Terms and conditions is required"),
@@ -311,6 +308,7 @@ const EditTermsAndCondition = forwardRef(
                           onChange={formik.handleChange}
                           onBlur={formik.handleBlur}
                           value={formik.values.termsAndConditionSignatureDate}
+                          readOnly
                         />
                         {formik.touched.termsAndConditionSignatureDate &&
                           formik.errors.termsAndConditionSignatureDate && (

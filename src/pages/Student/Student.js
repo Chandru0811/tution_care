@@ -105,30 +105,7 @@ const Student = () => {
         accessorKey: "dateOfBirth",
         header: "Date of Birth",
       },
-      {
-        accessorKey: "schoolType",
-        header: "School Type",
-      },
-      {
-        accessorKey: "schoolName",
-        header: "School Name",
-      },
-      {
-        accessorKey: "race",
-        header: "Race",
-      },
-      {
-        accessorKey: "primaryLanguage",
-        header: "Primary Language",
-      },
-      {
-        accessorKey: "referByParent",
-        header: "Referred By Parent",
-      },
-      {
-        accessorKey: "referByStudent",
-        header: "Referred By Student",
-      },
+
       {
         accessorKey: "remark",
         header: "Remark",
@@ -306,7 +283,7 @@ const Student = () => {
                 autoComplete="off"
               />
             </div>
-            <div className="form-group mb-0 ms-2 mb-1">
+            {/* <div className="form-group mb-0 ms-2 mb-1">
               <input
                 type="text"
                 name="parentName"
@@ -317,7 +294,7 @@ const Student = () => {
                 placeholder="Parent"
                 autoComplete="off"
               />
-            </div>
+            </div> */}
             <div className="form-group mb-0 ms-2 mb-1">
               <input
                 type="text"
@@ -396,22 +373,12 @@ const Student = () => {
                     age: false,
                     dateOfBirth: false,
                     medicalCondition: false,
-                    schoolType: false,
-                    schoolName: false,
-                    preAssessmentResult: false,
-                    parentPrimaryName: false,
-                    parentPrimaryEmail: false,
-                    parentPrimaryMobile: false,
                     createdBy: false,
                     createdAt: false,
                     updatedBy: false,
                     updatedAt: false,
                     nationality: false,
-                    race: false,
                     primaryLanguage: false,
-                    referByParent: false,
-                    referByStudent: false,
-                    referByParent: false,
                     remark: false,
                     id: !hideColumn,
                   },

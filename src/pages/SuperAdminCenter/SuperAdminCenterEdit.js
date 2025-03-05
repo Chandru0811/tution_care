@@ -78,7 +78,10 @@ function SuperAdminCenterEdit() {
       trialDate: "",
       configId: "",
       mobile: "",
+      zipCode: "",
       address: "",
+      lattitude: "",
+      longitude: "",
       updatedBy: userName,
       leadManagement: false,
       staffManagement: false,
@@ -169,7 +172,10 @@ function SuperAdminCenterEdit() {
           values.isFacialRegForStudent !== null &&
           values.isFacialRegForStudent !== undefined
         )
-          formData.append("isFacialRegForStudent", values.isFacialRegForStudent);
+          formData.append(
+            "isFacialRegForStudent",
+            values.isFacialRegForStudent
+          );
         if (
           values.isGeoFenceForStudent !== null &&
           values.isGeoFenceForStudent !== undefined
@@ -179,7 +185,16 @@ function SuperAdminCenterEdit() {
           values.isFacialRegForTeacher !== null &&
           values.isFacialRegForTeacher !== undefined
         )
-          formData.append("isFacialRegForTeacher", values.isFacialRegForTeacher);
+          formData.append(
+            "isFacialRegForTeacher",
+            values.isFacialRegForTeacher
+          );
+        if (values.lattitude !== null && values.lattitude !== undefined)
+          formData.append("lattitude", values.lattitude);
+        if (values.longitude !== null && values.longitude !== undefined)
+          formData.append("longitude", values.longitude);
+        if (values.zipCode !== null && values.zipCode !== undefined)
+          formData.append("zipCode", values.zipCode);
         if (
           values.isGeoFenceForTeacher !== null &&
           values.isGeoFenceForTeacher !== undefined
@@ -235,6 +250,58 @@ function SuperAdminCenterEdit() {
     const value = e.target.value;
     setStatus(value);
     formik.setFieldValue("centerStatus", value);
+  };
+
+  const fetchCoordinates = async (zipCode) => {
+    if (!zipCode) return;
+
+    const API_KEY = "AIzaSyCpzT4NCRo4A2-8s0pj8L-6L6LIdEGQkGU";
+    const geoCodeURL = `https://maps.googleapis.com/maps/api/geocode/json?address=${zipCode}&key=${API_KEY}&components=country:IN|country:SG`;
+
+    try {
+      const response = await fetch(geoCodeURL);
+      const data = await response.json();
+
+      if (data.status !== "OK" || !data.results.length) {
+        toast.error("Invalid postal code or no results found.");
+        return;
+      }
+
+      const result = data.results[0];
+
+      // Extract Address Components
+      const addressComponents = result.address_components;
+      const formattedAddress = result.formatted_address; // Full address
+      const lattitude = result.geometry.location.lat;
+      const longitude = result.geometry.location.lng;
+
+      // Extracting City & State
+      const city =
+        addressComponents.find((comp) => comp.types.includes("locality"))
+          ?.long_name || "";
+      const state =
+        addressComponents.find((comp) =>
+          comp.types.includes("administrative_area_level_1")
+        )?.long_name || "";
+      const country =
+        addressComponents.find((comp) => comp.types.includes("country"))
+          ?.short_name || "";
+
+      // Ensure the result is only from India (IN) or Singapore (SG)
+      if (country !== "IN" && country !== "SG") {
+        toast.error("Location must be in India or Singapore.");
+        return;
+      }
+
+      // Update form fields using Formik
+      formik.setFieldValue("zipCode", zipCode);
+      formik.setFieldValue("address", formattedAddress); // Set full address
+      formik.setFieldValue("lattitude", lattitude);
+      formik.setFieldValue("longitude", longitude);
+    } catch (error) {
+      console.error("Error fetching coordinates:", error);
+      toast.error("Error fetching coordinates. Please try again.");
+    }
   };
 
   useEffect(() => {
@@ -507,6 +574,72 @@ function SuperAdminCenterEdit() {
                   )}
                 </div>
               </div>
+              <input
+                type="hidden"
+                className="form-control"
+                name="lattitude"
+                value={formik.values.lattitude}
+              />
+              <input
+                type="hidden"
+                className="form-control"
+                name="lattitude"
+                value={formik.values.longitude}
+              />
+              <>
+                <div className="col-md-6 col-12 mb-3">
+                  <div className="form-group col-sm">
+                    <label>Postal Code</label>
+                    <span className="text-danger">*</span>
+                    <input
+                      className="form-control"
+                      name="zipCode"
+                      onChange={(e) => {
+                        formik.handleChange(e);
+                        if (
+                          e.target.value.length === 6 &&
+                          !isNaN(e.target.value) &&
+                          !e.target.value.includes(" ")
+                        ) {
+                          fetchCoordinates(e.target.value);
+                          formik.setFieldValue(
+                            "address",
+                            formik.values.address || ""
+                          );
+                        }
+                      }}
+                      onBlur={formik.handleBlur}
+                      value={formik.values.zipCode}
+                    />
+                    {formik.touched.zipCode && formik.errors.zipCode && (
+                      <div className="error text-danger">
+                        <small>{formik.errors.zipCode}</small>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <div className="col-md-6 col-12 mb-3">
+                  <div className="form-group col-sm">
+                    <label>Address</label>
+                    <span className="text-danger">*</span>
+                    <input
+                      type="text"
+                      className="form-control"
+                      name="address"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      value={formik.values.address}
+                      readOnly
+                    />
+                    {formik.touched.address && formik.errors.address && (
+                      <div className="error text-danger">
+                        <small>{formik.errors.address}</small>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </>
               <div className="col-md-6 col-12">
                 <div className="mb-3">
                   <label className="form-label">Student</label>
@@ -651,36 +784,6 @@ function SuperAdminCenterEdit() {
                   </div>
                 </div>
               )}
-              <div className="col-12">
-                <div className="mb-3">
-                  <label for="exampleFormControlInput1" className="form-label">
-                    Address<span className="text-danger">*</span>
-                  </label>
-                  <textarea
-                    className={`form-control ${
-                      formik.touched.address && formik.errors.address
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    {...formik.getFieldProps("address")}
-                    id="exampleFormControlTextarea1"
-                    rows="3"
-                    onBlur={formik.handleBlur}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") {
-                        console.log(
-                          "Enter key pressed: moving to the next line"
-                        );
-                      }
-                    }}
-                  ></textarea>
-                  {formik.touched.address && formik.errors.address && (
-                    <div className="invalid-feedback">
-                      {formik.errors.address}
-                    </div>
-                  )}
-                </div>
-              </div>
             </div>
           </div>
         </div>

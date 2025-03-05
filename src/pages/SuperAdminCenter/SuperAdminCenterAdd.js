@@ -5,12 +5,16 @@ import * as Yup from "yup";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
 import { Modal } from "react-bootstrap";
+import { useJsApiLoader } from "@react-google-maps/api";
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required("*Name is required"),
   configId: Yup.string().required("*App Type is required"),
   centerName: Yup.string().required("*Centre Name is required"),
   address: Yup.string().required("*Address is required"),
+  zipCode: Yup.string()
+    .matches(/^\d{6}$/, "*Postal Code must be exactly 6 digits")
+    .required("*Postal Code is required"),
   mobile: Yup.string()
     .matches(
       /^(?:\+?65)?\s?(?:\d{4}\s?\d{4}|\d{3}\s?\d{3}\s?\d{4})$/,
@@ -46,6 +50,7 @@ const validationSchema = Yup.object().shape({
     }
   ),
 });
+const libraries = ["places"];
 
 function SuperAdminCenterAdd({ handleCenterChanged }) {
   const navigate = useNavigate();
@@ -56,6 +61,7 @@ function SuperAdminCenterAdd({ handleCenterChanged }) {
   const [status, setStatus] = useState("Pending");
   const handleClose = () => setShowModal(false);
   const handleShow = () => setShowModal(true);
+
   useEffect(() => {
     const today = new Date();
     today.setDate(today.getDate() + 30);
@@ -72,7 +78,10 @@ function SuperAdminCenterAdd({ handleCenterChanged }) {
       email: "",
       senderMail: "",
       mobile: "",
+      zipCode: "",
       address: "",
+      lattitude: "",
+      longitude: "",
       leadManagement: false,
       staffManagement: false,
       documentManagement: false,
@@ -81,7 +90,6 @@ function SuperAdminCenterAdd({ handleCenterChanged }) {
       reportManagement: false,
       messages: false,
       file: null,
-
       isFacialRegForTeacher: true,
       isGeoFenceForTeacher: true,
       isFacialRegForStudent: true,
@@ -119,6 +127,57 @@ function SuperAdminCenterAdd({ handleCenterChanged }) {
     validateOnChange: false, // Enable validation on change
     validateOnBlur: true, // Enable validation on blur
   });
+  const fetchCoordinates = async (zipCode) => {
+    if (!zipCode) return;
+
+    const API_KEY = "AIzaSyCpzT4NCRo4A2-8s0pj8L-6L6LIdEGQkGU";
+    const geoCodeURL = `https://maps.googleapis.com/maps/api/geocode/json?address=${zipCode}&key=${API_KEY}&components=country:IN|country:SG`;
+
+    try {
+      const response = await fetch(geoCodeURL);
+      const data = await response.json();
+
+      if (data.status !== "OK" || !data.results.length) {
+        toast.error("Invalid postal code or no results found.");
+        return;
+      }
+
+      const result = data.results[0];
+
+      // Extract Address Components
+      const addressComponents = result.address_components;
+      const formattedAddress = result.formatted_address; // Full address
+      const lattitude = result.geometry.location.lat;
+      const longitude = result.geometry.location.lng;
+
+      // Extracting City & State
+      const city =
+        addressComponents.find((comp) => comp.types.includes("locality"))
+          ?.long_name || "";
+      const state =
+        addressComponents.find((comp) =>
+          comp.types.includes("administrative_area_level_1")
+        )?.long_name || "";
+      const country =
+        addressComponents.find((comp) => comp.types.includes("country"))
+          ?.short_name || "";
+
+      // Ensure the result is only from India (IN) or Singapore (SG)
+      if (country !== "IN" && country !== "SG") {
+        toast.error("Location must be in India or Singapore.");
+        return;
+      }
+
+      // Update form fields using Formik
+      formik.setFieldValue("zipCode", zipCode);
+      formik.setFieldValue("address", formattedAddress); // Set full address
+      formik.setFieldValue("lattitude", lattitude);
+      formik.setFieldValue("longitude", longitude);
+    } catch (error) {
+      console.error("Error fetching coordinates:", error);
+      toast.error("Error fetching coordinates. Please try again.");
+    }
+  };
 
   // Function to scroll to the first error field
   const scrollToError = (errors) => {
@@ -320,7 +379,6 @@ function SuperAdminCenterAdd({ handleCenterChanged }) {
                   )}
                 </div>
               </div>
-
               <div className="col-md-6 col-12">
                 <div className="mb-3">
                   <label for="exampleFormControlInput1" className="form-label">
@@ -370,6 +428,72 @@ function SuperAdminCenterAdd({ handleCenterChanged }) {
                   )}
                 </div>
               </div>
+              <input
+                type="hidden"
+                className="form-control"
+                name="lattitude"
+                value={formik.values.lattitude}
+              />
+              <input
+                type="hidden"
+                className="form-control"
+                name="lattitude"
+                value={formik.values.longitude}
+              />
+              <>
+                <div className="col-md-6 col-12 mb-3">
+                  <div className="form-group col-sm">
+                    <label>Postal Code</label>
+                    <span className="text-danger">*</span>
+                    <input
+                      className="form-control"
+                      name="zipCode"
+                      onChange={(e) => {
+                        formik.handleChange(e);
+                        if (
+                          e.target.value.length === 6 &&
+                          !isNaN(e.target.value) &&
+                          !e.target.value.includes(" ")
+                        ) {
+                          fetchCoordinates(e.target.value);
+                          formik.setFieldValue(
+                            "address",
+                            formik.values.address || ""
+                          );
+                        }
+                      }}
+                      onBlur={formik.handleBlur}
+                      value={formik.values.zipCode}
+                    />
+                    {formik.touched.zipCode && formik.errors.zipCode && (
+                      <div className="error text-danger">
+                        <small>{formik.errors.zipCode}</small>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <div className="col-md-6 col-12 mb-3">
+                  <div className="form-group col-sm">
+                    <label>Address</label>
+                    <span className="text-danger">*</span>
+                    <input
+                      type="text"
+                      className="form-control"
+                      name="address"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      value={formik.values.address}
+                      readOnly
+                    />
+                    {formik.touched.address && formik.errors.address && (
+                      <div className="error text-danger">
+                        <small>{formik.errors.address}</small>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </>
               <div className="col-md-6 col-12">
                 <div className="mb-3">
                   <label className="form-label">Student</label>
@@ -454,7 +578,6 @@ function SuperAdminCenterAdd({ handleCenterChanged }) {
                   </div>
                 </div>
               </div>
-
               <div className="col-md-6 col-12">
                 <div className="mb-3">
                   <label className="form-label">
@@ -507,36 +630,6 @@ function SuperAdminCenterAdd({ handleCenterChanged }) {
                   </div>
                 </div>
               )}
-              <div className="col-12">
-                <div className="mb-3">
-                  <label for="exampleFormControlInput1" className="form-label">
-                    Address<span className="text-danger">*</span>
-                  </label>
-                  <textarea
-                    className={`form-control  ${
-                      formik.touched.address && formik.errors.address
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    {...formik.getFieldProps("address")}
-                    id="exampleFormControlTextarea1"
-                    rows="3"
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") {
-                        // Allow the default behavior for Enter key
-                        console.log(
-                          "Enter key pressed: moving to the next line"
-                        );
-                      }
-                    }}
-                  ></textarea>
-                  {formik.touched.address && formik.errors.address && (
-                    <div className="invalid-feedback">
-                      {formik.errors.address}
-                    </div>
-                  )}
-                </div>
-              </div>
             </div>
           </div>
         </div>
