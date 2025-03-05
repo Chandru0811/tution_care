@@ -399,6 +399,7 @@ function LeaveEdit() {
                       <small>{formik.errors.file}</small>
                     </div>
                   )}
+
                   <div className="mt-3">
                     {formik.values.file instanceof File ? (
                       formik.values.file.type.startsWith("image/") ? (
@@ -412,29 +413,7 @@ function LeaveEdit() {
                           className="card border-0 shadow"
                           style={{ width: "70%" }}
                         >
-                          <div
-                            onClick={(e) => e.stopPropagation()}
-                            style={{ cursor: "not-allowed" }}
-                          >
-                            <img
-                              className="card-img-top img-fluid"
-                              style={{
-                                height: "10rem",
-                                pointerEvents: "none",
-                                cursor: "not-allowed",
-                              }}
-                              src={
-                                leavedatas?.attachment?.endsWith(".pdf")
-                                  ? pdfLogo
-                                  : leavedatas?.attachment
-                              }
-                              alt="Attachment Preview"
-                            />
-                          </div>
-                          <div
-                            className="card-body d-flex justify-content-between align-items-center"
-                            style={{ flexWrap: "wrap" }}
-                          >
+                          <div className="card-body d-flex justify-content-between align-items-center">
                             <p
                               className="card-title fw-semibold mb-0 text-wrap"
                               style={{
@@ -468,29 +447,7 @@ function LeaveEdit() {
                         className="card border-0 shadow"
                         style={{ width: "70%" }}
                       >
-                        <div
-                          onClick={(e) => e.stopPropagation()}
-                          style={{ cursor: "not-allowed" }}
-                        >
-                          <img
-                            className="card-img-top img-fluid"
-                            style={{
-                              height: "10rem",
-                              pointerEvents: "none",
-                              cursor: "not-allowed",
-                            }}
-                            src={
-                              leavedatas.attachment.endsWith(".pdf")
-                                ? pdfLogo
-                                : leavedatas.attachment
-                            }
-                            alt="Attachment Preview"
-                          />
-                        </div>
-                        <div
-                          className="card-body d-flex justify-content-between align-items-center"
-                          style={{ flexWrap: "wrap" }}
-                        >
+                        <div className="card-body d-flex justify-content-between align-items-center">
                           <p
                             className="card-title fw-semibold mb-0 text-wrap"
                             style={{
