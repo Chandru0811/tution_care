@@ -237,7 +237,15 @@ const EditStudentDetails = forwardRef(
           addressComponents.find((comp) =>
             comp.types.includes("administrative_area_level_1")
           )?.long_name || "";
-        // Update form fields using Formik
+        const country =
+          addressComponents.find((comp) => comp.types.includes("country"))
+            ?.short_name || "";
+
+        // Ensure the result is only from India (IN) or Singapore (SG)
+        if (country !== "IN" && country !== "SG") {
+          toast.error("Location must be in India or Singapore.");
+          return;
+        }
         formik.setFieldValue("postalCode", postalCode);
         formik.setFieldValue("address", formattedAddress); // Set full address
         formik.setFieldValue("lattitude", lattitude);

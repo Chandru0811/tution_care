@@ -30,7 +30,7 @@ const PersonalAdd = forwardRef(
     console.log("isGeoFenceForTeacher", centreData?.isGeoFenceForTeacher);
 
     const validationSchema = Yup.object().shape({
-      teacherName: Yup.string().required("*Teacher Name is required"),
+      teacherName: Yup.string().required("*Name is required"),
       role: Yup.string().required("*Role is required"),
       countryId: Yup.string().required("*Country is required"),
       dateOfBirth: Yup.date()
@@ -40,7 +40,9 @@ const PersonalAdd = forwardRef(
       idNo: Yup.string().required("*Id No is required"),
       nationalityId: Yup.string().required("*Nationality is required"),
       citizenship: Yup.string().required("*Citizenship is required"),
-      email: Yup.string().email("*Invalid Email").required("*Email is required"),
+      email: Yup.string()
+        .email("*Invalid Email")
+        .required("*Email is required"),
       gender: Yup.string().required("*Gender is required"),
       file: Yup.mixed()
         .required("*Photo is required")
@@ -50,25 +52,27 @@ const PersonalAdd = forwardRef(
           (value) => !value || value.name.length <= 50
         ),
       status: Yup.string().required("*Status is required"),
-    
+
       password: Yup.string()
         .matches(/^\S*$/, "*Password must not contain spaces.")
         .required("*Enter the valid Password"),
       confirmPassword: Yup.string()
         .oneOf([Yup.ref("password"), null], "*Passwords must match")
         .required("*Confirm Password is required"),
-      postalCode: Yup.string().when([], {
-        is: () => centreData?.isGeoFenceForTeacher,
-        then: (schema) => schema.required("*Postal Code is required"),
-        otherwise: (schema) => schema.notRequired(),
-      }),
+      postalCode: Yup.string()
+        .matches(/^\d{6}$/, "*Postal Code must be exactly 6 digits")
+        .when([], {
+          is: () => centreData?.isGeoFenceForTeacher,
+          then: (schema) => schema.required("*Postal Code is required"),
+          otherwise: (schema) => schema.notRequired(),
+        }),
       address: Yup.string().when([], {
         is: () => centreData?.isGeoFenceForTeacher,
         then: (schema) => schema.required("*Address is required"),
         otherwise: (schema) => schema.notRequired(),
       }),
     });
-    
+
     const formik = useFormik({
       initialValues: {
         role: formData.role,
@@ -259,7 +263,15 @@ const PersonalAdd = forwardRef(
           addressComponents.find((comp) =>
             comp.types.includes("administrative_area_level_1")
           )?.long_name || "";
-        // Update form fields using Formik
+        const country =
+          addressComponents.find((comp) => comp.types.includes("country"))
+            ?.short_name || "";
+
+        // Ensure the result is only from India (IN) or Singapore (SG)
+        if (country !== "IN" && country !== "SG") {
+          toast.error("Location must be in India or Singapore.");
+          return;
+        }
         formik.setFieldValue("postalCode", postalCode);
         formik.setFieldValue("address", formattedAddress); // Set full address
         formik.setFieldValue("lattitude", lattitude);
