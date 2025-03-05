@@ -18,7 +18,11 @@ const validationSchema = Yup.object({
   dob: Yup.date().required("Date of Birth is required"),
   referredBy: Yup.string().nullable(),
   // parentName: Yup.string().required("Parent name is required"),
-  // parentEmail: Yup.string().email("Invalid email format"),
+  parentEmail: Yup.string().email("Invalid email format"),
+  parentMobile: Yup.string()
+    .matches(/^[0-9]+$/, "Only numbers are allowed")
+    .required("Parent Mobile is required"),
+
   // address: Yup.string().required("Address is required"),
   postalCode: Yup.string().matches(/^\d{6}$/, "Postal code must be 6 digits"),
   // .required("Postal code is required"),

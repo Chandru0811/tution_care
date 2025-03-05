@@ -154,7 +154,9 @@ function DocumentAdd() {
 
   const fetchTeacher = async () => {
     try {
-      const response = await api.get(`/getTeacherListByCenterScheduleId/${centerId}`);
+      const response = await api.get(
+        `/getTeacherListByCenterScheduleId/${centerId}`
+      );
       setUserData(response.data);
     } catch (error) {
       toast.error(error);
@@ -163,7 +165,9 @@ function DocumentAdd() {
 
   const fetchStudent = async () => {
     try {
-      const response = await api.get(`/getIdsAndStudentNamesByScheduleCenterId/${centerId}`);
+      const response = await api.get(
+        `/getIdsAndStudentNamesByScheduleCenterId/${centerId}`
+      );
       setStudentData(response.data);
     } catch (error) {
       toast.error(error);
@@ -209,7 +213,9 @@ function DocumentAdd() {
 
   const fetchBatchandTeacherData = async (day) => {
     try {
-      const response = await api.get(`getTeacherWithBatchListByScheduleDay?centerId=${centerId}&day=${day}`);
+      const response = await api.get(
+        `getTeacherWithBatchListByScheduleDay?centerId=${centerId}&day=${day}`
+      );
       setBatchData(response.data.batchList);
     } catch (error) {
       toast.error(error.message);
@@ -402,7 +408,8 @@ function DocumentAdd() {
 
               <div class="col-md-6 col-12 mb-4">
                 <lable class="">
-                  Teacher<span class="text-danger">*</span>
+                  {storedConfigure?.employee || "Employee"}
+                  <span class="text-danger">*</span>
                 </lable>
                 <select
                   {...formik.getFieldProps("userId")}

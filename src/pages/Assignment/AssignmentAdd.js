@@ -35,7 +35,9 @@ function AssignmentAdd() {
     course: Yup.string().required(
       `* ${storedConfigure?.course || "Course"} is required`
     ),
-    userId: Yup.string().required("*Teacher is required"),
+    userId: Yup.string().required(
+      `* ${storedConfigure?.employee || "Employee"} is required`
+    ),
     day: Yup.string().required("*Days is required"),
     batchTime: Yup.array()
       .of(Yup.string().required("*Batch Time is required"))
@@ -550,7 +552,8 @@ function AssignmentAdd() {
               </div>
               <div className="col-md-6 col-12 mb-4">
                 <label className="form-label">
-                  Teacher<span className="text-danger">*</span>
+                  {storedConfigure?.employee || "Employee"}
+                  <span className="text-danger">*</span>
                 </label>
                 <select
                   {...formik.getFieldProps("userId")}

@@ -273,12 +273,14 @@ function Sidebar() {
               isOpen: false,
               subMenus: [
                 {
-                  title: "Document Folder",
+                  title:
+                    storedConfigure?.documentManagement || "Document Folder",
                   path: "/document",
                   access: storedScreens.documentListingIndex,
                 },
                 {
-                  title: "Document Files",
+                  title:
+                    storedConfigure?.documentManagement || "Document Files",
                   path: "/documentfile",
                   access: storedScreens.documentFileIndex,
                 },
@@ -296,12 +298,15 @@ function Sidebar() {
               isOpen: false,
               subMenus: [
                 {
-                  title: "Assignment Questionnaire",
+                  title:
+                    storedConfigure?.assignManagement ||
+                    "Assignment Questionnaire",
                   path: "/assignment",
                   access: storedScreens.questionIndex,
                 },
                 {
-                  title: "Assignment Result",
+                  title:
+                    storedConfigure?.assignManagement || "Assignment Result",
                   path: "/assignmentResult",
                   access: storedScreens.answerIndex,
                 },
@@ -529,7 +534,7 @@ function Sidebar() {
     <div className="sidebar">
       <div className="logo-details">
         <span className="logo_name">
-          <img src={Logo} alt="logo" width={80} className="img-fluid p-2 "/>
+          <img src={Logo} alt="logo" width={80} className="img-fluid p-2 " />
           <span className="text-dark">ECS Schools</span>
         </span>
       </div>
