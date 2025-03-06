@@ -39,7 +39,7 @@ const PersonalAdd = forwardRef(
       idTypeId: Yup.string().required("*Id Type is required"),
       idNo: Yup.string().required("*Id No is required"),
       nationalityId: Yup.string().required("*Nationality is required"),
-      citizenship: Yup.string().required("*Citizenship is required"),
+      citizenshipId: Yup.string().required("*Citizenship is required"),
       email: Yup.string()
         .email("*Invalid Email")
         .required("*Email is required"),
@@ -83,10 +83,10 @@ const PersonalAdd = forwardRef(
         password: formData.password,
         confirmPassword: formData.confirmPassword,
         idNo: formData.idNo,
-        citizenship: formData.citizenship,
-        countryId: formData.countryId,
-        nationality: formData.nationality || "",
+        citizenshipId: formData.citizenshipId,
         nationalityId: formData.nationalityId || "",
+        countryId: formData.countryId,
+        // nationality: formData.nationality || "",
         file: formData.file || "",
         shortIntroduction: formData.shortIntroduction,
         gender: formData.gender,
@@ -123,11 +123,11 @@ const PersonalAdd = forwardRef(
           formData.append("idTypeId", values.idTypeId);
           formData.append("idNo", values.idNo);
           formData.append("age", 25);
-          formData.append("citizenship", values.citizenship);
+          formData.append("citizenshipId", values.citizenshipId);
           formData.append("shortIntroduction", values.shortIntroduction || "");
           formData.append("gender", values.gender);
           formData.append("countryId", values.countryId);
-          formData.append("nationality", nationalityName.nationality);
+          // formData.append("nationality", nationalityName.nationality);
           formData.append("nationalityId", values.nationalityId);
           formData.append("status", values.status);
           formData.append("createdBy", userName);
@@ -428,12 +428,15 @@ const PersonalAdd = forwardRef(
                 value={formik.values.nationalityId}
               >
                 <option selected></option>
-                {nationalityData &&
+                <option value="1">Indian</option>
+                <option value="2">Chinese</option>
+                {/* <option value="1"></option> */}
+                {/* {nationalityData &&
                   nationalityData.map((nationalityId) => (
                     <option key={nationalityId.id} value={nationalityId.id}>
                       {nationalityId.nationality}
                     </option>
-                  ))}
+                  ))} */}
               </select>
               {formik.touched.nationalityId && formik.errors.nationalityId && (
                 <div className="error text-danger">
@@ -446,28 +449,28 @@ const PersonalAdd = forwardRef(
               <span className="text-danger">*</span>
               <select
                 className="form-select"
-                name="citizenship"
+                name="citizenshipId"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                value={formik.values.citizenship}
+                value={formik.values.citizenshipId}
               >
                 <option selected></option>
-                <option value="1st Year PR">1st Year PR</option>
-                <option value="2nd Year PR">2nd Year PR</option>
-                <option value="3rd Year PR">3rd Year PR</option>
+                <option value="1">1st Year PR</option>
+                <option value="2">2nd Year PR</option>
+                {/* <option value="3rd Year PR">3rd Year PR</option> */}
                 {/* {nationalityData &&
-                    nationalityData.map((citizenship) => (
+                    nationalityData.map((citizenshipId) => (
                       <option
-                        key={citizenship.id}
-                        value={citizenship.citizenship}
+                        key={citizenshipId.id}
+                        value={citizenshipId.citizenshipId}
                       >
-                        {citizenship.citizenship}
+                        {citizenshipId.citizenshipId}
                       </option>
                     ))} */}
               </select>
-              {formik.touched.citizenship && formik.errors.citizenship && (
+              {formik.touched.citizenshipId && formik.errors.citizenshipId && (
                 <div className="error text-danger">
-                  <small>{formik.errors.citizenship}</small>
+                  <small>{formik.errors.citizenshipId}</small>
                 </div>
               )}
             </div>
