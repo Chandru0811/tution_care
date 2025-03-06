@@ -64,7 +64,7 @@ const LeaveEdit = forwardRef(
             }
           } else {
             const response = await api.post(
-              `/createUserLeaveCreationWithCenterId/${formData.staff_id}`,
+              `/createUserLeaveCreation/${formData.staff_id}`,
               values,
               {
                 headers: {

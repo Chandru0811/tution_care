@@ -120,7 +120,7 @@ const ContractEdit = forwardRef(
                 headers: { "Content-Type": "application/json" },
               })
             : api.post(
-                `/createUserContractCreationWithCenterId/${formData.staff_id}`,
+                `/createUserContractCreation/${formData.staff_id}`,
                 values,
                 {
                   headers: { "Content-Type": "application/json" },

@@ -15,7 +15,7 @@ function InvoiceView() {
   const [data, setData] = useState([]);
   const [centerValues, setCenterValues] = useState([]);
   const navigate = useNavigate();
-  console.log("centerValues::", centerValues);
+  console.log("data uuu ::", data);
   const [courseData, setCourseData] = useState(null);
   const [studentData, setStudentData] = useState(null);
   const [centerData, setcenterData] = useState(null);
@@ -336,14 +336,20 @@ function InvoiceView() {
         </div>
         <div className=" row">
           <div className="col-6 d-flex justify-content-start my-2">
-            <Link to={`/payments/add?invoiceId=${id}&studentId=${data.studentId}`}>
-              <button
-                type="button"
-                className="btn btn-border btn-sm ms-2 btn-button"
+            {data.invoiceStatus !== "PAID" ? (
+              <Link
+                to={`/payments/add?invoiceId=${id}&studentId=${data.studentId}`}
               >
-                Make Payment
-              </button>
-            </Link>
+                <button
+                  type="button"
+                  className="btn btn-border btn-sm ms-2 btn-button"
+                >
+                  Make Payment
+                </button>
+              </Link>
+            ) : (
+              <></>
+            )}
           </div>
           <div className="col-6 d-flex justify-content-end my-2">
             {data.invoiceStatus !== "PAID" && (

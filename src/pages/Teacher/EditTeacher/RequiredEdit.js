@@ -65,7 +65,7 @@ const RequiredEdit = forwardRef(
             );
 
             const response = await api.post(
-              `/createUserRequireInformationWithCenterId`,
+              `/createUserRequireInformation`,
               formDatas,
               {
                 headers: {

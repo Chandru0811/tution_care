@@ -161,14 +161,10 @@ const PersonalEdit = forwardRef(
             ...response.data,
             roleId: role, // Include role in formData
           }));
-          const citizenship = response.data.citizenship;
-          // if(citizenship === "1st Year PR"){
-          //   response.data.citizenship = 1;
-          // }
           formik.setValues({
             ...response.data, 
             dateOfBirth: dateOfBirth,
-            citizenshipId : 1
+            // citizenshipId : 1
           });
         } catch (error) {
           console.error("Error fetching data:", error);

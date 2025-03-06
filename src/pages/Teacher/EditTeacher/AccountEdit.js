@@ -86,7 +86,7 @@ const AccountEdit = forwardRef(
               userId: formData.staff_id,
             };
             const response = await api.post(
-              `/createUserAccountInfoWithCenterId`,
+              `/createUserAccountInfos`,
               updatedData,
               {
                 headers: {

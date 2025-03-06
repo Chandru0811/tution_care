@@ -280,8 +280,8 @@ function Sidebar() {
               isOpen: false,
               subMenus: [
                 {
-                  title: storedConfigure?.assignManagement?.trim()
-                    ? `${storedConfigure.assignManagement} Folder`
+                  title: storedConfigure?.documentManagement?.trim()
+                    ? `${storedConfigure.documentManagement} Folder`
                     : "Document Folder",
 
                   // title:
@@ -290,8 +290,8 @@ function Sidebar() {
                   access: storedScreens.documentListingIndex,
                 },
                 {
-                  title: storedConfigure?.assignManagement?.trim()
-                    ? `${storedConfigure.assignManagement} Files`
+                  title: storedConfigure?.documentManagement?.trim()
+                    ? `${storedConfigure.documentManagement} Files`
                     : "Document Files",
 
                   // title:

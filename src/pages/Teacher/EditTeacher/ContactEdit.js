@@ -60,7 +60,7 @@ const ContactEdit = forwardRef(
             }
           } else {
             const response = await api.post(
-              `/createUserContactInfoWithCenterId/${formData.staff_id}`,
+              `/createUserContactInfo/${formData.staff_id}`,
               values,
               {
                 headers: {

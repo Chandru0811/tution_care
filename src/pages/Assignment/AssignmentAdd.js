@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useFormik } from "formik";
+import { Formik, useFormik } from "formik";
 import * as Yup from "yup";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
@@ -19,6 +19,9 @@ function AssignmentAdd() {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const userName = localStorage.getItem("tmsuserName");
   const centerId = localStorage.getItem("tmscenterId");
+  const tmsuserInfo = localStorage.getItem("tmsuserInfo");
+  console.log("tmsuserInfo", tmsuserInfo);
+
   const [batchData, setBatchData] = useState(null);
   const [selectedStudents, setSelectedStudents] = useState([]);
   const [selectedBatchTimes, setSelectedBatchTimes] = useState([]);
@@ -203,8 +206,17 @@ function AssignmentAdd() {
 
   const fetchCourses = async () => {
     try {
-      const courses = await fetchAllCoursesWithIdsC(centerId);
-      setCourseData(courses);
+      if (Array.isArray(tmsuserInfo) && tmsuserInfo.length > 0) {
+        // If tmsuserInfo has values, trigger the first condition
+        const response = await api.get(
+          `getOptimizedCourseInfo?centerId=${centerId}&userId=${formik.values.userId}`
+        );
+        setCourseData(response.data);
+      } else {
+        // If tmsuserInfo is an empty array, trigger the second condition
+        const courses = await fetchAllCoursesWithIdsC(centerId);
+        setCourseData(courses);
+      }
     } catch (error) {
       toast.error(error);
     }

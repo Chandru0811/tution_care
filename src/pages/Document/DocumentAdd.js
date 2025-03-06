@@ -15,7 +15,9 @@ const validationSchema = Yup.object({
   course: Yup.string().required(
     `*${storedConfigure?.course || "Course"} is required`
   ),
-  userId: Yup.string().required("*Teacher is required"),
+  userId: Yup.string().required(
+    `*${storedConfigure?.employee || "Teacher"} is required`
+  ),
   day: Yup.string().required("*Days is required"),
   batchTime: Yup.string().required("*Batch Time is required"),
   classListing: Yup.string().required(
@@ -30,6 +32,9 @@ const validationSchema = Yup.object({
 function DocumentAdd() {
   const navigate = useNavigate();
   const centerId = localStorage.getItem("tmscenterId");
+  const tmsuserId = localStorage.getItem("tmsuserId");
+  console.log("tmsuserId", tmsuserId);
+  
   const [folderCategory, setFolderCategory] = useState("group");
   const [classData, setClassData] = useState(null);
   const [courseData, setCourseData] = useState(null);
@@ -43,7 +48,7 @@ function DocumentAdd() {
     initialValues: {
       center: centerId,
       course: "",
-      userId: "",
+      userId: tmsuserId || "",
       classListing: "",
       date: "",
       day: "",
@@ -77,7 +82,7 @@ function DocumentAdd() {
 
         let requestBody = {
           centerId: centerId,
-          userId: values.userId,
+          userId: tmsuserId || values.userId,
           day: values.day,
           center: selectedOptionName,
           classListing: selectedClassName,
@@ -145,8 +150,17 @@ function DocumentAdd() {
 
   const fetchCourses = async () => {
     try {
-      const courses = await fetchAllCoursesWithIdsC(centerId);
-      setCourseData(courses);
+      if(!tmsuserId){
+        const courses = await fetchAllCoursesWithIdsC(centerId);
+        setCourseData(courses);
+      }else {
+        const response = await api.get(
+          `getOptimizedCourseInfo?centerId=${centerId}&userId=${tmsuserId}`
+        );
+        setCourseData(response.data);
+        console.log("Courses", response.data);
+        
+      }
     } catch (error) {
       toast.error(error);
     }
@@ -176,7 +190,9 @@ function DocumentAdd() {
   useEffect(() => {
     fetchCourses();
     fetchStudent();
-    fetchTeacher();
+    if (!tmsuserId) {
+      fetchTeacher();
+    }
   }, []);
 
   const fetchClasses = async (courseId) => {
@@ -405,35 +421,39 @@ function DocumentAdd() {
                   </div>
                 )}
               </div>
-
-              <div class="col-md-6 col-12 mb-4">
-                <lable class="">
-                  {storedConfigure?.employee || "Employee"}
-                  <span class="text-danger">*</span>
-                </lable>
-                <select
-                  {...formik.getFieldProps("userId")}
-                  name="userId"
-                  className={`form-select  ${
-                    formik.touched.userId && formik.errors.userId
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  aria-label="Default select example"
-                >
-                  <option disabled></option>
-                  {userData &&
-                    userData.map((userId) => (
-                      <option key={userId.id} value={userId.id}>
-                        {userId.teacherNames}
-                      </option>
-                    ))}
-                </select>
-                {formik.touched.userId && formik.errors.userId && (
-                  <div className="invalid-feedback">{formik.errors.userId}</div>
-                )}
-              </div>
-
+              {tmsuserId === null ? (
+                <div class="col-md-6 col-12 mb-4">
+                  <lable class="">
+                    {storedConfigure?.employee || "Teacher"}
+                    <span class="text-danger">*</span>
+                  </lable>
+                  <select
+                    {...formik.getFieldProps("userId")}
+                    name="userId"
+                    className={`form-select  ${
+                      formik.touched.userId && formik.errors.userId
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                    aria-label="Default select example"
+                  >
+                    <option disabled></option>
+                    {userData &&
+                      userData.map((userId) => (
+                        <option key={userId.id} value={userId.id}>
+                          {userId.teacherNames}
+                        </option>
+                      ))}
+                  </select>
+                  {formik.touched.userId && formik.errors.userId && (
+                    <div className="invalid-feedback">
+                      {formik.errors.userId}
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <></>
+              )}
               <div className="col-md-6 col-12 mb-4">
                 <label className="">
                   Days<span className="text-danger">*</span>

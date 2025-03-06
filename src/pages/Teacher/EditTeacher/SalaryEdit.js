@@ -71,7 +71,7 @@ const SalaryEdit = forwardRef(
             }
           } else {
             const response = await api.post(
-              `/createSalaryCreationWithCenterId/${formData.staff_id}`,
+              `/createUserSalaryCreation/${formData.staff_id}`,
               values,
               {
                 headers: {
