@@ -20,8 +20,9 @@ const validationSchema = Yup.object({
   // parentName: Yup.string().required("Parent name is required"),
   // parentEmail: Yup.string().email("Invalid email format"),
   // address: Yup.string().required("Address is required"),
-  postalCode: Yup.string().matches(/^\d{6}$/, "Postal code must be 6 digits"),
-  // .required("Postal code is required"),
+  postalCode: Yup.string()
+    .matches(/^\d{6}$/, "Postal code must be 6 digits")
+    .required("Postal code is required"),
   termsAndCondition: Yup.boolean()
     .oneOf([true], "Please accept the terms and conditions")
     .required("Terms and conditions must be accepted"),
@@ -631,7 +632,7 @@ function NewLeadsEdit() {
               </div>
               <div className="col-md-6 mb-3">
                 <label className="form-label">Postal Code</label>
-                {/* <span className="text-danger">*</span> */}
+                <span className="text-danger">*</span>
                 <input
                   name="postalCode"
                   type="text"

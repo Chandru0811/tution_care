@@ -269,18 +269,33 @@ function Sidebar() {
             {
               title:
                 storedConfigure?.documentManagement || "Document Management",
+
+              // title: storedConfigure?.documentManagement?.trim()
+              //   ? `${storedConfigure.documentManagement} `
+              //   : "Document Management",
+
+              // title:
+              //   storedConfigure?.documentManagement || "Document Management",
               icon: "TbFolderCog",
               isOpen: false,
               subMenus: [
                 {
-                  title:
-                    storedConfigure?.documentManagement || "Document Folder",
+                  title: storedConfigure?.assignManagement?.trim()
+                    ? `${storedConfigure.assignManagement} Folder`
+                    : "Document Folder",
+
+                  // title:
+                  //   storedConfigure?.documentManagement || "Document Folder",
                   path: "/document",
                   access: storedScreens.documentListingIndex,
                 },
                 {
-                  title:
-                    storedConfigure?.documentManagement || "Document Files",
+                  title: storedConfigure?.assignManagement?.trim()
+                    ? `${storedConfigure.assignManagement} Files`
+                    : "Document Files",
+
+                  // title:
+                  //   storedConfigure?.documentManagement || "Document Files",
                   path: "/documentfile",
                   access: storedScreens.documentFileIndex,
                 },
@@ -294,19 +309,29 @@ function Sidebar() {
             {
               title:
                 storedConfigure?.assignManagement || "Assignment Management",
-              icon: "MdOutlineAssignment",
+
+              // title: storedConfigure?.assignManagement?.trim()
+              //   ? `${storedConfigure.assignManagement} `
+              //   : "Assignment Management",
+
               isOpen: false,
               subMenus: [
                 {
-                  title:
-                    storedConfigure?.assignManagement ||
-                    "Assignment Questionnaire",
+                  title: storedConfigure?.assignManagement?.trim()
+                    ? `${storedConfigure.assignManagement} Questionnaire`
+                    : "Assignment Questionnaire",
+                  // title:
+                  //   storedConfigure?.assignManagement ||
+                  //   "Assignment Questionnaire",
                   path: "/assignment",
                   access: storedScreens.questionIndex,
                 },
                 {
-                  title:
-                    storedConfigure?.assignManagement || "Assignment Result",
+                  title: storedConfigure?.assignManagement?.trim()
+                    ? `${storedConfigure.assignManagement} Result`
+                    : "Assignment Result",
+                  // title:
+                  //   storedConfigure?.assignManagement || "Assignment Result",
                   path: "/assignmentResult",
                   access: storedScreens.answerIndex,
                 },
