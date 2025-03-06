@@ -158,8 +158,6 @@ function DocumentAdd() {
           `getOptimizedCourseInfo?centerId=${centerId}&userId=${tmsuserId}`
         );
         setCourseData(response.data);
-        console.log("Courses", response.data);
-        
       }
     } catch (error) {
       toast.error(error);
@@ -197,8 +195,15 @@ function DocumentAdd() {
 
   const fetchClasses = async (courseId) => {
     try {
-      const classes = await fetchAllClassesWithIdsC(courseId);
-      setClassData(classes);
+      if(!tmsuserId){
+        const classes = await fetchAllClassesWithIdsC(courseId);
+        setClassData(classes);
+      }else {
+        const response = await api.get(
+          `getOptimizedClassInfo?centerId=${centerId}&userId=${tmsuserId}&courseId=${courseId}`
+        );
+        setClassData(response.data);
+      }
     } catch (error) {
       toast.error(error);
     }
