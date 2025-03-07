@@ -23,8 +23,6 @@ function CurriculumOutletEdit({ id, onSuccess, courseId, handleMenuClose }) {
     setOpen(true);
   };
 
-
-
   const validationSchema = Yup.object({
     effectiveDate: Yup.string().required("*Effective Date is required"),
     name: Yup.string().required("*Name Code is required"),
@@ -96,12 +94,15 @@ function CurriculumOutletEdit({ id, onSuccess, courseId, handleMenuClose }) {
 
   return (
     <>
-      <p
-        onClick={handleOpen}
-        className="text-start mb-0 menuitem-style"
-      >
-        Edit
-      </p> 
+      <div onClick={handleOpen} className="w-100">
+        <p
+          className="text-start mb-0 menuitem-style"
+          style={{ whiteSpace: "nowrap" }}
+        >
+          Edit
+        </p>
+      </div>
+
       <Dialog
         open={open}
         onClose={handleClose}
@@ -182,7 +183,8 @@ function CurriculumOutletEdit({ id, onSuccess, courseId, handleMenuClose }) {
             </div>
           </DialogContent>
           <DialogActions>
-            <button type="button"
+            <button
+              type="button"
               className="btn btn-sm btn-border bg-light text-dark"
               onClick={handleClose}
             >
