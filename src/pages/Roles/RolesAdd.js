@@ -40,7 +40,7 @@ function RolesAdd() {
       );
       if (response.data.length > 0) {
         setRoleName(response.data);
-        setSelectedRole(response.data[0].name); // Set first role as default
+        setSelectedRole(response.data[0].roleName); // Set first role as default
         setSelectedRoleId(response.data[0].id); // Set first role ID as default
         // formik.setValues(response.data)
       }
@@ -52,25 +52,6 @@ function RolesAdd() {
     fetchRole();
   }, []);
 
-  const handleRoleChange = async (e) => {
-    const selectedId = e.target.value;
-    const selectedRoleObj = roleName.find(
-      (role) => role.id.toString() === selectedId
-    );
-
-    console.log("selectedRoleObj", selectedRoleObj);
-
-    if (selectedRoleObj) {
-      setLoading(true); // Show loader
-      formik.setValues(selectedRoleObj);
-      setSelectedRole(selectedRoleObj.name); // Set role name
-      setSelectedRoleId(selectedRoleObj.id); // Set role ID
-
-      // Simulate async operation (Formik update)
-      await new Promise((resolve) => setTimeout(resolve, 500)); // Optional delay
-      setLoading(false); // Hide loader
-    }
-  };
   const formik = useFormik({
     initialValues: {
       courseIndex: true,
@@ -947,6 +928,28 @@ function RolesAdd() {
       contactUsSettingIndex: true,
     });
   };
+  const handleRoleChange = async (e) => {
+    const selectedId = e.target.value;
+    const selectedRoleObj = roleName.find(
+      (role) => role.id.toString() === selectedId
+    );
+    console.log("first", formik.values);
+
+    console.log("selectedRoleObj", typeof selectedId);
+
+    if (selectedRoleObj) {
+      setLoading(true); // Show loader
+      formik.setFieldValue("roleName", selectedRoleObj.roleName);
+      formik.setFieldValue("roleId", selectedRoleObj.id);
+      formik.setValues(selectedRoleObj);
+      setSelectedRole(selectedRoleObj.roleName); // Set role name
+      setSelectedRoleId(selectedRoleObj.id); // Set role ID
+
+      // Simulate async operation (Formik update)
+      await new Promise((resolve) => setTimeout(resolve, 500)); // Optional delay
+      setLoading(false); // Hide loader
+    }
+  };
   const getRoleData = async () => {
     try {
       const response = await api.get(
@@ -1009,9 +1012,10 @@ function RolesAdd() {
                   <div className="input-group">
                     <select
                       className="form-select form-select-sm iconInput"
-                      name="roleName"
+                      // name="roleName"
+                      value={selectedRoleId}
                       onChange={handleRoleChange}
-                      disabled={loading}
+                      // disabled={loading}
                     >
                       <option disabled>Select Role</option>
                       {roleName &&
