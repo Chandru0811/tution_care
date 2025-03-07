@@ -33,8 +33,6 @@ function DocumentAdd() {
   const navigate = useNavigate();
   const centerId = localStorage.getItem("tmscenterId");
   const tmsuserId = localStorage.getItem("tmsuserId");
-  console.log("tmsuserId", tmsuserId);
-  
   const [folderCategory, setFolderCategory] = useState("group");
   const [classData, setClassData] = useState(null);
   const [courseData, setCourseData] = useState(null);
@@ -43,6 +41,7 @@ function DocumentAdd() {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const userName = localStorage.getItem("tmsuserName");
   const [batchData, setBatchData] = useState(null);
+  const [dayData, setDayData] = useState(null);
 
   const formik = useFormik({
     initialValues: {
@@ -150,14 +149,15 @@ function DocumentAdd() {
 
   const fetchCourses = async () => {
     try {
-      if(!tmsuserId){
+      if (!tmsuserId) {
         const courses = await fetchAllCoursesWithIdsC(centerId);
         setCourseData(courses);
-      }else {
+      } else {
         const response = await api.get(
           `getOptimizedCourseInfo?centerId=${centerId}&userId=${tmsuserId}`
         );
         setCourseData(response.data);
+        console.log("setCourseData::", response.data);
       }
     } catch (error) {
       toast.error(error);
@@ -185,20 +185,13 @@ function DocumentAdd() {
       toast.error(error);
     }
   };
-  useEffect(() => {
-    fetchCourses();
-    fetchStudent();
-    if (!tmsuserId) {
-      fetchTeacher();
-    }
-  }, []);
 
   const fetchClasses = async (courseId) => {
     try {
-      if(!tmsuserId){
+      if (!tmsuserId) {
         const classes = await fetchAllClassesWithIdsC(courseId);
         setClassData(classes);
-      }else {
+      } else {
         const response = await api.get(
           `getOptimizedClassInfo?centerId=${centerId}&userId=${tmsuserId}&courseId=${courseId}`
         );
@@ -232,6 +225,20 @@ function DocumentAdd() {
     return `${year}-${month}-${day}`;
   };
 
+  const fetchDayData = async () => {
+    if (tmsuserId) {
+      try {
+        const response = await api.get(
+          `getOptimizedWorkingDaysInfo?centerId=${centerId}&userId=${tmsuserId}`
+        );
+        const days = response.data.workingDays;
+        setDayData(days || []);
+      } catch (error) {
+        toast.error(error.message);
+      }
+    }
+  };
+
   const fetchBatchandTeacherData = async (day) => {
     try {
       const response = await api.get(
@@ -247,8 +254,16 @@ function DocumentAdd() {
     if (formik.values.day) {
       fetchBatchandTeacherData(formik.values.day);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.day]);
+
+  useEffect(() => {
+    fetchCourses();
+    fetchStudent();
+    if (!tmsuserId) {
+      fetchTeacher();
+    }
+    fetchDayData();
+  }, []);
 
   const formatTo12Hour = (time) => {
     const [hours, minutes] = time.split(":");
@@ -460,12 +475,12 @@ function DocumentAdd() {
                 <></>
               )}
               <div className="col-md-6 col-12 mb-4">
-                <label className="">
+                <label>
                   Days<span className="text-danger">*</span>
                 </label>
                 <select
                   {...formik.getFieldProps("day")}
-                  className={`form-select  ${
+                  className={`form-select ${
                     formik.touched.day && formik.errors.day ? "is-invalid" : ""
                   }`}
                   name="day"
@@ -473,15 +488,34 @@ function DocumentAdd() {
                   onBlur={formik.handleBlur}
                   value={formik.values.day}
                 >
-                  <option></option>
-                  <option value="MONDAY">Monday</option>
-                  <option value="TUESDAY">Tuesday</option>
-                  <option value="WEDNESDAY">Wednesday</option>
-                  <option value="THURSDAY">Thursday</option>
-                  <option value="FRIDAY">Friday</option>
-                  <option value="SATURDAY">Saturday</option>
-                  <option value="SUNDAY">Sunday</option>
+                  {tmsuserId ? (
+                    dayData && dayData.length > 0 ? (
+                      <>
+                        <option selected></option>
+                        {dayData.map((day, index) => (
+                          <option key={index} value={day}>
+                            {day.charAt(0).toUpperCase() +
+                              day.slice(1).toLowerCase()}
+                          </option>
+                        ))}
+                      </>
+                    ) : (
+                      <option value="">No Days available</option>
+                    )
+                  ) : (
+                    <>
+                      <option value="">Select a day</option>
+                      <option value="MONDAY">Monday</option>
+                      <option value="TUESDAY">Tuesday</option>
+                      <option value="WEDNESDAY">Wednesday</option>
+                      <option value="THURSDAY">Thursday</option>
+                      <option value="FRIDAY">Friday</option>
+                      <option value="SATURDAY">Saturday</option>
+                      <option value="SUNDAY">Sunday</option>
+                    </>
+                  )}
                 </select>
+
                 {formik.touched.day && formik.errors.day && (
                   <div className="invalid-feedback">{formik.errors.day}</div>
                 )}

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Formik, useFormik } from "formik";
+import { useFormik } from "formik";
 import * as Yup from "yup";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
@@ -19,14 +19,14 @@ function AssignmentAdd() {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const userName = localStorage.getItem("tmsuserName");
   const centerId = localStorage.getItem("tmscenterId");
-  const tmsuserInfo = localStorage.getItem("tmsuserInfo");
-  console.log("tmsuserInfo", tmsuserInfo);
-
+  const tmsuserId = localStorage.getItem("tmsuserId");
+  const [dayData, setDayData] = useState(null);
   const [batchData, setBatchData] = useState(null);
   const [selectedStudents, setSelectedStudents] = useState([]);
   const [selectedBatchTimes, setSelectedBatchTimes] = useState([]);
   const [teacherData, setTeacherData] = useState(null);
   const [uploadedFiles, setUploadedFiles] = useState([]);
+  const [userData, setUserData] = useState(null);
   const storedConfigure = JSON.parse(
     localStorage.getItem("tmsappConfigInfo") || "{}"
   );
@@ -92,7 +92,7 @@ function AssignmentAdd() {
       center: centerId,
       assignmentName: "",
       course: "",
-      userId: "",
+      userId: tmsuserId || "",
       classListing: "",
       date: "",
       day: "",
@@ -126,7 +126,7 @@ function AssignmentAdd() {
         });
         const formData = new FormData();
         formData.append("centerId", centerId);
-        formData.append("userId", values.userId);
+        formData.append("userId", tmsuserId || values.userId);
         formData.append("assignmentName", values.assignmentName);
         formData.append("assignmentReason", values.assignmentReason);
         formData.append("day", values.day);
@@ -206,16 +206,14 @@ function AssignmentAdd() {
 
   const fetchCourses = async () => {
     try {
-      if (Array.isArray(tmsuserInfo) && tmsuserInfo.length > 0) {
-        // If tmsuserInfo has values, trigger the first condition
-        const response = await api.get(
-          `getOptimizedCourseInfo?centerId=${centerId}&userId=${formik.values.userId}`
-        );
-        setCourseData(response.data);
-      } else {
-        // If tmsuserInfo is an empty array, trigger the second condition
+      if (!tmsuserId) {
         const courses = await fetchAllCoursesWithIdsC(centerId);
         setCourseData(courses);
+      } else {
+        const response = await api.get(
+          `getOptimizedCourseInfo?centerId=${centerId}&userId=${tmsuserId}`
+        );
+        setCourseData(response.data);
       }
     } catch (error) {
       toast.error(error);
@@ -247,6 +245,17 @@ function AssignmentAdd() {
     try {
       const classes = await fetchAllClassesWithIdsC(courseId);
       setClassData(classes);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
+
+  const fetchTeacher = async () => {
+    try {
+      const response = await api.get(
+        `/getTeacherListByCenterScheduleId/${centerId}`
+      );
+      setUserData(response.data);
     } catch (error) {
       toast.error(error);
     }
@@ -344,6 +353,20 @@ function AssignmentAdd() {
     }
   };
 
+  const fetchDayData = async () => {
+    if (tmsuserId) {
+      try {
+        const response = await api.get(
+          `getOptimizedWorkingDaysInfo?centerId=${centerId}&userId=${tmsuserId}`
+        );
+        const days = response.data.workingDays;
+        setDayData(days || []);
+      } catch (error) {
+        toast.error(error.message);
+      }
+    }
+  };
+
   // Handle file removal
   const handleFileRemove = (index) => {
     const filteredFiles = uploadedFiles.filter((_, i) => i !== index); // Remove the file at the given index
@@ -376,9 +399,12 @@ function AssignmentAdd() {
   }, [formik.values.day]);
 
   useEffect(() => {
-    fetchCourses(centerId);
-    // fetchTeacher(centerId);
-    fetchStudent(centerId);
+    fetchCourses();
+    fetchStudent();
+    if (!tmsuserId) {
+      fetchTeacher();
+    }
+    fetchDayData();
   }, []);
 
   return (
@@ -541,7 +567,7 @@ function AssignmentAdd() {
                 </label>
                 <select
                   {...formik.getFieldProps("day")}
-                  className={`form-select  ${
+                  className={`form-select ${
                     formik.touched.day && formik.errors.day ? "is-invalid" : ""
                   }`}
                   name="day"
@@ -549,46 +575,70 @@ function AssignmentAdd() {
                   onBlur={formik.handleBlur}
                   value={formik.values.day}
                 >
-                  <option></option>
-                  <option value="MONDAY">Monday</option>
-                  <option value="TUESDAY">Tuesday</option>
-                  <option value="WEDNESDAY">Wednesday</option>
-                  <option value="THURSDAY">Thursday</option>
-                  <option value="FRIDAY">Friday</option>
-                  <option value="SATURDAY">Saturday</option>
-                  <option value="SUNDAY">Sunday</option>
+                  {tmsuserId ? (
+                    dayData && dayData.length > 0 ? (
+                      <>
+                        <option selected></option>
+                        {dayData.map((day, index) => (
+                          <option key={index} value={day}>
+                            {day.charAt(0).toUpperCase() +
+                              day.slice(1).toLowerCase()}
+                          </option>
+                        ))}
+                      </>
+                    ) : (
+                      <option value="">No Days available</option>
+                    )
+                  ) : (
+                    <>
+                      <option value="">Select a day</option>
+                      <option value="MONDAY">Monday</option>
+                      <option value="TUESDAY">Tuesday</option>
+                      <option value="WEDNESDAY">Wednesday</option>
+                      <option value="THURSDAY">Thursday</option>
+                      <option value="FRIDAY">Friday</option>
+                      <option value="SATURDAY">Saturday</option>
+                      <option value="SUNDAY">Sunday</option>
+                    </>
+                  )}
                 </select>
+
                 {formik.touched.day && formik.errors.day && (
                   <div className="invalid-feedback">{formik.errors.day}</div>
                 )}
               </div>
-              <div className="col-md-6 col-12 mb-4">
-                <label className="form-label">
-                  {storedConfigure?.employee || "Employee"}
-                  <span className="text-danger">*</span>
-                </label>
-                <select
-                  {...formik.getFieldProps("userId")}
-                  name="userId"
-                  className={`form-select  ${
-                    formik.touched.userId && formik.errors.userId
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  aria-label="Default select example"
-                >
-                  <option disabled></option>
-                  {teacherData &&
-                    teacherData.map((userId) => (
-                      <option key={userId.id} value={userId.teacherId}>
-                        {userId.teacherName}
-                      </option>
-                    ))}
-                </select>
-                {formik.touched.userId && formik.errors.userId && (
-                  <div className="invalid-feedback">{formik.errors.userId}</div>
-                )}
-              </div>
+              {tmsuserId === null ? (
+                <div class="col-md-6 col-12 mb-4">
+                  <lable className="form-label">
+                    {storedConfigure?.employee || "Teacher"}
+                    <span class="text-danger">*</span>
+                  </lable>
+                  <select
+                    {...formik.getFieldProps("userId")}
+                    name="userId"
+                    className={`form-select  ${
+                      formik.touched.userId && formik.errors.userId
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                  >
+                    <option disabled></option>
+                    {userData &&
+                      userData.map((userId) => (
+                        <option key={userId.id} value={userId.id}>
+                          {userId.teacherNames}
+                        </option>
+                      ))}
+                  </select>
+                  {formik.touched.userId && formik.errors.userId && (
+                    <div className="invalid-feedback">
+                      {formik.errors.userId}
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <></>
+              )}
               <div className="col-md-6 col-12 mb-4">
                 <label className="form-label">
                   Batch Time<span className="text-danger">*</span>
@@ -743,76 +793,6 @@ function AssignmentAdd() {
               </div>
 
               <div className="col-md-6 col-12 mb-2">
-                {/* <div className="row">
-                  <label className="form-label">
-                    Files<span className="text-danger">*</span>
-                  </label>
-                  <div className="input-group">
-                    <input
-                      className="form-control"
-                      type="file"
-                      multiple
-                      accept="image/jpeg, image/png, application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                      onChange={(event) => {
-                        const files = Array.from(event.target.files);
-                        let errors = [];
-
-                        // Validate each file
-                        files.forEach((file) => {
-                          if (
-                            ![
-                              "image/jpeg",
-                              "image/png",
-                              "application/pdf",
-                              "application/msword",
-                              "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-                            ].includes(file.type)
-                          ) {
-                            errors.push(
-                              `${file.name} is not an allowed file type.`
-                            );
-                          }
-
-                          if (file.size > 5 * 1024 * 1024) {
-                            errors.push(
-                              `${file.name} exceeds the 5MB size limit.`
-                            );
-                          }
-
-                          if (file.name.length > 50) {
-                            errors.push(
-                              `${file.name} has a name longer than 50 characters.`
-                            );
-                          }
-                        });
-
-                        // Check total size
-                        const totalSize = files.reduce(
-                          (total, file) => total + file.size,
-                          0
-                        );
-                        if (totalSize > 1024 * 1024 * 1024) {
-                          errors.push("Total file size exceeds 1GB.");
-                        }
-
-                        if (errors.length > 0) {
-                          formik.setFieldError("files", errors.join(" "));
-                        } else {
-                          formik.setFieldValue("files", files); // Set files if valid
-                          formik.setFieldError("files", null); // Clear errors
-                        }
-                      }}
-                    />
-                  </div>
-                  {formik.errors.files && (
-                    <small className="text-danger">{formik.errors.files}</small>
-                  )}
-                  <label className="text-muted">
-                    Note: Only JPG, PNG, PDF, DOC, or DOCX files are allowed.
-                    Each file must be less than 5MB. Total size must be under
-                    1GB, and file names must not exceed 50 characters.
-                  </label>
-                </div> */}
                 <div className="row">
                   <label className="form-label">
                     Files <span className="text-danger">*</span>
@@ -824,12 +804,6 @@ function AssignmentAdd() {
                     accept="image/jpeg, image/png, application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
                     onChange={handleFileChange}
                   />
-                  {/* Display the file count inside or near the input field */}
-                  {/* <div className="file-count-display">
-                    {uploadedFiles.length > 0
-                      ? `${uploadedFiles.length} file(s) selected`
-                      : "No files selected"}
-                  </div> */}
                   {formik.errors.files && (
                     <small className="text-danger">{formik.errors.files}</small>
                   )}

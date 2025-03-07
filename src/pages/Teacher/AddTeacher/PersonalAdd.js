@@ -21,13 +21,18 @@ const PersonalAdd = forwardRef(
       libraries,
     });
     const [idTypeData, setIdTypeData] = useState(null);
-    const [nationalityData, setNationalityData] = useState(null);
     const userName = localStorage.getItem("tmsuserName");
     const centerId = localStorage.getItem("tmscenterId");
     const userId = formData.user_id;
     const [roleData, setRoleData] = useState(null);
     const [centreData, setCentreData] = useState([]);
-    console.log("isGeoFenceForTeacher", centreData?.isGeoFenceForTeacher);
+    const [countryData, setCountryData] = useState([]);
+    const [citizenshipData, setCitizenshipData] = useState([]);
+    const [nationalityData, setNationalityData] = useState([]);
+    // console.log("isGeoFenceForTeacher", centreData?.isGeoFenceForTeacher);
+    // console.log("countryData", countryData);
+    // console.log("citizenshipData", citizenshipData);
+    // console.log("nationalityData", nationalityData);
 
     const validationSchema = Yup.object().shape({
       teacherName: Yup.string().required("*Name is required"),
@@ -86,7 +91,6 @@ const PersonalAdd = forwardRef(
         citizenshipId: formData.citizenshipId,
         nationalityId: formData.nationalityId || "",
         countryId: formData.countryId,
-        // nationality: formData.nationality || "",
         file: formData.file || "",
         shortIntroduction: formData.shortIntroduction,
         gender: formData.gender,
@@ -123,12 +127,11 @@ const PersonalAdd = forwardRef(
           formData.append("idTypeId", values.idTypeId);
           formData.append("idNo", values.idNo);
           formData.append("age", 25);
-          formData.append("citizenshipId", values.citizenshipId);
           formData.append("shortIntroduction", values.shortIntroduction || "");
           formData.append("gender", values.gender);
           formData.append("countryId", values.countryId);
-          // formData.append("nationality", nationalityName.nationality);
           formData.append("nationalityId", values.nationalityId);
+          formData.append("citizenshipId", values.citizenshipId);
           formData.append("status", values.status);
           formData.append("createdBy", userName);
           if (userId === null || userId === undefined) {
@@ -223,10 +226,14 @@ const PersonalAdd = forwardRef(
       }
     };
 
-    const fetchCitizenShipData = async () => {
+    const fetchCNCData = async () => {
       try {
-        const nationalityData = await fetchAllNationality(centerId);
-        setNationalityData(nationalityData);
+        const citizenship = await api.get(`/getAllCitizenshipTypeWithCenterId/${centerId}`);
+        setCitizenshipData(citizenship.data);
+        const country = await api.get(`/getAllCountryTypeWithCenterId/${centerId}`);
+        setCountryData(country.data);
+        const nationality = await api.get(`/getAllNationalityTypeWithCenterId/${centerId}`);
+        setNationalityData(nationality.data);
       } catch (error) {
         toast.error(error);
       }
@@ -284,7 +291,7 @@ const PersonalAdd = forwardRef(
 
     useEffect(() => {
       fetchIDTypeData();
-      fetchCitizenShipData();
+      fetchCNCData();
       rolesData();
       centerData();
     }, []);
@@ -403,9 +410,9 @@ const PersonalAdd = forwardRef(
                 onBlur={formik.handleBlur}
                 value={formik.values.countryId}
               >
-                <option value="" selected></option>
-                {nationalityData &&
-                  nationalityData.map((countryId) => (
+                <option selected></option>
+                {countryData &&
+                  countryData.map((countryId) => (
                     <option key={countryId.id} value={countryId.id}>
                       {countryId.country}
                     </option>
@@ -428,15 +435,12 @@ const PersonalAdd = forwardRef(
                 value={formik.values.nationalityId}
               >
                 <option selected></option>
-                <option value="1">Indian</option>
-                <option value="2">Chinese</option>
-                {/* <option value="1"></option> */}
-                {/* {nationalityData &&
+                {nationalityData &&
                   nationalityData.map((nationalityId) => (
                     <option key={nationalityId.id} value={nationalityId.id}>
                       {nationalityId.nationality}
                     </option>
-                  ))} */}
+                  ))}
               </select>
               {formik.touched.nationalityId && formik.errors.nationalityId && (
                 <div className="error text-danger">
@@ -455,18 +459,15 @@ const PersonalAdd = forwardRef(
                 value={formik.values.citizenshipId}
               >
                 <option selected></option>
-                <option value="1">1st Year PR</option>
-                <option value="2">2nd Year PR</option>
-                {/* <option value="3rd Year PR">3rd Year PR</option> */}
-                {/* {nationalityData &&
-                    nationalityData.map((citizenshipId) => (
+                {citizenshipData &&
+                    citizenshipData.map((citizenshipId) => (
                       <option
                         key={citizenshipId.id}
-                        value={citizenshipId.citizenshipId}
+                        value={citizenshipId.id}
                       >
-                        {citizenshipId.citizenshipId}
+                        {citizenshipId.citizenship}
                       </option>
-                    ))} */}
+                    ))}
               </select>
               {formik.touched.citizenshipId && formik.errors.citizenshipId && (
                 <div className="error text-danger">
@@ -476,7 +477,7 @@ const PersonalAdd = forwardRef(
             </div>
             {userId === undefined && (
               <>
-                <div className="col-md-6 col-12 mb-3">
+                <div className="col-md-6 col-12 mb-2 mt-3">
                   <div className="form-group  col-sm ">
                     <label>Photo</label>
                     <span className="text-danger">*</span>

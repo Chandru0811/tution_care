@@ -16,7 +16,9 @@ const libraries = ["places"];
 const PersonalEdit = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const [idTypeData, setIdTypeData] = useState(null);
-    const [nationalityData, setNationalityData] = useState(null);
+    const [countryData, setCountryData] = useState([]);
+    const [citizenshipData, setCitizenshipData] = useState([]);
+    const [nationalityData, setNationalityData] = useState([]);
     const userName = localStorage.getItem("tmsuserName");
     const centerId = localStorage.getItem("tmscenterId");
     const [roleData, setRoleData] = useState(null);
@@ -59,12 +61,11 @@ const PersonalEdit = forwardRef(
         dateOfBirth: formData.dateOfBirth || "",
         idTypeId: formData.idTypeId || "",
         idNo: formData.idNo || "",
+        countryId: formData.countryId,
         nationalityId: formData.nationalityId || "",
         citizenshipId: formData.citizenshipId || "",
         photo: formData.photo || "",
         employeeType: null || null,
-        countryId: formData.countryId,
-        // nationality: formData.nationality || "",
         status: formData.status || "",
         age: 0,
         shortIntroduction: formData.shortIntroduction || "",
@@ -162,9 +163,8 @@ const PersonalEdit = forwardRef(
             roleId: role, // Include role in formData
           }));
           formik.setValues({
-            ...response.data, 
+            ...response.data,
             dateOfBirth: dateOfBirth,
-            // citizenshipId : 1
           });
         } catch (error) {
           console.error("Error fetching data:", error);
@@ -184,10 +184,20 @@ const PersonalEdit = forwardRef(
       }
     };
 
-    const fetchCitizenShipData = async () => {
+    const fetchCNCData = async () => {
       try {
-        const nationalityData = await fetchAllNationality(centerId);
-        setNationalityData(nationalityData);
+        const citizenship = await api.get(
+          `/getAllCitizenshipTypeWithCenterId/${centerId}`
+        );
+        setCitizenshipData(citizenship.data);
+        const country = await api.get(
+          `/getAllCountryTypeWithCenterId/${centerId}`
+        );
+        setCountryData(country.data);
+        const nationality = await api.get(
+          `/getAllNationalityTypeWithCenterId/${centerId}`
+        );
+        setNationalityData(nationality.data);
       } catch (error) {
         toast.error(error);
       }
@@ -210,7 +220,7 @@ const PersonalEdit = forwardRef(
     };
     useEffect(() => {
       fetchIDTypeData();
-      fetchCitizenShipData();
+      fetchCNCData();
       rolesData();
       centerData();
     }, []);
@@ -373,8 +383,8 @@ const PersonalEdit = forwardRef(
                   value={formik.values.countryId}
                 >
                   <option selected></option>
-                  {nationalityData &&
-                    nationalityData.map((countryId) => (
+                  {countryData &&
+                    countryData.map((countryId) => (
                       <option key={countryId.id} value={countryId.id}>
                         {countryId.country}
                       </option>
@@ -397,14 +407,12 @@ const PersonalEdit = forwardRef(
                   value={formik.values.nationalityId}
                 >
                   <option selected></option>
-                  <option value="1">Indian</option>
-                  <option value="2">Chinese</option>
-                  {/* {nationalityData &&
+                  {nationalityData &&
                     nationalityData.map((nationalityId) => (
                       <option key={nationalityId.id} value={nationalityId.id}>
                         {nationalityId.nationality}
                       </option>
-                    ))} */}
+                    ))}
                 </select>
                 {formik.touched.nationalityId &&
                   formik.errors.nationalityId && (
@@ -424,23 +432,22 @@ const PersonalEdit = forwardRef(
                   value={formik.values.citizenshipId}
                 >
                   <option selected></option>
-                  <option value="1">1st Year PR</option>
-                  <option value="2">2nd Year PR</option>
-                  {/* {nationalityData &&
-                           nationalityData.map((citizenshipId) => (
-                             <option
-                               key={citizenshipId.id}
-                               value={citizenshipId.citizenshipId}
-                             >
-                               {citizenshipId.citizenshipId}
-                             </option>
-                           ))} */}
+                  {citizenshipData &&
+                    citizenshipData.map((citizenshipId) => (
+                      <option
+                        key={citizenshipId.id}
+                        value={citizenshipId.id}
+                      >
+                        {citizenshipId.citizenship}
+                      </option>
+                    ))}
                 </select>
-                {formik.touched.citizenshipId && formik.errors.citizenshipId && (
-                  <div className="error text-danger">
-                    <small>{formik.errors.citizenshipId}</small>
-                  </div>
-                )}
+                {formik.touched.citizenshipId &&
+                  formik.errors.citizenshipId && (
+                    <div className="error text-danger">
+                      <small>{formik.errors.citizenshipId}</small>
+                    </div>
+                  )}
               </div>
               <div class="col-md-6 col-12 mb-2 mt-3">
                 <div class="form-group col-sm">

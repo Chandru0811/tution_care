@@ -166,15 +166,6 @@ function AssignmentEdit() {
     }
   };
 
-  // const fetchTeacher = async () => {
-  //   try {
-  //     const teacher = await fetchAllTeacherListByCenter(centerId);
-  //     setUserData(teacher);
-  //   } catch (error) {
-  //     toast.error(error);
-  //   }
-  // };
-
   const fetchStudent = async () => {
     try {
       const studentList = await fetchAllStudentListByCenter(centerId); // API call to fetch students
@@ -204,22 +195,6 @@ function AssignmentEdit() {
       toast.error(error);
     }
   };
-
-  // const fetchBatchandTeacherData = async (day) => {
-  //   try {
-  //     const response = await api.get(`getTeacherWithBatchListByDay?day=${day}`);
-  //     setBatchData(response.data.batchList);
-  //   } catch (error) {
-  //     toast.error(error.message);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   if (formik.values.day) {
-  //     fetchBatchandTeacherData(formik.values.day);
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [formik.values.day]);
 
   const fetchBatchandTeacherData = async (day) => {
     try {
@@ -810,22 +785,6 @@ function AssignmentEdit() {
                               >
                                 {decodeURIComponent(fileUrl.split("/").pop())}
                               </a>
-                              {/* <button
-                                type="button"
-                                className="btn btn-sm btn-danger"
-                                onClick={() => {
-                                  const updatedFiles = [
-                                    ...formik.values.questions,
-                                  ];
-                                  updatedFiles.splice(index, 1);
-                                  formik.setFieldValue(
-                                    "questions",
-                                    updatedFiles
-                                  );
-                                }}
-                              >
-                                <CgTrash/>
-                              </button> */}
                             </ol>
                           ))}
                         </ul>

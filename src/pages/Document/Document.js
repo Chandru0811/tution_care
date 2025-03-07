@@ -19,6 +19,7 @@ import GlobalDelete from "../../components/common/GlobalDelete";
 
 const Document = () => {
   const centerId = localStorage.getItem("tmscenterId");
+  const userId = localStorage.getItem("tmsuserId");
   const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   const [filters, setFilters] = useState({
     centerId: centerId,
@@ -200,14 +201,17 @@ const Document = () => {
   const getDocumentData = async () => {
     try {
       setLoading(true);
-      // Dynamically construct query parameters based on filters
+
+      // Construct query parameters based on filters
       const queryParams = new URLSearchParams();
-      if (!isClearFilterClicked) {
-        if (filters.centerId) {
-          queryParams.append("centerId", filters.centerId);
-        } else if (centerIDLocal && centerIDLocal !== "undefined") {
-          queryParams.append("centerId", centerIDLocal);
-        }
+
+      // Ensure centerId is always passed
+      if (filters.centerId) {
+        queryParams.append("centerId", filters.centerId);
+      } else if (centerIDLocal && centerIDLocal !== "undefined") {
+        queryParams.append("centerId", centerIDLocal);
+      } else if (centerId) {
+        queryParams.append("centerId", centerId);
       }
 
       // Loop through other filters and add key-value pairs if they have a value
@@ -220,9 +224,10 @@ const Document = () => {
       const response = await api.get(
         `/getDocumentFolderWithCustomInfo?${queryParams.toString()}`
       );
+
       setData(response.data);
     } catch (error) {
-      toast.error("Error Fetching Data : ", error);
+      toast.error("Error Fetching Data: ", error);
     } finally {
       setLoading(false);
       setIsClearFilterClicked(false);
@@ -348,25 +353,27 @@ const Document = () => {
                 style={{ width: "160px" }}
               />
             </div>
-            <div className="form-group mb-0 ms-2 mb-1">
-              <select
-                className="form-select form-select-sm center_list"
-                name="userId"
-                style={{ width: "100%" }}
-                onChange={handleFilterChange}
-                value={filters.userId}
-              >
-                <option value="" disabled>
-                  Select the {storedConfigure?.employee || "Employee"}
-                </option>
-                {teacherData &&
-                  teacherData.map((teacher) => (
-                    <option key={teacher.id} value={teacher.id}>
-                      {teacher.teacherNames}
-                    </option>
-                  ))}
-              </select>
-            </div>
+            {!userId && (
+              <div className="form-group mb-0 ms-2 mb-1">
+                <select
+                  className="form-select form-select-sm center_list"
+                  name="userId"
+                  style={{ width: "100%" }}
+                  onChange={handleFilterChange}
+                  value={filters.userId}
+                >
+                  <option value="" disabled>
+                    Select the {storedConfigure?.employee || "Employee"}
+                  </option>
+                  {teacherData &&
+                    teacherData.map((teacher) => (
+                      <option key={teacher.id} value={teacher.id}>
+                        {teacher.teacherNames}
+                      </option>
+                    ))}
+                </select>
+              </div>
+            )}
           </div>
           <div className="d-flex justify-content-between">
             <div className="individual_fliters d-lg-flex mt-2">
@@ -385,7 +392,7 @@ const Document = () => {
                   <option value="MONDAY">Monday</option>
                   <option value="TUESDAY">Tuesday</option>
                   <option value="WEDNESDAY">Wednesday</option>
-                  <option value="THURDAY">Thursday</option>
+                  <option value="THURSDAY">Thursday</option>
                   <option value="FRIDAY">Friday</option>
                   <option value="SATURDAY">Saturday</option>
                 </select>
