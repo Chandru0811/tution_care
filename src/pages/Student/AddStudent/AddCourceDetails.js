@@ -260,6 +260,23 @@ const AddcourseDetail = forwardRef(
           if (response.status === 201 || response.status === 200) {
             toast.success(response.data.message);
             setFormData((prv) => ({ ...prv, ...data }));
+            if (formData.LeadId) {
+              try {
+                const response = await api.put(
+                  `/updateLeadInfo/${formData.LeadId}`,
+                  {
+                    leadStatus: formData.LeadStatus,
+                  }
+                );
+                if (response === 200) {
+                  console.log("Lead Status CONFIRMED");
+                } else {
+                  console.log("Lead Status Not CONFIRMED");
+                }
+              } catch {
+                console.log("Lead Status Not CONFIRMED");
+              }
+            }
             if (navigate) {
               navigate(`/invoice/add?studentID=${studentId}`);
             } else {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useFormik } from "formik";
 import {
   Dialog,
@@ -12,38 +12,20 @@ import * as Yup from "yup";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
 
-const validationSchema = Yup.object({
-    salaryAmount: Yup.string()
-      .required("*Salary Amount is required"), // Optional: Maximum character length
+const validationSchema = Yup.object({});
 
-    shgContribution: Yup.number()
-      .typeError("*SHG Contribution must be a number") // Ensures value is a valid number
-      .required("*SHG Contribution is required") // Required validation
-      .positive("*SHG Contribution must be a positive number") // Only positive values allowed
-      .test(
-        "is-decimal",
-        "*SHG Contribution must have at most 2 decimal places", // Custom error message
-        (value) => {
-          // Test allows numbers with up to 2 decimal places
-          return value ? /^\d+(\.\d{1,2})?$/.test(value) : true;
-        }
-      ),
-
-      nationalityId: Yup.string()
-      .required("*Nationality is required"), 
-  });
-
-function ShgEdit({ id, onSuccess, handleMenuClose }) {
+function SdlEdit({ id, onSuccess, handleMenuClose }) {
   const [open, setOpen] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const userName = localStorage.getItem("tmsuserName");
   const [isModified, setIsModified] = useState(false);
   const centerId = localStorage.getItem("tmscenterId");
-    const [nationalityData, setNationalityData] = useState([]);
 
   const getData = async () => {
     try {
-      const response = await api.get(`/getAllUserShgById/${id}`);
+      const response = await api.get(`/getAllUserSdlById/${id}`);
+      // formik.setFieldValue("shgAmount", response.data.shgAmount);
+      // formik.setFieldValue("shgType", response.data.shgType);
       formik.setValues(response.data);
     } catch (error) {
       console.error("Error fetching data ", error);
@@ -54,22 +36,22 @@ function ShgEdit({ id, onSuccess, handleMenuClose }) {
     initialValues: {
       centerId: centerId,
       salaryAmount: "",
-      shgContribution: "",
-      nationalityId:"",
+      sdlPayable:"",
+      sdlRate:"",
       updatedBy: userName,
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       setLoadIndicator(true);
       try {
-        const response = await api.put(`/updateUserShg/${id}`, values, {
+        const response = await api.put(`/updateUserSdl/${id}`, values, {
           headers: {
             "Content-Type": "application/json",
           },
         });
-        if (response.status === 200) {
+        if (response.status === 201 || response.status === 200) {
           onSuccess();
-
+          handleClose();
           toast.success(response.data.message);
         } else {
           toast.error(response.data.message);
@@ -77,7 +59,6 @@ function ShgEdit({ id, onSuccess, handleMenuClose }) {
       } catch (error) {
         toast.error(error);
       } finally {
-        handleClose();
         setLoadIndicator(false);
       }
     },
@@ -85,9 +66,7 @@ function ShgEdit({ id, onSuccess, handleMenuClose }) {
     validateOnChange: true,
     validateOnBlur: true,
     validate: (values) => {
-      if (
-        Object.values(values).some((value) => (value && typeof value === 'string' ? value.trim() !== "" : value))
-      ) {
+      if (Object.values(values).some((value) => (value && typeof value === 'string' ? value.trim() !== "" : value))) {
         setIsModified(true);
       } else {
         setIsModified(false);
@@ -104,18 +83,6 @@ function ShgEdit({ id, onSuccess, handleMenuClose }) {
     setIsModified(false);
     getData();
   };
-  const fetchCNCData = async () => {
-    try {
-      const nationality = await api.get(`/getAllNationalityTypeWithCenterId/${centerId}`);
-        setNationalityData(nationality.data);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
-
-  useEffect(() => {
-    fetchCNCData();
-  }, []);
 
   return (
     <>
@@ -136,7 +103,7 @@ function ShgEdit({ id, onSuccess, handleMenuClose }) {
         fullWidth
       >
         <DialogTitle className="headColor">
-          SHG Edit{" "}
+          SDL Edit{" "}
           <IconButton
             aria-label="close"
             onClick={handleClose}
@@ -158,64 +125,60 @@ function ShgEdit({ id, onSuccess, handleMenuClose }) {
               <div className="row">
                 <div className="col-md-6 col-12 mb-2">
                   <label className="form-label">
-                    Salary Amount<span className="text-danger">*</span>
+                    SDL Amount<span className="text-danger">*</span>
                   </label>
                   <input
                     type="text"
-                    className={`form-control  ${formik.touched.salaryAmount && formik.errors.salaryAmount
+                    name="sdlAmount"
+                    className={`form-control  ${formik.touched.sdlAmount && formik.errors.sdlAmount
                         ? "is-invalid"
                         : ""
                       }`}
-                    {...formik.getFieldProps("salaryAmount")}
+                    {...formik.getFieldProps("sdlAmount")}
                   />
-                  {formik.touched.salaryAmount && formik.errors.salaryAmount && (
+                  {formik.touched.sdlAmount && formik.errors.sdlAmount && (
                     <div className="invalid-feedback">
-                      {formik.errors.salaryAmount}
+                      {formik.errors.sdlAmount}
                     </div>
                   )}
                 </div>
                 <div className="col-md-6 col-12 mb-2">
                   <label className="form-label">
-                  SHG Contribution<span className="text-danger">*</span>
+                    SDL Payable<span className="text-danger">*</span>
                   </label>
                   <input
                     type="text"
-                    className={`form-control  ${formik.touched.shgContribution && formik.errors.shgContribution
+                    name="sdlPayable"
+                    className={`form-control  ${formik.touched.sdlPayable && formik.errors.sdlPayable
                         ? "is-invalid"
                         : ""
                       }`}
-                    {...formik.getFieldProps("shgContribution")}
+                    {...formik.getFieldProps("sdlPayable")}
                   />
-                  {formik.touched.shgContribution && formik.errors.shgContribution && (
+                  {formik.touched.sdlPayable && formik.errors.sdlPayable && (
                     <div className="invalid-feedback">
-                      {formik.errors.shgContribution}
+                      {formik.errors.sdlPayable}
                     </div>
                   )}
                 </div>
-                <div className="col-md-6 col-12 mb-2 mt-3">
-                  <label>Nationality</label>
-                  <span className="text-danger">*</span>
-                  <select
-                    className="form-select"
-                    name="nationalityId"
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    value={formik.values.nationalityId}
-                  >
-                    <option selected></option>
-                    {nationalityData &&
-                  nationalityData.map((nationalityId) => (
-                    <option key={nationalityId.id} value={nationalityId.id}>
-                      {nationalityId.nationality}
-                    </option>
-                  ))}
-                  </select>
-                  {formik.touched.nationalityId &&
-                    formik.errors.nationalityId && (
-                      <div className="error text-danger">
-                        <small>{formik.errors.nationalityId}</small>
-                      </div>
-                    )}
+                <div className="col-md-6 col-12 mb-2">
+                  <label className="form-label">
+                    SDL Rate<span className="text-danger">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    name="sdlrate"
+                    className={`form-control  ${formik.touched.sdlrate && formik.errors.sdlrate
+                        ? "is-invalid"
+                        : ""
+                      }`}
+                    {...formik.getFieldProps("sdlrate")}
+                  />
+                  {formik.touched.sdlrate && formik.errors.sdlrate && (
+                    <div className="invalid-feedback">
+                      {formik.errors.sdlrate}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -249,4 +212,4 @@ function ShgEdit({ id, onSuccess, handleMenuClose }) {
   );
 }
 
-export default ShgEdit;
+export default SdlEdit;

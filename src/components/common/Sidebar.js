@@ -211,16 +211,16 @@ function Sidebar() {
                   path: "/payrolladmin",
                   access: storedScreens.payrollIndex,
                 },
-                {
-                  title: "Payslip",
-                  path: "/employeepayslip",
-                  access: storedScreens.payslipIndex,
-                },
-                {
-                  title: "Freelancer Invoice",
-                  path: "/freelancerPayslip",
-                  access: storedScreens.freeLancerIndex,
-                },
+                // {
+                //   title: "Payslip",
+                //   path: "/employeepayslip",
+                //   access: storedScreens.payslipIndex,
+                // },
+                // {
+                //   title: "Freelancer Invoice",
+                //   path: "/freelancerPayslip",
+                //   access: storedScreens.freeLancerIndex,
+                // },
               ],
             },
           ]
@@ -449,6 +449,16 @@ function Sidebar() {
             access: storedScreens.shgSettingIndex,
           },
           {
+            title: "SDL",
+            path: "/sdl",
+            access: true,
+          },
+          {
+            title: "CPF",
+            path: "/cpf",
+            access: true,
+          },
+          {
             title: "Batch Time",
             path: "/batchtime",
             access: storedScreens.batchtimeSettingIndex,
@@ -560,7 +570,7 @@ function Sidebar() {
       <div className="logo-details">
         <span className="logo_name">
           <img src={Logo} alt="logo" width={80} className="img-fluid p-2 " />
-          <span className="text-dark">ECS Schools</span>
+          <span className="text-dark">SMS Guru</span>
         </span>
       </div>
       <ul className="nav-links">

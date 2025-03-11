@@ -99,6 +99,7 @@ function AddPayroll() {
       status: "",
       shgContribution: "",
       cpfContribution: "",
+      sdlContribution:0,
       freelancerCount: "",
       payrollType: "",
       createdBy: userName,
@@ -136,6 +137,7 @@ function AddPayroll() {
           deductionAmount: values.deductionAmount,
           shgContribution: values.shgContribution,
           cpfContribution: values.cpfContribution,
+          sdlContribution:values.sdlContribution,
         };
       } else if (empRole === "freelancer") {
         payload = {
@@ -210,6 +212,7 @@ function AddPayroll() {
         formik.setFieldValue("grossPay", response.data.basicPay);
         formik.setFieldValue("cpfContribution", response.data.cpfContribution);
         formik.setFieldValue("shgContribution", response.data.shgContribution);
+        formik.setFieldValue("sdlContribution", response.data.sdlContribution);
       } catch (error) {
         toast.error(error);
       }
@@ -398,33 +401,7 @@ function AddPayroll() {
           </div>
           <div className="container px-4">
             <div className="row">
-              {/* <div className="col-md-6 col-12 mb-3 ">
-                <lable className="">Centre Name</lable>
-                <span className="text-danger">*</span>
-                <select
-                  {...formik.getFieldProps("centerId")}
-                  className={`form-select ${
-                    formik.touched.centerId && formik.errors.centerId
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  aria-label="Default select example"
-                  onChange={handleCenterChange}
-                >
-                  <option selected disabled></option>
-                  {centerData &&
-                    centerData.map((center) => (
-                      <option key={center.id} value={center.id}>
-                        {center.centerNames}
-                      </option>
-                    ))}
-                </select>
-                {formik.touched.centerId && formik.errors.centerId && (
-                  <div className="invalid-feedback">
-                    {formik.errors.centerId}
-                  </div>
-                )}
-              </div> */}
+              
               <div className="col-md-6 col-12 mb-3 ">
                 <lable className="">{appConfigInfo.employee} Name</lable>{" "}
                 <span className="text-danger">*</span>
@@ -499,7 +476,7 @@ function AddPayroll() {
                   </div>
                   <div className="col-md-6 col-12">
                     <div className="text-start mt-2 mb-3">
-                      <label className="form-label">
+                      <label>
                         Payroll Month<span className="text-danger">*</span>
                       </label>
                       <input

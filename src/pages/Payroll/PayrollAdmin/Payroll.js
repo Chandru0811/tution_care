@@ -11,30 +11,34 @@ import { MoreVert as MoreVertIcon } from "@mui/icons-material";
 import { MaterialReactTable } from "material-react-table";
 import GlobalDelete from "../../../components/common/GlobalDelete";
 import api from "../../../config/URL";
+import { toast } from "react-toastify";
+import fetchAllEmployeeListByCenter from "../../List/EmployeeList";
 
 const Payroll = () => {
-  const [filters, setFilters] = useState({
-    employeeName: "",
-    roll: "",
-  });
   const navigate = useNavigate();
   const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   const [datas, setDatas] = useState([]);
-  const [allData, setAllData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
   const centerId = localStorage.getItem("tmscenterId");
+  const tmsuserId = localStorage.getItem("tmsuserId");
   const appConfigInfo = JSON.parse(localStorage.getItem("tmsappConfigInfo"));
+  const [teacherData, setTeacherData] = useState([]);
+  const [filters, setFilters] = useState({
+    centerId: centerId,
+    userId: tmsuserId || "",
+    payrollMonth: "",
+  });
 
-  const columns = useMemo(
-    () => [
+  const columns = useMemo(() => {
+    const baseColumns = [
       {
         accessorFn: (row, index) => index + 1,
         header: "S.NO",
         enableSorting: true,
         enableHiding: false,
-        size: 40,
+        size: 20,
         cell: ({ cell }) => (
           <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
         ),
@@ -60,6 +64,7 @@ const Payroll = () => {
       {
         accessorKey: "status",
         enableHiding: false,
+        size: 20,
         header: "Status",
         Cell: ({ row }) =>
           row.original.status === "APPROVED" ? (
@@ -85,42 +90,49 @@ const Payroll = () => {
             </span>
           ) : null,
       },
-      {
-        accessorKey: "userRole",
-        enableHiding: false,
-        header: "Role",
-        Cell: ({ row }) => {
-          const colors = [
-            "bg-primary",
-            "bg-success",
-            "bg-warning",
-            "bg-danger",
-            "bg-info",
-            "bg-secondary",
-          ];
-          const randomColor = colors[Math.floor(Math.random() * colors.length)];
-          return (
-            <span className={`badge ${randomColor} text-white fw-light`}>
-              {row.original.userRole}
-            </span>
-          );
-        },
-      },
+      // Conditionally add the Role column if tmsuserId is not present
+      ...(tmsuserId
+        ? []
+        : [
+            {
+              accessorKey: "userRole",
+              enableHiding: false,
+              size: 20,
+              header: "Role",
+              Cell: ({ row }) => {
+                const colors = [
+                  "bg-primary",
+                  "bg-success",
+                  "bg-warning",
+                  "bg-danger",
+                  "bg-info",
+                  "bg-secondary",
+                ];
+                const randomColor =
+                  colors[Math.floor(Math.random() * colors.length)];
+                return (
+                  <span className={`badge ${randomColor} text-white fw-light`}>
+                    {row.original.userRole}
+                  </span>
+                );
+              },
+            },
+          ]),
       {
         accessorKey: "employeeName",
         enableHiding: false,
         header: `${appConfigInfo.employee}`,
       },
       {
-        accessorKey: "netPay",
+        accessorKey: "payrollMonth",
         enableHiding: false,
-        header: "Net Pay",
+        header: "Payroll Month",
       },
+      { accessorKey: "netPay", enableHiding: false, header: "Net Pay" },
       { accessorKey: "bonus", header: "Bonus" },
       { accessorKey: "cpfContributions", header: "Cpf Contributions" },
       { accessorKey: "deductionAmount", header: "Deduction Amount" },
       { accessorKey: "grossPay", header: "Gross Pay" },
-      { accessorKey: "payrollMonth", header: "Payroll Month" },
       { accessorKey: "payrollType", header: "Payroll Type" },
       { accessorKey: "shgContribution", header: "Shg Contribution" },
       { accessorKey: "freelanceCount", header: "Freelance Count" },
@@ -144,26 +156,60 @@ const Payroll = () => {
         header: "Updated By",
         Cell: ({ cell }) => cell.getValue() || "",
       },
-    ],
-    []
-  );
-
-  const fetchData = async () => {
+    ];
+  
+    return baseColumns;
+  }, [tmsuserId]);
+  
+  const getPayrollData = async () => {
     try {
+      setLoading(true);
+      const queryParams = new URLSearchParams();
+      for (let key in filters) {
+        if (filters[key]) {
+          queryParams.append(key, filters[key]);
+        }
+      }
+
       const response = await api.get(
-        `getAllUserPayrollWithCenterId/${centerId}`
+        `/getAllUserPayrollWithCenterId?${queryParams.toString()}`
       );
-      setAllData(response.data);
+
       setDatas(response.data);
-      setLoading(false);
     } catch (error) {
-      console.error("Error fetching data ", error);
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+    setFilters((prevFilters) => ({ ...prevFilters, [name]: value }));
+  };
+
+  const clearFilters = () => {
+    setFilters({
+      centerId: centerId,
+      userId: tmsuserId ||"",
+      payrollMonth: "",
+    });
+    getPayrollData();
+  };
+
+  const fetchUserData = async () => {
+    try {
+      const teacherDatas = await fetchAllEmployeeListByCenter(centerId);
+      setTeacherData(teacherDatas);
+    } catch (error) {
+      toast.error(error.message);
     }
   };
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    getPayrollData();
+    fetchUserData();
+  }, [filters]);
 
   const theme = createTheme({
     components: {
@@ -208,74 +254,11 @@ const Payroll = () => {
     },
   });
 
-  useEffect(() => {
-    const filteredData = allData.filter((item) => {
-      const centerNameMatch = filters.centerName
-        ? item.centerName
-            ?.toLowerCase()
-            .includes(filters.centerName.toLowerCase())
-        : true;
-
-      const employeeNameMatch = filters.employeeName
-        ? item.employeeName
-            ?.toLowerCase()
-            .includes(filters.employeeName.toLowerCase())
-        : true;
-
-      const rollMatch = filters.roll
-        ? item.roll?.toLowerCase().includes(filters.roll.toLowerCase())
-        : true;
-
-      return centerNameMatch && employeeNameMatch && rollMatch;
-    });
-
-    setDatas(filteredData);
-  }, [filters, allData]);
-
-  const handleFilterChange = (e) => {
-    const { name, value } = e.target;
-    setFilters((prevFilters) => ({
-      ...prevFilters,
-      [name]: value,
-    }));
-  };
-
-  const clearFilter = () => {
-    setFilters({
-      employeeName: "",
-      roll: "",
-    });
-    setDatas(allData);
-  };
-
-  useEffect(() => {
-    const filteredData = allData.filter((item) => {
-      const centerNameMatch = filters.centerName
-        ? item.centerName
-            ?.toLowerCase()
-            .includes(filters.centerName.toLowerCase())
-        : true;
-
-      const employeeNameMatch = filters.employeeName
-        ? item.employeeName
-            ?.toLowerCase()
-            .includes(filters.employeeName.toLowerCase())
-        : true;
-
-      const rollMatch = filters.roll
-        ? item.userRole?.toLowerCase().includes(filters.roll.toLowerCase())
-        : true;
-
-      return centerNameMatch && employeeNameMatch && rollMatch;
-    });
-
-    setDatas(filteredData);
-  }, [filters, allData]);
-
   const handleMenuClose = () => setMenuAnchor(null);
   const hideColumn =
     storedScreens?.payrollUpdate === false &&
     storedScreens?.payrollDelete === false;
+
   return (
     <div className="container-fluid my-4 center">
       <ol
@@ -315,34 +298,42 @@ const Payroll = () => {
         </div>
         <div className="d-flex justify-content-between mb-3 px-2">
           <div className="individual_fliters d-lg-flex ">
+            {!tmsuserId && (
+              <div className="form-group mb-0 ms-2 mb-1">
+                <select
+                  className="form-select form-select-sm center_list"
+                  style={{ width: "100%" }}
+                  name="userId"
+                  onChange={handleFilterChange}
+                  value={filters.userId}
+                >
+                  <option value="" disabled>
+                    Select a {appConfigInfo.employee}
+                  </option>
+                  {teacherData &&
+                    teacherData.map((emp) => (
+                      <option key={emp.id} value={emp.id}>
+                        {emp.userNames}
+                      </option>
+                    ))}
+                </select>
+              </div>
+            )}
             <div className="form-group mb-0 ms-2 mb-1">
               <input
-                type="text"
+                type="month"
+                name="payrollMonth"
                 className="form-control form-control-sm center_list"
-                style={{ width: "160px" }}
-                placeholder="Employee Name"
-                name="employeeName"
-                value={filters.employeeName}
+                style={{ width: "100%" }}
                 onChange={handleFilterChange}
+                value={filters.payrollMonth}
               />
             </div>
-            <div className="form-group mb-0 ms-2 mb-1">
-              <input
-                type="text"
-                className="form-control form-control-sm center_list"
-                style={{ width: "160px" }}
-                placeholder="Role"
-                name="roll"
-                value={filters.roll}
-                onChange={handleFilterChange}
-              />
-            </div>
-
             <div className="form-group mb-0 ms-2 mb-1 ">
               <button
                 type="button"
                 className="btn btn-sm btn-border"
-                onClick={clearFilter}
+                onClick={clearFilters}
               >
                 Clear
               </button>
@@ -388,7 +379,6 @@ const Payroll = () => {
                     deductionAmount: false,
                     grossPay: false,
                     hourlyId: false,
-                    payrollMonth: false,
                     payrollType: false,
                     sdl: false,
                     shgContribution: false,
@@ -405,8 +395,13 @@ const Payroll = () => {
                   },
                 }}
                 muiTableBodyRowProps={({ row }) => ({
-                  onClick: () =>
-                    navigate(`/payrolladmin/view/${row.original.id}`),
+                  onClick: () => {
+                    if (tmsuserId) {
+                      navigate(`/payrolladmin/payslip/${row.original.id}`);
+                    } else {
+                      navigate(`/payrolladmin/view/${row.original.id}`);
+                    }
+                  },
                   style: { cursor: "pointer" },
                 })}
               />
@@ -430,7 +425,7 @@ const Payroll = () => {
                 {storedScreens?.payrollDelete && (
                   <GlobalDelete
                     path={`/deleteUserPayroll/${selectedId}`}
-                    onDeleteSuccess={fetchData}
+                    onDeleteSuccess={getPayrollData}
                     onOpen={handleMenuClose}
                   />
                 )}

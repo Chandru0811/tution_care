@@ -26,7 +26,7 @@ const AddStudentDetails = forwardRef(
     const [imagePreviewUrl, setImagePreviewUrl] = useState(null);
     const [raceData, setRaceData] = useState(null);
     const [languageData, setLanguageData] = useState(null);
-    const [nationalityData, setNationalityData] = useState(null);
+    const [nationalityData, setNationalityData] = useState([]);
     const userName = localStorage.getItem("tmsuserName");
     const centerId = localStorage.getItem("tmscenterId");
     const center = localStorage.getItem("tmscenterName");
@@ -40,15 +40,10 @@ const AddStudentDetails = forwardRef(
       try {
         const studentData = await fetchAllStudentsWithIds();
         setStudentData(studentData);
-
         const raceData = await fetchAllRaceWithIds();
         setRaceData(raceData);
-
         const languageData = await fetchAllLanguageWithIdsC();
         setLanguageData(languageData);
-
-        const nationality = await fetchAllNationalityeWithIds(centerId);
-        setNationalityData(nationality);
       } catch (error) {
         toast.error(error);
       }
@@ -363,9 +358,19 @@ const AddStudentDetails = forwardRef(
       }
     };
 
+    const fetchNationalityData = async () => {
+      try {
+        const nationality = await api.get(`/getAllNationalityTypeWithCenterId/${centerId}`);
+        setNationalityData(nationality.data);
+      } catch (error) {
+        toast.error(error);
+      }
+    };
+
     useEffect(() => {
       fetchData();
       centerData();
+      fetchNationalityData();
     }, []);
 
     useImperativeHandle(ref, () => ({
@@ -519,7 +524,7 @@ const AddStudentDetails = forwardRef(
                     </div>
                     {centreData?.isGeoFenceForStudent && (
                       <>
-                        <div className="col-md-6 col-12 mb-3">
+                        <div className="text-start mt-4">
                           <div className="form-group col-sm">
                             <label>Postal Code</label>
                             <span className="text-danger">*</span>
@@ -547,6 +552,27 @@ const AddStudentDetails = forwardRef(
                               formik.errors.postalCode && (
                                 <div className="error text-danger">
                                   <small>{formik.errors.postalCode}</small>
+                                </div>
+                              )}
+                          </div>
+                        </div>
+                        <div className="text-start mt-4">
+                          <div className="form-group col-sm">
+                            <label>Address</label>
+                            <span className="text-danger">*</span>
+                            <input
+                              type="text"
+                              className="form-control"
+                              name="address"
+                              onChange={formik.handleChange}
+                              onBlur={formik.handleBlur}
+                              value={formik.values.address}
+                              readOnly
+                            />
+                            {formik.touched.address &&
+                              formik.errors.address && (
+                                <div className="error text-danger">
+                                  <small>{formik.errors.address}</small>
                                 </div>
                               )}
                           </div>
@@ -686,46 +712,7 @@ const AddStudentDetails = forwardRef(
                           </div>
                         )}
                     </div>
-                    <input
-                      type="hidden"
-                      className="form-control"
-                      name="la"
-                      value={formik.values.la}
-                    />
-                    <input
-                      type="hidden"
-                      className="form-control"
-                      name="lattitude"
-                      value={formik.values.longitude}
-                    />
-                    {centreData?.isGeoFenceForStudent && (
-                      <>
-                        <div className="col-md-6 col-12 mb-3">
-                          <div className="form-group col-sm">
-                            <label>Address</label>
-                            <span className="text-danger">*</span>
-                            <input
-                              type="text"
-                              className="form-control"
-                              name="address"
-                              onChange={formik.handleChange}
-                              onBlur={formik.handleBlur}
-                              value={formik.values.address}
-                              readOnly
-                            />
-                            {formik.touched.address &&
-                              formik.errors.address && (
-                                <div className="error text-danger">
-                                  <small>{formik.errors.address}</small>
-                                </div>
-                              )}
-                          </div>
-                        </div>
-                      </>
-                    )}
-                  </div>
-                </div>
-                <div className="text-start mt-4">
+                    <div className="text-start mt-4">
                   <label htmlFor="" className="mb-1 fw-medium">
                     <small>Remark</small>
                   </label>
@@ -748,6 +735,21 @@ const AddStudentDetails = forwardRef(
                     </div>
                   )}
                 </div>
+                    <input
+                      type="hidden"
+                      className="form-control"
+                      name="la"
+                      value={formik.values.la}
+                    />
+                    <input
+                      type="hidden"
+                      className="form-control"
+                      name="lattitude"
+                      value={formik.values.longitude}
+                    />
+                  </div>
+                </div>
+                
               </div>
             </div>
           </div>

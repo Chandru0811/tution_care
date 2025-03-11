@@ -123,7 +123,7 @@ function ReplacementAdd({
   }, []);
   const fetchBatchandTeacherData = async (day) => {
     try {
-      const response = await api.get(`getTeacherWithBatchListByDay?day=${day}`);
+      const response = await api.get(`getTeacherWithBatchListByDay?centerId=${centerId}&day=${day}`);
       console.log("response.data.batchList", response.data.batchList);
       setBatchData(response.data.batchList);
     } catch (error) {

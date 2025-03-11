@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -7,12 +7,11 @@ import Modal from "react-bootstrap/Modal";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
 
-function ShgAdd({ onSuccess }) {
+function SdlAdd({ onSuccess }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [isModified, setIsModified] = useState(false);
   const centerId = localStorage.getItem("tmscenterId");
-    const [nationalityData, setNationalityData] = useState([]);
 
   const handleClose = () => {
     setShow(false);
@@ -24,40 +23,21 @@ function ShgAdd({ onSuccess }) {
   };
   const userName = localStorage.getItem("tmsuserName");
 
-  const validationSchema = Yup.object({
-    salaryAmount: Yup.string()
-      .required("*Salary Amount is required"), // Optional: Maximum character length
-
-    shgContribution: Yup.number()
-      .typeError("*SHG Contribution must be a number") // Ensures value is a valid number
-      .required("*SHG Contribution is required") // Required validation
-      .positive("*SHG Contribution must be a positive number") // Only positive values allowed
-      .test(
-        "is-decimal",
-        "*SHG Contribution must have at most 2 decimal places", // Custom error message
-        (value) => {
-          // Test allows numbers with up to 2 decimal places
-          return value ? /^\d+(\.\d{1,2})?$/.test(value) : true;
-        }
-      ),
-
-      nationalityId: Yup.string()
-      .required("*Nationality is required"), 
-  });
+  const validationSchema = Yup.object({});
 
   const formik = useFormik({
     initialValues: {
       centerId: centerId,
       salaryAmount: "",
-      shgContribution: "",
-      nationalityId:"",
+      sdlPayable:"",
+      sdlRate:"",
       createdBy: userName,
     },
-    validationSchema: validationSchema,
+    // validationSchema: validationSchema,
     onSubmit: async (values) => {
       setLoadIndicator(true);
       try {
-        const response = await api.post("/createUserShg", values, {
+        const response = await api.post("/createUserSdl", values, {
           headers: {
             "Content-Type": "application/json",
           },
@@ -87,19 +67,6 @@ function ShgAdd({ onSuccess }) {
     },
   });
 
-  const fetchCNCData = async () => {
-    try {
-      const nationality = await api.get(`/getAllNationalityTypeWithCenterId/${centerId}`);
-        setNationalityData(nationality.data);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
-
-  useEffect(() => {
-    fetchCNCData();
-  }, []);
-
   return (
     <>
       <div className="mb-3 d-flex justify-content-end">
@@ -121,7 +88,7 @@ function ShgAdd({ onSuccess }) {
         keyboard={isModified ? false : true}
       >
         <Modal.Header closeButton>
-          <Modal.Title className="headColor">Add SHG</Modal.Title>
+          <Modal.Title className="headColor">Add SDL</Modal.Title>
         </Modal.Header>
         <form
           onSubmit={formik.handleSubmit}
@@ -136,64 +103,60 @@ function ShgAdd({ onSuccess }) {
               <div className="row">
                 <div className="col-md-6 col-12 mb-2">
                   <label className="form-label">
-                    Salary Amount<span className="text-danger">*</span>
+                    SDL Amount<span className="text-danger">*</span>
                   </label>
                   <input
                     type="text"
-                    className={`form-control  ${formik.touched.salaryAmount && formik.errors.salaryAmount
+                    name="sdlAmount"
+                    className={`form-control  ${formik.touched.sdlAmount && formik.errors.sdlAmount
                         ? "is-invalid"
                         : ""
                       }`}
-                    {...formik.getFieldProps("salaryAmount")}
+                    {...formik.getFieldProps("sdlAmount")}
                   />
-                  {formik.touched.salaryAmount && formik.errors.salaryAmount && (
+                  {formik.touched.sdlAmount && formik.errors.sdlAmount && (
                     <div className="invalid-feedback">
-                      {formik.errors.salaryAmount}
+                      {formik.errors.sdlAmount}
                     </div>
                   )}
                 </div>
                 <div className="col-md-6 col-12 mb-2">
                   <label className="form-label">
-                  SHG Contribution<span className="text-danger">*</span>
+                    SDL Payable<span className="text-danger">*</span>
                   </label>
                   <input
                     type="text"
-                    className={`form-control  ${formik.touched.shgContribution && formik.errors.shgContribution
+                    name="sdlPayable"
+                    className={`form-control  ${formik.touched.sdlPayable && formik.errors.sdlPayable
                         ? "is-invalid"
                         : ""
                       }`}
-                    {...formik.getFieldProps("shgContribution")}
+                    {...formik.getFieldProps("sdlPayable")}
                   />
-                  {formik.touched.shgContribution && formik.errors.shgContribution && (
+                  {formik.touched.sdlPayable && formik.errors.sdlPayable && (
                     <div className="invalid-feedback">
-                      {formik.errors.shgContribution}
+                      {formik.errors.sdlPayable}
                     </div>
                   )}
                 </div>
-                <div className="col-md-6 col-12 mb-2 mt-3">
-                  <label>Nationality</label>
-                  <span className="text-danger">*</span>
-                  <select
-                    className="form-select"
-                    name="nationalityId"
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    value={formik.values.nationalityId}
-                  >
-                    <option selected></option>
-                    {nationalityData &&
-                  nationalityData.map((nationalityId) => (
-                    <option key={nationalityId.id} value={nationalityId.id}>
-                      {nationalityId.nationality}
-                    </option>
-                  ))}
-                  </select>
-                  {formik.touched.nationalityId &&
-                    formik.errors.nationalityId && (
-                      <div className="error text-danger">
-                        <small>{formik.errors.nationalityId}</small>
-                      </div>
-                    )}
+                <div className="col-md-6 col-12 mb-2">
+                  <label className="form-label">
+                    SDL Rate<span className="text-danger">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    name="sdlrate"
+                    className={`form-control  ${formik.touched.sdlrate && formik.errors.sdlrate
+                        ? "is-invalid"
+                        : ""
+                      }`}
+                    {...formik.getFieldProps("sdlrate")}
+                  />
+                  {formik.touched.sdlrate && formik.errors.sdlrate && (
+                    <div className="invalid-feedback">
+                      {formik.errors.sdlrate}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -226,4 +189,4 @@ function ShgAdd({ onSuccess }) {
   );
 }
 
-export default ShgAdd;
+export default SdlAdd;

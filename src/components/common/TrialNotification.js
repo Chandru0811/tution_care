@@ -33,7 +33,7 @@ const TrialNotification = () => {
       <div className="notification-bar d-flex">
         <marquee>
           *Attention: Your trial version expires in {daysLeft} days! Upgrade to
-          the ECS Schools plan now to enjoy uninterrupted service and ensure
+          the SMS Guru plan now to enjoy uninterrupted service and ensure
           continuous access to all our tools and support. Don’t delay secure
           your upgrade today!
         </marquee>

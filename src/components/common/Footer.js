@@ -19,7 +19,7 @@ function Footer() {
   return (
     <div className="d-flex align-items-center justify-content-center">
       <div className="text-muted p-2" style={{ fontSize: "12px" }}>
-        Copyright@ECSSchools - 2025
+        Copyright@SMSGuru - 2025
       </div>
     </div>
   );

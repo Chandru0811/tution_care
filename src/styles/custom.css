@@ -763,6 +763,9 @@ tbody tr td {
 }
 
 .payslip-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   font-family: Arial, sans-serif;
   width: 100%;
   padding: 20px;

@@ -1635,7 +1635,7 @@ function RolesAdd() {
                           </tr>
                           {/* Center  */}
                           <tr>
-                            <th colspan="6">Company Management</th>
+                            <th colspan="6">{storedConfigure?.centreName || "Centre"} Management</th>
                           </tr>
                           <tr>
                             <td>
@@ -1645,7 +1645,7 @@ function RolesAdd() {
                                   marginBottom: "0px",
                                 }}
                               >
-                                Company Listing
+                                {storedConfigure?.centreName || "Centre"} Listing
                               </p>
                             </td>
                             <td>
@@ -2312,7 +2312,7 @@ function RolesAdd() {
                                       marginBottom: "0px",
                                     }}
                                   >
-                                    Payroll
+                                    Payroll/Payslip
                                   </p>
                                 </td>
                                 <td>
@@ -2372,7 +2372,7 @@ function RolesAdd() {
                                 </td>
                               </tr>
 
-                              <tr>
+                              {/* <tr>
                                 <td>
                                   <p
                                     style={{
@@ -2398,8 +2398,8 @@ function RolesAdd() {
                                 <td></td>
                                 <td></td>
                                 <td></td>
-                              </tr>
-                              <tr>
+                              </tr> */}
+                              {/* <tr>
                                 <td>
                                   <p
                                     style={{
@@ -2435,7 +2435,7 @@ function RolesAdd() {
                                 <td></td>
                                 <td></td>
                                 <td></td>
-                              </tr>
+                              </tr> */}
                             </>
                           )}
 

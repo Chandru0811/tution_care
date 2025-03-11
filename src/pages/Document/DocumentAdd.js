@@ -6,24 +6,19 @@ import api from "../../config/URL";
 import { toast } from "react-toastify";
 import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
 import fetchAllClassesWithIdsC from "../List/ClassListByCourse";
-import fetchAllTeacherListByCenter from "../List/TeacherListByCenter";
-import fetchAllStudentListByCenter from "../List/StudentListByCenter";
 const storedConfigure = JSON.parse(
   localStorage.getItem("tmsappConfigInfo") || "{}"
 );
 const validationSchema = Yup.object({
-  course: Yup.string().required(
+  courseId: Yup.string().required(
     `*${storedConfigure?.course || "Course"} is required`
   ),
   userId: Yup.string().required(
     `*${storedConfigure?.employee || "Teacher"} is required`
   ),
-  day: Yup.string().required("*Days is required"),
-  batchTime: Yup.string().required("*Batch Time is required"),
-  classListing: Yup.string().required(
+  classId: Yup.string().required(
     `*${storedConfigure?.confClass || "Class"} Listing is required`
   ),
-
   folderCategoryListing: Yup.string().required("*FolderCategory is required"),
   date: Yup.string().required("*Date is required"),
   expiredDate: Yup.string().required("*Expired Date is required"),
@@ -40,71 +35,53 @@ function DocumentAdd() {
   const [userData, setUserData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const userName = localStorage.getItem("tmsuserName");
-  const [batchData, setBatchData] = useState(null);
-  const [dayData, setDayData] = useState(null);
 
   const formik = useFormik({
     initialValues: {
-      center: centerId,
-      course: "",
+      centerId: centerId,
+      courseId: "",
+      classId: "",
       userId: tmsuserId || "",
-      classListing: "",
+      studentId: "",
       date: "",
-      day: "",
+      isGroupUpload: true,
       expiredDate: "",
       folderCategoryListing: "group",
-      batchTime: "",
-      groupSelect: "",
-      studentSelect: "",
       createdBy: userName,
+      files: [],
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       setLoadIndicator(true);
       try {
-        // Assuming formik is in scope
-        let selectedOptionName = "";
-        let selectedClassName = "";
-        let selectedCourseName = "";
-
-        classData.forEach((cls) => {
-          if (parseInt(values.classListing) === cls.id) {
-            selectedClassName = cls.classNames || "--";
-          }
-        });
-
-        courseData.forEach((course) => {
-          if (parseInt(values.course) === course.id) {
-            selectedCourseName = course.courseNames || "--";
-          }
-        });
-
-        let requestBody = {
-          centerId: centerId,
-          userId: tmsuserId || values.userId,
-          day: values.day,
-          center: selectedOptionName,
-          classListing: selectedClassName,
-          course: selectedCourseName,
-          courseId: values.course,
-          classId: values.classListing,
-          folderCategory: folderCategory,
-          batchTime: values.batchTime,
-          date: values.date,
-          expiredDate: values.expiredDate,
-          createdBy: userName,
-        };
-
+        const formData = new FormData();
         if (folderCategory === "group") {
-          requestBody.isGroupUpload = true;
+          values.isGroupUpload = true;
         } else {
-          requestBody.isGroupUpload = false;
-          requestBody.studentId = values.studentSelect;
+          values.isGroupUpload = false;
+          values.studentId = values.studentId;
         }
+        formData.append("centerId", centerId || "");
+        formData.append("courseId", values.courseId || "");
+        formData.append("classId", values.classId || "");
+        formData.append("studentId", values.studentId || "");
+        formData.append("userId", tmsuserId || values.userId || "");
+        formData.append("folderCategory", folderCategory || "");
+        formData.append("date", values.date || "");
+        formData.append("expiredDate", values.expiredDate || "");
+        values.files.forEach((file) => {
+          formData.append("files", file || []);
+        });
+        formData.append("createdBy", userName || "");
 
         const response = await api.post(
           "/uploadStudentFilesWithSingleOrGroup",
-          requestBody
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
         );
 
         if (response.status === 201) {
@@ -157,7 +134,22 @@ function DocumentAdd() {
           `getOptimizedCourseInfo?centerId=${centerId}&userId=${tmsuserId}`
         );
         setCourseData(response.data);
-        console.log("setCourseData::", response.data);
+      }
+    } catch (error) {
+      toast.error(error);
+    }
+  };
+
+  const fetchClasses = async (courseId) => {
+    try {
+      if (!tmsuserId) {
+        const classes = await fetchAllClassesWithIdsC(courseId);
+        setClassData(classes);
+      } else {
+        const response = await api.get(
+          `getOptimizedClassInfo?centerId=${centerId}&userId=${tmsuserId}&courseId=${courseId}`
+        );
+        setClassData(response.data);
       }
     } catch (error) {
       toast.error(error);
@@ -186,22 +178,6 @@ function DocumentAdd() {
     }
   };
 
-  const fetchClasses = async (courseId) => {
-    try {
-      if (!tmsuserId) {
-        const classes = await fetchAllClassesWithIdsC(courseId);
-        setClassData(classes);
-      } else {
-        const response = await api.get(
-          `getOptimizedClassInfo?centerId=${centerId}&userId=${tmsuserId}&courseId=${courseId}`
-        );
-        setClassData(response.data);
-      }
-    } catch (error) {
-      toast.error(error);
-    }
-  };
-
   useEffect(() => {
     if (formik.values.date) {
       const calculatedExpiredDate = calculateExpiryDate(formik.values.date);
@@ -225,36 +201,12 @@ function DocumentAdd() {
     return `${year}-${month}-${day}`;
   };
 
-  const fetchDayData = async () => {
-    if (tmsuserId) {
-      try {
-        const response = await api.get(
-          `getOptimizedWorkingDaysInfo?centerId=${centerId}&userId=${tmsuserId}`
-        );
-        const days = response.data.workingDays;
-        setDayData(days || []);
-      } catch (error) {
-        toast.error(error.message);
-      }
-    }
+  const handleCourseChange = (event) => {
+    setClassData(null);
+    const course = event.target.value;
+    formik.setFieldValue("courseId", course);
+    fetchClasses(course); // Fetch class for the selected center
   };
-
-  const fetchBatchandTeacherData = async (day) => {
-    try {
-      const response = await api.get(
-        `getTeacherWithBatchListByScheduleDay?centerId=${centerId}&day=${day}`
-      );
-      setBatchData(response.data.batchList);
-    } catch (error) {
-      toast.error(error.message);
-    }
-  };
-
-  useEffect(() => {
-    if (formik.values.day) {
-      fetchBatchandTeacherData(formik.values.day);
-    }
-  }, [formik.values.day]);
 
   useEffect(() => {
     fetchCourses();
@@ -262,54 +214,7 @@ function DocumentAdd() {
     if (!tmsuserId) {
       fetchTeacher();
     }
-    fetchDayData();
   }, []);
-
-  const formatTo12Hour = (time) => {
-    const [hours, minutes] = time.split(":");
-    let period = "AM";
-    let hour = parseInt(hours, 10);
-
-    if (hour === 0) {
-      hour = 12;
-    } else if (hour >= 12) {
-      period = "PM";
-      if (hour > 12) hour -= 12;
-    }
-
-    return `${hour}:${minutes} ${period}`;
-  };
-
-  const normalizeTime = (time) => {
-    if (time.includes("AM") || time.includes("PM")) {
-      return time;
-    }
-
-    return formatTo12Hour(time);
-  };
-
-  const convertTo24Hour = (time) => {
-    const [timePart, modifier] = time.split(" ");
-    let [hours, minutes] = timePart.split(":").map(Number);
-
-    if (modifier === "PM" && hours < 12) {
-      hours += 12;
-    } else if (modifier === "AM" && hours === 12) {
-      hours = 0;
-    }
-
-    return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(
-      2,
-      "0"
-    )}`;
-  };
-
-  const handleCourseChange = (event) => {
-    setClassData(null);
-    const course = event.target.value;
-    formik.setFieldValue("course", course);
-    fetchClasses(course); // Fetch class for the selected center
-  };
 
   return (
     <div className="container">
@@ -389,17 +294,17 @@ function DocumentAdd() {
                   <span class="text-danger">*</span>
                 </lable>
                 <select
-                  {...formik.getFieldProps("course")}
-                  name="course"
+                  {...formik.getFieldProps("courseId")}
+                  name="courseId"
                   className={`form-select    ${
-                    formik.touched.course && formik.errors.course
+                    formik.touched.courseId && formik.errors.courseId
                       ? "is-invalid"
                       : ""
                   }`}
                   aria-label="Default select example"
                   onChange={handleCourseChange}
                 >
-                  <option disabled></option>
+                  <option selected></option>
                   {courseData &&
                     courseData.map((courses) => (
                       <option key={courses.id} value={courses.id}>
@@ -407,27 +312,27 @@ function DocumentAdd() {
                       </option>
                     ))}
                 </select>
-                {formik.touched.course && formik.errors.course && (
-                  <div className="invalid-feedback">{formik.errors.course}</div>
+                {formik.touched.courseId && formik.errors.courseId && (
+                  <div className="invalid-feedback">
+                    {formik.errors.courseId}
+                  </div>
                 )}
               </div>
-
               <div class="col-md-6 col-12 mb-4 d-flex flex-column justify-content-end">
                 <lable class="">
                   {storedConfigure?.confClass || "Class"} Listing
                   <span class="text-danger">*</span>
                 </lable>
                 <select
-                  {...formik.getFieldProps("classListing")}
-                  name="classListing"
+                  {...formik.getFieldProps("classId")}
+                  name="classId"
                   className={`form-select    ${
-                    formik.touched.classListing && formik.errors.classListing
+                    formik.touched.classId && formik.errors.classId
                       ? "is-invalid"
                       : ""
                   }`}
-                  aria-label="Default select example"
                 >
-                  <option disabled></option>
+                  <option selected></option>
                   {classData &&
                     classData.map((classes) => (
                       <option key={classes.id} value={classes.id}>
@@ -435,9 +340,9 @@ function DocumentAdd() {
                       </option>
                     ))}
                 </select>
-                {formik.touched.classListing && formik.errors.classListing && (
+                {formik.touched.classId && formik.errors.classId && (
                   <div className="invalid-feedback">
-                    {formik.errors.classListing}
+                    {formik.errors.classId}
                   </div>
                 )}
               </div>
@@ -474,86 +379,32 @@ function DocumentAdd() {
               ) : (
                 <></>
               )}
-              <div className="col-md-6 col-12 mb-4">
-                <label>
-                  Days<span className="text-danger">*</span>
-                </label>
-                <select
-                  {...formik.getFieldProps("day")}
-                  className={`form-select ${
-                    formik.touched.day && formik.errors.day ? "is-invalid" : ""
-                  }`}
-                  name="day"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.day}
-                >
-                  {tmsuserId ? (
-                    dayData && dayData.length > 0 ? (
-                      <>
-                        <option selected></option>
-                        {dayData.map((day, index) => (
-                          <option key={index} value={day}>
-                            {day.charAt(0).toUpperCase() +
-                              day.slice(1).toLowerCase()}
-                          </option>
-                        ))}
-                      </>
-                    ) : (
-                      <option value="">No Days available</option>
-                    )
-                  ) : (
-                    <>
-                      <option value="">Select a day</option>
-                      <option value="MONDAY">Monday</option>
-                      <option value="TUESDAY">Tuesday</option>
-                      <option value="WEDNESDAY">Wednesday</option>
-                      <option value="THURSDAY">Thursday</option>
-                      <option value="FRIDAY">Friday</option>
-                      <option value="SATURDAY">Saturday</option>
-                      <option value="SUNDAY">Sunday</option>
-                    </>
-                  )}
-                </select>
-
-                {formik.touched.day && formik.errors.day && (
-                  <div className="invalid-feedback">{formik.errors.day}</div>
-                )}
-              </div>
-
-              <div className="col-md-6 col-12 mb-4">
-                <label className="">
-                  Batch Time<span className="text-danger">*</span>
-                </label>
-                <select
-                  {...formik.getFieldProps("batchTime")}
-                  className={`form-select ${
-                    formik.touched.batchTime && formik.errors.batchTime
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                >
-                  <option></option>
-                  {batchData &&
-                    batchData.map((time) => {
-                      const displayTime = normalizeTime(time);
-                      const valueTime =
-                        time.includes("AM") || time.includes("PM")
-                          ? convertTo24Hour(time)
-                          : time;
-
-                      return (
-                        <option key={time} value={valueTime}>
-                          {displayTime}
-                        </option>
-                      );
-                    })}
-                </select>
-                {formik.touched.batchTime && formik.errors.batchTime && (
-                  <div className="invalid-feedback">
-                    {formik.errors.batchTime}
+              <div className="col-md-6 col-12 mb-2">
+                <div className="row">
+                  <label>
+                    Files<span className="text-danger">*</span>
+                  </label>
+                  <div className="input-group">
+                    <input
+                      className="form-control"
+                      type="file"
+                      multiple
+                      accept="image/jpeg, image/png, video/mp4"
+                      onChange={(event) => {
+                        const files = Array.from(event.target.files);
+                        formik.setFieldValue("files", files);
+                      }}
+                    />
                   </div>
-                )}
+                  {formik.touched.files && formik.errors.files && (
+                    <small className="text-danger">{formik.errors.files}</small>
+                  )}
+                  <label className="text-muted">
+                    Note: Files must be JPG, PNG, or MP4, and the total size
+                    must be below 1GB. Each file name should not exceed 50
+                    characters.
+                  </label>
+                </div>
               </div>
 
               <div className="col-md-6 col-12 mb-4">
@@ -576,7 +427,28 @@ function DocumentAdd() {
                   )}
                 </div>
               </div>
-              {/* Radio buttons for selecting folder category */}
+
+              <div className="col-md-6 col-12 mb-4">
+                <label className="form-label">
+                  Expired Date<span className="text-danger">*</span>
+                </label>
+                <input
+                  name="expiredDate"
+                  type="date"
+                  className={`form-control  ${
+                    formik.touched.expiredDate && formik.errors.expiredDate
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  {...formik.getFieldProps("expiredDate")}
+                  value={calculateExpiryDate(formik.values.date)}
+                />
+                {formik.touched.expiredDate && formik.errors.expiredDate && (
+                  <div className="invalid-feedback">
+                    {formik.errors.expiredDate}
+                  </div>
+                )}
+              </div>
               <div className="col-md-6 col-12 mb-4">
                 <label className="form-label">
                   Folder Category<span className="text-danger">*</span>
@@ -617,29 +489,6 @@ function DocumentAdd() {
                     </div>
                   )}
               </div>
-
-              <div className="col-md-6 col-12 mb-4">
-                <label className="form-label">
-                  Expired Date<span className="text-danger">*</span>
-                </label>
-                <input
-                  name="expiredDate"
-                  type="date"
-                  className={`form-control  ${
-                    formik.touched.expiredDate && formik.errors.expiredDate
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  {...formik.getFieldProps("expiredDate")}
-                  value={calculateExpiryDate(formik.values.date)}
-                />
-                {formik.touched.expiredDate && formik.errors.expiredDate && (
-                  <div className="invalid-feedback">
-                    {formik.errors.expiredDate}
-                  </div>
-                )}
-              </div>
-
               <div class="col-md-6 col-12 mb-3">
                 {folderCategory === "group" ? (
                   <></>
@@ -649,15 +498,14 @@ function DocumentAdd() {
                       {storedConfigure?.student || "Student"} Name
                     </label>
                     <select
-                      {...formik.getFieldProps("studentSelect")}
+                      {...formik.getFieldProps("studentId")}
                       className={`form-select   ${
-                        formik.touched.studentSelect &&
-                        formik.errors.studentSelect
+                        formik.touched.studentId && formik.errors.studentId
                           ? "is-invalid"
                           : ""
                       }`}
                     >
-                      <option disabled></option>
+                      <option selected></option>
                       {studentData &&
                         studentData.map((student) => (
                           <option key={student.id} value={student.id}>
@@ -665,12 +513,11 @@ function DocumentAdd() {
                           </option>
                         ))}
                     </select>
-                    {formik.touched.studentSelect &&
-                      formik.errors.studentSelect && (
-                        <div className="invalid-feedback">
-                          {formik.errors.studentSelect}
-                        </div>
-                      )}
+                    {formik.touched.studentId && formik.errors.studentId && (
+                      <div className="invalid-feedback">
+                        {formik.errors.studentId}
+                      </div>
+                    )}
                   </div>
                 )}
               </div>

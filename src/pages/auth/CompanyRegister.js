@@ -77,7 +77,7 @@ export default function CompanyRegister() {
               className="ecs-logo"
               style={{ borderRadius: "50%" }}
             />
-            <h1 className="ecs-text">ECS Schools</h1>
+            <h1 className="ecs-text">SMS Guru</h1>
           </div>
 
           <div className="col-md-6 col-12 d-flex flex-column justify-content-center align-items-center form-section">

@@ -32,7 +32,7 @@ const PersonalEdit = forwardRef(
     const validationSchema = Yup.object().shape({
       teacherName: Yup.string().required("*Name is required"),
       role: Yup.string().required("*Role is required"),
-      countryId: Yup.string().required("*Country is required"),
+      countryTypeId: Yup.string().required("*Country is required"),
       dateOfBirth: Yup.date()
         .required("*Date of Birth is required")
         .max(new Date(), "*Date of Birth cannot be in the future"),
@@ -61,7 +61,7 @@ const PersonalEdit = forwardRef(
         dateOfBirth: formData.dateOfBirth || "",
         idTypeId: formData.idTypeId || "",
         idNo: formData.idNo || "",
-        countryId: formData.countryId,
+        countryTypeId: formData.countryTypeId,
         nationalityId: formData.nationalityId || "",
         citizenshipId: formData.citizenshipId || "",
         photo: formData.photo || "",
@@ -90,7 +90,7 @@ const PersonalEdit = forwardRef(
           formDatas.append("idTypeId", data.idTypeId);
           formDatas.append("idNo", data.idNo);
           formDatas.append("nationalityId", data.nationalityId);
-          formDatas.append("countryId", data.countryId);
+          formDatas.append("countryTypeId", data.countryTypeId);
           formDatas.append("citizenshipId", data.citizenshipId);
           formDatas.append("status", data.status);
           formDatas.append("gender", data.gender);
@@ -377,22 +377,22 @@ const PersonalEdit = forwardRef(
                 <span className="text-danger">*</span>
                 <select
                   className="form-select"
-                  name="countryId"
+                  name="countryTypeId"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  value={formik.values.countryId}
+                  value={formik.values.countryTypeId}
                 >
                   <option selected></option>
                   {countryData &&
-                    countryData.map((countryId) => (
-                      <option key={countryId.id} value={countryId.id}>
-                        {countryId.country}
+                    countryData.map((countryTypeId) => (
+                      <option key={countryTypeId.id} value={countryTypeId.id}>
+                        {countryTypeId.country}
                       </option>
                     ))}
                 </select>
-                {formik.touched.countryId && formik.errors.countryId && (
+                {formik.touched.countryTypeId && formik.errors.countryTypeId && (
                   <div className="error text-danger">
-                    <small>{formik.errors.countryId}</small>
+                    <small>{formik.errors.countryTypeId}</small>
                   </div>
                 )}
               </div>

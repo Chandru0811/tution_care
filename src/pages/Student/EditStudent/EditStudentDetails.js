@@ -20,13 +20,12 @@ const EditStudentDetails = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext, navigate }, ref) => {
     const [studentData, setStudentData] = useState(null);
     const [raceData, setRaceData] = useState(null);
-    const [nationalityData, setNationalityData] = useState(null);
+    const [nationalityData, setNationalityData] = useState([]);
     const [languageData, setLanguageData] = useState(null);
-
     const userName = localStorage.getItem("tmsuserName");
     const centerId = localStorage.getItem("tmscenterId");
     const [centreData, setCentreData] = useState([]);
-    console.log("isGeoFenceForTeacher", centreData?.isGeoFenceForTeacher);
+
     const validationSchema = Yup.object().shape({
       studentName: Yup.string().required(
         `*${storedConfigure?.student || "Student"} Name is required`
@@ -61,15 +60,19 @@ const EditStudentDetails = forwardRef(
       try {
         const studentData = await fetchAllStudentsWithIds();
         setStudentData(studentData);
-
         const raceData = await fetchAllRaceWithIds();
         setRaceData(raceData);
-
         const languageData = await fetchAllLanguageWithIdsC();
         setLanguageData(languageData);
+      } catch (error) {
+        toast.error(error);
+      }
+    };
 
-        const nationality = await fetchAllNationalityeWithIds(centerId);
-        setNationalityData(nationality);
+    const fetchNationalityData = async () => {
+      try {
+        const nationality = await api.get(`/getAllNationalityTypeWithCenterId/${centerId}`);
+        setNationalityData(nationality.data);
       } catch (error) {
         toast.error(error);
       }
@@ -205,7 +208,9 @@ const EditStudentDetails = forwardRef(
       getData();
       fetchData();
       centerData();
+      fetchNationalityData();
     }, []);
+    
     const fetchCoordinates = async (postalCode) => {
       if (!postalCode) return;
 
@@ -419,7 +424,7 @@ const EditStudentDetails = forwardRef(
                     </div>
                     {centreData?.isGeoFenceForStudent && (
                       <>
-                        <div className="col-md-6 col-12 mb-3">
+                        <div className="text-start mt-4">
                           <div className="form-group col-sm">
                             <label>Postal Code</label>
                             <span className="text-danger">*</span>
@@ -447,6 +452,27 @@ const EditStudentDetails = forwardRef(
                               formik.errors.postalCode && (
                                 <div className="error text-danger">
                                   <small>{formik.errors.postalCode}</small>
+                                </div>
+                              )}
+                          </div>
+                        </div>
+                        <div className="text-start mt-4">
+                          <div className="form-group col-sm">
+                            <label>Address</label>
+                            <span className="text-danger">*</span>
+                            <input
+                              type="text"
+                              className="form-control"
+                              name="address"
+                              onChange={formik.handleChange}
+                              onBlur={formik.handleBlur}
+                              value={formik.values.address}
+                              readOnly
+                            />
+                            {formik.touched.address &&
+                              formik.errors.address && (
+                                <div className="error text-danger">
+                                  <small>{formik.errors.address}</small>
                                 </div>
                               )}
                           </div>
@@ -552,34 +578,7 @@ const EditStudentDetails = forwardRef(
                           </div>
                         )}
                     </div>
-                    {centreData?.isGeoFenceForStudent && (
-                      <>
-                        <div className="col-md-6 col-12 mb-3">
-                          <div className="form-group col-sm">
-                            <label>Address</label>
-                            <span className="text-danger">*</span>
-                            <input
-                              type="text"
-                              className="form-control"
-                              name="address"
-                              onChange={formik.handleChange}
-                              onBlur={formik.handleBlur}
-                              value={formik.values.address}
-                              readOnly
-                            />
-                            {formik.touched.address &&
-                              formik.errors.address && (
-                                <div className="error text-danger">
-                                  <small>{formik.errors.address}</small>
-                                </div>
-                              )}
-                          </div>
-                        </div>
-                      </>
-                    )}
-                  </div>
-                </div>
-                <div className="text-start mt-4">
+                    <div className="text-start mt-4">
                   <label htmlFor="" className="mb-1 fw-medium">
                     <small>Remark</small>
                   </label>
@@ -597,10 +596,8 @@ const EditStudentDetails = forwardRef(
                     maxLength={200}
                   />
                 </div>
-
-                {/* <div className="mb-5">
-                  
-                </div> */}
+                  </div>
+                </div>
               </div>
             </div>
           </div>

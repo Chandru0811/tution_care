@@ -81,8 +81,8 @@ const Document = () => {
       },
       {
         accessorKey: "user",
+        header: `${storedConfigure?.employee || "Teacher"}`,
         enableHiding: false,
-        header: "User Name",
       },
       {
         accessorKey: "course",
@@ -108,7 +108,6 @@ const Document = () => {
         enableHiding: false,
         header: "Days",
       },
-      { accessorKey: "user", enableHiding: false, header: "Teacher" },
       {
         accessorKey: "folderCategory",
         enableHiding: false,
@@ -197,7 +196,6 @@ const Document = () => {
       toast.error(error.message);
     }
   };
-
   const getDocumentData = async () => {
     try {
       setLoading(true);

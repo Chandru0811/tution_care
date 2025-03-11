@@ -133,7 +133,6 @@ import CountryView from "../pages/Settings/Country/CountryView";
 import Shg from "../pages/Settings/Shg/Shg";
 import ShgAdd from "../pages/Settings/Shg/ShgAdd";
 import ShgEdit from "../pages/Settings/Shg/ShgEdit";
-import ShgView from "../pages/Settings/Shg/ShgView";
 import SettingLeave from "../pages/Settings/Leave/Leave";
 import SettingLeaveAdd from "../pages/Settings/Leave/LeaveAdd";
 import SettingLeaveEdit from "../pages/Settings/Leave/LeaveEdit";
@@ -211,6 +210,11 @@ import NewLeadsAdd from "../pages/New Leads/NewLeadsAdd";
 import NewLeadsEdit from "../pages/New Leads/NewLeadsEdit";
 import NewLeadsView from "../pages/New Leads/NewLeadsView";
 import EmployeeAttendance from "../pages/Report/EmployeeAttendance";
+import Sdl from "../pages/Settings/Sdl/Sdl";
+import SdlAdd from "../pages/Settings/Sdl/SdlAdd";
+import SdlEdit from "../pages/Settings/Sdl/SdlEdit";
+import Cpf from "../pages/Settings/Cpf/Cpf";
+import PayrollPayslip from "../pages/Payroll/PayrollAdmin/PayrollPayslip";
 
 function Admin({ handleLogout }) {
   const [centerChange, setCenterChange] = useState(0);
@@ -407,6 +411,7 @@ function Admin({ handleLogout }) {
               <Route path="/payrolladmin/add" element={<AddPayroll />} />
               <Route path="/payrolladmin/edit/:id" element={<EditPayroll />} />
               <Route path="/payrolladmin/view/:id" element={<Viewpayroll />} />
+              <Route path="/payrolladmin/payslip/:id" element={<PayrollPayslip />} />
 
               {/* {/ Payslip /} */}
               <Route path="/employeepayslip" element={<Payslip />} />
@@ -664,7 +669,14 @@ function Admin({ handleLogout }) {
               <Route path="/shg" element={<Shg />} />
               <Route path="/shg/add" element={<ShgAdd />} />
               <Route path="/shg/edit/:id" element={<ShgEdit />} />
-              <Route path="/shg/view/:id" element={<ShgView />} />
+
+              {/* Sdl */}
+              <Route path="/sdl" element={<Sdl />} />
+              <Route path="/sdl/add" element={<SdlAdd />} />
+              <Route path="/sdl/edit/:id" element={<SdlEdit />} />
+
+              {/* Cpf */}
+              <Route path="/cpf" element={<Cpf />} />
 
               {/* {/ Batch Time /} */}
               <Route path="/batchtime" element={<BatchTime />} />

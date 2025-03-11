@@ -7,12 +7,12 @@ import Modal from "react-bootstrap/Modal";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
 
-function ShgAdd({ onSuccess }) {
+function CpfAdd({ onSuccess }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [isModified, setIsModified] = useState(false);
   const centerId = localStorage.getItem("tmscenterId");
-    const [nationalityData, setNationalityData] = useState([]);
+  const [citizenshipData, setCitizenshipData] = useState([]);
 
   const handleClose = () => {
     setShow(false);
@@ -24,40 +24,23 @@ function ShgAdd({ onSuccess }) {
   };
   const userName = localStorage.getItem("tmsuserName");
 
-  const validationSchema = Yup.object({
-    salaryAmount: Yup.string()
-      .required("*Salary Amount is required"), // Optional: Maximum character length
-
-    shgContribution: Yup.number()
-      .typeError("*SHG Contribution must be a number") // Ensures value is a valid number
-      .required("*SHG Contribution is required") // Required validation
-      .positive("*SHG Contribution must be a positive number") // Only positive values allowed
-      .test(
-        "is-decimal",
-        "*SHG Contribution must have at most 2 decimal places", // Custom error message
-        (value) => {
-          // Test allows numbers with up to 2 decimal places
-          return value ? /^\d+(\.\d{1,2})?$/.test(value) : true;
-        }
-      ),
-
-      nationalityId: Yup.string()
-      .required("*Nationality is required"), 
-  });
+  const validationSchema = Yup.object({});
 
   const formik = useFormik({
     initialValues: {
       centerId: centerId,
-      salaryAmount: "",
-      shgContribution: "",
-      nationalityId:"",
+      minAge: 0,
+      maxAge: 0,
+      cpfPerEmployee: 0,
+      cpfPerEmployer: 0,
+      citizenshipId: 0,
       createdBy: userName,
     },
-    validationSchema: validationSchema,
+    // validationSchema: validationSchema,
     onSubmit: async (values) => {
       setLoadIndicator(true);
       try {
-        const response = await api.post("/createUserShg", values, {
+        const response = await api.post("/createUserCpfPr", values, {
           headers: {
             "Content-Type": "application/json",
           },
@@ -79,7 +62,11 @@ function ShgAdd({ onSuccess }) {
     validateOnChange: true,
     validateOnBlur: true,
     validate: (values) => {
-      if (Object.values(values).some((value) => (value && typeof value === 'string' ? value.trim() !== "" : value))) {
+      if (
+        Object.values(values).some((value) =>
+          value && typeof value === "string" ? value.trim() !== "" : value
+        )
+      ) {
         setIsModified(true);
       } else {
         setIsModified(false);
@@ -89,8 +76,10 @@ function ShgAdd({ onSuccess }) {
 
   const fetchCNCData = async () => {
     try {
-      const nationality = await api.get(`/getAllNationalityTypeWithCenterId/${centerId}`);
-        setNationalityData(nationality.data);
+      const citizenship = await api.get(
+        `/getAllCitizenshipTypeWithCenterId/${centerId}`
+      );
+      setCitizenshipData(citizenship.data);
     } catch (error) {
       toast.error(error);
     }
@@ -121,7 +110,7 @@ function ShgAdd({ onSuccess }) {
         keyboard={isModified ? false : true}
       >
         <Modal.Header closeButton>
-          <Modal.Title className="headColor">Add SHG</Modal.Title>
+          <Modal.Title className="headColor">Add CPF</Modal.Title>
         </Modal.Header>
         <form
           onSubmit={formik.handleSubmit}
@@ -136,62 +125,66 @@ function ShgAdd({ onSuccess }) {
               <div className="row">
                 <div className="col-md-6 col-12 mb-2">
                   <label className="form-label">
-                    Salary Amount<span className="text-danger">*</span>
+                    Min Age<span className="text-danger">*</span>
                   </label>
                   <input
                     type="text"
-                    className={`form-control  ${formik.touched.salaryAmount && formik.errors.salaryAmount
+                    name="minAge"
+                    className={`form-control  ${
+                      formik.touched.minAge && formik.errors.minAge
                         ? "is-invalid"
                         : ""
-                      }`}
-                    {...formik.getFieldProps("salaryAmount")}
+                    }`}
+                    {...formik.getFieldProps("minAge")}
                   />
-                  {formik.touched.salaryAmount && formik.errors.salaryAmount && (
+                  {formik.touched.minAge && formik.errors.minAge && (
                     <div className="invalid-feedback">
-                      {formik.errors.salaryAmount}
+                      {formik.errors.minAge}
                     </div>
                   )}
                 </div>
                 <div className="col-md-6 col-12 mb-2">
                   <label className="form-label">
-                  SHG Contribution<span className="text-danger">*</span>
+                    Max Age<span className="text-danger">*</span>
                   </label>
                   <input
                     type="text"
-                    className={`form-control  ${formik.touched.shgContribution && formik.errors.shgContribution
+                    name="maxAge"
+                    className={`form-control  ${
+                      formik.touched.maxAge && formik.errors.maxAge
                         ? "is-invalid"
                         : ""
-                      }`}
-                    {...formik.getFieldProps("shgContribution")}
+                    }`}
+                    {...formik.getFieldProps("maxAge")}
                   />
-                  {formik.touched.shgContribution && formik.errors.shgContribution && (
+                  {formik.touched.maxAge && formik.errors.maxAge && (
                     <div className="invalid-feedback">
-                      {formik.errors.shgContribution}
+                      {formik.errors.maxAge}
                     </div>
                   )}
                 </div>
                 <div className="col-md-6 col-12 mb-2 mt-3">
-                  <label>Nationality</label>
+                  <label>Citizenship</label>
                   <span className="text-danger">*</span>
                   <select
                     className="form-select"
-                    name="nationalityId"
+                    name="citizenshipId"
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    value={formik.values.nationalityId}
+                    value={formik.values.citizenshipId}
                   >
                     <option selected></option>
-                    {nationalityData &&
-                  nationalityData.map((nationalityId) => (
-                    <option key={nationalityId.id} value={nationalityId.id}>
-                      {nationalityId.nationality}
-                    </option>
-                  ))}
+                    {citizenshipData &&
+                      citizenshipData.map((citizenshipId) => (
+                        <option key={citizenshipId.id} value={citizenshipId.id}>
+                          {citizenshipId.citizenship}
+                        </option>
+                      ))}
                   </select>
-                  {formik.touched.nationalityId &&
-                    formik.errors.nationalityId && (
+                  {formik.touched.citizenshipId &&
+                    formik.errors.citizenshipId && (
                       <div className="error text-danger">
-                        <small>{formik.errors.nationalityId}</small>
+                        <small>{formik.errors.citizenshipId}</small>
                       </div>
                     )}
                 </div>
@@ -226,4 +219,4 @@ function ShgAdd({ onSuccess }) {
   );
 }
 
-export default ShgAdd;
+export default CpfAdd;
