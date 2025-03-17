@@ -6,9 +6,23 @@ import api from "../../config/URL";
 import { toast } from "react-toastify";
 import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
 import fetchAllClassesWithIdsC from "../List/ClassListByCourse";
-const storedConfigure = JSON.parse(
-  localStorage.getItem("tmsappConfigInfo") || "{}"
-);
+let storedConfigure = {};
+
+try {
+  const rawConfig = localStorage.getItem("tmsappConfigInfo");
+
+  // Ensure rawConfig is a valid string before parsing
+  storedConfigure = rawConfig ? JSON.parse(rawConfig) : {};
+} catch (error) {
+  console.error("Error parsing tmsappConfigInfo:", error);
+
+  // Clear the corrupted data from localStorage
+  localStorage.removeItem("tmsappConfigInfo");
+
+  // Use a default empty object
+  storedConfigure = {};
+}
+
 const validationSchema = Yup.object({
   courseId: Yup.string().required(
     `*${storedConfigure?.course || "Course"} is required`

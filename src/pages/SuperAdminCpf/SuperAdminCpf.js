@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import api from "../../../config/URL";
+import api from "../../config/URL";
 import { Link } from "react-router-dom";
 import { MoreVert as MoreVertIcon } from "@mui/icons-material";
 import {
@@ -10,11 +10,11 @@ import {
   ThemeProvider,
 } from "@mui/material";
 import { MaterialReactTable } from "material-react-table";
-import GlobalDelete from "../../../components/common/GlobalDelete";
-import SdlAdd from "./SdlAdd";
-import SdlEdit from "./SdlEdit";
+import SuperAdminCpfAdd from "./SuperAdminCpfAdd";
+import SuperAdminCpfEdit from "./SuperAdminCpfEdit";
+// import GlobalDelete from "../../../components/common/GlobalDelete";
 
-const Sdl = () => {
+const SuperAdminCpf = () => {
   const storedScreens = JSON.parse(localStorage.getItem("tmsscreens") || "{}");
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -24,7 +24,9 @@ const Sdl = () => {
 
   const getData = async () => {
     try {
-      const response = await api.get(`/getUserSdlWithCenterId/${centerId}`);
+      const response = await api.get(
+        `/getAllUserCpfPrWithCenterId/${centerId}`
+      );
       setDatas(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -67,21 +69,21 @@ const Sdl = () => {
         ),
       },
       {
-        accessorKey: "sdlAmount",
+        accessorKey: "citizenship",
         enableHiding: false,
-        header: "SDL Amount",
+        header: "Citizenship",
         size: 20,
       },
       {
-        accessorKey: "sdlPayable",
+        accessorKey: "maxAge",
         enableHiding: false,
-        header: "SDL Payable",
+        header: "Max Age",
         size: 20,
       },
       {
-        accessorKey: "sdlrate",
+        accessorKey: "minAge",
         enableHiding: false,
-        header: "SDL Rate",
+        header: "Min Age",
         size: 20,
       },
       { accessorKey: "createdBy", header: "Created By" },
@@ -169,7 +171,7 @@ const Sdl = () => {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          &nbsp;SDL
+          &nbsp;CPF
         </li>
       </ol>
       <div className="card">
@@ -184,16 +186,18 @@ const Sdl = () => {
             <span class="me-2 text-muted">
               This database shows the list of{" "}
               <span className="bold" style={{ color: "#287f71" }}>
-                SDL
+                CPF
               </span>
             </span>
           </div>
         </div>
-        {storedScreens?.shgSettingCreate && (
-          <div className="d-flex justify-content-end align-items-center">
-            <span>{/* <SdlAdd onSuccess={getData} /> */}</span>
-          </div>
-        )}
+        {/* {storedScreens?.shgSettingCreate && ( */}
+        <div className="d-flex justify-content-end align-items-center">
+          <span>
+            <SuperAdminCpfAdd onSuccess={getData} />
+          </span>
+        </div>
+        {/* )} */}
         {loading ? (
           <div className="loader-container">
             <div className="loading">
@@ -227,22 +231,22 @@ const Sdl = () => {
               />
             </ThemeProvider>
 
-            {/* <Menu
+            <Menu
               id="action-menu"
               anchorEl={menuAnchor}
               open={Boolean(menuAnchor)}
               onClose={handleMenuClose}
             >
               <MenuItem>
-                {storedScreens?.shgSettingUpdate && (
-                  <SdlEdit
-                    onSuccess={getData}
-                    id={selectedId}
-                    handleMenuClose={handleMenuClose}
-                  />
-                )}
+                {/* {storedScreens?.shgSettingUpdate && ( */}
+                <SuperAdminCpfEdit
+                  onSuccess={getData}
+                  id={selectedId}
+                  handleMenuClose={handleMenuClose}
+                />
+                {/* )} */}
               </MenuItem>
-              <MenuItem>
+              {/* <MenuItem>
                 {storedScreens?.shgSettingDelete && (
                   <GlobalDelete
                     path={`/deleteSHGSetting/${selectedId}`}
@@ -250,8 +254,8 @@ const Sdl = () => {
                     onOpen={handleMenuClose}
                   />
                 )}
-              </MenuItem>
-            </Menu> */}
+              </MenuItem> */}
+            </Menu>
           </>
         )}
       </div>
@@ -259,4 +263,4 @@ const Sdl = () => {
   );
 };
 
-export default Sdl;
+export default SuperAdminCpf;

@@ -19,6 +19,10 @@ import ConfigurationAdd from "../pages/Configuration/ConfigurationAdd";
 import ConfigurationEdit from "../pages/Configuration/ConfigurationEdit";
 import ConfigurationView from "../pages/Configuration/ConfigurationView";
 import fetchAllCentersWithIds from "../pages/List/CenterList";
+import SuperAdminShg from "../pages/SuperAdminShg/SuperAdminShg";
+import SuperAdminShgAdd from "../pages/SuperAdminShg/SuperAdminShgAdd";
+import SuperAdminCpf from "../pages/SuperAdminCpf/SuperAdminCpf";
+import SuperAdminSdl from "../pages/SuperAdminSdl/SuperAdminSdl";
 
 function SuperAdmin({ handleLogout }) {
   const [centerChange, setCenterChange] = useState(0);
@@ -90,15 +94,25 @@ function SuperAdmin({ handleLogout }) {
               {/* SuperAdminCenter */}
               <Route
                 path="/companyregistration"
-                element={<SuperAdminCenter handleCenterChanged={handleCenterChanged}/>}
+                element={
+                  <SuperAdminCenter handleCenterChanged={handleCenterChanged} />
+                }
               />
               <Route
                 path="/companyregistration/add"
-                element={<SuperAdminCenterAdd  handleCenterChanged={handleCenterChanged}/>}
+                element={
+                  <SuperAdminCenterAdd
+                    handleCenterChanged={handleCenterChanged}
+                  />
+                }
               />
               <Route
                 path="/companyregistration/edit/:id"
-                element={<SuperAdminCenterEdit handleCenterChanged={handleCenterChanged}/>}
+                element={
+                  <SuperAdminCenterEdit
+                    handleCenterChanged={handleCenterChanged}
+                  />
+                }
               />
               <Route
                 path="/companyregistration/view/:id"
@@ -106,6 +120,10 @@ function SuperAdmin({ handleLogout }) {
               />
 
               {/* Configuration */}
+              <Route path="/superSdl" element={<SuperAdminSdl />} />
+              <Route path="/superCpf" element={<SuperAdminCpf />} />
+              <Route path="/superShg" element={<SuperAdminShg />} />
+              <Route path="/superShg/add" element={<SuperAdminShgAdd />} />
               <Route path="/configuration" element={<Configuration />} />
               <Route path="/configuration/add" element={<ConfigurationAdd />} />
               <Route

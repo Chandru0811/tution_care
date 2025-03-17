@@ -191,9 +191,7 @@ const Shg = () => {
         </div>
         {storedScreens?.shgSettingCreate && (
           <div className="d-flex justify-content-end align-items-center">
-            <span>
-              <ShgAdd onSuccess={getData} />
-            </span>
+            <span>{/* <ShgAdd onSuccess={getData} /> */}</span>
             {/* } */}
             {/* <p>        <button className="btn btn-light border-secondary mx-2" onClick={handleDataShow}>
 
@@ -240,7 +238,7 @@ const Shg = () => {
               />
             </ThemeProvider>
 
-            <Menu
+            {/* <Menu
               id="action-menu"
               anchorEl={menuAnchor}
               open={Boolean(menuAnchor)}
@@ -264,7 +262,7 @@ const Shg = () => {
                   />
                 )}
               </MenuItem>
-            </Menu>
+            </Menu> */}
           </>
         )}
       </div>

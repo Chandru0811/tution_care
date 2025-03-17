@@ -24,7 +24,9 @@ const Cpf = () => {
 
   const getData = async () => {
     try {
-      const response = await api.get(`/getAllUserCpfPrWithCenterId/${centerId}`);
+      const response = await api.get(
+        `/getAllUserCpfPrWithCenterId/${centerId}`
+      );
       setDatas(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -191,9 +193,7 @@ const Cpf = () => {
         </div>
         {storedScreens?.shgSettingCreate && (
           <div className="d-flex justify-content-end align-items-center">
-            <span>
-              <CpfAdd onSuccess={getData} />
-            </span>
+            <span>{/* <CpfAdd onSuccess={getData} /> */}</span>
           </div>
         )}
         {loading ? (
@@ -229,7 +229,7 @@ const Cpf = () => {
               />
             </ThemeProvider>
 
-            <Menu
+            {/* <Menu
               id="action-menu"
               anchorEl={menuAnchor}
               open={Boolean(menuAnchor)}
@@ -244,7 +244,7 @@ const Cpf = () => {
                   />
                 )}
               </MenuItem>
-              {/* <MenuItem>
+              <MenuItem>
                 {storedScreens?.shgSettingDelete && (
                   <GlobalDelete
                     path={`/deleteSHGSetting/${selectedId}`}
@@ -252,8 +252,8 @@ const Cpf = () => {
                     onOpen={handleMenuClose}
                   />
                 )}
-              </MenuItem> */}
-            </Menu>
+              </MenuItem>
+            </Menu> */}
           </>
         )}
       </div>

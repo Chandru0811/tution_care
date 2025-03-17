@@ -11,7 +11,7 @@ import { MdOutlineSettingsSuggest } from "react-icons/md";
 
 const iconMapping = {
   "Centre Management": <PiBuildings />,
-  "Configuration": <MdOutlineSettingsSuggest />,
+  Configuration: <MdOutlineSettingsSuggest />,
   "Course Management": <PiBookOpenText />,
   "Lead Management": <GiExitDoor />,
 };
@@ -22,9 +22,7 @@ function SuperAdminSidebar() {
   const location = useLocation();
   const hasRenderedOnce = useRef(false);
 
-
   useEffect(() => {
-
     const updatedMenuItems = [
       {
         title: "Centre Management",
@@ -46,6 +44,21 @@ function SuperAdminSidebar() {
           {
             title: "Configure",
             path: "/configuration",
+            access: true,
+          },
+          {
+            title: "SHG",
+            path: "/superShg",
+            access: true,
+          },
+          {
+            title: "CPF",
+            path: "/superCpf",
+            access: true,
+          },
+          {
+            title: "SDL",
+            path: "/superSdl",
             access: true,
           },
         ],
